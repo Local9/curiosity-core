@@ -59,6 +59,22 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser.Character;
             }));
 
+            EventSystem.GetModule().Attach("character:weapons:equip", new EventCallback(metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                int playerPed = player.Character.Handle;
+
+                uint weaponHash = metadata.Find<uint>(0);
+                int ammoCount = metadata.Find<int>(1);
+                bool isHidden = metadata.Find<bool>(2);
+                bool forceInHand = metadata.Find<bool>(3);
+
+                API.GiveWeaponToPed(playerPed, weaponHash, ammoCount, isHidden, forceInHand);
+
+                return true;
+            }));
+
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];

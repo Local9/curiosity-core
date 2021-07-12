@@ -49,9 +49,6 @@ namespace Curiosity.MissionManager.Client.Managers
 
             IsOfficer = (job == JOB_POLICE);
 
-            if (!Cache.Player.User.IsDeveloper)
-                Game.PlayerPed.Weapons.RemoveAll();
-
             if (IsOfficer && !WasOfficer)
             {
                 if (!HasShownScaleform)
@@ -68,9 +65,10 @@ namespace Curiosity.MissionManager.Client.Managers
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
                 Game.PlayerPed.Armor = 100;
-                Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
+
+                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.Nightstick, 1, false, true);
+                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.StunGun, 1, false, true);
+                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.Flashlight, 1, false, true);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
@@ -84,8 +82,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 Instance.DiscordRichPresence.SmallAsset = "fivem";
                 Instance.DiscordRichPresence.SmallAssetText = "FiveM";
                 Instance.DiscordRichPresence.Commit();
-
-                Game.PlayerPed.Weapons.RemoveAll();
 
                 MissionDirectorManager.Director.TurnOffMissionDirector();
                 WorldVehicleManager.VehicleManager.Stop();

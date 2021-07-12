@@ -31,6 +31,15 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "light", })]
+        public class Weapon : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, true, true);
+            }
+        }
+
         [CommandInfo(new[] { "tow" })]
         public class PlayerTow : ICommand
         {
