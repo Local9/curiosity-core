@@ -94,6 +94,8 @@ namespace Curiosity.Core.Server.Managers
                 veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
 
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
@@ -167,6 +169,8 @@ namespace Curiosity.Core.Server.Managers
                 ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
                 ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
                 ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
+
+                API.SetEntityDistanceCullingRadius(pedId, 15000f);
 
                 return API.NetworkGetNetworkIdFromEntity(pedId);
             }));
