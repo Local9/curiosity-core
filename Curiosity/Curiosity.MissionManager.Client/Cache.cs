@@ -13,23 +13,7 @@ namespace Curiosity.MissionManager.Client
         public static Position Position => Entity.Position;
         public static Vehicle PersonalVehicle { get; internal set; }
 
-        private static Ped _ped = null;
-        public static Ped PlayerPed
-        {
-            get
-            {
-                if (_ped == null)
-                    UpdatePedId();
-
-                return _ped;
-            }
-            internal set => _ped = value;
-        }
-
-        static Cache()
-        {
-            _ped = new Ped(PlayerPedId());
-        }
+        public static Ped PlayerPed = Game.PlayerPed;
 
         public static void UpdatePedId() => PlayerPed = new Ped(PlayerPedId());
     }
