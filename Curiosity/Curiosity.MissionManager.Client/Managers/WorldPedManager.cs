@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -72,7 +73,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     if (WorldPeds.ContainsKey(ped.Handle)) return;
 
-                    var setup = ped.State.Get(Decorators.PED_SETUP);
+                    var setup = ped.State.Get(StateBagKey.PED_SETUP) ?? false;
 
                     if (setup == null)
                         setup = false;

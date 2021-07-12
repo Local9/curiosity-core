@@ -157,7 +157,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 return;
             }
 
-            int randomResponse = Decorators.GetInteger(Ped.Handle, Decorators.MENU_RANDOM_RESPONSE);
+            int randomResponse = Ped.State.Get(StateBagKey.MENU_RANDOM_RESPONSE);
             bool runFleeChance = false;
 
             switch(randomResponse)
@@ -264,7 +264,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
             if (selectedItem == menuItemWelcome)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_WELCOME, true);
+                Ped.State.Set(StateBagKey.MENU_WELCOME, true, true);
             }
 
             if (selectedItem == menuItemIdentifcation)
@@ -278,8 +278,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 }
                 Ped.Identity = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
                 Screen.ShowNotification(Ped.Identity);
-                
-                Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
+
+                Ped.State.Set(StateBagKey.MENU_IDENTIFICATION, true, true);
                 Cache.PlayerPed.AnimationTicket();
 
                 menuItemIdentifcation.Description = Ped.Identity;
@@ -287,27 +287,27 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
             if (selectedItem == menuItemWhatAreYouDoing)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_WHAT_YOU_DOING, true);
+                Ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, true, true);
             }
 
             if (selectedItem == menuItemRanRedLight)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_RAN_RED_LIGHT, true);
+                Ped.State.Set(StateBagKey.MENU_RAN_RED_LIGHT, true, true);
             }
 
             if (selectedItem == menuItemSpeeding)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_SPEEDING, true);
+                Ped.State.Set(StateBagKey.MENU_SPEEDING, true, true);
             }
 
             if (selectedItem == menuItemLaneChange)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_LANE_CHANGE, true);
+                Ped.State.Set(StateBagKey.MENU_LANE_CHANGE, true, true);
             }
 
             if (selectedItem == menuItemTailGating)
             {
-                Decorators.Set(Ped.Handle, Decorators.MENU_TAILGATING, true);
+                Ped.State.Set(StateBagKey.MENU_TAILGATING, true, true);
             }
 
             if (selectedItem == menuItemStepOutOfTheCar)

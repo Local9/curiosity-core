@@ -77,7 +77,18 @@ namespace Curiosity.Core.Server.Managers
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                 Vehicle veh = new Vehicle(vehicleId);
-                veh.State.Set($"{StateBagKey.MISSION_VEH}", isMission, true);
+                veh.State.Set(StateBagKey.VEHICLE_MISSION, isMission, true);
+                veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_SEARCH, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TOW, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_IMPORTANT, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_SETUP, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_HANDLE, 0, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
@@ -124,7 +135,30 @@ namespace Curiosity.Core.Server.Managers
                 API.SetEntityRoutingBucket(pedId, (int)routingBucket);
 
                 Ped ped = new Ped(pedId);
-                ped.State.Set($"{StateBagKey.MISSION_PED}", isMission, true);
+                ped.State.Set(StateBagKey.PED_FLEE, false, true);
+                ped.State.Set(StateBagKey.PED_SHOOT, false, true);
+                ped.State.Set(StateBagKey.PED_FRIENDLY, false, true);
+                ped.State.Set(StateBagKey.PED_ARREST, false, true);
+                ped.State.Set(StateBagKey.PED_ARRESTED, false, true);
+                ped.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
+                ped.State.Set(StateBagKey.PED_SUSPECT, false, true);
+                ped.State.Set(StateBagKey.PED_MISSION, isMission, true);
+                ped.State.Set(StateBagKey.PED_IMPORTANT, false, true);
+                ped.State.Set(StateBagKey.PED_HOSTAGE, false, true);
+                ped.State.Set(StateBagKey.PED_RELEASED, false, true);
+                ped.State.Set(StateBagKey.PED_HANDCUFFED, false, true);
+                ped.State.Set(StateBagKey.PED_DIALOGUE, false, true);
+                ped.State.Set(StateBagKey.PED_SETUP, false, true);
+                ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
+                // menu options
+                ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0.0, true);
+                ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
+                ped.State.Set(StateBagKey.MENU_IDENTIFICATION, false, true);
+                ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, false, true);
+                ped.State.Set(StateBagKey.MENU_RAN_RED_LIGHT, false, true);
+                ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
+                ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
+                ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
 
                 return API.NetworkGetNetworkIdFromEntity(pedId);
             }));

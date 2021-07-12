@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -88,7 +89,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 vehicles.ForEach(async veh =>
                 {
-                    bool setup = Decorators.GetBoolean(veh.Handle, Decorators.VEHICLE_SETUP);
+                    bool setup = veh.State.Get(StateBagKey.VEHICLE_SETUP) ?? false;
 
                     if (!setup && !veh.Driver.IsPlayer)
                     {

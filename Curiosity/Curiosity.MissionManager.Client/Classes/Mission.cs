@@ -48,8 +48,6 @@ namespace Curiosity.MissionManager.Client
 
         public static void AddPlayer(Player player)
         {
-            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, true);
-
             if (Players == null)
             {
                 Players = new List<Player> { player };
@@ -61,7 +59,6 @@ namespace Curiosity.MissionManager.Client
 
         public static void RemovePlayer(Player player)
         {
-            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
             Players.Remove(player);
         }
 
@@ -175,12 +172,6 @@ namespace Curiosity.MissionManager.Client
 
                 if (Players.Count > 0)
                 {
-                    Players.ForEach(player =>
-                    {
-                        if (player.Character.Exists())
-                            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
-                    });
-
                     Players.Clear();
                 }
 

@@ -28,8 +28,6 @@
         public const string VEH_BOAT_NETWORK_ID = "VEH_BOAT_NETWORK_ID";
         public const string PLAYER_ROUTING = "PLAYER_ROUTING";
         public const string PLAYER_HANDLE = "PLAYER_HANDLE";
-        public const string MISSION_PED = "MISSION_PED";
-        public const string MISSION_VEH = "MISSION_VEH";
 
         #region Mission Keys
         public const string PLAYER_DEBUG_NPC = "player::npc::debug";
@@ -52,6 +50,7 @@
         public const string VEHICLE_TRAFFIC_STOP_PULLOVER = "c::vehicle::trafficstop::pullover";
         public const string VEHICLE_TRAFFIC_STOP_IGNORED = "c::vehicle::trafficstop::ignored";
         public const string VEHICLE_TRAFFIC_STOP_COMPLETED = "c::vehicle::trafficstop::completed";
+        public const string VEHICLE_SPIKE_ALLOWED = "c::vehicle::spike";
 
         public const string PED_FLEE = "c::ped::flee";
         public const string PED_SHOOT = "c::ped::shoot";

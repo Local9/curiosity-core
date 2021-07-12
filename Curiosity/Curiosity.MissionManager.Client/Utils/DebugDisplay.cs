@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -84,12 +85,12 @@ namespace Curiosity.MissionManager.Client.Utils
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
 
-                    list["Important"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_IMPORTANT)}";
-                    list["MissionPed"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_MISSION)}";
-                    list["Hostage"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_HOSTAGE)}";
-                    list["Arrested"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARREST)}";
-                    list["Suspect"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_SUSPECT)}";
-                    list["Arrestable"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARRESTABLE)}";
+                    list["Important"] = $"{ped.State.Get(StateBagKey.PED_IMPORTANT) ?? false}";
+                    list["MissionPed"] = $"{ped.State.Get(StateBagKey.PED_MISSION) ?? false}";
+                    list["Hostage"] = $"{ped.State.Get(StateBagKey.PED_HOSTAGE) ?? false}";
+                    list["Arrested"] = $"{ped.State.Get(StateBagKey.PED_ARREST) ?? false}";
+                    list["Suspect"] = $"{ped.State.Get(StateBagKey.PED_SUSPECT) ?? false}";
+                    list["Arrestable"] = $"{ped.State.Get(StateBagKey.PED_ARRESTABLE) ?? false}";
 
                     //if (ped.Fx.IsInGroup)
                     //{

@@ -172,6 +172,9 @@ namespace Curiosity.Core.Server.Managers
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
+                    Player assistingPlayer = PluginManager.PlayersList[serverHandle];
+                    assistingPlayer.State.Set(StateBagKey.PLAYER_ASSISTING, false, true);
+
                     await BaseScript.Delay(500);
                     if (numberOfFailures >= 3)
                     {
@@ -663,6 +666,9 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("mission:assistance:accept", new EventCallback(metadata =>
             {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+                player.State.Set(StateBagKey.PLAYER_ASSISTING, true, true);
+
                 int missionOwnerId = metadata.Find<int>(0);
 
                 if (!ActiveMissions.ContainsKey(missionOwnerId)) return false;

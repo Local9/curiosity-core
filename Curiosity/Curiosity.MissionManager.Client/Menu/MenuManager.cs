@@ -48,7 +48,7 @@ namespace Curiosity.MissionManager.Client.Menu
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
 
-                    Decorators.Set(API.PlayerPedId(), Decorators.PLAYER_MENU, false);
+                    Game.PlayerPed.State.Set(StateBagKey.PLAYER_MENU, false, true);
 
                     Setup();
                 };
@@ -148,7 +148,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             foreach(CitizenFX.Core.Ped ped in peds)
             {
-                bool missionPed = ped.State.Get($"{StateBagKey.MISSION_PED}") ?? false;
+                bool missionPed = ped.State.Get(StateBagKey.PED_MISSION) ?? false;
                 if (missionPed)
                 {
                     currentEntity = ped;
@@ -158,7 +158,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
             {
-                bool missionVehicle = vehicle.State.Get($"{StateBagKey.MISSION_VEH}") ?? false;
+                bool missionVehicle = vehicle.State.Get(StateBagKey.VEHICLE_MISSION) ?? false;
                 if (missionVehicle)
                 {
                     currentEntity = vehicle;
