@@ -208,6 +208,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("mission:add:ped", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 if (missionData == null) return null;
 
@@ -218,6 +219,40 @@ namespace Curiosity.Core.Server.Managers
                 bool isDriver = metadata.Find<bool>(2);
 
                 MissionDataPed missionDataPed = missionData.AddNetworkPed(networkId, gender, isDriver);
+
+                int pedId = API.NetworkGetEntityFromNetworkId(networkId);
+                Ped ped = new Ped(pedId);
+
+                ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                ped.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                ped.State.Set(StateBagKey.PED_SPAWNED, true, true);
+                ped.State.Set(StateBagKey.PED_FLEE, false, true);
+                ped.State.Set(StateBagKey.PED_SHOOT, false, true);
+                ped.State.Set(StateBagKey.PED_FRIENDLY, false, true);
+                ped.State.Set(StateBagKey.PED_ARREST, false, true);
+                ped.State.Set(StateBagKey.PED_ARRESTED, false, true);
+                ped.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
+                ped.State.Set(StateBagKey.PED_SUSPECT, false, true);
+                ped.State.Set(StateBagKey.PED_MISSION, true, true);
+                ped.State.Set(StateBagKey.PED_IMPORTANT, false, true);
+                ped.State.Set(StateBagKey.PED_HOSTAGE, false, true);
+                ped.State.Set(StateBagKey.PED_RELEASED, false, true);
+                ped.State.Set(StateBagKey.PED_HANDCUFFED, false, true);
+                ped.State.Set(StateBagKey.PED_DIALOGUE, false, true);
+                ped.State.Set(StateBagKey.PED_SETUP, false, true);
+                ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
+                // menu options
+                ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0.0, true);
+                ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
+                ped.State.Set(StateBagKey.MENU_IDENTIFICATION, false, true);
+                ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, false, true);
+                ped.State.Set(StateBagKey.MENU_RAN_RED_LIGHT, false, true);
+                ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
+                ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
+                ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
+
+                API.SetEntityDistanceCullingRadius(pedId, 15000f);
+                API.SetEntityRoutingBucket(pedId, API.GetPlayerRoutingBucket(player.Handle));
 
                 Logger.Debug($"Added ped to mission;\n{missionDataPed}");
 
@@ -439,12 +474,35 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 if (missionData == null) return null;
 
                 if (missionData.OwnerHandleId != metadata.Sender) return null;
 
                 int networkId = metadata.Find<int>(0);
+
+                int vehicleId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                Vehicle veh = new Vehicle(vehicleId);
+                veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                veh.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                veh.State.Set(StateBagKey.VEHICLE_MISSION, true, true);
+                veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_SEARCH, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TOW, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_IMPORTANT, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_SETUP, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_HANDLE, 0, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
+                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
+
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+                API.SetEntityRoutingBucket(vehicleId, API.GetPlayerRoutingBucket(player.Handle));
 
                 return missionData.AddNetworkVehicle(networkId);
             }));
