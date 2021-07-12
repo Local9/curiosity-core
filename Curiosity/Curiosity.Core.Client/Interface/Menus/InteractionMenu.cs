@@ -68,6 +68,11 @@ namespace Curiosity.Core.Client.Interface.Menus
         {
             if (state == MenuState.Opened)
                 OnMenuOpen();
+
+            if (state == MenuState.Closed)
+            {
+                menuMain.InstructionalButtons.Clear();
+            }
         }
 
         private void MenuMain_OnIndexChange(UIMenu sender, int newIndex)
