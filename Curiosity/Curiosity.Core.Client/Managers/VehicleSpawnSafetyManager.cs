@@ -49,10 +49,13 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
-                List<Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f && m.Handle != Cache.PlayerPed.CurrentVehicle.Handle).ToList();
+                List<Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f && m.Handle != Game.PlayerPed.CurrentVehicle.Handle).ToList();
 
                 foreach (Vehicle vehicle in vehicles)
                 {
+                    if (vehicle is null) continue;
+                    if (!vehicle.Exists()) continue;
+
                     if (safeZoneVehicles.ContainsKey(vehicle.Handle)) continue;
                     safeZoneVehicles.Add(vehicle.Handle, new SafeZoneVehicle(vehicle));
                 }
