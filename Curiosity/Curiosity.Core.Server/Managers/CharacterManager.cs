@@ -36,6 +36,8 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set($"{StateBagKey.PLAYER_ROUTING}", (int)RoutingBucket.LOBBY, true);
                 player.State.Set($"{StateBagKey.PLAYER_HANDLE}", player.Handle, true);
 
+                API.SetPlayerCullingRadius($"{metadata.Sender}", 500.0f);
+
                 PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.LOBBY;
 
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
