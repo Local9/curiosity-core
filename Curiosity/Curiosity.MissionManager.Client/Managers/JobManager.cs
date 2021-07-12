@@ -66,9 +66,9 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 Game.PlayerPed.Armor = 100;
 
-                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.Nightstick, 1, false, true);
-                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.StunGun, 1, true, true);
-                await EventSystem.Request<bool>("character:weapons:equip", WeaponHash.Flashlight, 1, false, true);
+                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Nightstick, 1, false, true);
+                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.StunGun, 1, true, true);
+                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Flashlight, 1, false, true);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
