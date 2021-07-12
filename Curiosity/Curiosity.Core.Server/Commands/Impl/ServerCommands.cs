@@ -66,12 +66,13 @@ namespace Curiosity.Core.Server.Commands.Impl
                 }
 
                 string url = arguments.ElementAt(0);
+                float volume = arguments.Count == 2 ? float.Parse(arguments.ElementAt(1)) : 0.5f;
 
                 PluginManager pluginManager = PluginManager.Instance;
 
                 Vector3 pos = player.Character.Position;
 
-                pluginManager.ExportDictionary["xsound"].PlayUrlPos(-1, "devSong", url, 0.25f, pos, false);
+                pluginManager.ExportDictionary["xsound"].PlayUrlPos(-1, "devSong", url, volume, pos, false);
             }
         }
 
