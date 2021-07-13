@@ -1,73 +1,103 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
 
-namespace Curiosity.Core.Client.Utils
+namespace Curiosity.Core.Client.Managers
 {
-    public class PlayerOptions
+    public class PlayerOptionsManager : Manager<PlayerOptionsManager>
     {
-        static DateTime passiveModeDisabled;
-        public static bool IsPassiveModeEnabled = true;
-        public static bool IsPassiveModeEnabledCooldown = false;
+        DateTime passiveModeDisabled;
+        public bool IsPassiveModeEnabled = false;
+        public bool IsPassiveModeEnabledCooldown = false;
+        DateTime playerKilledSelf;
+        public bool IsKillSelfEnabled { get; internal set; } = true;
+        public int CostOfKillSelf = 500;
+        public int NumberOfTimesKillSelf = 0;
 
-
-        static DateTime playerKilledSelf;
-        public static bool IsKillSelfEnabled { get; internal set; } = true;
-        public static int CostOfKillSelf = 500;
-        public static int NumberOfTimesKillSelf = 0;
-
-        public static void SetPlayerPassive(bool isPassive)
+        public override void Begin()
         {
-            if (API.NetworkIsGameInProgress())
-            {
-                if (IsPassiveModeEnabled == isPassive) return;
-
-                if (IsPassiveModeEnabled != isPassive)
-                    IsPassiveModeEnabled = isPassive;
-
-                if (!isPassive)
-                {
-                    //Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                    //Cache.PlayerPed.SetConfigFlag(342, false);
-                    //Cache.PlayerPed.SetConfigFlag(122, false);
-                    //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
-                    //Cache.PlayerPed.CanSwitchWeapons = true;
-
-                    // API.NetworkSetPlayerIsPassive(false);
-                    API.NetworkSetFriendlyFireOption(true);
-
-                    passiveModeDisabled = DateTime.Now;
-                    PluginManager.Instance.AttachTickHandler(PassiveCooldownTick);
-                    IsPassiveModeEnabledCooldown = true;
-                }
-                else
-                {
-                    //Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                    //Cache.PlayerPed.SetConfigFlag(342, true);
-                    //Cache.PlayerPed.SetConfigFlag(122, true);
-                    //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
-                    //Cache.PlayerPed.CanSwitchWeapons = false;
-
-                    // API.NetworkSetPlayerIsPassive(true);
-                    API.NetworkSetFriendlyFireOption(false);
-
-                    // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
-                }
-            }
+            SetPlayerPassive(true);
         }
 
-        private static async Task PassiveCooldownTick()
+        public async void SetPlayerPassive(bool isPassive)
         {
-            if (DateTime.Now.Subtract(passiveModeDisabled).TotalMinutes >= 5)
+            await Session.Loading();
+
+            if (IsPassiveModeEnabled == isPassive) return;
+
+            if (Game.Player.WantedLevel > 0)
             {
-                PluginManager.Instance.DetachTickHandler(PassiveCooldownTick);
+                Notify.Info($"Passive Mode: Cannot enable when wanted.");
+                return;
+            }
+
+            if (IsPassiveModeEnabled != isPassive)
+                IsPassiveModeEnabled = isPassive;
+
+            if (!isPassive)
+            {
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                //Cache.PlayerPed.SetConfigFlag(342, false);
+                //Cache.PlayerPed.SetConfigFlag(122, false);
+                API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
+                //Cache.PlayerPed.CanSwitchWeapons = true;
+
+                // API.NetworkSetPlayerIsPassive(false);
+                API.NetworkSetFriendlyFireOption(true);
+
+                passiveModeDisabled = DateTime.UtcNow.AddMinutes(5);
+                Instance.AttachTickHandler(PassiveCooldownTick);
+                Instance.DetachTickHandler(DisableWantedStates);
+                IsPassiveModeEnabledCooldown = true;
+
+                API.SetMaxWantedLevel(5);
+
+                Logger.Debug($"Passive Mode Disabled");
+            }
+                
+            if (isPassive)
+            {
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                //Cache.PlayerPed.SetConfigFlag(342, true);
+                //Cache.PlayerPed.SetConfigFlag(122, true);
+                API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
+                //Cache.PlayerPed.CanSwitchWeapons = false;
+
+                // API.NetworkSetPlayerIsPassive(true);
+                API.NetworkSetFriendlyFireOption(false);
+                Instance.AttachTickHandler(DisableWantedStates);
+                Logger.Debug($"Passive Mode Enabled");
+                // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
+            }
+
+            Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
+        }
+
+        public async Task DisableWantedStates()
+        {
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+            API.SetMaxWantedLevel(0);
+            API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
+            API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
+            API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
+            Game.Player.WantedLevel = 0;
+        }
+
+        public async Task PassiveCooldownTick()
+        {
+            if (passiveModeDisabled < DateTime.UtcNow)
+            {
+                Instance.DetachTickHandler(PassiveCooldownTick);
                 IsPassiveModeEnabledCooldown = false;
+                Notify.Info($"Passive Mode can now be changed.");
             }
             else
             {
@@ -77,7 +107,7 @@ namespace Curiosity.Core.Client.Utils
                 const int interval = 45;
 
                 DateTime finalDate = passiveModeDisabled;
-                string timeSpanLeft = (finalDate.AddMinutes(5) - DateTime.Now).ToString(@"mm\:ss");
+                string timeSpanLeft = (finalDate - DateTime.UtcNow).ToString(@"mm\:ss");
 
                 PointF left = new PointF(Convert.ToInt32(res.Width) - safe.X - 318, Convert.ToInt32(res.Height) - safe.Y - (100 + (1 * interval)));
                 PointF right = new PointF(Convert.ToInt32(res.Width) - safe.X - 20, Convert.ToInt32(res.Height) - safe.Y - (102 + (1 * interval)));
@@ -93,7 +123,7 @@ namespace Curiosity.Core.Client.Utils
             }
         }
 
-        internal async static void KillSelf()
+        public async void KillSelf()
         {
             int randomEvent = Utility.RANDOM.Next(3);
 
@@ -138,11 +168,11 @@ namespace Curiosity.Core.Client.Utils
             EventSystem.GetModule().Send("character:killed:self");
         }
 
-        private static async Task PlayerKilledSelfCooldownTick()
+        public async Task PlayerKilledSelfCooldownTick()
         {
             if (DateTime.Now.Subtract(playerKilledSelf).TotalMinutes >= 5)
             {
-                PluginManager.Instance.DetachTickHandler(PlayerKilledSelfCooldownTick);
+                Instance.DetachTickHandler(PlayerKilledSelfCooldownTick);
                 IsKillSelfEnabled = true;
 
                 NumberOfTimesKillSelf++;

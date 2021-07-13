@@ -191,17 +191,7 @@ namespace Curiosity.Core.Client
             API.SetTextChatEnabled(false);
             API.DisablePlayerVehicleRewards(Game.Player.Handle);
 
-            // Disable wanted levels
-            API.ClearPlayerWantedLevel(Game.Player.Handle);
-            API.SetMaxWantedLevel(0);
-            API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
-            API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
-            API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
-            Game.Player.WantedLevel = 0;
-
             Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death            
-
-            await Task.FromResult(0);
         }
 
         public object LoadManager(Type type)

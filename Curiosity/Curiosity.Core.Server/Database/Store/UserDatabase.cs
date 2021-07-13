@@ -64,7 +64,6 @@ namespace Curiosity.Core.Server.Database.Store
                         curiosityUser.QueuePriority = kv["queuePriority"].ToInt();
                         curiosityUser.LatestName = player.Name;
                         curiosityUser.DiscordId = discordId;
-                        curiosityUser.IsPassive = kv["IsPassive"].ToBoolean();
 
                         object bannedUntilObj;
                         if (kv.TryGetValue("bannedUntil", out bannedUntilObj))

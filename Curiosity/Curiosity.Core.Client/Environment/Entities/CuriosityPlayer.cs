@@ -61,8 +61,6 @@ namespace Curiosity.Core.Client.Environment.Entities
                 NoClipManager.NoClipInstance.Dispose();
             }
 
-            PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
-
             Session.ForceLoaded = true;
         }
 

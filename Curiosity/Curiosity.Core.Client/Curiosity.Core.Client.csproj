@@ -142,7 +142,7 @@
     <Compile Include="Utils\CameraMath.cs" />
     <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\DebugDisplay.cs" />
-    <Compile Include="Utils\PlayerOptions.cs" />
+    <Compile Include="Managers\PlayerOptionsManager.cs" />
     <Compile Include="Utils\ScreenOptions.cs" />
   </ItemGroup>
   <ItemGroup>

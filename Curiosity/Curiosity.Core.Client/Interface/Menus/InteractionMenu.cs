@@ -52,8 +52,6 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             miKillYourself.SetRightLabel($"$0");
 
-            MenuPool.Add(menuMain);
-
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
@@ -62,17 +60,19 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
 
             menuMain.RefreshIndex();
+
+            MenuPool.Add(menuMain);
         }
 
         private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Opened)
+            Logger.Debug($"Menu State: {state}");
+
+            if (state == MenuState.Opened || state == MenuState.ChangeBackward || state == MenuState.ChangeForward)
                 OnMenuOpen();
 
             if (state == MenuState.Closed)
-            {
                 menuMain.InstructionalButtons.Clear();
-            }
         }
 
         private void MenuMain_OnIndexChange(UIMenu sender, int newIndex)
@@ -82,29 +82,30 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
+            PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
+
             if (selectedItem == miPassive)
             {
-                if (PlayerOptions.IsPassiveModeEnabledCooldown) return;
+                if (playerOptionsManager.IsPassiveModeEnabledCooldown) return;
 
-                Cache.Player.User.IsPassive = !Cache.Player.User.IsPassive;
-                PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
+                playerOptionsManager.SetPlayerPassive(!playerOptionsManager.IsPassiveModeEnabled);
                 miPassive.Enabled = false;
 
                 await BaseScript.Delay(1000);
 
-                miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
-                miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
+                miPassive.Text = playerOptionsManager.IsPassiveModeEnabled ? "Disable Passive Mode" : "Enable Passive Mode";
+                miPassive.Enabled = !playerOptionsManager.IsPassiveModeEnabledCooldown;
 
-                string notificationText = (Cache.Player.User.IsPassive) ? "Enabled" : "Disabled";
+                string notificationText = (playerOptionsManager.IsPassiveModeEnabled) ? "Enabled" : "Disabled";
                 Notify.Info($"Passive Mode: {notificationText}");
                 return;
             }
 
             if (selectedItem == miKillYourself)
             {
-                if (!PlayerOptions.IsKillSelfEnabled) return;
+                if (!playerOptionsManager.IsKillSelfEnabled) return;
 
-                PlayerOptions.KillSelf();
+                playerOptionsManager.KillSelf();
                 miKillYourself.Enabled = false;
             }
         }
@@ -140,16 +141,19 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private void OnMenuOpen()
         {
+            PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
+
+            Logger.Debug($"Menu Open");
             // TOP
             UpdateGpsMenuItem();
             // MID
 
             // BOTTOM
-            miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
-            miPassive.Enabled = !PlayerOptions.IsPassiveModeEnabledCooldown;
+            miPassive.Text = playerOptionsManager.IsPassiveModeEnabled ? "Disable Passive Mode" : "Enable Passive Mode";
+            miPassive.Enabled = !playerOptionsManager.IsPassiveModeEnabledCooldown;
 
-            miKillYourself.Enabled = PlayerOptions.IsKillSelfEnabled;
-            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf * PlayerOptions.NumberOfTimesKillSelf}");
+            miKillYourself.Enabled = playerOptionsManager.IsKillSelfEnabled;
+            miKillYourself.SetRightLabel($"${playerOptionsManager.CostOfKillSelf * playerOptionsManager.NumberOfTimesKillSelf}");
         }
 
         private async Task OnMenuDisplay()
@@ -195,6 +199,8 @@ namespace Curiosity.Core.Client.Interface.Menus
                                 {
                                     if (!MenuPool.IsAnyMenuOpen())
                                     {
+                                        OnMenuOpen();
+
                                         Instance.AttachTickHandler(OnMenuDisplay);
                                         menuMain.Visible = !menuMain.Visible;
                                     }
@@ -209,6 +215,8 @@ namespace Curiosity.Core.Client.Interface.Menus
                             {
                                 if (!MenuPool.IsAnyMenuOpen())
                                 {
+                                    OnMenuOpen();
+
                                     Instance.AttachTickHandler(OnMenuDisplay);
                                     menuMain.Visible = !menuMain.Visible;
                                 }
