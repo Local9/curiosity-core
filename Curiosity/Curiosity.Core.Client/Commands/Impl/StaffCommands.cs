@@ -266,6 +266,9 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     await vehicle.FadeIn();
                 }
+
+                if (vehModel?.IsLoaded ?? false)
+                    vehModel.MarkAsNoLongerNeeded();
             }
         }
 
