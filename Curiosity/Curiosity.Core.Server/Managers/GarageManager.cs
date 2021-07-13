@@ -41,15 +41,16 @@ namespace Curiosity.Core.Server.Managers
                 try
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
                     int characterVehicleId = metadata.Find<int>(0);
-
-                    VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
-
                     float x = metadata.Find<float>(1);
                     float y = metadata.Find<float>(2);
                     float z = metadata.Find<float>(3);
                     float h = metadata.Find<float>(4);
                     float d = metadata.Find<float>(5);
+                    uint model = metadata.Find<uint>(6);
+
+                    VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
 
                     if (vehicleItem is null)
                     {
@@ -59,17 +60,15 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     Player player = PluginManager.PlayersList[metadata.Sender];
-
                     RoutingBucket routingBucket = curiosityUser.RoutingBucket;
 
-                    var model = API.GetHashKey(vehicleItem.Hash);
-
-                    Vector3 charPos = player.Character.Position;
-                    Vector3 pos = new Vector3(charPos.X, charPos.Y, charPos.Z);
-                    float heading = player.Character.Heading;
+                    Vector3 charPos = new Vector3(x, y, z);
+                    Vector3 pos = new Vector3(x, y, z);
+                    float heading = h;
 
                     if (vehicleItem.SpawnTypeId == SpawnType.Unknown)
                     {
+                        Logger.Debug($"Vehicle {vehicleItem.CharacterVehicleId} incorrectly configured, contact support.");
                         vehicleItem.Message = "Vehicle incorrectly configured, contact support.";
                         return vehicleItem;
                     }
@@ -92,22 +91,21 @@ namespace Curiosity.Core.Server.Managers
                         heading = h;
                     }
 
-                    if (AnyVehicleNearPoint(pos, d))
-                    {
-                        Logger.Error($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
-                        vehicleItem.Message = "Current location is blocked by another vehicle";
-                        return vehicleItem;
-                    }
+                    //if (AnyVehicleNearPoint(pos, d))
+                    //{
+                    //    Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
+                    //    vehicleItem.Message = "Current location is blocked by another vehicle";
+                    //    return vehicleItem;
+                    //}
 
                     if (Vector3.Distance(charPos, pos) >= 5000.0f)
                     {
+                        Logger.Debug($"Too far away from a suitable location.");
                         vehicleItem.Message = "Too far away from a suitable location.";
                         return vehicleItem;
                     }
 
-                    
-                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, heading, true, true);
-                    await BaseScript.Delay(0);
+                    int vehicleId = API.CreateVehicle(model, pos.X, pos.Y, pos.Z, heading, true, true);
 
                     if (vehicleId == 0)
                     {
@@ -116,7 +114,7 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
-                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(10);
 
                     while (!API.DoesEntityExist(vehicleId))
                     {
@@ -124,7 +122,6 @@ namespace Curiosity.Core.Server.Managers
 
                         if (maxWaitTime < DateTime.UtcNow) break;
                     }
-                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                     if (!API.DoesEntityExist(vehicleId))
                     {
@@ -183,6 +180,9 @@ namespace Curiosity.Core.Server.Managers
 
                     vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 
+                    API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+
                     return vehicleItem;
                 }
                 catch (Exception ex)
@@ -194,7 +194,8 @@ namespace Curiosity.Core.Server.Managers
 
 
         }
-        private bool AnyVehicleNearPoint(Vector3 location, float distance)
+
+        public bool AnyVehicleNearPoint(Vector3 location, float distance)
         {
             // Distance should be greater than zero if you want to know if any vehicles are in area
             if (float.IsNaN(distance) || distance <= 0)
@@ -207,7 +208,7 @@ namespace Curiosity.Core.Server.Managers
             return vehicles?.Any(x => VehicleDistance(x, location) <= distance) ?? false;
         }
 
-        private float VehicleDistance(object value, Vector3 location)
+        public float VehicleDistance(object value, Vector3 location)
         {
             if (!(value is null))
             {

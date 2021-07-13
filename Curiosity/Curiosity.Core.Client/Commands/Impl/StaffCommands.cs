@@ -206,17 +206,41 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 int networkId = 0;
 
+                Model vehModel = new Model(arguments.ElementAt(0));
+
+                if (!vehModel.IsValid)
+                {
+                    NotificationManger.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
+                    return;
+                }
+
+                DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
+
+                while (!vehModel.IsLoaded)
+                {
+                    await vehModel.Request(3000);
+
+                    if (DateTime.UtcNow > maxTime) break;
+                }
+
+                if (!vehModel.IsLoaded)
+                {
+                    NotificationManger.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
+                    return;
+                }
+
                 if (arguments.Count == 1)
-                    networkId = await EventSystem.Request<int>("vehicle:spawn", arguments.ElementAt(0));
+                    networkId = await EventSystem.Request<int>("vehicle:spawn", (uint)vehModel.Hash, vehModel.GetDimensions().Y);
 
                 if (arguments.Count == 5)
                 {
                     networkId = await EventSystem.Request<int>("vehicle:spawn:position",
-                        arguments.ElementAt(0),
+                        (uint)vehModel.Hash,
                         float.Parse(arguments.ElementAt(1)),
                         float.Parse(arguments.ElementAt(2)),
                         float.Parse(arguments.ElementAt(3)),
-                        float.Parse(arguments.ElementAt(4))
+                        float.Parse(arguments.ElementAt(4)),
+                        vehModel.GetDimensions().Y
                         );
                 }
 

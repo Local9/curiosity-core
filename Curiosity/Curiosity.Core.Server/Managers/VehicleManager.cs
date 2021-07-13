@@ -218,10 +218,18 @@ namespace Curiosity.Core.Server.Managers
 
                 RoutingBucket routingBucket = user.RoutingBucket;
 
-                var model = API.GetHashKey(metadata.Find<string>(0));
+                uint model = metadata.Find<uint>(0);
+                float distance = metadata.Find<float>(1);
 
                 Vector3 pos = player.Character.Position;
-                int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
+
+                if (GarageManager.GetModule().AnyVehicleNearPoint(pos, distance))
+                {
+                    Logger.Debug($"Current location is blocked by another vehicle");
+                    return null;
+                }
+
+                int vehicleId = API.CreateVehicle(model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
 
                 if (vehicleId == 0)
                 {
@@ -245,10 +253,19 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 Vehicle vehicle = new Vehicle(vehicleId);
-                vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
-                vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
+                vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                vehicle.State.Set(StateBagKey.VEH_PERSONAL, true, true);
+                vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);
+                vehicle.State.Set(StateBagKey.VEH_OWNER, player.Name, true);
+                vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                vehicle.State.Set(StateBagKey.VEHICLE_MISSION, false, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL, 0f, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL_MULTIPLIER, 0f, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL_SETUP, false, true);
+                vehicle.State.Set(StateBagKey.VEH_CONTENT, new { }, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
@@ -264,15 +281,23 @@ namespace Curiosity.Core.Server.Managers
 
                 RoutingBucket routingBucket = user.RoutingBucket;
 
-                var model = API.GetHashKey(metadata.Find<string>(0));
-
                 float x = metadata.Find<float>(1);
                 float y = metadata.Find<float>(2);
                 float z = metadata.Find<float>(3);
                 float h = metadata.Find<float>(4);
 
-                Vector3 pos = new Vector3();
-                int vehicleId = API.CreateVehicle((uint)model, x, y, z, h, true, true);
+                uint model = metadata.Find<uint>(0);
+                float distance = metadata.Find<float>(5);
+
+                Vector3 pos = new Vector3(x, y, z);
+
+                if (GarageManager.GetModule().AnyVehicleNearPoint(pos, distance))
+                {
+                    Logger.Debug($"Current location is blocked by another vehicle");
+                    return null;
+                }
+
+                int vehicleId = API.CreateVehicle(model, x, y, z, h, true, true);
 
                 if (vehicleId == 0)
                 {
@@ -296,10 +321,19 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 Vehicle vehicle = new Vehicle(vehicleId);
-                vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
-                vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
+                vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                vehicle.State.Set(StateBagKey.VEH_PERSONAL, true, true);
+                vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);
+                vehicle.State.Set(StateBagKey.VEH_OWNER, player.Name, true);
+                vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                vehicle.State.Set(StateBagKey.VEHICLE_MISSION, false, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL, 0f, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL_MULTIPLIER, 0f, true);
+                vehicle.State.Set(StateBagKey.VEH_FUEL_SETUP, false, true);
+                vehicle.State.Set(StateBagKey.VEH_CONTENT, new { }, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
