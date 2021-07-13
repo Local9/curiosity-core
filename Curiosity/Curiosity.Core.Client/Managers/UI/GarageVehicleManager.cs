@@ -44,6 +44,12 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 Model vehModel = new Model(hash);
 
+                if (!vehModel.IsValid)
+                {
+                    NotificationManger.GetModule().Error($"Model '{hash}' is not valid.");
+                    return new { success = false };
+                }
+
                 DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
 
                 while (!vehModel.IsLoaded)
@@ -67,6 +73,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
                 API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
+
+                float distance = vehModel.GetDimensions().Y;
+
+                if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance))
+                {
+                    NotificationManger.GetModule().Error("Location is blocked by another vehicle");
+                    vehModel.MarkAsNoLongerNeeded();
+                    return new { success = false };
+                }
 
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
 
@@ -115,8 +130,17 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = new Vehicle(vehId);
 
+                    vehicle.IsPersistent = true;
+                    vehicle.PreviouslyOwnedByPlayer = true;
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
+
+                    API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                    API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+
+                    vehicle.PlaceOnGround();
+                    vehicle.RadioStation = RadioStation.RadioOff;
+
                     await vehicle.FadeOut();
 
                     await BaseScript.Delay(100);
