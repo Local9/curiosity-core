@@ -83,7 +83,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     return new { success = false };
                 }
 
-                VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
+                VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance);
 
                 vehModel.MarkAsNoLongerNeeded();
 

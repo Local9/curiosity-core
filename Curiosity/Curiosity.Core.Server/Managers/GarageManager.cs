@@ -7,6 +7,8 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -41,12 +43,13 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     int characterVehicleId = metadata.Find<int>(0);
 
+                    VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
+
                     float x = metadata.Find<float>(1);
                     float y = metadata.Find<float>(2);
                     float z = metadata.Find<float>(3);
                     float h = metadata.Find<float>(4);
-
-                    VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
+                    float d = metadata.Find<float>(5);
 
                     if (vehicleItem is null)
                     {
@@ -87,6 +90,13 @@ namespace Curiosity.Core.Server.Managers
                     {
                         pos = new Vector3(x, y, z);
                         heading = h;
+                    }
+
+                    if (AnyVehicleNearPoint(pos, d))
+                    {
+                        Logger.Error($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
+                        vehicleItem.Message = "Current location is blocked by another vehicle";
+                        return vehicleItem;
                     }
 
                     if (Vector3.Distance(charPos, pos) >= 5000.0f)
@@ -183,6 +193,32 @@ namespace Curiosity.Core.Server.Managers
             }));
 
 
+        }
+        private bool AnyVehicleNearPoint(Vector3 location, float distance)
+        {
+            // Distance should be greater than zero if you want to know if any vehicles are in area
+            if (float.IsNaN(distance) || distance <= 0)
+            {
+                return false;
+            }
+
+            List<object> vehicles = API.GetAllVehicles();
+
+            return vehicles?.Any(x => VehicleDistance(x, location) <= distance) ?? false;
+        }
+
+        private float VehicleDistance(object value, Vector3 location)
+        {
+            if (!(value is null))
+            {
+                if (int.TryParse(value.ToString(), out int handle))
+                {
+                    var vehicle = Entity.FromHandle(handle);
+                    return vehicle?.Position.DistanceToSquared(location) ?? float.PositiveInfinity;
+                }
+            }
+
+            return float.PositiveInfinity;
         }
     }
 }
