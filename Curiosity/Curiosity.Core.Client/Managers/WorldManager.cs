@@ -308,7 +308,12 @@ namespace Curiosity.Core.Client.Managers
 
                 if (!serverSpawned)
                     vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+
+                if (serverSpawned && (vehicle.LockStatus == VehicleLockStatus.LockedForPlayer || vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter))
+                    vehicle.LockStatus = VehicleLockStatus.Unlocked;
             });
+
+            await BaseScript.Delay(500);
         }
 
         [TickHandler(SessionWait = true)]
@@ -323,7 +328,9 @@ namespace Curiosity.Core.Client.Managers
 
                 Ped driver = vehicle?.Driver;
 
-                if ((!driver?.IsPlayer ?? false) && (!driver?.IsFleeing ?? false) && (driver?.IsAlive ?? false))
+                bool serverSpawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+
+                if ((!driver?.IsPlayer ?? false) && (!driver?.IsFleeing ?? false) && (driver?.IsAlive ?? false) && !serverSpawned)
                 {
                     vehicle.LockStatus = VehicleLockStatus.CannotBeTriedToEnter;
 
