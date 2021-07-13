@@ -314,7 +314,7 @@ namespace Curiosity.Core.Client.Managers
                     bool isServerSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
                     if (!isServerSpawned)
-                        veh.LockStatus = VehicleLockStatus.LockedForPlayer;
+                        veh.LockStatus = VehicleLockStatus.CannotBeTriedToEnter;
 
                     if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
                     {
