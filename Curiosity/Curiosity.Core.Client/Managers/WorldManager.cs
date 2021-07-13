@@ -298,7 +298,57 @@ namespace Curiosity.Core.Client.Managers
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnSuppressVehicles()
+        private async Task OnLockVehicles()
+        {
+            List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
+
+            vehicles.ForEach(vehicle =>
+            {
+                bool serverSpawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+
+                if (!serverSpawned)
+                    vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+            });
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnPreventPlayerAccessToLockedVehicles()
+        {
+            Ped ped = Cache.PlayerPed;
+
+            if (ped?.IsTryingToEnterALockedVehicle ?? false)
+            {
+                Vehicle vehicle = ped?.VehicleTryingToEnter;
+                ped?.Task?.ClearAll();
+
+                Ped driver = vehicle?.Driver;
+
+                if ((!driver?.IsPlayer ?? false) && (!driver?.IsFleeing ?? false) && (driver?.IsAlive ?? false))
+                {
+                    vehicle.LockStatus = VehicleLockStatus.CannotBeTriedToEnter;
+
+                    if ((driver?.Exists() ?? false) && !NetworkHasControlOfNetworkId(driver.NetworkId))
+                    {
+                        if (!NetworkHasControlOfNetworkId(driver.NetworkId))
+                        {
+                            NetworkRequestControlOfNetworkId(driver.NetworkId);
+
+                            while (!NetworkHasControlOfNetworkId(driver.NetworkId))
+                            {
+                                await BaseScript.Delay(0);
+                            }
+                        }
+                    }
+
+                    driver?.Task?.FleeFrom(ped);
+                }
+            }
+
+            await BaseScript.Delay(500);
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnRemoveSuppressedVehicles()
         {
             if (DateTime.Now.Subtract(lastRunVehicleSuppression).TotalSeconds >= 10)
             {
@@ -311,14 +361,10 @@ namespace Curiosity.Core.Client.Managers
 
                 vehicles.ForEach(veh =>
                 {
-                    bool isServerSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
-
-                    if (!isServerSpawned)
-                        veh.LockStatus = VehicleLockStatus.CannotBeTriedToEnter;
-
                     if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
                     {
-                        bool serverSpawned = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") is null ? false : veh.State.Get($"{StateBagKey.VEH_SPAWNED}");
+                        bool serverSpawned = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+
                         if (!serverSpawned)
                             veh.RemoveFromWorld();
                     }
