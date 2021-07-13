@@ -82,6 +82,8 @@ namespace Curiosity.StolenVehicle.Missions
                     return;
                 }
 
+                storeClerk.State.Set(StateBagKey.PED_MISSION, false, true);
+
                 storeClerk.IsImportant = true;
                 storeClerk.IsPositionFrozen = true;
                 storeClerk.IsCollisionEnabled = false;
