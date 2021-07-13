@@ -114,6 +114,7 @@ namespace Curiosity.Core.Server.Managers
 
                         if (maxWaitTime < DateTime.UtcNow) break;
                     }
+                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                     if (!API.DoesEntityExist(vehicleId))
                     {
@@ -123,8 +124,6 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     Vehicle vehicle = new Vehicle(vehicleId);
-
-                    API.SetEntityDistanceCullingRadius(vehicle.Handle, 15000f);
 
                     Player p = PluginManager.PlayersList[metadata.Sender];
 
@@ -171,8 +170,6 @@ namespace Curiosity.Core.Server.Managers
                         vehicle.State.Set(StateBagKey.VEH_PERSONAL_TRAILER, true, true);
                         vehicle.State.Set(StateBagKey.VEH_TRAILER_CONTENT, new { }, true);
                     }
-
-                    API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                     vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 

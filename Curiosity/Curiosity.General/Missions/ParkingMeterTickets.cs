@@ -24,7 +24,9 @@ namespace Curiosity.ParkingMeters.Missions
         System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 65, 105, 225);
         Vector3 scale = new Vector3(0.5f);
 
-        public override void Start()
+        Model model;
+
+        public override async void Start()
         {
             parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
 
@@ -36,6 +38,12 @@ namespace Curiosity.ParkingMeters.Missions
             missionBlip = World.CreateBlip(parkingMeter.Position);
             missionBlip.Sprite = BlipSprite.PointOfInterest;
             missionBlip.ShowRoute = true;
+
+            model = parkingMeter.ParkingMeterVehicle.Vehicle;
+            await model.Request(3000);
+
+            while (!model.IsLoaded)
+                await BaseScript.Delay(100);
 
             RegisterBlip(missionBlip);
 
@@ -60,13 +68,20 @@ namespace Curiosity.ParkingMeters.Missions
                         missionState = MissionState.SpawnVehicle;
                     break;
                 case MissionState.SpawnVehicle:
-                    vehicle = await VehicleSpawn(parkingMeter.ParkingMeterVehicle.Vehicle, parkingMeter.ParkingMeterVehicle.Position, parkingMeter.ParkingMeterVehicle.Heading, false, false, true);
+                    await model.Request(3000);
+
+                    while (!model.IsLoaded)
+                        await BaseScript.Delay(100);
+
+                    await BaseScript.Delay(100);
+
+                    vehicle = await VehicleSpawn(model.Hash, parkingMeter.ParkingMeterVehicle.Position, parkingMeter.ParkingMeterVehicle.Heading, false);
                     vehicle.IsPersistent = true;
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsInvincible = true;
                     vehicle.IsCollisionEnabled = false;
                     vehicle.IsRecordingCollisions = false;
-                    
+
                     if (vehicle == null)
                     {
                         Stop(EndState.Error);

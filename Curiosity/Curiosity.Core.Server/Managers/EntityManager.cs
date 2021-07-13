@@ -48,10 +48,9 @@ namespace Curiosity.Core.Server.Managers
                 float y = metadata.Find<float>(2);
                 float z = metadata.Find<float>(3);
                 float h = metadata.Find<float>(4);
-                bool isNetworked = metadata.Find<bool>(5);
-                bool isMission = metadata.Find<bool>(6);
 
-                int vehicleId = API.CreateVehicle(model, x, y, z, h, isNetworked, isMission);
+                int vehicleId = API.CreateVehicle(model, x, y, z, h, true, true);
+
                 await BaseScript.Delay(0);
 
                 if (vehicleId == 0)
@@ -75,13 +74,18 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
+                await BaseScript.Delay(0);
+
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+
+                await BaseScript.Delay(0);
 
                 Vehicle veh = new Vehicle(vehicleId);
                 veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
                 veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
                 veh.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
-                veh.State.Set(StateBagKey.VEHICLE_MISSION, isMission, true);
+                veh.State.Set(StateBagKey.VEHICLE_MISSION, true, true);
                 veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_SEARCH, false, true);
@@ -93,8 +97,6 @@ namespace Curiosity.Core.Server.Managers
                 veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
-
-                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
@@ -112,10 +114,8 @@ namespace Curiosity.Core.Server.Managers
                 float y = metadata.Find<float>(3);
                 float z = metadata.Find<float>(4);
                 float h = metadata.Find<float>(5);
-                bool isNetworked = metadata.Find<bool>(6);
-                bool isMission = metadata.Find<bool>(7);
 
-                int pedId = API.CreatePed(pedType, model, x, y, z, h, isNetworked, isMission);
+                int pedId = API.CreatePed(pedType, model, x, y, z, h, true, true);
                 await BaseScript.Delay(0);
 
                 if (pedId == 0)
@@ -133,13 +133,16 @@ namespace Curiosity.Core.Server.Managers
                     if (maxWaitTime < DateTime.UtcNow) break;
                 }
 
+                API.SetEntityRoutingBucket(pedId, (int)routingBucket);
+                API.SetEntityDistanceCullingRadius(pedId, 15000f);
+
+                await BaseScript.Delay(0);
+
                 if (!API.DoesEntityExist(pedId))
                 {
                     Logger.Debug($"Failed to create ped in timely manor.");
                     return null;
                 }
-
-                API.SetEntityRoutingBucket(pedId, (int)routingBucket);
 
                 Ped ped = new Ped(pedId);
                 ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
@@ -152,7 +155,7 @@ namespace Curiosity.Core.Server.Managers
                 ped.State.Set(StateBagKey.PED_ARRESTED, false, true);
                 ped.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
                 ped.State.Set(StateBagKey.PED_SUSPECT, false, true);
-                ped.State.Set(StateBagKey.PED_MISSION, isMission, true);
+                ped.State.Set(StateBagKey.PED_MISSION, true, true);
                 ped.State.Set(StateBagKey.PED_IMPORTANT, false, true);
                 ped.State.Set(StateBagKey.PED_HOSTAGE, false, true);
                 ped.State.Set(StateBagKey.PED_RELEASED, false, true);
@@ -169,8 +172,6 @@ namespace Curiosity.Core.Server.Managers
                 ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
                 ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
                 ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
-
-                API.SetEntityDistanceCullingRadius(pedId, 15000f);
 
                 return API.NetworkGetNetworkIdFromEntity(pedId);
             }));
@@ -245,8 +246,8 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            Instance.ExportDictionary.Add("CreateProp", new Func<string, uint, float, float, float, bool, bool, bool, Task<string>>(
-                async (playerHandle, model, x, y, z, isNetworked, isMission, isDynamic) =>
+            Instance.ExportDictionary.Add("CreateProp", new Func<string, uint, float, float, float, bool, Task<string>>(
+                async (playerHandle, model, x, y, z, isDynamic) =>
                 {
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -257,7 +258,7 @@ namespace Curiosity.Core.Server.Managers
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                         exportMessage.Error = "Player was not found";
 
-                    int propNetworkId = await CreateEntity(playerId, model, x, y, z, isNetworked, isMission, isDynamic);
+                    int propNetworkId = await CreateEntity(playerId, model, x, y, z, isDynamic);
 
                     exportMessage.NetworkId = propNetworkId;
 
@@ -271,18 +272,16 @@ namespace Curiosity.Core.Server.Managers
             float x = metadata.Find<float>(1);
             float y = metadata.Find<float>(2);
             float z = metadata.Find<float>(3);
-            bool isNetworked = metadata.Find<bool>(4);
-            bool isMission = metadata.Find<bool>(5);
             bool isDynamic = metadata.Find<bool>(6);
 
-            return await CreateEntity(metadata.Sender, model, x, y, z, isNetworked, isMission, isDynamic);
+            return await CreateEntity(metadata.Sender, model, x, y, z, isDynamic);
         }
 
-        private async Task<int> CreateEntity(int source, uint model, float x, float y, float z, bool isNetworked, bool isMission, bool isDynamic)
+        private async Task<int> CreateEntity(int source, uint model, float x, float y, float z, bool isDynamic)
         {
             RoutingBucket routingBucket = PluginManager.ActiveUsers[source].RoutingBucket;
 
-            int objectId = API.CreateObjectNoOffset(model, x, y, z, isNetworked, isMission, isDynamic);
+            int objectId = API.CreateObjectNoOffset(model, x, y, z, true, true, isDynamic);
 
             Logger.Debug($"Generated Object with ID {objectId}");
 

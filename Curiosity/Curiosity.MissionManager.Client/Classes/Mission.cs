@@ -478,7 +478,7 @@ namespace Curiosity.MissionManager.Client
             Instance.DiscordRichPresence.Commit();
         }
 
-        public async Task<Ped> PedSpawnRandom(Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
+        public async Task<Ped> PedSpawnRandom(Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE)
         {
 
             Vector3 spawnPosition = position;
@@ -511,7 +511,7 @@ namespace Curiosity.MissionManager.Client
 
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
-            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
             await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
             API.NetworkRequestControlOfNetworkId(pedNetworkId);
@@ -536,7 +536,7 @@ namespace Curiosity.MissionManager.Client
             return ped;
         }
 
-        public async Task<Ped> PedSpawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
+        public async Task<Ped> PedSpawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE)
         {
             Vector3 spawnPosition = position;
 
@@ -569,7 +569,7 @@ namespace Curiosity.MissionManager.Client
 
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
-            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
             await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
             API.NetworkRequestControlOfNetworkId(pedNetworkId);
@@ -595,7 +595,7 @@ namespace Curiosity.MissionManager.Client
             return ped;
         }
 
-        public async Task<Vehicle> VehicleSpawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
+        public async Task<Vehicle> VehicleSpawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true)
         {
             Vector3 spawnPosition = position;
 
@@ -610,7 +610,7 @@ namespace Curiosity.MissionManager.Client
 
             CitizenFX.Core.Vehicle fxVehicle;
 
-            int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
             await BaseScript.Delay(100);
             int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
             await BaseScript.Delay(0);
