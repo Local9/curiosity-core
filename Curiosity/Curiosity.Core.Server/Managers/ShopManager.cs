@@ -171,7 +171,11 @@ namespace Curiosity.Core.Server.Managers
                                 metRequirements++;
                         }
 
-                        if (metRequirements == requirements) goto AddItemToCharacter;
+                        if (metRequirements == requirements && item.SpawnTypeId == 0)
+                            goto AddItemToCharacter;
+
+                        if (metRequirements == requirements && (item.IsVehicle || item.SpawnTypeId == SpawnType.Trailer))
+                            goto AddVehicleToCharacter;
 
                         goto FailedPurchaseSkill;
                     }
@@ -179,7 +183,7 @@ namespace Curiosity.Core.Server.Managers
                     if (item.SpawnTypeId == 0)
                         goto AddItemToCharacter; // Let them buy it then!
 
-                    if (item.IsVehicle)
+                    if (item.IsVehicle || item.SpawnTypeId == SpawnType.Trailer)
                         goto AddVehicleToCharacter;
 
                 AddVehicleToCharacter:
