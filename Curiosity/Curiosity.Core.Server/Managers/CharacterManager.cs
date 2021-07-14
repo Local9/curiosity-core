@@ -55,9 +55,6 @@ namespace Curiosity.Core.Server.Managers
 
                 curiosityUser.Character = await Database.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
 
-                curiosityUser.Character.Skills = await Database.Store.SkillDatabase.Get(curiosityUser.Character.CharacterId);
-                curiosityUser.Character.Stats = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId);
-
                 return curiosityUser.Character;
             }));
 
@@ -182,7 +179,6 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
-                player.Character.Skills = returnVal;
                 return returnVal;
             }));
 
@@ -194,7 +190,6 @@ namespace Curiosity.Core.Server.Managers
                 if (!player.AllowPublicStats && !isSamePlayer) return null;
 
                 List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
-                player.Character.Skills = returnVal;
                 return returnVal;
             }));
 
@@ -202,7 +197,6 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
-                player.Character.Stats = returnVal;
                 return returnVal;
             }));
 
@@ -214,7 +208,6 @@ namespace Curiosity.Core.Server.Managers
                 if (!player.AllowPublicStats && !isSamePlayer) return null;
 
                 List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
-                player.Character.Stats = returnVal;
                 return returnVal;
             }));
 
@@ -282,8 +275,6 @@ namespace Curiosity.Core.Server.Managers
                     }
                     else
                     {
-                        user.Character.Skills = await Database.Store.SkillDatabase.Get(user.Character.CharacterId);
-
                         exportMessage.Skill = skill;
                     }
 
@@ -306,8 +297,6 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
                     int newSkillValue = await Database.Store.SkillDatabase.Adjust(user.Character.CharacterId, skillId, amt);
-
-                    user.Character.Skills = await Database.Store.SkillDatabase.Get(user.Character.CharacterId);
 
                     exportMessage.NewNumberValue = newSkillValue;
 
@@ -362,10 +351,7 @@ namespace Curiosity.Core.Server.Managers
                         return $"{exportMessage}";
                     }
 
-
                     int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
-
-                    user.Character.Stats = await Database.Store.StatDatabase.Get(user.Character.CharacterId);
 
                     exportMessage.NewNumberValue = newSkillValue;
 

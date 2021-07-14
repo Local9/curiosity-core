@@ -346,14 +346,16 @@ namespace Curiosity.Core.Client.Extensions
             Session.CreatingCharacter = false;
         }
 
-        public static void SetupStats(this CuriosityCharacter character)
+        public static async void SetupStats(this CuriosityCharacter character)
         {
             LevelManager levelManager = LevelManager.GetModule();
             PlayerStatManager playerStatManager = PlayerStatManager.GetModule();
 
+            List<CharacterStat> characterStats = await EventSystem.GetModule().Request<List<CharacterStat>>("character:get:stats:enhanced", Game.Player.ServerId);
+
             Logger.Debug($"[LOAD] Setting up stats");
 
-            foreach (CharacterStat stat in character.Stats)
+            foreach (CharacterStat stat in characterStats)
             {
                 string statStr = "";
                 int lvl = 0;

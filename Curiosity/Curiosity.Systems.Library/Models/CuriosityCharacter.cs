@@ -25,10 +25,6 @@ namespace Curiosity.Systems.Library.Models
         public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();
 
-        public List<CharacterSkill> Skills = new List<CharacterSkill>();
-
-        public List<CharacterStat> Stats = new List<CharacterStat>();
-
         public void ChangeFeature(int feature, float value)
         {
             if (Features.ContainsKey(feature))
