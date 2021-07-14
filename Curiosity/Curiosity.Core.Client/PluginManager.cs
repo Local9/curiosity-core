@@ -75,6 +75,7 @@ namespace Curiosity.Core.Client
             DiscordRichPresence.Commit();
 
             Logger.Info("[Curiosity]: Loading managers, please wait...");
+            Logger.Info("[Curiosity]: Version: 2.0.1.3267");
 
             Assembly.GetExecutingAssembly().GetExportedTypes()
                 .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
