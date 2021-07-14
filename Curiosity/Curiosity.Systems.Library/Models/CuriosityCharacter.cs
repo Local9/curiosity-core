@@ -43,7 +43,7 @@ namespace Curiosity.Systems.Library.Models
             int costOfRespawn = (int)(Cash * 0.1);
 
             if (costOfRespawn < 100)
-                costOfRespawn = 100;
+                costOfRespawn = 0;
 
             if (costOfRespawn > 5000)
             {
