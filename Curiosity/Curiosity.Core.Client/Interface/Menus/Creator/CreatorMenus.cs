@@ -97,6 +97,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 if (selectedItem == itemSave)
                 {
                     Cache.Character.MarkedAsRegistered = true;
+                    Cache.Player.Character = Cache.Character;
                     await Cache.Character.Save();
 
                     DestroyMenus();
