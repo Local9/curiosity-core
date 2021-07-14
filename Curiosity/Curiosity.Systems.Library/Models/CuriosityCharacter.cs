@@ -13,6 +13,7 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public string MP0_WHEELIE_ABILITY { get { return "MP0_WHEELIE_ABILITY"; } }
         [JsonIgnore] public string MP0_LUNG_CAPACITY { get { return "MP0_LUNG_CAPACITY"; } }
 
+        public string Version = "2";
         public int CharacterId { get; set; }
         public int Health { get; set; }
         public int Armor { get; set; }
