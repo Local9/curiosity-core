@@ -199,8 +199,6 @@ namespace Curiosity.Core.Client.Interface.Menus
                                 {
                                     if (!MenuPool.IsAnyMenuOpen())
                                     {
-                                        OnMenuOpen();
-
                                         Instance.AttachTickHandler(OnMenuDisplay);
                                         menuMain.Visible = !menuMain.Visible;
                                     }
@@ -215,8 +213,6 @@ namespace Curiosity.Core.Client.Interface.Menus
                             {
                                 if (!MenuPool.IsAnyMenuOpen())
                                 {
-                                    OnMenuOpen();
-
                                     Instance.AttachTickHandler(OnMenuDisplay);
                                     menuMain.Visible = !menuMain.Visible;
                                 }
@@ -225,11 +221,9 @@ namespace Curiosity.Core.Client.Interface.Menus
                     }
                 }
             }
-            catch (IndexOutOfRangeException iex) { }
-            catch (KeyNotFoundException kex) { }
             catch (Exception ex)
             {
-
+                Logger.Error(ex, "On Menu Open Tick");
             }
         }
 
