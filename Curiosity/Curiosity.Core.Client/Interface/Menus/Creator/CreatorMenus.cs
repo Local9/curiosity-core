@@ -100,20 +100,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                     await Cache.Character.Save();
 
                     DestroyMenus();
-                    menuMain.Clear();
                     _MenuPool.CloseAllMenus();
+                    menuMain.Clear();
                     menuMain = null;
 
                     EventSystem.GetModule().Send("character:routing:base");
                 }
-            }
-            catch (KeyNotFoundException ex)
-            {
-
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-
             }
             catch (Exception ex)
             {
