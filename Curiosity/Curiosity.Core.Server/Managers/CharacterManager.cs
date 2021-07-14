@@ -93,6 +93,8 @@ namespace Curiosity.Core.Server.Managers
                     return false;
                 }
 
+                user.Character = curiosityCharacter;
+
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
 
                 if (player.Character != null)
