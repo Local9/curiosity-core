@@ -73,31 +73,6 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
-                    if (curiosityUser.PersonalVehicle > 0 && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
-                    {
-                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalVehicle);
-                    }
-
-                    if (curiosityUser.PersonalBoat > 0 && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                    {
-                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalBoat);
-                    }
-
-                    if (curiosityUser.PersonalPlane > 0 && vehicleItem.SpawnTypeId == SpawnType.Plane)
-                    {
-                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
-                    }
-
-                    if (curiosityUser.PersonalHelicopter > 0 && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
-                    {
-                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalHelicopter);
-                    }
-
-                    if (curiosityUser.PersonalTrailer > 0 && vehicleItem.SpawnTypeId == SpawnType.Trailer)
-                    {
-                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalTrailer);
-                    }
-
                     // get spawn loacation if not a car
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
@@ -162,18 +137,33 @@ namespace Curiosity.Core.Server.Managers
                     switch(vehicleItem.SpawnTypeId)
                     {
                         case SpawnType.Boat:
+                            if (curiosityUser.PersonalBoat > 0)
+                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalBoat);
+
                             p.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Plane:
+                            if (curiosityUser.PersonalPlane > 0)
+                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
+
                             p.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
+                            if (curiosityUser.PersonalHelicopter > 0)
+                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalHelicopter);
+
                             p.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Trailer:
+                            if (curiosityUser.PersonalTrailer > 0)
+                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalTrailer);
+
                             p.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         default:
+                            if (curiosityUser.PersonalVehicle > 0)
+                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalVehicle);
+
                             p.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
