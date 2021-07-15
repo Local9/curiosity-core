@@ -249,7 +249,7 @@ namespace Curiosity.Core.Client.Extensions
                 if (DateTime.UtcNow > waitTime) break;
             }
 
-            if (!Cache.PlayerPed.IsInRangeOf(endPosition, 0.5f))
+            if (!Cache.PlayerPed.IsInRangeOf(endPosition, 0.1f))
             {
                 await Cache.PlayerPed.FadeOut();
 
