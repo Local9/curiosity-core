@@ -1,19 +1,6 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Server.Diagnostics;
-using Curiosity.Core.Server.Events;
-using Curiosity.Core.Server.Extensions;
-using Curiosity.Core.Server.Web;
-using Curiosity.Core.Server.Web.Discord.Entity;
-using Curiosity.Systems.Library.Entity;
-using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Events;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Utils;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace Curiosity.Core.Server.Managers
 {

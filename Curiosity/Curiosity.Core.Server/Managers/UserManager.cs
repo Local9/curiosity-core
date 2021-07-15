@@ -252,6 +252,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else
                 {
+                    PluginManager.ActiveUsers[handle].RoutingBucket = bucket;
                     API.SetPlayerRoutingBucket(playerHandle, bucket);
                 }
 
