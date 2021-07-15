@@ -143,6 +143,12 @@ namespace Curiosity.Core.Client.Managers
                             markerData.SetOnGround = m.SetOnGround;
                             markerData.SpawnType = location.SpawnType;
 
+                            float ground = 0f;
+                            Vector3 position = markerData.Position;
+
+                            if (API.GetGroundZFor_3dCoord_2(markerData.Position.X, markerData.Position.Y, markerData.Position.Z, ref ground, false) && m.SetOnGround)
+                                position.Z = ground;
+
                             MarkersAll.Add(markerData);
                         });
                     });
@@ -167,7 +173,7 @@ namespace Curiosity.Core.Client.Managers
 
         void RefreshClose()
         {
-            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => 
+            MarkersClose = MarkersAll.Where(m => 
                 Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
                 && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
             ).ToList();
@@ -204,15 +210,8 @@ namespace Curiosity.Core.Client.Managers
         {
             MarkersClose.ForEach(m =>
             {
-                float ground = 0f;
-                Vector3 position = m.Position;
-
-                if (API.GetGroundZFor_3dCoord_2(m.Position.X, m.Position.Y, m.Position.Z, ref ground, false) && m.SetOnGround)
-                    position.Z = ground;
-
-                World.DrawMarker((MarkerType)m.MarkerId, position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
-                
-                ScreenInterface.Draw3DText(position, m.Message, 50f, m.DrawThreshold, 2f);
+                World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
+                ScreenInterface.Draw3DText(m.Position, m.Message, 50f, m.DrawThreshold, 2f);
             });
         }
 
