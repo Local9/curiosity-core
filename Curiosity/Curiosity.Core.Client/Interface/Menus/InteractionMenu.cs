@@ -126,51 +126,31 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 if (key == PERSONAL_VEHICLE)
                 {
-                    if (Cache.PersonalVehicle is null) return;
-                    if (!(Cache.PersonalVehicle.Vehicle?.Exists() ?? false)) return;
-
-                    Vector3 pos = Cache.PersonalVehicle.Vehicle.Position;
-                    API.SetNewWaypoint(pos.X, pos.Y);
+                    PersonalVehicleWaypoint(Cache.PersonalVehicle.Vehicle);
                     return;
                 }
 
                 if (key == PERSONAL_TRAILER)
                 {
-                    if (Cache.PersonalTrailer is null) return;
-                    if (!(Cache.PersonalTrailer.Vehicle?.Exists() ?? false)) return;
-
-                    Vector3 pos = Cache.PersonalTrailer.Vehicle.Position;
-                    API.SetNewWaypoint(pos.X, pos.Y);
+                    PersonalVehicleWaypoint(Cache.PersonalTrailer.Vehicle);
                     return;
                 }
 
                 if (key == PERSONAL_PLANE)
                 {
-                    if (Cache.PersonalPlane is null) return;
-                    if (!(Cache.PersonalPlane.Vehicle?.Exists() ?? false)) return;
-
-                    Vector3 pos = Cache.PersonalPlane.Vehicle.Position;
-                    API.SetNewWaypoint(pos.X, pos.Y);
+                    PersonalVehicleWaypoint(Cache.PersonalPlane.Vehicle);
                     return;
                 }
 
                 if (key == PERSONAL_HELICOPTER)
                 {
-                    if (Cache.PersonalHelicopter is null) return;
-                    if (!(Cache.PersonalHelicopter.Vehicle?.Exists() ?? false)) return;
-
-                    Vector3 pos = Cache.PersonalHelicopter.Vehicle.Position;
-                    API.SetNewWaypoint(pos.X, pos.Y);
+                    PersonalVehicleWaypoint(Cache.PersonalHelicopter.Vehicle);
                     return;
                 }
 
                 if (key == PERSONAL_BOAT)
                 {
-                    if (Cache.PersonalBoat is null) return;
-                    if (!(Cache.PersonalBoat.Vehicle?.Exists() ?? false)) return;
-
-                    Vector3 pos = Cache.PersonalBoat.Vehicle.Position;
-                    API.SetNewWaypoint(pos.X, pos.Y);
+                    PersonalVehicleWaypoint(Cache.PersonalBoat.Vehicle);
                     return;
                 }
 
@@ -184,6 +164,15 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 API.SetNewWaypoint(closestPosition.X, closestPosition.Y);
             }
+        }
+
+        private void PersonalVehicleWaypoint(Vehicle vehicle)
+        {
+            if (vehicle is null) return;
+            if (!(vehicle?.Exists() ?? false)) return;
+
+            Vector3 pos = vehicle.Position;
+            API.SetNewWaypoint(pos.X, pos.Y);
         }
 
         private void MenuMain_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
