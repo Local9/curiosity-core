@@ -173,11 +173,11 @@ namespace Curiosity.Core.Client.Extensions
         {
             await Cache.PlayerPed.FadeOut();
 
-            Cache.PlayerPed.Weapons.RemoveAll();
             Cache.PlayerPed.Task.ClearAllImmediately();
             Game.Player.WantedLevel = 0;
             Cache.PlayerPed.IsVisible = true;
             Cache.PlayerPed.Health = Cache.PlayerPed.MaxHealth;
+            Cache.PlayerPed.Armor = 0;
             Cache.PlayerPed.ClearBloodDamage();
             Cache.PlayerPed.ClearLastWeaponDamage();
 
