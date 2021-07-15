@@ -14,6 +14,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 {
     public class InteractionMenu : Manager<InteractionMenu>
     {
+        private const string PERSONAL_VEHICLE = "Personal Vehicle";
         public static InteractionMenu MenuInstance;
 
         public static MenuPool MenuPool;
@@ -118,6 +119,16 @@ namespace Curiosity.Core.Client.Interface.Menus
                 string key = (string)listItem.Items[newIndex];
 
                 Logger.Debug($"Selected Key: {key}");
+
+                if (key == PERSONAL_VEHICLE)
+                {
+                    if (Cache.PersonalVehicle is null) return;
+                    if (!(Cache.PersonalVehicle.Vehicle?.Exists() ?? false)) return;
+
+                    Vector3 pos = Cache.PersonalVehicle.Vehicle.Position;
+                    API.SetNewWaypoint(pos.X, pos.Y);
+                    return;
+                }
 
                 List<Position> positions = BlipManager.ManagerInstance.Locations[key];
                 List<Vector3> posVectors = new List<Vector3>();
@@ -252,6 +263,18 @@ namespace Curiosity.Core.Client.Interface.Menus
             {
                 if (!gpsLocations.Contains(kvp.Key))
                     gpsLocations.Add(kvp.Key);
+            }
+
+            if (!gpsLocations.Contains(PERSONAL_VEHICLE))
+            {
+                if (Cache.PersonalVehicle is not null)
+                {
+                    Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+                    if (vehicle?.Exists() ?? false)
+                    {
+                        gpsLocations.Add(PERSONAL_VEHICLE);
+                    }
+                }
             }
 
             if (gpsLocations.Count > 1)
