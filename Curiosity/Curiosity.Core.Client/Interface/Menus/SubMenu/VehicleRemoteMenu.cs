@@ -11,6 +11,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuCheckboxItem miNeon = new UIMenuCheckboxItem("Neon Lights", false);
         private bool neonLights = false;
         private bool headlights = false;
+        private UIMenu _menu;
         // UIMenuCheckboxItem miRadio = new UIMenuCheckboxItem("Engine", false);
 
         public UIMenu CreateMenu(UIMenu menu)
@@ -25,6 +26,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.MouseControlsEnabled = false;
             menu.MouseEdgeEnabled = false;
 
+            _menu = menu;
+
             return menu;
         }
 
@@ -32,6 +35,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             if (state == MenuState.ChangeForward)
                 OnMenuOpen();
+
+            if (state == MenuState.ChangeBackward)
+                _menu.InstructionalButtons.Clear();
         }
 
         private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)

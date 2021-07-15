@@ -141,6 +141,8 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private void OnMenuOpen()
         {
+            menuMain.InstructionalButtons.Clear();
+
             PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
             Logger.Debug($"Menu Open");

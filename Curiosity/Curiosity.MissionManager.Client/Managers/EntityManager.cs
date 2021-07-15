@@ -1,13 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Handler;
-using Curiosity.MissionManager.Client.Managers;
-using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Curiosity.MissionManager.Client.Managers
 {
