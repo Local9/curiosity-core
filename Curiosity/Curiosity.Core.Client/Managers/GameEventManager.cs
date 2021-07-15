@@ -319,6 +319,7 @@ namespace Curiosity.Core.Client.Managers
             Cache.PlayerPed.Weapons.RemoveAll();
 
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, spawnLocation.H));
+            BaseScript.TriggerEvent("onPlayerResurrected:hospital");
 
             RemoveCamera();
 
@@ -333,6 +334,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
 
             Vector3 spawnLocation = curiosityPlayer.Entity.Position.AsVector();
+            BaseScript.TriggerEvent("onPlayerResurrected:local");
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Cache.PlayerPed.Heading));
 
             RemoveCamera();
