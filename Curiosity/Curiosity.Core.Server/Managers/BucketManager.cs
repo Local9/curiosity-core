@@ -31,7 +31,14 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else
                 {
-                    API.SetRoutingBucketEntityLockdownMode(bucketId, mode);
+                    if (mode == "strict" || mode == "relaxed" || mode == "inactive")
+                    {
+                        API.SetRoutingBucketEntityLockdownMode(bucketId, mode);
+                    }
+                    else
+                    {
+                        exportMessage.Error = $"Unknown mode '{mode}', can only accept strict, relaxed, or inactive";
+                    }
                 }
 
                 return $"{exportMessage}";
