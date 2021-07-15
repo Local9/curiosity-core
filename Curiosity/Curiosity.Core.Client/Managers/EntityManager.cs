@@ -55,6 +55,13 @@ namespace Curiosity.Core.Client.Managers
                             Vehicle vehicle = new Vehicle(entityHandle);
                             if (vehicle.Exists())
                             {
+                                Ped driver = vehicle?.Driver;
+
+                                if (driver?.Exists() ?? false)
+                                {
+                                    if (driver.IsPlayer) return null;
+                                }
+
                                 if (vehicle.PassengerCount > 0)
                                 {
                                     foreach(Ped p in vehicle.Passengers)
