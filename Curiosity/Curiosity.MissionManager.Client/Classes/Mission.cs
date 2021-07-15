@@ -74,7 +74,7 @@ namespace Curiosity.MissionManager.Client
 
         public static void CreateParticleAtLocation(string dict, string fx, Vector3 location, float scale = 1.0f, bool placeOnGround = true)
         {
-            BaseScript.TriggerServerEvent("s:mm:particle:location", dict, fx, location.X, location.Y, location.Z, scale, placeOnGround);
+            EventSystem.Send("s:mm:particle:location", dict, fx, location.X, location.Y, location.Z, scale, placeOnGround);
         }
 
         public static void CountArrest()

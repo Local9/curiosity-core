@@ -205,6 +205,7 @@ namespace Curiosity.Core.Client.Extensions
             var player = Cache.Player;
             var timestamp = API.GetGameTimer();
 
+            Vector3 endPosition = new Vector3(405.9247f, -997.2114f, -99.00401f);
             Game.PlayerPed.Position = new Vector3(405.9247f, -997.2114f, -99.00401f);
             Game.PlayerPed.Heading = 86.36787f;
 
@@ -239,6 +240,24 @@ namespace Curiosity.Core.Client.Extensions
                 .WithFlags(AnimationFlags.Loop)
                 .SkipTask()
             ).PlayQueue();
+
+            DateTime waitTime = DateTime.UtcNow.AddSeconds(3);
+
+            while (true)
+            {
+                await BaseScript.Delay(1);
+                if (DateTime.UtcNow > waitTime) break;
+            }
+
+            if (!Cache.PlayerPed.IsInRangeOf(endPosition, 1f))
+            {
+                await Cache.PlayerPed.FadeOut();
+
+                Cache.PlayerPed.Position = new Vector3(405.9247f, -997.2114f, -99.00401f);
+                Cache.PlayerPed.Heading = 86.36787f;
+
+                await Cache.PlayerPed.FadeIn();
+            }
 
             var menuDisplayed = false;
 

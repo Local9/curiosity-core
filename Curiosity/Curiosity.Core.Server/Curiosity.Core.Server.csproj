@@ -88,6 +88,7 @@
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\DeveloperManager.cs" />
+    <Compile Include="Managers\EntityDamageManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\GarageManager.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\MissionManager.cs" />
     <Compile Include="Managers\OneSyncEventManager.cs" />
+    <Compile Include="Managers\ParticleManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\SpecialDayManager.cs" />
