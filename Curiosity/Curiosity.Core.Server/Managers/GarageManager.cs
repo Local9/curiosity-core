@@ -125,7 +125,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!API.DoesEntityExist(vehicleId))
                     {
-                        Logger.Debug($"Failed to create vehicle in timely manor.");
+                        Logger.Debug($"Failed to create vehicle in timely manor. Move a little and it may spawn.");
                         vehicleItem.Message = "Vehicle not created within a timely manor.";
                         return vehicleItem;
                     }
