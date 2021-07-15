@@ -73,6 +73,31 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
+                    if (curiosityUser.PersonalVehicle > 0 && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                    {
+                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalVehicle);
+                    }
+
+                    if (curiosityUser.PersonalBoat > 0 && vehicleItem.SpawnTypeId == SpawnType.Boat)
+                    {
+                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalBoat);
+                    }
+
+                    if (curiosityUser.PersonalPlane > 0 && vehicleItem.SpawnTypeId == SpawnType.Plane)
+                    {
+                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
+                    }
+
+                    if (curiosityUser.PersonalHelicopter > 0 && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
+                    {
+                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalHelicopter);
+                    }
+
+                    if (curiosityUser.PersonalTrailer > 0 && vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                    {
+                        EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalTrailer);
+                    }
+
                     // get spawn loacation if not a car
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
