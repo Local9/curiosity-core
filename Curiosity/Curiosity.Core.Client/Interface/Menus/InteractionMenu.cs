@@ -15,6 +15,10 @@ namespace Curiosity.Core.Client.Interface.Menus
     public class InteractionMenu : Manager<InteractionMenu>
     {
         private const string PERSONAL_VEHICLE = "Personal Vehicle";
+        private const string PERSONAL_BOAT = "Personal Boat";
+        private const string PERSONAL_PLANE = "Personal Plane";
+        private const string PERSONAL_TRAILER = "Personal Trailer";
+        private const string PERSONAL_HELICOPTER = "Personal Helicopter";
         public static InteractionMenu MenuInstance;
 
         public static MenuPool MenuPool;
@@ -126,6 +130,46 @@ namespace Curiosity.Core.Client.Interface.Menus
                     if (!(Cache.PersonalVehicle.Vehicle?.Exists() ?? false)) return;
 
                     Vector3 pos = Cache.PersonalVehicle.Vehicle.Position;
+                    API.SetNewWaypoint(pos.X, pos.Y);
+                    return;
+                }
+
+                if (key == PERSONAL_TRAILER)
+                {
+                    if (Cache.PersonalTrailer is null) return;
+                    if (!(Cache.PersonalTrailer.Vehicle?.Exists() ?? false)) return;
+
+                    Vector3 pos = Cache.PersonalTrailer.Vehicle.Position;
+                    API.SetNewWaypoint(pos.X, pos.Y);
+                    return;
+                }
+
+                if (key == PERSONAL_PLANE)
+                {
+                    if (Cache.PersonalPlane is null) return;
+                    if (!(Cache.PersonalPlane.Vehicle?.Exists() ?? false)) return;
+
+                    Vector3 pos = Cache.PersonalPlane.Vehicle.Position;
+                    API.SetNewWaypoint(pos.X, pos.Y);
+                    return;
+                }
+
+                if (key == PERSONAL_HELICOPTER)
+                {
+                    if (Cache.PersonalHelicopter is null) return;
+                    if (!(Cache.PersonalHelicopter.Vehicle?.Exists() ?? false)) return;
+
+                    Vector3 pos = Cache.PersonalHelicopter.Vehicle.Position;
+                    API.SetNewWaypoint(pos.X, pos.Y);
+                    return;
+                }
+
+                if (key == PERSONAL_BOAT)
+                {
+                    if (Cache.PersonalBoat is null) return;
+                    if (!(Cache.PersonalBoat.Vehicle?.Exists() ?? false)) return;
+
+                    Vector3 pos = Cache.PersonalBoat.Vehicle.Position;
                     API.SetNewWaypoint(pos.X, pos.Y);
                     return;
                 }
@@ -273,6 +317,54 @@ namespace Curiosity.Core.Client.Interface.Menus
                     if (vehicle?.Exists() ?? false)
                     {
                         gpsLocations.Add(PERSONAL_VEHICLE);
+                    }
+                }
+            }
+
+            if (!gpsLocations.Contains(PERSONAL_BOAT))
+            {
+                if (Cache.PersonalBoat is not null)
+                {
+                    Vehicle vehicle = Cache.PersonalBoat.Vehicle;
+                    if (vehicle?.Exists() ?? false)
+                    {
+                        gpsLocations.Add(PERSONAL_BOAT);
+                    }
+                }
+            }
+
+            if (!gpsLocations.Contains(PERSONAL_HELICOPTER))
+            {
+                if (Cache.PersonalHelicopter is not null)
+                {
+                    Vehicle vehicle = Cache.PersonalHelicopter.Vehicle;
+                    if (vehicle?.Exists() ?? false)
+                    {
+                        gpsLocations.Add(PERSONAL_HELICOPTER);
+                    }
+                }
+            }
+
+            if (!gpsLocations.Contains(PERSONAL_PLANE))
+            {
+                if (Cache.PersonalPlane is not null)
+                {
+                    Vehicle vehicle = Cache.PersonalPlane.Vehicle;
+                    if (vehicle?.Exists() ?? false)
+                    {
+                        gpsLocations.Add(PERSONAL_PLANE);
+                    }
+                }
+            }
+
+            if (!gpsLocations.Contains(PERSONAL_TRAILER))
+            {
+                if (Cache.PersonalTrailer is not null)
+                {
+                    Vehicle vehicle = Cache.PersonalTrailer.Vehicle;
+                    if (vehicle?.Exists() ?? false)
+                    {
+                        gpsLocations.Add(PERSONAL_TRAILER);
                     }
                 }
             }
