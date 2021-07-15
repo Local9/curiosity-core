@@ -44,7 +44,7 @@ namespace Curiosity.Core.Server.Managers
                 return $"{exportMessage}";
             }));
 
-            Instance.ExportDictionary.Add("BucketLockdownMode", new Func<int, bool, string>((bucketId, enabled) =>
+            Instance.ExportDictionary.Add("BucketPopulationEnabled", new Func<int, bool, string>((bucketId, enabled) =>
             {
                 ExportMessage exportMessage = new ExportMessage();
 
