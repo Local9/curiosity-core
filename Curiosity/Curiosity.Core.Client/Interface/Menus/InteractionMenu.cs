@@ -158,7 +158,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             Logger.Debug($"Menu Open");
             // TOP
-            UpdateGpsMenuItem();
+            UpdateGpsMenuItem(true);
             // MID
 
             // BOTTOM
