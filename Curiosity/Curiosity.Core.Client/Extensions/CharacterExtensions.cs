@@ -253,8 +253,10 @@ namespace Curiosity.Core.Client.Extensions
             {
                 await Cache.PlayerPed.FadeOut();
 
-                Cache.PlayerPed.Position = endPosition;
-                Cache.PlayerPed.Heading = 177.9398f;
+                await SafeTeleport.Teleport(player.Entity.Id, new Position(endPosition.X, endPosition.Y, endPosition.Z, 177.9398f));
+
+                //Cache.PlayerPed.Position = endPosition;
+                //Cache.PlayerPed.Heading = 177.9398f;
 
                 await Cache.PlayerPed.FadeIn();
             }
