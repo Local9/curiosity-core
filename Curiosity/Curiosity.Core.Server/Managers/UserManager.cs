@@ -240,6 +240,24 @@ namespace Curiosity.Core.Server.Managers
                 return SetUserJobText(handle, jobText);
             }));
 
+            Instance.ExportDictionary.Add("SetBucket", new Func<string, int, string>((playerHandle, bucket) =>
+            {
+                ExportMessage exportMessage = new ExportMessage();
+
+                int handle = int.Parse(playerHandle);
+
+                if (!PluginManager.ActiveUsers.ContainsKey(handle))
+                {
+                    exportMessage.Error = "Player not found";
+                }
+                else
+                {
+                    API.SetPlayerRoutingBucket(playerHandle, bucket);
+                }
+
+                return $"{exportMessage}";
+            }));
+
             Instance.ExportDictionary.Add("UserRole", new Func<string, string>((playerHandle) =>
             {
                 ExportMessage exportMessage = new ExportMessage();

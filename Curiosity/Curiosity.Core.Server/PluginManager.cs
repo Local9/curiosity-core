@@ -216,8 +216,10 @@ namespace Curiosity.Core.Server
                 API.SetConvarServerInfo("Curiosity-Core", CURIOSITY_VERSION);
 
                 // Disable client side entity creation
-                Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC
+                // Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC
                 // CreateObject fails, CreateObjectNoOffset is fine
+
+                API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
             }
             catch (Exception ex)
             {
