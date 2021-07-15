@@ -147,7 +147,12 @@ namespace Curiosity.Core.Client.Managers.UI
                     if (player.Character.IsDead)
                     {
                         blip.Sprite = BlipSprite.Dead;
-                        ShowHeadingIndicatorOnBlip(blip.Handle, false); ;
+                        ShowHeadingIndicatorOnBlip(blip.Handle, false);
+                    }
+                    else
+                    {
+                        blip.Sprite = BlipSprite.Standard;
+                        ShowHeadingIndicatorOnBlip(blip.Handle, true);
                     }
 
                     if (Game.IsPaused)
