@@ -43,8 +43,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 float scale = metadata.Find<float>(5);
                 bool placeOnGround = metadata.Find<bool>(6);
 
-                if (!Mission.isOnMission) return null;
-
                 Vector3 pos = new Vector3(x, y, z);
                 float groundZ = 0f;
 
@@ -68,8 +66,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 float y = metadata.Find<float>(4);
                 float z = metadata.Find<float>(5);
                 float scale = metadata.Find<float>(6);
-
-                if (!Mission.isOnMission) return null;
 
                 int handle = await EntityHandler.GetEntityFromNetworkId(networkId);
 
