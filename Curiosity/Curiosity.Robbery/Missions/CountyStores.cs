@@ -175,6 +175,7 @@ namespace Curiosity.StolenVehicle.Missions
                     thief.IsImportant = true;
                     thief.IsMission = true;
                     thief.IsSuspect = true;
+                    thief.IsArrestable = true;
 
                     thief.Fx.Task.WanderAround(thief.Position, 20f);
 
