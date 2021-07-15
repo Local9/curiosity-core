@@ -205,6 +205,9 @@ namespace Curiosity.Core.Client.Extensions
             var player = Cache.Player;
             var timestamp = API.GetGameTimer();
 
+            Game.PlayerPed.Position = new Vector3(405.9247f, -997.2114f, -99.00401f);
+            Game.PlayerPed.Heading = 86.36787f;
+
             while (timestamp + 5000 > API.GetGameTimer())
             {
                 await BaseScript.Delay(100);
