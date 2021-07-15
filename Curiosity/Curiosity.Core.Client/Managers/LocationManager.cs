@@ -144,10 +144,9 @@ namespace Curiosity.Core.Client.Managers
                             markerData.SpawnType = location.SpawnType;
 
                             float ground = 0f;
-                            Vector3 position = markerData.Position;
 
                             if (API.GetGroundZFor_3dCoord_2(markerData.Position.X, markerData.Position.Y, markerData.Position.Z, ref ground, false) && m.SetOnGround)
-                                position.Z = ground;
+                                markerData.Position.Z = ground;
 
                             MarkersAll.Add(markerData);
                         });
