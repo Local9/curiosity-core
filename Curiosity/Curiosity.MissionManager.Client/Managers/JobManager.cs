@@ -69,6 +69,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Nightstick, 1, false, true);
                 await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.StunGun, 1, true, true);
                 await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Flashlight, 1, false, true);
+                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Pistol, 250, false, true);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
