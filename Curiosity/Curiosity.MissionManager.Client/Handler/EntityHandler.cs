@@ -1,18 +1,25 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Events;
+using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
     public class EntityHandler
     {
-        public static int GetEntityFromNetworkId(int networkId)
+        public static async Task<int> GetEntityFromNetworkId(int networkId)
         {
             if (!API.NetworkDoesNetworkIdExist(networkId)) return 0;
 
             int handle = API.NetworkGetEntityFromNetworkId(networkId);
 
             if (!API.DoesEntityExist(handle)) return 0;
+
+            while (!API.NetworkHasControlOfNetworkId(networkId))
+            {
+                await BaseScript.Delay(0);
+                API.NetworkRequestControlOfNetworkId(networkId);
+            }
 
             return handle;
         }

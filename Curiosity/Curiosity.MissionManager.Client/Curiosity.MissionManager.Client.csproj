@@ -85,14 +85,13 @@
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Handler\AnimationHandler.cs" />
-    <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\HowlerHandler.cs" />
     <Compile Include="Managers\ArrestManager.cs" />
+    <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Functions.cs" />
-    <Compile Include="Handler\ParticleHandler.cs" />
     <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />

@@ -10,6 +10,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.Development.Missions
 {
+    // /m mis devVehDmg
     [MissionInfo("Development Vehicle Damaged", "devVehDmg", 0f, 0f, 0f, MissionType.Developer, true, "None")]
     public class SpawnVehicleDamaged : Mission
     {
