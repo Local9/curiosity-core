@@ -316,6 +316,8 @@ namespace Curiosity.Core.Client.Managers
                 spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
             }
 
+            Cache.PlayerPed.Weapons.RemoveAll();
+
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, spawnLocation.H));
 
             RemoveCamera();
