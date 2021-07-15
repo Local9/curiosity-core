@@ -222,6 +222,15 @@ namespace Curiosity.Core.Client.Interface.Menus
                         }
                     }
                 }
+
+                if (menuMain is not null)
+                {
+                    if (!menuMain.Visible)
+                    {
+                        if (menuMain.InstructionalButtons.Count > 0)
+                            menuMain.InstructionalButtons.Clear();
+                    }
+                }
             }
             catch (Exception ex)
             {
