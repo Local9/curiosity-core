@@ -84,18 +84,18 @@ namespace Curiosity.Core.Server.Managers
                             pos = spawnPos.AsVector();
                             heading = spawnPos.H;
                         }
+
+                        if (AnyVehicleNearPoint(pos, d))
+                        {
+                            Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
+                            vehicleItem.Message = "Current location is blocked by another vehicle";
+                            return vehicleItem;
+                        }
                     }
                     else
                     {
                         pos = new Vector3(x, y, z);
                         heading = h;
-                    }
-
-                    if (AnyVehicleNearPoint(pos, d) && vehicleItem.SpawnTypeId != SpawnType.Vehicle)
-                    {
-                        Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
-                        vehicleItem.Message = "Current location is blocked by another vehicle";
-                        return vehicleItem;
                     }
 
                     if (Vector3.Distance(charPos, pos) >= 5000.0f)
