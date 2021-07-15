@@ -240,7 +240,7 @@ namespace Curiosity.Core.Server.Managers
                 return SetUserJobText(handle, jobText);
             }));
 
-            Instance.ExportDictionary.Add("SetBucket", new Func<string, int, string>((playerHandle, bucket) =>
+            Instance.ExportDictionary.Add("SetPlayerBucket", new Func<string, int, string>((playerHandle, bucket) =>
             {
                 ExportMessage exportMessage = new ExportMessage();
 
@@ -252,7 +252,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else
                 {
-                    PluginManager.ActiveUsers[handle].RoutingBucket = bucket;
+                    PluginManager.ActiveUsers[handle].RoutingBucket = (RoutingBucket)bucket;
                     API.SetPlayerRoutingBucket(playerHandle, bucket);
                 }
 
