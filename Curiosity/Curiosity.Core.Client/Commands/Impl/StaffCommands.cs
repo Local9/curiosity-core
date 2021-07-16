@@ -33,8 +33,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                 Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
                 {
                     Cache.PlayerPed.Weapons.Give(w, 999, false, true);
-                    Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
-                    Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                    //Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                    //Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
                 });
 
                 Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
