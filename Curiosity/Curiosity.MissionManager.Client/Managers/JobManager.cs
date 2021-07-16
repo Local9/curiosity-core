@@ -99,12 +99,22 @@ namespace Curiosity.MissionManager.Client.Managers
 
         async Task EquipWeapon(WeaponHash weapon, int ammo = 1, bool equip = false, bool forceInHand = false)
         {
-            bool hasWeapon = await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+            await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+
+            bool hasWeapon = Game.PlayerPed.Weapons.HasWeapon(weapon);
+
+            int failRate = 0;
 
             while (!hasWeapon)
             {
-                await BaseScript.Delay(100);
-                hasWeapon = await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+                await BaseScript.Delay(250);
+                await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+
+                hasWeapon = Game.PlayerPed.Weapons.HasWeapon(weapon);
+
+                if (!hasWeapon && failRate >= 5) break;
+
+                failRate++;
             }
         }
 
