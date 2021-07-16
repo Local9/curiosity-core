@@ -64,6 +64,11 @@ namespace Curiosity.Core.Server.Managers
 
                 int playerPed = player.Character.Handle;
 
+                if (!API.DoesEntityExist(playerPed))
+                {
+                    return false;
+                }
+
                 uint weaponHash = metadata.Find<uint>(0);
                 int ammoCount = metadata.Find<int>(1);
                 bool isHidden = metadata.Find<bool>(2);

@@ -66,10 +66,10 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 Game.PlayerPed.Armor = 100;
 
-                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Nightstick, 1, false, true);
-                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.StunGun, 1, true, true);
-                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Flashlight, 1, false, true);
-                await EventSystem.Request<bool>("character:weapons:equip", (uint)WeaponHash.Pistol, 250, false, true);
+                await EquipWeapon(WeaponHash.Nightstick);
+                await EquipWeapon(WeaponHash.StunGun);
+                await EquipWeapon(WeaponHash.Flashlight);
+                await EquipWeapon(WeaponHash.Pistol, 250, true, true);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
@@ -95,6 +95,17 @@ namespace Curiosity.MissionManager.Client.Managers
             Instance.ExportRegistry["curiosity-client"].SetJobActivity(active, onDuty, job);
             await BaseScript.Delay(100);
             EventSystem.Request<object>("user:job", job);
+        }
+
+        async Task EquipWeapon(WeaponHash weapon, int ammo = 1, bool equip = false, bool forceInHand = false)
+        {
+            bool hasWeapon = await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+
+            while (!hasWeapon)
+            {
+                await BaseScript.Delay(100);
+                hasWeapon = await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
+            }
         }
 
         static async void ShowScaleformRules()
