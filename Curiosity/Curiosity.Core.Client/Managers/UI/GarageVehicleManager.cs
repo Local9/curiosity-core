@@ -54,7 +54,15 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 try
                 {
-                    int characterVehicleId = metadata.Find<int>(0);
+                    string characterVehicleIdString = metadata.Find<string>(0);
+                    int characterVehicleId = 0;
+
+                    if (!int.TryParse(characterVehicleIdString, out characterVehicleId))
+                    {
+                        NotificationManger.GetModule().Error("Vehicle information is invalid, if it happens again write up what you were doing on the forums.");
+                        return new { success = false };
+                    }
+
                     string hash = metadata.Find<string>(1);
 
                     Model vehModel = new Model(hash);
