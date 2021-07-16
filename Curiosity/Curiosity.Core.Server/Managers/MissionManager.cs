@@ -308,6 +308,55 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            EventSystem.GetModule().Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
+            {
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataPed == null) return null;
+
+                bool successfulArrest = false;
+
+                int experienceEarned = 10;
+
+                if (missionDataPed.StoleVehicle)
+                {
+                    experienceEarned += 100;
+                    successfulArrest = true;
+                }
+
+                if (missionDataPed.HasBeenBreathalysed && missionDataPed.BloodAlcoholLimit >= 8)
+                {
+                    experienceEarned += 50;
+                    successfulArrest = true;
+                }
+
+                if (missionDataPed.IsCarryingIllegalItems && missionDataPed.HasBeenSearched)
+                {
+                    experienceEarned += 50;
+                }
+
+                if (missionDataPed.IsWanted)
+                {
+                    missionDataPed.Wants.ForEach(s =>
+                    {
+                        experienceEarned += 25;
+                    });
+                    successfulArrest = true;
+                }
+
+                if (!successfulArrest)
+                    experienceEarned = 10;
+
+                missionDataPed.IsArrested = true;
+
+                bool res = await RecordArrest(metadata.Sender, experienceEarned);
+
+                if (res)
+                    _numberOfSuspectArrested++;
+
+                return res;
+            }));
+
             #region Mission Ped Updates
 
             EventSystem.GetModule().Attach("mission:update:ped:mission", new EventCallback(metadata =>
@@ -416,55 +465,6 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
-            {
-                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
-
-                if (missionDataPed == null) return null;
-
-                bool successfulArrest = false;
-
-                int experienceEarned = 10;
-
-                if (missionDataPed.StoleVehicle)
-                {
-                    experienceEarned += 100;
-                    successfulArrest = true;
-                }
-
-                if (missionDataPed.HasBeenBreathalysed && missionDataPed.BloodAlcoholLimit >= 8)
-                {
-                    experienceEarned += 50;
-                    successfulArrest = true;
-                }
-
-                if (missionDataPed.IsCarryingIllegalItems && missionDataPed.HasBeenSearched)
-                {
-                    experienceEarned += 50;
-                }
-
-                if (missionDataPed.IsWanted)
-                {
-                    missionDataPed.Wants.ForEach(s =>
-                    {
-                        experienceEarned += 25;
-                    });
-                    successfulArrest = true;
-                }
-
-                if (!successfulArrest)
-                    experienceEarned = 10;
-
-                missionDataPed.IsArrested = true;
-
-                bool res = await RecordArrest(metadata.Sender, experienceEarned);
-
-                if (res)
-                    _numberOfSuspectArrested++;
-
-                return res;
-            }));
-
             #endregion
 
             #endregion
@@ -518,6 +518,38 @@ namespace Curiosity.Core.Server.Managers
                 return missionData.RemoveNetworkVehicle(networkId);
             }));
 
+            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new AsyncEventCallback(async metadata =>
+            {
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataVehicle == null) return null;
+
+                int experienceEarned = 10;
+
+                if (missionDataVehicle.Stolen)
+                {
+                    experienceEarned += 100;
+                }
+
+                if (missionDataVehicle.HasBeenSearched)
+                {
+                    foreach (KeyValuePair<string, bool> kvp in missionDataVehicle.Items)
+                    {
+                        if (kvp.Value)
+                            experienceEarned += 25;
+                    }
+                }
+
+                if (!missionDataVehicle.InsuranceValid)
+                {
+                    experienceEarned += 50;
+                }
+
+                bool res = await RecordVehicleTowed(metadata.Sender, experienceEarned);
+
+                return res;
+            }));
+
             #region Mission Vehicle Update
 
             EventSystem.GetModule().Attach("mission:update:vehicle:mission", new EventCallback(metadata =>
@@ -551,38 +583,6 @@ namespace Curiosity.Core.Server.Managers
                 missionDataVehicle.IsTowable = metadata.Find<bool>(1);
 
                 return missionDataVehicle;
-            }));
-
-            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new AsyncEventCallback(async metadata =>
-            {
-                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
-
-                if (missionDataVehicle == null) return null;
-
-                int experienceEarned = 10;
-
-                if (missionDataVehicle.Stolen)
-                {
-                    experienceEarned += 100;
-                }
-
-                if (missionDataVehicle.HasBeenSearched)
-                {
-                    foreach(KeyValuePair<string, bool> kvp in missionDataVehicle.Items)
-                    {
-                        if (kvp.Value)
-                            experienceEarned += 25;
-                    }
-                }
-
-                if (!missionDataVehicle.InsuranceValid)
-                {
-                    experienceEarned += 50;
-                }
-
-                bool res = await RecordVehicleTowed(metadata.Sender, experienceEarned);
-
-                return res;
             }));
 
             EventSystem.GetModule().Attach("mission:update:vehicle:license", new EventCallback(metadata =>
