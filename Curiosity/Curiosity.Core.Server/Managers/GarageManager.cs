@@ -89,11 +89,11 @@ namespace Curiosity.Core.Server.Managers
                         {
                             List<object> vehicles = GetVehiclesNearPoint(pos, d);
 
-                            Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle.");
+                            Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle. So its being deleted!");
 
                             for(int i = 0; i < vehicles.Count; i++)
                             {
-                                int vehIdToDelete = (int)vehicles[i];
+                                int vehIdToDelete = Convert.ToInt32(vehicles[i]);
                                 if (API.DoesEntityExist(vehIdToDelete))
                                     API.DeleteEntity(vehIdToDelete);
                             }

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
@@ -13,8 +14,20 @@ namespace Curiosity.Core.Client.Managers.UI
 {
     public class GarageVehicleManager : Manager<GarageVehicleManager>
     {
+        private const string BLIP_PERSONAL_VEHICLE = "blipPersonalVehicle";
+        private const string BLIP_PERSONAL_TRAILER = "blipPersonalTrailer";
+        private const string BLIP_PERSONAL_PLANE = "blipPersonalPlane";
+        private const string BLIP_PERSONAL_BOAT = "blipPersonalBoat";
+        private const string BLIP_PERSONAL_HELICOPTER = "blipPersonalHelicopter";
+
         public override void Begin()
         {
+            API.AddTextEntry(BLIP_PERSONAL_VEHICLE, "Personal Vehicle");
+            API.AddTextEntry(BLIP_PERSONAL_TRAILER, "Personal Trailer");
+            API.AddTextEntry(BLIP_PERSONAL_PLANE, "Personal Plane");
+            API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
+            API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
+
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
                 List<dynamic> vehicles = new List<dynamic>();
@@ -76,14 +89,25 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 float distance = vehModel.GetDimensions().Y;
 
-                if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance))
-                {
-                    NotificationManger.GetModule().Error("Location is blocked by another vehicle");
-                    vehModel.MarkAsNoLongerNeeded();
-                    return new { success = false };
-                }
-
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
+
+                if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                {
+                    Vehicle[] vehicles = World.GetAllVehicles();
+
+                    for (int i = 0; i < vehicles.Length; i++)
+                    {
+                        Vehicle vehicle = vehicles[i];
+                        if (vehicle.IsInRangeOf(spawnRoad, distance) && vehicle.NetworkId != vehicleItem.NetworkId)
+                        {
+                            EventSystem.Send("delete:entity", vehicle.NetworkId);
+                            await BaseScript.Delay(100);
+                        }
+                    }
+
+                    NotificationManger.GetModule().Info("Location is blocked by another vehicle, so it was removed from this world.");
+                    vehModel.MarkAsNoLongerNeeded();
+                }
 
                 await BaseScript.Delay(0);
 
@@ -139,6 +163,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                     API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                    API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
 
                     vehicle.PlaceOnGround();
                     vehicle.RadioStation = RadioStation.RadioOff;
@@ -263,42 +288,59 @@ namespace Curiosity.Core.Client.Managers.UI
 
             int spawnType = vehicle.State.Get($"{StateBagKey.VEH_SPAWN_TYPE}") ?? (int)SpawnType.Vehicle;
 
+            bool setBlip = false;
+
             if (spawnType == (int)SpawnType.Vehicle)
             {
-                blip.Name = "Personal Vehicle";
+                API.BeginTextCommandSetBlipName(BLIP_PERSONAL_VEHICLE);
+                blip.Sprite = BlipSprite.PersonalVehicleCar;
+                setBlip = true;
             }
 
             if (spawnType == (int)SpawnType.Trailer)
             {
-                blip.Name = "Personal Trailer";
+                API.BeginTextCommandSetBlipName(BLIP_PERSONAL_TRAILER);
+                API.SetBlipSprite(blip.Handle, 479);
+                setBlip = true;
             }
 
             if (spawnType == (int)SpawnType.Boat)
             {
-                blip.Name = "Personal Boat";
+                API.BeginTextCommandSetBlipName(BLIP_PERSONAL_BOAT);
+                blip.Sprite = BlipSprite.Boat;
+                setBlip = true;
             }
 
             if (spawnType == (int)SpawnType.Plane)
             {
-                blip.Name = "Personal Plane";
+                API.BeginTextCommandSetBlipName(BLIP_PERSONAL_PLANE);
+                blip.Sprite = BlipSprite.Plane;
+                setBlip = true;
             }
 
             if (spawnType == (int)SpawnType.Helicopter)
             {
-                blip.Name = "Personal Helicopter";
+                API.BeginTextCommandSetBlipName(BLIP_PERSONAL_HELICOPTER);
+                blip.Sprite = BlipSprite.Helicopter;
+                setBlip = true;
             }
+
+            API.EndTextCommandSetBlipName(blip.Handle);
 
             VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
 
-            if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
+            if (!setBlip)
             {
-                API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
-            }
-            else
-            {
-                if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
+                if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
                 {
-                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
+                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
+                }
+                else
+                {
+                    if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
+                    {
+                        API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
+                    }
                 }
             }
 

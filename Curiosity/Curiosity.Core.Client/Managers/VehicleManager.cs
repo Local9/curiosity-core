@@ -202,6 +202,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
+            PluginManager.Instance.AttachTickHandler(OnVehicleIsTowing);
         }
 
         private async Task OnManageVehicleBlip()
@@ -301,6 +302,33 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
+        private async Task OnVehicleIsTowing()
+        {
+            List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
+
+            foreach (Vehicle veh in vehicles)
+            {
+                int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
+
+                if (veh.AttachedBlip is not null)
+                {
+                    if (veh.AttachedBlip.Alpha != alpha)
+                    {
+                        int blipHandle = API.GetBlipFromEntity(veh.Handle);
+                        API.SetBlipAlpha(blipHandle, alpha);
+                    }
+                }
+
+                int trailerId = 0;
+                if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
+                {
+                    int blipId = API.GetBlipFromEntity(trailerId);
+                    if (blipId > 0)
+                        API.SetBlipAlpha(blipId, alpha);
+                }
+            }
+        }
+
         private async Task OnVehicleFuel()
         {
             if (!Cache.PlayerPed.IsInVehicle())
@@ -309,6 +337,7 @@ namespace Curiosity.Core.Client.Managers
                 PluginManager.Instance.DetachTickHandler(OnVehicleFuel);
                 PluginManager.Instance.DetachTickHandler(OnVehicleRefuel);
                 PluginManager.Instance.DetachTickHandler(CheckFuelPumpDistance);
+                PluginManager.Instance.DetachTickHandler(OnVehicleIsTowing);
                 IsNearFuelPump = false;
                 IsRefueling = false;
                 currentVehicle = null;
@@ -323,14 +352,16 @@ namespace Curiosity.Core.Client.Managers
                         API.SetBlipAlpha(blipHandle, 255);
                     }
 
-                    Vehicle attachedVeh = (Vehicle)veh.GetEntityAttachedTo();
+                    bool isAttachedToTrailer = API.IsVehicleAttachedToTrailer(veh.Handle);
 
-                    if (attachedVeh is not null)
+                    if (isAttachedToTrailer)
                     {
-                        if (attachedVeh.AttachedBlip is not null)
+                        int trailerId = 0;
+                        if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
                         {
-                            int blipHandleAttached = API.GetBlipFromEntity(attachedVeh.Handle);
-                            API.SetBlipAlpha(blipHandleAttached, 255);
+                            int blipId = API.GetBlipFromEntity(trailerId);
+                            if (blipId > 0)
+                                API.SetBlipAlpha(blipId, 255);
                         }
                     }
                 }

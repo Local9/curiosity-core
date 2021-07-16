@@ -144,7 +144,7 @@ namespace Curiosity.Core.Client.Managers
                     int blipHandle = API.GetBlipFromEntity(vehicle.Handle);
                     API.SetBlipAlpha(blipHandle, 0);
 
-                    Vehicle veh = (Vehicle)vehicle.GetEntityAttachedTo();
+                    Vehicle veh = (Vehicle)vehicle.TowedVehicle;
 
                     if (veh is not null)
                     {
