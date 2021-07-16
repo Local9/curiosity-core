@@ -242,7 +242,7 @@ namespace Curiosity.Core.Server.Managers
                 ped.State.Set(StateBagKey.PED_SETUP, false, true);
                 ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
                 // menu options
-                ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0.0, true);
+                ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0, true);
                 ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
                 ped.State.Set(StateBagKey.MENU_IDENTIFICATION, false, true);
                 ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, false, true);
