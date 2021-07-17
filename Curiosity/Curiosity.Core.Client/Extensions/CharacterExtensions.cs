@@ -112,11 +112,11 @@ namespace Curiosity.Core.Client.Extensions
 
             API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
-            CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
-            CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
-            CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
-            CharacterClothing.SetPedHat(Cache.PlayerPed, character.Appearance.Hat);
-            CharacterClothing.SetPedGlasses(Cache.PlayerPed, character.Appearance.Glasses);
+            //CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
+            //CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
+            //CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
+            //CharacterClothing.SetPedHat(Cache.PlayerPed, character.Appearance.Hat);
+            //CharacterClothing.SetPedGlasses(Cache.PlayerPed, character.Appearance.Glasses);
 
             foreach (KeyValuePair<int, float> keyValuePair in character.Features)
             {

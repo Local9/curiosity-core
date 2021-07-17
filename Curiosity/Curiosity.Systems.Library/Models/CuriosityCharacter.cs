@@ -24,6 +24,7 @@ namespace Curiosity.Systems.Library.Models
         public Position LastPosition { get; set; } = new Position(405.9247f, -997.2114f, -99.00401f, 86.36787f);
         public CharacterHeritage Heritage { get; set; } = new CharacterHeritage();
         public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
+        public CharacterInfo CharacterInfo { get; set; } = new CharacterInfo();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();
 
         public void ChangeFeature(int feature, float value)

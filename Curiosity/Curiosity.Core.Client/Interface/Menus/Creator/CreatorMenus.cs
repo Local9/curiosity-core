@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         // private UIMenu menuPlayerLifeStyle; // 
         private UIMenu menuCharacterFeatures; // eyes, hair?
         private UIMenu menuCharacterAppearance; // clothes
-        private UIMenu menuCharacterApparel; // clothing
+        private UIMenu menuCharacterCustomisation; // clothing
         private UIMenu menuCharacterStats; // stats
         private UIMenuItem itemSave;
         // Cameras
@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         // Classes
         private CharacterHeritage _CharacterHeritage = new CharacterHeritage();
         private CharacterFeatures _CharacterFeatures = new CharacterFeatures();
-        private CharacterApparel _CharacterApparel = new CharacterApparel();
+        private CharacterCustomisation _CharacterCustomisation = new CharacterCustomisation();
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
 
         internal void CreateMenu()
@@ -68,8 +68,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             _CharacterFeatures.CreateMenu(menuCharacterFeatures);
             menuCharacterAppearance = _MenuPool.AddSubMenu(menuMain, "Appearance");
             _CharacterAppearance.CreateMenu(menuCharacterAppearance);
-            menuCharacterApparel = _MenuPool.AddSubMenu(menuMain, "Apparel");
-            _CharacterApparel.CreateMenu(menuCharacterApparel);
+            menuCharacterCustomisation = _MenuPool.AddSubMenu(menuMain, "Apparel");
+            _CharacterCustomisation.CreateMenu(menuCharacterCustomisation);
 
             itemSave = new UIMenuItem("Save", "Save your character and enter the world.");
             menuMain.AddItem(itemSave);

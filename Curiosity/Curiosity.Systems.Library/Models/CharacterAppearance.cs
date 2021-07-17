@@ -4,8 +4,6 @@ namespace Curiosity.Systems.Library.Models
 {
     public class CharacterAppearance
     {
-        public int Hat;
-
         public int EyeColor { get; set; } = 0;
         public int HairStyle { get; set; } = 0;
         public KeyValuePair<string, string> HairOverlay { get; set; } = new KeyValuePair<string, string>("", "");
@@ -36,10 +34,6 @@ namespace Curiosity.Systems.Library.Models
         public int Lipstick { get; set; } = 0;
         public float LipstickOpacity { get; set; } = 0f;
         public int LipstickColor { get; set; } = 0;
-        public int Top { get; set; }
-        public int Pants { get; set; }
-        public int Shoes { get; set; }
-        public int Glasses { get; set; }
 
     }
 }
