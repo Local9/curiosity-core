@@ -112,6 +112,11 @@ namespace Curiosity.Core.Client.Extensions
 
             API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
+            API.SetPedComponentVariation(Game.PlayerPed.Handle, 3, 15, 0, 0);
+            API.SetPedComponentVariation(Game.PlayerPed.Handle, 8, 15, 0, 0);
+            API.SetPedComponentVariation(Game.PlayerPed.Handle, 11, 15, 0, 0);
+            API.SetFacialIdleAnimOverride(Game.PlayerPed.Handle, "mood_Normal_1", null);
+
             //CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
             //CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
             //CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
