@@ -304,34 +304,41 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnVehicleIsTowing()
         {
-            List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
-
-            foreach (Vehicle veh in vehicles)
+            try
             {
-                if (Cache.PlayerPed?.CurrentVehicle is not null)
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
+
+                foreach (Vehicle veh in vehicles)
                 {
-                    if (Cache.PlayerPed.CurrentVehicle.NetworkId > 0)
+                    if (Cache.PlayerPed?.CurrentVehicle is not null)
                     {
-                        int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
-
-                        if (veh.AttachedBlip is not null)
+                        if (Cache.PlayerPed.CurrentVehicle.NetworkId > 0)
                         {
-                            if (veh.AttachedBlip.Alpha != alpha)
+                            int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
+
+                            if (veh.AttachedBlip is not null)
                             {
-                                int blipHandle = API.GetBlipFromEntity(veh.Handle);
-                                API.SetBlipAlpha(blipHandle, alpha);
+                                if (veh.AttachedBlip.Alpha != alpha)
+                                {
+                                    int blipHandle = API.GetBlipFromEntity(veh.Handle);
+                                    API.SetBlipAlpha(blipHandle, alpha);
+                                }
                             }
-                        }
 
-                        int trailerId = 0;
-                        if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
-                        {
-                            int blipId = API.GetBlipFromEntity(trailerId);
-                            if (blipId > 0)
-                                API.SetBlipAlpha(blipId, alpha);
+                            int trailerId = 0;
+                            if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
+                            {
+                                int blipId = API.GetBlipFromEntity(trailerId);
+                                if (blipId > 0)
+                                    API.SetBlipAlpha(blipId, alpha);
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                // DON'T FUCKING CARE!
             }
         }
 
