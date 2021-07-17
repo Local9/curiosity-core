@@ -72,6 +72,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 _CharacterAppearance.CreateMenu(menuCharacterAppearance);
 
             }
+
             menuCharacterCustomisation = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterCustomisation.CreateMenu(menuCharacterCustomisation);
 
