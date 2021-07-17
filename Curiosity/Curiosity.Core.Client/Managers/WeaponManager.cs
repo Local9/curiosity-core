@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
+﻿using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
@@ -18,10 +19,18 @@ namespace Curiosity.Core.Client.Managers
             if (Cache.PlayerPed.IsReloading)
             {
                 if (isReloadingCheck) return;
-                
-                int ammoCount = Cache.PlayerPed.Weapons.Current.Ammo;
+                isReloadingCheck = true;
 
-                Logger.Debug($"Player is Reloading, current ammo {ammoCount}");
+                int pedHandle = Cache.PlayerPed.Handle;
+
+                uint weaponHash = 0;
+
+                if (API.GetCurrentPedWeapon(pedHandle, ref weaponHash, true))
+                {
+                    int ammoCount = API.GetAmmoInPedWeapon(pedHandle, weaponHash);
+
+                    Logger.Debug($"Player is Reloading, current {weaponHash} TotalAmmo {ammoCount}");
+                }
             }
             else
             {

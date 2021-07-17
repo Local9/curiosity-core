@@ -308,23 +308,29 @@ namespace Curiosity.Core.Client.Managers
 
             foreach (Vehicle veh in vehicles)
             {
-                int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
-
-                if (veh.AttachedBlip is not null)
+                if (Cache.PlayerPed?.CurrentVehicle is not null)
                 {
-                    if (veh.AttachedBlip.Alpha != alpha)
+                    if (Cache.PlayerPed.CurrentVehicle.NetworkId > 0)
                     {
-                        int blipHandle = API.GetBlipFromEntity(veh.Handle);
-                        API.SetBlipAlpha(blipHandle, alpha);
-                    }
-                }
+                        int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
 
-                int trailerId = 0;
-                if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
-                {
-                    int blipId = API.GetBlipFromEntity(trailerId);
-                    if (blipId > 0)
-                        API.SetBlipAlpha(blipId, alpha);
+                        if (veh.AttachedBlip is not null)
+                        {
+                            if (veh.AttachedBlip.Alpha != alpha)
+                            {
+                                int blipHandle = API.GetBlipFromEntity(veh.Handle);
+                                API.SetBlipAlpha(blipHandle, alpha);
+                            }
+                        }
+
+                        int trailerId = 0;
+                        if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
+                        {
+                            int blipId = API.GetBlipFromEntity(trailerId);
+                            if (blipId > 0)
+                                API.SetBlipAlpha(blipId, alpha);
+                        }
+                    }
                 }
             }
         }
