@@ -17,8 +17,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             {
                 if (i != 0 && i != 2)
                 {
-                    int currentVariationIndex = GetPedDrawableVariation(Cache.PlayerPed.Handle, i);
-                    int currentVariationTextureIndex = GetPedTextureVariation(Cache.PlayerPed.Handle, i);
+                    int currentVariationIndex = Cache.Character.CharacterInfo.DrawableVariations.ContainsKey(i) ? Cache.Character.CharacterInfo.DrawableVariations[i].Key : GetPedDrawableVariation(Cache.PlayerPed.Handle, i);
+                    int currentVariationTextureIndex = Cache.Character.CharacterInfo.DrawableVariations.ContainsKey(i) ? Cache.Character.CharacterInfo.DrawableVariations[i].Value : GetPedTextureVariation(Cache.PlayerPed.Handle, i);
 
                     int maxDrawables = GetNumberOfPedDrawableVariations(Cache.PlayerPed.Handle, i);
 

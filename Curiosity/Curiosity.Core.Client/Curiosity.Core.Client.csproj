@@ -69,6 +69,7 @@
     <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterCustomisation.cs" />
+    <Compile Include="Interface\Menus\Creator\CharacterProps.cs" />
     <Compile Include="Interface\Menus\Spawner\VehicleSpawnMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\JobMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />

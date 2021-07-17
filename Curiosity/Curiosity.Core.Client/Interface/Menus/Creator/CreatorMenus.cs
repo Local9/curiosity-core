@@ -23,6 +23,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private UIMenu menuCharacterFeatures; // eyes, hair?
         private UIMenu menuCharacterAppearance; // clothes
         private UIMenu menuCharacterCustomisation; // clothing
+        private UIMenu menuCharacterProps; // clothing
         private UIMenu menuCharacterStats; // stats
         private UIMenuItem itemSave;
         // Cameras
@@ -42,6 +43,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private CharacterFeatures _CharacterFeatures = new CharacterFeatures();
         private CharacterCustomisation _CharacterCustomisation = new CharacterCustomisation();
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
+        private CharacterProps _CharacterProps = new CharacterProps();
 
         internal void CreateMenu(bool open = false)
         {
@@ -75,6 +77,9 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             menuCharacterCustomisation = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterCustomisation.CreateMenu(menuCharacterCustomisation);
+
+            menuCharacterProps = _MenuPool.AddSubMenu(menuMain, "Props");
+            _CharacterProps.CreateMenu(menuCharacterProps);
 
             itemSave = new UIMenuItem("Save", "Save your character and enter the world.");
             menuMain.AddItem(itemSave);
