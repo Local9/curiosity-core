@@ -43,7 +43,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private CharacterCustomisation _CharacterCustomisation = new CharacterCustomisation();
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
 
-        internal void CreateMenu()
+        internal void CreateMenu(bool open = false)
         {
             // TICKS & SETUP
             _MenuPool = new MenuPool();
@@ -79,6 +79,9 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain.InstructionalButtons.Add(btnRotateRight);
 
             _MenuPool.RefreshIndex();
+
+            if (open)
+                OpenMenu();
         }
 
         private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)

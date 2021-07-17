@@ -33,6 +33,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         // private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
         private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
+        private UIMenuItem miEditPed = new UIMenuItem("Customise Ped", "Change your look.");
 
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
@@ -54,6 +55,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
+            menuMain.AddItem(miEditPed);
 
             miKillYourself.SetRightLabel($"$0");
 
@@ -112,6 +114,14 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 playerOptionsManager.KillSelf();
                 miKillYourself.Enabled = false;
+                return;
+            }
+
+            if (selectedItem == miEditPed)
+            {
+                Creator.CreatorMenus creatorMenus = new Creator.CreatorMenus();
+                creatorMenus.CreateMenu(true);
+                MenuPool.CloseAllMenus();
             }
         }
 
