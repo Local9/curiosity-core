@@ -61,8 +61,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             mLstGender = new UIMenuListItem("Gender", Genders, 0);
             menuMain.AddItem(mLstGender);
 
-            menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
-            _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+            if (!open)
+            {
+                menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
+                _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+            }
 
             menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
             _CharacterFeatures.CreateMenu(menuCharacterFeatures);
