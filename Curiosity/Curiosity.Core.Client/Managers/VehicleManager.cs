@@ -308,12 +308,17 @@ namespace Curiosity.Core.Client.Managers
             {
                 List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
 
-                foreach (Vehicle veh in vehicles)
+                for (int i = 0; i < vehicles.Count; i++)
                 {
                     if (Cache.PlayerPed?.CurrentVehicle is not null)
                     {
                         if (Cache.PlayerPed.CurrentVehicle.NetworkId > 0)
                         {
+                            Vehicle veh = vehicles[i];
+
+                            if (veh is null) continue;
+                            if (!(veh?.Exists() ?? false)) continue;
+
                             int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
 
                             if (veh.AttachedBlip is not null)
