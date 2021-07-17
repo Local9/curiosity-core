@@ -316,26 +316,26 @@ namespace Curiosity.Core.Client.Managers
                         {
                             Vehicle veh = vehicles[i];
 
-                            if (veh is null) continue;
-                            if (!(veh?.Exists() ?? false)) continue;
-
-                            int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
-
-                            if (veh.AttachedBlip is not null)
+                            if (veh.Exists())
                             {
-                                if (veh.AttachedBlip.Alpha != alpha)
+                                int alpha = Cache.PlayerPed.CurrentVehicle.NetworkId == veh.NetworkId ? 0 : 255;
+
+                                if (veh.AttachedBlip is not null)
                                 {
-                                    int blipHandle = API.GetBlipFromEntity(veh.Handle);
-                                    API.SetBlipAlpha(blipHandle, alpha);
+                                    if (veh.AttachedBlip.Alpha != alpha)
+                                    {
+                                        int blipHandle = API.GetBlipFromEntity(veh.Handle);
+                                        API.SetBlipAlpha(blipHandle, alpha);
+                                    }
                                 }
-                            }
 
-                            int trailerId = 0;
-                            if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
-                            {
-                                int blipId = API.GetBlipFromEntity(trailerId);
-                                if (blipId > 0)
-                                    API.SetBlipAlpha(blipId, alpha);
+                                int trailerId = 0;
+                                if (API.GetVehicleTrailerVehicle(veh.Handle, ref trailerId))
+                                {
+                                    int blipId = API.GetBlipFromEntity(trailerId);
+                                    if (blipId > 0)
+                                        API.SetBlipAlpha(blipId, alpha);
+                                }
                             }
                         }
                     }
