@@ -7,6 +7,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class ShopManager : Manager<ShopManager>
     {
+        bool isProcessing;
         public override void Begin()
         {
 
@@ -51,6 +52,14 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
             {
+                if (isProcessing)
+                {
+                    NotificationManger.GetModule().Warn($"You have a request pending.");
+                    return new List<dynamic>();
+                }
+
+                isProcessing = true;
+
                 List<CuriosityShopItem> result = await EventSystem.Request<List<CuriosityShopItem>>("shop:get:items", metadata.Find<int>(0));
 
                 var items = new List<dynamic>();
@@ -83,6 +92,8 @@ namespace Curiosity.Core.Client.Managers
                         items.Add(i);
                     }
                 }
+
+                isProcessing = false;
 
                 return items;
             }));
