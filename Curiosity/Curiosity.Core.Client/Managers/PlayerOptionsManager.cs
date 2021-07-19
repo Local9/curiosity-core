@@ -33,6 +33,8 @@ namespace Curiosity.Core.Client.Managers
 
             if (IsPassiveModeEnabled == isPassive) return;
 
+            Game.PlayerPed.IsInvincible = false;
+
             if (Game.Player.WantedLevel > 0)
             {
                 Notify.Info($"Passive Mode: Cannot enable when wanted.");
