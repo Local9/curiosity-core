@@ -267,10 +267,17 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
+
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -284,7 +291,8 @@ namespace Curiosity.Core.Server.Managers
                     {
                         exportMessage.Skill = skill;
                     }
-
+                
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -296,10 +304,16 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -307,6 +321,7 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.NewNumberValue = newSkillValue;
 
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -318,10 +333,16 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -329,6 +350,7 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.Value = statValue;
 
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -341,13 +363,13 @@ namespace Curiosity.Core.Server.Managers
                     if (!int.TryParse(playerHandle, out playerId))
                     {
                         exportMessage.Error = "First parameter is not a number";
-                        return $"{exportMessage}";
+                        goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
                         exportMessage.Error = "Player was not found";
-                        return $"{exportMessage}";
+                        goto SendMessage;
                     }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
@@ -355,13 +377,14 @@ namespace Curiosity.Core.Server.Managers
                     if (!Enum.TryParse($"{statId}", out Stat stat))
                     {
                         exportMessage.Error = "StatID failed parse";
-                        return $"{exportMessage}";
+                        goto SendMessage;
                     }
 
                     int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
 
                     exportMessage.NewNumberValue = newSkillValue;
 
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -372,10 +395,16 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -385,6 +414,7 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.Value = cashValue;
 
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -395,10 +425,16 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -407,7 +443,8 @@ namespace Curiosity.Core.Server.Managers
                     user.Character.Cash = newCashValue;
 
                     exportMessage.NewNumberValue = newCashValue;
-
+                
+                SendMessage:
                     return $"{exportMessage}";
                 }));
 
@@ -418,10 +455,16 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        goto SendMessage;
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        goto SendMessage;
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -429,6 +472,7 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.Item = item;
 
+                SendMessage:
                     return $"{exportMessage}";
                 }));
         }
