@@ -21,7 +21,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override string[] Aliases { get; set; } = { "staff", "s" };
         public override string Title { get; set; } = "Staff Commands";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
-        public override bool IsRestricted { get; set; }
+        public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.ADMINISTRATOR, Role.COMMUNITY_MANAGER, Role.DEVELOPER, Role.HEAD_ADMIN, Role.HELPER, Role.MODERATOR, Role.PROJECT_MANAGER, Role.SENIOR_ADMIN };
 
         #region Weapons
