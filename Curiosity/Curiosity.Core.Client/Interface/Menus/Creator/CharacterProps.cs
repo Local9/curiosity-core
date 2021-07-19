@@ -91,6 +91,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                         listItem.Description = $"Select a prop using the arrow keys and press ~o~enter~s~ to cycle through all available textures. Currently selected texture: #{textureIndex + 1} (of {maxPropTextures}).";
                     }
                 }
+                _sender.UpdateDescription();
             };
 
             menu.OnListSelect += (_sender, listItem, listIndex) =>
@@ -126,6 +127,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                         listItem.Description = $"Select a prop using the arrow keys and press ~o~enter~s~ to cycle through all available textures. Currently selected texture: #{newTextureIndex + 1} (of {maxPropTextures}).";
                     }
                 }
+                _sender.UpdateDescription();
             };
 
             return menu;

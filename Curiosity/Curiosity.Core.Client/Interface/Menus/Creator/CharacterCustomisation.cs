@@ -73,6 +73,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 Cache.Character.CharacterInfo.DrawableVariations[componentIndex] = new KeyValuePair<int, int>(listIndex, newTextureIndex);
                 listItem.Description = $"Select a drawable using the arrow keys and press ~o~enter~s~ to cycle through all available textures. Currently selected texture: #{newTextureIndex + 1} (of {maxTextures}).";
+                _sender.UpdateDescription();
             };
 
             menu.OnListSelect += (_sender, listItem, listIndex) =>
@@ -89,6 +90,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 Cache.Character.CharacterInfo.DrawableVariations[componentIndex] = new KeyValuePair<int, int>(listIndex, newTextureIndex);
                 listItem.Description = $"Select a drawable using the arrow keys and press ~o~enter~s~ to cycle through all available textures. Currently selected texture: #{newTextureIndex + 1} (of {maxTextures}).";
+                _sender.UpdateDescription();
             };
 
             return menu;
