@@ -34,6 +34,14 @@ namespace Curiosity.Core.Client.Managers
         {
             if (Session.CreatingCharacter) return;
 
+            if (Cache.PlayerPed.IsInVehicle() && PointingFinger)
+            {
+                StopPointing();
+                return;
+            }
+
+            if (Cache.PlayerPed.IsInVehicle()) return;
+
             var ped = Cache.Entity.Id;
 
             if (Game.IsControlJustPressed(0, Control.SpecialAbilitySecondary))
