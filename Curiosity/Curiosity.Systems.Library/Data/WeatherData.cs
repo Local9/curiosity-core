@@ -26,8 +26,8 @@ namespace Curiosity.Systems.Library.Data
 
         public readonly static Dictionary<WeatherSeason, List<WeatherType>> SeasonalWeather = new Dictionary<WeatherSeason, List<WeatherType>>()
         {
-            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST } },
-            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS } },
+            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN } },
+            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.CLEARING } },
             { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN, WeatherType.CLEARING, WeatherType.THUNDER, WeatherType.SMOG } },
             { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD } },
         };
