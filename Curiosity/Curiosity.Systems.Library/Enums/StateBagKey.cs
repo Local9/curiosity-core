@@ -14,7 +14,7 @@
         public const string PLAYER_MENU = "player::npc::menu";
         public const string PLAYER_ASSISTING = "player::npc::assisting";
         public const string PLAYER_OWNER = "player::owner";
-        public const string PLAYER_PASSIVE = "player::passive";
+        public const string PLAYER_PASSIVE = "PLAYER_PASSIVE";
 
         public const string PLAYER_NAME = "PLAYER_NAME";
         public const string SERVER_HANDLE = "SERVER_HANDLE";
