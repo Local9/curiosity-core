@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
@@ -79,6 +80,8 @@ namespace Curiosity.Core.Client.Managers
                 Logger.Debug($"Passive Mode Enabled");
                 // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
             }
+
+            Cache.PlayerPed.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
 
             Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
         }

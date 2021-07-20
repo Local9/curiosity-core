@@ -28,13 +28,14 @@ namespace Curiosity.Core.Server.Managers
                 if (currentBucket != 1)
                     API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.LOBBY);
 
-                player.State.Set($"{StateBagKey.VEH_BOAT_NETWORK_ID}", -1, true);
-                player.State.Set($"{StateBagKey.VEH_PLANE_NETWORK_ID}", -1, true);
-                player.State.Set($"{StateBagKey.VEH_HELI_NETWORK_ID}", -1, true);
-                player.State.Set($"{StateBagKey.VEH_TRAILER_NETWORK_ID}", -1, true);
-                player.State.Set($"{StateBagKey.VEH_NETWORK_ID}", -1, true);
-                player.State.Set($"{StateBagKey.PLAYER_ROUTING}", (int)RoutingBucket.LOBBY, true);
-                player.State.Set($"{StateBagKey.PLAYER_HANDLE}", player.Handle, true);
+                player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, -1, true);
+                player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, -1, true);
+                player.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, -1, true);
+                player.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, -1, true);
+                player.State.Set(StateBagKey.VEH_NETWORK_ID, -1, true);
+                player.State.Set(StateBagKey.PLAYER_ROUTING, (int)RoutingBucket.LOBBY, true);
+                player.State.Set(StateBagKey.PLAYER_HANDLE, player.Handle, true);
+                player.State.Set(StateBagKey.PLAYER_PASSIVE, true, true);
 
                 API.SetPlayerCullingRadius($"{metadata.Sender}", 15000.0f);
 
