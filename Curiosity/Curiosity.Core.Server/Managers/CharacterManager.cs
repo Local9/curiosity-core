@@ -112,7 +112,11 @@ namespace Curiosity.Core.Server.Managers
 
                     player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
-                    player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityCharacter.Cash, true);
+
+                    if (curiosityCharacter.IsDead)
+                    {
+                        Logger.Debug($"Player state saved as dead");
+                    }
 
                     if (!user.IsStaff)
                     {

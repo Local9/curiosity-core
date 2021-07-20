@@ -370,9 +370,13 @@ namespace Curiosity.Core.Client.Managers
                 {
                     if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
                     {
-                        bool serverSpawned = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+                        bool serverSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+                        bool shouldBeDeleted = veh.State.Get(StateBagKey.ENTITY_DELETE) ?? false;
 
                         if (!serverSpawned)
+                            veh.RemoveFromWorld();
+
+                        if (shouldBeDeleted)
                             veh.RemoveFromWorld();
                     }
                 });

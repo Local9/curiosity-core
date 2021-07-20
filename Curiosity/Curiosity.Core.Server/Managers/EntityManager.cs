@@ -320,7 +320,13 @@ namespace Curiosity.Core.Server.Managers
             int entityId = API.NetworkGetEntityFromNetworkId(networkId);
 
             if (API.DoesEntityExist(entityId))
+            {
+                Vehicle vehicle = new Vehicle(entityId);
+
+                vehicle.State.Set(StateBagKey.ENTITY_DELETE, true, true);
+
                 API.DeleteEntity(entityId);
+            }
         }
     }
 }

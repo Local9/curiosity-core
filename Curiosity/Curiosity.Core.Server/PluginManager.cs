@@ -467,10 +467,15 @@ namespace Curiosity.Core.Server
                                 }
 
                                 EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                                await Delay(100);
                                 EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                                await Delay(100);
                                 EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                                await Delay(100);
                                 EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                                await Delay(100);
                                 EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
+                                await Delay(100);
                                 MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
                                 MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
                             }

@@ -312,8 +312,14 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Vector3 pos = API.GetEntityCoords(playerPed);
                     curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
+
+                    int playerPedHealth = API.GetEntityHealth(playerPed);
+                    curUser.Character.IsDead = playerPedHealth == 0;
+                    curUser.Character.Health = playerPedHealth;
+                    curUser.Character.Armor = API.GetPedArmour(playerPed);
+
                     await curUser.Character.Save();
-                    Logger.Debug($"Player: {player.Name} position saved");
+                    Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
                 }
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);

@@ -80,6 +80,8 @@
         public const string MENU_SPEEDING = "c::menu::speeding";
         public const string MENU_LANE_CHANGE = "c::menu::lane";
         public const string MENU_TAILGATING = "c::menu::tailgating";
+
+        public const string ENTITY_DELETE = "e::delete";
         #endregion
     }
 }

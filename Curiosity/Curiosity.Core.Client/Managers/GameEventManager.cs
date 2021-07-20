@@ -300,6 +300,8 @@ namespace Curiosity.Core.Client.Managers
             DateOfDeath = DateTime.Now;
             EventSystem.Send("character:death");
 
+            Cache.Player.Character.IsDead = true;
+
             CreateCamera();
 
             PluginManager.Instance.AttachTickHandler(OnRespawnControlTask);
@@ -359,6 +361,9 @@ namespace Curiosity.Core.Client.Managers
             DeathCamera.PointAt(Cache.PlayerPed, new Vector3(0f, 0f, 0.5f));
             DeathCamera.Position = camPosition;
             API.SetFocusArea(camPosition.X, camPosition.Y, camPosition.Z, 0f, 0f, 0f);
+
+            if (!Game.PlayerPed.IsDead)
+                Game.PlayerPed.Kill();
 
             ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)",
                 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);

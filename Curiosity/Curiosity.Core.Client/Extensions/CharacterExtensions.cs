@@ -76,6 +76,7 @@ namespace Curiosity.Core.Client.Extensions
         public static async Task Save(this CuriosityCharacter character)
         {
             character.LastPosition = Cache.Entity.Position;
+            character.IsDead = Cache.PlayerPed.IsDead;
 
             bool success = await EventSystem.GetModule().Request<bool>("character:save", character);
 
@@ -106,9 +107,6 @@ namespace Curiosity.Core.Client.Extensions
             int motherId = character.Heritage.MotherId;
             float remBlend = character.Heritage.BlendApperance;
             float skinBlend = character.Heritage.BlendSkin;
-
-            Cache.PlayerPed.Health = character.Health;
-            Cache.PlayerPed.Armor = character.Armor;
 
             API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
@@ -183,6 +181,19 @@ namespace Curiosity.Core.Client.Extensions
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
+            if (character.IsDead)
+            {
+                Logger.Debug($"[LOAD] Killed Ped");
+                Cache.PlayerPed.Health = 0;
+                Cache.PlayerPed.Armor = 0;
+                Cache.PlayerPed.Kill();
+            }
+            else
+            {
+                Cache.PlayerPed.Health = character.Health;
+                Cache.PlayerPed.Armor = character.Armor;
+            }
+
             Logger.Debug($"[LOAD] Character Style Complete");
 
             character.SetupStats();
@@ -203,6 +214,8 @@ namespace Curiosity.Core.Client.Extensions
             Cache.PlayerPed.Armor = 0;
             Cache.PlayerPed.ClearBloodDamage();
             Cache.PlayerPed.ClearLastWeaponDamage();
+
+            Cache.Player.Character.IsDead = false;
 
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             Cache.UpdatePedId(true);
