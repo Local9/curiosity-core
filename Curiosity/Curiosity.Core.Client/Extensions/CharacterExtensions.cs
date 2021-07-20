@@ -127,6 +127,14 @@ namespace Curiosity.Core.Client.Extensions
                 }
             }
 
+            if (character.CharacterInfo.Props.Count > 0)
+            {
+                foreach (KeyValuePair<int, KeyValuePair<int, int>> kvp in character.CharacterInfo.Props)
+                {
+                    API.SetPedPropIndex(Cache.PlayerPed.Handle, kvp.Key, kvp.Value.Key, kvp.Value.Value, true);
+                }
+            }
+
             //CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
             //CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
             //CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
