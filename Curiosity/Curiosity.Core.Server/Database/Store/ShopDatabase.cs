@@ -1,5 +1,6 @@
 ﻿using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
@@ -368,6 +369,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
+                DiscordClient.GetModule().SendDiscordServerEventLogMessage($"GetCategoryItems: categoryId {categoryId}, characterId {characterId}\r{ex}");
                 Logger.Error($"{ex}");
                 return null;
             }
