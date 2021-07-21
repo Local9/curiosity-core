@@ -1,7 +1,9 @@
-﻿using Curiosity.LifeV.Bot.Tools;
+﻿using Curiosity.LifeV.Bot.Methods;
+using Curiosity.LifeV.Bot.Tools;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -105,6 +107,7 @@ namespace Curiosity.LifeV.Bot.Modules
                 await ReplyAsync("", false, embed);
             }
         }// lv!admin user <userId>
+
         [Command("log")]
         [Summary("Return users log from Curiosity")]
         [Alias("l", "history")]
@@ -120,7 +123,9 @@ namespace Curiosity.LifeV.Bot.Modules
 
             if (!dbAdminUser.IsStaff)
             {
-                await Context.Channel.SendMessageAsync($"Admin permission required");
+                var m = await Context.Channel.SendMessageAsync($"Admin permission required");
+                await Task.Delay(3000);
+                await m.DeleteAsync();
                 return;
             }
 
@@ -128,7 +133,9 @@ namespace Curiosity.LifeV.Bot.Modules
 
             if (userId == null)
             {
-                await Context.Channel.SendMessageAsync($"UserID must be supplied");
+                var m2 = await Context.Channel.SendMessageAsync($"UserID must be supplied");
+                await Task.Delay(3000);
+                await m2.DeleteAsync();
                 return;
             }
 
@@ -138,7 +145,9 @@ namespace Curiosity.LifeV.Bot.Modules
 
             if (dbUserLog == null)
             {
-                await ReplyAsync("User was not found.");
+                var m3 = await ReplyAsync("User was not found.");
+                await Task.Delay(3000);
+                await m3.DeleteAsync();
             }
             else
             {
@@ -166,6 +175,54 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 await ReplyAsync(message, false);
             }
+        }
+
+        [Command("sticky")]
+        [Summary("stick message management")]
+        public async Task Sticky([Summary("Message to stick")] string message)
+        {
+            await Context.Message.DeleteAsync();
+
+            if (string.IsNullOrEmpty(message))
+            {
+                var m = await ReplyAsync("no message included");
+                await Task.Delay(3000);
+                await m.DeleteAsync();
+                return;
+            }
+
+            var msg = await Context.Channel.SendMessageAsync($"STICKY\r{message}");
+
+            MessageHandlers.AddSticky(Context.Channel.Id, msg.Id, message);
+
+            var msgRes = await Context.Channel.SendMessageAsync($"Sticky Added");
+
+            await Task.Delay(3000);
+
+            await msgRes.DeleteAsync();
+        }
+
+        [Command("stickystop")]
+        [Summary("Remove stick message management")]
+        public async Task StickyStop()
+        {
+            await Context.Message.DeleteAsync();
+
+            ulong messageId = MessageHandlers.RemoveSticky(Context.Channel.Id);
+
+            if (messageId == 0)
+            {
+                await ReplyAsync("no message to remove");
+                return;
+            }
+
+            await Context.Channel.DeleteMessageAsync(messageId);
+
+            var msg = await Context.Channel.SendMessageAsync($"Sticky Removed");
+
+            await Task.Delay(3000);
+
+            await msg.DeleteAsync();
         }
 
         //public class CleanModule : ModuleBase<SocketCommandContext>

@@ -16,10 +16,70 @@ namespace Curiosity.LifeV.Bot.Methods
         static DateTime lastSentTrigger = DateTime.Now.AddMinutes(-10);
         static Dictionary<ulong, DateTime> discordChannel = new Dictionary<ulong, DateTime>();
 
+        static Dictionary<ulong, KeyValuePair<ulong, string>> stickyMessages = new Dictionary<ulong, KeyValuePair<ulong, string>>();
+
         public MessageHandlers(DiscordSocketClient client, ulong guildId)
         {
             _client = client;
             _guildId = guildId;
+        }
+
+        public static void AddSticky(ulong channelId, ulong messageId, string message)
+        {
+            if (stickyMessages.ContainsKey(channelId))
+            {
+                stickyMessages[channelId] = new KeyValuePair<ulong, string>(messageId, message);
+            }
+            else
+            {
+                stickyMessages.Add(channelId, new KeyValuePair<ulong, string>(messageId, message));
+            }
+        }
+
+        public void AddStickyMessage(ulong channelId, ulong messageId, string message)
+        {
+            if (stickyMessages.ContainsKey(channelId))
+            {
+                stickyMessages[channelId] = new KeyValuePair<ulong, string>(messageId, message);
+            }
+            else
+            {
+                stickyMessages.Add(channelId, new KeyValuePair<ulong, string>(messageId, message));
+            }
+        }
+
+        public static ulong RemoveSticky(ulong channelId)
+        {
+            if (stickyMessages.ContainsKey(channelId))
+            {
+                KeyValuePair<ulong, string> messageItem = stickyMessages[channelId];
+                return messageItem.Key;
+
+                stickyMessages.Remove(channelId);
+            }
+            return 0;
+        }
+
+        public void RemoveStickMessage(ulong channelId)
+        {
+            stickyMessages.Remove(channelId);
+        }
+
+        public async Task StickyMessage(SocketUserMessage message, SocketCommandContext context)
+        {
+            if (stickyMessages.ContainsKey(message.Channel.Id))
+            {
+                ulong channelId = message.Channel.Id;
+                KeyValuePair<ulong, string> messageItem = stickyMessages[channelId];
+
+                ulong messageId = messageItem.Key;
+
+                await message.Channel.DeleteMessageAsync(messageId);
+                var messageResult = await message.Channel.SendMessageAsync($"STICKY\r{messageItem.Value}");
+                ulong newMessageId = messageResult.Id;
+
+                AddStickyMessage(channelId, newMessageId, messageItem.Value);
+            }
         }
 
         public async Task HandleUrl(SocketUserMessage message, SocketCommandContext context)

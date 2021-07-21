@@ -138,7 +138,7 @@ namespace Curiosity.LifeV.Bot
                 {
                     messageHandlers.HandleUrl(message, context);
                 }
-                
+
                 if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
                 {
                     // will delay for 1 second
@@ -157,6 +157,8 @@ namespace Curiosity.LifeV.Bot
                         }
                     }
                 }
+
+                messageHandlers.StickyMessage(message, context);
             }
             catch (Exception ex)
             {
