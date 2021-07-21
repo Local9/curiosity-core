@@ -1,3 +1,4 @@
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Managers;
 using System;
@@ -44,7 +45,7 @@ namespace Curiosity.Core.Client.Interface.Modules
             //        Color.FromArgb(175, 93, 182, 229));
             //}
 
-            Hud.IsRadarVisible = Cache.PlayerPed.IsInVehicle();
+            Hud.IsRadarVisible = API.IsPedInAnyVehicle(API.PlayerPedId(), true);
         }
 
         public MinimapAnchor GetMinimapAnchor()
