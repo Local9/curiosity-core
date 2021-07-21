@@ -59,7 +59,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 {
                     case "Success":
                         string message = "<span>Dispatch AI</span>" +
-                            "<table class=\"w-100\">" +
+                            "<table class=\"w-300\">" +
                             "<tr>" +
                             "<td class=\"text-left\">Mission</td>" +
                             "<td class=\"text-right\">Example</td>" +
