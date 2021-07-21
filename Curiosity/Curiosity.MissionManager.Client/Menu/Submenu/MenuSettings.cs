@@ -2,7 +2,6 @@
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
-using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Collections.Generic;
@@ -20,6 +19,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         UIMenuCheckboxItem menuChkNpcDebug; // 3
         UIMenuCheckboxItem menuChkVehDebug; // 4
+
+        static new List<dynamic> notificationList = new List<dynamic>() { "Success", "Info", "Warning", "Error", "Show" };
+        UIMenuListItem menuListNotification = new UIMenuListItem("Notifications", notificationList, 0);
 
         int patrolZoneIndex = 0;
         List<dynamic> lst = new List<dynamic>() { "City", "County" };
@@ -40,11 +42,57 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnListChange += Menu_OnListChange;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
+            menu.OnListSelect += Menu_OnListSelect;
 
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             Menu = menu;
             return menu;
+        }
+
+        private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
+        {
+            if (listItem == menuListNotification)
+            {
+                string notification = (string)notificationList[newIndex];
+                switch(notification)
+                {
+                    case "Success":
+                        string message = "<span>Dispatch AI</span>" +
+                            "<table class=\"w-100\">" +
+                            "<tr>" +
+                            "<td class=\"text-left\">Mission</td>" +
+                            "<td class=\"text-right\">Example</td>" +
+                            "</tr>" +
+                            "<tr>" +
+                            "<td class=\"text-left\">Reward</td>" +
+                            "<td class=\"text-right\">$0</td>" +
+                            "</tr>" +
+                            "<tr>" +
+                            "<td class=\"text-left\">XP Gain</td>" +
+                            "<td class=\"text-right\">0xp</td>" +
+                            "</tr>" +
+                            "<tr>" +
+                            "<td class=\"text-left\">Reputation Gain</td>" +
+                            "<td class=\"text-right\">0</td>" +
+                            "</tr>" +
+                            "</table>";
+                        Notify.Success(message, "bottom-center", "snackbar");
+                        break;
+                    case "Info":
+                        Notify.Info("Test Info", "bottom-center", "toast");
+                        break;
+                    case "Warning":
+                        Notify.Warning("Test Warning", "bottom-center", "toast");
+                        break;
+                    case "Error":
+                        Notify.Error("Test Error", "bottom-center", "toast");
+                        break;
+                    case "Show":
+                        Notify.Show("Test Show", "bottom-center", "toast");
+                        break;
+                }
+            }
         }
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
@@ -127,6 +175,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     sender.AddItem(menuChkNpcDebug);
                     menuChkVehDebug = new UIMenuCheckboxItem("Vehicle Debug UI", false);
                     sender.AddItem(menuChkVehDebug);
+                    sender.AddItem(menuListNotification);
                 }
             }
             else
@@ -135,6 +184,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 {
                     sender.RemoveItemAt(3);
                     sender.RemoveItemAt(4);
+                    sender.RemoveItemAt(5);
                 }
             }
 
