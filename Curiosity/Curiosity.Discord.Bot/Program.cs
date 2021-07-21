@@ -30,6 +30,8 @@ namespace Curiosity.LifeV.Bot
 
         private DiscordConfiguration discordConfiguration;
 
+        private MessageHandlers messageHandlers;
+
         private ulong guildId;
         Random Random = new Random();
 
@@ -94,6 +96,8 @@ namespace Curiosity.LifeV.Bot
 
             _client.GuildMemberUpdated += GuildMemberUpdated.Handle;
 
+            messageHandlers = new MessageHandlers(_client, guildId);
+
             await Task.Delay(-1);
         }
 
@@ -128,12 +132,12 @@ namespace Curiosity.LifeV.Bot
 
                 if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
                 {
-                    MessageHandlers.HandleGunMessage(message, context);
+                    messageHandlers.HandleGunMessage(message, context);
                 }
 
                 if (urlRE.IsMatch(message.Content))
                 {
-                    MessageHandlers.HandleUrl(message, context);
+                    messageHandlers.HandleUrl(message, context);
                 }
                 
                 if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))

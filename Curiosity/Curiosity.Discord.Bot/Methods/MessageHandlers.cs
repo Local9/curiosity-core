@@ -9,10 +9,20 @@ namespace Curiosity.LifeV.Bot.Methods
 {
     class MessageHandlers
     {
+        private const long CURIOSITY_BOT_TEXT_CHANNEL = 773248492939247626; // todo: move this some where central
+        private static DiscordSocketClient _client;
+        private static ulong _guildId;
+
         static DateTime lastSentTrigger = DateTime.Now.AddMinutes(-10);
         static Dictionary<ulong, DateTime> discordChannel = new Dictionary<ulong, DateTime>();
 
-        public async static Task HandleUrl(SocketUserMessage message, SocketCommandContext context)
+        public MessageHandlers(DiscordSocketClient client, ulong guildId)
+        {
+            _client = client;
+            _guildId = guildId;
+        }
+
+        public async Task HandleUrl(SocketUserMessage message, SocketCommandContext context)
         {
             //if (message.Content.Contains("cfx.re"))
             //    return;
@@ -32,7 +42,7 @@ namespace Curiosity.LifeV.Bot.Methods
             //if (message.Content.Contains("twitch.tv"))
             //    return;
 
-            if (message.Content.Contains("bit.ly") || message.Content.Contains("stearncomminuty.ru") || message.Content.Contains("steamcommunytu.ru") || message.Content.Contains("ramlucky.xyz") || message.Content.Contains("stearncomminuty.ru"))
+            if (message.Content.Contains("bit.ly") || message.Content.Contains(".ru/") || message.Content.Contains("ramlucky.xyz"))
             {
                 await message.DeleteAsync();
 
@@ -41,10 +51,12 @@ namespace Curiosity.LifeV.Bot.Methods
                 await Task.Delay(5000);
 
                 await msg.DeleteAsync();
+
+                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[SCAM LINK] User: {message.Author.Mention} posted a possible scam link and it has been removed.\nRemoved Content;\n```{message.Content}```");
             }
         }
 
-        public async static Task HandleGunMessage(SocketUserMessage message, SocketCommandContext context)
+        public async Task HandleGunMessage(SocketUserMessage message, SocketCommandContext context)
         {
             if (message.Channel.Id == 599956067686023176) return;
 
