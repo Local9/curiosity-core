@@ -100,7 +100,14 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("GetItem", new AsyncEventCallback(async metadata =>
             {
-                CuriosityShopItem storeItem = await EventSystem.Request<CuriosityShopItem>("shop:get:item", metadata.Find<int>(0));
+                int storeItemId = 0;
+                if (!int.TryParse(metadata.Find<string>(0), out storeItemId))
+                {
+                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    return new { success = false };
+                }
+
+                CuriosityShopItem storeItem = await EventSystem.Request<CuriosityShopItem>("shop:get:item", storeItemId);
 
                 if (storeItem is not null)
                 {
