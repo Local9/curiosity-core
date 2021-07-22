@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Systems.Library.Enums;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -125,7 +127,7 @@ namespace Curiosity.Core.Client.Managers
         {
             await BaseScript.Delay(500);
 
-            Vehicle[] vehicles = World.GetAllVehicles(); // figure out better filtering
+            Vehicle[] vehicles = World.GetAllVehicles().Where(x => Game.PlayerPed.Position.Distance(x.Position) < 100f).ToArray(); // figure out better filtering
 
             for (int i = 0; i < vehicles.Length; i++)
             {
