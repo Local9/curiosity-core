@@ -135,6 +135,7 @@ namespace Curiosity.Core.Client.Managers
 
                     bool sirenSetup = vehicle.State.Get("siren:setup") ?? false;
                     bool lightSetup = vehicle.State.Get("light:setup") ?? false;
+                    string lastSoundFile = vehicle.State.Get("siren:lastSound");
 
                     if (vehicle.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? false)
                     {
@@ -163,16 +164,25 @@ namespace Curiosity.Core.Client.Managers
 
                     if (vehicle.State.Get(StateBagKey.VEH_SIREN_STATE) ?? false && lightSetup)
                     {
+                        string soundToPlay = vehicle.State.Get(StateBagKey.VEH_SIREN_SOUND);
+
                         if (!sirenSetup)
                         {
-                            vehicle.State.Set("siren:setup", true, false);
-                            string soundToPlay = vehicle.State.Get(StateBagKey.VEH_SIREN_SOUND);
+                            vehicle.State.Set("siren:setup", true, false);    
 
                             if (string.IsNullOrEmpty(soundToPlay))
                                 soundToPlay = "VEHICLES_HORNS_SIREN_1";
 
+                            vehicle.State.Set("siren:lastSound", soundToPlay, false);
+
                             PlaySoundFromEntity(vehicle.Handle, soundToPlay, vehicle.Handle, "PLAYER_SIRENS", false, 0);
                             vehicle.IsSirenSilent = false;
+                        }
+
+                        if (lastSoundFile != soundToPlay)
+                        {
+                            vehicle.State.Set("siren:lastSound", soundToPlay, false);
+                            PlaySoundFromEntity(vehicle.Handle, soundToPlay, vehicle.Handle, "PLAYER_SIRENS", false, 0);
                         }
                     }
 
