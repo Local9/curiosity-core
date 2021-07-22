@@ -76,9 +76,6 @@ namespace Curiosity.Core.Client.Managers
             {
                 _lightsActive = true;
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, true, true);
-                // Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "VEHICLES_HORNS_SIREN_1", true);
-
-                Logger.Debug($"Lights Enabled");
 
                 await BaseScript.Delay(100);
             }
@@ -91,8 +88,6 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, false, true);
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "STOP", true);
-
-                Logger.Debug($"Lights Disabled");
 
                 await BaseScript.Delay(100);
             }
@@ -111,8 +106,6 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, true, true);
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "VEHICLES_HORNS_SIREN_1", true); // sounds from a file
 
-                Logger.Debug($"Siren Enabled");
-
                 await BaseScript.Delay(100);
             }
 
@@ -122,8 +115,6 @@ namespace Curiosity.Core.Client.Managers
             {
                 _sirenActive = false;
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
-
-                Logger.Debug($"Siren Disabled");
 
                 await BaseScript.Delay(100);
             }
@@ -154,8 +145,6 @@ namespace Curiosity.Core.Client.Managers
                             vehicle.IsSirenSilent = true;
                             int toggle = 1;
                             SetSirenWithNoDriver(vehicle.Handle, ref toggle);
-
-                            Logger.Debug($"Lights Enabled {vehicle.Handle}");
                         }
                     }
                     
@@ -169,8 +158,6 @@ namespace Curiosity.Core.Client.Managers
                             SetSirenWithNoDriver(vehicle.Handle, ref toggle);
                             StopSound(vehicle.Handle);
                             ReleaseSoundId(vehicle.Handle);
-
-                            Logger.Debug($"Sirens Disabled {vehicle.Handle}");
                         }
                     }
 
