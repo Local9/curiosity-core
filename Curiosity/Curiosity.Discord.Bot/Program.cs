@@ -136,7 +136,7 @@ namespace Curiosity.LifeV.Bot
 
                 if (urlRE.IsMatch(message.Content))
                 {
-                    messageHandlers.HandleUrl(message, context);
+                    messageHandlers.HandleAutomatedResponses(message, context);
                 }
 
                 if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))

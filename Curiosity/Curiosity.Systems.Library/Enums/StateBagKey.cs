@@ -82,6 +82,12 @@
         public const string MENU_TAILGATING = "c::menu::tailgating";
 
         public const string ENTITY_DELETE = "e::delete";
+
+        public const string VEH_SIREN_STATE = "v::siren::state";
+        public const string VEH_SIREN_LIGHTS = "v::siren::light";
+        public const string VEH_SIREN_SOUND = "v::siren::sound";
+        public const string VEH_SIREN_BLIP = "v::siren::blip";
+        public const string VEH_SIREN_AIRHORN = "v::siren::airhorn";
         #endregion
     }
 }

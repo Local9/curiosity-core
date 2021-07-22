@@ -102,6 +102,7 @@ namespace Curiosity.Core.Client.Managers
             if (ent is Vehicle)
             {
                 VehicleManager vehicleManager = VehicleManager.GetModule();
+                EmergencyVehicleSirenManager emergencyVehicleSirenManager = EmergencyVehicleSirenManager.GetModule();
                 Vehicle vehicle = (Vehicle)ent;
 
                 VehicleState currentVehicle;
@@ -132,10 +133,15 @@ namespace Curiosity.Core.Client.Managers
 
                     vehicleManager.InitialiseVehicleFuel(currentVehicle);
 
-                    if (ent.Model.Hash == (int)VehicleHash.Skylift)
+                    // run skylift tick
+                    if (vehicle.Model.Hash == (int)VehicleHash.Skylift)
                     {
-                        // run skylift tick
                         vehicleManager.InitialiseSkylift(currentVehicle);
+                    }
+
+                    if (vehicle.ClassType == VehicleClass.Emergency)
+                    {
+                        emergencyVehicleSirenManager.EnableSirenManager();
                     }
                 }
 

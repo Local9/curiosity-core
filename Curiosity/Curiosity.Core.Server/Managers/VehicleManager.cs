@@ -264,6 +264,12 @@ namespace Curiosity.Core.Server.Managers
                 vehicle.State.Set(StateBagKey.VEH_FUEL_SETUP, false, true);
                 vehicle.State.Set(StateBagKey.VEH_CONTENT, new { }, true);
 
+                vehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "", true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_BLIP, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_AIRHORN, false, true);
+
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
                 API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
@@ -331,6 +337,12 @@ namespace Curiosity.Core.Server.Managers
                 vehicle.State.Set(StateBagKey.VEH_FUEL_MULTIPLIER, 0f, true);
                 vehicle.State.Set(StateBagKey.VEH_FUEL_SETUP, false, true);
                 vehicle.State.Set(StateBagKey.VEH_CONTENT, new { }, true);
+
+                vehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "", true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_BLIP, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_AIRHORN, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
                 API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
