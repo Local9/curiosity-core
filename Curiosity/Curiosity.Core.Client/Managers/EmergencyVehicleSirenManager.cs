@@ -137,7 +137,6 @@ namespace Curiosity.Core.Client.Managers
 
                 if (!(vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false)) continue;
 
-
                 bool sirenSetup = vehicle.State.Get("siren:setup") ?? false;
                 bool lightSetup = vehicle.State.Get("light:setup") ?? false;
                 string lastSoundFile = vehicle.State.Get("siren:lastSound");
