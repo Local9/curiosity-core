@@ -60,6 +60,7 @@ namespace Curiosity.Core.Client.Managers
             }
 
             ToggleLights();
+            ToggleSiren();
         }
 
         private async void ToggleLights()
@@ -103,11 +104,11 @@ namespace Curiosity.Core.Client.Managers
 
             if (((Game.IsDisabledControlJustPressed(0, sirenToggle) && Game.CurrentInputMode == InputMode.MouseAndKeyboard) ||
                 (Game.IsControlJustPressed(2, sirenToggleController) && Game.CurrentInputMode == InputMode.GamePad))
-                && !_sirenActive)
+                && !_sirenActive && _lightsActive)
             {
                 _sirenActive = true;
                 Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, true, true);
-                // Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "VEHICLES_HORNS_SIREN_1", true);
+                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "VEHICLES_HORNS_SIREN_1", true);
 
                 Logger.Debug($"Siren Enabled");
 
@@ -143,30 +144,36 @@ namespace Curiosity.Core.Client.Managers
                     bool sirenSetup = vehicle.State.Get("siren:setup") ?? false;
                     bool lightSetup = vehicle.State.Get("light:setup") ?? false;
 
-                    if (vehicle.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? false && !lightSetup)
+                    if (vehicle.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? false)
                     {
-                        vehicle.State.Set("light:setup", true, false);
-                        vehicle.IsSirenActive = true;
-                        vehicle.IsSirenSilent = true;
-                        int toggle = 1;
-                        SetSirenWithNoDriver(vehicle.Handle, ref toggle);
+                        if (!lightSetup)
+                        {
+                            vehicle.State.Set("light:setup", true, false);
+                            vehicle.IsSirenActive = true;
+                            vehicle.IsSirenSilent = true;
+                            int toggle = 1;
+                            SetSirenWithNoDriver(vehicle.Handle, ref toggle);
 
-                        Logger.Debug($"Lights Enabled {vehicle.Handle}");
+                            Logger.Debug($"Lights Enabled {vehicle.Handle}");
+                        }
                     }
                     
-                    if (!(vehicle.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? false) && lightSetup)
+                    if (!(vehicle.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? false))
                     {
-                        vehicle.State.Set("light:setup", false, false);
-                        vehicle.IsSirenActive = false;
-                        int toggle = 0;
-                        SetSirenWithNoDriver(vehicle.Handle, ref toggle);
-                        StopSound(vehicle.Handle);
-                        ReleaseSoundId(vehicle.Handle);
+                        if (lightSetup)
+                        {
+                            vehicle.State.Set("light:setup", false, false);
+                            vehicle.IsSirenActive = false;
+                            int toggle = 0;
+                            SetSirenWithNoDriver(vehicle.Handle, ref toggle);
+                            StopSound(vehicle.Handle);
+                            ReleaseSoundId(vehicle.Handle);
 
-                        Logger.Debug($"Sirens Disabled {vehicle.Handle}");
+                            Logger.Debug($"Sirens Disabled {vehicle.Handle}");
+                        }
                     }
 
-                    if (vehicle.State.Get(StateBagKey.VEH_SIREN_STATE) ?? false && lightSetup && !sirenSetup)
+                    if (vehicle.State.Get(StateBagKey.VEH_SIREN_STATE) ?? false && lightSetup)
                     {
                         vehicle.State.Set("siren:setup", true, false);
                         string soundToPlay = vehicle.State.Get(StateBagKey.VEH_SIREN_SOUND);
@@ -175,11 +182,14 @@ namespace Curiosity.Core.Client.Managers
                             soundToPlay = "VEHICLES_HORNS_SIREN_1";
 
                         PlaySoundFromEntity(vehicle.Handle, soundToPlay, vehicle.Handle, "PLAYER_SIRENS", false, 0);
+                        vehicle.IsSirenSilent = false;
                     }
 
                     if (!(vehicle.State.Get(StateBagKey.VEH_SIREN_STATE) ?? false) && sirenSetup)
                     {
                         vehicle.State.Set("siren:setup", false, false);
+
+                        vehicle.IsSirenSilent = true;
                         PlaySoundFromEntity(vehicle.Handle, "STOP", vehicle.Handle, "PLAYER_SIRENS", false, 0);
                     }
                 }
