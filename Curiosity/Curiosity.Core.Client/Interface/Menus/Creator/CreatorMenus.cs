@@ -173,7 +173,9 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void OnMenuClose()
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
-            menuMain.InstructionalButtons.Clear();
+
+            if (menuMain.InstructionalButtons.Count > 0)
+                menuMain.InstructionalButtons.Clear();
         }
 
         private void OnMenuOpen()
@@ -188,12 +190,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         {
             if (Game.IsControlPressed(0, Control.Pickup))
             {
-                Cache.PlayerPed.Heading += 10f;
+                Cache.PlayerPed.Heading += 5f;
             }
 
             if (Game.IsControlPressed(0, Control.Cover))
             {
-                Cache.PlayerPed.Heading -= 10f;
+                Cache.PlayerPed.Heading -= 5f;
             }
         }
 
