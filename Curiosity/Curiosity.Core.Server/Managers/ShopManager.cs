@@ -1,5 +1,6 @@
 ﻿using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -255,6 +256,8 @@ namespace Curiosity.Core.Server.Managers
                 }
                 catch (Exception ex)
                 {
+                    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[ERROR] shop:purchase:item\r{ex}");
+
                     Logger.Error(ex, "shop:purchase:item");
                     curiosityUser.Purchasing = false;
                     return sqlResult;
