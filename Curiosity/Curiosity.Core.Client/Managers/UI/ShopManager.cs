@@ -59,8 +59,15 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 isProcessing = true;
+                
+                int categoryId = 0;
+                if (!int.TryParse(metadata.Find<string>(0), out categoryId))
+                {
+                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    return new { success = false };
+                }
 
-                List<CuriosityShopItem> result = await EventSystem.Request<List<CuriosityShopItem>>("shop:get:items", metadata.Find<int>(0));
+                List<CuriosityShopItem> result = await EventSystem.Request<List<CuriosityShopItem>>("shop:get:items", categoryId);
 
                 var items = new List<dynamic>();
 
@@ -186,7 +193,12 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("PurchaseItem", new AsyncEventCallback(async metadata =>
             {
-                int itemId = metadata.Find<int>(0);
+                int itemId = 0;
+                if (!int.TryParse(metadata.Find<string>(0), out itemId))
+                {
+                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    return new { success = false };
+                }
 
                 SqlResult result = await EventSystem.Request<SqlResult>("shop:purchase:item", itemId);
 
@@ -207,7 +219,12 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("SellItem", new AsyncEventCallback(async metadata =>
             {
-                int itemId = metadata.Find<int>(0);
+                int itemId = 0;
+                if (!int.TryParse(metadata.Find<string>(0), out itemId))
+                {
+                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    return new { success = false };
+                }
 
                 SqlResult result = await EventSystem.Request<SqlResult>("shop:sell:item", itemId);
 
