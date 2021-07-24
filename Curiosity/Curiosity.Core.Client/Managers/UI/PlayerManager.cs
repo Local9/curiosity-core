@@ -44,7 +44,12 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("GetEnhancedProfile", new AsyncEventCallback(async metadata =>
             {
-                int serverHandle = metadata.Find<int>(0);
+                List<CharacterSkill> skills = new();
+                List<CharacterStat> stats = new();
+
+                int serverHandle = 0;
+
+                int.TryParse(metadata.Find<string>(0), out serverHandle);
 
                 if (serverHandle == 0)
                 {
@@ -52,8 +57,12 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile:enhanced", serverHandle);
-                List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills:enhanced", serverHandle);
-                List<CharacterStat> stats = await EventSystem.Request<List<CharacterStat>>("character:get:stats:enhanced", serverHandle);
+
+                if (serverHandle == Game.Player.ServerId || Cache.Player.User.IsAdmin)
+                {
+                    skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills:enhanced", serverHandle);
+                    stats = await EventSystem.Request<List<CharacterStat>>("character:get:stats:enhanced", serverHandle);
+                }
 
                 if (curiosityUser == null) return null;
 
