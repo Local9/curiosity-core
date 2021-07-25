@@ -178,7 +178,7 @@ namespace Curiosity.Core.Server.Managers
                     await BaseScript.Delay(500);
                     if (numberOfFailures >= 3)
                     {
-                        EventSystem.GetModule().Send("mission:notification:warning", serverHandle, "No earnings<br />The player you've assisted has failed too many times.", "right");
+                        EventSystem.GetModule().Send("mission:notification:warning", serverHandle, "No earnings<br />The player you've assisted has failed too many times.", "bottom-right");
                     }
                     else
                     {
@@ -709,12 +709,12 @@ namespace Curiosity.Core.Server.Managers
 
                     users.ForEach(u =>
                     {
-                        EventSystem.GetModule().Send("mission:notification:info", u.Handle, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "right");
+                        EventSystem.GetModule().Send("mission:notification:info", u.Handle, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "bottom-right");
                     });
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification:warning", metadata.Sender, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "right");
+                    EventSystem.GetModule().Send("mission:notification:warning", metadata.Sender, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right");
                 }
 
                 missionData.AssistanceRequested = true;
@@ -941,13 +941,13 @@ namespace Curiosity.Core.Server.Managers
 
                 if (numberOfFailures >= 3)
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "right");
+                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "bottom-right");
                     await BaseScript.Delay(500);
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"You require {numberOfFailures - 3:d0} or more successful callout(s) to earn full rewards.", "right");
+                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"You require {numberOfFailures - 3:d0} or more successful callout(s) to earn full rewards.", "bottom-right");
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "right");
+                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "bottom-right");
                 }
             }
             else
@@ -974,7 +974,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     await BaseScript.Delay(500);
 
-                    EventSystem.GetModule().Send("mission:notification:fail", serverHandle, "Dispatch A.I.<br />You have failed too many missions in a row and will now get lower rewards.", "right");
+                    EventSystem.GetModule().Send("mission:notification:fail", serverHandle, "Dispatch A.I.<br />You have failed too many missions in a row and will now get lower rewards.", "bottom-right");
                 }
             }
 
