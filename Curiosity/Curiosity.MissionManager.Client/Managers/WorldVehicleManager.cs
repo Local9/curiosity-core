@@ -26,6 +26,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public void Start()
         {
+            Logger.Debug($"Traffic Stop System Started");
             Instance.AttachTickHandler(OnVehicleCreator);
             Instance.AttachTickHandler(OnWorldVehicleList);
         }
@@ -50,7 +51,7 @@ namespace Curiosity.MissionManager.Client.Managers
             WorldVehicles.Clear();
         }
 
-        private async Task OnWorldVehicleList()
+        private async Task OnWorldVehicleList() // WHAT the fuck is this?
         {
             ConcurrentDictionary<int, Vehicle> WorldVehiclesCopy = WorldVehicles;
 
@@ -80,7 +81,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 15f)).ToList();
+                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 30f)).ToList();
 
                 if (vehicles.Count == 0)
                 {
