@@ -190,7 +190,10 @@ namespace Curiosity.MissionManager.Client.Menu
             {
                 Logger.Debug($"Open Police Menu");
 
-                if (menuMain.Visible) return;
+                if (menuMain.Visible)
+                {
+                    menuMain.Visible = false;
+                }
 
                 if (!menuMain.Visible)
                 {
