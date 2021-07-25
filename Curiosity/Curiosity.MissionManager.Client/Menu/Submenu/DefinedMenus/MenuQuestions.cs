@@ -76,15 +76,15 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.ChangeBackward)
-            {
-                MenuManager.OnMenuState();
-                PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
-            }
-
             if (state == MenuState.ChangeForward)
             {
                 OnMenuOpen();
+            }
+
+            if (state == MenuState.Closed || state == MenuState.ChangeBackward)
+            {
+                MenuManager.OnMenuState();
+                PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
             }
         }
 
@@ -142,10 +142,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             }
         }
 
-        private async Task OnSuspectDistanceCheck()
+        public async Task OnSuspectDistanceCheck()
         {
             if (Ped.Position.Distance(Cache.PlayerPed.Position) > 3f)
+            {
                 MenuManager._MenuPool.CloseAllMenus();
+                PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
+            }
         }
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)

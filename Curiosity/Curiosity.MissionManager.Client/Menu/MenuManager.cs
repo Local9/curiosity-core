@@ -98,6 +98,8 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (state == MenuState.Closed)
                 OnMenuState();
+
+            Logger.Debug($"Mission State: {state}");
         }
 
         private async Task OnMenuDisplay()
@@ -188,15 +190,16 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (Cache.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
-                Logger.Debug($"Open Police Menu");
-
-                if (menuMain.Visible)
-                {
-                    menuMain.Visible = false;
-                }
+                //if (menuMain.Visible)
+                //{
+                //    Instance.DetachTickHandler(OnMenuDisplay);
+                //    menuMain.Visible = false;
+                //}
 
                 if (!menuMain.Visible)
                 {
+                    Logger.Debug($"Open Police Menu");
+
                     menuMain.Visible = !menuMain.Visible;
                     Instance.AttachTickHandler(OnMenuDisplay);
                 }
