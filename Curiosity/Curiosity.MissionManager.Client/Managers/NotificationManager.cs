@@ -12,6 +12,51 @@ namespace Curiosity.MissionManager.Client.Managers
                 Notify.Custom(metadata.Find<string>(0));
                 return null;
             }));
+
+            EventSystem.Attach("mission:notification:success", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+
+                Notify.Success(message, position);
+                return null;
+            }));
+
+            EventSystem.Attach("mission:notification:info", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+
+                Notify.Info(message, position);
+                return null;
+            }));
+
+            EventSystem.Attach("mission:notification:warning", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+
+                Notify.Warning(message, position);
+                return null;
+            }));
+
+            EventSystem.Attach("mission:notification:fail", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+
+                Notify.Warning(message, position);
+                return null;
+            }));
+
+            EventSystem.Attach("mission:notification:show", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+
+                Notify.Show(message, position);
+                return null;
+            }));
         }
     }
 }
