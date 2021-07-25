@@ -1,4 +1,5 @@
-﻿using Curiosity.MissionManager.Client.Interface;
+﻿using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.MissionManager.Client.Managers
@@ -18,6 +19,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 string message = metadata.Find<string>(0);
                 string position = metadata.Find<string>(1);
 
+                Logger.Debug($"notification:success {message}/{position}");
+
                 Notify.Success(message, position);
                 return null;
             }));
@@ -26,6 +29,8 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 string message = metadata.Find<string>(0);
                 string position = metadata.Find<string>(1);
+
+                Logger.Debug($"notification:info {message}/{position}");
 
                 Notify.Info(message, position);
                 return null;
@@ -36,6 +41,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 string message = metadata.Find<string>(0);
                 string position = metadata.Find<string>(1);
 
+                Logger.Debug($"notification:warning {message}/{position}");
+
                 Notify.Warning(message, position);
                 return null;
             }));
@@ -45,6 +52,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 string message = metadata.Find<string>(0);
                 string position = metadata.Find<string>(1);
 
+                Logger.Debug($"notification:fail {message}/{position}");
+
                 Notify.Warning(message, position);
                 return null;
             }));
@@ -53,6 +62,8 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 string message = metadata.Find<string>(0);
                 string position = metadata.Find<string>(1);
+
+                Logger.Debug($"notification:show {message}/{position}");
 
                 Notify.Show(message, position);
                 return null;
