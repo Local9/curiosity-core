@@ -264,6 +264,15 @@ namespace Curiosity.Core.Server.Managers
                 return player.Character.Cash;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:items", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetItems(player.Character.CharacterId);
+
+                return lst;
+            }));
+
             Instance.ExportDictionary.Add("Skill", new Func<string, int, Task<string>>(
                 async (playerHandle, skillId) =>
                 {
