@@ -311,6 +311,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
+                DiscordClient.GetModule().SendDiscordServerEventLogMessage($"selShopItem: itemId {itemId}, characterId {characterId}\r{ex}");
                 Logger.Error($"{ex}");
                 return null;
             }

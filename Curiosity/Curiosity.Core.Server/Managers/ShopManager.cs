@@ -55,11 +55,17 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("shop:get:item", new AsyncEventCallback(async metadata =>
             {
+                int itemId = -1;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
                 try
                 {
-                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    itemId = metadata.Find<int>(0);
 
-                    int itemId = metadata.Find<int>(0);
+                    if (itemId == -1)
+                    {
+                        return null;
+                    }
 
                     CuriosityShopItem item = await Database.Store.ShopDatabase.GetItem(itemId, curiosityUser.Character.CharacterId);
                     item.SkillRequirements = await Database.Store.ShopDatabase.GetSkillRequirements(itemId, curiosityUser.Character.CharacterId);
@@ -70,6 +76,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 catch (Exception ex)
                 {
+                    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"shop:get:item: itemId {itemId}, characterId {curiosityUser.Character.CharacterId}\r{ex}");
                     Logger.Error(ex, "shop:get:items");
                     return null;
                 }
