@@ -392,6 +392,7 @@ namespace Curiosity.Core.Client.Managers
             DeathCamera = World.CreateCamera(Cache.PlayerPed.Position, Vector3.Zero, GameplayCamera.FieldOfView);
             DeathCamera.IsActive = true;
             API.RenderScriptCams(true, true, 1000, true, false);
+            API.SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
         }
 
         void RemoveCamera()
@@ -403,6 +404,7 @@ namespace Curiosity.Core.Client.Managers
                 DeathCamera.Delete();
 
             DeathCamera = null;
+            API.SetTransitionTimecycleModifier($"DEFAULT", 5.0f);
         }
 
         Vector3 ProcessCameraPosition()
