@@ -125,6 +125,7 @@ namespace Curiosity.Core.Server.Database.Store
             i.HashKey = $"{kv["HashKey"]}";
             i.ImageUri = $"{kv["ImageUri"]}";
             i.NumberOwned = kv["NumberOwned"].ToInt();
+            i.CanCarry = kv["NumberOwned"].ToBoolean();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
@@ -137,15 +138,16 @@ namespace Curiosity.Core.Server.Database.Store
             return i;
         }
 
-        private static async Task<ResultSet> GetCharacterItems(int characterId, int? itemId = null)
+        private static async Task<ResultSet> GetCharacterItems(int characterId, int? itemId = null, bool? inventoryOnly = null)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
             {
                 { "@CharacterID", characterId },
-                { "@ItemID", itemId }
+                { "@ItemID", itemId },
+                { "@InventoryOnly", inventoryOnly }
             };
 
-            string myQuery = "CALL selCharacterItems(@CharacterID, @ItemID);";
+            string myQuery = "CALL selCharacterItems(@CharacterID, @ItemID, @InventoryOnly);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
