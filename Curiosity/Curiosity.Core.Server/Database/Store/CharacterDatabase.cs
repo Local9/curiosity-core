@@ -138,6 +138,83 @@ namespace Curiosity.Core.Server.Database.Store
             return i;
         }
 
+        // Should write an extension
+        public static async Task<List<CuriosityShopItem>> GetInventoryEquipped(int characterId)
+        {
+            ResultSet kvp = await GetCharacterEquippedItems(characterId, inventoryOnly: true);
+            List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
+
+            if (kvp.Count == 0)
+                return lst;
+
+            foreach (Dictionary<string, object> kv in kvp)
+            {
+                CuriosityShopItem i = new CuriosityShopItem();
+
+                i.ItemId = kv["ItemId"].ToInt();
+                i.Label = $"{kv["Label"]}";
+                i.Description = $"{kv["Description"]}";
+                i.IsDroppable = kv["IsDroppable"].ToBoolean();
+                i.IsUsable = kv["IsUsable"].ToBoolean();
+                i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
+                i.HashKey = $"{kv["HashKey"]}";
+                i.ImageUri = $"{kv["ImageUri"]}";
+                i.NumberOwned = kv["NumberOwned"].ToInt();
+                i.CanCarry = kv["CanCarry"].ToBoolean();
+
+                lst.Add(i);
+            }
+
+            return lst;
+        }
+
+        // Should write an extension
+        public static async Task<List<CuriosityShopItem>> GetInventoryItems(int characterId)
+        {
+            ResultSet kvp = await GetCharacterItems(characterId, inventoryOnly: true);
+            List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
+
+            if (kvp.Count == 0)
+                return lst;
+
+            foreach (Dictionary<string, object> kv in kvp)
+            {
+                CuriosityShopItem i = new CuriosityShopItem();
+
+                i.ItemId = kv["ItemId"].ToInt();
+                i.Label = $"{kv["Label"]}";
+                i.Description = $"{kv["Description"]}";
+                i.IsDroppable = kv["IsDroppable"].ToBoolean();
+                i.IsUsable = kv["IsUsable"].ToBoolean();
+                i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
+                i.HashKey = $"{kv["HashKey"]}";
+                i.ImageUri = $"{kv["ImageUri"]}";
+                i.NumberOwned = kv["NumberOwned"].ToInt();
+                i.CanCarry = kv["CanCarry"].ToBoolean();
+
+                lst.Add(i);
+            }
+
+            return lst;
+        }
+
+        private static async Task<ResultSet> GetCharacterEquippedItems(int characterId, int? itemId = null, bool? inventoryOnly = null)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId },
+                { "@InventoryOnly", inventoryOnly }
+            };
+
+            string myQuery = "CALL selCharacterEquippedItems(@CharacterID, @ItemID, @InventoryOnly);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                return await result;
+            }
+        }
+
         private static async Task<ResultSet> GetCharacterItems(int characterId, int? itemId = null, bool? inventoryOnly = null)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()

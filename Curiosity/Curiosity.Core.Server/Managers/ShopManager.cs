@@ -188,12 +188,10 @@ namespace Curiosity.Core.Server.Managers
                     goto ItemPurchaseRouter;
 
                 ItemPurchaseRouter:
-
-                    if (item.SpawnTypeId == 0 || item.SpawnTypeId == SpawnType.Weapon)
-                        goto AddItemToCharacter; // Let them buy it then!
-
                     if (item.IsVehicle || item.SpawnTypeId == SpawnType.Trailer)
                         goto AddVehicleToCharacter;
+
+                    goto AddItemToCharacter;
 
                 AddVehicleToCharacter:
                     purchaseResult = await Database.Store.ShopDatabase.PurchaseVehicle(itemId, characterId);

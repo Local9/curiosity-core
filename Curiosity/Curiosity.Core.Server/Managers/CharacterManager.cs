@@ -268,7 +268,16 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
-                List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetItems(player.Character.CharacterId);
+                List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryItems(player.Character.CharacterId);
+
+                return lst;
+            }));
+
+            EventSystem.GetModule().Attach("character:inventory:equipped", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryEquipped(player.Character.CharacterId);
 
                 return lst;
             }));
