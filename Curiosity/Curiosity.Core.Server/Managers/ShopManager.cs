@@ -179,16 +179,17 @@ namespace Curiosity.Core.Server.Managers
                                 metRequirements++;
                         }
 
-                        if (metRequirements == requirements && item.SpawnTypeId == 0)
-                            goto AddItemToCharacter;
-
-                        if (metRequirements == requirements && (item.IsVehicle || item.SpawnTypeId == SpawnType.Trailer))
-                            goto AddVehicleToCharacter;
+                        if (metRequirements == requirements)
+                            goto ItemPurchaseRouter;
 
                         goto FailedPurchaseSkill;
                     }
 
-                    if (item.SpawnTypeId == 0)
+                    goto ItemPurchaseRouter;
+
+                ItemPurchaseRouter:
+
+                    if (item.SpawnTypeId == 0 || item.SpawnTypeId == SpawnType.Weapon)
                         goto AddItemToCharacter; // Let them buy it then!
 
                     if (item.IsVehicle || item.SpawnTypeId == SpawnType.Trailer)

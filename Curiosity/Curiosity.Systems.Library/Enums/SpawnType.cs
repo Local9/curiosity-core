@@ -8,6 +8,7 @@
         Plane = 3,
         Boat = 4,
         Vehicle = 5,
-        Trailer = 6
+        Trailer = 6,
+        Weapon = 7
     }
 }
