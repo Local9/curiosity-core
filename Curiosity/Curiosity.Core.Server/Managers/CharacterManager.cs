@@ -53,10 +53,8 @@ namespace Curiosity.Core.Server.Managers
 
                         if (item.SpawnTypeId == SpawnType.Weapon)
                         {
-                            int playerPedId = API.GetPlayerPed(player.Handle);
-
                             int hash = API.GetHashKey(item.HashKey);
-                            API.GiveWeaponToPed(playerPedId, (uint)hash, 999, false, false);
+                            API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
                         }
                     }
                 }
@@ -305,14 +303,15 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("character:inventory:equip", new AsyncEventCallback(async metadata =>
             {
-                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 ExportMessage exportMessage = new ExportMessage();
 
                 int itemId = metadata.Find<int>(0);
                 int amount = metadata.Find<int>(1);
 
-                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(player.Character.CharacterId, itemId);
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(curiosityUser.Character.CharacterId, itemId);
 
                 if (item.CarringMaxed)
                 {
@@ -320,7 +319,7 @@ namespace Curiosity.Core.Server.Managers
                     goto ReturnResult;
                 }
 
-                bool inserted = await Database.Store.CharacterDatabase.InsertInventoryItem(player.Character.CharacterId, itemId, amount);
+                bool inserted = await Database.Store.CharacterDatabase.InsertInventoryItem(curiosityUser.Character.CharacterId, itemId, amount);
 
                 if (!inserted)
                 {
@@ -330,11 +329,10 @@ namespace Curiosity.Core.Server.Managers
 
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
-                    int playerPedId = API.GetPlayerPed($"{player.Handle}");
                     int hash = API.GetHashKey(item.HashKey);
-                    API.GiveWeaponToPed(playerPedId, (uint)hash, 999, false, false);
+                    API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, true);
 
-                    Logger.Debug($"Equipping {item.HashKey} to {player.LatestName}");
+                    Logger.Debug($"Equipping {item.HashKey} to {curiosityUser.LatestName}");
                 }
 
             ReturnResult:
@@ -343,16 +341,17 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("character:inventory:remove", new AsyncEventCallback(async metadata =>
             {
-                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 ExportMessage exportMessage = new ExportMessage();
 
                 int itemId = metadata.Find<int>(0);
                 int amount = metadata.Find<int>(1);
 
-                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(player.Character.CharacterId, itemId);
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(curiosityUser.Character.CharacterId, itemId);
 
-                bool updated = await Database.Store.CharacterDatabase.RemoveInventoryItem(player.Character.CharacterId, itemId, amount);
+                bool updated = await Database.Store.CharacterDatabase.RemoveInventoryItem(curiosityUser.Character.CharacterId, itemId, amount);
 
                 if (!updated)
                 {
@@ -362,9 +361,10 @@ namespace Curiosity.Core.Server.Managers
 
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
-                    int playerPedId = API.GetPlayerPed($"{player.Handle}");
                     int hash = API.GetHashKey(item.HashKey);
-                    API.RemoveWeaponFromPed(playerPedId, (uint)hash);
+                    API.RemoveWeaponFromPed(player.Character.Handle, (uint)hash);
+
+                    Logger.Debug($"Removing {item.HashKey} from {curiosityUser.LatestName}");
                 }
 
             ReturnResult:
