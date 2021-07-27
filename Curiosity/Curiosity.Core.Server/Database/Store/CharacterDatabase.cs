@@ -263,5 +263,19 @@ namespace Curiosity.Core.Server.Database.Store
 
             return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }
+
+        internal static async Task<bool> RemoveInventoryItem(int characterId, int itemId, int amount)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId },
+                { "@Amount", amount },
+            };
+
+            string myQuery = "CALL delCharacterInventoryItem(@CharacterID, @ItemID, @Amount);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
+        }
     }
 }

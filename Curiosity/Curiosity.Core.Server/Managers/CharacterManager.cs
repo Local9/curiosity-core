@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("character:routing:base", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("character:routing:base", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -39,10 +39,31 @@ namespace Curiosity.Core.Server.Managers
 
                 API.SetPlayerCullingRadius($"{metadata.Sender}", 15000.0f);
 
-                PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.LOBBY;
-
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
+                u.RoutingBucket = RoutingBucket.LOBBY;
                 u.Character.LastPosition = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+
+                List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryEquipped(u.Character.CharacterId);
+
+                try
+                {
+                    for (int i = 0; i < lst.Count; i++)
+                    {
+                        CuriosityShopItem item = lst[i];
+
+                        if (item.SpawnTypeId == SpawnType.Weapon)
+                        {
+                            int playerPedId = API.GetPlayerPed(player.Handle);
+
+                            int hash = API.GetHashKey(item.HashKey);
+                            API.GiveWeaponToPed(playerPedId, (uint)hash, 999, false, false);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
 
                 // Logger.Debug($"{player.Name}:{API.GetPlayerRoutingBucket(player.Handle)}");
 
@@ -319,6 +340,41 @@ namespace Curiosity.Core.Server.Managers
             ReturnResult:
                 return exportMessage;
             }));
+
+            EventSystem.GetModule().Attach("character:inventory:remove", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                ExportMessage exportMessage = new ExportMessage();
+
+                int itemId = metadata.Find<int>(0);
+                int amount = metadata.Find<int>(1);
+
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(player.Character.CharacterId, itemId);
+
+                bool updated = await Database.Store.CharacterDatabase.RemoveInventoryItem(player.Character.CharacterId, itemId, amount);
+
+                if (!updated)
+                {
+                    exportMessage.Error = "Was unable to remove the item.";
+                    goto ReturnResult;
+                }
+
+                if (item.SpawnTypeId == SpawnType.Weapon)
+                {
+                    int playerPedId = API.GetPlayerPed($"{player.Handle}");
+
+                    int hash = API.GetHashKey(item.HashKey);
+
+                    API.RemoveWeaponFromPed(playerPedId, (uint)hash);
+                }
+
+            ReturnResult:
+                return exportMessage;
+            }));
+
+
+            /// EXPORTS
 
             Instance.ExportDictionary.Add("Skill", new Func<string, int, Task<string>>(
                 async (playerHandle, skillId) =>
