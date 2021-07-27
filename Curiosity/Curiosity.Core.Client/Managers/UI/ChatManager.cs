@@ -28,7 +28,8 @@ namespace Curiosity.Core.Client.Managers
                     activeJob = metadata.Find<string>(4),
                     timestamp = DateTime.Now.ToString("HH:mm"),
                     name = metadata.Find<string>(0),
-                    message = metadata.Find<string>(2)
+                    message = metadata.Find<string>(2),
+                    showChat = !API.IsPauseMenuActive()
                 });
 
                 string nuiMessage = jsonBuilder.Build();
