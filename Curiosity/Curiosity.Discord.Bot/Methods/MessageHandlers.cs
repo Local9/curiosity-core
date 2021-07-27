@@ -101,7 +101,7 @@ namespace Curiosity.LifeV.Bot.Methods
             //if (message.Content.Contains("twitch.tv"))
             //    return;
 
-            if (message.Content.Contains("bit.ly") || message.Content.Contains(".ru/") || message.Content.Contains("ramlucky.xyz"))
+            if (message.Content.Contains("bit.ly") || message.Content.Contains(".ru/") || message.Content.Contains("ramlucky.xyz") || message.Content.Contains("discord.shop"))
             {
                 await message.DeleteAsync();
 
