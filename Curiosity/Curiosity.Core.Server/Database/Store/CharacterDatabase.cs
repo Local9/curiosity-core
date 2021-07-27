@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
@@ -129,6 +130,7 @@ namespace Curiosity.Core.Server.Database.Store
             i.NumberOwned = kv["NumberOwned"].ToInt();
             i.CanCarry = kv["CanCarry"].ToBoolean();
             i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
+            i.SpawnTypeId = (SpawnType)kv["SpawnTypeId"].ToInt();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
