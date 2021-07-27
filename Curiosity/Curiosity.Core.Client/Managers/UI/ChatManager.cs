@@ -101,6 +101,8 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
+                if (API.IsPauseMenuActive()) return;
+
                 if (IsChatboxOpen != state)
                 {
                     JsonBuilder jsonBuilder = new JsonBuilder();
@@ -139,6 +141,17 @@ namespace Curiosity.Core.Client.Managers
 
             API.SetNuiFocus(false, false);
             API.SetNuiFocusKeepInput(false);
+        }
+
+        [TickHandler]
+        private async void OnCheckPauseMenu()
+        {
+            if (API.IsPauseMenuActive())
+            {
+                API.SetNuiFocus(false, false);
+                API.SetNuiFocusKeepInput(false);
+                OnCloseChat();
+            }
         }
     }
 }
