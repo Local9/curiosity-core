@@ -54,6 +54,7 @@ namespace Curiosity.Core.Server.Managers
                         if (item.SpawnTypeId == SpawnType.Weapon)
                         {
                             int hash = API.GetHashKey(item.HashKey);
+                            await BaseScript.Delay(0);
                             API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
                         }
                     }
@@ -330,9 +331,10 @@ namespace Curiosity.Core.Server.Managers
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
                     int hash = API.GetHashKey(item.HashKey);
+                    await BaseScript.Delay(0);
                     API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, true);
 
-                    Logger.Debug($"Equipping {item.HashKey} to {curiosityUser.LatestName}");
+                    Logger.Debug($"Equipping {item.HashKey}:{hash} to {curiosityUser.LatestName}");
                 }
 
             ReturnResult:
@@ -362,9 +364,10 @@ namespace Curiosity.Core.Server.Managers
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
                     int hash = API.GetHashKey(item.HashKey);
+                    await BaseScript.Delay(0);
                     API.RemoveWeaponFromPed(player.Character.Handle, (uint)hash);
 
-                    Logger.Debug($"Removing {item.HashKey} from {curiosityUser.LatestName}");
+                    Logger.Debug($"Removing {item.HashKey}:{hash} from {curiosityUser.LatestName}");
                 }
 
             ReturnResult:
