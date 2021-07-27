@@ -146,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler]
         private async void OnCheckPauseMenu()
         {
-            if (API.IsPauseMenuActive())
+            if (API.IsPauseMenuActive() && IsChatboxOpen)
             {
                 API.SetNuiFocus(false, false);
                 API.SetNuiFocusKeepInput(false);
