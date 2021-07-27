@@ -152,6 +152,7 @@ namespace Curiosity.Core.Client.Managers
                 API.SetNuiFocusKeepInput(false);
                 OnCloseChat();
             }
+            await BaseScript.Delay(500);
         }
     }
 }
