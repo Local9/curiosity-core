@@ -79,6 +79,9 @@ namespace Curiosity.Systems.Library.Models.Shop
         [DataMember(Name = "canCarry")]
         public bool CanCarry = false;
 
+        [DataMember(Name = "carryingMaxed")]
+        public bool CarringMaxed = false;
+
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();
 

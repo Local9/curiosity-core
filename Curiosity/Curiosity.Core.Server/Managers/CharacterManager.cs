@@ -282,6 +282,44 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:equip", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                ExportMessage exportMessage = new ExportMessage();
+
+                int itemId = metadata.Find<int>(0);
+                int amount = metadata.Find<int>(1);
+
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(player.Character.CharacterId, itemId);
+
+                if (item.CarringMaxed)
+                {
+                    exportMessage.Error = "Carrying Maximum Allowed.";
+                    goto ReturnResult;
+                }
+
+                bool inserted = await Database.Store.CharacterDatabase.InsertInventoryItem(player.Character.CharacterId, itemId, amount);
+
+                if (!inserted)
+                {
+                    exportMessage.Error = "Was unable to equip the item.";
+                    goto ReturnResult;
+                }
+
+                if (item.SpawnTypeId == SpawnType.Weapon)
+                {
+                    int playerPedId = API.GetPlayerPed($"{player.Handle}");
+
+                    int hash = API.GetHashKey(item.HashKey);
+
+                    API.GiveWeaponToPed(playerPedId, (uint)hash, 999, false, false);
+                }
+
+            ReturnResult:
+                return exportMessage;
+            }));
+
             Instance.ExportDictionary.Add("Skill", new Func<string, int, Task<string>>(
                 async (playerHandle, skillId) =>
                 {

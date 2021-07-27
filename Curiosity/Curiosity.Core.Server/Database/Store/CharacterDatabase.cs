@@ -5,6 +5,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -89,6 +90,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.HashKey = $"{kv["HashKey"]}";
                 i.ImageUri = $"{kv["ImageUri"]}";
                 i.NumberOwned = kv["NumberOwned"].ToInt();
+                i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
 
                 if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
                 {
@@ -125,7 +127,8 @@ namespace Curiosity.Core.Server.Database.Store
             i.HashKey = $"{kv["HashKey"]}";
             i.ImageUri = $"{kv["ImageUri"]}";
             i.NumberOwned = kv["NumberOwned"].ToInt();
-            i.CanCarry = kv["NumberOwned"].ToBoolean();
+            i.CanCarry = kv["CanCarry"].ToBoolean();
+            i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
@@ -161,6 +164,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.ImageUri = $"{kv["ImageUri"]}";
                 i.NumberOwned = kv["NumberOwned"].ToInt();
                 i.CanCarry = kv["CanCarry"].ToBoolean();
+                // i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
 
                 lst.Add(i);
             }
@@ -191,6 +195,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.ImageUri = $"{kv["ImageUri"]}";
                 i.NumberOwned = kv["NumberOwned"].ToInt();
                 i.CanCarry = kv["CanCarry"].ToBoolean();
+                i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
 
                 lst.Add(i);
             }
@@ -241,6 +246,20 @@ namespace Curiosity.Core.Server.Database.Store
             };
 
             string myQuery = "CALL spCharacterRemoveItem(@CharacterID, @ItemID);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
+        }
+
+        internal static async Task<bool> InsertInventoryItem(int characterId, int itemId, int amount)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId },
+                { "@Amount", amount },
+            };
+
+            string myQuery = "CALL insCharacterInventoryItem(@CharacterID, @ItemID, @Amount);";
 
             return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }
