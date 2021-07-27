@@ -331,10 +331,10 @@ namespace Curiosity.Core.Server.Managers
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
                     int playerPedId = API.GetPlayerPed($"{player.Handle}");
-
                     int hash = API.GetHashKey(item.HashKey);
-
                     API.GiveWeaponToPed(playerPedId, (uint)hash, 999, false, false);
+
+                    Logger.Debug($"Equipping {item.HashKey} to {player.LatestName}");
                 }
 
             ReturnResult:
@@ -363,9 +363,7 @@ namespace Curiosity.Core.Server.Managers
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
                     int playerPedId = API.GetPlayerPed($"{player.Handle}");
-
                     int hash = API.GetHashKey(item.HashKey);
-
                     API.RemoveWeaponFromPed(playerPedId, (uint)hash);
                 }
 

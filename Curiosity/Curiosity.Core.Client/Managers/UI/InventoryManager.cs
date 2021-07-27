@@ -61,9 +61,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 int.TryParse(metadata.Find<string>(1), out numberOfItems);
 
-                await EventSystem.Request<List<CuriosityShopItem>>("character:inventory:remove", itemId, numberOfItems);
+                ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:remove", itemId, numberOfItems);
 
-                return new { success = true };
+                if (!result.Success)
+                {
+                    NotificationManger.GetModule().Error($"{result.Error}");
+                    return $"{result}";
+                }
+
+                return $"{result}";
             }));
         }
     }
