@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,7 @@
     <None Include="config\jobMenu.json" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
+    <Compile Include="Environment\Entities\Models\Siren.cs" />
     <Compile Include="Extensions\EntityExtensions.cs" />
     <Compile Include="Extensions\PedExtensions.cs" />
     <Compile Include="Extensions\VehicleExtensions.cs" />
@@ -154,6 +156,9 @@
     </Content>
     <None Include="config\interiors.json" />
     <None Include="config\pedComponentVariations.json" />
+    <Content Include="config\sirens.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

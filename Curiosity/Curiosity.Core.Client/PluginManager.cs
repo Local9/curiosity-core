@@ -217,16 +217,25 @@ namespace Curiosity.Core.Client
 
             methods?.ForEach(async self =>
             {
-                var handler = (TickHandler)self.GetCustomAttribute(typeof(TickHandler));
-
-                if (handler.SessionWait)
+                try
                 {
-                    await Session.Loading();
+                    var handler = (TickHandler)self.GetCustomAttribute(typeof(TickHandler));
+
+                    if (handler.SessionWait)
+                    {
+                        await Session.Loading();
+                    }
+
+                    Logger.Debug($"{self.Name}");
+
+                    Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
+
+                    RegisteredTickHandlers.Add(instance.GetType());
                 }
-
-                Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
-
-                RegisteredTickHandlers.Add(instance.GetType());
+                catch(Exception ex)
+                {
+                    Logger.Error(ex, $"AttachTickHandlers");
+                }
             });
         }
 

@@ -270,6 +270,8 @@ namespace Curiosity.Core.Client.Managers.UI
                         vehicle.IsPositionFrozen = false;
                         vehicle.IsCollisionEnabled = true;
 
+                        API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
+
                         NotificationManger.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
 
                         // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();

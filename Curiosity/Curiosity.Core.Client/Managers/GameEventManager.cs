@@ -139,10 +139,7 @@ namespace Curiosity.Core.Client.Managers
                         vehicleManager.InitialiseSkylift(currentVehicle);
                     }
 
-                    if (vehicle.ClassType == VehicleClass.Emergency)
-                    {
-                        emergencyVehicleSirenManager.EnableSirenManager();
-                    }
+                    emergencyVehicleSirenManager.EnableSirenManager(vehicle);
                 }
 
                 if (vehicle.AttachedBlip is not null)

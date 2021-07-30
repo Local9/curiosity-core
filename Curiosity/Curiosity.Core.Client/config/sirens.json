@@ -1,0 +1,42 @@
+[
+  {
+    "hash": "police",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01", "RESIDENT_VEHICLES_SIREN_QUICK_02" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "police2",
+    "sirens": [ "VEHICLES_HORNS_SIREN_1", "VEHICLES_HORNS_SIREN_2" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "police3",
+    "sirens": [ "VEHICLES_HORNS_SIREN_1", "VEHICLES_HORNS_SIREN_2" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "tahoe17",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_WAIL_02", "RESIDENT_VEHICLES_SIREN_QUICK_02" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "firetruk",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_FIRETRUCK_WAIL_01", "RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01" ],
+    "warning": "VEHICLES_HORNS_FIRETRUCK_WARNING"
+  },
+  {
+    "hash": "fib",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_WAIL_02", "RESIDENT_VEHICLES_SIREN_QUICK_02" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "policeb",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_WAIL_03", "RESIDENT_VEHICLES_SIREN_QUICK_03" ],
+    "warning": "VEHICLES_HORNS_POLICE_WARNING"
+  },
+  {
+    "hash": "ambulance",
+    "sirens": [ "RESIDENT_VEHICLES_SIREN_WAIL_01", "RESIDENT_VEHICLES_SIREN_QUICK_01" ],
+    "warning": "VEHICLES_HORNS_AMBULANCE_WARNING"
+  }
+]

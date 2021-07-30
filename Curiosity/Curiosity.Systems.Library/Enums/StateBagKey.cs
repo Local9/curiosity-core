@@ -88,6 +88,7 @@
         public const string VEH_SIREN_SOUND = "v::siren::sound";
         public const string VEH_SIREN_BLIP = "v::siren::blip";
         public const string VEH_SIREN_AIRHORN = "v::siren::airhorn";
+        public const string VEH_SIREN_SOUNDID = "v::siren::soundId";
         #endregion
     }
 }

@@ -1,8 +1,12 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Systems.Library.Enums;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -14,6 +18,9 @@ namespace Curiosity.Core.Client.Managers
         bool _lightsActive = false;
         bool _sirenActive = false;
 
+        Dictionary<int, Siren> sirens = new Dictionary<int, Siren>();
+        Siren activeConfig;
+
         /*
          * Add a config file for vehicle hashes and sirens
          * Load config into the client
@@ -21,13 +28,66 @@ namespace Curiosity.Core.Client.Managers
          * 
          * */
 
-        public override void Begin()
+        public override async void Begin()
         {
+            await Session.Loading();
 
+            CreateSirenDictionary();
         }
 
-        public async void EnableSirenManager()
+        private void CreateSirenDictionary()
         {
+            List<Siren> sirensConfig = GetConfig();
+
+            for (int i = 0; i < sirensConfig.Count; i++)
+            {
+                Siren siren = sirensConfig[i];
+                int vehicleHash = GetHashKey(siren.Hash);
+
+                Model model = new Model(vehicleHash);
+
+                if (!model.IsValid) continue;
+
+                if (!sirens.ContainsKey(vehicleHash))
+                {
+                    sirens.Add(vehicleHash, siren);
+                }
+            }
+
+            Logger.Debug($"Added {sirens.Count} sirens from config");
+        }
+
+        private List<Siren> GetConfig()
+        {
+            List<Siren> config = new List<Siren>();
+
+            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/sirens.json"); // Fuck you VS2019 UTF8 BOM
+
+            try
+            {
+                if (string.IsNullOrEmpty(jsonFile))
+                {
+                    Logger.Error($"sirens.json file is empty or does not exist, please fix this");
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<List<Siren>>(jsonFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Siren JSON File Exception\nDetails: {ex.Message}\nStackTrace:\n{ex.StackTrace}");
+            }
+
+            return config;
+        }
+
+        public async void EnableSirenManager(Vehicle vehicle)
+        {
+            if (!sirens.ContainsKey(vehicle.Model.Hash)) return;
+
+            activeConfig = sirens[vehicle.Model.Hash];
+
             Logger.Debug($"Started Siren Manager");
 
             Instance.AttachTickHandler(OnSirenDisableControls);
@@ -46,13 +106,8 @@ namespace Curiosity.Core.Client.Managers
         {
             if (!Cache.PlayerPed.IsInVehicle()) return;
 
-            if (GetVehicleClass(Cache.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
-            {
-                SetVehicleRadioEnabled(Cache.PlayerPed.CurrentVehicle.Handle, false);
-
-                // different control group
-                DisableControlAction(0, (int)Control.VehicleHorn, true);
-            }
+            SetVehicleRadioEnabled(Cache.PlayerPed.CurrentVehicle.Handle, false);
+            DisableControlAction(0, (int)Control.VehicleHorn, true);
         }
 
         private async Task OnSirenControlInput()
@@ -64,6 +119,50 @@ namespace Curiosity.Core.Client.Managers
 
             ToggleLights();
             ToggleSiren();
+            ToggleSirenSoundTone1();
+            ToggleSirenSoundTone2();
+        }
+
+        private async void ToggleSirenSoundTone1()
+        {
+            Control sirenToneControl = Control.SelectWeaponUnarmed;
+            Game.DisableControlThisFrame(0, sirenToneControl);
+            Game.DisableControlThisFrame(2, Control.Reload);
+
+            if (((Game.IsDisabledControlJustPressed(0, sirenToneControl) && Game.CurrentInputMode == InputMode.MouseAndKeyboard) ||
+                (Game.IsControlJustPressed(2, Control.Reload) && Game.CurrentInputMode == InputMode.GamePad))
+                && _lightsActive)
+            {
+                if (activeConfig.Sirens.Count == 0)
+                {
+                    NotificationManger.GetModule().Error($"There are no siren sounds for this vehicle!");
+                    return;
+                }
+
+                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, activeConfig.Sirens[0], true); // sounds from a file
+                await BaseScript.Delay(100);
+            }
+        }
+
+        private async void ToggleSirenSoundTone2()
+        {
+            Control sirenToneControl = Control.SelectWeaponMelee;
+            Game.DisableControlThisFrame(0, sirenToneControl);
+            Game.DisableControlThisFrame(2, Control.SniperZoomInSecondary);
+
+            if (((Game.IsDisabledControlJustPressed(0, sirenToneControl) && Game.CurrentInputMode == InputMode.MouseAndKeyboard) ||
+                (Game.IsControlJustPressed(2, Control.SniperZoomInSecondary) && Game.CurrentInputMode == InputMode.GamePad))
+                && _lightsActive)
+            {
+                if (activeConfig.Sirens.Count == 0)
+                {
+                    NotificationManger.GetModule().Error($"There are no siren sounds for this vehicle!");
+                    return;
+                }
+
+                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, activeConfig.Sirens[1], true); // sounds from a file
+                await BaseScript.Delay(100);
+            }
         }
 
         private async void ToggleLights()
@@ -87,9 +186,15 @@ namespace Curiosity.Core.Client.Managers
                 && _lightsActive)
             {
                 _lightsActive = false;
-                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, false, true);
-                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
-                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "STOP", true);
+
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                vehicle.State.Set(StateBagKey.VEH_SIREN_LIGHTS, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
+                vehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "STOP", true);
+
+                StopSound(vehicle.NetworkId);
+                ReleaseSoundId(vehicle.NetworkId);
 
                 await BaseScript.Delay(100);
             }
@@ -105,8 +210,22 @@ namespace Curiosity.Core.Client.Managers
                 && !_sirenActive && _lightsActive)
             {
                 _sirenActive = true;
-                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_STATE, true, true);
-                Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, "VEHICLES_HORNS_SIREN_1", true); // sounds from a file
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                vehicle.State.Set(StateBagKey.VEH_SIREN_STATE, true, true);
+
+                if (activeConfig.Sirens.Count == 0)
+                {
+                    NotificationManger.GetModule().Error($"There are no siren sounds for this vehicle!");
+                }
+                else
+                {
+                    string lastSound = vehicle.State.Get("siren:lastSound");
+
+                    if (string.IsNullOrEmpty(lastSound))
+                        lastSound = activeConfig.Sirens[0];
+
+                    Game.PlayerPed.CurrentVehicle.State.Set(StateBagKey.VEH_SIREN_SOUND, lastSound, true); // sounds from a file
+                }
 
                 await BaseScript.Delay(100);
             }
@@ -122,7 +241,7 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        [TickHandler]
+        [TickHandler(SessionWait = true)]
         private async Task OnCheckVehicleSirenStates()
         {
             await BaseScript.Delay(500);
@@ -135,7 +254,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (!(vehicle?.Exists() ?? false)) continue;
 
-                if (vehicle.ClassType != VehicleClass.Emergency) continue;
+                if (!sirens.ContainsKey(vehicle.Model.Hash)) continue;
 
                 if (!(vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false)) continue;
 
@@ -163,8 +282,8 @@ namespace Curiosity.Core.Client.Managers
                         vehicle.IsSirenActive = false;
                         int toggle = 0;
                         SetSirenWithNoDriver(vehicle.Handle, ref toggle);
-                        StopSound(vehicle.Handle);
-                        ReleaseSoundId(vehicle.Handle);
+                        StopSound(vehicle.NetworkId);
+                        ReleaseSoundId(vehicle.NetworkId);
                     }
                 }
 
@@ -172,23 +291,25 @@ namespace Curiosity.Core.Client.Managers
                 {
                     string soundToPlay = vehicle.State.Get(StateBagKey.VEH_SIREN_SOUND);
 
+                    await BaseScript.Delay(0);
+
                     if (!sirenSetup)
                     {
                         vehicle.State.Set("siren:setup", true, false);
-
-                        if (string.IsNullOrEmpty(soundToPlay))
-                            soundToPlay = "VEHICLES_HORNS_SIREN_1";
-
                         vehicle.State.Set("siren:lastSound", soundToPlay, false);
 
-                        PlaySoundFromEntity(vehicle.Handle, soundToPlay, vehicle.Handle, "PLAYER_SIRENS", false, 0);
-                        vehicle.IsSirenSilent = false;
+                        PlaySoundFromEntity(vehicle.NetworkId, soundToPlay, vehicle.Handle, string.Empty, false, 0);
+                        vehicle.IsSirenSilent = true;
                     }
 
                     if (lastSoundFile != soundToPlay)
                     {
+                        StopSound(vehicle.NetworkId);
+                        ReleaseSoundId(vehicle.NetworkId);
+
                         vehicle.State.Set("siren:lastSound", soundToPlay, false);
-                        PlaySoundFromEntity(vehicle.Handle, soundToPlay, vehicle.Handle, "PLAYER_SIRENS", false, 0);
+                        PlaySoundFromEntity(vehicle.NetworkId, soundToPlay, vehicle.Handle, string.Empty, false, 0);
+                        Logger.Debug($"Changing Siren {lastSoundFile} -> {soundToPlay}");
                     }
                 }
 
@@ -199,11 +320,10 @@ namespace Curiosity.Core.Client.Managers
                         vehicle.State.Set("siren:setup", false, false);
 
                         vehicle.IsSirenSilent = true;
-                        PlaySoundFromEntity(vehicle.Handle, "STOP", vehicle.Handle, "PLAYER_SIRENS", false, 0);
+                        PlaySoundFromEntity(vehicle.NetworkId, "STOP", vehicle.Handle, string.Empty, false, 0);
                     }
                 }
             }
-
         }
     }
 }
