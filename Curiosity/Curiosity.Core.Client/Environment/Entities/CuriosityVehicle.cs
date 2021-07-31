@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
@@ -16,8 +18,8 @@ namespace Curiosity.Core.Client.Environment.Entities
         internal CuriosityVehicle(Vehicle vehicle)
         {
             _vehicle = vehicle;
-            _vehicle.IsSirenSilent = true;
             LastSeen = DateTime.UtcNow;
+            _vehicle.IsSirenSilent = true;
         }
 
         internal void SetLightsState(bool state)
@@ -40,8 +42,9 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 if (_soundId == -1)
                 {
+                    _soundId = API.GetSoundId();
                     if (!Audio.HasSoundFinished(_soundId)) return;
-                    _soundId = Audio.PlaySoundFromEntity(_vehicle, _tone);
+                    PlaySoundFromEntity(_soundId, _tone, _vehicle.Handle, string.Empty, false, 0);
                     Logger.Debug($"Started sound with ID {_soundId} from {_vehicle.NetworkId}");
                 }
             }

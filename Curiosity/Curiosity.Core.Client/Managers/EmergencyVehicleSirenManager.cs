@@ -324,7 +324,7 @@ namespace Curiosity.Core.Client.Managers
                     if (sirenSetup)
                     {
                         vehicle.State.Set("siren:setup", false, false);
-
+                        await BaseScript.Delay(0);
                         curiosityVehicle.SetSirenToneState(false);
                     }
                 }
