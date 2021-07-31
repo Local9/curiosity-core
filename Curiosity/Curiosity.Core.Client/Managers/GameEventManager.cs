@@ -102,7 +102,7 @@ namespace Curiosity.Core.Client.Managers
             if (ent is Vehicle)
             {
                 VehicleManager vehicleManager = VehicleManager.GetModule();
-                EmergencyVehicleSirenManager emergencyVehicleSirenManager = EmergencyVehicleSirenManager.GetModule();
+                // EmergencyVehicleSirenManager emergencyVehicleSirenManager = EmergencyVehicleSirenManager.GetModule();
                 Vehicle vehicle = (Vehicle)ent;
 
                 VehicleState currentVehicle;
@@ -139,7 +139,7 @@ namespace Curiosity.Core.Client.Managers
                         vehicleManager.InitialiseSkylift(currentVehicle);
                     }
 
-                    emergencyVehicleSirenManager.EnableSirenManager(vehicle);
+                    // emergencyVehicleSirenManager.EnableSirenManager(vehicle);
                 }
 
                 if (vehicle.AttachedBlip is not null)
