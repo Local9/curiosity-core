@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus;
@@ -20,6 +21,8 @@ namespace Curiosity.Core.Client.Managers
 
         Dictionary<int, Siren> sirens = new Dictionary<int, Siren>();
         Siren activeConfig;
+
+        Dictionary<int, CuriosityVehicle> curiosityVehicles = new Dictionary<int, CuriosityVehicle>();
 
         /*
          * Add a config file for vehicle hashes and sirens
@@ -254,9 +257,18 @@ namespace Curiosity.Core.Client.Managers
 
                 if (!(vehicle?.Exists() ?? false)) continue;
 
+                int networkId = vehicle.NetworkId;
+
                 if (!sirens.ContainsKey(vehicle.Model.Hash)) continue;
 
                 if (!(vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false)) continue;
+
+                if (!curiosityVehicles.ContainsKey(networkId))
+                {
+                    curiosityVehicles.Add(networkId, new CuriosityVehicle(vehicle));
+                }
+
+                CuriosityVehicle curiosityVehicle = curiosityVehicles[networkId];
 
                 bool sirenSetup = vehicle.State.Get("siren:setup") ?? false;
                 bool lightSetup = vehicle.State.Get("light:setup") ?? false;
@@ -266,9 +278,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     if (!lightSetup)
                     {
-                        vehicle.State.Set("light:setup", true, false);
-                        vehicle.IsSirenActive = true;
-                        vehicle.IsSirenSilent = true;
+                        curiosityVehicle.SetLightsState(true);
                         int toggle = 1;
                         SetSirenWithNoDriver(vehicle.Handle, ref toggle);
                     }
@@ -278,12 +288,11 @@ namespace Curiosity.Core.Client.Managers
                 {
                     if (lightSetup)
                     {
-                        vehicle.State.Set("light:setup", false, false);
-                        vehicle.IsSirenActive = false;
+                        curiosityVehicle.SetLightsState(false);
+                        curiosityVehicle.SetSirenToneState(false);
+
                         int toggle = 0;
                         SetSirenWithNoDriver(vehicle.Handle, ref toggle);
-                        StopSound(vehicle.NetworkId);
-                        ReleaseSoundId(vehicle.NetworkId);
                     }
                 }
 
@@ -298,17 +307,17 @@ namespace Curiosity.Core.Client.Managers
                         vehicle.State.Set("siren:setup", true, false);
                         vehicle.State.Set("siren:lastSound", soundToPlay, false);
 
-                        PlaySoundFromEntity(vehicle.NetworkId, soundToPlay, vehicle.Handle, string.Empty, false, 0);
-                        vehicle.IsSirenSilent = true;
+                        curiosityVehicle.Tone = soundToPlay;
+                        curiosityVehicle.SetSirenToneState(true);
                     }
 
                     if (lastSoundFile != soundToPlay)
                     {
-                        StopSound(vehicle.NetworkId);
-                        ReleaseSoundId(vehicle.NetworkId);
-
+                        curiosityVehicle.SetSirenToneState(false);
                         vehicle.State.Set("siren:lastSound", soundToPlay, false);
-                        PlaySoundFromEntity(vehicle.NetworkId, soundToPlay, vehicle.Handle, string.Empty, false, 0);
+                        curiosityVehicle.Tone = soundToPlay;
+                        curiosityVehicle.SetSirenToneState(true);
+
                         Logger.Debug($"Changing Siren {lastSoundFile} -> {soundToPlay}");
                     }
                 }
@@ -319,8 +328,7 @@ namespace Curiosity.Core.Client.Managers
                     {
                         vehicle.State.Set("siren:setup", false, false);
 
-                        vehicle.IsSirenSilent = true;
-                        PlaySoundFromEntity(vehicle.NetworkId, "STOP", vehicle.Handle, string.Empty, false, 0);
+                        curiosityVehicle.SetSirenToneState(false);
                     }
                 }
             }

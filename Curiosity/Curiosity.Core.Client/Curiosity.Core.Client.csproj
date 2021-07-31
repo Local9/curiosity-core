@@ -63,6 +63,7 @@
     <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <None Include="config\jobMenu.json" />
+    <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
     <Compile Include="Environment\Entities\Models\Siren.cs" />
