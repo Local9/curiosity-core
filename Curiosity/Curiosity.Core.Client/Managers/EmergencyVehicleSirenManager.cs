@@ -305,17 +305,14 @@ namespace Curiosity.Core.Client.Managers
                     if (!sirenSetup)
                     {
                         vehicle.State.Set("siren:setup", true, false);
-                        vehicle.State.Set("siren:lastSound", soundToPlay, false);
-
-                        curiosityVehicle.Tone = soundToPlay;
+                        curiosityVehicle.SetSirenTone(soundToPlay);
                         curiosityVehicle.SetSirenToneState(true);
                     }
 
                     if (lastSoundFile != soundToPlay)
                     {
                         curiosityVehicle.SetSirenToneState(false);
-                        vehicle.State.Set("siren:lastSound", soundToPlay, false);
-                        curiosityVehicle.Tone = soundToPlay;
+                        curiosityVehicle.SetSirenTone(soundToPlay);
                         curiosityVehicle.SetSirenToneState(true);
 
                         Logger.Debug($"Changing Siren {lastSoundFile} -> {soundToPlay}");

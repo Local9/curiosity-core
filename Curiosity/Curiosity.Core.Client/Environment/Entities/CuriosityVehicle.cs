@@ -9,8 +9,8 @@ namespace Curiosity.Core.Client.Environment.Entities
         private Vehicle _vehicle;
         private int _soundId = -1;
         private bool _sirenState;
+        private string _tone;
 
-        internal string Tone;
         internal DateTime LastSeen;
 
         internal CuriosityVehicle(Vehicle vehicle)
@@ -26,6 +26,12 @@ namespace Curiosity.Core.Client.Environment.Entities
             _vehicle.IsSirenActive = state;
         }
 
+        internal void SetSirenTone(string tone)
+        {
+            _vehicle.State.Set("siren:lastSound", tone, false);
+            _tone = tone;
+        }
+
         internal void SetSirenToneState(bool sirenState)
         {
             _sirenState = sirenState;
@@ -35,7 +41,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                 if (_soundId == -1)
                 {
                     if (!Audio.HasSoundFinished(_soundId)) return;
-                    _soundId = Audio.PlaySoundFromEntity(_vehicle, Tone);
+                    _soundId = Audio.PlaySoundFromEntity(_vehicle, _tone);
                     Logger.Debug($"Started sound with ID {_soundId} from {_vehicle.NetworkId}");
                 }
             }
