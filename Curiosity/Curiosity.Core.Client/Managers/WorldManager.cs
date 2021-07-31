@@ -6,6 +6,7 @@ using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,39 +17,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class WorldManager : Manager<WorldManager>
     {
-        List<VehicleHash> vehiclesToSuppress = new List<VehicleHash>()
-        {
-            VehicleHash.Shamal,
-            VehicleHash.Luxor,
-            VehicleHash.Luxor2,
-            VehicleHash.Jet,
-            VehicleHash.Lazer,
-            VehicleHash.Titan,
-            VehicleHash.Barracks,
-            VehicleHash.Barracks2,
-            VehicleHash.Barracks3,
-            VehicleHash.Crusader,
-            VehicleHash.Rhino,
-            VehicleHash.Airtug,
-            VehicleHash.Ripley,
-            VehicleHash.Asea2,
-            VehicleHash.Burrito5,
-            VehicleHash.Emperor3,
-            VehicleHash.Mesa2,
-            VehicleHash.PoliceOld1,
-            VehicleHash.PoliceOld2,
-            VehicleHash.RancherXL2,
-            VehicleHash.Sadler2,
-            VehicleHash.Stockade3,
-            VehicleHash.Tractor3,
-            VehicleHash.Buzzard,
-            VehicleHash.Buzzard2,
-            VehicleHash.Cargobob,
-            VehicleHash.Cargobob2,
-            VehicleHash.Cargobob3,
-            VehicleHash.Cargobob4,
-            VehicleHash.Besra
-        };
+        List<int> vehiclesToSuppress = new List<int>();
 
         WeatherType lastWeather = WeatherType.UNKNOWN;
         CuriosityWeather CuriosityWeather = new CuriosityWeather();
@@ -62,7 +31,7 @@ namespace Curiosity.Core.Client.Managers
         int hour;
         int minute;
 
-        public override void Begin()
+        public override async void Begin()
         {
             EventSystem.Attach("world:time", new EventCallback(metadata =>
             {
@@ -81,6 +50,45 @@ namespace Curiosity.Core.Client.Managers
             LoadLosSantosIpls();
 
             API.SetWeatherOwnedByNetwork(false);
+
+            await Session.Loading();
+
+            List<string> vehicles = GetConfig();
+
+            for (int i = 0; i < vehicles.Count; i++)
+            {
+                int modelHash = API.GetHashKey(vehicles[i]);
+                Model model = new Model(modelHash);
+
+                if (!model.IsValid) continue;
+
+                vehiclesToSuppress.Add(modelHash);
+            }
+        }
+
+        private List<string> GetConfig()
+        {
+            List<string> config = new List<string>();
+
+            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/config.json"); // Fuck you VS2019 UTF8 BOM
+
+            try
+            {
+                if (string.IsNullOrEmpty(jsonFile))
+                {
+                    Logger.Error($"config.json file is empty or does not exist, please fix this");
+                }
+                else
+                {
+                    return JsonConvert.DeserializeObject<List<string>>(jsonFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Config JSON File Exception\nDetails: {ex.Message}\nStackTrace:\n{ex.StackTrace}");
+            }
+
+            return config;
         }
 
         private async void UnloadLosSantosIpls()
@@ -140,6 +148,8 @@ namespace Curiosity.Core.Client.Managers
             RemoveIpl("vw_ch3_additions_strm_0");
             RemoveIpl("vw_dlc_casino_door");
             RemoveIpl("vw_dlc_casino_door_lod");
+
+            SwitchTrainTrack(3, false); // Enable Metro
         }
 
         private async void LoadLosSantosIpls()
@@ -368,7 +378,7 @@ namespace Curiosity.Core.Client.Managers
 
                 vehicles.ForEach(veh =>
                 {
-                    if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
+                    if (vehiclesToSuppress.Contains(veh.Model.Hash))
                     {
                         bool serverSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
                         bool shouldBeDeleted = veh.State.Get(StateBagKey.ENTITY_DELETE) ?? false;
