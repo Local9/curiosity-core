@@ -53,7 +53,7 @@ namespace Curiosity.Core.Client.Managers
 
             await Session.Loading();
 
-            List<string> vehicles = GetConfig();
+            List<string> vehicles = GetConfig().VehiclesToSuppress;
 
             for (int i = 0; i < vehicles.Count; i++)
             {
@@ -66,9 +66,9 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        private List<string> GetConfig()
+        private ClientConfig GetConfig()
         {
-            List<string> config = new List<string>();
+            ClientConfig config = new();
 
             string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/config.json"); // Fuck you VS2019 UTF8 BOM
 
@@ -80,7 +80,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<List<string>>(jsonFile);
+                    return JsonConvert.DeserializeObject<ClientConfig>(jsonFile);
                 }
             }
             catch (Exception ex)
