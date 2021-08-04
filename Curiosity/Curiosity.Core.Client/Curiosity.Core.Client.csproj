@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Cache.cs" />
     <Compile Include="ClientExports\DiscordExports.cs" />
+    <Compile Include="ClientExports\PlayerExport.cs" />
     <Compile Include="Commands\CommandContext.cs" />
     <Compile Include="Commands\CommandFramework.cs" />
     <Compile Include="Commands\CommandInfo.cs" />
