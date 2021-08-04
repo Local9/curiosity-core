@@ -76,30 +76,35 @@ namespace Curiosity.Core.Client.Managers
                     isAdmin = curiosityUser.IsAdmin,
                     isStaff = curiosityUser.IsStaff,
                     headshot = $"https://nui-img/{CurrentPedHeadshot}/{CurrentPedHeadshot}",
-                    worldName = $"{curiosityUser.RoutingBucket}",
                     skills = new List<dynamic>(),
                     stats = new List<dynamic>(),
                 };
 
-                foreach(CharacterSkill skill in skills)
+                if (skills is not null)
                 {
-                    var s = new
+                    foreach (CharacterSkill skill in skills)
                     {
-                        label = skill.Label,
-                        description = skill.Description,
-                        value = skill.Value
-                    };
-                    profile.skills.Add(s);
+                        var s = new
+                        {
+                            label = skill.Label,
+                            description = skill.Description,
+                            value = skill.Value
+                        };
+                        profile.skills.Add(s);
+                    }
                 }
 
-                foreach (CharacterStat stat in stats)
+                if (stats is not null)
                 {
-                    var s = new
+                    foreach (CharacterStat stat in stats)
                     {
-                        label = stat.Label,
-                        value = stat.Value
-                    };
-                    profile.stats.Add(s);
+                        var s = new
+                        {
+                            label = stat.Label,
+                            value = stat.Value
+                        };
+                        profile.stats.Add(s);
+                    }
                 }
 
                 return profile;
