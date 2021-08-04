@@ -71,7 +71,8 @@ namespace Curiosity.Core.Client.Managers.UI
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.HealthArmour, false);
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.BigText, false);
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpUsingMenu, false);
-                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpPassiveMode, false);
+                        bool isPassive = player.Character.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                        SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpPassiveMode, isPassive);
                         SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, isStaff);
 
                         bool isDriving = false;
