@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.3960\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.4356\lib\net45\CitizenFX.Core.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -81,6 +81,7 @@
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EmergencyVehicleSirenManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="Managers\UI\DamageEffectManager.cs" />
     <Compile Include="Managers\UI\GarageVehicleManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
