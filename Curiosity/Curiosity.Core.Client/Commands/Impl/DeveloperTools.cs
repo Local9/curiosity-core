@@ -291,6 +291,22 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "health" })]
+        public class Health : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count <= 0) return;
+
+                int health = 100;
+                if (int.TryParse(arguments[0], out health))
+                {
+                    Game.PlayerPed.Health = health;
+                    NotificationManger.GetModule().Success($"Health set to {health}");
+                }
+            }
+        }
+
 
         #endregion
 

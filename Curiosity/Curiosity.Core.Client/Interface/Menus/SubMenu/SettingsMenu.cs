@@ -1,7 +1,10 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using NativeUI;
+using System.Collections.Generic;
 using System.Linq;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
@@ -19,7 +22,24 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
             menu.OnListChange += Menu_OnListChange;
 
-            miDamageEffects.Items = DamageEffectManager.GetModule().Effects.Select(x => x.Label).ToList();
+            List<dynamic> effects = DamageEffectManager.GetModule().Effects.Select(x => x.Label).ToList();
+
+            int index = 0;
+            string savedEffect = GetResourceKvpString("cur:damage:effect");
+
+            Debug.WriteLine(savedEffect);
+
+            for (int i = 0; i < effects.Count; i++)
+            {
+                if (effects[i] == savedEffect)
+                {
+                    index = i;
+                }
+            }
+
+            miDamageEffects = new UIMenuListItem("Damage Effect", effects, index);
+
+            menu.AddItem(miDamageEffects);
 
             return menu;
         }
@@ -30,18 +50,20 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 DamageEffectManager damageEffectManager = DamageEffectManager.GetModule();
                 dynamic item = damageEffectManager.Effects[newIndex];
-                damageEffectManager.Effect = item.Effect;
+                damageEffectManager.SetEffect(item.Label, item.Effect);
+
+                NotificationManger.GetModule().Success($"Damage Effect: {item.Label}");
                 await BaseScript.Delay(150);
             }
         }
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.ChangeForward)
-                OnMenuOpen();
+            //if (state == MenuState.ChangeForward)
+            //    OnMenuOpen();
 
-            if (state == MenuState.ChangeBackward)
-                settingsMenu.InstructionalButtons.Clear();
+            ////if (state == MenuState.ChangeBackward)
+            ////    settingsMenu.InstructionalButtons.Clear();
         }
 
         private void OnMenuOpen()

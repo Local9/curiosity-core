@@ -34,7 +34,7 @@ namespace Curiosity.Core.Client.Managers
             levelManager = LevelManager.GetModule();
         }
 
-        [TickHandler(SessionWait = true)]
+        // [TickHandler(SessionWait = true)]
         private async Task OnPlayerStateTask()
         {
             if (Cache.PlayerPed.IsSprinting && !wasSprinting)
