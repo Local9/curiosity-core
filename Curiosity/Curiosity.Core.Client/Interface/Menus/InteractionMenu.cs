@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
@@ -38,6 +37,9 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
 
+        private UIMenu menuSettings;
+        private SubMenu.SettingsMenu _MenuSettings = new SubMenu.SettingsMenu();
+
         public override void Begin()
         {
             MenuInstance = this;
@@ -52,6 +54,9 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles");
             _VehicleMenu.CreateMenu(menuVehicle);
+
+            menuSettings = MenuPool.AddSubMenu(menuMain, "Settings");
+            _MenuSettings.CreateMenu(menuSettings);
 
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
