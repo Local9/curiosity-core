@@ -145,7 +145,7 @@ namespace ProfanityFilterNS
         /// <returns></returns>
         public string CensorString(string sentence)
         {
-            return CensorString(sentence, '\*');
+            return CensorString(sentence, '*');
         }
 
         /// <summary>
@@ -395,7 +395,7 @@ namespace ProfanityFilterNS
             {
                 if (word[i] != ' ')
                 {
-                    censoredWord += censorCharacter;
+                    censoredWord += $@"\{censorCharacter}";
                 }
                 else
                 {
