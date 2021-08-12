@@ -33,7 +33,8 @@ namespace Curiosity.Core.Server.Managers
                     string channel = metadata.Find<string>(1);
 
                     var filter = new ProfanityFilter();
-                    message = filter.CensorString(message);
+                    string filteredMessage = filter.CensorString(message);
+                    message = filteredMessage.Replace(@"\", "");
 
                     switch (channel)
                     {
@@ -70,7 +71,7 @@ namespace Curiosity.Core.Server.Managers
                     // NOTE: Store messages in database
 
                     string discordMessageStart = $"[W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
-                    string discordMessage = message.Trim('"');
+                    string discordMessage = filteredMessage.Trim('"');
 
                     DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);
 
