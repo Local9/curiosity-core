@@ -31,7 +31,27 @@ namespace Curiosity.Core.Server
         public static int MaximumPlayers { get; } = 32;
         public static int ServerId { get; private set; }
         public static int SpawnLocationId { get; private set; }
-        public static string Hostname { get; private set; }
+
+        static string _hostName;
+        public static string Hostname
+        {
+            get
+            {
+                string cleanName = _hostName
+                                    .Replace("^0", "")
+                                    .Replace("^1", "")
+                                    .Replace("^2", "")
+                                    .Replace("^3", "")
+                                    .Replace("^4", "")
+                                    .Replace("^5", "")
+                                    .Replace("^6", "")
+                                    .Replace("^7", "")
+                                    .Replace("^8", "")
+                                    .Replace("^9", "");
+                return cleanName;
+            }
+            private set { _hostName = value; }
+        }
         public static bool IsDebugging { get; private set; }
         public static bool IsMaintenanceActive { get; private set; }
         public static bool ServerReady { get; private set; }

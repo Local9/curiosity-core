@@ -145,6 +145,10 @@
       <Project>{cf04e9fa-50c4-469a-9619-5acece2be099}</Project>
       <Name>FiveM-MySQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProfantiyFilter452\ProfantiyFilter452.csproj">
+      <Project>{d2b12e3f-bced-4bd8-80cd-8a7fa042025a}</Project>
+      <Name>ProfantiyFilter452</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />

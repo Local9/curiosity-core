@@ -6,6 +6,7 @@ using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using ProfanityFilterNS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,9 @@ namespace Curiosity.Core.Server.Managers
 
                     string message = metadata.Find<string>(0);
                     string channel = metadata.Find<string>(1);
+
+                    var filter = new ProfanityFilter();
+                    message = filter.CensorString(message);
 
                     switch (channel)
                     {
@@ -65,7 +69,7 @@ namespace Curiosity.Core.Server.Managers
 
                     // NOTE: Store messages in database
 
-                    string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
+                    string discordMessageStart = $"[W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                     string discordMessage = message.Trim('"');
 
                     DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);

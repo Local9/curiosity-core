@@ -145,7 +145,7 @@ namespace ProfanityFilterNS
         /// <returns></returns>
         public string CensorString(string sentence)
         {
-            return CensorString(sentence, '*');
+            return CensorString(sentence, '\*');
         }
 
         /// <summary>

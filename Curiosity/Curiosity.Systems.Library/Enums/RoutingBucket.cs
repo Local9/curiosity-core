@@ -3,7 +3,7 @@
     public enum RoutingBucket
     {
         CHARACTER_LOADING = 5000,
-        LOBBY = 0,
+        LOS_SANTOS = 0,
         CAYO_ISLAND = 1,
         RACING = 2,
         TRUCKING = 3,
