@@ -137,7 +137,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
             await Task.Delay(1000);
 
-            var msg = await context.Channel.SendMessageAsync("All you talk about is guns... https://i.giphy.com/media/dIBzteMy7M5H6iy7CX/giphy.webp");
+            var msg = await context.Channel.SendMessageAsync("shush");
 
             await Task.Delay(10000);
 

@@ -129,10 +129,10 @@ namespace Curiosity.LifeV.Bot
                     PingHandler.ReactToPing(message, context);
                 }
 
-                if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
-                {
-                    messageHandlers.HandleGunMessage(message, context);
-                }
+                //if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
+                //{
+                //    messageHandlers.HandleGunMessage(message, context);
+                //}
 
                 if (urlRE.IsMatch(message.Content))
                 {
