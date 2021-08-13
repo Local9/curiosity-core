@@ -1,6 +1,7 @@
 ﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
 using Curiosity.LifeV.Bot.Entities.Curiosity;
 using Curiosity.LifeV.Bot.Models;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using MySqlConnector;
