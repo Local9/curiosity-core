@@ -19,6 +19,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menuVehicleRemote = InteractionMenu.MenuPool.AddSubMenu(menu, "Vehicle Remote Functions");
             _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
 
+            menu.AddItem(uiVehicleLock);
+
             menu.OnListChange += Menu_OnListChange;
 
             menu.MouseControlsEnabled = false;
