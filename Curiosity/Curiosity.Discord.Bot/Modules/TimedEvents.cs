@@ -25,8 +25,7 @@ namespace Curiosity.LifeV.Bot
 
         private Dictionary<string, string> servers = new Dictionary<string, string>()
         {
-            { "Public", "5.9.0.85:30120" },
-            { "Members", "5.9.0.85:30121" }
+            { "Worlds", "5.9.0.85:30120" }
         };
         private int currentServer = 0;
 
