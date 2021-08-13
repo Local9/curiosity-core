@@ -137,7 +137,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
             await Task.Delay(1000);
 
-            var msg = await context.Channel.SendMessageAsync("Weapons are currently in refactoring with the new framework, this is to allow you to purchase licenses for weapons and earn components. There is no E.T.A. as to when this will be completed as ::1 is also trying to support OneSync and the Casino or latest updates to GTA.");
+            var msg = await context.Channel.SendMessageAsync("All you talk about is guns... https://i.giphy.com/media/dIBzteMy7M5H6iy7CX/giphy.webp");
 
             await Task.Delay(10000);
 
