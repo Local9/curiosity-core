@@ -79,7 +79,7 @@ namespace Curiosity.LifeV.Bot
                 List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
                 CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
-                _client.SetGameAsync($"{server.Key} {lst.Count}/32");
+                _client.SetGameAsync($"{server.Key} {lst.Count}/64");
             }
             catch (Exception ex)
             {
