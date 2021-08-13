@@ -146,7 +146,7 @@ namespace Curiosity.Core.Server
                     Logger.Warn($"----------------------------------------");
                 }
 
-                IsMaintenanceActive = IsLive;
+                IsMaintenanceActive = !IsLive;
 
                 if (IsMaintenanceActive)
                 {
