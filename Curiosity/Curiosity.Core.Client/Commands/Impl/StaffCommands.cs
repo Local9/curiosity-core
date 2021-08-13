@@ -274,6 +274,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
 
                     await vehicle.FadeIn();
+
+                    API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
                 }
 
                 if (vehModel?.IsLoaded ?? false)
