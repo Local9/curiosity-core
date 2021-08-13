@@ -365,11 +365,11 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             Instance.ExportDictionary.Add("StockAdjust", new Func<int, int, Task<string>>(
-                async (itemId, amount) =>
+                async (shopItemId, amount) =>
                 {
                     ExportMessage exportMessage = new ExportMessage();
 
-                    bool success = await Database.Store.ShopDatabase.Adjust(itemId, amount);
+                    bool success = await Database.Store.ShopDatabase.Adjust(shopItemId, amount);
 
                     if (!success)
                     {
