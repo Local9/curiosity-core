@@ -66,10 +66,10 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 Game.PlayerPed.Armor = 100;
 
-                await EquipWeapon(WeaponHash.Nightstick);
-                await EquipWeapon(WeaponHash.StunGun);
-                await EquipWeapon(WeaponHash.Flashlight);
-                await EquipWeapon(WeaponHash.Pistol, 250, true, true);
+                //await EquipWeapon(WeaponHash.Nightstick);
+                //await EquipWeapon(WeaponHash.StunGun);
+                //await EquipWeapon(WeaponHash.Flashlight);
+                //await EquipWeapon(WeaponHash.Pistol, 250, true, true);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
