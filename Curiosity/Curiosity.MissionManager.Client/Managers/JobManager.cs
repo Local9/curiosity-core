@@ -84,8 +84,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 Instance.DiscordRichPresence.SmallAssetText = "FiveM";
                 Instance.DiscordRichPresence.Commit();
 
-                Game.PlayerPed.Weapons.RemoveAll();
-
                 MissionDirectorManager.Director.TurnOffMissionDirector();
                 WorldVehicleManager.VehicleManager.Stop();
 
