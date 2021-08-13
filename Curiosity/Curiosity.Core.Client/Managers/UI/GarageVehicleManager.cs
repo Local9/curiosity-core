@@ -263,6 +263,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                         Blip blip = CreateBlip(vehicle);
 
+                        API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
+
                         vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
 
                         API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
