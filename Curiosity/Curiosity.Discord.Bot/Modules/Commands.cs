@@ -182,7 +182,6 @@ namespace Curiosity.LifeV.Bot.Modules
                     builder
                         .AddField("Player", $"{dbUser.Username}", true)
                         .AddField("Role", StringValueAttribute.GetStringValue(dbUser.UserRole), true)
-                        .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
                         .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
                         .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
                         .WithColor(Color.Blue)

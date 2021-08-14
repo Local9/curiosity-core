@@ -12,8 +12,6 @@ namespace Curiosity.LifeV.Bot.Models
     {
         public long UserId;
         public string Username;
-        public string License;
-        public long LifeExperience;
         public long Experience;
         public DateTime DateCreated;
         public DateTime LastSeen;
@@ -187,15 +185,10 @@ namespace Curiosity.LifeV.Bot.Models
                     {
                         UserId = reader.GetFieldValue<long>("userId"),
                         Username = reader.GetFieldValue<string>("username"),
-                        License = reader.GetFieldValue<string>("license"),
-                        LifeExperience = reader.GetFieldValue<long>("lifeExperience"),
                         DateCreated = reader.GetFieldValue<DateTime>("dateCreated"),
                         LastSeen = reader.GetFieldValue<DateTime>("lastSeen"),
                         BannedPerm = reader.GetFieldValue<bool>("bannedPerm"),
                     };
-
-                    if (!DBNull.Value.Equals(reader["experience"]))
-                        user.Experience = reader.GetFieldValue<long>("experience");
 
                     if (!DBNull.Value.Equals(reader["bannedUntil"]))
                         user.BannedUntil = reader.GetFieldValue<DateTime>("bannedUntil");
