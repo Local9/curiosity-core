@@ -73,19 +73,14 @@ namespace Curiosity.Core.Client.Managers.UI
                         return new { success = false };
                     }
 
-                    DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
-
-                    while (!vehModel.IsLoaded)
+                    if (!(vehModel?.IsLoaded ?? false))
                     {
-                        await vehModel.Request(3000);
+                        vehModel?.Request();
 
-                        if (DateTime.UtcNow > maxTime) break;
-                    }
-
-                    if (!vehModel.IsLoaded)
-                    {
-                        NotificationManger.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
-                        return new { success = false };
+                        while (!vehModel.IsLoaded)
+                        {
+                            await BaseScript.Delay(0);
+                        }
                     }
 
                     Vector3 charPos = Cache.PlayerPed.Position;
