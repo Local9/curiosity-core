@@ -77,11 +77,15 @@ namespace Curiosity.Core.Client.Managers.UI
                     {
                         vehModel?.Request();
 
+                        Logger.Debug($"Vehicle model is not loaded");
+
                         while (!vehModel.IsLoaded)
                         {
                             await BaseScript.Delay(0);
-                        }
+                        }                        
                     }
+
+                    Logger.Debug($"Vehicle model is now loaded");
 
                     Vector3 charPos = Cache.PlayerPed.Position;
                     Vector3 spawnPos = Vector3.Zero;
@@ -95,6 +99,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     float distance = vehModel.GetDimensions().Y;
 
                     VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
+
+                    Logger.Debug($"Vehicle Information: {vehicleItem?.Hash}/{vehicleItem?.Label}/{vehicleItem?.SpawnTypeId}/{vehicleItem?.NetworkId}/{vehicleItem?.ServerHandle}");
 
                     if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {

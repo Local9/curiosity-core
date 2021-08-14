@@ -51,6 +51,7 @@ namespace Curiosity.Core.Server.Managers
                     uint model = metadata.Find<uint>(6);
 
                     VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
+                    await BaseScript.Delay(0);
 
                     if (vehicleItem is null)
                     {
@@ -124,7 +125,11 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
+                    vehicleItem.ServerHandle = vehicleId;
+
                     DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(10);
+
+                    await BaseScript.Delay(0);
 
                     while (!API.DoesEntityExist(vehicleId))
                     {
@@ -136,11 +141,13 @@ namespace Curiosity.Core.Server.Managers
                     if (!API.DoesEntityExist(vehicleId))
                     {
                         Logger.Debug($"Failed to create vehicle in timely manner. Move a little and it may spawn.");
-                        vehicleItem.Message = "Vehicle not created within a timely manner.";
+                        vehicleItem.Message = "Failed to create vehicle in timely manner. Move a little and it may spawn.";
                         return vehicleItem;
                     }
 
                     Vehicle vehicle = new Vehicle(vehicleId);
+
+                    vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 
                     Player p = PluginManager.PlayersList[metadata.Sender];
 
