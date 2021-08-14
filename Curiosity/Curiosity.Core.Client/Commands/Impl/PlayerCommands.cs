@@ -94,11 +94,15 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     await vehicle.FadeOut();
 
+                    vehicle.IsCollisionEnabled = false;
+
                     vehicle.Rotation = new Vector3(vehicle.Rotation.X, 0f, vehicle.Rotation.Z);
 
-                    vehicle.Position = new Vector3(vehicle.Position.X, vehicle.Position.Y, vehicle.Position.Z + 1f);
+                    vehicle.Position = new Vector3(vehicle.Position.X, vehicle.Position.Y, vehicle.Position.Z + 0.2f);
 
                     vehicle.PlaceOnGround();
+
+                    vehicle.IsCollisionEnabled = true;
 
                     await BaseScript.Delay(1000);
 
