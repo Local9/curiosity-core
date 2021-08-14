@@ -391,6 +391,8 @@ namespace Curiosity.Core.Server.Managers
                     UpdateHostName();
                     UpdateStates();
                     await BaseScript.Delay(100);
+                    RemoveEmptySessions();
+                    await BaseScript.Delay(100);
                     BalanceReserved();
                     await BaseScript.Delay(1000);
                 }
@@ -399,6 +401,23 @@ namespace Curiosity.Core.Server.Managers
                     Logger.Error($"Curiosity Queue Manager : QueueCycle() -> {ex.Message}");
                 }
             }
+        }
+
+        void RemoveEmptySessions()
+        {
+            List<KeyValuePair<string, SessionState>> activeSessions = session.Where(x => x.Value == SessionState.Active).ToList();
+            PlayerList players = PluginManager.PlayersList;
+
+            List<string> licenses = players.Select(x => x.Identifiers["license"]).ToList();
+
+            activeSessions.ForEach(k =>
+            {
+                if (!licenses.Contains(k.Key))
+                {
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : REMOVED -> {k.Key}"); }
+                    RemoveFrom(k.Key, true, true, true, true, true, true);
+                }
+            });
         }
 
         async void StopHardcap()
@@ -454,6 +473,8 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
+                
+
                 session.Where(k => k.Value == SessionState.Loading || k.Value == SessionState.Grace).ToList().ForEach(j =>
                 {
                     try

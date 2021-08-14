@@ -379,6 +379,7 @@ namespace Curiosity.Core.Client.Managers
             else if (timeSpan.TotalSeconds <= 0)
             {
                 EventSystem.Send("character:respawn");
+                PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
             }
         }
 
