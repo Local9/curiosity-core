@@ -214,9 +214,9 @@ namespace Curiosity.Core.Server
                 DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
                 API.SetConvarServerInfo("Discord", DiscordUrl);
 
-                WebsiteUrl = API.GetConvar("website_url", "website_url not set");
+                WebsiteUrl = API.GetConvar("website_url", "https://lifev.net");
                 API.SetConvarServerInfo("Website", WebsiteUrl);
-                API.SetGameType(API.GetConvar("game_type", "game_type not set"));
+                API.SetGameType(API.GetConvar("game_type", "Simulation"));
                 API.SetMapName("Curiosity Framework");
 
                 SpawnLocationId = API.GetConvarInt("starting_location_id", 1);
