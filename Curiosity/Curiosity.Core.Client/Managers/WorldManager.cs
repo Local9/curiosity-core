@@ -236,7 +236,7 @@ namespace Curiosity.Core.Client.Managers
         //        RemoveIpl("sunkcargoship");
         //}
 
-        [TickHandler]
+        [TickHandler(SessionWait = true)]
         private async Task OnWeatherSyncTick()
         {
             if (DateTime.Now.Subtract(lastRunWeatherUpdate).TotalSeconds >= 60)
@@ -277,10 +277,17 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        [TickHandler]
+        [TickHandler(SessionWait = true)]
         private async Task OnWorldTimeSyncTick()
         {
             await BaseScript.Delay(0);
+
+            while(!Cache.Player.Character.MarkedAsRegistered)
+            {
+                API.SetClockTime(12, 1, 0);
+                API.SetWeatherTypeNow("EXTRASUNNY");
+                await BaseScript.Delay(0);
+            }
 
             //int interior = GetInteriorFromEntity(Cache.PlayerPed.Handle);
 

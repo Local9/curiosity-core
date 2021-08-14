@@ -147,7 +147,7 @@ namespace Curiosity.Core.Client.Managers
 
         public async Task Load(CuriosityPlayer player)
         {
-            API.SetClockTime(0, 1, 0);
+            API.SetClockTime(12, 1, 0);
             API.SetWeatherTypeNow("EXTRASUNNY");
 
             EventSystem.Send("user:queue:active");
