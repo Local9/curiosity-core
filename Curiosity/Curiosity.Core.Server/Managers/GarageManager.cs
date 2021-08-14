@@ -77,14 +77,14 @@ namespace Curiosity.Core.Server.Managers
                     // get spawn loacation if not a car
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
-                        Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
-                        await BaseScript.Delay(0);
+                        //Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
+                        //await BaseScript.Delay(0);
 
-                        if (spawnPos is not null)
-                        {
-                            pos = spawnPos.AsVector();
-                            heading = spawnPos.H;
-                        }
+                        //if (spawnPos is not null)
+                        //{
+                        //    pos = spawnPos.AsVector();
+                        //    heading = spawnPos.H;
+                        //}
 
                         List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId);
 
@@ -142,6 +142,10 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     vehicleItem.ServerHandle = vehicleId;
+                    vehicleItem.Heading = heading;
+                    vehicleItem.X = pos.X;
+                    vehicleItem.Y = pos.Y;
+                    vehicleItem.Z = pos.Z;
 
                     DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(10);
 

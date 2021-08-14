@@ -126,6 +126,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
 
                     Logger.Debug($"Vehicle Information: {vehicleItem?.Hash}/{vehicleItem?.Label}/{vehicleItem?.SpawnTypeId}/{vehicleItem?.NetworkId}/{vehicleItem?.ServerHandle}");
+                    Logger.Debug($"Vehicle Information: H: {vehicleItem?.Heading}, X: {vehicleItem?.X}, Y: {vehicleItem?.Y}, Z: {vehicleItem?.Z}");
 
                     await BaseScript.Delay(0);
 
@@ -183,6 +184,14 @@ namespace Curiosity.Core.Client.Managers.UI
                         vehicle.PreviouslyOwnedByPlayer = true;
                         vehicle.IsPositionFrozen = true;
                         vehicle.IsCollisionEnabled = false;
+
+                        if (vehicle.Heading != vehicleItem.Heading)
+                            vehicle.Heading = vehicleItem.Heading;
+
+                        Vector3 spawnedPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
+
+                        if (vehicle.Position != spawnedPosition)
+                            vehicle.Position = spawnedPosition;
 
                         API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                         API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);

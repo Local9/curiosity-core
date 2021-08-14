@@ -14,6 +14,10 @@ namespace Curiosity.Systems.Library.Models
         public SpawnType SpawnTypeId;
         public VehicleInfo VehicleInfo = new VehicleInfo();
 
-        public int ServerHandle { get; set; }
+        public int ServerHandle;
+        public float Heading;
+        public float X;
+        public float Y;
+        public float Z;
     }
 }
