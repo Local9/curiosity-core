@@ -55,6 +55,9 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
 
+                if (curiosityUser is null)
+                    return null;
+
                 Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
                 curiosityUser.Handle = metadata.Sender;
