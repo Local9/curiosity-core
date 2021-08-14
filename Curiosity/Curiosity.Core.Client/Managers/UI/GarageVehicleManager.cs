@@ -269,6 +269,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                         vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
 
+                        await BaseScript.Delay(100);
+
                         API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
 
                         vehicle.IsPositionFrozen = false;
@@ -281,6 +283,11 @@ namespace Curiosity.Core.Client.Managers.UI
                         // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
 
                         await vehicle.FadeIn();
+
+                        await BaseScript.Delay(100);
+
+                        if (vehicle.Opacity < 200)
+                            await vehicle.FadeIn();
 
                         return new { success = true };
 
