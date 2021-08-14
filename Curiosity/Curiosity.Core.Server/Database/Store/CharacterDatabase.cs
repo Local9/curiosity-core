@@ -166,6 +166,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.ImageUri = $"{kv["ImageUri"]}";
                 i.NumberOwned = kv["NumberOwned"].ToInt();
                 i.CanCarry = kv["CanCarry"].ToBoolean();
+                i.SpawnTypeId = (SpawnType)kv["SpawnTypeId"].ToInt();
                 // i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
 
                 lst.Add(i);

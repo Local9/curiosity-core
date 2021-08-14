@@ -1,4 +1,5 @@
 ﻿using Curiosity.Systems.Library.Enums;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -30,6 +31,10 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "imageUri")]
         public string ImageUri;
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     [DataContract]
@@ -90,6 +95,11 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "roleRequirements")]
         public List<RoleRequirement> RoleRequirements = new List<RoleRequirement>();
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     [DataContract]
@@ -106,6 +116,10 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "metRequirement")]
         public bool RequirementMet;
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     [DataContract]
@@ -122,6 +136,10 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "metRequirement")]
         public bool RequirementMet;
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     [DataContract]
@@ -135,5 +153,9 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "hasRole")]
         public bool HasRole;
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

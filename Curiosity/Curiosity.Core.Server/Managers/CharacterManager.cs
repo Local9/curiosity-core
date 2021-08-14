@@ -41,7 +41,9 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
                 u.RoutingBucket = RoutingBucket.LOS_SANTOS;
-                u.Character.LastPosition = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+
+                if (u.Character.LastPosition is null)
+                    u.Character.LastPosition = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
 
                 List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryEquipped(u.Character.CharacterId);
 
@@ -63,9 +65,6 @@ namespace Curiosity.Core.Server.Managers
                             int hash = API.GetHashKey(item.HashKey);
                             await BaseScript.Delay(0);
                             API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
-
-                            if (u.IsDeveloper)
-                                Logger.Debug($"Giving weapon {item.HashKey}");
                         }
                     }
                 }
