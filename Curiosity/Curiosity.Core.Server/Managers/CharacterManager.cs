@@ -45,10 +45,15 @@ namespace Curiosity.Core.Server.Managers
 
                 List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryEquipped(u.Character.CharacterId);
 
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(100);
 
                 try
                 {
+                    while (!API.DoesEntityExist(player.Character.Handle))
+                    {
+                        await BaseScript.Delay(0);
+                    }
+
                     for (int i = 0; i < lst.Count; i++)
                     {
                         CuriosityShopItem item = lst[i];
@@ -58,6 +63,9 @@ namespace Curiosity.Core.Server.Managers
                             int hash = API.GetHashKey(item.HashKey);
                             await BaseScript.Delay(0);
                             API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
+
+                            if (u.IsDeveloper)
+                                Logger.Debug($"Giving weapon {item.HashKey}");
                         }
                     }
                 }

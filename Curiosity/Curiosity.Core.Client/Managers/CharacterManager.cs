@@ -218,8 +218,6 @@ namespace Curiosity.Core.Client.Managers
 
             if (player.Character.MarkedAsRegistered)
             {
-                EventSystem.Send("character:routing:base");
-
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
@@ -240,6 +238,8 @@ namespace Curiosity.Core.Client.Managers
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
+
+            EventSystem.Send("character:routing:base");
 
             Cache.UpdatePedId(true);
         }
