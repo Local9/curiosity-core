@@ -311,18 +311,26 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
 
                 int playerPed = API.GetPlayerPed(player.Handle);
-                if (API.DoesEntityExist(playerPed))
+
+                try
                 {
-                    Vector3 pos = API.GetEntityCoords(playerPed);
-                    curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
+                    if (API.DoesEntityExist(playerPed))
+                    {
+                        Vector3 pos = API.GetEntityCoords(playerPed);
+                        curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
 
-                    int playerPedHealth = API.GetEntityHealth(playerPed);
-                    curUser.Character.IsDead = playerPedHealth == 0;
-                    curUser.Character.Health = playerPedHealth;
-                    curUser.Character.Armor = API.GetPedArmour(playerPed);
+                        int playerPedHealth = API.GetEntityHealth(playerPed);
+                        curUser.Character.IsDead = playerPedHealth == 0;
+                        curUser.Character.Health = playerPedHealth;
+                        curUser.Character.Armor = API.GetPedArmour(playerPed);
 
-                    await curUser.Character.Save();
-                    Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
+                        await curUser.Character.Save();
+                        Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Player doesn't exist, not saving location or details.");
                 }
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
