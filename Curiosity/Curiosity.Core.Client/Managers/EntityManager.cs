@@ -17,6 +17,24 @@ namespace Curiosity.Core.Client.Managers
             {
                 Vector3 pos = Cache.PlayerPed.Position;
                 API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 500f, false, false, false, false);
+
+                Vehicle[] vehicles = World.GetAllVehicles();
+
+                for (int i = 0; i < vehicles.Length; i++)
+                {
+                    Vehicle vehicle = vehicles[i];
+
+                    if (vehicle is not null)
+                    {
+                        if (vehicle.Exists())
+                        {
+                            if (vehicle.IsDead)
+                                vehicle.Delete();
+                        }
+                    }
+                }
+
+
                 return null;
             }));
 

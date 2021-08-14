@@ -112,6 +112,12 @@ namespace Curiosity.Core.Client.Managers.UI
                             if (vehicle.IsInRangeOf(spawnRoad, distance) && vehicle.NetworkId != vehicleItem.NetworkId)
                             {
                                 EventSystem.Send("delete:entity", vehicle.NetworkId);
+                                
+                                if (vehicle.Exists())
+                                {
+                                    vehicle.Delete();
+                                }
+
                                 await BaseScript.Delay(100);
                             }
                         }
