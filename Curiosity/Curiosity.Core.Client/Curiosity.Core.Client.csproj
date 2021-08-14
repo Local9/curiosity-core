@@ -79,7 +79,6 @@
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
-    <Compile Include="Managers\EmergencyVehicleSirenManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\UI\DamageEffectManager.cs" />
     <Compile Include="Managers\UI\GarageVehicleManager.cs" />
