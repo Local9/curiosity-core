@@ -90,6 +90,7 @@ namespace Curiosity.Core.Server.Managers
                     session.TryUpdate(license, SessionState.Active, oldState);
                     if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
 
+                    // Custom Changes
                     string msg = $"Player '{player.Name}#{metadata.Sender}': Successfully Connected. Ping: {player.Ping}ms";
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage(msg);
                     ChatManager.OnLogMessage(msg);
