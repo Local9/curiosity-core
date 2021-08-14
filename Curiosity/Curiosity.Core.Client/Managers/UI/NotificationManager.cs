@@ -6,7 +6,7 @@ using System;
 
 namespace Curiosity.Core.Client.Managers
 {
-    public class NotificationManger : Manager<NotificationManger>
+    public class NotificationManager : Manager<NotificationManager>
     {
         public override void Begin()
         {

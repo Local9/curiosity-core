@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -53,11 +53,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("Ban Logged.");
+                    NotificationManager.GetModule().Success("Ban Logged.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not banned.");
+                    NotificationManager.GetModule().Warn("User was not banned.");
                 }
 
                 return new { success = success };
@@ -67,7 +67,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -94,7 +94,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -108,11 +108,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("Kick Logged.");
+                    NotificationManager.GetModule().Success("Kick Logged.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not kicked.");
+                    NotificationManager.GetModule().Warn("User was not kicked.");
                 }
 
                 return new { success = success };
@@ -122,7 +122,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -132,11 +132,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("User frozen state changed.");
+                    NotificationManager.GetModule().Success("User frozen state changed.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not frozen.");
+                    NotificationManager.GetModule().Warn("User was not frozen.");
                 }
 
                 return new { success = success };
@@ -146,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -159,11 +159,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("User warned.");
+                    NotificationManager.GetModule().Success("User warned.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not warned.");
+                    NotificationManager.GetModule().Warn("User was not warned.");
                 }
 
                 return new { success = success };
@@ -173,7 +173,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -183,11 +183,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("User revived.");
+                    NotificationManager.GetModule().Success("User revived.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not revived.");
+                    NotificationManager.GetModule().Warn("User was not revived.");
                 }
 
                 return new { success = success };
@@ -197,7 +197,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -207,11 +207,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("User teleported.");
+                    NotificationManager.GetModule().Success("User teleported.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("User was not teleported.");
+                    NotificationManager.GetModule().Warn("User was not teleported.");
                 }
 
                 return new { success = success };
@@ -221,7 +221,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -231,11 +231,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("Teleported to User.");
+                    NotificationManager.GetModule().Success("Teleported to User.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("Was not teleported.");
+                    NotificationManager.GetModule().Warn("Was not teleported.");
                 }
 
                 return new { success = success };
@@ -245,7 +245,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -255,11 +255,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("Spectating Player.");
+                    NotificationManager.GetModule().Success("Spectating Player.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("Unable to spectate player.");
+                    NotificationManager.GetModule().Warn("Unable to spectate player.");
                 }
 
                 return new { success = success };
@@ -269,7 +269,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin)
                 {
-                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    NotificationManager.GetModule().Warn("You do not have the permission to use this.");
                     return new { success = false };
                 }
 
@@ -279,11 +279,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("Stopped Spectating Player.");
+                    NotificationManager.GetModule().Success("Stopped Spectating Player.");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("Issue when trying to cancel spectate.");
+                    NotificationManager.GetModule().Warn("Issue when trying to cancel spectate.");
                 }
 
                 return new { success = success };

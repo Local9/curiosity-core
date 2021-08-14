@@ -281,7 +281,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     case "locations":
                     case "loc":
                         LocationManager.LocationManagerInstance.OnGetLocations();
-                        Chat.SendLocalMessage($"Refreshed locations.");
+                        NotificationManager.GetModule().Success($"Refreshed locations.");
                         EventSystem.GetModule().Send("config:locations");
                         break;
                     default:
@@ -302,7 +302,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 if (int.TryParse(arguments[0], out health))
                 {
                     Game.PlayerPed.Health = health;
-                    NotificationManger.GetModule().Success($"Health set to {health}");
+                    NotificationManager.GetModule().Success($"Health set to {health}");
                 }
             }
         }

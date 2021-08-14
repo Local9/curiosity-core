@@ -86,29 +86,45 @@ namespace Curiosity.Core.Server.Managers
                             heading = spawnPos.H;
                         }
 
-                        if (AnyVehicleNearPoint(pos, d))
+                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId);
+
+                        for(int i = 0; i < spawnPositions.Count; i++)
                         {
-                            List<object> vehicles = GetVehiclesNearPoint(pos, d);
-
-                            Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle. So its being deleted!");
-
-                            for(int i = 0; i < vehicles.Count; i++)
+                            Vector3 positionToCheck = spawnPositions[i].AsVector();
+                            if (!AnyVehicleNearPoint(positionToCheck, d))
                             {
-                                int vehIdToDelete = Convert.ToInt32(vehicles[i]);
-                                if (API.DoesEntityExist(vehIdToDelete))
-                                    API.DeleteEntity(vehIdToDelete);
+                                pos = positionToCheck;
+                                goto SpawnVehicle;
                             }
 
-                            //vehicleItem.Message = "Current location is blocked by another vehicle";
-                            //return vehicleItem;
+                            Logger.Debug($"Vehicle at position, moving to next one.");
                         }
+
+                        //if (AnyVehicleNearPoint(pos, d))
+                        //{
+                        //    List<object> vehicles = GetVehiclesNearPoint(pos, d);
+
+                        //    Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle. So its being deleted!");
+
+                        //    for(int i = 0; i < vehicles.Count; i++)
+                        //    {
+                        //        int vehIdToDelete = Convert.ToInt32(vehicles[i]);
+                        //        if (API.DoesEntityExist(vehIdToDelete))
+                        //            API.DeleteEntity(vehIdToDelete);
+                        //    }
+
+                        //    //vehicleItem.Message = "Current location is blocked by another vehicle";
+                        //    //return vehicleItem;
+                        //}
                     }
                     else
                     {
                         pos = new Vector3(x, y, z);
                         heading = h;
+                        goto SpawnVehicle;
                     }
 
+                SpawnVehicle:
                     if (Vector3.Distance(charPos, pos) >= 5000.0f)
                     {
                         Logger.Debug($"Too far away from a suitable location.");
@@ -243,7 +259,7 @@ namespace Curiosity.Core.Server.Managers
 
             List<object> vehicles = API.GetAllVehicles();
 
-            return vehicles?.Any(x => VehicleDistance(x, location) <= distance) ?? false;
+            return vehicles?.Any(x => VehicleDistance(x, location) <= distance + 1.0f) ?? false;
         }
 
         public List<object> GetVehiclesNearPoint(Vector3 location, float distance)
@@ -256,7 +272,7 @@ namespace Curiosity.Core.Server.Managers
 
             List<object> vehicles = API.GetAllVehicles();
 
-            return vehicles?.Where(x => VehicleDistance(x, location) <= distance).ToList();
+            return vehicles?.Where(x => VehicleDistance(x, location) <= distance + 1.0f).ToList();
         }
 
         public float VehicleDistance(object value, Vector3 location)

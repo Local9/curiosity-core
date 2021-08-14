@@ -31,7 +31,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if(!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManger.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    NotificationManager.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };
                 }
 
@@ -41,7 +41,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!result.Success)
                 {
-                    NotificationManger.GetModule().Error($"{result.Error}");
+                    NotificationManager.GetModule().Error($"{result.Error}");
                     return $"{result}";
                 }
 
@@ -55,7 +55,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManger.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    NotificationManager.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };
                 }
 
@@ -65,7 +65,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!result.Success)
                 {
-                    NotificationManger.GetModule().Error($"{result.Error}");
+                    NotificationManager.GetModule().Error($"{result.Error}");
                     return $"{result}";
                 }
 

@@ -55,7 +55,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (isProcessing)
                 {
-                    NotificationManger.GetModule().Warn($"You have a request pending.");
+                    NotificationManager.GetModule().Warn($"You have a request pending.");
                     return new List<dynamic>();
                 }
 
@@ -64,7 +64,7 @@ namespace Curiosity.Core.Client.Managers
                 int categoryId = 0;
                 if (!int.TryParse(metadata.Find<string>(0), out categoryId))
                 {
-                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    NotificationManager.GetModule().Error($"Unable to load data as selected value is invalid.");
                     return new { success = false };
                 }
 
@@ -113,7 +113,7 @@ namespace Curiosity.Core.Client.Managers
                 int storeItemId = 0;
                 if (!int.TryParse(metadata.Find<string>(0), out storeItemId))
                 {
-                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    NotificationManager.GetModule().Error($"Unable to load data as selected value is invalid.");
                     return new { success = false };
                 }
 
@@ -199,13 +199,13 @@ namespace Curiosity.Core.Client.Managers
                 int itemId = 0;
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    NotificationManager.GetModule().Error($"Unable to load data as selected value is invalid.");
                     return new { success = false };
                 }
 
                 SqlResult result = await EventSystem.Request<SqlResult>("shop:purchase:item", itemId);
 
-                NotificationManger notificationManger = NotificationManger.GetModule();
+                NotificationManager notificationManger = NotificationManager.GetModule();
 
                 if (result.Success)
                 {
@@ -225,13 +225,13 @@ namespace Curiosity.Core.Client.Managers
                 int itemId = 0;
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManger.GetModule().Error($"Unable to load data as selected value is invalid.");
+                    NotificationManager.GetModule().Error($"Unable to load data as selected value is invalid.");
                     return new { success = false };
                 }
 
                 SqlResult result = await EventSystem.Request<SqlResult>("shop:sell:item", itemId);
 
-                NotificationManger notificationManger = NotificationManger.GetModule();
+                NotificationManager notificationManger = NotificationManager.GetModule();
 
                 if (result.Success)
                 {

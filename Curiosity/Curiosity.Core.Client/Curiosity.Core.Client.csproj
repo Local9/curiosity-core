@@ -93,7 +93,7 @@
     <Compile Include="Managers\UI\ExportManager.cs" />
     <Compile Include="Managers\UI\InventoryManager.cs" />
     <Compile Include="Managers\UI\MarqueeManager.cs" />
-    <Compile Include="Managers\UI\NotificationManger.cs" />
+    <Compile Include="Managers\UI\NotificationManager.cs" />
     <Compile Include="Managers\UI\PdaManager.cs" />
     <Compile Include="Managers\UI\PlayerManager.cs" />
     <Compile Include="Managers\UI\PlayerNameManager.cs" />

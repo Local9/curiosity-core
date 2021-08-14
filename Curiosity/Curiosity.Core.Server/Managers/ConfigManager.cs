@@ -190,5 +190,39 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }
         }
+
+        public List<Position> NearestSpawnPositions(Vector3 position, SpawnType spawnType)
+        {
+            try
+            {
+                if (!spawnCache.ContainsKey(spawnType))
+                {
+                    Logger.Error($"Key '{spawnType}' not found");
+
+                    string keys = string.Empty;
+                    spawnCache.Keys.ToList().ForEach(t => { keys += $"{t},"; });
+                    Logger.Error($"Keys: {keys}");
+
+                    return null;
+                }
+
+
+                List<Position> positions = spawnCache[spawnType];
+
+                if (positions.Count == 0)
+                {
+                    return null;
+                }
+
+                return positions
+                    .Where(x => Vector3.Distance(position, x.AsVector()) < 50f)
+                    .OrderBy(x => Vector3.Distance(position, x.AsVector())).ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"NearestSpawnPosition: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

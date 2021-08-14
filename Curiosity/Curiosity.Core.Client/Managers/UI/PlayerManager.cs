@@ -166,7 +166,7 @@ namespace Curiosity.Core.Client.Managers
 
                 bool reportSuccess = await EventSystem.Request<bool>("user:report:submit", playerBeingReportedHandle, playerBeingReported, reason);
 
-                NotificationManger notification = NotificationManger.GetModule();
+                NotificationManager notification = NotificationManager.GetModule();
 
                 if (reportSuccess)
                 {

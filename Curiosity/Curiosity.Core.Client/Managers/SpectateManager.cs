@@ -30,7 +30,7 @@ namespace Curiosity.Core.Client.Managers
         {
             if (playerId == Cache.Player.Handle)
             {
-                NotificationManger.GetModule().Warn("You cannot spectate yourself.");
+                NotificationManager.GetModule().Warn("You cannot spectate yourself.");
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (playerPedId == 0)
             {
-                NotificationManger.GetModule().Warn("Unable to find player ped to spectate.");
+                NotificationManager.GetModule().Warn("Unable to find player ped to spectate.");
                 return;
             }
 

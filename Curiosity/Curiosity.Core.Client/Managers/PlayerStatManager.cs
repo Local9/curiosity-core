@@ -56,7 +56,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsSprinting), MAX_EXP, MAX_LEVEL))
                 {
-                    NotificationManger nm = NotificationManger.GetModule();
+                    NotificationManager nm = NotificationManager.GetModule();
                     int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
                     UpdateStat(Cache.Character.MP0_STAMINA, "Sprinting Level Increased", newLevel);
 
@@ -89,7 +89,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalSwiming), MAX_EXP, MAX_LEVEL))
                 {
-                    NotificationManger nm = NotificationManger.GetModule();
+                    NotificationManager nm = NotificationManager.GetModule();
                     int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
                     UpdateStat(Cache.Character.MP0_LUNG_CAPACITY, "Breathing Level Increased", newLevel);
 
@@ -116,7 +116,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentStatValue != newStatValue)
             {
-                NotificationManger.GetModule().Success(message);
+                NotificationManager.GetModule().Success(message);
             }
         }
 

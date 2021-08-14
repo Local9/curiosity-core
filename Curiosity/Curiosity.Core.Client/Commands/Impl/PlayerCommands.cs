@@ -4,6 +4,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
@@ -46,10 +47,11 @@ namespace Curiosity.Core.Client.Commands.Impl
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
+                NotificationManager notificationManger = NotificationManager.GetModule();
 
                 if (vehicle == null)
                 {
-                    Notify.Impound($"Invalid Information", $"Sorry bud, cannot find ere on this ere computer that there vehicle.");
+                    notificationManger.Info($"<b>Invalid Information</b><br />Sorry bud, cannot find ere on this ere computer that there vehicle.");
                     return;
                 }
 
@@ -59,20 +61,48 @@ namespace Curiosity.Core.Client.Commands.Impl
                 switch (commonErrors)
                 {
                     case CommonErrors.PurchaseSuccessful:
-                        Notify.Impound($"Vehicle Impounded", "~b~Charge: ~g~$1000~n~~w~Pleasure doing business with ye");
+                        notificationManger.Success($"<b>Vehicle Impounded</b><br /><b>Charge</b>: $1000<br />Pleasure doing business with ye.");
                         break;
                     case CommonErrors.PurchaseUnSuccessful:
-                        Notify.Impound($"Payment Issue", "Looks like ur bank rejected it.");
+                        notificationManger.Info($"<b>Payment Issue</b><br />Looks like ur bank rejected it.");
                         break;
                     case CommonErrors.VehicleIsOwned:
-                        Notify.Impound($"Computer Warning", "Sorry bub, this vehicle is owned by someone.");
-                        break;
-                    case CommonErrors.NotEnoughPoliceRep1000:
-                        Notify.Alert(commonErrors);
+                        notificationManger.Warn($"<b>Computer Warning</b><br />Sorry bub, this vehicle is owned by someone.");
                         break;
                     default:
-                        Notify.Impound($"Computer Error", "Computer said no...");
+                        notificationManger.Error($"Computer Error", "Computer said no...");
                         break;
+                }
+            }
+        }
+
+        [CommandInfo(new[] { "flip" })]
+        public class PlayerFlip : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
+                NotificationManager notificationManger = NotificationManager.GetModule();
+
+                if (vehicle == null)
+                {
+                    notificationManger.Info($"Vehicle not found.");
+                    return;
+                }
+
+                if (!vehicle.IsOnAllWheels)
+                {
+                    await vehicle.FadeOut();
+
+                    vehicle.Rotation = new Vector3(vehicle.Rotation.X, 0f, vehicle.Rotation.Z);
+
+                    vehicle.Position = new Vector3(vehicle.Position.X, vehicle.Position.Y, vehicle.Position.Z + 1f);
+
+                    vehicle.PlaceOnGround();
+
+                    await BaseScript.Delay(1000);
+
+                    await vehicle.FadeIn();
                 }
             }
         }

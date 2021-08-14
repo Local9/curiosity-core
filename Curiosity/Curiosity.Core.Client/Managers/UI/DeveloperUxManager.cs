@@ -23,7 +23,7 @@ namespace Curiosity.Core.Client.Managers.UI
             Enabled = true;
             Instance.AttachTickHandler(DeveloperOverlay);
             Instance.AttachTickHandler(DeveloperEntityOverlay);
-            NotificationManger.GetModule().Success($"Enabled Developer UI");
+            NotificationManager.GetModule().Success($"Enabled Developer UI");
         }
 
         public void DisableDeveloperOverlay()
@@ -31,7 +31,7 @@ namespace Curiosity.Core.Client.Managers.UI
             Enabled = false;
             Instance.DetachTickHandler(DeveloperOverlay);
             Instance.DetachTickHandler(DeveloperEntityOverlay);
-            NotificationManger.GetModule().Success($"Disabled Developer UI");
+            NotificationManager.GetModule().Success($"Disabled Developer UI");
         }
 
         private async Task DeveloperOverlay()

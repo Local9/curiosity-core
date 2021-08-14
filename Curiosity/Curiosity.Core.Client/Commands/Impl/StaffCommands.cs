@@ -219,7 +219,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (!vehModel.IsValid)
                 {
-                    NotificationManger.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
+                    NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
                     return;
                 }
 
@@ -234,7 +234,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (!vehModel.IsLoaded)
                 {
-                    NotificationManger.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
+                    NotificationManager.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
                     return;
                 }
 
@@ -255,7 +255,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (networkId == 0)
                 {
-                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully.");
+                    NotificationManager.GetModule().Error("Vehicle failed to be created successfully.");
                 }
 
                 if (networkId > 0)

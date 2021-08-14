@@ -140,11 +140,11 @@ namespace Curiosity.Core.Client.Managers
                     vehicle.Health = vehicle.MaxHealth;
                     vehicle.ClearLastWeaponDamage();
 
-                    NotificationManger.GetModule().Success("Vehicle Repaired", "bottom-middle");
+                    NotificationManager.GetModule().Success("Vehicle Repaired", "bottom-middle");
                 }
                 else
                 {
-                    NotificationManger.GetModule().Warn("Must be in a Vehicle", "bottom-middle");
+                    NotificationManager.GetModule().Warn("Must be in a Vehicle", "bottom-middle");
                 }
 
                 return null;
@@ -281,12 +281,12 @@ namespace Curiosity.Core.Client.Managers
                     if (result.Success)
                     {
                         currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 100f, true);
-                        NotificationManger.GetModule().Success($"Vehicle refueled (${result.Cost})", "bottom-middle");
+                        NotificationManager.GetModule().Success($"Vehicle refueled (${result.Cost})", "bottom-middle");
                     }
 
                     if (!result.Success)
                     {
-                        NotificationManger.GetModule().Warn($"Vehicle <b>not</b> refueled<br />{result.Message}", "bottom-middle");
+                        NotificationManager.GetModule().Warn($"Vehicle <b>not</b> refueled<br />{result.Message}", "bottom-middle");
                     }
 
                     IsAwaitingServerResponse = false;

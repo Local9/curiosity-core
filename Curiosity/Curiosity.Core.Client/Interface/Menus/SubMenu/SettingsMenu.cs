@@ -52,7 +52,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 dynamic item = damageEffectManager.Effects[newIndex];
                 damageEffectManager.SetEffect(item.Label, item.Effect);
 
-                NotificationManger.GetModule().Success($"Damage Effect: {item.Label}");
+                NotificationManager.GetModule().Success($"Damage Effect: {item.Label}");
                 await BaseScript.Delay(150);
             }
         }

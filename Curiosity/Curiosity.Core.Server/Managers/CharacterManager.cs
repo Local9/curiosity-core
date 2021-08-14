@@ -45,6 +45,8 @@ namespace Curiosity.Core.Server.Managers
 
                 List<CuriosityShopItem> lst = await Database.Store.CharacterDatabase.GetInventoryEquipped(u.Character.CharacterId);
 
+                await BaseScript.Delay(0);
+
                 try
                 {
                     for (int i = 0; i < lst.Count; i++)
