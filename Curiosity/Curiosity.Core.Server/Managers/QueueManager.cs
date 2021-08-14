@@ -40,8 +40,6 @@ namespace Curiosity.Core.Server.Managers
         static int publicTypeSlots = 0;
         static int maxSession = 32;
 
-        bool queueReadoutEnabled = false;
-
         static bool IsServerQueueReady = false;
         static DateTime serverStartTime = DateTime.Now;
 
@@ -335,7 +333,7 @@ namespace Curiosity.Core.Server.Managers
 
         private async Task QueueUpdate()
         {
-            if (!queueReadoutEnabled)
+            if (!stateChangeMessages)
                 Instance.DetachTickHandler(QueueUpdate);
 
             if (inPriorityQueue > 0 || inQueue > 0 || session.Count > 0)
