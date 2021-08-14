@@ -86,7 +86,7 @@ namespace Curiosity.Core.Server.Managers
                         //    heading = spawnPos.H;
                         //}
 
-                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId);
+                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, 300f);
 
                         for(int i = 0; i < spawnPositions.Count; i++)
                         {

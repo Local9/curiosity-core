@@ -191,7 +191,7 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        public List<Position> NearestSpawnPositions(Vector3 position, SpawnType spawnType)
+        public List<Position> NearestSpawnPositions(Vector3 position, SpawnType spawnType, float distance = 50f)
         {
             try
             {
@@ -215,7 +215,7 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 return positions
-                    .Where(x => Vector3.Distance(position, x.AsVector()) < 50f)
+                    .Where(x => Vector3.Distance(position, x.AsVector()) < distance)
                     .OrderBy(x => Vector3.Distance(position, x.AsVector())).ToList();
             }
             catch (Exception ex)
