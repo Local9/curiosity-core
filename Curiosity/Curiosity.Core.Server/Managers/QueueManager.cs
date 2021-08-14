@@ -40,6 +40,8 @@ namespace Curiosity.Core.Server.Managers
         static int publicTypeSlots = 0;
         static int maxSession = 32;
 
+        bool queueReadoutEnabled = false;
+
         static bool IsServerQueueReady = false;
         static DateTime serverStartTime = DateTime.Now;
 
@@ -331,9 +333,11 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        [TickHandler]
         private async Task QueueUpdate()
         {
+            if (!queueReadoutEnabled)
+                Instance.DetachTickHandler(QueueUpdate);
+
             if (inPriorityQueue > 0 || inQueue > 0 || session.Count > 0)
             {
                 int activeSessions = session.Where(x => x.Value == SessionState.Active).Count();
@@ -822,18 +826,6 @@ namespace Curiosity.Core.Server.Managers
         {
             stateChangeMessages = API.GetConvar("queue_enable_console_messages", "true") == "true";
             maxSession = API.GetConvarInt("queue_max_session_slots", maxSession);
-
-            if (API.GetConvar("onesync_enabled", "false") == "true")
-            {
-                Logger.Warn($"Curiosity Queue Manager : Server reports that OneSync is enabled. Ignoring regular 32 player limit, set slots to {maxSession}.");
-            }
-            else
-            {
-                if (maxSession > 32)
-                {
-                    maxSession = 32;
-                }
-            }
 
             loadTime = API.GetConvarInt("queue_loading_timeout", loadTime);
             graceTime = API.GetConvarInt("queue_reconnect_timeout", graceTime);
