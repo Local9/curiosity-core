@@ -154,6 +154,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (vehicleItem.NetworkId > 0)
                     {
+                        await BaseScript.Delay(0);
+
                         Vehicle vehicle = null;
                         Vehicle previousVehicle = null;
 
@@ -173,6 +175,9 @@ namespace Curiosity.Core.Client.Managers.UI
 
                         vehicle = new Vehicle(vehId);
 
+                        vehicle.PlaceOnGround();
+
+                        vehicle.Opacity = 0;
                         vehicle.IsPersistent = true;
                         vehicle.PreviouslyOwnedByPlayer = true;
                         vehicle.IsPositionFrozen = true;
@@ -182,10 +187,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
                         API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
 
-                        vehicle.PlaceOnGround();
                         vehicle.RadioStation = RadioStation.RadioOff;
-
-                        await vehicle.FadeOut();
 
                         await BaseScript.Delay(100);
 
