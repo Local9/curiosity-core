@@ -331,6 +331,31 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
+        [TickHandler]
+        private async Task QueueUpdate()
+        {
+            if (inPriorityQueue > 0 || inQueue > 0 || session.Count > 0)
+            {
+                int activeSessions = session.Where(x => x.Value == SessionState.Active).Count();
+                int graceSessions = session.Where(x => x.Value == SessionState.Grace).Count();
+                int loadingSessions = session.Where(x => x.Value == SessionState.Loading).Count();
+                int queuedSessions = session.Where(x => x.Value == SessionState.Queue).Count();
+
+                string msg = $"Queue Update";
+                msg += $"\n - inPriorityQueue: {inPriorityQueue}";
+                msg += $"\n - inQueue: {inQueue}";
+                msg += $"\n -----";
+                msg += $"\n Sessions: {session.Count}/{maxSession}";
+                msg += $"\n Active: {activeSessions}";
+                msg += $"\n Graced: {graceSessions}";
+                msg += $"\n Loading: {loadingSessions}";
+                msg += $"\n Queued: {queuedSessions}";
+                DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
+            }
+            int timeToWait = 60 * 1000;
+            await BaseScript.Delay(timeToWait);
+        }
+
         async Task SetupTimer()
         {
             if (PluginManager.IsMaintenanceActive)
