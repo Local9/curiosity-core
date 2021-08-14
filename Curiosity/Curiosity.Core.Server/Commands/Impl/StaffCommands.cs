@@ -108,7 +108,7 @@ namespace Curiosity.Core.Server.Commands.Impl
 
         //            if (!API.DoesEntityExist(vehicleId))
         //            {
-        //                Logger.Debug($"Failed to create vehicle in timely manor.");
+        //                Logger.Debug($"Failed to create vehicle in timely manner.");
         //                return;
         //            }
 

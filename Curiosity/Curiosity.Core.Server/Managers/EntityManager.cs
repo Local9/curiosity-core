@@ -70,7 +70,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!API.DoesEntityExist(vehicleId))
                 {
-                    Logger.Debug($"Failed to create vehicle in timely manor.");
+                    Logger.Debug($"Failed to create vehicle in timely manner.");
                     return null;
                 }
 
@@ -140,7 +140,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!API.DoesEntityExist(pedId))
                 {
-                    Logger.Debug($"Failed to create ped in timely manor.");
+                    Logger.Debug($"Failed to create ped in timely manner.");
                     return null;
                 }
 
@@ -304,7 +304,7 @@ namespace Curiosity.Core.Server.Managers
 
             if (!API.DoesEntityExist(objectId))
             {
-                Logger.Debug($"Failed to create object in timely manor.");
+                Logger.Debug($"Failed to create object in timely manner.");
                 return -1;
             }
 
