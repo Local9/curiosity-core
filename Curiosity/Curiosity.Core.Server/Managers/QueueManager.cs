@@ -333,26 +333,45 @@ namespace Curiosity.Core.Server.Managers
 
         private async Task QueueUpdate()
         {
-            if (!stateChangeMessages)
-                Instance.DetachTickHandler(QueueUpdate);
+            int countRemoved = 0;
+            List<KeyValuePair<string, SessionState>> activeSessionsList = session.Where(x => x.Value == SessionState.Active).ToList();
+            PlayerList players = PluginManager.PlayersList;
 
-            if (inPriorityQueue > 0 || inQueue > 0 || session.Count > 0)
+            List<string> licenses = players.Select(x => x.Identifiers["license"]).ToList();
+
+            activeSessionsList.ForEach(k =>
             {
-                int activeSessions = session.Where(x => x.Value == SessionState.Active).Count();
-                int graceSessions = session.Where(x => x.Value == SessionState.Grace).Count();
-                int loadingSessions = session.Where(x => x.Value == SessionState.Loading).Count();
-                int queuedSessions = session.Where(x => x.Value == SessionState.Queue).Count();
+                if (!licenses.Contains(k.Key))
+                {
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : REMOVED -> {k.Key}"); }
+                    RemoveFrom(k.Key, true, true, true, true, true, true);
+                    countRemoved++;
+                }
+            });
 
-                string msg = $"Queue Update";
-                msg += $"\n - inPriorityQueue: {inPriorityQueue}";
-                msg += $"\n - inQueue: {inQueue}";
-                msg += $"\n -----";
-                msg += $"\n Sessions: {session.Count}/{maxSession}";
-                msg += $"\n Active: {activeSessions}";
-                msg += $"\n Graced: {graceSessions}";
-                msg += $"\n Loading: {loadingSessions}";
-                msg += $"\n Queued: {queuedSessions}";
-                DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
+            if (stateChangeMessages)
+            {
+                if (inPriorityQueue > 0 || inQueue > 0 || session.Count > 0)
+                {
+                    int activeSessions = session.Where(x => x.Value == SessionState.Active).Count();
+                    int graceSessions = session.Where(x => x.Value == SessionState.Grace).Count();
+                    int loadingSessions = session.Where(x => x.Value == SessionState.Loading).Count();
+                    int queuedSessions = session.Where(x => x.Value == SessionState.Queue).Count();
+
+                    string msg = $"Queue Update";
+                    msg += $"\n - inPriorityQueue: {inPriorityQueue}";
+                    msg += $"\n - inQueue: {inQueue}";
+                    msg += $"\n -----";
+                    msg += $"\n Sessions: {session.Count}/{maxSession}";
+                    msg += $"\n Active: {activeSessions}";
+                    msg += $"\n Graced: {graceSessions}";
+                    msg += $"\n Loading: {loadingSessions}";
+                    msg += $"\n Queued: {queuedSessions}";
+                    msg += $"\n -----";
+                    msg += $"\n Removed Active: {countRemoved}";
+
+                    DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
+                }
             }
             int timeToWait = 60 * 1000;
             await BaseScript.Delay(timeToWait);
