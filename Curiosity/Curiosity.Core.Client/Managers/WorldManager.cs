@@ -370,7 +370,7 @@ namespace Curiosity.Core.Client.Managers
 
                 int owner = vehicle.State.Get(StateBagKey.VEH_OWNER_ID) ?? -1;
 
-                if (owner == Game.PlayerPed.Handle)
+                if (owner == Game.Player.ServerId)
                 {
                     if (vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter)
                         vehicle.LockStatus = VehicleLockStatus.Unlocked;
