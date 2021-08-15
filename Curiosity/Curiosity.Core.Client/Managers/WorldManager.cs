@@ -284,8 +284,8 @@ namespace Curiosity.Core.Client.Managers
 
             while(!Cache.Player.Character.MarkedAsRegistered)
             {
-                NetworkOverrideClockTime(0, 1, 0);
-                SetClockTime(0, 1, 0);
+                NetworkOverrideClockTime(12, 1, 0);
+                SetClockTime(12, 1, 0);
                 SetWeatherTypeNow("EXTRASUNNY");
                 await BaseScript.Delay(0);
             }
