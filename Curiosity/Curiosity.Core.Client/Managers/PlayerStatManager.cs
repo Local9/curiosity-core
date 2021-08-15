@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using System;
@@ -34,15 +35,15 @@ namespace Curiosity.Core.Client.Managers
             levelManager = LevelManager.GetModule();
         }
 
-        // [TickHandler(SessionWait = true)]
+        [TickHandler(SessionWait = true)]
         private async Task OnPlayerStateTask()
         {
-            if (Cache.PlayerPed.IsSprinting && !wasSprinting)
+            if (Game.PlayerPed.IsSprinting && !wasSprinting)
             {
                 wasSprinting = true;
                 sprintStart = DateTime.Now;
             }
-            else if (!Cache.PlayerPed.IsSprinting && wasSprinting)
+            else if (!Game.PlayerPed.IsSprinting && wasSprinting)
             {
                 wasSprinting = false;
                 sprintEnd = DateTime.Now;
@@ -69,12 +70,12 @@ namespace Curiosity.Core.Client.Managers
                 sprintEnd = DEFAULT;
             }
 
-            if (Cache.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
+            if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
             {
                 wasSwimming = true;
                 swimStart = DateTime.Now;
             }
-            else if (!Cache.PlayerPed.IsSwimmingUnderWater && wasSwimming)
+            else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming)
             {
                 wasSwimming = false;
                 swimEnd = DateTime.Now;
