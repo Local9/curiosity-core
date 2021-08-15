@@ -87,11 +87,14 @@ namespace Curiosity.Core.Server.Database.Store
                 i.Description = $"{kv["Description"]}";
                 i.IsDroppable = kv["IsDroppable"].ToBoolean();
                 i.IsUsable = kv["IsUsable"].ToBoolean();
+                i.CanCarry = kv["CanCarry"].ToBoolean();
                 i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
                 i.HashKey = $"{kv["HashKey"]}";
                 i.ImageUri = $"{kv["ImageUri"]}";
                 i.NumberOwned = kv["NumberOwned"].ToInt();
                 i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
+                i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
+                i.HealingAmount = kv["HealingAmount"].ToInt();
 
                 if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
                 {
@@ -131,6 +134,8 @@ namespace Curiosity.Core.Server.Database.Store
             i.CanCarry = kv["CanCarry"].ToBoolean();
             i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
             i.SpawnTypeId = (SpawnType)kv["SpawnTypeId"].ToInt();
+            i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
+            i.HealingAmount = kv["HealingAmount"].ToInt();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
@@ -199,6 +204,8 @@ namespace Curiosity.Core.Server.Database.Store
                 i.NumberOwned = kv["NumberOwned"].ToInt();
                 i.CanCarry = kv["CanCarry"].ToBoolean();
                 i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
+                i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
+                i.HealingAmount = kv["HealingAmount"].ToInt();
 
                 lst.Add(i);
             }
@@ -277,6 +284,19 @@ namespace Curiosity.Core.Server.Database.Store
             };
 
             string myQuery = "CALL delCharacterInventoryItem(@CharacterID, @ItemID, @Amount);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
+        }
+
+        internal static async Task<bool> UseItem(int characterId, int itemId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId }
+            };
+
+            string myQuery = "CALL upCharacterIventoryItemUsed(@CharacterID, @ItemID);";
 
             return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }

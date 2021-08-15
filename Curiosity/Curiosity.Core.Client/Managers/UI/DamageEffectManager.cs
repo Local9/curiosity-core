@@ -27,7 +27,7 @@ namespace Curiosity.Core.Client.Managers.UI
             new { Label = "Red", Effect = "glasses_red" },
         };
 
-        int _healthDead = 2;
+        int _healthDead = 30;
 
         float _beforeFraction = 0f;
         float _fraction = 0f;

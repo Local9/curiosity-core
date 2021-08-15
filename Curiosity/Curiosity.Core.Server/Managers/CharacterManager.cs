@@ -311,6 +311,36 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:use", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                ExportMessage exportMessage = new ExportMessage();
+
+                int itemId = metadata.Find<int>(0);
+
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(curiosityUser.Character.CharacterId, itemId);
+
+                if (!item.IsUsable)
+                {
+                    exportMessage.Error = "Item is not usable.";
+                    goto ReturnResult;
+                }
+
+                if (item.NumberOwned == 0)
+                {
+                    exportMessage.Error = "You do not have any left.";
+                    goto ReturnResult;
+                }
+
+                exportMessage.Item = item;
+
+                await Database.Store.CharacterDatabase.UseItem(curiosityUser.Character.CharacterId, itemId);
+
+            ReturnResult:
+                return exportMessage;
+            }));
+
             EventSystem.GetModule().Attach("character:inventory:equip", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];

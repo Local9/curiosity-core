@@ -78,6 +78,12 @@ namespace Curiosity.Systems.Library.Models.Shop
             || SpawnTypeId == SpawnType.Boat
             || SpawnTypeId == SpawnType.Vehicle;
 
+        [DataMember(Name = "isHealingItem")]
+        public bool IsHealingItem;
+
+        [DataMember(Name = "healingAmount")]
+        public int HealingAmount;
+
         [DataMember(Name = "originalValue")]
         public int OriginalValue;
 

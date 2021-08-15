@@ -1,4 +1,5 @@
-﻿using Curiosity.Systems.Library.Events;
+﻿using CitizenFX.Core;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using Newtonsoft.Json;
@@ -8,6 +9,8 @@ namespace Curiosity.Core.Client.Managers.UI
 {
     public class InventoryManager : Manager<InventoryManager>
     {
+        bool isProcessing = false;
+
         public override void Begin()
         {
             Instance.AttachNuiHandler("GetPlayerItems", new AsyncEventCallback(async metadata =>
@@ -44,6 +47,50 @@ namespace Curiosity.Core.Client.Managers.UI
                     NotificationManager.GetModule().Error($"{result.Error}");
                     return $"{result}";
                 }
+
+                return $"{result}";
+            }));
+
+            Instance.AttachNuiHandler("UseItem", new AsyncEventCallback(async metadata =>
+            {
+                NotificationManager notificationManager = NotificationManager.GetModule();
+
+                if (isProcessing)
+                {
+                    notificationManager.Error($"Currently processing request.");
+                    return new { success = false };
+                }
+
+                isProcessing = true;
+
+                int itemId = -1;
+
+                if (!int.TryParse(metadata.Find<string>(0), out itemId))
+                {
+                    notificationManager.Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    return new { success = false };
+                }
+
+                ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
+
+                if (!result.Success)
+                {
+                    notificationManager.Error($"{result.Error}");
+                    return $"{result}";
+                }
+
+                if (result.Item is not null)
+                {
+                    if (result.Item.IsHealingItem)
+                    {
+                        int playerHealth = Game.PlayerPed.Handle;
+                        Game.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
+
+                        notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                    }
+                }
+
+                isProcessing = false;
 
                 return $"{result}";
             }));
