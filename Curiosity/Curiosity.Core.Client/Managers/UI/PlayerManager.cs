@@ -14,6 +14,8 @@ namespace Curiosity.Core.Client.Managers
     {
         string CurrentPedHeadshot;
 
+        List<string> MutedPlayers = new List<string>();
+
         public override void Begin()
         {
             Instance.AttachNuiHandler("GetProfile", new AsyncEventCallback(async metadata =>
@@ -128,7 +130,8 @@ namespace Curiosity.Core.Client.Managers
                         job = p.Job,
                         role = p.Role,
                         ping = p.Ping,
-                        routingBucket = p.RoutingBucket
+                        routingBucket = p.RoutingBucket,
+                        isMuted = MutedPlayers.Contains($"{p.ServerHandle}")
                     };
 
                     pl.Add(player);
@@ -156,6 +159,31 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 return reasons;
+            }));
+
+            Instance.AttachNuiHandler("ToggleMute", new EventCallback(metadata =>
+            {
+                string playerId = metadata.Find<string>(0);
+                int pId = 0;
+
+                if (int.TryParse(playerId, out pId))
+                {
+                    Instance.ExportDictionary["pma-voice"].toggleMutePlayer(pId);
+
+                    if (MutedPlayers.Contains(playerId))
+                    {
+                        MutedPlayers.Remove(playerId);
+                        return new { success = true };
+                    }
+
+                    if (!MutedPlayers.Contains(playerId))
+                    {
+                        MutedPlayers.Add(playerId);
+                        return new { success = true };
+                    }
+                }
+
+                return new { success = true };
             }));
 
             Instance.AttachNuiHandler("ReportPlayer", new AsyncEventCallback(async metadata =>
