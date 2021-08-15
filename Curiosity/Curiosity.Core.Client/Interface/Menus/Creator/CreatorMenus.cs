@@ -206,9 +206,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 _MenuPool.ProcessMenus();
                 _MenuPool.ProcessMouse();
 
-                API.SetClockTime(0, 1, 0);
-                API.SetWeatherTypeNow("EXTRASUNNY");
-
                 if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
                     menuMain.Visible = true;
             }
