@@ -118,7 +118,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         //    }
                         //}
 
-                        NotificationManager.GetModule().Info("Location is blocked by another vehicle.");
+                        NotificationManager.GetModule().Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
                         vehModel.MarkAsNoLongerNeeded();
                         return new { success = false };
                     }
