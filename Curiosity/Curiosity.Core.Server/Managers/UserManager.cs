@@ -351,7 +351,7 @@ namespace Curiosity.Core.Server.Managers
 
                 QueueManager.GetModule().OnPlayerDropped(player, reason);
 
-                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconneded: '{reason}'");
+                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");
                 Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
             }
         }
