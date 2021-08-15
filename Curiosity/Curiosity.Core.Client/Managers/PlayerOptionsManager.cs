@@ -81,7 +81,7 @@ namespace Curiosity.Core.Client.Managers
                 // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
             }
 
-            Cache.PlayerPed.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
+            Game.PlayerPed.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
 
             Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
         }

@@ -43,6 +43,7 @@ namespace Curiosity.Core.Client
         public static void UpdatePedId(bool export = false)
         {
             PlayerPed = new Ped(PlayerPedId());
+            _ped = PlayerPed;
 
 
             if (export)

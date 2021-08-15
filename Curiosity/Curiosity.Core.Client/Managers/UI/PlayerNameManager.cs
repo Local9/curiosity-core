@@ -145,6 +145,11 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     blip = player.Character.AttachedBlip;
 
+                    SetBlipCategory(blip.Handle, 7);
+                    SetBlipPriority(blip.Handle, 11);
+                    ShowHeadingIndicatorOnBlip(blip.Handle, true);
+                    SetBlipNameToPlayerName(blip.Handle, player.Handle);
+
                     if (player.Character.IsDead)
                     {
                         blip.Sprite = BlipSprite.Dead;
