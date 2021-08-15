@@ -94,6 +94,7 @@ namespace Curiosity.Core.Server.Managers
                             if (!AnyVehicleNearPoint(positionToCheck, d))
                             {
                                 pos = positionToCheck;
+                                heading = spawnPositions[i].H;
                                 goto SpawnVehicle;
                             }
 
