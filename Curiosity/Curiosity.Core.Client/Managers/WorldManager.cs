@@ -346,7 +346,7 @@ namespace Curiosity.Core.Client.Managers
 
                 Ped driver = vehicle?.Driver;
 
-                bool serverSpawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+                bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
                 if ((!driver?.IsPlayer ?? false) && (!driver?.IsFleeing ?? false) && (driver?.IsAlive ?? false) && !serverSpawned)
                 {
@@ -366,6 +366,14 @@ namespace Curiosity.Core.Client.Managers
                     }
 
                     driver?.Task?.FleeFrom(ped);
+                }
+
+                int owner = vehicle.State.Get(StateBagKey.VEH_OWNER_ID) ?? -1;
+
+                if (owner == Game.PlayerPed.Handle)
+                {
+                    if (vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter)
+                        vehicle.LockStatus = VehicleLockStatus.Unlocked;
                 }
             }
 
