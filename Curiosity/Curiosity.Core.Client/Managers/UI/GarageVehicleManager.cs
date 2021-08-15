@@ -87,7 +87,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     Logger.Debug($"Vehicle model is now loaded");
 
-                    Vector3 charPos = Cache.PlayerPed.Position;
+                    Vector3 charPos = Game.PlayerPed.Position;
                     Vector3 spawnPos = Vector3.Zero;
                     float spawnHeading = 0f;
 
