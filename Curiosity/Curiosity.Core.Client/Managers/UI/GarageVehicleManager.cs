@@ -184,14 +184,10 @@ namespace Curiosity.Core.Client.Managers.UI
                         vehicle.PreviouslyOwnedByPlayer = true;
                         vehicle.IsPositionFrozen = true;
                         vehicle.IsCollisionEnabled = false;
-
-                        if (vehicle.Heading != vehicleItem.Heading)
-                            vehicle.Heading = vehicleItem.Heading;
+                        vehicle.Heading = vehicleItem.Heading;
 
                         Vector3 spawnedPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
-
-                        if (vehicle.Position != spawnedPosition)
-                            vehicle.Position = spawnedPosition;
+                        vehicle.Position = spawnedPosition;
 
                         API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                         API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
