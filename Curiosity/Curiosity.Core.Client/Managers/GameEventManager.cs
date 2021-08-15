@@ -43,7 +43,7 @@ namespace Curiosity.Core.Client.Managers
 
         private void OnGameEventTriggered(string name, List<dynamic> args)
         {
-            Logger.Debug($"game event {name} ({String.Join(", ", args.ToArray())})");
+            // Logger.Debug($"game event {name} ({String.Join(", ", args.ToArray())})");
 
             try
             {
