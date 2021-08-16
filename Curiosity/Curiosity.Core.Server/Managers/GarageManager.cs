@@ -208,6 +208,8 @@ namespace Curiosity.Core.Server.Managers
                     API.SetEntityRoutingBucket(entityHandle, (int)curiosityUser.RoutingBucket);
                     API.SetEntityDistanceCullingRadius(entityHandle, SPAWN_DISTANCE_CHECK);
 
+                    API.SetVehicleNumberPlateText(vehicle.Handle, player.Name);
+
                     Logger.Debug($"Completed setting up vehicle for {player.Name}");
 
                     return true;
