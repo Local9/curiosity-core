@@ -146,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
                             float ground = 0f;
 
                             if (API.GetGroundZFor_3dCoord_2(markerData.Position.X, markerData.Position.Y, markerData.Position.Z, ref ground, false) && m.SetOnGround)
-                                markerData.Position.Z = ground;
+                                markerData.Position.Z = markerData.Position.Z - 1f;
 
                             MarkersAll.Add(markerData);
                         });
