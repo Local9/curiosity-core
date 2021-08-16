@@ -165,7 +165,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     {
                         player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                         Cache.PersonalVehicle = new State.VehicleState(vehicle);
-
+                        GarageVehicleManager.GetModule().CreateBlip(vehicle);
                         entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                         await vehicle.FadeIn();
                         return;

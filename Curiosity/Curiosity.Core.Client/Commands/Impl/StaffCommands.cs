@@ -213,8 +213,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                     }
                 }
 
-                int networkId = 0;
-
                 Model vehModel = new Model(arguments.ElementAt(0));
 
                 if (!vehModel.IsValid)
@@ -238,48 +236,50 @@ namespace Curiosity.Core.Client.Commands.Impl
                     return;
                 }
 
+                bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
+
+                if (!requestLogged) return;
+
+                await BaseScript.Delay(1000);
+
                 if (arguments.Count == 1)
-                    networkId = await EventSystem.Request<int>("vehicle:spawn", (uint)vehModel.Hash, vehModel.GetDimensions().Y);
+                {
+                    vehicle = await World.CreateVehicle(vehModel, Game.PlayerPed.Position, Game.PlayerPed.Heading);
+                }
 
                 if (arguments.Count == 5)
                 {
-                    networkId = await EventSystem.Request<int>("vehicle:spawn:position",
-                        (uint)vehModel.Hash,
-                        float.Parse(arguments.ElementAt(1)),
-                        float.Parse(arguments.ElementAt(2)),
-                        float.Parse(arguments.ElementAt(3)),
-                        float.Parse(arguments.ElementAt(4)),
-                        vehModel.GetDimensions().Y
-                        );
+                    float x = float.Parse(arguments.ElementAt(1));
+                    float y = float.Parse(arguments.ElementAt(2));
+                    float z = float.Parse(arguments.ElementAt(3));
+                    float h = float.Parse(arguments.ElementAt(4));
+
+                    Vector3 pos = new Vector3(x, y, z);
+
+                    vehicle = await World.CreateVehicle(vehModel, pos, h);
                 }
 
-                if (networkId == 0)
-                {
-                    NotificationManager.GetModule().Error("Vehicle failed to be created successfully.");
-                }
+                vehicle.Opacity = 0;
 
-                if (networkId > 0)
-                {
-                    int vehId = API.NetworkGetEntityFromNetworkId(networkId);
-
-                    if (!API.DoesEntityExist(vehId)) return;
-
-                    vehicle = new Vehicle(vehId);
-
-                    GarageVehicleManager.GetModule().CreateBlip(vehicle);
-
-                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
-
-                    Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-
-                    await vehicle.FadeIn();
-
-                    API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
-                }
+                await BaseScript.Delay(500);
 
                 if (vehModel?.IsLoaded ?? false)
                     vehModel.MarkAsNoLongerNeeded();
+
+                bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
+
+                if (b)
+                {
+                    GarageVehicleManager.GetModule().CreateBlip(vehicle);
+                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
+                    Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                    await vehicle.FadeIn();
+                    API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
+                    return;
+                }
+                EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+                vehicle.Delete();
             }
         }
 
@@ -321,18 +321,46 @@ namespace Curiosity.Core.Client.Commands.Impl
                 API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
                 API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
 
-                int networkId = await EventSystem.Request<int>("vehicle:trailer:spawn:position", arguments.ElementAt(0), spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
+                Model vehModel = new Model(arguments.ElementAt(0));
 
-                int vehId = API.NetworkGetEntityFromNetworkId(networkId);
+                if (!vehModel.IsValid)
+                {
+                    NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
+                    return;
+                }
 
-                if (!API.DoesEntityExist(vehId)) return;
+                DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
 
-                vehicle = new Vehicle(vehId);
+                while (!vehModel.IsLoaded)
+                {
+                    await vehModel.Request(3000);
 
-                Cache.PersonalTrailer = new State.VehicleState(vehicle);
-                Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+                    if (DateTime.UtcNow > maxTime) break;
+                }
 
-                await vehicle.FadeIn();
+                if (!vehModel.IsLoaded)
+                {
+                    NotificationManager.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
+                    return;
+                }
+
+                vehicle = await World.CreateVehicle(vehModel, spawnRoad, spawnHeading);
+                vehicle.Opacity = 0;
+
+                if (vehModel?.IsLoaded ?? false)
+                    vehModel.MarkAsNoLongerNeeded();
+
+                bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
+
+                if (b)
+                {
+                    Cache.PersonalTrailer = new State.VehicleState(vehicle);
+                    Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+                    await vehicle.FadeIn();
+                    return;
+                }
+                EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+                vehicle.Delete();
             }
         
         }
