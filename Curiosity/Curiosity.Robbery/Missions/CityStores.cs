@@ -76,7 +76,7 @@ namespace Curiosity.StolenVehicle.Missions
                 if (storeClerk == null)
                     storeClerk = await PedSpawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL);
 
-                if (storeClerk == null)
+                if (storeClerk is null)
                 {
                     Stop(EndState.Error);
                     return;
@@ -164,7 +164,7 @@ namespace Curiosity.StolenVehicle.Missions
 
                     thief = await PedSpawnRandom(spawnLocation);
 
-                    if (thief == null)
+                    if (thief is null)
                     {
                         Stop(EndState.Error);
                         return;
@@ -205,7 +205,7 @@ namespace Curiosity.StolenVehicle.Missions
             if (NumberPedsArrested == 0)
             {
                 if (thief != null && thief.IsDead)
-                    Fail("Suspect is dead");
+                    Fail("Suspect is dead or got away");
             }
         }
     }

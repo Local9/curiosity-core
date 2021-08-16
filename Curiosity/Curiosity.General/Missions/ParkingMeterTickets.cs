@@ -30,7 +30,7 @@ namespace Curiosity.ParkingMeters.Missions
         {
             parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
 
-            if (parkingMeter == null)
+            if (parkingMeter is null)
                 Stop(EndState.Error);
 
             missionState = MissionState.Start;
@@ -76,17 +76,18 @@ namespace Curiosity.ParkingMeters.Missions
                     await BaseScript.Delay(100);
 
                     vehicle = await VehicleSpawn(model.Hash, parkingMeter.ParkingMeterVehicle.Position, parkingMeter.ParkingMeterVehicle.Heading, false);
-                    vehicle.IsPersistent = true;
-                    vehicle.IsPositionFrozen = true;
-                    vehicle.IsInvincible = true;
-                    vehicle.IsCollisionEnabled = false;
-                    vehicle.IsRecordingCollisions = false;
 
                     if (vehicle == null)
                     {
                         Stop(EndState.Error);
                         return;
                     }
+
+                    vehicle.IsPersistent = true;
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsInvincible = true;
+                    vehicle.IsCollisionEnabled = false;
+                    vehicle.IsRecordingCollisions = false;
                     
                     vehicle.Fx.LockStatus = VehicleLockStatus.Locked;
                     vehicle.Fx.IsEngineRunning = false;

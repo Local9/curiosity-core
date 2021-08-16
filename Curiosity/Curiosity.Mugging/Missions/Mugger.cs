@@ -51,6 +51,12 @@ namespace Curiosity.Mugging.Missions
                     await BaseScript.Delay(100);
                     victim = await this.PedSpawnRandom(spawnPoint);
 
+                    if (criminal is null || victim is null)
+                    {
+                        Stop(EndState.Error);
+                        return;
+                    }
+
                     if (!criminal.Exists() || !victim.Exists())
                     {
                         Stop(EndState.Error);

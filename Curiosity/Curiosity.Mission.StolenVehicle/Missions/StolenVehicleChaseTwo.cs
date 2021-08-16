@@ -76,7 +76,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             stolenVehicle = await VehicleSpawn(vehicleHashes.Random(), location, Game.PlayerPed.Heading);
 
-            if (stolenVehicle == null)
+            if (stolenVehicle is null)
             {
                 Stop(EndState.Error);
                 return;
@@ -86,7 +86,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             criminal = await PedSpawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
 
-            if (criminal == null)
+            if (criminal is null)
             {
                 Stop(EndState.Error);
                 return;

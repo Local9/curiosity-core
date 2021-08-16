@@ -72,7 +72,7 @@ namespace Curiosity.TrafficViolations.Missions
 
             suspectVehicle = await this.VehicleSpawn(vehicleHashes.Random(), location);
 
-            if (suspectVehicle == null)
+            if (suspectVehicle is null)
             {
                 Stop(EndState.Error);
                 return;

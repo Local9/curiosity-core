@@ -507,33 +507,41 @@ namespace Curiosity.MissionManager.Client
                 await BaseScript.Delay(100);
             }
 
-            CitizenFX.Core.Ped fxPed;
-
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
-            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
-            await BaseScript.Delay(100);
-            int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
-            API.NetworkRequestControlOfNetworkId(pedNetworkId);
-            await BaseScript.Delay(0);
+            bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
 
-            API.NetworkRequestControlOfNetworkId(pedNetworkId);
-            await BaseScript.Delay(0);
-
-            while (!API.NetworkHasControlOfEntity(pedId))
+            if (requestLogged)
             {
+                CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
+                fxPed.Opacity = 0;
+
+                int pedNetworkId = fxPed.NetworkId;
+                await BaseScript.Delay(100);
+                int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+                API.NetworkRequestControlOfNetworkId(pedNetworkId);
                 await BaseScript.Delay(0);
-                API.NetworkRequestControlOfEntity(pedId);
+
+                API.NetworkRequestControlOfNetworkId(pedNetworkId);
+                await BaseScript.Delay(0);
+
+                while (!API.NetworkHasControlOfEntity(pedId))
+                {
+                    await BaseScript.Delay(0);
+                    API.NetworkRequestControlOfEntity(pedId);
+                }
+                await BaseScript.Delay(0);
+
+                fxPed = new CitizenFX.Core.Ped(pedId);
+
+                fxPed.FadeIn();
+
+                Logger.Debug(fxPed.ToString());
+                var ped = new Ped(fxPed);
+                return ped;
             }
-            await BaseScript.Delay(0);
 
-            fxPed = new CitizenFX.Core.Ped(pedId);
-
-            fxPed.FadeIn();
-
-            Logger.Debug(fxPed.ToString());
-            var ped = new Ped(fxPed);
-            return ped;
+            return null;
         }
 
         public async Task<Ped> PedSpawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE)
@@ -565,34 +573,40 @@ namespace Curiosity.MissionManager.Client
                 await BaseScript.Delay(100);
             }
 
-            CitizenFX.Core.Ped fxPed;
-
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
-            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
-            await BaseScript.Delay(100);
-            int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
-            API.NetworkRequestControlOfNetworkId(pedNetworkId);
-            await BaseScript.Delay(0);
+            bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
 
-            model.MarkAsNoLongerNeeded();
-
-            await BaseScript.Delay(0);
-
-            while (!API.NetworkHasControlOfEntity(pedId))
+            if (requestLogged)
             {
+                CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
+                fxPed.Opacity = 0;
+                int pedNetworkId = fxPed.NetworkId;
+                await BaseScript.Delay(100);
+                int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+                API.NetworkRequestControlOfNetworkId(pedNetworkId);
                 await BaseScript.Delay(0);
-                API.NetworkRequestControlOfEntity(pedId);
+
+                model.MarkAsNoLongerNeeded();
+
+                await BaseScript.Delay(0);
+
+                while (!API.NetworkHasControlOfEntity(pedId))
+                {
+                    await BaseScript.Delay(0);
+                    API.NetworkRequestControlOfEntity(pedId);
+                }
+                await BaseScript.Delay(0);
+
+                fxPed = new CitizenFX.Core.Ped(pedId);
+
+                fxPed.FadeIn();
+
+                Logger.Debug(fxPed.ToString());
+                var ped = new Ped(fxPed);
+                return ped;
             }
-            await BaseScript.Delay(0);
-
-            fxPed = new CitizenFX.Core.Ped(pedId);
-
-            fxPed.FadeIn();
-
-            Logger.Debug(fxPed.ToString());
-            var ped = new Ped(fxPed);
-            return ped;
+            return null;                
         }
 
         public async Task<Vehicle> VehicleSpawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true)
@@ -608,33 +622,40 @@ namespace Curiosity.MissionManager.Client
 
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
-            CitizenFX.Core.Vehicle fxVehicle;
+            bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
 
-            int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, true, true);
-            await BaseScript.Delay(100);
-            int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
-            await BaseScript.Delay(0);
-
-            model.MarkAsNoLongerNeeded();
-
-            API.NetworkRequestControlOfNetworkId(vehNetworkId);
-            await BaseScript.Delay(0);
-
-            while (!API.NetworkHasControlOfEntity(vehId))
+            if (requestLogged)
             {
+                CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
+                fxVehicle.Opacity = 0;
+
+                int vehNetworkId = fxVehicle.NetworkId;
+                await BaseScript.Delay(100);
+                int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
                 await BaseScript.Delay(0);
-                API.NetworkRequestControlOfEntity(vehId);
+
+                model.MarkAsNoLongerNeeded();
+
+                API.NetworkRequestControlOfNetworkId(vehNetworkId);
+                await BaseScript.Delay(0);
+
+                while (!API.NetworkHasControlOfEntity(vehId))
+                {
+                    await BaseScript.Delay(0);
+                    API.NetworkRequestControlOfEntity(vehId);
+                }
+
+                await BaseScript.Delay(0);
+
+                fxVehicle = new CitizenFX.Core.Vehicle(vehId);
+
+                Logger.Debug(fxVehicle.ToString());
+
+                fxVehicle.FadeIn();
+
+                return new Vehicle(fxVehicle);
             }
-
-            await BaseScript.Delay(0);
-
-            fxVehicle = new CitizenFX.Core.Vehicle(vehId);
-
-            Logger.Debug(fxVehicle.ToString());
-
-            fxVehicle.FadeIn();
-
-            return new Vehicle(fxVehicle);
+            return null;
         }
     }
 }
