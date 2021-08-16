@@ -45,7 +45,16 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (checkboxItem == miEngine)
             {
                 miEngine.Enabled = false;
-                Cache.PersonalVehicle.Vehicle.IsEngineRunning = Checked;
+
+                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    vehicle = Game.PlayerPed.CurrentVehicle;
+                }
+
+                vehicle.IsEngineRunning = Checked;
+
                 await BaseScript.Delay(1000);
                 miEngine.Enabled = true;
                 return;
