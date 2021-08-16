@@ -514,8 +514,7 @@ namespace Curiosity.MissionManager.Client
             if (requestLogged)
             {
                 CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
-                fxPed.Opacity = 0;
-
+                await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
                 await BaseScript.Delay(100);
                 int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
@@ -580,7 +579,7 @@ namespace Curiosity.MissionManager.Client
             if (requestLogged)
             {
                 CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
-                fxPed.Opacity = 0;
+                await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
                 await BaseScript.Delay(100);
                 int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
@@ -627,7 +626,7 @@ namespace Curiosity.MissionManager.Client
             if (requestLogged)
             {
                 CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
-                fxVehicle.Opacity = 0;
+                await fxVehicle.FadeOut();
 
                 int vehNetworkId = fxVehicle.NetworkId;
                 await BaseScript.Delay(100);
