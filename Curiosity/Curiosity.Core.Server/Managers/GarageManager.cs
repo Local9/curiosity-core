@@ -14,7 +14,7 @@ namespace Curiosity.Core.Server.Managers
 {
     public class GarageManager : Manager<GarageManager>
     {
-        private const float SPAWN_DISTANCE_CHECK = 15000.0f;
+        private const float SPAWN_DISTANCE_CHECK = 300.0f;
 
         public override void Begin()
         {
