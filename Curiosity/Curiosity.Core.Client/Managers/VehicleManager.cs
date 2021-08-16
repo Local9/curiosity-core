@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Managers
 
         Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
-            [VehicleClass.Planes] = 3.5f,
+            [VehicleClass.Planes] = 2.8f,
             [VehicleClass.Helicopters] = 1.4f,
             [VehicleClass.Super] = 3.2f,
             [VehicleClass.Sports] = 2.8f,
