@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Events;
 using System;
 using static CitizenFX.Core.Native.API;
 using System.Collections.Generic;
+using CitizenFX.Core;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -55,33 +56,42 @@ namespace Curiosity.Core.Server.Managers
 
         private void OnEntityCreating(int handle)
         {
-            if (DoesEntityExist(handle))
+            try
             {
-                int populationType = GetEntityPopulationType(handle);
-                if (populationType > 10)
+                if (DoesEntityExist(handle))
                 {
-                    Logger.Info($"Population Type {populationType} is not known");
-                }
-
-                PopulationType population = (PopulationType)populationType;
-                
-                if (population == PopulationType.MISSION)
-                {
-                    int owner = NetworkGetEntityOwner(handle);
-
-                    if (PluginManager.PlayersList[owner] is not null || requestedRightsToSpawn.Contains(owner))
+                    int populationType = GetEntityPopulationType(handle);
+                    if (populationType > 10)
                     {
-                        if (requestedRightsToSpawn.Contains(owner))
-                            requestedRightsToSpawn.Remove(owner);
-                        return;
+                        Logger.Info($"Population Type {populationType} is not known");
                     }
 
-                    if (!requestedRightsToSpawn.Contains(owner))
+                    PopulationType population = (PopulationType)populationType;
+
+                    if (population == PopulationType.MISSION)
                     {
-                        DeleteEntity(handle);
-                        CancelEvent();
+                        int owner = NetworkGetEntityOwner(handle);
+                        Player player = PluginManager.PlayersList[owner];
+
+                        if (player is not null || requestedRightsToSpawn.Contains(owner))
+                        {
+                            if (requestedRightsToSpawn.Contains(owner))
+                                requestedRightsToSpawn.Remove(owner);
+
+                            return;
+                        }
+
+                        if (!requestedRightsToSpawn.Contains(owner))
+                        {
+                            DeleteEntity(handle);
+                            CancelEvent();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "OnEntityCreating");
             }
         }
     }
