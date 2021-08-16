@@ -187,11 +187,13 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
 
+                    await vehicle.FadeOut();
+
                     vehModel.MarkAsNoLongerNeeded();
 
-                    vehicle.Opacity = 0;
-
                     // setup vehicle on the server
+
+                    await BaseScript.Delay(0);
 
                     bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)vehicleItem.SpawnTypeId);
 
@@ -208,7 +210,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     API.NetworkRequestControlOfEntity(vehicle.Handle);
                     vehicle.PlaceOnGround();
 
-                    vehicle.Opacity = 0;
                     vehicle.IsPersistent = true;
                     vehicle.PreviouslyOwnedByPlayer = true;
                     vehicle.IsPositionFrozen = true;
@@ -280,9 +281,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     await vehicle.FadeIn();
 
                     await BaseScript.Delay(100);
-
-                    if (vehicle.Opacity == 0)
-                        await vehicle.FadeIn();
 
                     vehicle.ResetOpacity();
 

@@ -259,7 +259,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     vehicle = await World.CreateVehicle(vehModel, pos, h);
                 }
 
-                vehicle.Opacity = 0;
+                await vehicle.FadeOut();
 
                 await BaseScript.Delay(500);
 
@@ -275,6 +275,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                     await vehicle.FadeIn();
+
+                    vehicle.ResetOpacity();
                     API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
                     return;
                 }

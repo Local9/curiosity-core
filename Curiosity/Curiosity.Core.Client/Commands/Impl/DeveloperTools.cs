@@ -155,7 +155,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     await BaseScript.Delay(1000);
 
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.H);
-                    vehicle.Opacity = 0;
+                    await vehicle.FadeOut();
 
                     await BaseScript.Delay(500);
 
@@ -168,6 +168,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                         GarageVehicleManager.GetModule().CreateBlip(vehicle);
                         entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                         await vehicle.FadeIn();
+
+                        vehicle.ResetOpacity();
                         return;
                     }
                     EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
