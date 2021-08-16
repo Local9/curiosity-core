@@ -14,6 +14,8 @@ namespace Curiosity.Core.Server.Managers
 {
     public class GarageManager : Manager<GarageManager>
     {
+        private const float SPAWN_DISTANCE_CHECK = 15000.0f;
+
         public override void Begin()
         {
             /*
@@ -76,10 +78,14 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
+                    bool isVehicle = Equals(vehicleItem.SpawnTypeId, SpawnType.Vehicle);
+
+                    Logger.Debug($"Requested Vehicle Spawn Type: {vehicleItem.SpawnTypeId}:{isVehicle}");
+
                     // get spawn loacation if not a car
-                    if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
+                    if (!isVehicle)
                     {
-                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, 300f);
+                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, SPAWN_DISTANCE_CHECK);
 
                         for (int i = 0; i < spawnPositions.Count; i++)
                         {
@@ -88,21 +94,19 @@ namespace Curiosity.Core.Server.Managers
                             {
                                 pos = positionToCheck;
                                 heading = spawnPositions[i].H;
+                                Logger.Debug($"Spawn position found. {pos.X} {pos.Y} {pos.Z}");
                                 goto SpawnVehicle;
                             }
 
                             Logger.Debug($"Vehicle at position, moving to next one.");
                         }
-                    }
-                    else
-                    {
-                        pos = new Vector3(x, y, z);
-                        heading = h;
-                        goto SpawnVehicle;
+
+                        vehicleItem.Message = "Unable to find any nearby spawn locations";
+                        return vehicleItem;
                     }
 
                 SpawnVehicle:
-                    if (Vector3.Distance(charPos, pos) >= 500.0f)
+                    if (Vector3.Distance(charPos, pos) >= SPAWN_DISTANCE_CHECK)
                     {
                         Logger.Debug($"Too far away from a suitable location.");
                         vehicleItem.Message = "Too far away from a suitable location.";
@@ -202,7 +206,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     API.SetEntityRoutingBucket(entityHandle, (int)curiosityUser.RoutingBucket);
-                    API.SetEntityDistanceCullingRadius(entityHandle, 500f);
+                    API.SetEntityDistanceCullingRadius(entityHandle, SPAWN_DISTANCE_CHECK);
 
                     Logger.Debug($"Completed setting up vehicle for {player.Name}");
 

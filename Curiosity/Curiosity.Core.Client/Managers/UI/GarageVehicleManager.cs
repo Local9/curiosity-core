@@ -100,7 +100,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
 
-                    if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                    if (API.IsAnyVehicleNearPoint(vehicleItem.X, vehicleItem.Y, vehicleItem.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
                         NotificationManager.GetModule().Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
                         vehModel.MarkAsNoLongerNeeded();
@@ -183,6 +183,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     Vector3 returnedSpawnPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
 
+                    API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
+
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
 
                     vehModel.MarkAsNoLongerNeeded();
@@ -221,7 +223,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     await BaseScript.Delay(100);
 
                     Vector3 pos = vehicle.Position;
-                    API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 4f, false, false, false, false);
 
                     vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
 

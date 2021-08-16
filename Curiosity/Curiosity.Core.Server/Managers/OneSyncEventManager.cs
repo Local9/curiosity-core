@@ -71,6 +71,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!requestedRightsToSpawn.Contains(owner))
                     {
+                        DeleteEntity(handle);
                         CancelEvent();
                     }
 
