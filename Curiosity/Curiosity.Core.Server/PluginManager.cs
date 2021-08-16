@@ -239,7 +239,7 @@ namespace Curiosity.Core.Server
                 // Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC
                 // CreateObject fails, CreateObjectNoOffset is fine
 
-                API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
+                // API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
             }
             catch (Exception ex)
             {

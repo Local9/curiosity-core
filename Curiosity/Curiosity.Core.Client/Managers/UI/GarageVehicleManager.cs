@@ -82,7 +82,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         while (!vehModel.IsLoaded)
                         {
                             await BaseScript.Delay(0);
-                        }                        
+                        }
                     }
 
                     Logger.Debug($"Vehicle model is now loaded");
@@ -98,41 +98,27 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     float distance = vehModel.GetDimensions().Y;
 
-                    if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance))
+                    VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
+
+                    if (API.IsAnyVehicleNearPoint(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
-                        //Vehicle[] vehicles = World.GetAllVehicles();
-
-                        //for (int i = 0; i < vehicles.Length; i++)
-                        //{
-                        //    Vehicle vehicle = vehicles[i];
-                        //    if (vehicle.IsInRangeOf(spawnRoad, distance))
-                        //    {
-                        //        EventSystem.Send("delete:entity", vehicle.NetworkId);
-
-                        //        if (vehicle.Exists())
-                        //        {
-                        //            vehicle.Delete();
-                        //        }
-
-                        //        await BaseScript.Delay(100);
-                        //    }
-                        //}
-
                         NotificationManager.GetModule().Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
                         vehModel.MarkAsNoLongerNeeded();
                         return new { success = false };
                     }
 
-                    VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
+                    await BaseScript.Delay(0);
+
+                    bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
+
+                    if (!requestLogged)
+                    {
+                        NotificationManager.GetModule().Error("Request to spawn the vehicle has failed.");
+                        return new { success = false };
+                    }
 
                     Logger.Debug($"Vehicle Information: {vehicleItem?.Hash}/{vehicleItem?.Label}/{vehicleItem?.SpawnTypeId}/{vehicleItem?.NetworkId}/{vehicleItem?.ServerHandle}");
                     Logger.Debug($"Vehicle Information: H: {vehicleItem?.Heading}, X: {vehicleItem?.X}, Y: {vehicleItem?.Y}, Z: {vehicleItem?.Z}");
-
-                    await BaseScript.Delay(0);
-
-                    vehModel.MarkAsNoLongerNeeded();
-
-                    await BaseScript.Delay(0);
 
                     if (vehicleItem is null)
                     {
@@ -146,175 +132,158 @@ namespace Curiosity.Core.Client.Managers.UI
                         return new { success = false };
                     }
 
-                    if (vehicleItem.NetworkId == 0)
+                    await BaseScript.Delay(0);
+
+                    Vehicle previousVehicle = null;
+
+                    if (Cache.PersonalVehicle is not null && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                        previousVehicle = Cache.PersonalVehicle.Vehicle;
+
+                    if (Cache.PersonalBoat is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
+                        previousVehicle = Cache.PersonalBoat.Vehicle;
+
+                    if (Cache.PersonalHelicopter is not null && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
+                        previousVehicle = Cache.PersonalHelicopter.Vehicle;
+
+                    if (Cache.PersonalPlane is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
+                        previousVehicle = Cache.PersonalBoat.Vehicle;
+
+                    if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                        previousVehicle = Cache.PersonalTrailer.Vehicle;
+
+                    if (previousVehicle is not null)
                     {
-                        NotificationManager.GetModule().Error("Vehicle failed to be created on the server. Please try again.");
+                        if (previousVehicle.Exists()) // personal vehicle
+                        {
+                            if (previousVehicle.Driver == Cache.PlayerPed && vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                                Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+
+                            await previousVehicle.FadeOut(true);
+
+                            previousVehicle.IsPositionFrozen = true;
+                            previousVehicle.IsCollisionEnabled = false;
+
+                            EventSystem.GetModule().Send("delete:entity", previousVehicle.NetworkId);
+                            await BaseScript.Delay(5);
+
+                            if (previousVehicle.Exists())
+                            {
+                                EntityManager.GetModule().RemoveEntityBlip(previousVehicle);
+                                await BaseScript.Delay(5);
+
+                                previousVehicle.Delete();
+                                previousVehicle = null;
+                            }
+
+                            await BaseScript.Delay(100);
+                        }
+                    }
+
+                    Vehicle vehicle = null;
+
+                    Vector3 returnedSpawnPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
+
+                    vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
+
+                    vehModel.MarkAsNoLongerNeeded();
+
+                    vehicle.Opacity = 0;
+
+                    // setup vehicle on the server
+
+                    bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)vehicleItem.SpawnTypeId);
+
+                    // if fail, delete it
+
+                    if (!setupCompleted)
+                    {
+                        NotificationManager.GetModule().Error("Vehicle setup failed.");
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+                        vehicle.Delete();
                         return new { success = false };
                     }
 
-                    await BaseScript.Delay(0);
+                    API.NetworkRequestControlOfEntity(vehicle.Handle);
+                    vehicle.PlaceOnGround();
 
-                    if (vehicleItem.NetworkId > 0)
+                    vehicle.Opacity = 0;
+                    vehicle.IsPersistent = true;
+                    vehicle.PreviouslyOwnedByPlayer = true;
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsCollisionEnabled = false;
+
+                    API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                    API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                    API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
+
+                    vehicle.RadioStation = RadioStation.RadioOff;
+
+                    await BaseScript.Delay(100);
+
+                    Vector3 pos = vehicle.Position;
+                    API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 4f, false, false, false, false);
+
+                    vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
+
+                    if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
-                        await BaseScript.Delay(0);
-
-                        Vehicle vehicle = null;
-                        Vehicle previousVehicle = null;
-
-                        int vehId = API.NetworkGetEntityFromNetworkId(vehicleItem.NetworkId);
-                        API.NetworkRequestControlOfEntity(vehId);
-
-                        int failRate = 0;
-
-                        while (!API.DoesEntityExist(vehId))
-                        {
-                            if (failRate >= 10)
-                                goto FAILED;
-
-                            await BaseScript.Delay(5);
-                            failRate++;
-                        }
-
-                        vehicle = new Vehicle(vehId);
-
-                        vehicle.PlaceOnGround();
-
-                        vehicle.Opacity = 0;
-                        vehicle.IsPersistent = true;
-                        vehicle.PreviouslyOwnedByPlayer = true;
-                        vehicle.IsPositionFrozen = true;
-                        vehicle.IsCollisionEnabled = false;
-                        vehicle.Heading = vehicleItem.Heading;
-
-                        Vector3 spawnedPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
-                        vehicle.Position = spawnedPosition;
-
-                        API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
-                        API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
-                        API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
-
-                        vehicle.RadioStation = RadioStation.RadioOff;
-
-                        await BaseScript.Delay(100);
-
-                        if (Cache.PersonalVehicle is not null && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
-                            previousVehicle = Cache.PersonalVehicle.Vehicle;
-
-                        if (Cache.PersonalBoat is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                            previousVehicle = Cache.PersonalBoat.Vehicle;
-
-                        if (Cache.PersonalHelicopter is not null && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
-                            previousVehicle = Cache.PersonalHelicopter.Vehicle;
-
-                        if (Cache.PersonalPlane is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                            previousVehicle = Cache.PersonalBoat.Vehicle;
-
-                        if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
-                            previousVehicle = Cache.PersonalTrailer.Vehicle;
-
-                        if (previousVehicle is not null)
-                        {
-                            if (previousVehicle.Exists()) // personal vehicle
-                            {
-                                if (previousVehicle.Driver == Cache.PlayerPed && vehicleItem.SpawnTypeId != SpawnType.Trailer)
-                                    Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
-
-                                await previousVehicle.FadeOut(true);
-
-                                previousVehicle.IsPositionFrozen = true;
-                                previousVehicle.IsCollisionEnabled = false;
-
-                                EventSystem.GetModule().Send("delete:entity", previousVehicle.NetworkId);
-                                await BaseScript.Delay(5);
-
-                                if (previousVehicle.Exists())
-                                {
-                                    EntityManager.GetModule().RemoveEntityBlip(previousVehicle);
-                                    await BaseScript.Delay(5);
-
-                                    previousVehicle.Delete();
-                                    previousVehicle = null;
-                                }
-
-                                await BaseScript.Delay(100);
-                            }
-                        }
-
-                        Vector3 pos = vehicle.Position;
-                        API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 4f, false, false, false, false);
-
-                        vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
-
-                        if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
-                        {
-                            Cache.PersonalVehicle = new State.VehicleState(vehicle);
-                            Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
-                            Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-                        }
-
-                        if (vehicleItem.SpawnTypeId == SpawnType.Plane)
-                        {
-                            Cache.PersonalPlane = new State.VehicleState(vehicle);
-                            Cache.Player.User.SendEvent("vehicle:log:player:plane", vehicle.NetworkId);
-                        }
-
-                        if (vehicleItem.SpawnTypeId == SpawnType.Boat)
-                        {
-                            Cache.PersonalBoat = new State.VehicleState(vehicle);
-                            Cache.Player.User.SendEvent("vehicle:log:player:boat", vehicle.NetworkId);
-                        }
-
-                        if (vehicleItem.SpawnTypeId == SpawnType.Helicopter)
-                        {
-                            Cache.PersonalHelicopter = new State.VehicleState(vehicle);
-                            Cache.Player.User.SendEvent("vehicle:log:player:helicopter", vehicle.NetworkId);
-                        }
-
-                        if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
-                        {
-                            Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
-                            Cache.PersonalTrailer = new State.VehicleState(vehicle);
-                        }
-
-                        Blip blip = CreateBlip(vehicle);
-
-                        if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
-                            API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
-
-                        vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
-
-                        await BaseScript.Delay(100);
-
-                        API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
-
-                        vehicle.IsPositionFrozen = false;
-                        vehicle.IsCollisionEnabled = true;
-
-                        API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
-
-                        NotificationManager.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
-
-                        // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
-
-                        await vehicle.FadeIn();
-
-                        await BaseScript.Delay(100);
-
-                        if (vehicle.Opacity < 200)
-                            await vehicle.FadeIn();
-
-                        return new { success = true };
-
-                    FAILED:
-
-                        API.DeleteEntity(ref vehId);
-
-                        NotificationManager.GetModule().Error("Vehicle failed to be created successfully. It might exist but will be a glitch in the matrix.");
-                        return new { success = true };
+                        Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                        Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                        Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                     }
 
-                    return new { success = true };
+                    if (vehicleItem.SpawnTypeId == SpawnType.Plane)
+                    {
+                        Cache.PersonalPlane = new State.VehicleState(vehicle);
+                        Cache.Player.User.SendEvent("vehicle:log:player:plane", vehicle.NetworkId);
+                    }
 
+                    if (vehicleItem.SpawnTypeId == SpawnType.Boat)
+                    {
+                        Cache.PersonalBoat = new State.VehicleState(vehicle);
+                        Cache.Player.User.SendEvent("vehicle:log:player:boat", vehicle.NetworkId);
+                    }
+
+                    if (vehicleItem.SpawnTypeId == SpawnType.Helicopter)
+                    {
+                        Cache.PersonalHelicopter = new State.VehicleState(vehicle);
+                        Cache.Player.User.SendEvent("vehicle:log:player:helicopter", vehicle.NetworkId);
+                    }
+
+                    if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                    {
+                        Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+                        Cache.PersonalTrailer = new State.VehicleState(vehicle);
+                    }
+
+                    Blip blip = CreateBlip(vehicle, vehicleItem.SpawnTypeId);
+
+                    if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                        API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
+
+                    vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
+
+                    await BaseScript.Delay(100);
+
+                    API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
+
+                    vehicle.IsPositionFrozen = false;
+                    vehicle.IsCollisionEnabled = true;
+
+                    API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
+
+                    NotificationManager.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
+
+                    // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
+
+                    await vehicle.FadeIn();
+
+                    await BaseScript.Delay(100);
+
+                    if (vehicle.Opacity < 200)
+                        await vehicle.FadeIn();
+
+                    return new { success = true };
                 }
                 catch (Exception ex)
                 {
@@ -325,43 +294,46 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
-        public Blip CreateBlip(Vehicle vehicle)
+        public Blip CreateBlip(Vehicle vehicle, SpawnType spawnType = SpawnType.Unknown)
         {
             Blip blip = vehicle.AttachBlip();
 
-            int spawnType = vehicle.State.Get($"{StateBagKey.VEH_SPAWN_TYPE}") ?? (int)SpawnType.Vehicle;
+            if (spawnType == SpawnType.Unknown)
+            {
+                spawnType = vehicle.State.Get(StateBagKey.VEH_SPAWN_TYPE) ?? SpawnType.Vehicle;
+            }
 
             bool setBlip = false;
 
-            if (spawnType == (int)SpawnType.Vehicle)
+            if (spawnType == SpawnType.Vehicle)
             {
                 API.BeginTextCommandSetBlipName(BLIP_PERSONAL_VEHICLE);
                 blip.Sprite = BlipSprite.PersonalVehicleCar;
                 setBlip = true;
             }
 
-            if (spawnType == (int)SpawnType.Trailer)
+            if (spawnType == SpawnType.Trailer)
             {
                 API.BeginTextCommandSetBlipName(BLIP_PERSONAL_TRAILER);
                 API.SetBlipSprite(blip.Handle, 479);
                 setBlip = true;
             }
 
-            if (spawnType == (int)SpawnType.Boat)
+            if (spawnType == SpawnType.Boat)
             {
                 API.BeginTextCommandSetBlipName(BLIP_PERSONAL_BOAT);
                 blip.Sprite = BlipSprite.Boat;
                 setBlip = true;
             }
 
-            if (spawnType == (int)SpawnType.Plane)
+            if (spawnType == SpawnType.Plane)
             {
                 API.BeginTextCommandSetBlipName(BLIP_PERSONAL_PLANE);
                 blip.Sprite = BlipSprite.Plane;
                 setBlip = true;
             }
 
-            if (spawnType == (int)SpawnType.Helicopter)
+            if (spawnType == SpawnType.Helicopter)
             {
                 API.BeginTextCommandSetBlipName(BLIP_PERSONAL_HELICOPTER);
                 blip.Sprite = BlipSprite.Helicopter;

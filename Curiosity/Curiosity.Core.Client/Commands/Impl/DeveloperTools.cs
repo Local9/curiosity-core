@@ -147,12 +147,31 @@ namespace Curiosity.Core.Client.Commands.Impl
                     }
 
                     var position = entity.Position;
+
+                    bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
+
+                    if (!requestLogged) return;
+
+                    await BaseScript.Delay(1000);
+
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.H);
+                    vehicle.Opacity = 0;
 
-                    player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                    await BaseScript.Delay(500);
 
-                    entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                    bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
+
+                    if (b)
+                    {
+                        player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                        Cache.PersonalVehicle = new State.VehicleState(vehicle);
+
+                        entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                        await vehicle.FadeIn();
+                        return;
+                    }
+                    EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+                    vehicle.Delete();
                 }
                 catch (Exception)
                 {

@@ -24,7 +24,8 @@ namespace Curiosity.Core.Server.Managers
              * 
              */
 
-            EventSystem.GetModule().Attach("garage:get:list", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("garage:get:list", new AsyncEventCallback(async metadata =>
+            {
                 try
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -37,7 +38,8 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("garage:get:vehicle", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("garage:get:vehicle", new AsyncEventCallback(async metadata =>
+            {
                 try
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -77,18 +79,9 @@ namespace Curiosity.Core.Server.Managers
                     // get spawn loacation if not a car
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
-                        //Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
-                        //await BaseScript.Delay(0);
-
-                        //if (spawnPos is not null)
-                        //{
-                        //    pos = spawnPos.AsVector();
-                        //    heading = spawnPos.H;
-                        //}
-
                         List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, 300f);
 
-                        for(int i = 0; i < spawnPositions.Count; i++)
+                        for (int i = 0; i < spawnPositions.Count; i++)
                         {
                             Vector3 positionToCheck = spawnPositions[i].AsVector();
                             if (!AnyVehicleNearPoint(positionToCheck, d))
@@ -100,23 +93,6 @@ namespace Curiosity.Core.Server.Managers
 
                             Logger.Debug($"Vehicle at position, moving to next one.");
                         }
-
-                        //if (AnyVehicleNearPoint(pos, d))
-                        //{
-                        //    List<object> vehicles = GetVehiclesNearPoint(pos, d);
-
-                        //    Logger.Debug($"Player {curiosityUser.LatestName} requested a vehicle, but the current location is blocked by another vehicle. So its being deleted!");
-
-                        //    for(int i = 0; i < vehicles.Count; i++)
-                        //    {
-                        //        int vehIdToDelete = Convert.ToInt32(vehicles[i]);
-                        //        if (API.DoesEntityExist(vehIdToDelete))
-                        //            API.DeleteEntity(vehIdToDelete);
-                        //    }
-
-                        //    //vehicleItem.Message = "Current location is blocked by another vehicle";
-                        //    //return vehicleItem;
-                        //}
                     }
                     else
                     {
@@ -133,76 +109,64 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
-                    int vehicleId = API.CreateVehicle(model, pos.X, pos.Y, pos.Z, heading, true, true);
-
-                    if (vehicleId == 0)
-                    {
-                        Logger.Debug($"Possible OneSync is Disabled");
-                        vehicleItem.Message = "Vehicle not created.";
-                        return vehicleItem;
-                    }
-
-                    vehicleItem.ServerHandle = vehicleId;
                     vehicleItem.Heading = heading;
                     vehicleItem.X = pos.X;
                     vehicleItem.Y = pos.Y;
                     vehicleItem.Z = pos.Z;
 
-                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(10);
+                    return vehicleItem;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "garage:get:vehicle");
+                    return null;
+                }
+            }));
 
-                    await BaseScript.Delay(0);
+            EventSystem.GetModule().Attach("garage:set:vehicle", new EventCallback(metadata =>
+            {
+                try
+                {
+                    Player player = PluginManager.PlayersList[metadata.Sender];
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                    while (!API.DoesEntityExist(vehicleId))
-                    {
-                        await BaseScript.Delay(0);
+                    int networkId = metadata.Find<int>(0);
+                    SpawnType spawnTypeId = (SpawnType)metadata.Find<int>(1);
 
-                        if (maxWaitTime < DateTime.UtcNow) break;
-                    }
+                    int entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
+                    Vehicle vehicle = new Vehicle(entityHandle);
 
-                    if (!API.DoesEntityExist(vehicleId))
-                    {
-                        Logger.Debug($"Failed to create vehicle in timely manner. Move a little and it may spawn.");
-                        vehicleItem.Message = "Failed to create vehicle in timely manner. Move a little and it may spawn.";
-                        return vehicleItem;
-                    }
-
-                    Vehicle vehicle = new Vehicle(vehicleId);
-
-                    vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
-
-                    Player p = PluginManager.PlayersList[metadata.Sender];
-
-                    switch(vehicleItem.SpawnTypeId)
+                    switch (spawnTypeId)
                     {
                         case SpawnType.Boat:
                             if (curiosityUser.PersonalBoat > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalBoat);
 
-                            p.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, vehicle.NetworkId, true);
+                            player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Plane:
                             if (curiosityUser.PersonalPlane > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
 
-                            p.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
+                            player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
                             if (curiosityUser.PersonalHelicopter > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalHelicopter);
 
-                            p.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, vehicle.NetworkId, true);
+                            player.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Trailer:
                             if (curiosityUser.PersonalTrailer > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalTrailer);
 
-                            p.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, vehicle.NetworkId, true);
+                            player.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         default:
                             if (curiosityUser.PersonalVehicle > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalVehicle);
 
-                            p.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
+                            player.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
 
@@ -211,11 +175,11 @@ namespace Curiosity.Core.Server.Managers
                     vehicle.State.Set(StateBagKey.VEH_OWNER, player.Name, true);
                     vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                     vehicle.State.Set(StateBagKey.VEHICLE_MISSION, false, true);
-                    vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, (int)vehicleItem.SpawnTypeId, true);
+                    vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, (int)spawnTypeId, true);
 
                     vehicle.State.Set(StateBagKey.BLIP_INFORMATION, new { }, true);
 
-                    if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                    if (spawnTypeId != SpawnType.Trailer)
                     {
                         vehicle.State.Set(StateBagKey.VEH_PERSONAL, true, true);
 
@@ -231,26 +195,25 @@ namespace Curiosity.Core.Server.Managers
                         vehicle.State.Set(StateBagKey.VEH_SIREN_STATE, false, true);
                     }
 
-                    if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                    if (spawnTypeId == SpawnType.Trailer)
                     {
                         vehicle.State.Set(StateBagKey.VEH_PERSONAL_TRAILER, true, true);
                         vehicle.State.Set(StateBagKey.VEH_TRAILER_CONTENT, new { }, true);
                     }
 
-                    vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
+                    API.SetEntityRoutingBucket(entityHandle, (int)curiosityUser.RoutingBucket);
+                    API.SetEntityDistanceCullingRadius(entityHandle, 500f);
 
-                    API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
-                    API.SetEntityDistanceCullingRadius(vehicleId, 500f);
+                    Logger.Debug($"Completed setting up vehicle for {player.Name}");
 
-                    return vehicleItem;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, "garage:get:vehicle");
-                    return null;
+                    Logger.Error(ex, "garage:set:vehicle");
+                    return false;
                 }
             }));
-
 
         }
 

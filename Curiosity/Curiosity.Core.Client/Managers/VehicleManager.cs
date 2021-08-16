@@ -174,14 +174,14 @@ namespace Curiosity.Core.Client.Managers
 
             bool setup = false;
 
-            if (currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_SETUP}") != null)
-                setup = currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_SETUP}");
+            if (currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL_SETUP))
+                setup = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL_SETUP) ?? false;
 
             if (!setup)
             {
                 Logger.Debug($"VFM: {currentVehicle.Vehicle.Handle}:{setup}");
 
-                if (currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}"))
+                if (currentVehicle.Vehicle.State.Get(StateBagKey.VEH_SPAWNED))
                 {
                     minRandomFuel = 100f;
                     maxRandomFuel = 100f;
@@ -274,13 +274,13 @@ namespace Curiosity.Core.Client.Managers
 
                     currentVehicle.Vehicle.IsEngineRunning = false;
 
-                    float fuel = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL}");
+                    float fuel = (float)currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL);
 
                     GenericMessage result = await EventSystem.Request<GenericMessage>("vehicle:refuel:charge", fuel);
 
                     if (result.Success)
                     {
-                        currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 100f, true);
+                        currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, 100f, true);
                         NotificationManager.GetModule().Success($"Vehicle refueled (${result.Cost})", "bottom-middle");
                     }
 
@@ -387,8 +387,8 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            float fuel = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL}");
-            float multi = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_MULTIPLIER}");
+            float fuel = (float)currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL);
+            float multi = (float)currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL_MULTIPLIER);
 
             if (fuel < 2f && !IsRefueling)
             {
