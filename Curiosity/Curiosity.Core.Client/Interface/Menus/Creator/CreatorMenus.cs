@@ -188,14 +188,19 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private async Task OnPlayerControls()
         {
+            float turnSpeed = 1f;
+
+            if (Game.IsControlPressed(0, Control.Sprint))
+                turnSpeed += 1f;
+
             if (Game.IsControlPressed(0, Control.Pickup))
             {
-                Cache.PlayerPed.Heading += 5f;
+                Cache.PlayerPed.Heading += turnSpeed;
             }
 
             if (Game.IsControlPressed(0, Control.Cover))
             {
-                Cache.PlayerPed.Heading -= 5f;
+                Cache.PlayerPed.Heading -= turnSpeed;
             }
         }
 
