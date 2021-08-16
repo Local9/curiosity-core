@@ -329,6 +329,9 @@ namespace Curiosity.Core.Client.Managers
 
                 if (serverSpawned && (vehicle.LockStatus == VehicleLockStatus.LockedForPlayer || vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter))
                     vehicle.LockStatus = VehicleLockStatus.Unlocked;
+
+                if (vehicle.Opacity == 0 && vehicle.Driver.IsPlayer)
+                    vehicle.ResetOpacity();
             });
 
             await BaseScript.Delay(500);
