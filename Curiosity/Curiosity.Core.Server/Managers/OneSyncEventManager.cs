@@ -25,20 +25,22 @@ namespace Curiosity.Core.Server.Managers
         public override void Begin()
         {
             Logger.Debug($"[INIT] OneSyncEventManager");
-            Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
+            // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
             // Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
             EventSystem.GetModule().Attach("onesync:request", new EventCallback(metadata => {
-                if (requestedRightsToSpawn.Contains(metadata.Sender))
-                    return true;
+                return true;
 
-                if (!requestedRightsToSpawn.Contains(metadata.Sender))
-                {
-                    requestedRightsToSpawn.Add(metadata.Sender);
-                    return true;
-                }
+                //if (requestedRightsToSpawn.Contains(metadata.Sender))
+                //    return true;
 
-                return false;
+                //if (!requestedRightsToSpawn.Contains(metadata.Sender))
+                //{
+                //    requestedRightsToSpawn.Add(metadata.Sender);
+                //    return true;
+                //}
+
+                //return false;
             }));
         }
 
