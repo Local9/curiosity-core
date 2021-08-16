@@ -140,6 +140,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     SetBlipPriority(blip.Handle, 11);
                     ShowHeadingIndicatorOnBlip(blip.Handle, true);
                     SetBlipNameToPlayerName(blip.Handle, player.Handle);
+
+                    blip.Name = player.Name;
                 }
                 else
                 {
@@ -149,6 +151,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     SetBlipPriority(blip.Handle, 11);
                     ShowHeadingIndicatorOnBlip(blip.Handle, true);
                     SetBlipNameToPlayerName(blip.Handle, player.Handle);
+
+                    blip.Name = player.Name;
 
                     if (player.Character.IsDead)
                     {
