@@ -266,10 +266,15 @@ namespace Curiosity.Core.Client.Commands.Impl
                 if (vehModel?.IsLoaded ?? false)
                     vehModel.MarkAsNoLongerNeeded();
 
+                API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
+
                 bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
 
                 if (b)
                 {
+
                     GarageVehicleManager.GetModule().CreateBlip(vehicle);
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
@@ -351,6 +356,10 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (vehModel?.IsLoaded ?? false)
                     vehModel.MarkAsNoLongerNeeded();
+
+                API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
 
                 bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
 

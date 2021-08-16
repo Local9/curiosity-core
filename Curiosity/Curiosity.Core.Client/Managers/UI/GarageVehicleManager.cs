@@ -195,6 +195,10 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     await BaseScript.Delay(0);
 
+                    API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                    API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                    API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
+
                     bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)vehicleItem.SpawnTypeId);
 
                     // if fail, delete it

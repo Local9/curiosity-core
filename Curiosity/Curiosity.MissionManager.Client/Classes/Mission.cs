@@ -633,6 +633,10 @@ namespace Curiosity.MissionManager.Client
                 int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
                 await BaseScript.Delay(0);
 
+                API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
+
                 model.MarkAsNoLongerNeeded();
 
                 API.NetworkRequestControlOfNetworkId(vehNetworkId);
