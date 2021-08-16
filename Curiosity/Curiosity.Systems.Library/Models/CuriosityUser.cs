@@ -70,7 +70,7 @@ namespace Curiosity.Systems.Library.Models
         public int PersonalPlane { get; set; }
         public int PersonalBoat { get; set; }
         public int PersonalHelicopter { get; set; }
-        public RoutingBucket RoutingBucket { get; set; }
+        public int RoutingBucket { get; set; }
         public bool AllowPublicStats { get; set; }
         public bool Purchasing { get; set; }
     }

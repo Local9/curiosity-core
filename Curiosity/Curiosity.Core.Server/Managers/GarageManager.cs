@@ -65,7 +65,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     Player player = PluginManager.PlayersList[metadata.Sender];
-                    RoutingBucket routingBucket = curiosityUser.RoutingBucket;
+                    int routingBucket = curiosityUser.RoutingBucket;
 
                     Vector3 charPos = new Vector3(x, y, z);
                     Vector3 pos = new Vector3(x, y, z);

@@ -41,7 +41,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
+                int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
                 uint model = metadata.Find<uint>(0);
                 float x = metadata.Find<float>(1);
@@ -106,7 +106,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
+                int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
                 int pedType = metadata.Find<int>(0);
                 uint model = metadata.Find<uint>(1);
@@ -279,7 +279,7 @@ namespace Curiosity.Core.Server.Managers
 
         private async Task<int> CreateEntity(int source, uint model, float x, float y, float z, bool isDynamic)
         {
-            RoutingBucket routingBucket = PluginManager.ActiveUsers[source].RoutingBucket;
+            int routingBucket = PluginManager.ActiveUsers[source].RoutingBucket;
 
             int objectId = API.CreateObjectNoOffset(model, x, y, z, true, true, isDynamic);
 

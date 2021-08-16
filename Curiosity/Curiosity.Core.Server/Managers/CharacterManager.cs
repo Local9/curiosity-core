@@ -25,22 +25,22 @@ namespace Curiosity.Core.Server.Managers
 
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
-                if (currentBucket != 1)
-                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.LOS_SANTOS);
+                if (currentBucket != 0)
+                    API.SetPlayerRoutingBucket(player.Handle, 0);
 
                 player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_NETWORK_ID, -1, true);
-                player.State.Set(StateBagKey.PLAYER_ROUTING, (int)RoutingBucket.LOS_SANTOS, true);
+                player.State.Set(StateBagKey.PLAYER_ROUTING, 0, true);
                 player.State.Set(StateBagKey.PLAYER_HANDLE, player.Handle, true);
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, true, true);
 
                 API.SetPlayerCullingRadius($"{metadata.Sender}", 300.0f);
 
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
-                u.RoutingBucket = RoutingBucket.LOS_SANTOS;
+                u.RoutingBucket = 0;
 
                 if (u.Character.LastPosition is null)
                     u.Character.LastPosition = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
