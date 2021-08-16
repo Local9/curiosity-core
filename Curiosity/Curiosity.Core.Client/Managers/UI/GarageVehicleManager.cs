@@ -187,14 +187,18 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
 
+                    vehicle.IsPersistent = true;
+                    vehicle.PreviouslyOwnedByPlayer = true;
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsCollisionEnabled = false;
+
                     await vehicle.FadeOut();
+
+                    await BaseScript.Delay(500);
 
                     vehModel.MarkAsNoLongerNeeded();
 
                     // setup vehicle on the server
-
-                    await BaseScript.Delay(10);
-
                     API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                     API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
                     API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
@@ -215,11 +219,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.NetworkRequestControlOfEntity(vehicle.Handle);
                     vehicle.PlaceOnGround();
-
-                    vehicle.IsPersistent = true;
-                    vehicle.PreviouslyOwnedByPlayer = true;
-                    vehicle.IsPositionFrozen = true;
-                    vehicle.IsCollisionEnabled = false;
 
                     API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                     API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
