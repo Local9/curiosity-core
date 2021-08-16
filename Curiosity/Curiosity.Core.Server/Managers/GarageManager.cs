@@ -126,7 +126,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                 SpawnVehicle:
-                    if (Vector3.Distance(charPos, pos) >= 5000.0f)
+                    if (Vector3.Distance(charPos, pos) >= 500.0f)
                     {
                         Logger.Debug($"Too far away from a suitable location.");
                         vehicleItem.Message = "Too far away from a suitable location.";
@@ -240,7 +240,7 @@ namespace Curiosity.Core.Server.Managers
                     vehicleItem.NetworkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
-                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+                    API.SetEntityDistanceCullingRadius(vehicleId, 500f);
 
                     return vehicleItem;
                 }
