@@ -216,7 +216,7 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[senderHandle];
 
-                RoutingBucket routingBucket = user.RoutingBucket;
+                int routingBucket = user.RoutingBucket;
 
                 uint model = metadata.Find<uint>(0);
                 float distance = metadata.Find<float>(1);
@@ -285,7 +285,7 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[senderHandle];
 
-                RoutingBucket routingBucket = user.RoutingBucket;
+                int routingBucket = user.RoutingBucket;
 
                 float x = metadata.Find<float>(1);
                 float y = metadata.Find<float>(2);
@@ -359,7 +359,7 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[senderHandle];
 
-                RoutingBucket routingBucket = user.RoutingBucket;
+                int routingBucket = user.RoutingBucket;
 
                 var model = API.GetHashKey(metadata.Find<string>(0));
 

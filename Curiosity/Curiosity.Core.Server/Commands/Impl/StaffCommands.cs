@@ -67,7 +67,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 }
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[player.Handle.ToInt()];
-                curiosityUser.RoutingBucket = (RoutingBucket)worldId;
+                curiosityUser.RoutingBucket = worldId;
 
                 API.SetPlayerRoutingBucket(player.Handle, worldId);
                 API.SetPlayerCullingRadius(player.Handle, 5000.0f);
