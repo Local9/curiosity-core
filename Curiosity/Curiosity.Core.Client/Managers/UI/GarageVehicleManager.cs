@@ -187,6 +187,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
 
+                    API.NetworkRequestControlOfEntity(vehicle.Handle);
+
                     vehicle.IsPersistent = true;
                     vehicle.PreviouslyOwnedByPlayer = true;
                     vehicle.IsPositionFrozen = true;
@@ -216,13 +218,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         vehicle.Delete();
                         return new { success = false };
                     }
-
-                    API.NetworkRequestControlOfEntity(vehicle.Handle);
                     vehicle.PlaceOnGround();
-
-                    API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
-                    API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
-                    API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
 
                     vehicle.RadioStation = RadioStation.RadioOff;
 

@@ -259,6 +259,11 @@ namespace Curiosity.Core.Client.Commands.Impl
                     vehicle = await World.CreateVehicle(vehModel, pos, h);
                 }
 
+                vehicle.IsPersistent = true;
+                vehicle.PreviouslyOwnedByPlayer = true;
+                vehicle.IsPositionFrozen = true;
+                vehicle.IsCollisionEnabled = false;
+
                 await vehicle.FadeOut();
 
                 await BaseScript.Delay(500);
@@ -266,6 +271,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 if (vehModel?.IsLoaded ?? false)
                     vehModel.MarkAsNoLongerNeeded();
 
+                API.NetworkRequestControlOfEntity(vehicle.Handle);
                 API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
                 API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
@@ -279,12 +285,17 @@ namespace Curiosity.Core.Client.Commands.Impl
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-                    await vehicle.FadeIn();
 
+                    vehicle.IsPositionFrozen = false;
+                    vehicle.IsCollisionEnabled = true;
+
+                    await vehicle.FadeIn();
+                    vehicle.Opacity = 255;
                     vehicle.ResetOpacity();
                     API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
                     return;
                 }
+
                 EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
                 vehicle.Delete();
             }
