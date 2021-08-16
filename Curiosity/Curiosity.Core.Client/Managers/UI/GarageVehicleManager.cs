@@ -187,8 +187,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
 
-                    await vehicle.FadeOut();
-
                     vehModel.MarkAsNoLongerNeeded();
 
                     // setup vehicle on the server
@@ -277,12 +275,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     NotificationManager.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
 
                     // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
-
-                    await vehicle.FadeIn();
-
-                    await BaseScript.Delay(100);
-
-                    vehicle.ResetOpacity();
 
                     return new { success = true };
                 }
