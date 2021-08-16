@@ -281,12 +281,10 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     await BaseScript.Delay(100);
 
-                    if (vehicle.Opacity < 200)
-                    {
+                    if (vehicle.Opacity == 0)
                         await vehicle.FadeIn();
 
-                        vehicle.ResetOpacity();
-                    }
+                    vehicle.ResetOpacity();
 
                     return new { success = true };
                 }
