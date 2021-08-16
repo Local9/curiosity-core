@@ -42,19 +42,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
+            Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                vehicle = Game.PlayerPed.CurrentVehicle;
+            }
+
             if (checkboxItem == miEngine)
             {
                 miEngine.Enabled = false;
-
-                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
-
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    vehicle = Game.PlayerPed.CurrentVehicle;
-                }
-
                 vehicle.IsEngineRunning = Checked;
-
                 await BaseScript.Delay(1000);
                 miEngine.Enabled = true;
                 return;
@@ -63,7 +61,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (checkboxItem == miHeadlights)
             {
                 miHeadlights.Enabled = false;
-                Cache.PersonalVehicle.Vehicle.AreLightsOn = Checked;
+                vehicle.AreLightsOn = Checked;
                 await BaseScript.Delay(1000);
                 miHeadlights.Enabled = true;
                 return;
@@ -73,7 +71,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 miHeadlights.Enabled = false;
 
-                ToggleNeonLights(Checked);
+                ToggleNeonLights(vehicle, Checked);
                 await BaseScript.Delay(1000);
                 miHeadlights.Enabled = true;
                 return;
@@ -90,30 +88,37 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
             else
             {
-                miEngine.Checked = Cache.PersonalVehicle.Vehicle.IsEngineRunning;
+                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    vehicle = Game.PlayerPed.CurrentVehicle;
+                }
+
+                miEngine.Checked = vehicle.IsEngineRunning;
                 miEngine.Enabled = true;
 
-                miHeadlights.Checked = Cache.PlayerPed.IsInVehicle() ? Cache.PersonalVehicle.Vehicle.AreLightsOn : headlights;
+                miHeadlights.Checked = Cache.PlayerPed.IsInVehicle() ? vehicle.AreLightsOn : headlights;
                 miHeadlights.Enabled = true;
 
                 miNeon.Checked = neonLights;
-                miNeon.Enabled = AreNeonsEnabled();
+                miNeon.Enabled = AreNeonsEnabled(vehicle);
             }
         }
 
-        private bool AreNeonsEnabled()
+        private bool AreNeonsEnabled(Vehicle vehicle)
         {
-            int handle = Cache.PersonalVehicle.Vehicle.Handle;
+            int handle = vehicle.Handle;
             return API.IsVehicleNeonLightEnabled(handle, 0)
                 || API.IsVehicleNeonLightEnabled(handle, 1)
                 || API.IsVehicleNeonLightEnabled(handle, 2)
                 || API.IsVehicleNeonLightEnabled(handle, 3);
         }
 
-        private void ToggleNeonLights(bool enabled)
+        private void ToggleNeonLights(Vehicle vehicle, bool enabled)
         {
             neonLights = enabled;
-            API.DisableVehicleNeonLights(Cache.PersonalVehicle.Vehicle.Handle, enabled);
+            API.DisableVehicleNeonLights(vehicle.Handle, enabled);
         }
     }
 }
