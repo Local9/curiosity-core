@@ -24,20 +24,20 @@ namespace Curiosity.Core.Server.Managers
         public override void Begin()
         {
             Logger.Debug($"[INIT] OneSyncEventManager");
-            // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
+            Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
             // Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
             EventSystem.GetModule().Attach("onesync:request", new EventCallback(metadata => {
-                //if (requestedRightsToSpawn.Contains(metadata.Sender))
-                //    return true;
+                if (requestedRightsToSpawn.Contains(metadata.Sender))
+                    return true;
 
-                //if (!requestedRightsToSpawn.Contains(metadata.Sender))
-                //{
-                //    requestedRightsToSpawn.Add(metadata.Sender);
-                //    return true;
-                //}
+                if (!requestedRightsToSpawn.Contains(metadata.Sender))
+                {
+                    requestedRightsToSpawn.Add(metadata.Sender);
+                    return true;
+                }
 
-                return true;
+                return false;
             }));
         }
 
@@ -69,13 +69,18 @@ namespace Curiosity.Core.Server.Managers
                 {
                     int owner = NetworkGetEntityOwner(handle);
 
+                    if (PluginManager.PlayersList[owner] is not null || requestedRightsToSpawn.Contains(owner))
+                    {
+                        if (requestedRightsToSpawn.Contains(owner))
+                            requestedRightsToSpawn.Remove(owner);
+                        return;
+                    }
+
                     if (!requestedRightsToSpawn.Contains(owner))
                     {
                         DeleteEntity(handle);
                         CancelEvent();
                     }
-
-                    requestedRightsToSpawn.Remove(owner);
                 }
             }
         }
