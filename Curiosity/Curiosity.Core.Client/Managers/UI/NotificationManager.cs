@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -42,7 +43,9 @@ namespace Curiosity.Core.Client.Managers
             .Add("dismissible", dismissible)
             .Add("duration", duration);
 
-            API.SendNuiMessage(jb.Build());
+            string jsonMessage = jb.Build();
+
+            API.SendNuiMessage(jsonMessage);
         }
 
         internal void Loader(string message, string position = "bottom-right")
