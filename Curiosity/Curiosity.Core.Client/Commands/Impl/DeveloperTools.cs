@@ -259,6 +259,17 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "notification" })]
+        public class NotificationTest : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                string message = "";
+                message += "Fishing Mode has been activated<br>Fishing Mode has been activated<br>Fishing Mode has been activated<br>Fishing Mode has been activated<br>";
+
+                NotificationManager.GetModule().Success(message, "bottom-right");
+            }
+        }
 
         #endregion
 
