@@ -317,15 +317,26 @@ namespace Curiosity.Core.Server.Managers
 
         public void NetworkDeleteEntity(int networkId)
         {
-            int entityId = API.NetworkGetEntityFromNetworkId(networkId);
-
-            if (API.DoesEntityExist(entityId))
+            try
             {
-                Vehicle vehicle = new Vehicle(entityId);
+                int entityId = API.NetworkGetEntityFromNetworkId(networkId);
 
-                vehicle.State.Set(StateBagKey.ENTITY_DELETE, true, true);
+                if (API.DoesEntityExist(entityId))
+                {
+                    Vehicle vehicle = new Vehicle(entityId);
 
-                API.DeleteEntity(entityId);
+                    vehicle.State.Set(StateBagKey.ENTITY_DELETE, true, true);
+
+                    API.DeleteEntity(entityId);
+                }
+            }
+            catch(InvalidOperationException ioEx)
+            {
+                Logger.Error(ioEx, "NetworkDeleteEntity -> Possible entity doesn't exist");
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex, "NetworkDeleteEntity");
             }
         }
     }
