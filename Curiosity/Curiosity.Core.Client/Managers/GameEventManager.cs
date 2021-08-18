@@ -28,6 +28,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class GameEventManager : Manager<GameEventManager>
     {
+        public bool EnableDebug = false;
 
         public static event PlayerKillPlayerEvent OnPlayerKillPlayer;
         public static event PlayerKillPedEvent OnPlayerKillPed;
@@ -43,7 +44,8 @@ namespace Curiosity.Core.Client.Managers
 
         private void OnGameEventTriggered(string name, List<dynamic> args)
         {
-            // Logger.Debug($"game event {name} ({String.Join(", ", args.ToArray())})");
+            if (EnableDebug)
+                Logger.Debug($"game event {name} ({String.Join(", ", args.ToArray())})");
 
             try
             {

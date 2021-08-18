@@ -13,6 +13,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu settingsMenu;
 
         UIMenuListItem miDamageEffects;
+        UIMenuCheckboxItem miDevEnableGameEventLogger;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -20,6 +21,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.MouseEdgeEnabled = false;
 
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
+            menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnListChange += Menu_OnListChange;
 
             List<dynamic> effects = DamageEffectManager.GetModule().Effects.Select(x => x.Label).ToList();
@@ -44,6 +46,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             return menu;
         }
 
+        private void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        {
+            if (miDevEnableGameEventLogger is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableGameEventLogger)
+            {
+                GameEventManager.GetModule().EnableDebug = Checked;
+            }
+        }
+
         private async void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
             if (listItem == miDamageEffects)
@@ -59,16 +69,20 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            //if (state == MenuState.ChangeForward)
-            //    OnMenuOpen();
+            if (state == MenuState.ChangeForward)
+                OnMenuOpen(newMenu);
 
             ////if (state == MenuState.ChangeBackward)
             ////    settingsMenu.InstructionalButtons.Clear();
         }
 
-        private void OnMenuOpen()
+        private void OnMenuOpen(UIMenu menu)
         {
-            
+            if (Cache.Player.User.IsDeveloper && miDevEnableGameEventLogger is null)
+            {
+                miDevEnableGameEventLogger = new UIMenuCheckboxItem("Enable Game Event Logger", GameEventManager.GetModule().EnableDebug);
+                menu.AddItem(miDevEnableGameEventLogger);
+            }
         }
     }
 }
