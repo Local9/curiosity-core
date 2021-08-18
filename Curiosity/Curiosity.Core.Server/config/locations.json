@@ -60,6 +60,7 @@
           "isServerEvent": true,
           "isLegacyEvent": false,
           "isLuaEvent": false,
+          "setOnGround": true,
           "markerId": 1,
           "scale": {
             "X": 1.0,
@@ -126,6 +127,7 @@
           "isServerEvent": true,
           "isLegacyEvent": false,
           "isLuaEvent": false,
+          "setOnGround": true,
           "markerId": 1,
           "scale": {
             "X": 1.0,
@@ -240,6 +242,7 @@
           "isServerEvent": true,
           "isLegacyEvent": false,
           "isLuaEvent": false,
+          "setOnGround": true,
           "markerId": 1,
           "scale": {
             "X": 5.0,
@@ -340,6 +343,7 @@
           "isServerEvent": true,
           "isLegacyEvent": false,
           "isLuaEvent": false,
+          "setOnGround": true,
           "markerId": 1,
           "scale": {
             "X": 5.0,
