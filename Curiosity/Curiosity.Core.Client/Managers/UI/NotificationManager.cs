@@ -10,10 +10,10 @@ namespace Curiosity.Core.Client.Managers
     {
         public override void Begin()
         {
-            Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, bool>(
-                (notification, message, position, theme) =>
+            Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, int, bool>(
+                (notification, message, position, theme, duration) =>
                 {
-                    SendNui((Notification)notification, message, position, theme);
+                    SendNui((Notification)notification, message, position, theme, duration);
                     return true;
                 }));
 
@@ -30,14 +30,15 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
 
-        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "toast")
+        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "toast", int duration = 5000)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")
             .Add("type", $"{notification}")
             .Add("message", message)
             .Add("position", position)
-            .Add("theme", theme);
+            .Add("theme", theme)
+            .Add("duration", duration);
 
             API.SendNuiMessage(jb.Build());
         }
