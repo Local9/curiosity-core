@@ -302,9 +302,16 @@ namespace Curiosity.Core.Client.Managers.UI
 
             if (spawnType == SpawnType.Unknown)
             {
-                spawnType = vehicle.State.Get(StateBagKey.VEH_SPAWN_TYPE) ?? SpawnType.Vehicle;
+                int stateSpawnType = vehicle.State.Get(StateBagKey.VEH_SPAWN_TYPE) ?? 0;
+                if (stateSpawnType == 0)
+                {
+                    spawnType = SpawnType.Vehicle;
+                    goto MakeBlip;
+                }
+                spawnType = (SpawnType)stateSpawnType;
             }
 
+           MakeBlip:
             bool setBlip = false;
 
             if (spawnType == SpawnType.Vehicle)
