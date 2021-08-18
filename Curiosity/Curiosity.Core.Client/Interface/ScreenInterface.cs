@@ -53,7 +53,6 @@ namespace Curiosity.Core.Client.Interface
             { VehicleHash.Bus, 513 },
             { VehicleHash.PBus, 513 },
             { VehicleHash.RentalBus, 513 },
-            { VehicleHash.Phantom2, 528 },
             { VehicleHash.Dune4, 531 },
             { VehicleHash.Dune5, 531 },
         };
