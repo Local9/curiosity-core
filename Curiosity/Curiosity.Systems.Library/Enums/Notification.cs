@@ -16,6 +16,7 @@
         NOTIFICATION_ERROR, // 2 - Error
         NOTIFICATION_WARNING, // 3 - Warning
         NOTIFICATION_INFO, // 4 - Info
-        NOTIFICATION_SHOW // 5 - Default with no colors
+        NOTIFICATION_SHOW, // 5 - Default with no colors
+        NOTIFICATION_LOADER // 6 - Loading
     }
 }

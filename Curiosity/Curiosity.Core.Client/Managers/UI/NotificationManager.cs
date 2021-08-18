@@ -43,6 +43,11 @@ namespace Curiosity.Core.Client.Managers
             API.SendNuiMessage(jb.Build());
         }
 
+        internal void Loader(string message, string position = "bottom-right")
+        {
+            SendNui(Notification.NOTIFICATION_LOADER, message, position);
+        }
+
         internal void Success(string message, string position = "bottom-right")
         {
             SendNui(Notification.NOTIFICATION_SUCCESS, message, position);
