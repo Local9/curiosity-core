@@ -54,7 +54,8 @@ namespace Curiosity.Core.Client.Interface
             { VehicleHash.PBus, 513 },
             { VehicleHash.RentalBus, 513 },
             { VehicleHash.Phantom2, 528 },
-            { VehicleHash.Dune3, 531 }
+            { VehicleHash.Dune4, 531 },
+            { VehicleHash.Dune5, 531 },
         };
 
         public static bool TimeoutStateValue = false;
