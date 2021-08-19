@@ -214,13 +214,13 @@ namespace Curiosity.MissionManager.Client
 
         public void AttachTickHandler(Func<Task> task)
         {
-            Logger.Debug($"Attaching {task.Method.Name}");
+            // Logger.Debug($"Attaching {task.Method.Name}");
             Tick += task;
         }
 
         public void DetachTickHandler(Func<Task> task)
         {
-            Logger.Debug($"Detaching {task.Method.Name}");
+            // Logger.Debug($"Detaching {task.Method.Name}");
             Tick -= task;
         }
 
