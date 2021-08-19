@@ -162,7 +162,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE);
+                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE) ?? false;
 
                 if (_value == null)
                 {
@@ -184,7 +184,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT);
+                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT) ?? false;
 
                 if (_value == null)
                 {
@@ -206,7 +206,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE);
+                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE) ?? false;
 
                 if (_value == null)
                 {
@@ -228,7 +228,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY);
+                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY) ?? true;
 
                 if (_value == null)
                 {
@@ -259,7 +259,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_RELEASED);
+                var _value = Fx.State.Get(StateBagKey.PED_RELEASED) ?? false;
 
                 if (_value == null)
                 {

@@ -144,6 +144,7 @@ namespace Curiosity.MissionManager.Client
                 switch (reason)
                 {
                     case EndState.Pass:
+                    case EndState.Cleared:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
                         EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
                         break;
@@ -241,6 +242,26 @@ namespace Curiosity.MissionManager.Client
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Mission Failed", failReason);
 
             Stop(endState);
+        }
+
+        public async void PassButFailedRequirements(string reason)
+        {
+            if (isEndingMission) return;
+            isEndingMission = true;
+
+            MissionInfo info = Functions.GetMissionInfo(missionType);
+
+            if (info == null) return;
+
+            API.PlayMissionCompleteAudio("FRANKLIN_BIG_01");
+
+            while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
+
+            if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Cleared", $"{info.displayName} - {reason}");
+            else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Cleared", $"{info.displayName} - {reason}");
+            else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Cleared", $"{info.displayName} - {reason}");
+
+            Stop(EndState.Cleared) ;
         }
 
         public async void Pass()

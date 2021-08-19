@@ -85,6 +85,8 @@ namespace Curiosity.MissionManager.Client.Utils
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
 
+                    list["Ped Name"] = $"{ped.State.Get(StateBagKey.PED_FULLNAME) ?? string.Empty}";
+
                     list["Important"] = $"{ped.State.Get(StateBagKey.PED_IMPORTANT) ?? false}";
                     list["MissionPed"] = $"{ped.State.Get(StateBagKey.PED_MISSION) ?? false}";
                     list["Hostage"] = $"{ped.State.Get(StateBagKey.PED_HOSTAGE) ?? false}";
