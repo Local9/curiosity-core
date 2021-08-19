@@ -36,144 +36,137 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("entity:spawn:vehicle", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("entity:setup:vehicle", new AsyncEventCallback(async metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-                Player player = PluginManager.PlayersList[metadata.Sender];
-
-                int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
-
-                uint model = metadata.Find<uint>(0);
-                float x = metadata.Find<float>(1);
-                float y = metadata.Find<float>(2);
-                float z = metadata.Find<float>(3);
-                float h = metadata.Find<float>(4);
-
-                int vehicleId = API.CreateVehicle(model, x, y, z, h, true, true);
-
-                await BaseScript.Delay(0);
-
-                if (vehicleId == 0)
+                try
                 {
-                    Logger.Debug($"Possible OneSync is Disabled");
-                    return null;
-                }
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                    Player player = PluginManager.PlayersList[metadata.Sender];
 
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+                    int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
-                while (!API.DoesEntityExist(vehicleId))
-                {
+                    int networkId = metadata.Find<int>(0);
+                    int vehicleId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                    while (!API.DoesEntityExist(vehicleId))
+                    {
+                        await BaseScript.Delay(0);
+
+                        if (maxWaitTime < DateTime.UtcNow) break;
+                    }
+
+                    if (!API.DoesEntityExist(vehicleId))
+                    {
+                        Logger.Debug($"Failed to create vehicle in timely manner.");
+                        return null;
+                    }
+
                     await BaseScript.Delay(0);
 
-                    if (maxWaitTime < DateTime.UtcNow) break;
-                }
+                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+                    API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
-                if (!API.DoesEntityExist(vehicleId))
+                    await BaseScript.Delay(0);
+
+                    Vehicle veh = new Vehicle(vehicleId);
+                    veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                    veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                    veh.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                    veh.State.Set(StateBagKey.VEHICLE_MISSION, true, true);
+                    veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_SEARCH, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TOW, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_IMPORTANT, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_SETUP, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_HANDLE, 0, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
+                    veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
+
+                    return API.NetworkGetNetworkIdFromEntity(vehicleId);
+                }
+                catch (Exception ex)
                 {
-                    Logger.Debug($"Failed to create vehicle in timely manner.");
-                    return null;
+                    Logger.Error(ex, "Error setting up vehicle for mission");
+                    return 0;
                 }
-
-                await BaseScript.Delay(0);
-
-                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
-                API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
-
-                await BaseScript.Delay(0);
-
-                Vehicle veh = new Vehicle(vehicleId);
-                veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
-                veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
-                veh.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
-                veh.State.Set(StateBagKey.VEHICLE_MISSION, true, true);
-                veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_SEARCH, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_TOW, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_IMPORTANT, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_SETUP, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_HANDLE, 0, true);
-                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
-                veh.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_COMPLETED, false, true);
-
-                return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
-            EventSystem.GetModule().Attach("entity:spawn:ped", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("entity:setup:ped", new AsyncEventCallback(async metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-                Player player = PluginManager.PlayersList[metadata.Sender];
-
-                int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
-
-                int pedType = metadata.Find<int>(0);
-                uint model = metadata.Find<uint>(1);
-                float x = metadata.Find<float>(2);
-                float y = metadata.Find<float>(3);
-                float z = metadata.Find<float>(4);
-                float h = metadata.Find<float>(5);
-
-                int pedId = API.CreatePed(pedType, model, x, y, z, h, true, true);
-                await BaseScript.Delay(0);
-
-                if (pedId == 0)
+                try
                 {
-                    Logger.Debug($"Possible OneSync is Disabled");
-                    return null;
-                }
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                    Player player = PluginManager.PlayersList[metadata.Sender];
 
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+                    int routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
-                while (!API.DoesEntityExist(pedId))
-                {
+                    int networkId = metadata.Find<int>(0);
+                    int pedId = API.NetworkGetEntityFromNetworkId(networkId);
+
                     await BaseScript.Delay(0);
 
-                    if (maxWaitTime < DateTime.UtcNow) break;
+                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                    while (!API.DoesEntityExist(pedId))
+                    {
+                        await BaseScript.Delay(0);
+
+                        if (maxWaitTime < DateTime.UtcNow) break;
+                    }
+
+                    API.SetEntityRoutingBucket(pedId, (int)routingBucket);
+                    API.SetEntityDistanceCullingRadius(pedId, 15000f);
+
+                    await BaseScript.Delay(0);
+
+                    if (!API.DoesEntityExist(pedId))
+                    {
+                        Logger.Debug($"Failed to create ped in timely manner.");
+                        return null;
+                    }
+
+                    Ped ped = new Ped(pedId);
+                    ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                    ped.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                    ped.State.Set(StateBagKey.PED_SPAWNED, true, true);
+                    ped.State.Set(StateBagKey.PED_FLEE, false, true);
+                    ped.State.Set(StateBagKey.PED_SHOOT, false, true);
+                    ped.State.Set(StateBagKey.PED_FRIENDLY, false, true);
+                    ped.State.Set(StateBagKey.PED_ARREST, false, true);
+                    ped.State.Set(StateBagKey.PED_ARRESTED, false, true);
+                    ped.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
+                    ped.State.Set(StateBagKey.PED_SUSPECT, false, true);
+                    ped.State.Set(StateBagKey.PED_MISSION, true, true);
+                    ped.State.Set(StateBagKey.PED_IMPORTANT, false, true);
+                    ped.State.Set(StateBagKey.PED_HOSTAGE, false, true);
+                    ped.State.Set(StateBagKey.PED_RELEASED, false, true);
+                    ped.State.Set(StateBagKey.PED_HANDCUFFED, false, true);
+                    ped.State.Set(StateBagKey.PED_DIALOGUE, false, true);
+                    ped.State.Set(StateBagKey.PED_SETUP, false, true);
+                    ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
+                    // menu options
+                    ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0, true);
+                    ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
+                    ped.State.Set(StateBagKey.MENU_IDENTIFICATION, false, true);
+                    ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, false, true);
+                    ped.State.Set(StateBagKey.MENU_RAN_RED_LIGHT, false, true);
+                    ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
+                    ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
+                    ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
+
+                    return API.NetworkGetNetworkIdFromEntity(pedId);
+
                 }
-
-                API.SetEntityRoutingBucket(pedId, (int)routingBucket);
-                API.SetEntityDistanceCullingRadius(pedId, 15000f);
-
-                await BaseScript.Delay(0);
-
-                if (!API.DoesEntityExist(pedId))
+                catch (Exception ex)
                 {
-                    Logger.Debug($"Failed to create ped in timely manner.");
-                    return null;
+                    Logger.Error(ex, "Error setting up ped for mission");
+                    return 0;
                 }
-
-                Ped ped = new Ped(pedId);
-                ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
-                ped.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
-                ped.State.Set(StateBagKey.PED_SPAWNED, true, true);
-                ped.State.Set(StateBagKey.PED_FLEE, false, true);
-                ped.State.Set(StateBagKey.PED_SHOOT, false, true);
-                ped.State.Set(StateBagKey.PED_FRIENDLY, false, true);
-                ped.State.Set(StateBagKey.PED_ARREST, false, true);
-                ped.State.Set(StateBagKey.PED_ARRESTED, false, true);
-                ped.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
-                ped.State.Set(StateBagKey.PED_SUSPECT, false, true);
-                ped.State.Set(StateBagKey.PED_MISSION, true, true);
-                ped.State.Set(StateBagKey.PED_IMPORTANT, false, true);
-                ped.State.Set(StateBagKey.PED_HOSTAGE, false, true);
-                ped.State.Set(StateBagKey.PED_RELEASED, false, true);
-                ped.State.Set(StateBagKey.PED_HANDCUFFED, false, true);
-                ped.State.Set(StateBagKey.PED_DIALOGUE, false, true);
-                ped.State.Set(StateBagKey.PED_SETUP, false, true);
-                ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
-                // menu options
-                ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0, true);
-                ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
-                ped.State.Set(StateBagKey.MENU_IDENTIFICATION, false, true);
-                ped.State.Set(StateBagKey.MENU_WHAT_YOU_DOING, false, true);
-                ped.State.Set(StateBagKey.MENU_RAN_RED_LIGHT, false, true);
-                ped.State.Set(StateBagKey.MENU_SPEEDING, false, true);
-                ped.State.Set(StateBagKey.MENU_LANE_CHANGE, false, true);
-                ped.State.Set(StateBagKey.MENU_TAILGATING, false, true);
-
-                return API.NetworkGetNetworkIdFromEntity(pedId);
             }));
 
             EventSystem.GetModule().Attach("entity:spawn:prop", new AsyncEventCallback(async metadata =>
