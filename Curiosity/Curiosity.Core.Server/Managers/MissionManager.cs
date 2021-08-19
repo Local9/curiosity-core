@@ -834,7 +834,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10);
             await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, 5);
             await BaseScript.Delay(100);
-            EventSystem.GetModule().Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:c0}");
+            EventSystem.GetModule().Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:N0}");
 
             return true;
         }
@@ -871,7 +871,7 @@ namespace Curiosity.Core.Server.Managers
             await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_ARRESTS, 1);
             await BaseScript.Delay(100);
 
-            string message = $"Dispatch A.I.<br />XP Gained: {xpEarned:d0}<br />Cash: ${100:c0}";
+            string message = $"Dispatch A.I.<br />XP Gained: {xpEarned:d0}<br />Cash: ${100:N0}";
             string position = "right";
 
             EventSystem.GetModule().Send("mission:notification:success", serverHandle, message, position);
@@ -941,13 +941,13 @@ namespace Curiosity.Core.Server.Managers
 
                 if (numberOfFailures >= 3)
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "bottom-right");
+                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
                     await BaseScript.Delay(500);
                     EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"You require {numberOfFailures - 3:d0} or more successful callout(s) to earn full rewards.", "bottom-right");
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:c0}", "bottom-right");
+                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
                 }
             }
             else
