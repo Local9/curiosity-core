@@ -36,12 +36,14 @@ namespace Curiosity.Development.Missions
                 return;
             }
 
+            Mission.RegisterPed(criminal);
+
+            await BaseScript.Delay(1000);
+
             criminal.IsImportant = true;
             criminal.IsMission = true;
             criminal.IsSuspect = true;
             criminal.AttachSuspectBlip();
-
-            Mission.RegisterPed(criminal);
 
             Notify.Info($"Ped Created");
 

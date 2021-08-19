@@ -13,5 +13,6 @@
         Restart,
         FailPlayersDead,
         TrafficStop,
+        Cleared,
     }
 }

@@ -71,6 +71,7 @@
         public const string PED_SETUP = "c::ped::setup";
         public const string PED_IS_DRIVER = "c::ped::driver";
         public const string PED_SPAWNED = "c::ped::spawned";
+        public const string PED_FULLNAME = "c::ped::fullname";
 
         public const string MENU_RANDOM_RESPONSE = "c::menu::random";
         public const string MENU_WELCOME = "c::menu::welcome";
@@ -89,6 +90,7 @@
         public const string VEH_SIREN_BLIP = "v::siren::blip";
         public const string VEH_SIREN_AIRHORN = "v::siren::airhorn";
         public const string VEH_SIREN_SOUNDID = "v::siren::soundId";
+        
         #endregion
     }
 }

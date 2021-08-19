@@ -65,7 +65,7 @@ namespace Curiosity.StolenVehicle.Missions
                 locationBlip = Functions.SetupLocationBlip(location);
                 RegisterBlip(locationBlip);
 
-                while (location.Distance(Game.PlayerPed.Position) > 50f)
+                while (location.Distance(Game.PlayerPed.Position) > 150f)
                 {
                     await BaseScript.Delay(100);
                 }
@@ -154,7 +154,7 @@ namespace Curiosity.StolenVehicle.Missions
                     locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
                     RegisterBlip(locationBlip);
 
-                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 100f)
+                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 150f)
                     {
                         await BaseScript.Delay(100);
                     }
@@ -163,6 +163,7 @@ namespace Curiosity.StolenVehicle.Missions
                         locationBlip.Delete();
 
                     thief = await PedSpawnRandom(spawnLocation);
+                    await BaseScript.Delay(1000);
 
                     if (thief is null)
                     {

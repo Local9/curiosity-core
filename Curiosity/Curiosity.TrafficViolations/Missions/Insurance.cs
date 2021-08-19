@@ -62,7 +62,7 @@ namespace Curiosity.TrafficViolations.Missions
             Blip locationBlip = Functions.SetupLocationBlip(location);
             RegisterBlip(locationBlip);
 
-            while (location.Distance(Game.PlayerPed.Position) > 50f)
+            while (location.Distance(Game.PlayerPed.Position) > 250f)
             {
                 await BaseScript.Delay(100);
             }
@@ -71,6 +71,7 @@ namespace Curiosity.TrafficViolations.Missions
                 locationBlip.Delete();
 
             suspectVehicle = await this.VehicleSpawn(vehicleHashes.Random(), location);
+            await BaseScript.Delay(1000);
 
             if (suspectVehicle is null)
             {

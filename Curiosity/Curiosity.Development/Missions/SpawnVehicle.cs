@@ -19,6 +19,8 @@ namespace Curiosity.Development.Missions
         {
             _vehicle = await VehicleSpawn(VehicleHash.Adder, Players[0].Character.Position.Around(3f, 4f));
 
+            await BaseScript.Delay(1000);
+
             RegisteredVehicles.Add(_vehicle);
 
             _vehicle.Fx.IsEngineRunning = false;
