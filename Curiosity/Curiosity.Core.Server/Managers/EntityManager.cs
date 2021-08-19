@@ -52,7 +52,7 @@ namespace Curiosity.Core.Server.Managers
 
                     while (!API.DoesEntityExist(vehicleId))
                     {
-                        await BaseScript.Delay(0);
+                        await BaseScript.Delay(100);
 
                         if (maxWaitTime < DateTime.UtcNow) break;
                     }
@@ -110,7 +110,7 @@ namespace Curiosity.Core.Server.Managers
 
                     while (!API.DoesEntityExist(pedId))
                     {
-                        await BaseScript.Delay(0);
+                        await BaseScript.Delay(100);
 
                         if (maxWaitTime < DateTime.UtcNow) break;
                     }

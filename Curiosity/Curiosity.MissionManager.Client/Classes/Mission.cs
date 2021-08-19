@@ -540,8 +540,6 @@ namespace Curiosity.MissionManager.Client
                 API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(fxPed.Handle, true);
 
-                await EventSystem.GetModule().Request<bool>("entity:setup:ped", fxPed.NetworkId);
-
                 // await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
                 await BaseScript.Delay(100);
@@ -551,6 +549,9 @@ namespace Curiosity.MissionManager.Client
 
                 API.NetworkRequestControlOfNetworkId(pedNetworkId);
                 await BaseScript.Delay(0);
+
+                Logger.Debug($"Ped NetworkID: {pedNetworkId}");
+                await EventSystem.GetModule().Request<int>("entity:setup:ped", fxPed.NetworkId);
 
                 while (!API.NetworkHasControlOfEntity(pedId))
                 {
@@ -619,7 +620,8 @@ namespace Curiosity.MissionManager.Client
                 API.NetworkRequestControlOfNetworkId(pedNetworkId);
                 await BaseScript.Delay(0);
 
-                await EventSystem.GetModule().Request<bool>("entity:setup:ped", fxPed.NetworkId);
+                Logger.Debug($"Ped NetworkID: {pedNetworkId}");
+                await EventSystem.GetModule().Request<int>("entity:setup:ped", fxPed.NetworkId);
 
                 model.MarkAsNoLongerNeeded();
 
@@ -672,7 +674,8 @@ namespace Curiosity.MissionManager.Client
                 API.SetNetworkIdCanMigrate(fxVehicle.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(fxVehicle.Handle, true);
 
-                await EventSystem.GetModule().Request<bool>("entity:setup:vehicle", fxVehicle.NetworkId);
+                Logger.Debug($"Ped NetworkID: {vehNetworkId}");
+                await EventSystem.GetModule().Request<int>("entity:setup:vehicle", fxVehicle.NetworkId);
 
                 model.MarkAsNoLongerNeeded();
 

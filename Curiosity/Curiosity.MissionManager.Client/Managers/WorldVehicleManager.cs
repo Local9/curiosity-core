@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Diagnostics;
-using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Concurrent;
