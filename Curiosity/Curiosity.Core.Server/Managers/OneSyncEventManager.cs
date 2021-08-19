@@ -5,6 +5,7 @@ using System;
 using static CitizenFX.Core.Native.API;
 using System.Collections.Generic;
 using CitizenFX.Core;
+using Curiosity.Systems.Library.Enums;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -75,10 +76,31 @@ namespace Curiosity.Core.Server.Managers
 
                         if (!requestedRightsToSpawn.Contains(owner))
                         {
+                            int entityType = GetEntityType(handle);
+
+                            if (entityType == 1)
+                            {
+                                Ped ped = new Ped(handle);
+                                bool isScriptCreated = ped.State.Get(StateBagKey.PED_MISSION) ?? false;
+
+                                if (isScriptCreated)
+                                    goto MoveForwards;
+                            }
+
+                            if (entityType == 2)
+                            {
+                                Vehicle vehicle = new Vehicle(handle);
+                                bool isScriptCreated = vehicle.State.Get(StateBagKey.VEHICLE_MISSION) ?? false;
+
+                                if (isScriptCreated)
+                                    goto MoveForwards;
+                            }
+
                             DeleteEntity(handle);
                             CancelEvent();
                         }
 
+                    MoveForwards:
                         requestedRightsToSpawn.Remove(owner);
                     }
                 }
