@@ -521,7 +521,7 @@ namespace Curiosity.MissionManager.Client
 
                 await EventSystem.GetModule().Request<bool>("entity:setup:ped", fxPed.NetworkId);
 
-                await fxPed.FadeOut();
+                // await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
                 await BaseScript.Delay(100);
                 int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
@@ -591,14 +591,14 @@ namespace Curiosity.MissionManager.Client
                 API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(fxPed.Handle, true);
 
-                await EventSystem.GetModule().Request<bool>("entity:setup:ped", fxPed.NetworkId);
-
-                await fxPed.FadeOut();
+                // await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
                 await BaseScript.Delay(100);
                 int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
                 API.NetworkRequestControlOfNetworkId(pedNetworkId);
                 await BaseScript.Delay(0);
+
+                await EventSystem.GetModule().Request<bool>("entity:setup:ped", fxPed.NetworkId);
 
                 model.MarkAsNoLongerNeeded();
 
@@ -640,9 +640,7 @@ namespace Curiosity.MissionManager.Client
             if (requestLogged)
             {
                 CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
-                await fxVehicle.FadeOut();
-
-                await EventSystem.GetModule().Request<bool>("entity:setup:vehicle", fxVehicle.NetworkId);
+                // await fxVehicle.FadeOut();
 
                 int vehNetworkId = fxVehicle.NetworkId;
                 await BaseScript.Delay(100);
@@ -652,6 +650,8 @@ namespace Curiosity.MissionManager.Client
                 API.SetNetworkIdExistsOnAllMachines(fxVehicle.NetworkId, true);
                 API.SetNetworkIdCanMigrate(fxVehicle.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(fxVehicle.Handle, true);
+
+                await EventSystem.GetModule().Request<bool>("entity:setup:vehicle", fxVehicle.NetworkId);
 
                 model.MarkAsNoLongerNeeded();
 

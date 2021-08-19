@@ -59,13 +59,11 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!API.DoesEntityExist(vehicleId))
                     {
-                        Logger.Debug($"Failed to create vehicle in timely manner.");
+                        Logger.Debug($"Failed to find the vehicle '{networkId}'/'{vehicleId}'.");
                         return null;
                     }
 
-                    await BaseScript.Delay(0);
-
-                    API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+                    API.SetEntityDistanceCullingRadius(vehicleId, 300f);
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                     await BaseScript.Delay(0);
@@ -108,8 +106,6 @@ namespace Curiosity.Core.Server.Managers
                     int networkId = metadata.Find<int>(0);
                     int pedId = API.NetworkGetEntityFromNetworkId(networkId);
 
-                    await BaseScript.Delay(0);
-
                     DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
 
                     while (!API.DoesEntityExist(pedId))
@@ -119,16 +115,14 @@ namespace Curiosity.Core.Server.Managers
                         if (maxWaitTime < DateTime.UtcNow) break;
                     }
 
-                    API.SetEntityRoutingBucket(pedId, (int)routingBucket);
-                    API.SetEntityDistanceCullingRadius(pedId, 15000f);
-
-                    await BaseScript.Delay(0);
-
                     if (!API.DoesEntityExist(pedId))
                     {
-                        Logger.Debug($"Failed to create ped in timely manner.");
+                        Logger.Debug($"Failed to find the Ped. '{networkId}'/'{pedId}'");
                         return null;
                     }
+
+                    API.SetEntityRoutingBucket(pedId, routingBucket);
+                    API.SetEntityDistanceCullingRadius(pedId, 300f);
 
                     Ped ped = new Ped(pedId);
                     ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
@@ -303,7 +297,7 @@ namespace Curiosity.Core.Server.Managers
 
             API.SetEntityRoutingBucket(objectId, (int)routingBucket);
 
-            API.SetEntityDistanceCullingRadius(objectId, 15000f);
+            API.SetEntityDistanceCullingRadius(objectId, 300f);
 
             return API.NetworkGetNetworkIdFromEntity(objectId);
         }

@@ -138,7 +138,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                 if (_value == null)
                 {
-                    Fx.State.Set($"{StateBagKey.PED_MISSION}", false, true);
+                    Fx.State.Set(StateBagKey.PED_MISSION, false, true);
                     return false;
                 }
                 else
@@ -151,7 +151,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 Logger.Debug($"IsMission: {value}");
 
                 Fx.IsPersistent = value;
-                Fx.State.Set($"{StateBagKey.PED_MISSION}", value, true);
+                Fx.State.Set(StateBagKey.PED_MISSION, value, true);
                 EventSystem.Send("mission:update:ped:mission", Fx.NetworkId, value);
 
                 Logger.Debug($"IsMission: {value}");
@@ -433,9 +433,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 base.MaxHealth = 200;
                 base.Health = 200;
 
-                await BaseScript.Delay(10);
-
-                if (Utility.RANDOM.Bool(0.75f) && !IsKneeling && IsArrestable)
+                if (!IsKneeling && IsArrestable)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
