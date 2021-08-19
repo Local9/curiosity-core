@@ -68,6 +68,7 @@ namespace Curiosity.StolenVehicle
         ChaseActive,
         Escaped,
         End,
-        SuspectDied
+        SuspectDied,
+        Error
     }
 }

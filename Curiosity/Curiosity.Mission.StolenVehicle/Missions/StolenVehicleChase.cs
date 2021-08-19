@@ -206,6 +206,9 @@ namespace Curiosity.StolenVehicle.Missions
                 case MissionState.SuspectDied:
                     Fail("Suspect dead.");
                     break;
+                case MissionState.Error:
+                    Stop(EndState.Error);
+                    break;
                 case MissionState.End:
                     Pass();
                     break;
