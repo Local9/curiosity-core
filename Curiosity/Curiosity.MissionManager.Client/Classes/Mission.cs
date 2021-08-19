@@ -146,12 +146,12 @@ namespace Curiosity.MissionManager.Client
                     case EndState.Pass:
                     case EndState.Cleared:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
-                        EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
+                        EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested, reason == EndState.Cleared);
                         break;
                     case EndState.Fail:
                     case EndState.FailPlayersDead:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
-                        EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested);
+                        EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested, false);
                         break;
                     case EndState.ForceEnd:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 10));
