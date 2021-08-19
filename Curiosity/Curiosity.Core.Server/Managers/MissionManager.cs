@@ -241,6 +241,7 @@ namespace Curiosity.Core.Server.Managers
                 ped.State.Set(StateBagKey.PED_DIALOGUE, false, true);
                 ped.State.Set(StateBagKey.PED_SETUP, false, true);
                 ped.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
+                ped.State.Set(StateBagKey.PED_FULLNAME, missionDataPed.FullName, true);
                 // menu options
                 ped.State.Set(StateBagKey.MENU_RANDOM_RESPONSE, 0, true);
                 ped.State.Set(StateBagKey.MENU_WELCOME, false, true);
