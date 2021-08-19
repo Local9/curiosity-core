@@ -42,14 +42,14 @@ namespace Curiosity.Mugging.Missions
             switch(missionState)
             {
                 case MissionState.Start:
-                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 50f)
+                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 250f)
                         missionState = MissionState.SpawnPeds;
                     break;
                 case MissionState.SpawnPeds:
 
                     criminal = await this.PedSpawnRandom(spawnPoint, pedType: PedType.PED_TYPE_CRIMINAL);
-                    await BaseScript.Delay(100);
                     victim = await this.PedSpawnRandom(spawnPoint);
+                    await BaseScript.Delay(1000);
 
                     if (criminal is null || victim is null)
                     {
@@ -82,7 +82,7 @@ namespace Curiosity.Mugging.Missions
                     missionState = MissionState.SpawnedPeds;
                     break;
                 case MissionState.SpawnedPeds:
-                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 30f)
+                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 100f)
                         missionState = MissionState.StartScene;
                     break;
                 case MissionState.StartScene:
@@ -123,7 +123,7 @@ namespace Curiosity.Mugging.Missions
             if (NumberPedsArrested == 0)
             {
                 if (criminal != null && criminal.IsDead)
-                    Fail($"Suspect is dead...");
+                    PassButFailedRequirements($"Suspect is dead...");
             }
         }
     }
