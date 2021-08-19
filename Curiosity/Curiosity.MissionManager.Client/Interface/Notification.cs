@@ -39,7 +39,7 @@ namespace Curiosity.MissionManager.Client.Interface
 
         private static void UxNotification(Notification notification, string message, string position = "bottom-right", string theme = "snackbar")
         {
-            PluginManager.Instance.ExportRegistry["curiosity-client"].Notification((int)notification, message, position, theme);
+            PluginManager.Instance.ExportRegistry["curiosity-client"].Notification((int)notification, message, position, theme, 5000, true, false);
         }
 
         public static void Custom(string message, bool blink = true, bool saveToBrief = true, int bgColor = 2)
