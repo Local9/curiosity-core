@@ -154,6 +154,7 @@ namespace Curiosity.Core.Server.Managers
                 string missionId = missionData.ID;
                 bool passed = metadata.Find<bool>(0);
                 int numberTransportArrested = metadata.Find<int>(1);
+                bool passButFailed = metadata.Find<bool>(2);
 
                 int numberOfFailures = 0;
 
@@ -168,7 +169,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Logger.Debug($"{player.Name} : NumFail: {numberOfFailures}");
 
-                Mission res = await MissionCompleted(metadata.Sender, missionId, passed, numberTransportArrested, numberOfFailures);
+                Mission res = await MissionCompleted(metadata.Sender, missionId, passed, numberTransportArrested, numberOfFailures, passButFailed);
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
@@ -184,7 +185,7 @@ namespace Curiosity.Core.Server.Managers
                     {
                         await RecordBackup(serverHandle);
                         await BaseScript.Delay(10);
-                        await MissionCompleted(serverHandle, missionId, passed, 1, 0);
+                        await MissionCompleted(serverHandle, missionId, passed, 1, 0, passButFailed);
                     }
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
 
@@ -880,7 +881,7 @@ namespace Curiosity.Core.Server.Managers
             return true;
         }
 
-        async Task<Mission> MissionCompleted(int serverHandle, string missionId, bool passed, int numTransportArrested, int numberOfFailures)
+        async Task<Mission> MissionCompleted(int serverHandle, string missionId, bool passed, int numTransportArrested, int numberOfFailures, bool passButFailed)
         {
             if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return null;
             CuriosityUser curUser = PluginManager.ActiveUsers[serverHandle];
@@ -920,6 +921,14 @@ namespace Curiosity.Core.Server.Managers
                     repReward = 0;
                     cashMin = (int)(cashMin * .1f);
                     cashMax = (int)(cashMax * .1f);
+                }
+
+                if (passButFailed)
+                {
+                    xpReward = (int)(xpReward * .5f);
+                    repReward = (int)(repReward * .5f);
+                    cashMin = (int)(cashMin * .5f);
+                    cashMax = (int)(cashMax * .5f);
                 }
 
                 int money = Utility.RANDOM.Next(cashMin, cashMax);
