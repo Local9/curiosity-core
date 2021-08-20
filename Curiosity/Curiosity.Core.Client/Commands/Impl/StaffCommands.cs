@@ -71,7 +71,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 string name = ent.State.Get(StateBagKey.CURIOSITY_CREATED) ?? "unknown";
 
-                Notify.Alert($"Entity Created By;~n~{name}~n~PopType: {popType}");
+                Notify.Alert($"Entity Created By;~n~{name}~n~PopType: {(PopulationType)popType}");
             }
         }
 
