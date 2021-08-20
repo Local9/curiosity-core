@@ -44,7 +44,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
 
-            if (Game.PlayerPed.IsInVehicle())
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
             {
                 vehicle = Game.PlayerPed.CurrentVehicle;
             }
