@@ -6,6 +6,7 @@ using static CitizenFX.Core.Native.API;
 using System.Collections.Generic;
 using CitizenFX.Core;
 using Curiosity.Systems.Library.Enums;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -23,23 +24,27 @@ namespace Curiosity.Core.Server.Managers
 
         List<int> requestedRightsToSpawn = new List<int>();
 
+        Queue<int> queueEntitysCreated = new Queue<int>();
+
         public override void Begin()
         {
             Logger.Debug($"[INIT] OneSyncEventManager");
-            Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
+            // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
             // Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
             EventSystem.GetModule().Attach("onesync:request", new EventCallback(metadata => {
-                if (requestedRightsToSpawn.Contains(metadata.Sender))
-                    return true;
+                return true;
 
-                if (!requestedRightsToSpawn.Contains(metadata.Sender))
-                {
-                    requestedRightsToSpawn.Add(metadata.Sender);
-                    return true;
-                }
+                //if (requestedRightsToSpawn.Contains(metadata.Sender))
+                //    return true;
 
-                return false;
+                //if (!requestedRightsToSpawn.Contains(metadata.Sender))
+                //{
+                //    requestedRightsToSpawn.Add(metadata.Sender);
+                //    return true;
+                //}
+
+                //return false;
             }));
         }
 
@@ -48,9 +53,62 @@ namespace Curiosity.Core.Server.Managers
             if (DoesEntityExist(handle))
             {
                 int owner = NetworkGetEntityOwner(handle);
-                if (requestedRightsToSpawn.Contains(owner))
+                Player player = PluginManager.PlayersList[owner];
+
+                int populationType = GetEntityPopulationType(handle);
+
+                if (player is not null && populationType == (int)PopulationType.MISSION)
+                    queueEntitysCreated.Enqueue(handle);
+            }
+        }
+
+        [TickHandler]
+        private async Task OnEntityQueue()
+        {
+            if (queueEntitysCreated.Count == 0)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
+
+            while(queueEntitysCreated.Count > 0)
+            {
+                int handle = queueEntitysCreated.Peek();
+
+                if (!DoesEntityExist(handle))
                 {
-                    requestedRightsToSpawn.Remove(owner);
+                    queueEntitysCreated.Dequeue();
+                    continue;
+                }
+
+                int owner = NetworkGetEntityOwner(handle);
+                Player player = PluginManager.PlayersList[owner];
+
+                if (player is not null)
+                {
+                    int entityType = GetEntityType(handle);
+                    bool isScriptCreated = false;
+
+                    if (entityType == 1)
+                    {
+                        Ped ped = new Ped(handle);
+                        isScriptCreated = ped.State.Get(StateBagKey.CURIOSITY_CREATED) ?? false;
+                    }
+
+                    if (entityType == 2)
+                    {
+                        Vehicle vehicle = new Vehicle(handle);
+                        isScriptCreated = vehicle.State.Get(StateBagKey.CURIOSITY_CREATED) ?? false;
+                    }
+
+                    if (!isScriptCreated)
+                    {
+                        DeleteEntity(handle);
+                    }
+                }
+                else
+                {
+                    queueEntitysCreated.Dequeue();
                 }
             }
         }
