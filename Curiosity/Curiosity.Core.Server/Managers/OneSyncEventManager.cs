@@ -58,12 +58,13 @@ namespace Curiosity.Core.Server.Managers
                     if (player is null) return;
 
                     int entityType = GetEntityType(handle);
-                    int entityPopulation = GetEntityPopulationType(handle);
-                    PopulationType population = (PopulationType)entityPopulation;
 
-                    bool expectedPopulation = Equals(population, PopulationType.MISSION) || Equals(population, PopulationType.PERMANENT);
+                    //int entityPopulation = GetEntityPopulationType(handle);
+                    //PopulationType population = (PopulationType)entityPopulation;
 
-                    if (!expectedPopulation) return;
+                    //bool expectedPopulation = Equals(population, PopulationType.MISSION) || Equals(population, PopulationType.PERMANENT);
+
+                    //if (!expectedPopulation) return;
 
                     Entity entity = null;
 
