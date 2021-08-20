@@ -55,6 +55,8 @@ namespace Curiosity.Core.Server.Managers
                     int owner = NetworkGetEntityOwner(handle);
                     Player player = PluginManager.PlayersList[owner];
 
+                    if (player is null) return;
+
                     int entityType = GetEntityType(handle);
 
                     Entity entity = null;
