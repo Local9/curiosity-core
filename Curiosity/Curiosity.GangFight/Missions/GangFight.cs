@@ -97,6 +97,8 @@ namespace Curiosity.Mugging.Missions
                                 b.Sprite = BlipSprite.Enemy;
                                 b.Color = BlipColor.Red;
                                 b.Scale = 0.5f;
+
+                                RegisterBlip(b);
                             }
 
                             pedsToTrack.Add(ped);
