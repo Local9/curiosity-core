@@ -34,6 +34,9 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
 
+                if (srvVeh is null)
+                    return vehicles;
+
                 foreach (VehicleItem v in srvVeh)
                 {
                     var m = new
