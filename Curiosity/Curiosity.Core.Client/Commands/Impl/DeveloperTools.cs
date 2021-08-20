@@ -40,6 +40,20 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+        [CommandInfo(new[] { "yeet" })]
+        public class Yeet : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Entity ent = Game.PlayerPed.GetEntityInFront();
+
+                float randX = PluginManager.Rand.Next(3, 40);
+                float randY = PluginManager.Rand.Next(3, 40);
+                float randZ = PluginManager.Rand.Next(100, 400);
+
+                ent.Velocity = new Vector3(randX, randY, randZ);
+            }
+        }
 
         [CommandInfo(new[] { "anim" })]
         public class Animation : ICommand
@@ -107,7 +121,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
+                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
                 Notify.Info($"~n~NetId: {vehicle.NetworkId}~n~Hndl: {vehicle.Handle}");
             }
         }
