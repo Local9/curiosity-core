@@ -59,17 +59,19 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Entity entityToDelete = Cache.PlayerPed.GetEntityInFront();
+                Entity ent = Cache.PlayerPed.GetEntityInFront();
 
-                if (entityToDelete == null)
+                if (ent == null)
                 {
                     Notify.Alert($"No entity found.");
                     return;
                 }
 
-                string name = entityToDelete.State.Get(StateBagKey.CURIOSITY_CREATED) ?? "unknown";
+                int popType = API.GetEntityPopulationType(ent.Handle);
 
-                Notify.Alert($"Entity Created By;~n~{name}");
+                string name = ent.State.Get(StateBagKey.CURIOSITY_CREATED) ?? "unknown";
+
+                Notify.Alert($"Entity Created By;~n~{name}~n~PopType: {popType}");
             }
         }
 
