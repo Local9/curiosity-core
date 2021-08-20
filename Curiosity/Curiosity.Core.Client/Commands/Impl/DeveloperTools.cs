@@ -192,6 +192,12 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 position.Z = World.GetGroundHeight(position) + 2;
 
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    API.SetPedCoordsKeepVehicle(Game.PlayerPed.Handle, position.X, position.Y, position.Z);
+                    return;
+                }
+
                 await player.Entity.Teleport(position.ToPosition());
             }
         }
@@ -210,6 +216,12 @@ namespace Curiosity.Core.Client.Commands.Impl
                     float z = float.Parse(arguments[2]);
 
                     var position = new Vector3(x, y, z);
+
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        API.SetPedCoordsKeepVehicle(Game.PlayerPed.Handle, position.X, position.Y, position.Z);
+                        return;
+                    }
 
                     await player.Entity.Teleport(position.ToPosition());
                 }
