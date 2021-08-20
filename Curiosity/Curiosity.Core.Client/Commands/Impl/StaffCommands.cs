@@ -54,6 +54,25 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         #region Entities
 
+        [CommandInfo(new[] { "creator", "c" })]
+        public class EntityCreator : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Entity entityToDelete = Cache.PlayerPed.GetEntityInFront();
+
+                if (entityToDelete == null)
+                {
+                    Notify.Alert($"No entity found.");
+                    return;
+                }
+
+                string name = entityToDelete.State.Get(StateBagKey.CURIOSITY_CREATED) ?? "unknown";
+
+                Notify.Alert($"Entity Created By;~n~{name}");
+            }
+        }
+
         [CommandInfo(new[] { "del" })]
         public class EntityDespawner : ICommand
         {

@@ -24,13 +24,11 @@ namespace Curiosity.Core.Server.Managers
 
         List<int> requestedRightsToSpawn = new List<int>();
 
-        Queue<int> queueEntitysCreated = new Queue<int>();
-
         public override void Begin()
         {
             Logger.Debug($"[INIT] OneSyncEventManager");
             // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
-            // Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
+            Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
             EventSystem.GetModule().Attach("onesync:request", new EventCallback(metadata => {
                 return true;
@@ -50,66 +48,33 @@ namespace Curiosity.Core.Server.Managers
 
         private void OnEntityCreated(int handle)
         {
-            if (DoesEntityExist(handle))
+            try
             {
-                int owner = NetworkGetEntityOwner(handle);
-                Player player = PluginManager.PlayersList[owner];
-
-                int populationType = GetEntityPopulationType(handle);
-
-                if (player is not null && populationType == (int)PopulationType.MISSION)
-                    queueEntitysCreated.Enqueue(handle);
-            }
-        }
-
-        [TickHandler]
-        private async Task OnEntityQueue()
-        {
-            if (queueEntitysCreated.Count == 0)
-            {
-                await BaseScript.Delay(1000);
-                return;
-            }
-
-            while(queueEntitysCreated.Count > 0)
-            {
-                int handle = queueEntitysCreated.Peek();
-
-                if (!DoesEntityExist(handle))
+                if (DoesEntityExist(handle))
                 {
-                    queueEntitysCreated.Dequeue();
-                    continue;
-                }
+                    int owner = NetworkGetEntityOwner(handle);
+                    Player player = PluginManager.PlayersList[owner];
 
-                int owner = NetworkGetEntityOwner(handle);
-                Player player = PluginManager.PlayersList[owner];
-
-                if (player is not null)
-                {
                     int entityType = GetEntityType(handle);
-                    bool isScriptCreated = false;
 
-                    if (entityType == 1)
-                    {
-                        Ped ped = new Ped(handle);
-                        isScriptCreated = ped.State.Get(StateBagKey.CURIOSITY_CREATED) ?? false;
-                    }
+                    Entity entity = null;
+
+                    if (entityType == 1) 
+                        entity = new Ped(handle);
 
                     if (entityType == 2)
-                    {
-                        Vehicle vehicle = new Vehicle(handle);
-                        isScriptCreated = vehicle.State.Get(StateBagKey.CURIOSITY_CREATED) ?? false;
-                    }
+                        entity = new Vehicle(handle);
 
-                    if (!isScriptCreated)
-                    {
-                        DeleteEntity(handle);
-                    }
+                    if (entityType == 3)
+                        entity = new Prop(handle);
+
+                    if (entity is not null) 
+                        entity.State.Set(StateBagKey.CURIOSITY_CREATED, player.Name, true);
                 }
-                else
-                {
-                    queueEntitysCreated.Dequeue();
-                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
