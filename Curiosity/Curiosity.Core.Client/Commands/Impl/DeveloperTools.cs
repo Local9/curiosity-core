@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Enums;
@@ -40,6 +41,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+
         [CommandInfo(new[] { "yeet" })]
         public class Yeet : ICommand
         {
@@ -52,6 +54,15 @@ namespace Curiosity.Core.Client.Commands.Impl
                 float randZ = PluginManager.Rand.Next(100, 400);
 
                 ent.Velocity = new Vector3(randX, randY, randZ);
+            }
+        }
+
+        [CommandInfo(new[] { "mod" })]
+        public class ModVehicleMenu : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                VehicleModMenu.GetModule().OpenMenu();
             }
         }
 
