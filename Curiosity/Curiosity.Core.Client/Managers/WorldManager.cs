@@ -149,6 +149,14 @@ namespace Curiosity.Core.Client.Managers
             RemoveIpl("vw_dlc_casino_door");
             RemoveIpl("vw_dlc_casino_door_lod");
 
+            RemoveIpl("tr_tuner_meetup");
+            RemoveIpl("tr_tuner_race_line");
+            RemoveIpl("tr_tuner_shop_burton");
+            RemoveIpl("tr_tuner_shop_mesa");
+            RemoveIpl("tr_tuner_shop_mission");
+            RemoveIpl("tr_tuner_shop_rancho");
+            RemoveIpl("tr_tuner_shop_strawberry");
+
             SwitchTrainTrack(3, false); // Enable Metro
         }
 
@@ -222,6 +230,14 @@ namespace Curiosity.Core.Client.Managers
             RequestIpl("xn_h4_islandx_terrain_04_slod");
             RequestIpl("xn_h4_islandx_terrain_05_slod");
             RequestIpl("xn_h4_islandx_terrain_06_slod");
+
+            RequestIpl("tr_tuner_meetup");
+            RequestIpl("tr_tuner_race_line");
+            RequestIpl("tr_tuner_shop_burton");
+            RequestIpl("tr_tuner_shop_mesa");
+            RequestIpl("tr_tuner_shop_mission");
+            RequestIpl("tr_tuner_shop_rancho");
+            RequestIpl("tr_tuner_shop_strawberry");
         }
 
         //[TickHandler(SessionWait = true)]
