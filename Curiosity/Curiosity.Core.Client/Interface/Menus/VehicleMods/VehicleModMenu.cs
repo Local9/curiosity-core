@@ -181,17 +181,22 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         {
             if (selectedItem == miCloseMenu)
             {
-                Instance.DetachTickHandler(OnMenuCreate);
-
-                mainMenu.InstructionalButtons.Clear();
-
-                if (mainMenu.Visible)
-                    mainMenu.Visible = false;
+                CloseModMenu();
             }
             else if (selectedItem == miSaveVehicle)
             {
                 SaveVehicle();
             }
+        }
+
+        private void CloseModMenu()
+        {
+            Instance.DetachTickHandler(OnMenuCreate);
+
+            mainMenu.InstructionalButtons.Clear();
+
+            if (mainMenu.Visible)
+                mainMenu.Visible = false;
         }
 
         private async void SaveVehicle()
@@ -288,6 +293,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                     if (saved)
                     {
                         NotificationManager.GetModule().Success($"Vehicle has been saved");
+                        CloseModMenu();
                     }
                     else
                     {
