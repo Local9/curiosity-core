@@ -198,17 +198,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
 
-                    Vector3 postionSpawn = returnedSpawnPosition;
-                    postionSpawn.Z = postionSpawn.Z - 50f;
+                    Vector3 postionSpawn = new Vector3(227.9327f, -988.5748f, -98.99995f); // create vehicles in a controlled location
+                    vehicle = await World.CreateVehicle(vehModel, postionSpawn, 181.2576f);
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsCollisionEnabled = false;
 
-                    vehicle = await World.CreateVehicle(vehModel, postionSpawn, vehicleItem.Heading);
-                   
                     API.NetworkRequestControlOfEntity(vehicle.Handle);
 
                     vehicle.IsPersistent = true;
                     vehicle.PreviouslyOwnedByPlayer = true;
-                    vehicle.IsPositionFrozen = true;
-                    vehicle.IsCollisionEnabled = false;
 
                     await vehicle.FadeOut();
 
@@ -239,15 +237,11 @@ namespace Curiosity.Core.Client.Managers.UI
                         return new { success = false };
                     }
 
-                    vehicle.Position = returnedSpawnPosition;
-
                     vehicle.PlaceOnGround();
 
                     vehicle.RadioStation = RadioStation.RadioOff;
 
                     await BaseScript.Delay(100);
-
-                    Vector3 pos = vehicle.Position;
 
                     vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
 
@@ -291,10 +285,13 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     await BaseScript.Delay(100);
 
-                    API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
+                    API.SetNewWaypoint(returnedSpawnPosition.X, returnedSpawnPosition.Y);
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;
+
+                    vehicle.Position = returnedSpawnPosition;
+                    vehicle.Heading = vehicleItem.Heading;
 
                     API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 

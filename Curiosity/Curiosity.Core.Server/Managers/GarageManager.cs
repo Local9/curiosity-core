@@ -73,7 +73,8 @@ namespace Curiosity.Core.Server.Managers
 
                     if (success)
                     {
-                        await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -5000);
+                        long characterAmount = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -5000);
+                        curiosityUser.Character.Cash = characterAmount;
                         return exportMessage;
                     }
                     else
