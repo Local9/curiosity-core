@@ -80,6 +80,7 @@
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleColorSubMenu.cs" />
+    <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleExtrasSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleModSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleNeonSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\VehicleModMenu.cs" />
