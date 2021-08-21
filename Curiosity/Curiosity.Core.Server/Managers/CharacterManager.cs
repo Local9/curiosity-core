@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_HANDLE, player.Handle, true);
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, true, true);
 
-                API.SetPlayerCullingRadius($"{metadata.Sender}", 300.0f);
+                API.SetPlayerCullingRadius($"{metadata.Sender}", 800.0f);
 
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
                 u.RoutingBucket = 0;

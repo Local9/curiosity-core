@@ -24,6 +24,9 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
+
+        static Vector3 positionSave = Vector3.Zero;
+
         #region Player
         [CommandInfo(new[] { "god" })]
         public class Godmode : ICommand
@@ -404,5 +407,30 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
         #endregion
+
+        [CommandInfo(new[] { "distance" })]
+        public class Distance : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    Chat.SendLocalMessage($"Missing position index.");
+                    return;
+                }
+
+                if (arguments[0] == $"{1}")
+                {
+                    positionSave = Game.PlayerPed.Position;
+                }
+                else
+                {
+                    if (positionSave != Vector3.Zero)
+                    {
+                        Logger.Debug($"{positionSave.Distance(Game.PlayerPed.Position)}");
+                    }
+                }
+            }
+        }
     }
 }

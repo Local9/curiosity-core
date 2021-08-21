@@ -28,14 +28,14 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
-            EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
-            {
-                string job = IsOfficer ? "unemployed" : JOB_POLICE;
-                OnJobDutyEvent(true, false, job);
-                await BaseScript.Delay(100);
-                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job); // for legacy resources
-                return null;
-            }));
+            //EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
+            //{
+            //    string job = IsOfficer ? "unemployed" : JOB_POLICE;
+            //    OnJobDutyEvent(true, false, job);
+            //    await BaseScript.Delay(100);
+            //    BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job); // for legacy resources
+            //    return null;
+            //}));
 
             // LEGACY
             Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnJobDutyEvent);
