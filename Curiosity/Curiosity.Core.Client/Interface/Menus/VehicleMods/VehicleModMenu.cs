@@ -29,14 +29,16 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         private UIMenu vehicleModMenu;
         private VehicleModSubMenu vehicleModSubMenu = new VehicleModSubMenu();
         private UIMenu vehicleNeonMenu;
-        private VehicleNeonSubMenu VehicleNeonSubMenu = new VehicleNeonSubMenu();
-
+        private VehicleNeonSubMenu vehicleNeonSubMenu = new VehicleNeonSubMenu();
         private UIMenu vehicleColorMenu;
+        private VehicleColorSubMenu vehicleColorSubMenu = new VehicleColorSubMenu();
+
         private UIMenuCheckboxItem uiChkXenonHeadlights;
         private UIMenuCheckboxItem uiChkTurbo;
         private UIMenuCheckboxItem uiChkBulletProofTires;
         private UIMenuCheckboxItem uiChkCustomWheels;
         private UIMenuCheckboxItem uiChkTireSmoke;
+
         private UIMenuListItem uiLstWindowTint;
         private UIMenuListItem uiLstHeadlightColor;
         private UIMenuItem closeMenu;
@@ -45,9 +47,6 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         List<dynamic> headlightColor = new List<dynamic>() { "White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Blacklight", "Default Xenon" };
         List<dynamic> windowTints = new List<dynamic>() { "Stock", "None", "Limo", "Light Smoke", "Dark Smoke", "Pure Black", "Green" };
-        
-
-
 
         public override void Begin()
         {
@@ -63,11 +62,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             vehicleModSubMenu.Create(vehicleModMenu);
 
             vehicleNeonMenu = _MenuPool.AddSubMenu(mainMenu, "Neon Kits");
-            VehicleNeonSubMenu.Create(vehicleNeonMenu);
+            vehicleNeonSubMenu.Create(vehicleNeonMenu);
 
             vehicleColorMenu = _MenuPool.AddSubMenu(mainMenu, "Colors");
-
-
+            vehicleColorSubMenu.Create(vehicleColorMenu);
 
             uiLstWindowTint = new UIMenuListItem("Window Tint", windowTints, 0);
             uiLstWindowTint.Description = "Apply tint to your windows.";
