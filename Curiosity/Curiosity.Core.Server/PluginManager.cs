@@ -334,7 +334,8 @@ namespace Curiosity.Core.Server
 
                 if (commandName.ToLower() == "save")
                 {
-                    SavePlayers();
+                    Logger.Info($"<- Save Start ->");
+                    SavePlayers(true);
                 }
 
                 if (commandName.ToLower() == "missions")
@@ -483,46 +484,60 @@ namespace Curiosity.Core.Server
             {
                 foreach (var users in ActiveUsers)
                 {
-                    await SaveOperation(users.Value);
+                    try
+                    {
+                        await SaveOperation(users.Value);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
 
                 Dictionary<int, CuriosityUser> auCopy = new Dictionary<int, CuriosityUser>(ActiveUsers);
 
                 foreach (KeyValuePair<int, CuriosityUser> kvp in auCopy)
                 {
-                    if (Players[kvp.Key] is null)
+                    try
                     {
-                        int playerHandle = kvp.Key;
-                        int playerVehicle = kvp.Value.PersonalVehicle;
-                        int playerBoat = kvp.Value.PersonalBoat;
-                        int playerTrailer = kvp.Value.PersonalTrailer;
-                        int playerPlane = kvp.Value.PersonalPlane;
-                        int playerHelicopter = kvp.Value.PersonalHelicopter;
-
-                        ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
-                        bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
-
-                        if (userHadMission)
+                        if (Players[kvp.Key] is null)
                         {
-                            MissionData mission = MissionManager.ActiveMissions[playerHandle];
-                            foreach (int partyMember in mission.PartyMembers)
-                            {
-                                EventSystem.GetModule().Send("mission:backup:completed", partyMember);
-                            }
-                        }
+                            int playerHandle = kvp.Key;
+                            int playerVehicle = kvp.Value.PersonalVehicle;
+                            int playerBoat = kvp.Value.PersonalBoat;
+                            int playerTrailer = kvp.Value.PersonalTrailer;
+                            int playerPlane = kvp.Value.PersonalPlane;
+                            int playerHelicopter = kvp.Value.PersonalHelicopter;
 
-                        EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
-                        await Delay(100);
-                        EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
-                        await Delay(100);
-                        EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
-                        await Delay(100);
-                        EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
-                        await Delay(100);
-                        EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
-                        await Delay(100);
-                        MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
-                        MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
+                            ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
+                            bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
+
+                            if (userHadMission)
+                            {
+                                MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                                foreach (int partyMember in mission.PartyMembers)
+                                {
+                                    EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                                }
+                            }
+
+                            EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                            await Delay(100);
+                            EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                            await Delay(100);
+                            EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                            await Delay(100);
+                            EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                            await Delay(100);
+                            EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
+                            await Delay(100);
+                            MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
+                            MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
                     }
                 }
 
