@@ -14,19 +14,95 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
         UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
 
+        UIMenuCheckboxItem uiChkDriftTires;
+        bool driftTiresEnabled = false;
+
+        List<int> driftVehicleHashes = new List<int>();
+
         public UIMenu CreateMenu(UIMenu menu)
         {
+            int growler = GetHashKey("growler");
+            driftVehicleHashes.Add(growler);
+            int vectre = GetHashKey("vectre");
+            driftVehicleHashes.Add(vectre);
+            int dominatorASP = GetHashKey("dominator7");
+            driftVehicleHashes.Add(dominatorASP);
+            int comet = GetHashKey("comet6");
+            driftVehicleHashes.Add(comet);
+            int remus = GetHashKey("remus");
+            driftVehicleHashes.Add(remus);
+            int jester = GetHashKey("jester4");
+            driftVehicleHashes.Add(jester);
+            int tailgater = GetHashKey("tailgater2");
+            driftVehicleHashes.Add(tailgater);
+            int warrener = GetHashKey("warrener2");
+            driftVehicleHashes.Add(warrener);
+            int rt3000 = GetHashKey("rt3000");
+            driftVehicleHashes.Add(rt3000);
+            int zr350 = GetHashKey("zr350");
+            driftVehicleHashes.Add(zr350);
+            int dominatorGTT = GetHashKey("dominator8");
+            driftVehicleHashes.Add(dominatorGTT);
+            int euros = GetHashKey("euros");
+            driftVehicleHashes.Add(euros);
+            int futo2 = GetHashKey("futo2");
+            driftVehicleHashes.Add(futo2);
+            int calicoGTF = GetHashKey("calico");
+            driftVehicleHashes.Add(calicoGTF);
+
             menuVehicleRemote = InteractionMenu.MenuPool.AddSubMenu(menu, "Vehicle Remote Functions");
             _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
 
+            uiChkDriftTires = new UIMenuCheckboxItem("Enable Drift Tires", driftTiresEnabled);
+
+            menu.AddItem(uiChkDriftTires);
             menu.AddItem(uiVehicleLock);
 
             menu.OnListChange += Menu_OnListChange;
+            menu.OnCheckboxChange += Menu_OnCheckboxChange;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             menu.MouseControlsEnabled = false;
             menu.MouseEdgeEnabled = false;
 
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
+            {
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                if (IsDriftSupported())
+                {
+                    driftTiresEnabled = GetDriftTyresEnabled(vehicle.Handle);
+                    uiChkDriftTires.Checked = driftTiresEnabled;
+                    uiChkDriftTires.Enabled = true;
+                }
+                else
+                {
+                    uiChkDriftTires.Checked = false;
+                    uiChkDriftTires.Enabled = false;
+                }
+            }
+        }
+
+        private bool IsDriftSupported()
+        {
+            int vehicleHash = Game.PlayerPed.CurrentVehicle.Model.Hash;
+            return driftVehicleHashes.Contains(vehicleHash);
+        }
+
+        private void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        {
+            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+            if (checkboxItem == uiChkDriftTires)
+            {
+                SetDriftTyresEnabled(vehicle.Handle, Checked);
+                SetReduceDriftVehicleSuspension(vehicle.Handle, Checked);
+            }
         }
 
         private async void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
