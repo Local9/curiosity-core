@@ -220,6 +220,24 @@ namespace Curiosity.Core.Client.Managers
 
             if (player.Character.MarkedAsRegistered)
             {
+                Vector3 charPos = position.AsVector();
+                Vector3 spawnPos = Vector3.Zero;
+                float spawnHeading = 0f;
+
+                Vector3 spawnRoad = Vector3.Zero;
+
+                API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
+                API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
+
+                spawnRoad.Z = World.GetGroundHeight(spawnRoad) + 2;
+
+                position.X = spawnRoad.X;
+                position.Y = spawnRoad.Y;
+                position.Z = spawnRoad.Z;
+                position.H = spawnHeading;
+
+                await SafeTeleport.Teleport(API.PlayerPedId(), position);
+
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
