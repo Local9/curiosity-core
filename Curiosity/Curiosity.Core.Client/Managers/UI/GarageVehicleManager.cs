@@ -198,7 +198,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
 
-                    Vector3 postionSpawn = new Vector3(405.9228f, -954.1149f, -99.6627f); // create vehicles in a controlled location
+                    Vector3 postionSpawn = returnedSpawnPosition; // create vehicles in a controlled location
+                    postionSpawn.Z = postionSpawn.Z - 50f;
                     vehicle = await World.CreateVehicle(vehModel, postionSpawn, 181.2576f);
 
                     vehicle.IsPositionFrozen = true;
