@@ -33,6 +33,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         private VehicleColorSubMenu vehicleColorSubMenu = new VehicleColorSubMenu();
         private UIMenu vehicleExtraMenu;
         private VehicleExtrasSubMenu vehicleExtrasSubMenu = new VehicleExtrasSubMenu();
+        private UIMenu vehicleLiveriesMenu;
+        private VehicleLiveriesSubMenu vehicleLiveriesSubMenu = new VehicleLiveriesSubMenu();
 
         private UIMenuCheckboxItem uiChkXenonHeadlights;
         private UIMenuCheckboxItem uiChkTurbo;
@@ -71,6 +73,9 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             vehicleExtraMenu = _MenuPool.AddSubMenu(mainMenu, "Extras");
             vehicleExtrasSubMenu.Create(vehicleExtraMenu);
+
+            vehicleLiveriesMenu = _MenuPool.AddSubMenu(mainMenu, "Liveries");
+            vehicleLiveriesSubMenu.Create(vehicleLiveriesMenu);
 
             uiLstWindowTint = new UIMenuListItem("Window Tint", windowTints, 0);
             uiLstWindowTint.Description = "Apply tint to your windows.";
