@@ -155,6 +155,13 @@ namespace Curiosity.Core.Client.Managers
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
 
+            if (Game.PlayerPed.Exists())
+            {
+                Game.PlayerPed.Position = new Vector3(405.9228f, -954.1149f, -99.6627f);
+                Game.PlayerPed.IsPositionFrozen = true;
+                Game.PlayerPed.IsInvincible = true;
+            }
+
             Screen.Fading.FadeOut(0);
 
             while (Screen.Fading.IsFadingOut)
@@ -239,6 +246,9 @@ namespace Curiosity.Core.Client.Managers
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
+
+                Game.PlayerPed.IsPositionFrozen = false;
+                Game.PlayerPed.IsInvincible = false;
             }
             else
             {
