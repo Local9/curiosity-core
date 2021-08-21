@@ -399,67 +399,75 @@ namespace Curiosity.Core.Client.Managers.UI
 
         private static async void ApplyVehicleModsDelayed(Vehicle vehicle, VehicleInfo vehicleInfo, int delay)
         {
-            if (vehicle != null && vehicle.Exists())
+            try
             {
-                vehicle.Mods.InstallModKit();
-                // set the extras
-                foreach (var extra in vehicleInfo.extras)
+                if (vehicle != null && vehicle.Exists())
                 {
-                    if (DoesExtraExist(vehicle.Handle, extra.Key))
-                        vehicle.ToggleExtra(extra.Key, extra.Value);
-                }
+                    vehicle.Mods.InstallModKit();
+                    // set the extras
 
-                SetVehicleWheelType(vehicle.Handle, vehicleInfo.wheelType);
-                SetVehicleMod(vehicle.Handle, 23, 0, vehicleInfo.customWheels);
-                if (vehicle.Model.IsBike)
-                {
-                    SetVehicleMod(vehicle.Handle, 24, 0, vehicleInfo.customWheels);
-                }
-                ToggleVehicleMod(vehicle.Handle, 18, vehicleInfo.turbo);
-                SetVehicleTyreSmokeColor(vehicle.Handle, vehicleInfo.colors["tyresmokeR"], vehicleInfo.colors["tyresmokeG"], vehicleInfo.colors["tyresmokeB"]);
-                ToggleVehicleMod(vehicle.Handle, 20, vehicleInfo.tyreSmoke);
-                ToggleVehicleMod(vehicle.Handle, 22, vehicleInfo.xenonHeadlights);
-                SetVehicleLivery(vehicle.Handle, vehicleInfo.livery);
-
-                SetVehicleColours(vehicle.Handle, vehicleInfo.colors["primary"], vehicleInfo.colors["secondary"]);
-                SetVehicleInteriorColour(vehicle.Handle, vehicleInfo.colors["trim"]);
-                SetVehicleDashboardColour(vehicle.Handle, vehicleInfo.colors["dash"]);
-
-                SetVehicleExtraColours(vehicle.Handle, vehicleInfo.colors["pearlescent"], vehicleInfo.colors["wheels"]);
-
-                SetVehicleNumberPlateText(vehicle.Handle, vehicleInfo.plateText);
-                SetVehicleNumberPlateTextIndex(vehicle.Handle, vehicleInfo.plateStyle);
-
-                SetVehicleWindowTint(vehicle.Handle, vehicleInfo.windowTint);
-
-                vehicle.CanTiresBurst = !vehicleInfo.bulletProofTires;
-
-                SetVehicleEnveffScale(vehicle.Handle, vehicleInfo.enveffScale);
-
-                VehicleModMenu._SetHeadlightsColorOnVehicle(vehicle, vehicleInfo.headlightColor);
-
-                vehicle.Mods.NeonLightsColor = System.Drawing.Color.FromArgb(red: vehicleInfo.colors["neonR"], green: vehicleInfo.colors["neonG"], blue: vehicleInfo.colors["neonB"]);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, vehicleInfo.neonLeft);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, vehicleInfo.neonRight);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, vehicleInfo.neonFront);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, vehicleInfo.neonBack);
-
-                void DoMods()
-                {
-                    vehicleInfo.mods.ToList().ForEach(mod =>
+                    foreach (var extra in vehicleInfo.extras)
                     {
-                        if (vehicle != null && vehicle.Exists())
-                            SetVehicleMod(vehicle.Handle, mod.Key, mod.Value, vehicleInfo.customWheels);
-                    });
-                }
+                        if (DoesExtraExist(vehicle.Handle, extra.Key))
+                            vehicle.ToggleExtra(extra.Key, extra.Value);
+                    }
 
-                DoMods();
-                // Performance mods require a delay after setting the modkit,
-                // so we just do it once first so all the visual mods load instantly,
-                // and after a small delay we do it again to make sure all performance
-                // mods have also loaded.
-                await BaseScript.Delay(delay);
-                DoMods();
+                    SetVehicleWheelType(vehicle.Handle, vehicleInfo.wheelType);
+                    SetVehicleMod(vehicle.Handle, 23, 0, vehicleInfo.customWheels);
+                    if (vehicle.Model.IsBike)
+                    {
+                        SetVehicleMod(vehicle.Handle, 24, 0, vehicleInfo.customWheels);
+                    }
+                    ToggleVehicleMod(vehicle.Handle, 18, vehicleInfo.turbo);
+                    SetVehicleTyreSmokeColor(vehicle.Handle, vehicleInfo.colors["tyresmokeR"], vehicleInfo.colors["tyresmokeG"], vehicleInfo.colors["tyresmokeB"]);
+                    ToggleVehicleMod(vehicle.Handle, 20, vehicleInfo.tyreSmoke);
+                    ToggleVehicleMod(vehicle.Handle, 22, vehicleInfo.xenonHeadlights);
+                    SetVehicleLivery(vehicle.Handle, vehicleInfo.livery);
+
+                    SetVehicleColours(vehicle.Handle, vehicleInfo.colors["primary"], vehicleInfo.colors["secondary"]);
+                    SetVehicleInteriorColour(vehicle.Handle, vehicleInfo.colors["trim"]);
+                    SetVehicleDashboardColour(vehicle.Handle, vehicleInfo.colors["dash"]);
+
+                    SetVehicleExtraColours(vehicle.Handle, vehicleInfo.colors["pearlescent"], vehicleInfo.colors["wheels"]);
+
+                    SetVehicleNumberPlateText(vehicle.Handle, vehicleInfo.plateText);
+                    SetVehicleNumberPlateTextIndex(vehicle.Handle, vehicleInfo.plateStyle);
+
+                    SetVehicleWindowTint(vehicle.Handle, vehicleInfo.windowTint);
+
+                    vehicle.CanTiresBurst = !vehicleInfo.bulletProofTires;
+
+                    SetVehicleEnveffScale(vehicle.Handle, vehicleInfo.enveffScale);
+
+                    VehicleModMenu._SetHeadlightsColorOnVehicle(vehicle, vehicleInfo.headlightColor);
+
+                    vehicle.Mods.NeonLightsColor = System.Drawing.Color.FromArgb(red: vehicleInfo.colors["neonR"], green: vehicleInfo.colors["neonG"], blue: vehicleInfo.colors["neonB"]);
+                    vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, vehicleInfo.neonLeft);
+                    vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, vehicleInfo.neonRight);
+                    vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, vehicleInfo.neonFront);
+                    vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, vehicleInfo.neonBack);
+
+                    void DoMods()
+                    {
+                        vehicleInfo.mods.ToList().ForEach(mod =>
+                        {
+                            if (vehicle != null && vehicle.Exists())
+                                SetVehicleMod(vehicle.Handle, mod.Key, mod.Value, vehicleInfo.customWheels);
+                        });
+                    }
+
+                    DoMods();
+                    // Performance mods require a delay after setting the modkit,
+                    // so we just do it once first so all the visual mods load instantly,
+                    // and after a small delay we do it again to make sure all performance
+                    // mods have also loaded.
+                    await BaseScript.Delay(delay);
+                    DoMods();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

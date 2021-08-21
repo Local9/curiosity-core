@@ -289,6 +289,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                     {
                         NotificationManager.GetModule().Success($"Vehicle has been saved");
                     }
+                    else
+                    {
+                        NotificationManager.GetModule().Error($"Unable to save vehicle<ul><li>Maybe you don't own it</li><li>Did you spawn it?</li></ul>");
+                    }
                 };
             }
         }
