@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -73,6 +74,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
+                Notify.Info($"Welcome to the force");
             }
             else if (!IsOfficer && WasOfficer)
             {
@@ -86,6 +88,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 MissionDirectorManager.Director.TurnOffMissionDirector();
                 WorldVehicleManager.VehicleManager.Stop();
+                Notify.Info($"No longer a police officer");
 
                 await BaseScript.Delay(100);
             }
@@ -147,7 +150,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(0);
             }
 
-            string description = "~w~Guides can be found via the Tablet [~o~F11/HOME~w~].\n";
+            string description = "~w~Guides can be found via the Tablet [~o~HOME~w~].\n";
             description += "~r~~h~DO NOT~h~~w~ Pull over other players.\n";
             description += "~r~~h~DO NOT~h~~w~ Drive recklessly.\n";
             description += "~r~~h~DO NOT~h~~w~ Force people to RolePlay, doing so will get you kicked.\n";
