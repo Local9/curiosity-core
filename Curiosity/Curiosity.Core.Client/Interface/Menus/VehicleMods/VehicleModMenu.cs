@@ -6,6 +6,7 @@ using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -44,6 +45,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         private UIMenuListItem uiLstWindowTint;
         private UIMenuListItem uiLstHeadlightColor;
+        private UIMenuListItem uiLstTireSmoke;
+
         private UIMenuItem miSaveVehicle;
         private UIMenuItem miCloseMenu;
 
@@ -52,9 +55,24 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         List<dynamic> headlightColor = new List<dynamic>() { "White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Blacklight", "Default Xenon" };
         List<dynamic> windowTints = new List<dynamic>() { "Stock", "None", "Limo", "Light Smoke", "Dark Smoke", "Pure Black", "Green" };
 
+        List<dynamic> tireSmokes = new List<dynamic>() { "Red", "Orange", "Yellow", "Gold", "Light Green", "Dark Green", "Light Blue", "Dark Blue", "Purple", "Pink", "Black" };
+        Dictionary<string, int[]> tireSmokeColors = new Dictionary<string, int[]>()
+        {
+            ["Red"] = new int[] { 244, 65, 65 },
+            ["Orange"] = new int[] { 244, 167, 66 },
+            ["Yellow"] = new int[] { 244, 217, 65 },
+            ["Gold"] = new int[] { 181, 120, 0 },
+            ["Light Green"] = new int[] { 158, 255, 84 },
+            ["Dark Green"] = new int[] { 44, 94, 5 },
+            ["Light Blue"] = new int[] { 65, 211, 244 },
+            ["Dark Blue"] = new int[] { 24, 54, 163 },
+            ["Purple"] = new int[] { 108, 24, 192 },
+            ["Pink"] = new int[] { 192, 24, 172 },
+            ["Black"] = new int[] { 1, 1, 1 }
+        };
+
         public override void Begin()
         {
-
             _MenuPool = new MenuPool();
 
             // create menu
@@ -97,6 +115,9 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             uiLstHeadlightColor = new UIMenuListItem("Headlight Color", headlightColor, 0);
             mainMenu.AddItem(uiLstHeadlightColor);
 
+            uiChkTireSmoke = new UIMenuCheckboxItem("Tire Smoke", false);
+            uiLstTireSmoke = new UIMenuListItem("Smoke Color", tireSmokes, 0);
+
             miSaveVehicle = new UIMenuItem("Save");
             mainMenu.AddItem(miSaveVehicle);
 
@@ -133,6 +154,30 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 if (IsThisModelABike((uint)GetEntityModel(vehicle.Handle)))
                 {
                     SetVehicleMod(vehicle.Handle, 24, GetVehicleMod(vehicle.Handle, 24), GetVehicleModVariation(vehicle.Handle, 23));
+                }
+            }
+            else if (checkboxItem == uiChkTireSmoke)
+            {
+                if (Checked)
+                {
+                    // Enable it.
+                    ToggleVehicleMod(vehicle.Handle, 20, true);
+                    // Get the selected color values.
+                    var r = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][0];
+                    var g = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][1];
+                    var b = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][2];
+                    // Set the color.
+                    SetVehicleTyreSmokeColor(vehicle.Handle, r, g, b);
+                }
+                // If it should be disabled:
+                else
+                {
+                    // Set the smoke to white.
+                    SetVehicleTyreSmokeColor(vehicle.Handle, 255, 255, 255);
+                    // Disable it.
+                    ToggleVehicleMod(vehicle.Handle, 20, false);
+                    // Remove the mod.
+                    RemoveVehicleMod(vehicle.Handle, 20);
                 }
             }
         }
@@ -179,6 +224,16 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 {
                     _SetHeadlightsColorOnVehicle(vehicle, newIndex);
                 }
+            }
+            else if (listItem == uiLstTireSmoke)
+            {
+                // Get the selected color values.
+                var r = tireSmokeColors[tireSmokes[newIndex]][0];
+                var g = tireSmokeColors[tireSmokes[newIndex]][1];
+                var b = tireSmokeColors[tireSmokes[newIndex]][2];
+
+                // Set the color.
+                SetVehicleTyreSmokeColor(vehicle.Handle, r, g, b);
             }
         }
 
@@ -351,12 +406,26 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         private void MainMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
+            if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
+            {
+                Vehicle veh = Game.PlayerPed.CurrentVehicle;
+                int smoker = 0, smokeg = 0, smokeb = 0;
+                GetVehicleTyreSmokeColor(veh.Handle, ref smoker, ref smokeg, ref smokeb);
+                var item = tireSmokeColors.ToList().Find((f) => { return (f.Value[0] == smoker && f.Value[1] == smokeg && f.Value[2] == smokeb); });
+                int index = tireSmokeColors.ToList().IndexOf(item);
+                if (index < 0)
+                {
+                    index = 0;
+                }
 
+                uiLstTireSmoke.Index = index;
 
-            //uiChkBulletProofTires.Checked = !GetVehicleTyresCanBurst(vehicle.Handle);
-            //uiChkCustomWheels.Checked = IsToggleModOn(vehicle.Handle, 23);
-            //uiChkTurbo.Checked = IsToggleModOn(vehicle.Handle, 18);
-            //uiChkXenonHeadlights.Checked = IsToggleModOn(vehicle.Handle, 22);
+                uiChkTireSmoke.Checked = IsToggleModOn(veh.Handle, 20);
+                uiChkBulletProofTires.Checked = !GetVehicleTyresCanBurst(veh.Handle);
+                uiChkCustomWheels.Checked = IsToggleModOn(veh.Handle, 23);
+                uiChkTurbo.Checked = IsToggleModOn(veh.Handle, 18);
+                uiChkXenonHeadlights.Checked = IsToggleModOn(veh.Handle, 22);
+            }
         }
 
         internal static int _GetHeadlightsColorFromVehicle(Vehicle vehicle)
