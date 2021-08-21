@@ -78,6 +78,9 @@
     <Compile Include="Interface\Menus\SubMenu\JobMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
+    <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleColorSubMenu.cs" />
+    <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleModSubMenu.cs" />
+    <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleNeonSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\VehicleModMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
