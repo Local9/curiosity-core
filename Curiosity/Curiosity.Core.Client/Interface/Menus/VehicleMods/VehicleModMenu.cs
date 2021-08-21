@@ -52,7 +52,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         {
 
             _MenuPool = new MenuPool();
-            _MenuPool.MouseEdgeEnabled = false;
+
             // create menu
             mainMenu = new UIMenu("Vehicle Mod Menu", "Modify your vehicle");
 

@@ -28,15 +28,28 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     "Street"        // 11
                 };
 
+        private int baseMenuIndex = 0;
+
         internal void Create(UIMenu vehicleModMenu)
         {
             menu = vehicleModMenu;
+            menu.MouseControlsEnabled = false;
+
+            menu.OnIndexChange += (sender, newIndex) =>
+            {
+                baseMenuIndex = newIndex;
+            };
 
             menu.OnMenuStateChanged += (oldMenu, newMenu, state) =>
             {
                 if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
                 {
                     UpdateMods();
+                }
+
+                if (newMenu == menu && state == MenuState.ChangeBackward)
+                {
+                    menu.CurrentSelection = baseMenuIndex;
                 }
             };
         }
