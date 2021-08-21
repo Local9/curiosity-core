@@ -179,6 +179,45 @@ namespace Curiosity.Core.Client.Commands.Impl
         #endregion
 
         #region Positions
+        [CommandInfo(new[] { "tuner" })]
+        public class Tuner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Vector3 position = new Vector3(-2134, 1106, -27);
+
+                API.RequestIpl("tr_tuner_meetup");
+                API.RequestIpl("tr_tuner_race_line");
+
+                int interiorId = API.GetInteriorAtCoords(-2000.0f, 1113.211f, -25.36243f);
+
+                if (API.IsValidInterior(interiorId))
+                    API.RefreshInterior(interiorId);
+
+                // API.ActivateInteriorEntitySet(interiorId, "entity_set_meet_crew");
+                API.ActivateInteriorEntitySet(interiorId, "entity_set_meet_lights");
+                API.ActivateInteriorEntitySet(interiorId, "entity_set_meet_lights_cheap");
+                // API.ActivateInteriorEntitySet(interiorId, "entity_set_player"); // ugly flag
+                // API.ActivateInteriorEntitySet(interiorId, "entity_set_test_crew");
+                API.ActivateInteriorEntitySet(interiorId, "entity_set_test_lights");
+                API.ActivateInteriorEntitySet(interiorId, "entity_set_test_lights_cheap");
+                API.ActivateInteriorEntitySet(interiorId, "entity_set_time_trial");
+
+                if (API.IsValidInterior(interiorId))
+                    API.RefreshInterior(interiorId);
+
+                // position.Z = World.GetGroundHeight(position) + 2;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    API.SetPedCoordsKeepVehicle(Game.PlayerPed.Handle, position.X, position.Y, position.Z);
+                    return;
+                }
+
+                await player.Entity.Teleport(position.ToPosition());
+            }
+        }
+
         [CommandInfo(new[] { "tpm" })]
         public class TeleportMarker : ICommand
         {
