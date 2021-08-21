@@ -7,7 +7,6 @@ using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.Creator;
-using Curiosity.Core.Client.Interface.Menus.Data;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;

@@ -1,10 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Curiosity.Core.Client.Diagnostics;
 
 namespace Curiosity.Core.Client.Managers
 {

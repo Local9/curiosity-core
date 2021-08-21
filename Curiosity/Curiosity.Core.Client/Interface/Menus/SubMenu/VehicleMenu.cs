@@ -1,8 +1,7 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
 using NativeUI;
-using System;
 using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

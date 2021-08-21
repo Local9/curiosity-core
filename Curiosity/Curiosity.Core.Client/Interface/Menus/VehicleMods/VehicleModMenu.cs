@@ -5,8 +5,6 @@ using Curiosity.Core.Client.Managers;
 using NativeUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -189,6 +187,16 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         public void OpenMenu()
         {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                return;
+            }
+
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver != Game.PlayerPed)
+            {
+                return;
+            }
+
             Instance.AttachTickHandler(OnMenuCreate);
         }
 

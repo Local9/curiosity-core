@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core.Native;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Managers
+﻿namespace Curiosity.Core.Client.Managers
 {
     public class PopulationManipulation : Manager<PopulationManipulation>
     {

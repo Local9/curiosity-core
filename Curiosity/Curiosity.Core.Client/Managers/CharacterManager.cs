@@ -5,8 +5,6 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.net.Extensions;
-using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;
 
