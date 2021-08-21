@@ -200,7 +200,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     Vector3 postionSpawn = returnedSpawnPosition; // create vehicles in a controlled location
                     postionSpawn.Z = postionSpawn.Z - 50f;
-                    vehicle = await World.CreateVehicle(vehModel, postionSpawn, 181.2576f);
+                    vehicle = await World.CreateVehicle(vehModel, postionSpawn, vehicleItem.Heading);
 
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
