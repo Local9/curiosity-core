@@ -2,6 +2,7 @@
 using Curiosity.Core.Client.Diagnostics;
 using NativeUI;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
@@ -45,13 +46,23 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
                 {
                     UpdateMods();
+                    PluginManager.Instance.AttachTickHandler(TestHorn);
                 }
 
                 if (newMenu == menu && state == MenuState.ChangeBackward)
                 {
                     menu.CurrentSelection = baseMenuIndex;
+                    PluginManager.Instance.DetachTickHandler(TestHorn);
                 }
             };
+        }
+
+        private async Task TestHorn()
+        {
+            if (Game.IsControlJustPressed(0, Control.VehicleHorn))
+            {
+                Game.PlayerPed.CurrentVehicle.SoundHorn(3000);
+            }
         }
 
         void UpdateMods()
@@ -86,6 +97,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                         string name = mod.LocalizedModTypeName;
                         UIMenu modSubmenu = VehicleModMenu._MenuPool.AddSubMenu(menu, $"{name}");
 
+                        UIMenuItem uIMenuItemRemove = new UIMenuItem($"Remove");
+                        uIMenuItemRemove.ItemData = new { mod = mod.ModType, variation = -1 };
+                        modSubmenu.AddItem(uIMenuItemRemove);
+
                         for (var i = 0; i < mod.ModCount; i++)
                         {
                             UIMenuItem uIMenuItem = new UIMenuItem($"{name} #{i + 1}");
@@ -101,7 +116,15 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                             var variation = item.ItemData?.variation;
                             bool customWheels = GetVehicleModVariation(vehicle.Handle, 23);
 
-                            SetVehicleMod(vehicle.Handle, (int)vehMod, variation, customWheels);
+                            if (variation == -1)
+                            {
+                                RemoveVehicleMod(vehicle.Handle, (int)vehMod);
+                            }
+                            else
+                            {
+                                SetVehicleMod(vehicle.Handle, (int)vehMod, variation, customWheels);
+                            }
+
                             Logger.Debug($"Vehicle Mod: {vehMod}:{variation}");
                         };
                     }
