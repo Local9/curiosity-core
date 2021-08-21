@@ -2,6 +2,7 @@
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         private UIMenuListItem uiLstWindowTint;
         private UIMenuListItem uiLstHeadlightColor;
-        private UIMenuItem closeMenu;
+        private UIMenuItem miSaveVehicle;
+        private UIMenuItem miCloseMenu;
 
         int oldWheelIndex = 0;
 
@@ -90,8 +92,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             uiLstHeadlightColor = new UIMenuListItem("Headlight Color", headlightColor, 0);
             mainMenu.AddItem(uiLstHeadlightColor);
 
-            closeMenu = new UIMenuItem("Close");
-            mainMenu.AddItem(closeMenu);
+            miSaveVehicle = new UIMenuItem("Save");
+            mainMenu.AddItem(miSaveVehicle);
+
+            miCloseMenu = new UIMenuItem("Close");
+            mainMenu.AddItem(miCloseMenu);
 
             mainMenu.OnMenuStateChanged += MainMenu_OnMenuStateChanged;
             mainMenu.OnItemSelect += MainMenu_OnItemSelect;
@@ -174,7 +179,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         private void MainMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
-            if (selectedItem == closeMenu)
+            if (selectedItem == miCloseMenu)
             {
                 Instance.DetachTickHandler(OnMenuCreate);
 
@@ -182,6 +187,109 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
                 if (mainMenu.Visible)
                     mainMenu.Visible = false;
+            }
+            else if (selectedItem == miSaveVehicle)
+            {
+                SaveVehicle();
+            }
+        }
+
+        private async void SaveVehicle()
+        {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                // Get the vehicle.
+                Vehicle veh = Game.PlayerPed.CurrentVehicle;
+
+                // Make sure the entity is actually a vehicle and it still exists, and it's not dead.
+                if (veh != null && veh.Exists() && !veh.IsDead && veh.IsDriveable)
+                {
+                    Dictionary<int, int> mods = new Dictionary<int, int>();
+
+                    foreach (var mod in veh.Mods.GetAllMods())
+                    {
+                        mods.Add((int)mod.ModType, mod.Index);
+                    }
+
+                    #region colors
+                    var colors = new Dictionary<string, int>();
+                    int primaryColor = 0;
+                    int secondaryColor = 0;
+                    int pearlescentColor = 0;
+                    int wheelColor = 0;
+                    int dashColor = 0;
+                    int trimColor = 0;
+                    GetVehicleExtraColours(veh.Handle, ref pearlescentColor, ref wheelColor);
+                    GetVehicleColours(veh.Handle, ref primaryColor, ref secondaryColor);
+                    GetVehicleDashboardColour(veh.Handle, ref dashColor);
+                    GetVehicleInteriorColour(veh.Handle, ref trimColor);
+                    colors.Add("primary", primaryColor);
+                    colors.Add("secondary", secondaryColor);
+                    colors.Add("pearlescent", pearlescentColor);
+                    colors.Add("wheels", wheelColor);
+                    colors.Add("dash", dashColor);
+                    colors.Add("trim", trimColor);
+                    int neonR = 255;
+                    int neonG = 255;
+                    int neonB = 255;
+                    if (veh.Mods.HasNeonLights)
+                    {
+                        GetVehicleNeonLightsColour(veh.Handle, ref neonR, ref neonG, ref neonB);
+                    }
+                    colors.Add("neonR", neonR);
+                    colors.Add("neonG", neonG);
+                    colors.Add("neonB", neonB);
+                    int tyresmokeR = 0;
+                    int tyresmokeG = 0;
+                    int tyresmokeB = 0;
+                    GetVehicleTyreSmokeColor(veh.Handle, ref tyresmokeR, ref tyresmokeG, ref tyresmokeB);
+                    colors.Add("tyresmokeR", tyresmokeR);
+                    colors.Add("tyresmokeG", tyresmokeG);
+                    colors.Add("tyresmokeB", tyresmokeB);
+                    #endregion
+
+                    var extras = new Dictionary<int, bool>();
+                    for (int i = 0; i < 20; i++)
+                    {
+                        if (veh.ExtraExists(i))
+                        {
+                            extras.Add(i, veh.IsExtraOn(i));
+                        }
+                    }
+
+                    VehicleInfo vi = new VehicleInfo()
+                    {
+                        colors = colors,
+                        customWheels = GetVehicleModVariation(veh.Handle, 23),
+                        extras = extras,
+                        livery = GetVehicleLivery(veh.Handle),
+                        model = (uint)GetEntityModel(veh.Handle),
+                        mods = mods,
+                        name = GetLabelText(GetDisplayNameFromVehicleModel((uint)GetEntityModel(veh.Handle))),
+                        neonBack = veh.Mods.IsNeonLightsOn(VehicleNeonLight.Back),
+                        neonFront = veh.Mods.IsNeonLightsOn(VehicleNeonLight.Front),
+                        neonLeft = veh.Mods.IsNeonLightsOn(VehicleNeonLight.Left),
+                        neonRight = veh.Mods.IsNeonLightsOn(VehicleNeonLight.Right),
+                        plateText = veh.Mods.LicensePlate,
+                        plateStyle = (int)veh.Mods.LicensePlateStyle,
+                        turbo = IsToggleModOn(veh.Handle, 18),
+                        tyreSmoke = IsToggleModOn(veh.Handle, 20),
+                        version = 1,
+                        wheelType = GetVehicleWheelType(veh.Handle),
+                        windowTint = (int)veh.Mods.WindowTint,
+                        xenonHeadlights = IsToggleModOn(veh.Handle, 22),
+                        bulletProofTires = !veh.CanTiresBurst,
+                        headlightColor = _GetHeadlightsColorFromVehicle(veh),
+                        enveffScale = GetVehicleEnveffScale(veh.Handle)
+                    };
+
+                    bool saved = await EventSystem.Request<bool>("garage:save", veh.NetworkId, vi);
+
+                    if (saved)
+                    {
+                        NotificationManager.GetModule().Success($"Vehicle has been saved");
+                    }
+                };
             }
         }
 

@@ -6,6 +6,7 @@ using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,35 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            EventSystem.GetModule().Attach("garage:save", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    int networkId = metadata.Find<int>(0);
+                    VehicleInfo vehicleInfo = metadata.Find<VehicleInfo>(1);
+
+                    int entityId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                    if (!API.DoesEntityExist(entityId))
+                    {
+                        return false;
+                    }
+
+                    Vehicle veh = new Vehicle(entityId);
+                    int vehId = veh.State.Get(StateBagKey.VEH_ID);
+
+                    string json = JsonConvert.SerializeObject(vehicleInfo);
+
+                    return await Database.Store.VehicleDatabase.SaveVehicle(curiosityUser.Character.CharacterId, vehId, json);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "garage:save");
+                    return false;
+                }
+            }));
+
             EventSystem.GetModule().Attach("garage:get:vehicle", new AsyncEventCallback(async metadata =>
             {
                 try
@@ -55,6 +85,7 @@ namespace Curiosity.Core.Server.Managers
                     uint model = metadata.Find<uint>(6);
 
                     VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
+
                     await BaseScript.Delay(0);
 
                     if (vehicleItem is null)
@@ -136,6 +167,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int networkId = metadata.Find<int>(0);
                     SpawnType spawnTypeId = (SpawnType)metadata.Find<int>(1);
+                    int characterVehicleId = metadata.Find<int>(2);
 
                     int entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
                     Vehicle vehicle = new Vehicle(entityHandle);
@@ -180,6 +212,7 @@ namespace Curiosity.Core.Server.Managers
                     vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                     vehicle.State.Set(StateBagKey.VEHICLE_MISSION, false, true);
                     vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, (int)spawnTypeId, true);
+                    vehicle.State.Set(StateBagKey.VEH_ID, characterVehicleId, true);
 
                     vehicle.State.Set(StateBagKey.BLIP_INFORMATION, new { }, true);
 

@@ -54,6 +54,7 @@
         public const string VEH_OWNER = "VEH_OWNER";
         public const string VEH_SPAWN_TYPE = "VEH_SPAWN_TYPE";
         public const string VEH_PERSONAL = "VEH_PERSONAL";
+        public const string VEH_ID = "c:veh:id";
 
         public const string PED_FLEE = "c::ped::flee";
         public const string PED_SHOOT = "c::ped::shoot";

@@ -2,14 +2,18 @@
 
 namespace Curiosity.Systems.Library.Models
 {
-    public class VehicleInfo
+    #region VehicleInfo struct
+    /// <summary>
+    /// Contains all information for a saved vehicle.
+    /// </summary>
+    public struct VehicleInfo
     {
-        public Dictionary<string, int> colors = new Dictionary<string, int>();
+        public Dictionary<string, int> colors;
         public bool customWheels;
-        public Dictionary<int, bool> extras = new Dictionary<int, bool>();
+        public Dictionary<int, bool> extras;
         public int livery;
         public uint model;
-        public Dictionary<int, int> mods = new Dictionary<int, int>();
+        public Dictionary<int, int> mods;
         public string name;
         public bool neonBack;
         public bool neonFront;
@@ -25,5 +29,7 @@ namespace Curiosity.Systems.Library.Models
         public bool xenonHeadlights;
         public bool bulletProofTires;
         public int headlightColor;
+        public float enveffScale;
     };
+    #endregion
 }

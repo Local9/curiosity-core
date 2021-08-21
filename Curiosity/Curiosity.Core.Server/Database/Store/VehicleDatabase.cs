@@ -3,6 +3,7 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -80,6 +81,20 @@ namespace Curiosity.Core.Server.Database.Store
             }
 
             return item;
+        }
+
+        internal static async Task<bool> SaveVehicle(int characterId, int vehId, string json)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@VehicleId", vehId },
+                { "@JSON", json },
+            };
+
+            string myQuery = "CALL upVehicle(@CharacterID, @VehicleId, @JSON);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }
     }
 }
