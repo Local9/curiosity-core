@@ -19,6 +19,8 @@ namespace Curiosity.MissionManager.Client.Managers
         internal static bool IsOfficer;
         internal static bool WasOfficer;
 
+        internal static bool isCurrentlyProcessing = false;
+
         private static bool HasShownScaleform;
         private static Scaleform scaleform;
 
@@ -41,6 +43,12 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
+            if (isCurrentlyProcessing)
+            {
+                Logger.Debug($"Fuck off {job}, I'm processing");
+            }
+            isCurrentlyProcessing = true;
+
             Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
 
             IsOnDuty = onDuty;
@@ -96,6 +104,8 @@ namespace Curiosity.MissionManager.Client.Managers
             Instance.ExportRegistry["curiosity-client"].SetJobActivity(active, onDuty, job);
             await BaseScript.Delay(100);
             EventSystem.Request<object>("user:job", job);
+
+            isCurrentlyProcessing = false;
         }
 
         async Task EquipWeapon(WeaponHash weapon, int ammo = 1, bool equip = false, bool forceInHand = false)
