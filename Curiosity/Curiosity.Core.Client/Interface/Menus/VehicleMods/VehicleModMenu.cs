@@ -352,7 +352,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
                     if (exportMessage.Success)
                     {
-                        NotificationManager.GetModule().Success($"Vehicle has been saved");
+                        NotificationManager.GetModule().Success($"Vehicle has been saved: $5,000");
                         CloseModMenu();
                     }
                     else
