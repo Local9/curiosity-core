@@ -289,6 +289,22 @@ namespace Curiosity.Core.Client.Managers
                 // SetWeatherTypeNow($"{weatherType}");
                 // SetWeatherTypeNowPersist($"{weatherType}");
 
+                if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                {
+                    Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                    if (vehicle is not null && vehicle.Exists() && vehicle.Model.IsPlane)
+                    {
+                        if (weatherType == WeatherType.THUNDER)
+                        {
+                            SetPlaneTurbulenceMultiplier(vehicle.Handle, 1.0f);
+                        }
+                        else
+                        {
+                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .5f);
+                        }
+                    }
+                }
+
                 lastWeather = weatherType;
             }
         }
