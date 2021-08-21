@@ -15,6 +15,15 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
     {
         public static MenuPool _MenuPool;
         // Menus
+
+        // TO DO
+        /*
+         * MOVE:
+         * Neon into submenu class file
+         * Create color submenu class file
+         * 
+         * */
+
         private UIMenu mainMenu;
         private UIMenu vehicleModMenu;
         private UIMenu vehicleNeonMenu;
