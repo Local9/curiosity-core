@@ -288,16 +288,16 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                         enveffScale = GetVehicleEnveffScale(veh.Handle)
                     };
 
-                    bool saved = await EventSystem.Request<bool>("garage:save", veh.NetworkId, vi);
+                    ExportMessage exportMessage = await EventSystem.Request<ExportMessage>("garage:save", veh.NetworkId, vi);
 
-                    if (saved)
+                    if (exportMessage.Success)
                     {
                         NotificationManager.GetModule().Success($"Vehicle has been saved");
                         CloseModMenu();
                     }
                     else
                     {
-                        NotificationManager.GetModule().Error($"Unable to save vehicle<ul><li>Maybe you don't own it</li><li>Did you spawn it?</li></ul>");
+                        NotificationManager.GetModule().Error($"{exportMessage.Error}");
                     }
                 };
             }

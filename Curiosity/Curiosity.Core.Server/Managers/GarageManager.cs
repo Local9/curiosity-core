@@ -45,7 +45,15 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
+                    ExportMessage exportMessage = new ExportMessage();
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                    if (curiosityUser.Character.Cash < 5000)
+                    {
+                        exportMessage.Error = "Not enough cash, $5,000 required to save";
+                        return exportMessage;
+                    }
+
                     int networkId = metadata.Find<int>(0);
                     VehicleInfo vehicleInfo = metadata.Find<VehicleInfo>(1);
 
@@ -61,7 +69,18 @@ namespace Curiosity.Core.Server.Managers
 
                     string json = JsonConvert.SerializeObject(vehicleInfo);
 
-                    return await Database.Store.VehicleDatabase.SaveVehicle(curiosityUser.Character.CharacterId, vehId, json);
+                    bool success = await Database.Store.VehicleDatabase.SaveVehicle(curiosityUser.Character.CharacterId, vehId, json);
+
+                    if (success)
+                    {
+                        await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -5000);
+                        return exportMessage;
+                    }
+                    else
+                    {
+                        exportMessage.Error = "Vehicle settings were not saved.";
+                        return exportMessage;
+                    }
                 }
                 catch (Exception ex)
                 {
