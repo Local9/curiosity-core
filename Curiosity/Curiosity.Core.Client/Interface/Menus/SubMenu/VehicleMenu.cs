@@ -8,6 +8,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class VehicleMenu
     {
+        private UIMenu menuVehicleDoors;
+        private VehicleDoorMenu _VehicleDoorMenu = new VehicleDoorMenu();
+        private UIMenu menuVehicleWindows;
+        private VehicleWindowMenu _VehicleWindowMenu = new VehicleWindowMenu();
+
         private UIMenu menuVehicleRemote;
         private VehicleRemoteMenu _VehicleRemoteMenu = new VehicleRemoteMenu();
 
@@ -49,6 +54,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             driftVehicleHashes.Add(futo2);
             int calicoGTF = GetHashKey("calico");
             driftVehicleHashes.Add(calicoGTF);
+
+            menuVehicleDoors = InteractionMenu.MenuPool.AddSubMenu(menu, "Doors");
+            _VehicleDoorMenu.CreateMenu(menuVehicleDoors);
+
+            menuVehicleWindows = InteractionMenu.MenuPool.AddSubMenu(menu, "Windows");
+            _VehicleWindowMenu.CreateMenu(menuVehicleWindows);
 
             menuVehicleRemote = InteractionMenu.MenuPool.AddSubMenu(menu, "Vehicle Remote Functions");
             _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);

@@ -77,8 +77,10 @@
     <Compile Include="Interface\Menus\Data\VehicleData.cs" />
     <Compile Include="Interface\Menus\SubMenu\SettingsMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\JobMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\VehicleDoorMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\VehicleWindowMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleColorSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleExtrasSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleModSubMenu.cs" />
