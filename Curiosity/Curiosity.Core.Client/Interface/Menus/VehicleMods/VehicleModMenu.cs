@@ -307,11 +307,13 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         {
             if (!Game.PlayerPed.IsInVehicle())
             {
+                NotificationManager.GetModule().Error($"You're not in a vehicle.");
                 return;
             }
 
             if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver != Game.PlayerPed)
             {
+                NotificationManager.GetModule().Error($"You're not the driver.");
                 return;
             }
 

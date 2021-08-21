@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using NativeUI;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
@@ -17,6 +18,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
         UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
+        UIMenuItem uiOpenModMenu = new UIMenuItem("Modify Vehicle");
 
         UIMenuCheckboxItem uiChkDriftTires;
         bool driftTiresEnabled = false;
@@ -67,10 +69,20 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             menu.AddItem(uiChkDriftTires);
             menu.AddItem(uiVehicleLock);
+            menu.AddItem(uiOpenModMenu);
 
             menu.OnListChange += Menu_OnListChange;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
+
+            menu.OnItemSelect += (sender, item, index) =>
+            {
+                if (item == uiOpenModMenu)
+                {
+                    InteractionMenu.MenuPool.CloseAllMenus();
+                    VehicleModMenu.GetModule().OpenMenu();
+                }
+            };
 
             menu.MouseControlsEnabled = false;
             menu.MouseEdgeEnabled = false;
