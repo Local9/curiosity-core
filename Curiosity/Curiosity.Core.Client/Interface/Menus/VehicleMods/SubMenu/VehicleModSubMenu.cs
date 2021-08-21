@@ -13,6 +13,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
         UIMenuListItem uiLstWheelType;
 
+        bool hornTest = false;
+
         List<dynamic> wheelTypes = new List<dynamic>()
                 {
                     "Sports",       // 0
@@ -62,6 +64,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
             if (Game.IsControlPressed(0, Control.VehicleHorn))
             {
                 Game.PlayerPed.CurrentVehicle.SoundHorn(3000);
+                await BaseScript.Delay(1000);
             }
         }
 
