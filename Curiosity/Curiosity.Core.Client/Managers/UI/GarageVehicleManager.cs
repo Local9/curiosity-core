@@ -188,7 +188,11 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
 
+                    Vector3 postionSpawn = returnedSpawnPosition;
+                    postionSpawn.Z = postionSpawn.Z - 50f;
+
                     vehicle = await World.CreateVehicle(vehModel, returnedSpawnPosition, vehicleItem.Heading);
+                    
 
                     API.NetworkRequestControlOfEntity(vehicle.Handle);
 
@@ -198,6 +202,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     vehicle.IsCollisionEnabled = false;
 
                     await vehicle.FadeOut();
+
+                    vehicle.Repair();
 
                     await BaseScript.Delay(500);
 
@@ -221,6 +227,9 @@ namespace Curiosity.Core.Client.Managers.UI
                         vehicle.Delete();
                         return new { success = false };
                     }
+
+                    vehicle.Position = returnedSpawnPosition;
+
                     vehicle.PlaceOnGround();
 
                     vehicle.RadioStation = RadioStation.RadioOff;

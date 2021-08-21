@@ -197,10 +197,10 @@ namespace Curiosity.Core.Client.Commands.Impl
                         if (vehicle.Driver == Cache.PlayerPed)
                             Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
-                        await vehicle.FadeOut(true);
-
                         vehicle.IsPositionFrozen = true;
                         vehicle.IsCollisionEnabled = false;
+
+                        await vehicle.FadeOut(true);
 
                         EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
 
@@ -265,7 +265,10 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (arguments.Count == 1)
                 {
-                    vehicle = await World.CreateVehicle(vehModel, Game.PlayerPed.Position, Game.PlayerPed.Heading);
+                    Vector3 pos = Game.PlayerPed.Position;
+                    pos.Z = pos.Z - 50f;
+
+                    vehicle = await World.CreateVehicle(vehModel, pos, Game.PlayerPed.Heading);
                 }
 
                 if (arguments.Count == 5)
@@ -286,6 +289,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 vehicle.IsCollisionEnabled = false;
 
                 await vehicle.FadeOut();
+                vehicle.Repair();
 
                 await BaseScript.Delay(500);
 
@@ -309,6 +313,8 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;
+
+                    vehicle.Position = Game.PlayerPed.Position;
 
                     await vehicle.FadeIn();
                     vehicle.Opacity = 255;
