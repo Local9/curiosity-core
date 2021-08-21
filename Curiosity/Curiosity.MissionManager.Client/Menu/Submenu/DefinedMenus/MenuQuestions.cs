@@ -160,7 +160,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 return;
             }
 
-            int randomResponse = Ped.State.Get(StateBagKey.MENU_RANDOM_RESPONSE) ?? 0;
+            int randomResponse = Ped.State.Get(StateBagKey.MENU_RANDOM_RESPONSE) ?? 1;
 
             bool runFleeChance = false;
 
