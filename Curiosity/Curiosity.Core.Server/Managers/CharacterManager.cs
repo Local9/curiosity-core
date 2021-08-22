@@ -33,6 +33,7 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_NETWORK_ID, -1, true);
+
                 player.State.Set(StateBagKey.PLAYER_ROUTING, 0, true);
                 player.State.Set(StateBagKey.PLAYER_HANDLE, player.Handle, true);
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, true, true);
