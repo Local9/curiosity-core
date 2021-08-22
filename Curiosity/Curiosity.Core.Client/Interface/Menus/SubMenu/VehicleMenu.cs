@@ -16,7 +16,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu menuVehicleRemote;
         private VehicleRemoteMenu _VehicleRemoteMenu = new VehicleRemoteMenu();
 
-        static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
+        // static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
+        static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone" };
         UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
         UIMenuItem uiOpenModMenu = new UIMenuItem("Modify Vehicle");
 
@@ -139,68 +140,69 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 if (type == "Lock for Everyone")
                     LockAllVehicles();
 
-                if (type == "Passengers Only")
-                    PassengersOnly();
-
                 await BaseScript.Delay(150);
             }
         }
 
         private void UnlockAllVehicles()
         {
-            if (Cache.PersonalVehicle is not null)
+            if (Cache.PersonalVehicle is not null && Cache.PersonalVehicle.Vehicle.Exists())
             {
-                Cache.PersonalVehicle.Vehicle.LockStatus = VehicleLockStatus.Unlocked;
-                SetVehicleExclusiveDriver_2(Cache.PersonalVehicle.Vehicle.Handle, Game.PlayerPed.Handle, 0);
+                Cache.PersonalVehicle.ToggleLock(false);
             }
 
-            if (Cache.PersonalPlane is not null)
+            if (Cache.PersonalPlane is not null && Cache.PersonalPlane.Vehicle.Exists())
             {
-                Cache.PersonalPlane.Vehicle.LockStatus = VehicleLockStatus.Unlocked;
-                SetVehicleExclusiveDriver_2(Cache.PersonalPlane.Vehicle.Handle, Game.PlayerPed.Handle, 0);
+                Cache.PersonalPlane.ToggleLock(false);
             }
 
-            if (Cache.PersonalHelicopter is not null)
+            if (Cache.PersonalHelicopter is not null && Cache.PersonalHelicopter.Vehicle.Exists())
             {
-                Cache.PersonalHelicopter.Vehicle.LockStatus = VehicleLockStatus.Unlocked;
-                SetVehicleExclusiveDriver_2(Cache.PersonalHelicopter.Vehicle.Handle, Game.PlayerPed.Handle, 0);
+                Cache.PersonalHelicopter.ToggleLock(false);
             }
 
-            if (Cache.PersonalBoat is not null)
+            if (Cache.PersonalBoat is not null && Cache.PersonalBoat.Vehicle.Exists())
             {
-                Cache.PersonalBoat.Vehicle.LockStatus = VehicleLockStatus.Unlocked;
-                SetVehicleExclusiveDriver_2(Cache.PersonalBoat.Vehicle.Handle, Game.PlayerPed.Handle, 0);
+                Cache.PersonalBoat.ToggleLock(false);
             }
         }
 
         private void LockAllVehicles()
         {
-            if (Cache.PersonalVehicle is not null)
-                Cache.PersonalVehicle.Vehicle.LockStatus = VehicleLockStatus.Locked;
+            if (Cache.PersonalVehicle is not null && Cache.PersonalVehicle.Vehicle.Exists())
+                Cache.PersonalVehicle.ToggleLock(true);
 
-            if (Cache.PersonalPlane is not null)
-                Cache.PersonalPlane.Vehicle.LockStatus = VehicleLockStatus.Locked;
+            if (Cache.PersonalPlane is not null && Cache.PersonalPlane.Vehicle.Exists())
+                Cache.PersonalPlane.ToggleLock(true);
 
-            if (Cache.PersonalHelicopter is not null)
-                Cache.PersonalHelicopter.Vehicle.LockStatus = VehicleLockStatus.Locked;
+            if (Cache.PersonalHelicopter is not null && Cache.PersonalHelicopter.Vehicle.Exists())
+                Cache.PersonalHelicopter.ToggleLock(true);
 
-            if (Cache.PersonalBoat is not null)
-                Cache.PersonalBoat.Vehicle.LockStatus = VehicleLockStatus.Locked;
+            if (Cache.PersonalBoat is not null && Cache.PersonalBoat.Vehicle.Exists())
+                Cache.PersonalBoat.ToggleLock(true);
         }
 
         private void PassengersOnly()
         {
-            if (Cache.PersonalVehicle is not null)
-                SetVehicleExclusiveDriver_2(Cache.PersonalVehicle.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+            if (Cache.PersonalVehicle is not null && Cache.PersonalVehicle.Vehicle.Exists())
+            {
+                Cache.PersonalVehicle.ToggleLock(false);
+            }
 
-            if (Cache.PersonalPlane is not null)
-                SetVehicleExclusiveDriver_2(Cache.PersonalPlane.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+            if (Cache.PersonalPlane is not null && Cache.PersonalPlane.Vehicle.Exists())
+            {
+                Cache.PersonalPlane.ToggleLock(false);
+            }
 
-            if (Cache.PersonalHelicopter is not null)
-                SetVehicleExclusiveDriver_2(Cache.PersonalHelicopter.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+            if (Cache.PersonalHelicopter is not null && Cache.PersonalHelicopter.Vehicle.Exists())
+            {
+                Cache.PersonalHelicopter.ToggleLock(false);
+            }
 
-            if (Cache.PersonalBoat is not null)
-                SetVehicleExclusiveDriver_2(Cache.PersonalBoat.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+            if (Cache.PersonalBoat is not null && Cache.PersonalBoat.Vehicle.Exists())
+            {
+                Cache.PersonalBoat.ToggleLock(false);
+            }
         }
     }
 }

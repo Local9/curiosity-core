@@ -72,8 +72,8 @@ namespace Curiosity.Core.Client.Utils
                         list["Class"] = $"{veh.ClassType}";
                         list["Personal"] = $"{veh.State.Get(StateBagKey.VEH_PERSONAL) ?? false}";
                         list["Personal Trailer"] = $"{veh.State.Get(StateBagKey.VEH_PERSONAL_TRAILER) ?? false}";
-                        list["Siren"] = $"{veh.State.Get(StateBagKey.VEH_SIREN_LIGHTS) ?? 0}";
-                        list["Siren Sound"] = $"{veh.State.Get(StateBagKey.VEH_SIREN_SOUND)}";
+                        list["Lock State"] = $"{veh.LockStatus}";
+                        list["Exclusive"] = $"{API.IsPedExclusiveDriverOfVehicle(Game.PlayerPed.Handle, veh.Handle, 0)}";
 
                         list["-"] = "";
                         

@@ -1,5 +1,8 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using System;
+using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Managers;
 
 namespace Curiosity.Core.Client.State
 {
@@ -15,6 +18,34 @@ namespace Curiosity.Core.Client.State
         public bool CruiseReverse;
         public float LastSpeed;
         public float CruiseSpeed;
+
+        public async void ToggleLock(bool lockDoors)
+        {
+            if (Vehicle != null && Vehicle.Exists())
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    int timer = GetGameTimer();
+                    while (GetGameTimer() - timer < 50)
+                    {
+                        SoundVehicleHornThisFrame(Vehicle.Handle);
+                        await BaseScript.Delay(0);
+                    }
+                    await BaseScript.Delay(50);
+                }
+
+                if (lockDoors)
+                {
+                    NotificationManager.GetModule().Info($"Doors are now locked");
+                    SetVehicleDoorsLockedForAllPlayers(Vehicle.Handle, true);
+                }
+                else
+                {
+                    NotificationManager.GetModule().Info($"Doors are now unlocked");
+                    SetVehicleDoorsLockedForAllPlayers(Vehicle.Handle, false);
+                }
+            }
+        }
 
         public VehicleState(Vehicle vehicle)
         {
