@@ -71,7 +71,7 @@ namespace Curiosity.Core.Client.Managers
                 Logger.Debug($"Passive Mode Enabled");
             }
 
-            Game.PlayerPed.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
+            Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
 
             Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
         }
