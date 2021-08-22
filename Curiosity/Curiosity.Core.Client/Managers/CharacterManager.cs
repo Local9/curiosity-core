@@ -241,6 +241,11 @@ namespace Curiosity.Core.Client.Managers
                 position.Z = spawnRoad.Z;
                 position.H = spawnHeading;
 
+                Vector3 safeLocation = World.GetSafeCoordForPed(position.AsVector(), true);
+                position.X = safeLocation.X;
+                position.Y = safeLocation.Y;
+                position.Z = safeLocation.Z;
+
                 await SafeTeleport.Teleport(API.PlayerPedId(), position);
 
                 await transition.Wait();
