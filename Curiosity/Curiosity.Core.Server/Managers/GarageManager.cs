@@ -192,6 +192,8 @@ namespace Curiosity.Core.Server.Managers
                     int entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
                     Vehicle vehicle = new Vehicle(entityHandle);
 
+                    float cullingRange = SPAWN_DISTANCE_CHECK;
+
                     switch (spawnTypeId)
                     {
                         case SpawnType.Boat:
@@ -204,6 +206,7 @@ namespace Curiosity.Core.Server.Managers
                             if (curiosityUser.PersonalPlane > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
 
+                            cullingRange = 2000f;
                             player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
@@ -225,6 +228,7 @@ namespace Curiosity.Core.Server.Managers
                             player.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
+                    API.SetEntityDistanceCullingRadius(entityHandle, cullingRange);
 
                     vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
                     vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);
@@ -259,7 +263,6 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     API.SetEntityRoutingBucket(entityHandle, (int)curiosityUser.RoutingBucket);
-                    API.SetEntityDistanceCullingRadius(entityHandle, SPAWN_DISTANCE_CHECK);
 
                     API.SetVehicleNumberPlateText(vehicle.Handle, player.Name);
 
