@@ -242,29 +242,31 @@ namespace Curiosity.Core.Client.Managers
                 position.Z = spawnRoad.Z;
                 position.H = spawnHeading;
 
-                Vector3 safeLocation = World.GetSafeCoordForPed(spawnRoad, true);
+                Vector3 safePosition = Vector3.Zero;
 
-                if (safeLocation != Vector3.Zero)
+                if (API.GetSafeCoordForPed(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, true, ref safePosition, 16))
                 {
-                    position.X = safeLocation.X;
-                    position.Y = safeLocation.Y;
-                    position.Z = safeLocation.Z;
+                    position.X = safePosition.X;
+                    position.Y = safePosition.Y;
+                    position.Z = safePosition.Z;
                 }
 
                 await SafeTeleport.Teleport(API.PlayerPedId(), position);
 
                 await BaseScript.Delay(1000);
 
+                string msg = "You have been moved to the City Hall as you were found";
+
                 if (API.IsEntityInWater(API.PlayerPedId()))
                 {
-                    Notify.Info($"You have been moved to the City Hall as you were found sleeping with the fishes.");
+                    Notify.Info($"{msg} sleeping with the fishes.");
                     position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
                     await SafeTeleport.Teleport(API.PlayerPedId(), position);
                 }
 
                 if (API.IsEntityInAir(API.PlayerPedId()))
                 {
-                    Notify.Info($"You have been moved to the City Hall as you were found being abducted.");
+                    Notify.Info($"{msg} being abducted.");
                     position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
                     await SafeTeleport.Teleport(API.PlayerPedId(), position);
                 }
