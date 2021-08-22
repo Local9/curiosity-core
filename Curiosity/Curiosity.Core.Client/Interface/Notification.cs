@@ -128,6 +128,11 @@ namespace Curiosity.Core.Client.Interface
             CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "Los Santos Impound", subtitle, saveToBrief, blink, iconType, 140);
         }
 
+        public static void TouristBoard(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
+        {
+            CustomImage("CHAR_LS_TOURIST_BOARD", "CHAR_LS_TOURIST_BOARD", message, "Tourist Board", subtitle, saveToBrief, blink, iconType, 140);
+        }
+
         public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 2)
         {
             ///

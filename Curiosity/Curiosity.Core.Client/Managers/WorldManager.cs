@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -280,8 +281,10 @@ namespace Curiosity.Core.Client.Managers
 
             if (!weatherType.Equals(lastWeather))
             {
-                Logger.Debug($"Weather Sync: {weatherType} : Region: {subRegion}");
+                string area = World.GetZoneLocalizedName(pos);
 
+                Notify.TouristBoard($"{area} Weather Update", GetForecastText(weatherType));
+                
                 await BaseScript.Delay(15000);
 
                 ClearOverrideWeather();
@@ -316,6 +319,43 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 lastWeather = weatherType;
+            }
+        }
+
+        private string GetForecastText(WeatherType weather)
+        {
+            switch (weather)
+            {
+                case WeatherType.EXTRASUNNY:
+                    return "Skies will be completely clear for a few hours.";
+                case WeatherType.NEUTRAL:
+                    return "Strange shit happening on the skies soon. Beware.";
+                case WeatherType.XMAS:
+                    return "Christmas itself is expected. Ho ho ho!";
+                case WeatherType.FOGGY:
+                    return "Its going to be foggy for a while.";
+                case WeatherType.THUNDER:
+                    return "Heavy rain accompanied by thunder is expected.";
+                case WeatherType.OVERCAST:
+                    return "Its going to be very cloudy for some time.";
+                case WeatherType.SNOW:
+                    return "Copious ammounts of snow for the next hours.";
+                case WeatherType.SMOG:
+                    return "Clear skies accompanied by little fog are expected.";
+                case WeatherType.SNOWLIGHT:
+                    return "Some snow is expected.";
+                case WeatherType.BLIZZARD:
+                    return "A big blizzard is expected.";
+                case WeatherType.CLOUDS:
+                    return "Clouds will cover the sky for some hours.";
+                case WeatherType.CLEAR:
+                    return "The skies will be clear for the next couple of hours.";
+                case WeatherType.RAIN:
+                    return "Rain is expected to feature the following hours.";
+                case WeatherType.CLEARING:
+                    return "Skies will clear in the next hours.";
+                default:
+                    return "No idea.";
             }
         }
 

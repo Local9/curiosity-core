@@ -99,8 +99,10 @@ namespace Curiosity.Systems.Library.Data
         BLIZZARD,
         [StringValue("Light Snow")]
         SNOWLIGHT,
-        [StringValue("Snow")]
+        [StringValue("X-Mas Snow")]
         XMAS,
+        [StringValue("Snow")]
+        SNOW,
         [StringValue("Halloween")]
         HALLOWEEN
     }
