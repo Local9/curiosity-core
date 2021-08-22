@@ -337,6 +337,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             fx.AlwaysDiesOnLowHealth = false;
             fx.DropsWeaponsOnDeath = false;
+            fx.CanWrithe = false;
 
             DateCreated = DateTime.Now;
 
@@ -433,10 +434,17 @@ namespace Curiosity.MissionManager.Client.Classes
                 base.MaxHealth = 200;
                 base.Health = 200;
 
+                if (Fx.IsInjured)
+                {
+                    API.ReviveInjuredPed(Fx.Handle);
+                }
+
                 if (!IsKneeling && IsArrestable)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
+
+                Fx.ClearBloodDamage();
             }
 
             if (TimeOfDeath.Year != 1900) // Remove the ped from the world
