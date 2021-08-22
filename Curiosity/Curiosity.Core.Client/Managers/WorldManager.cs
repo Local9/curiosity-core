@@ -300,6 +300,14 @@ namespace Curiosity.Core.Client.Managers
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, 1.0f);
                         }
+                        else if (weatherType == WeatherType.RAIN)
+                        {
+                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .75f);
+                        }
+                        else if (weatherType == WeatherType.EXTRASUNNY)
+                        {
+                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .25f);
+                        }
                         else
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, .5f);
