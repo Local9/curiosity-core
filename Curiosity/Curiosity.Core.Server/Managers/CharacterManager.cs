@@ -257,6 +257,8 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return 0;
+
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     Stat stat = (Stat)metadata.Find<int>(0);
                     double time = metadata.Find<double>(1);
