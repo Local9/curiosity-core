@@ -448,7 +448,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         internal static void _SetHeadlightsColorOnVehicle(Vehicle veh, int newIndex)
         {
 
-            if (veh != null && veh.Exists() && veh.Driver == Game.PlayerPed)
+            if (veh != null && veh.Exists())
             {
                 if (newIndex > -1 && newIndex < 13)
                 {
