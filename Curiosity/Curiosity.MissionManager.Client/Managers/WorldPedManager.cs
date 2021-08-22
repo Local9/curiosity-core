@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
@@ -69,34 +70,23 @@ namespace Curiosity.MissionManager.Client.Managers
                     return;
                 }
 
-                peds.ForEach(async ped =>
+                peds.ForEach(ped =>
                 {
-                    if (WorldPeds.ContainsKey(ped.Handle)) return;
-
-                    var setup = ped.State.Get(StateBagKey.PED_SETUP) ?? false;
-
-                    if (setup == null)
-                        setup = false;
-
-                    ped.DropsWeaponsOnDeath = false;
-
-                    if (!setup && !ped.IsPlayer)
+                    if (ped.IsBeingStunned)
                     {
-                        if (ped.IsBeingStunned)
-                        {
-                            Ped curPed = new Ped(ped, false, true);
-                            curPed.IsImportant = false;
-                            curPed.IsMission = false;
-                            curPed.IsSuspect = false;
-                            curPed.IsArrestable = false;
+                        ped.DropsWeaponsOnDeath = false;
+                        ped.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
 
-                            WorldPeds.TryAdd(curPed.Handle, curPed);
-                        }
+                        ped.Health = ped.MaxHealth;
+                        ped.ClearBloodDamage();
                     }
 
-                    await BaseScript.Delay(100);
+                    if (ped.IsInjured)
+                    {
+                        ReviveInjuredPed(ped.Handle);
+                    }
 
-                    // NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
+                    NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
                 });
             }
             catch (Exception ex)
