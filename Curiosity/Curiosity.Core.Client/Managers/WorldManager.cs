@@ -283,7 +283,10 @@ namespace Curiosity.Core.Client.Managers
             {
                 string area = World.GetZoneLocalizedName(pos);
 
-                Notify.TouristBoard($"{area} Weather Update", GetForecastText(weatherType));
+                int interiorId = GetInteriorFromEntity(PlayerPedId());
+
+                if (!(interiorId > 0))
+                    Notify.TouristBoard($"{area} Weather Update", GetForecastText(weatherType));
                 
                 await BaseScript.Delay(15000);
 
