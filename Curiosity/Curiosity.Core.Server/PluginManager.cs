@@ -508,6 +508,7 @@ namespace Curiosity.Core.Server
                         if (Players[kvp.Key] is null)
                         {
                             int playerHandle = kvp.Key;
+                            int staffVehicle = kvp.Value.StaffVehicle;
                             int playerVehicle = kvp.Value.PersonalVehicle;
                             int playerBoat = kvp.Value.PersonalBoat;
                             int playerTrailer = kvp.Value.PersonalTrailer;
@@ -526,15 +527,17 @@ namespace Curiosity.Core.Server
                                 }
                             }
 
-                            EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                            if (staffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(staffVehicle);
                             await Delay(100);
-                            EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                            if (playerVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
                             await Delay(100);
-                            EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                            if (playerBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
                             await Delay(100);
-                            EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                            if (playerTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
                             await Delay(100);
-                            EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
+                            if (playerPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                            await Delay(100);
+                            if (playerHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
                             await Delay(100);
                             MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
                             MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);

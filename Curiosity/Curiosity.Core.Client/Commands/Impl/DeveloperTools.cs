@@ -448,11 +448,19 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     int toggle = int.Parse(arguments.ElementAt(0));
                     Vehicle veh = Game.PlayerPed.CurrentVehicle;
-                    API.SetVehicleExclusiveDriver(veh.Handle, toggle);
+
+                    if (toggle == 0)
+                    {
+                        API.SetVehicleExclusiveDriver_2(veh.Handle, 0, 0);
+                    }
+                    else
+                    {
+                        API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, toggle);
+                    }
                 }
                 catch(Exception ex)
                 {
-
+                    Logger.Error(ex, "DevCmd: Lock");
                 }
             }
         }

@@ -345,7 +345,18 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
 
-                EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
+                if (curUser.PersonalVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
+                await BaseScript.Delay(100);
+                if (curUser.PersonalBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalBoat);
+                await BaseScript.Delay(100);
+                if (curUser.PersonalPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalPlane);
+                await BaseScript.Delay(100);
+                if (curUser.PersonalTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalTrailer);
+                await BaseScript.Delay(100);
+                if (curUser.PersonalHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalHelicopter);
+                await BaseScript.Delay(100);
+                if (curUser.StaffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.StaffVehicle);
+
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 
