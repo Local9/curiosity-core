@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
@@ -20,6 +21,28 @@ namespace Curiosity.Core.Server.Managers
         public override void Begin()
         {
             EntityInstance = this;
+
+            EventSystem.GetModule().Attach("culling:set", new EventCallback(metadata =>
+            {
+                float culling = metadata.Find<float>(0);
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                SetPlayerCullingRadius(player.Handle, culling);
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("culling:reset", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                SetPlayerCullingRadius(player.Handle, 400f);
+
+                return null;
+            }));
 
             EventSystem.GetModule().Attach("entity:nuke", new EventCallback(metadata =>
             {
