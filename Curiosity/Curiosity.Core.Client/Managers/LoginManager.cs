@@ -73,10 +73,10 @@ namespace Curiosity.Core.Client.Managers
             //voice.Commit();
 
             //Instance.AttachTickHandlers(voice);
-            Instance.Local.DisableHud();
+            Cache.Player.DisableHud();
 
             Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.Role}`");
-            transition.Up(Instance.Local);
+            transition.Up(Cache.Player);
 
             await CharacterManager.GetModule().Synchronize();
         }

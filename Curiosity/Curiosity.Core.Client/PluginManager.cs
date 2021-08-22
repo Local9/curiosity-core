@@ -67,7 +67,7 @@ namespace Curiosity.Core.Client
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            await Local.Character.Save();
+            await Cache.Character.Save();
         }
 
         private async Task Load()

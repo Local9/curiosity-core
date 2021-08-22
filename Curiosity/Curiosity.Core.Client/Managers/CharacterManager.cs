@@ -136,11 +136,11 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Debug("[Character] Loaded character data...");
 
-            Instance.Local.Character = curiosityCharacter;
+            Cache.Player.Character = curiosityCharacter;
 
             Screen.LoadingPrompt.Show("Loading Character...");
 
-            await Load(Instance.Local);
+            await Load(Cache.Player);
 
             API.SetNuiFocus(false, false);
             API.ShutdownLoadingScreen();
