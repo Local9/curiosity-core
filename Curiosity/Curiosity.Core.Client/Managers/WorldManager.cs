@@ -361,56 +361,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (serverSpawned && (vehicle.LockStatus == VehicleLockStatus.LockedForPlayer || vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter))
                     vehicle.LockStatus = VehicleLockStatus.Unlocked;
-
-                if (vehicle.Opacity == 0 && vehicle.Driver.IsPlayer)
-                    vehicle.ResetOpacity();
             });
-
-            await BaseScript.Delay(500);
-        }
-
-        [TickHandler(SessionWait = true)]
-        private async Task OnPreventPlayerAccessToLockedVehicles()
-        {
-            Ped ped = Cache.PlayerPed;
-
-            if (ped?.IsTryingToEnterALockedVehicle ?? false)
-            {
-                Vehicle vehicle = ped?.VehicleTryingToEnter;
-                ped?.Task?.ClearAll();
-
-                Ped driver = vehicle?.Driver;
-
-                bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
-
-                if ((!driver?.IsPlayer ?? false) && (!driver?.IsFleeing ?? false) && (driver?.IsAlive ?? false) && !serverSpawned)
-                {
-                    vehicle.LockStatus = VehicleLockStatus.CannotBeTriedToEnter;
-
-                    if ((driver?.Exists() ?? false) && !NetworkHasControlOfNetworkId(driver.NetworkId))
-                    {
-                        if (!NetworkHasControlOfNetworkId(driver.NetworkId))
-                        {
-                            NetworkRequestControlOfNetworkId(driver.NetworkId);
-
-                            while (!NetworkHasControlOfNetworkId(driver.NetworkId))
-                            {
-                                await BaseScript.Delay(0);
-                            }
-                        }
-                    }
-
-                    driver?.Task?.FleeFrom(ped);
-                }
-
-                int owner = vehicle.State.Get(StateBagKey.VEH_OWNER_ID) ?? -1;
-
-                if (owner == Game.Player.ServerId)
-                {
-                    if (vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter)
-                        vehicle.LockStatus = VehicleLockStatus.Unlocked;
-                }
-            }
 
             await BaseScript.Delay(500);
         }
