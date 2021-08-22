@@ -33,6 +33,7 @@ namespace Curiosity.Core.Client.Managers
             await Session.Loading();
 
             if (IsPassiveModeEnabled == isPassive) return;
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
 
             Game.PlayerPed.IsInvincible = false;
 
@@ -48,18 +49,12 @@ namespace Curiosity.Core.Client.Managers
             if (!isPassive)
             {
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                //Cache.PlayerPed.SetConfigFlag(342, false);
-                //Cache.PlayerPed.SetConfigFlag(122, false);
                 API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
-                //Cache.PlayerPed.CanSwitchWeapons = true;
-
-                // API.NetworkSetPlayerIsPassive(false);
                 API.NetworkSetFriendlyFireOption(true);
 
                 passiveModeDisabled = DateTime.UtcNow.AddMinutes(5);
                 Instance.AttachTickHandler(PassiveCooldownTick);
-                // Instance.DetachTickHandler(DisableWantedStates);
-                ResetWantedStates();
+                API.SetMaxWantedLevel(5);
                 IsPassiveModeEnabledCooldown = true;
 
                 API.SetMaxWantedLevel(5);
@@ -70,34 +65,15 @@ namespace Curiosity.Core.Client.Managers
             if (isPassive)
             {
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                //Cache.PlayerPed.SetConfigFlag(342, true);
-                //Cache.PlayerPed.SetConfigFlag(122, true);
                 API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
-                //Cache.PlayerPed.CanSwitchWeapons = false;
-
-                // API.NetworkSetPlayerIsPassive(true);
                 API.NetworkSetFriendlyFireOption(false);
-                // Instance.AttachTickHandler(DisableWantedStates);
-                DisableWantedStates();
+                API.SetMaxWantedLevel(0);
                 Logger.Debug($"Passive Mode Enabled");
-                // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
             }
 
             Game.PlayerPed.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
 
             Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
-        }
-
-        public void DisableWantedStates()
-        {
-            API.ClearPlayerWantedLevel(Game.Player.Handle);
-            API.SetMaxWantedLevel(0);
-        }
-
-        public void ResetWantedStates()
-        {
-            API.ClearPlayerWantedLevel(Game.Player.Handle);
-            API.SetMaxWantedLevel(5);
         }
 
         public async Task PassiveCooldownTick()
