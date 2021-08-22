@@ -58,7 +58,8 @@ namespace Curiosity.Core.Client.Managers
 
                 passiveModeDisabled = DateTime.UtcNow.AddMinutes(5);
                 Instance.AttachTickHandler(PassiveCooldownTick);
-                Instance.DetachTickHandler(DisableWantedStates);
+                // Instance.DetachTickHandler(DisableWantedStates);
+                ResetWantedStates();
                 IsPassiveModeEnabledCooldown = true;
 
                 API.SetMaxWantedLevel(5);
@@ -76,7 +77,8 @@ namespace Curiosity.Core.Client.Managers
 
                 // API.NetworkSetPlayerIsPassive(true);
                 API.NetworkSetFriendlyFireOption(false);
-                Instance.AttachTickHandler(DisableWantedStates);
+                // Instance.AttachTickHandler(DisableWantedStates);
+                DisableWantedStates();
                 Logger.Debug($"Passive Mode Enabled");
                 // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
             }
@@ -86,14 +88,16 @@ namespace Curiosity.Core.Client.Managers
             Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
         }
 
-        public async Task DisableWantedStates()
+        public void DisableWantedStates()
         {
             API.ClearPlayerWantedLevel(Game.Player.Handle);
             API.SetMaxWantedLevel(0);
-            API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
-            API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
-            API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
-            Game.Player.WantedLevel = 0;
+        }
+
+        public void ResetWantedStates()
+        {
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+            API.SetMaxWantedLevel(5);
         }
 
         public async Task PassiveCooldownTick()
