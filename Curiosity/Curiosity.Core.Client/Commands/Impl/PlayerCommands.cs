@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
@@ -7,8 +8,10 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -29,6 +32,82 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
                 Position position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
                 await SafeTeleport.TeleportFadePlayer(position);
+            }
+        }
+
+        [CommandInfo(new[] { "sound", })]
+        public class XSound : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                PluginManager pluginManager = PluginManager.Instance;
+                var xsound = pluginManager.ExportDictionary["xsound"] ?? null;
+                if (pluginManager.ExportDictionary["xsound"] is null)
+                {
+                    Notify.Info($"XSound was not found");
+                    return;
+                }
+
+                if (arguments.Count == 0)
+                {
+                    Chat.SendLocalMessage("Args missing; all, stop, link", "help");
+                }
+
+                string cmd = arguments.ElementAt(0);
+
+                if (!xsound.isPlayerCloseToAnySound())
+                {
+                    Chat.SendLocalMessage($"You're currently not near any sounds.", "help");
+                    return;
+                }
+
+                if (cmd == "all")
+                {
+                    var allSounds = xsound.getAllAudioInfo();
+
+                    string json = JsonConvert.SerializeObject(allSounds);
+                    
+                    Dictionary<string, dynamic> sounds = new Dictionary<string, dynamic>();
+
+                    sounds = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
+
+                    List<string> soundsPlaying = new();
+
+                    foreach(KeyValuePair<string, dynamic> keyValuePair in sounds)
+                    {
+                        soundsPlaying.Add(keyValuePair.Key);
+                    }
+
+                    Chat.SendLocalMessage($"Sounds: {string.Join(", ", soundsPlaying)}", "help");
+                    return;
+                }
+
+                if (cmd == "stop" || cmd == "link")
+                {
+                    string soundName = arguments.ElementAt(1);
+
+                    if (!xsound.soundExists(soundName))
+                    {
+                        Chat.SendLocalMessage($"'{soundName}' not found", "help");
+                        return;
+                    }
+
+                    if (cmd == "stop")
+                    {
+                        xsound.Destroy(soundName);
+                        Chat.SendLocalMessage($"'{soundName}' Stopped", "help");
+                        return;
+                    }
+
+                    if (cmd == "link")
+                    {
+                        string url = xsound.getLink(soundName);
+                        Chat.SendLocalMessage($"'{soundName}' URL: {url}", "help");
+                        return;
+                    }
+                }
+
+                Chat.SendLocalMessage($"Command '{cmd}' unknown.", "help");
             }
         }
 
