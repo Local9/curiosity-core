@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Library.Enums
 {
-    enum ePedConfigFlags
+    public enum ePedConfigFlags
     {
         _0x67D1A445 = 0,
         _0xC63DE95E = 1,
