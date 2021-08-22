@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;
 
@@ -241,12 +242,25 @@ namespace Curiosity.Core.Client.Managers
                 position.Z = spawnRoad.Z;
                 position.H = spawnHeading;
 
-                Vector3 safeLocation = World.GetSafeCoordForPed(position.AsVector(), true);
-                position.X = safeLocation.X;
-                position.Y = safeLocation.Y;
-                position.Z = safeLocation.Z;
+                Vector3 safeLocation = World.GetSafeCoordForPed(spawnRoad, true);
+
+                if (safeLocation != Vector3.Zero)
+                {
+                    position.X = safeLocation.X;
+                    position.Y = safeLocation.Y;
+                    position.Z = safeLocation.Z;
+                }
 
                 await SafeTeleport.Teleport(API.PlayerPedId(), position);
+
+                await BaseScript.Delay(1000);
+
+                if (API.IsEntityInWater(API.PlayerPedId()))
+                {
+                    Notify.Info($"You have been moved to the City Hall as you were found sleeping with the fishes.");
+                    position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+                    await SafeTeleport.Teleport(API.PlayerPedId(), position);
+                }
 
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
