@@ -18,6 +18,8 @@ namespace Curiosity.Core.Server.Managers
         private const int WEATHER_UPDATE_MS = 60000;
         DateTime lastTimeWeatherUpdated = DateTime.Now;
 
+        int numberOfWeatherCyclesProcessed = 0;
+
         public bool IsWeatherFrozen = false;
         bool _debugWeather
         {
@@ -112,9 +114,19 @@ namespace Curiosity.Core.Server.Managers
                 {
                     WeatherSeason season = WeatherData.GetCurrentSeason();
                     List<WeatherType> weatherTypes = WeatherData.SeasonalWeather[season];
+
+                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER)
+                    {
+                        weatherTypes.Add(WeatherType.RAIN);
+                    }
+
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
                 }
             }
+            numberOfWeatherCyclesProcessed++;
+
+            if (numberOfWeatherCyclesProcessed >= 7)
+                numberOfWeatherCyclesProcessed = 0;
         }
 
         [TickHandler]
