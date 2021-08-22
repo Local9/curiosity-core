@@ -125,7 +125,7 @@ namespace Curiosity.Core.Server.Managers
             }
             numberOfWeatherCyclesProcessed++;
 
-            if (numberOfWeatherCyclesProcessed >= 7)
+            if (numberOfWeatherCyclesProcessed > 7)
                 numberOfWeatherCyclesProcessed = 0;
         }
 
