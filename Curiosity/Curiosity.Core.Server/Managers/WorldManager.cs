@@ -40,8 +40,8 @@ namespace Curiosity.Core.Server.Managers
         // TIME
         double _baseTime = 0;
         double _timeOffset = 0;
-        DateTime lastTimeTick = DateTime.Now;
-        DateTime lastTimeSyncTick = DateTime.Now;
+        DateTime lastTimeTick = DateTime.UtcNow;
+        DateTime lastTimeSyncTick = DateTime.UtcNow;
 
         public bool IsTimeFrozen { get; internal set; }
 
@@ -122,11 +122,13 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWeatherTick()
         {
-            if (DateTime.Now.Subtract(lastTimeWeatherUpdated).TotalMinutes >= 60)
+            if (DateTime.UtcNow.Subtract(lastTimeWeatherUpdated).TotalMinutes >= 60)
             {
                 if (IsWeatherFrozen) return;
 
                 RandomiseWeather();
+
+                lastTimeWeatherUpdated = DateTime.UtcNow;
             }
 
             await BaseScript.Delay(WEATHER_UPDATE_MS);
@@ -145,7 +147,7 @@ namespace Curiosity.Core.Server.Managers
 
                 _baseTime = IsTimeFrozen ? _baseTime : newBaseTime;
 
-                lastTimeTick = DateTime.Now;
+                lastTimeTick = DateTime.UtcNow;
             }
 
             await BaseScript.Delay(250);
@@ -156,7 +158,7 @@ namespace Curiosity.Core.Server.Managers
         {
             if (DateTime.Now.Subtract(lastTimeSyncTick).TotalSeconds >= 5) {
                 EventSystem.GetModule().SendAll("world:time", _baseTime, _timeOffset);
-                lastTimeSyncTick = DateTime.Now;
+                lastTimeSyncTick = DateTime.UtcNow;
             }
 
             await BaseScript.Delay(1000);
