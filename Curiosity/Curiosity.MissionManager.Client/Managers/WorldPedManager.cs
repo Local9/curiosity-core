@@ -62,6 +62,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
+                SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0f);
                 List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 30f)).ToList();
 
                 if (peds.Count == 0)
@@ -72,21 +73,26 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 peds.ForEach(ped =>
                 {
-                    if (ped.IsBeingStunned)
+                    if (!IsEntityStatic(ped.Handle))
                     {
-                        ped.DropsWeaponsOnDeath = false;
-                        ped.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+                        ped.CanWrithe = false;
 
-                        ped.Health = ped.MaxHealth;
-                        ped.ClearBloodDamage();
+                        if (ped.IsBeingStunned)
+                        {
+                            ped.DropsWeaponsOnDeath = false;
+                            // ped.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+
+                            ped.Health = ped.MaxHealth;
+                            ped.ClearBloodDamage();
+                        }
+
+                        if (ped.IsInjured)
+                        {
+                            ReviveInjuredPed(ped.Handle);
+                        }
                     }
 
-                    if (ped.IsInjured)
-                    {
-                        ReviveInjuredPed(ped.Handle);
-                    }
-
-                    NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
+                    // NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
                 });
             }
             catch (Exception ex)
