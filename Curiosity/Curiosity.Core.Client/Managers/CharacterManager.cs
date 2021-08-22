@@ -262,6 +262,13 @@ namespace Curiosity.Core.Client.Managers
                     await SafeTeleport.Teleport(API.PlayerPedId(), position);
                 }
 
+                if (API.IsEntityInAir(API.PlayerPedId()))
+                {
+                    Notify.Info($"You have been moved to the City Hall as you were found being abducted.");
+                    position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+                    await SafeTeleport.Teleport(API.PlayerPedId(), position);
+                }
+
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
