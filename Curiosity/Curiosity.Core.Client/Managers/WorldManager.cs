@@ -285,7 +285,7 @@ namespace Curiosity.Core.Client.Managers
 
                 int interiorId = GetInteriorFromEntity(PlayerPedId());
 
-                if (!(interiorId > 0))
+                if (interiorId == 0)
                     Notify.TouristBoard($"{area} Weather Update", GetForecastText(weatherType));
                 
                 await BaseScript.Delay(15000);
