@@ -24,6 +24,8 @@ namespace Curiosity.Core.Client.Managers
         DateTime lastRunWeatherUpdate = DateTime.Now;
         DateTime lastRunVehicleSuppression = DateTime.Now;
 
+        List<Vehicle> vehiclesToLock = new List<Vehicle>();
+
         // Time
         double clientBaseTime = 0;
         double clientTimeOffset = 0;
@@ -350,9 +352,12 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnLockVehicles()
         {
-            List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
+            if (vehiclesToLock.Count > 0)
+                vehiclesToLock.Clear();
 
-            vehicles.ForEach(vehicle =>
+            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f) && x.LockStatus != VehicleLockStatus.LockedForPlayer).ToList();
+
+            vehiclesToLock.ForEach(vehicle =>
             {
                 bool serverSpawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
 
@@ -376,21 +381,23 @@ namespace Curiosity.Core.Client.Managers
                     SetVehicleModelIsSuppressed((uint)veh, true);
                 });
 
-                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f) && vehiclesToSuppress.Contains(x.Model.Hash)).ToList();
 
                 vehicles.ForEach(veh =>
                 {
-                    if (vehiclesToSuppress.Contains(veh.Model.Hash))
+                    bool serverSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+                    bool shouldBeDeleted = veh.State.Get(StateBagKey.ENTITY_DELETE) ?? false;
+
+                    if (veh.Driver == Game.PlayerPed)
                     {
-                        bool serverSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
-                        bool shouldBeDeleted = veh.State.Get(StateBagKey.ENTITY_DELETE) ?? false;
-
-                        if (!serverSpawned)
-                            veh.RemoveFromWorld();
-
-                        if (shouldBeDeleted)
-                            veh.RemoveFromWorld();
+                        Game.PlayerPed.Task.WarpOutOfVehicle(veh);
                     }
+
+                    if (!serverSpawned)
+                        veh.RemoveFromWorld();
+
+                    if (shouldBeDeleted)
+                        veh.RemoveFromWorld();
                 });
 
                 vehicles = null;
