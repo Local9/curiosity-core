@@ -302,15 +302,15 @@ namespace Curiosity.Core.Client.Managers
                     Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
                     if (vehicle is not null && vehicle.Exists() && vehicle.Model.IsPlane)
                     {
-                        if (weatherType == WeatherType.THUNDER)
+                        if (weatherType.Equals(WeatherType.THUNDER) && weatherType.Equals(WeatherType.BLIZZARD))
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, 1.0f);
                         }
-                        else if (weatherType == WeatherType.RAIN)
+                        else if (weatherType.Equals(WeatherType.RAIN))
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, .75f);
                         }
-                        else if (weatherType == WeatherType.EXTRASUNNY)
+                        else if (weatherType.Equals(WeatherType.EXTRASUNNY))
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, .25f);
                         }
