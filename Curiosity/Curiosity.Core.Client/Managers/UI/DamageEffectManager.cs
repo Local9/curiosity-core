@@ -9,7 +9,7 @@ namespace Curiosity.Core.Client.Managers.UI
     public class DamageEffectManager : Manager<DamageEffectManager>
     {
         int _updateTick = 0;
-        public int Ticks = 60;
+        public int Ticks = 10;
         
         public float EffectThreshold = .5f;
         public float SpeedIn = .8f;
