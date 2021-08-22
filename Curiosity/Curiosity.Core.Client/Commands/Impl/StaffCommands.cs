@@ -187,8 +187,8 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 Vehicle vehicle = null;
                 
-                if (Cache.PersonalVehicle is not null)
-                    vehicle = Cache.PersonalVehicle.Vehicle;
+                if (Cache.StaffVehicle is not null)
+                    vehicle = Cache.StaffVehicle.Vehicle;
 
                 if (vehicle is not null)
                 {
@@ -307,9 +307,9 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
 
                     GarageVehicleManager.GetModule().CreateBlip(vehicle);
-                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                    Cache.StaffVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
-                    Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                    Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;

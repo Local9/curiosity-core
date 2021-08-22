@@ -63,15 +63,16 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLife => Role == Role.DONATOR_LIFE;
         public bool IsSupporterAccess => IsStaff || IsDonator;
 
-        public bool NotificationBackup { get; set; } = false;
-        public DateTime LastNotificationBackup { get; set; }
-        public int PersonalVehicle { get; set; }
-        public int PersonalTrailer { get; set; }
-        public int PersonalPlane { get; set; }
-        public int PersonalBoat { get; set; }
-        public int PersonalHelicopter { get; set; }
-        public int RoutingBucket { get; set; }
-        public bool AllowPublicStats { get; set; }
-        public bool Purchasing { get; set; }
+        [JsonIgnore] public bool NotificationBackup { get; set; } = false;
+        [JsonIgnore] public DateTime LastNotificationBackup { get; set; }
+        [JsonIgnore] public int PersonalVehicle { get; set; }
+        [JsonIgnore] public int PersonalTrailer { get; set; }
+        [JsonIgnore] public int PersonalPlane { get; set; }
+        [JsonIgnore] public int PersonalBoat { get; set; }
+        [JsonIgnore] public int PersonalHelicopter { get; set; }
+        [JsonIgnore] public int RoutingBucket { get; set; }
+        [JsonIgnore] public bool AllowPublicStats { get; set; }
+        [JsonIgnore] public bool Purchasing { get; set; }
+        [JsonIgnore] public int StaffVehicle { get; set; }
     }
 }

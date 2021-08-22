@@ -66,6 +66,20 @@ namespace Curiosity.Core.Server.Managers
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
+            
+            EventSystem.GetModule().Attach("vehicle:log:staff", new EventCallback(metadata =>
+            {
+                int netId = metadata.Find<int>(0);
+
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.StaffVehicle = netId;
+
+                Player player = PluginManager.PlayersList[metadata.Sender];
+                player.State.Set($"{StateBagKey.PLAYER_VEHICLE}", user.PersonalVehicle, true);
+
+                Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
+                return false;
+            }));
 
             EventSystem.GetModule().Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
             {

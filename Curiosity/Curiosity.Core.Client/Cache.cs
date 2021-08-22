@@ -14,6 +14,7 @@ namespace Curiosity.Core.Client
         public static Position Position => Entity.Position;
         // Vehicles
         public static VehicleState PersonalVehicle;
+        public static VehicleState StaffVehicle;
         public static VehicleState PersonalTrailer;
         public static VehicleState PersonalBoat;
         public static VehicleState PersonalPlane;
