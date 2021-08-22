@@ -130,9 +130,6 @@ namespace Curiosity.Core.Client.Managers.UI
                         return new { success = false };
                     }
 
-                    Logger.Debug($"Vehicle Information: {vehicleItem?.Hash}/{vehicleItem?.Label}/{vehicleItem?.SpawnTypeId}/{vehicleItem?.NetworkId}/{vehicleItem?.ServerHandle}");
-                    Logger.Debug($"Vehicle Information: H: {vehicleItem?.Heading}, X: {vehicleItem?.X}, Y: {vehicleItem?.Y}, Z: {vehicleItem?.Z}");
-
                     if (vehicleItem is null)
                     {
                         NotificationManager.GetModule().Error("Vehicle failed to be created. Please try again.");
@@ -311,7 +308,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Oh well....");
+                    Logger.Error(ex, $"Oh well....");
                     NotificationManager.GetModule().Error("FiveM fucked something up");
                     return new { success = false };
                 }
