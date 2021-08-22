@@ -16,7 +16,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public static WorldManager WorldInstance;
         private const int WEATHER_UPDATE_MS = 60000;
-        DateTime lastTimeWeatherUpdated = DateTime.Now;
+        DateTime lastTimeWeatherUpdated = DateTime.UtcNow;
 
         int numberOfWeatherCyclesProcessed = 0;
 
