@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnReloadTick()
         {
+            if (Cache.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed) return;
+
             if (Cache.PlayerPed.IsReloading)
             {
                 if (isReloadingCheck) return;
