@@ -308,7 +308,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     GarageVehicleManager.GetModule().CreateBlip(vehicle);
                     Cache.StaffVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
+                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
 
                     vehicle.IsPositionFrozen = false;
