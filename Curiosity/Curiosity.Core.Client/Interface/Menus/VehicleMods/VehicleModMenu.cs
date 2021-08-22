@@ -117,6 +117,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             uiChkTireSmoke = new UIMenuCheckboxItem("Tire Smoke", false);
             uiLstTireSmoke = new UIMenuListItem("Smoke Color", tireSmokes, 0);
+            mainMenu.AddItem(uiChkTireSmoke);
+            mainMenu.AddItem(uiLstTireSmoke);
 
             miSaveVehicle = new UIMenuItem("Save");
             mainMenu.AddItem(miSaveVehicle);
