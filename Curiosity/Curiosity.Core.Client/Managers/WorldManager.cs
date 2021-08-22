@@ -406,11 +406,11 @@ namespace Curiosity.Core.Client.Managers
             if (vehiclesToLock.Count > 0)
                 vehiclesToLock.Clear();
 
-            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f) && x.LockStatus != VehicleLockStatus.LockedForPlayer).ToList();
+            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
 
             vehiclesToLock.ForEach(vehicle =>
             {
-                bool serverSpawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+                bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
                 if (!serverSpawned && vehicle.Opacity > 100)
                     vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
