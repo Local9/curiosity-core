@@ -266,7 +266,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"{ex}");
+                    Logger.Error(ex, "Update Player Stat");
                     return 0;
                 }
             }));
