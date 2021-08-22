@@ -433,12 +433,35 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "lock" })]
+        public class LockTesting : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (!Game.PlayerPed.IsInVehicle())
+                {
+                    Chat.SendLocalMessage($"Need to be in a vehicle.", "help");
+                    return;
+                }
+
+                try
+                {
+                    int toggle = int.Parse(arguments.ElementAt(0));
+                    Vehicle veh = Game.PlayerPed.CurrentVehicle;
+                    API.SetVehicleExclusiveDriver(veh.Handle, toggle);
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+        }
+
         [CommandInfo(new [] { "car" })]
         public class DevCar : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-
                 Vehicle vehicle = null;
 
                 if (Cache.Entity is not null && Cache.Entity.Vehicle is not null)
