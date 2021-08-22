@@ -338,6 +338,11 @@ namespace Curiosity.Core.Server
                     SavePlayers(true);
                 }
 
+                if (commandName.ToLower() == "weather")
+                {
+                    WorldManager.GetModule().WeatherDebugOutput();
+                }
+
                 if (commandName.ToLower() == "missions")
                 {
                     Logger.Info($"<- Mission Manager Start ->");

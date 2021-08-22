@@ -21,13 +21,6 @@ namespace Curiosity.Core.Server.Managers
         int numberOfWeatherCyclesProcessed = 0;
 
         public bool IsWeatherFrozen = false;
-        bool _debugWeather
-        {
-            get
-            {
-                return API.GetConvarInt("debug_weather", 0) == 1;
-            }
-        }
 
         Dictionary<Region, WeatherType> regionWeatherType = new Dictionary<Region, WeatherType>()
         {
@@ -74,19 +67,16 @@ namespace Curiosity.Core.Server.Managers
             WeatherDebugOutput();
         }
 
-        private void WeatherDebugOutput()
+        public void WeatherDebugOutput()
         {
-            if (_debugWeather)
+            Logger.Debug($"Weather Region Init START");
+
+            foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
             {
-                Logger.Debug($"Weather Region Init START");
-
-                foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
-                {
-                    Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
-                }
-
-                Logger.Debug($"Weather Region Init END");
+                Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
             }
+
+            Logger.Debug($"Weather Region Init END");
         }
 
         public void SetWeatherForAllRegions(WeatherType weatherType)
@@ -115,7 +105,7 @@ namespace Curiosity.Core.Server.Managers
                     WeatherSeason season = WeatherData.GetCurrentSeason();
                     List<WeatherType> weatherTypes = WeatherData.SeasonalWeather[season];
 
-                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.5f))
+                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
                     {
                         weatherTypes.Add(WeatherType.RAIN);
                     }
