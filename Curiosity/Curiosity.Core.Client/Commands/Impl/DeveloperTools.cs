@@ -154,6 +154,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                             companionPed.Health = 5000;
                             companionPed.CanRagdoll = false;
                             companionPed.IsMeleeProof = true;
+                            companionPed.FiringPattern = FiringPattern.FullAuto;
                         }
                         else
                         {
