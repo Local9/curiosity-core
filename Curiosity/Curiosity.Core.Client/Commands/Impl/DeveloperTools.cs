@@ -60,6 +60,11 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                         string pedHash = arguments.ElementAt(1);
 
+                        if (pedHash == "jug")
+                        {
+                            pedHash = "u_m_y_juggernaut_01";
+                        }
+
                         Model companionModel = await Utils.Utility.LoadModel(pedHash);
 
                         Vector3 offset = new Vector3(2f, 0f, 0f);
@@ -98,7 +103,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                         companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreBeingOnFire, true);
                         companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreSeenMelee, true);
 
-                        companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
+                        if (pedHash == "u_m_y_juggernaut_01")
+                        {
+                            companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
+                        }
+                        else
+                        {
+                            companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
+                        }
 
                         companions.Add(companionPed);
                     }
