@@ -298,6 +298,8 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Send("character:routing:base");
             Instance.ExportDictionary["pma-voice"].toggleMute();
 
+            Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
+
             Cache.UpdatePedId(true);
         }
     }

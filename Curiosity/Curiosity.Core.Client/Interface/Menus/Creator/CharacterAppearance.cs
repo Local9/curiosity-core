@@ -375,6 +375,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             CreateMenuItems();
 
             lstHair = new UIMenuListItem("Hair", hairStyleList, 0);
+            lstHair.Description = $"Set your hair";
             pnlHairColorPrimary = new UIMenuColorPanel("1st Hair Color", UIMenuColorPanel.ColorPanelType.Hair);
             pnlHairColorSecondary = new UIMenuColorPanel("2nd Hair Color", UIMenuColorPanel.ColorPanelType.Hair);
             menu.AddItem(lstHair);

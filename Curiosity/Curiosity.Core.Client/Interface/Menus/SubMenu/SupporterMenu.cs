@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Core.Client.Managers.Supporter;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
@@ -62,12 +63,24 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             if (selectedItem == uiItemResetCharacter)
             {
+                if (Cache.PlayerPed.IsDead)
+                {
+                    NotificationManager.GetModule().Error($"Computer said no.");
+                    selectedItem.Enabled = true;
+                    return;
+                }
+
                 await Cache.PlayerPed.FadeOut();
                 Cache.Player.Character.Load();
                 await BaseScript.Delay(500); // JIC
                 await Cache.PlayerPed.FadeIn();
-                selectedItem.Enabled = true;
             }
+            else if (selectedItem == uiItemRemoveCompanion)
+            {
+                CompanionManager.GetModule().DeleteCurrentCompanion();
+            }
+
+            selectedItem.Enabled = true;
         }
 
         private async void BaseMenu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -78,20 +91,36 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 await Cache.PlayerPed.FadeOut();
 
-                string playerHash = companions[newIndex].Hash;
+                string modelHash = companions[newIndex].Hash;
 
-                Model model = new Model(playerHash);
+                Model model = new Model(modelHash);
                 
                 if (!model.IsInCdImage)
                 {
                     NotificationManager.GetModule().Error($"Model is not loaded.");
-                    return;
+                    goto EXIT;
                 }
+
+                DateTime stopDate = DateTime.UtcNow.AddSeconds(5);
 
                 while (!model.IsLoaded)
                 {
                     await model.Request(1000);
                     await BaseScript.Delay(0); // JIC
+
+                    if (DateTime.UtcNow > stopDate) break;
+                }
+
+                if (!model.IsLoaded)
+                {
+                    NotificationManager.GetModule().Error($"Model failed to load.");
+                    goto EXIT;
+                }
+
+                if (!model.IsValid)
+                {
+                    NotificationManager.GetModule().Error($"Model is invalid.");
+                    goto EXIT;
                 }
 
                 Game.Player.ChangeModel(model);
@@ -99,13 +128,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 await Cache.PlayerPed.FadeIn();
 
                 listItem.Enabled = true;
-                return;
             }
-
-            if (listItem == uiLstCompanions)
+            else if (listItem == uiLstCompanions)
             {
-
+                string modelHash = companions[newIndex].Hash;
+                CompanionManager.GetModule().CreateCompanion(modelHash);
             }
+
+        EXIT:
+            listItem.Enabled = true;
         }
     }
 }
