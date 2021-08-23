@@ -421,6 +421,7 @@ namespace Curiosity.Core.Client.Managers
                     if (veh.Driver == Game.PlayerPed)
                     {
                         Game.PlayerPed.Task.WarpOutOfVehicle(veh);
+                        NotificationManager.GetModule().Warn($"This is a blacklisted vehicle.");
                     }
 
                     if (!serverSpawned)
