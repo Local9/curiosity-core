@@ -117,6 +117,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentStatValue != newStatValue)
             {
+                NativeUI.Notifications.ShowStatNotification(newStatValue, currentStatValue, message);
                 NotificationManager.GetModule().Success(message);
             }
         }
