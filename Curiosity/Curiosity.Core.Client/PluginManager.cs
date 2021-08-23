@@ -36,7 +36,7 @@ namespace Curiosity.Core.Client
             };
 
         public PlayerList PlayerList;
-
+        public RelationshipGroup PlayerRelationshipGroup;
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
         public CuriosityPlayer Local { get; set; }
@@ -132,6 +132,8 @@ namespace Curiosity.Core.Client
             AttachTickHandlers(this);
 
             API.DecorRegister(DECOR_PED_OWNER, 3);
+
+            PlayerRelationshipGroup = World.AddRelationshipGroup("PLAYER");
 
             Logger.Info("Load method has been completed.");
         }
