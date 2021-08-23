@@ -1,8 +1,5 @@
 {
   "suppressedVehicles": [
-    "Shamal",
-    "Luxor",
-    "Luxor2",
     "Jet",
     "Lazer",
     "Titan",
@@ -66,6 +63,34 @@
       {
         "label": "Groot",
         "hash": "minibabygroot_p"
+      },
+      {
+        "label": "DeadPool",
+        "hash": "deadpool_p"
+      },
+      {
+        "label": "Kylo",
+        "hash": "kylo_p"
+      },
+      {
+        "label": "Lana",
+        "hash": "lana_p"
+      },
+      {
+        "label": "Samantha",
+        "hash": "sam_p"
+      },
+      {
+        "label": "Shadow Trooper",
+        "hash": "shadowtroopersp"
+      },
+      {
+        "label": "Shadow Trooper",
+        "hash": "shadowtroopersp"
+      },
+      {
+        "label": "Spiderman",
+        "hash": "spiderman_p"
       }
     ]
   }
