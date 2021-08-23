@@ -1,8 +1,7 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using System;
-using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
+using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.State
 {

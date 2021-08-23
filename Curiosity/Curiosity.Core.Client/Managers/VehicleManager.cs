@@ -10,11 +10,11 @@ using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using LibUtils = Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LibUtils = Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Client.Managers
 {

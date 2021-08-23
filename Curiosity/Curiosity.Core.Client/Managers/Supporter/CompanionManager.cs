@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using ClientUtility = Curiosity.Core.Client.Utils.Utility;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Exceptions;
-using Curiosity.Core.Client.Diagnostics;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Exceptions;
+using Curiosity.Core.Client.Extensions;
+using System;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
+using ClientUtility = Curiosity.Core.Client.Utils.Utility;
 
 namespace Curiosity.Core.Client.Managers.Supporter
 {

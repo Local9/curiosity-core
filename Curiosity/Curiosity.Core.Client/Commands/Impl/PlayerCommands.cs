@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
