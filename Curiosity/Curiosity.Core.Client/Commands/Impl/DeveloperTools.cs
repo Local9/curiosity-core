@@ -93,7 +93,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
                         SetPedToInformRespectedFriends(Cache.PlayerPed.Handle, 20f, 20);
 
-                        SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
+                        SetGroupFormationSpacing(playerGroup.Handle, 3f, 3f, 3f);
 
                         companionPed.NeverLeavesGroup = true;
                         companionPed.CanSufferCriticalHits = false;
