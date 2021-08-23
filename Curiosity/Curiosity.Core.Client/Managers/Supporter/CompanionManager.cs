@@ -12,25 +12,10 @@ namespace Curiosity.Core.Client.Managers.Supporter
 {
     public class CompanionManager : Manager<CompanionManager>
     {
-        #region Animations
-        const string ANIM_DICT_IDLE = "idle_a";
-        const string ANIM_RETRIEVER_IDLE = "creatures@retriever@amb@world_dog_sitting@idle_a";
-        const string ANIM_ROTTWEILER_IDLE = "creatures@rottweiler@amb@world_dog_sitting@idle_a";
-        const string ANIM_DICT_MOVE = "creatures@rottweiler@move";
         const string ANIM_DICT_TRICKS = "creatures@rottweiler@tricks@";
-        const string ANIM_PETTING_PLAYER = "petting_franklin";
-        const string ANIM_PETTING_PET = "petting_chop";
         const string ANIM_SIT_ENTER = "sit_enter";
-        const string ANIM_SIT_LOOP = "sit_loop";
-        const string ANIM_SIT_EXIT = "sit_exit";
-        #endregion
 
-        WeaponHash thrownProjectile;
-        WeaponHash weaponBall = WeaponHash.Ball;
-
-        static Ped companionPed;
-
-        int companionState = 0;
+        Ped companionPed;
 
         public override void Begin()
         {
@@ -91,6 +76,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 {
                     int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
                     playerGroup = new PedGroup(playerGroupId);
+                    Logger.Debug($"PedGroup was Null, made a new group: {playerGroupId}");
                 }
 
                 playerGroup.FormationType = FormationType.Default;

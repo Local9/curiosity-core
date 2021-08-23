@@ -301,10 +301,6 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Send("character:routing:base");
             Instance.ExportDictionary["pma-voice"].toggleMute();
 
-            int playerGroupId = API.CreateGroup(0);
-            PedGroup playerGroup = new PedGroup(playerGroupId);
-            playerGroup.Add(Cache.PlayerPed, true);
-
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
             Cache.UpdatePedId(true);
