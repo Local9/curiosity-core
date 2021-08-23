@@ -40,6 +40,9 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuSettings;
         private SubMenu.SettingsMenu _MenuSettings = new SubMenu.SettingsMenu();
 
+        private UIMenu menuSupporter;
+        private SubMenu.SupporterMenu _MenuSupporter = new SubMenu.SupporterMenu();
+
         public override void Begin()
         {
             MenuInstance = this;
@@ -57,6 +60,9 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuSettings = MenuPool.AddSubMenu(menuMain, "Settings");
             _MenuSettings.CreateMenu(menuSettings);
+
+            menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter");
+            _MenuSupporter.CreateMenu(menuSupporter);
 
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
@@ -215,6 +221,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             miKillYourself.Enabled = playerOptionsManager.IsKillSelfEnabled;
             miKillYourself.SetRightLabel($"${playerOptionsManager.CostOfKillSelf * playerOptionsManager.NumberOfTimesKillSelf}");
+
+            UIMenuItem supporterButton = menuSupporter.ParentItem;
+            supporterButton.Enabled = Cache.Player.User.IsSupporterAccess;
+            supporterButton.Description = "Please visit our Patreon to see our supporter benefits.";
+            if (supporterButton.Enabled)
+                supporterButton.Description = "Supporter Menu";
         }
 
         private async Task OnMenuDisplay()
