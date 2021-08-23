@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Linq;
 using Curiosity.Core.Client.Exceptions;
 using System.Threading.Tasks;
+using Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -83,7 +84,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         companionModel.MarkAsNoLongerNeeded();
 
                         PedGroup playerGroup = Cache.PlayerPed.PedGroup;
-                        playerGroup.FormationType = FormationType.Default;
+                        playerGroup.FormationType = FormationType.Circle2;
                         playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
 
                         playerGroup.Add(Cache.PlayerPed, true);
@@ -110,6 +111,38 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                         if (pedHash == "u_m_y_juggernaut_01")
                         {
+                            int type = Utility.RANDOM.Next(3);
+                            if (type == 0)
+                            {
+                                SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                                SetPedComponentVariation(companionPed.Handle, 0, 0, 1, 0);
+                                SetPedComponentVariation(companionPed.Handle, 3, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 8, 0, 1, 0);
+                                SetPedComponentVariation(companionPed.Handle, 10, 0, 1, 0);
+                            }
+                            else if (type == 1)
+                            {
+                                SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                                SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                            }
+                            else
+                            {
+                                ClearPedProp(companionPed.Handle, 0);
+                                SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                                SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                            }
+
                             companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
                             companionPed.Health = 5000;
                             companionPed.CanRagdoll = false;
