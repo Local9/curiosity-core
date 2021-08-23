@@ -30,7 +30,7 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
 
-        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "toast", int duration = 5000, bool autoClose = true, bool dismissible = false)
+        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 5000, bool autoClose = true, bool dismissible = false)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")
