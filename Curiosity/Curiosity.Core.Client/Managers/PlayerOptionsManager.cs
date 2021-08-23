@@ -86,21 +86,13 @@ namespace Curiosity.Core.Client.Managers
             }
             else
             {
-                SizeF res = ScreenTools.ResolutionMaintainRatio;
-                Point safe = ScreenTools.SafezoneBounds;
-
                 const int interval = 45;
 
                 DateTime finalDate = passiveModeDisabled;
                 string timeSpanLeft = (finalDate - DateTime.UtcNow).ToString(@"mm\:ss");
 
-                PointF left = new PointF(Convert.ToInt32(res.Width) - safe.X - 318, Convert.ToInt32(res.Height) - safe.Y - (100 + (1 * interval)));
-                PointF right = new PointF(Convert.ToInt32(res.Width) - safe.X - 20, Convert.ToInt32(res.Height) - safe.Y - (102 + (1 * interval)));
-                PointF background = new Point(Convert.ToInt32(res.Width) - safe.X - 248, Convert.ToInt32(res.Height) - safe.Y - (100 + (1 * interval)));
-
-                new UIResText("Passive Mode Cooldown", left, 0.3f).Draw();
-                new UIResText($"{timeSpanLeft}", right, 0.5f, Color.FromArgb(255, 255, 255, 255), CitizenFX.Core.UI.Font.ChaletLondon, Alignment.Right).Draw();
-                new NativeUI.Sprite("timerbars", "all_black_bg", background, new Size(300, 37), 0f, Color.FromArgb(180, 255, 255, 255)).Draw();
+                TextTimerBar textTimerBar = new TextTimerBar("Passive Mode Cooldown", timeSpanLeft);
+                textTimerBar.Draw(interval);
 
                 Screen.Hud.HideComponentThisFrame(HudComponent.AreaName);
                 Screen.Hud.HideComponentThisFrame(HudComponent.StreetName);
