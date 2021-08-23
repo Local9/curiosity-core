@@ -62,6 +62,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 }
 
                 companionPed = await World.CreatePed(model, spawn, Cache.PlayerPed.Heading);
+                model.MarkAsNoLongerNeeded();
 
                 companionPed.Task.ClearAll();
                 companionPed.LeaveGroup();
