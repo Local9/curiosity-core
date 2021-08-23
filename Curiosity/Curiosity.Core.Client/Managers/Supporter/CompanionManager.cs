@@ -61,7 +61,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     spawn.Z = groundZ;
                 }
 
-                companionPed = await World.CreatePed(model, spawn, Cache.PlayerPed.Heading);
+                companionPed = await World.CreatePed(model, spawn, Game.PlayerPed.Heading);
                 model.MarkAsNoLongerNeeded();
 
                 companionPed.Task.ClearAll();
@@ -71,7 +71,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 await BaseScript.Delay(100);
 
-                companionPed.RelationshipGroup = Cache.PlayerPed.RelationshipGroup;
+                companionPed.RelationshipGroup = Game.PlayerPed.RelationshipGroup;
                 companionPed.NeverLeavesGroup = true;
 
                 companionPed.Health = 200;
@@ -88,18 +88,18 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 if (!companionPed.IsHuman) PlayAnimalVocalization(companionPed.Handle, 3, "BARK");
 
-                PedGroup playerGroup = Cache.PlayerPed.PedGroup;
+                PedGroup playerGroup = Game.PlayerPed.PedGroup;
 
                 if (playerGroup is null)
                 {
-                    int playerGroupId = CreateGroup(0);
+                    int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
                     playerGroup = new PedGroup(playerGroupId);
                 }
 
                 playerGroup.FormationType = FormationType.Default;
                 playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
 
-                playerGroup.Add(Cache.PlayerPed, true);
+                playerGroup.Add(Game.PlayerPed, true);
                 playerGroup.Add(companionPed, false);
 
                 SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
@@ -162,10 +162,10 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
             try
             {
-                if (Cache.PlayerPed.IsInVehicle() && !companionPed.IsInVehicle())
+                if (Game.PlayerPed.IsInVehicle() && !companionPed.IsInVehicle())
                 {
                     await companionPed.FadeOut();
-                    companionPed.Task.WarpIntoVehicle(Cache.PlayerPed.CurrentVehicle, VehicleSeat.Any);
+                    companionPed.Task.WarpIntoVehicle(Game.PlayerPed.CurrentVehicle, VehicleSeat.Any);
 
                     if (!companionPed.IsHuman)
                     {
@@ -191,12 +191,12 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     }
                 }
 
-                if (Cache.PlayerPed.IsInVehicle() && companionPed.IsInVehicle())
+                if (Game.PlayerPed.IsInVehicle() && companionPed.IsInVehicle())
                 {
                     companionPed.SetConfigFlag(292, true);
                 }
 
-                if (companionPed.IsDead && Cache.PlayerPed.IsInRangeOf(companionPed.Position, 2.5f) && !Cache.PlayerPed.IsInVehicle())
+                if (companionPed.IsDead && Game.PlayerPed.IsInRangeOf(companionPed.Position, 2.5f) && !Game.PlayerPed.IsInVehicle())
                 {
                     Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to revive companion.");
 
@@ -219,11 +219,11 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     }
                 }
 
-                if (Cache.PlayerPed.IsDead && companionPed.IsAlive && !Cache.PlayerPed.IsInVehicle())
+                if (Game.PlayerPed.IsDead && companionPed.IsAlive && !Game.PlayerPed.IsInVehicle())
                 {
                     while (companionPed.Position.Distance(Game.PlayerPed.Position) > 2f)
                     {
-                        companionPed.Task.GoTo(Cache.PlayerPed);
+                        companionPed.Task.GoTo(Game.PlayerPed);
                         await BaseScript.Delay(500);
                     }
                     GameEventTigger.GetModule().Respawn(Cache.Player);

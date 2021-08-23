@@ -80,25 +80,25 @@ namespace Curiosity.Core.Client.Commands.Impl
                             spawn.Z = groundZ;
                         }
 
-                        Ped companionPed = await World.CreatePed(companionModel, spawn, Cache.PlayerPed.Heading);
+                        Ped companionPed = await World.CreatePed(companionModel, spawn, Game.PlayerPed.Heading);
                         companionModel.MarkAsNoLongerNeeded();
 
-                        PedGroup playerGroup = Cache.PlayerPed.PedGroup;
+                        PedGroup playerGroup = Game.PlayerPed.PedGroup;
 
                         if (playerGroup is null)
                         {
-                            int playerGroupId = CreateGroup(0);
+                            int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
                             playerGroup = new PedGroup(playerGroupId);
                         }
 
                         playerGroup.FormationType = FormationType.Circle2;
                         playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
 
-                        playerGroup.Add(Cache.PlayerPed, true);
+                        playerGroup.Add(Game.PlayerPed, true);
                         playerGroup.Add(companionPed, false);
 
                         SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
-                        SetPedToInformRespectedFriends(Cache.PlayerPed.Handle, 20f, 20);
+                        SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
 
                         SetGroupFormationSpacing(playerGroup.Handle, 3f, 3f, 3f);
 
