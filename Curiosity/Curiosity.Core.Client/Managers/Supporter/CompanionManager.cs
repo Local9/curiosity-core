@@ -9,6 +9,7 @@ using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Exceptions;
 using Curiosity.Core.Client.Diagnostics;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Core.Client.Managers.Supporter
 {
@@ -45,6 +46,8 @@ namespace Curiosity.Core.Client.Managers.Supporter
             {
                 await DeleteCurrentCompanion();
 
+                await BaseScript.Delay(100);
+
                 if (companionPed is not null) throw new CitizenFxException($"Current companion has not been removed.");
 
                 Model model = await ClientUtility.LoadModel(companionHash);
@@ -59,12 +62,21 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 }
 
                 companionPed = await World.CreatePed(model, spawn, Cache.PlayerPed.Heading);
+
+                companionPed.Task.ClearAll();
+                companionPed.LeaveGroup();
+
                 await companionPed.FadeIn();
 
-                companionPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
+                await BaseScript.Delay(100);
+
+                companionPed.RelationshipGroup = Cache.PlayerPed.RelationshipGroup;
                 companionPed.NeverLeavesGroup = true;
 
+                companionPed.Health = 200;
+                companionPed.Armor = 100;
                 companionPed.CanSufferCriticalHits = false;
+                companionPed.CanRagdoll = false;
                 companionPed.CanBeTargetted = false;
                 companionPed.IsPersistent = true;
 
@@ -73,12 +85,24 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 companionBlip.Scale = 0.7f;
                 companionBlip.Name = "Compainion";
 
+                if (!companionPed.IsHuman) PlayAnimalVocalization(companionPed.Handle, 3, "BARK");
+
                 PedGroup playerGroup = Cache.PlayerPed.PedGroup;
                 playerGroup.FormationType = FormationType.Default;
-                playerGroup.SeparationRange = 2f;
+                playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
+
+                playerGroup.Add(Cache.PlayerPed, true);
+                playerGroup.Add(companionPed, false);
+
+                SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
 
                 SetPedCanTeleportToGroupLeader(companionPed.Handle, playerGroup.Handle, true);
                 NotificationManager.GetModule().Info($"Your campanion will defend you.");
+
+                SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
+                SetPedToInformRespectedFriends(Cache.PlayerPed.Handle, 20f, 20);
+
+                Instance.AttachTickHandler(OnCompanionMasterTick);
             }
             catch (CitizenFxException cfxEx)
             {
@@ -113,6 +137,101 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     if (companionPed.Exists()) companionPed.Delete();
                     companionPed = null;
                 }
+
+                Dispose();
+            }
+        }
+
+        private void Dispose()
+        {
+            Instance.DetachTickHandler(OnCompanionMasterTick);
+        }
+
+        private async Task OnCompanionMasterTick()
+        {
+            if (companionPed is null) Dispose();
+            if (!companionPed.Exists()) Dispose();
+
+            try
+            {
+                if (Cache.PlayerPed.IsInVehicle() && !companionPed.IsInVehicle())
+                {
+                    await companionPed.FadeOut();
+                    companionPed.Task.WarpIntoVehicle(Cache.PlayerPed.CurrentVehicle, VehicleSeat.Any);
+
+                    if (!companionPed.IsHuman)
+                    {
+                        await BaseScript.Delay(500);
+                        PlayAnimalVocalization(companionPed.Handle, 3, "WHINE");
+                        await BaseScript.Delay(500);
+                        companionPed.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_ENTER, 1f, -1, AnimationFlags.StayInEndFrame);
+                    }
+
+                    await companionPed.FadeIn();
+                }
+
+                if (!Game.PlayerPed.IsInVehicle() && companionPed.IsInVehicle())
+                {
+                    companionPed.SetConfigFlag(292, false);
+                    if (!companionPed.IsHuman)
+                    {
+                        await companionPed.FadeOut();
+                        Vehicle vehicle = companionPed.CurrentVehicle;
+                        companionPed.Position = vehicle.GetOffsetPosition(new Vector3(2f, 0f, 0f));
+                        companionPed.Task.ClearAll();
+                        await companionPed.FadeIn();
+                    }
+                }
+
+                if (Cache.PlayerPed.IsInVehicle() && companionPed.IsInVehicle())
+                {
+                    companionPed.SetConfigFlag(292, true);
+                }
+
+                if (companionPed.IsDead && Cache.PlayerPed.IsInRangeOf(companionPed.Position, 2.5f) && !Cache.PlayerPed.IsInVehicle())
+                {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to revive companion.");
+
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        await companionPed.FadeOut();
+                        await BaseScript.Delay(500);
+                        companionPed.Resurrect();
+                        companionPed.Health = 200;
+                        companionPed.Armor = 100;
+                        await companionPed.FadeIn();
+
+                        PedGroup currentPedGroup = Cache.PlayerPed.PedGroup;
+                        currentPedGroup.SeparationRange = 300f;
+
+                        if (!currentPedGroup.Contains(Cache.PlayerPed)) currentPedGroup.Add(Cache.PlayerPed, true);
+                        if (!currentPedGroup.Contains(companionPed)) currentPedGroup.Add(companionPed, false);
+
+                        await BaseScript.Delay(500);
+                    }
+                }
+
+                if (Cache.PlayerPed.IsDead && companionPed.IsAlive && !Cache.PlayerPed.IsInVehicle())
+                {
+                    while (companionPed.Position.Distance(Game.PlayerPed.Position) > 2f)
+                    {
+                        companionPed.Task.GoTo(Cache.PlayerPed);
+                        await BaseScript.Delay(500);
+                    }
+                    GameEventTigger.GetModule().Respawn(Cache.Player);
+                    await BaseScript.Delay(3000);
+                }
+
+                if (!companionPed.IsInGroup)
+                {
+                    DeleteCurrentCompanion();
+                    NotificationManager.GetModule().Info($"Your companion has left you.");
+                }
+            }
+            catch (Exception ex)
+            {
+                DeleteCurrentCompanion();
+                NotificationManager.GetModule().Error($"Companion has been removed.");
             }
         }
     }

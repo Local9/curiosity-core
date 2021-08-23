@@ -335,7 +335,7 @@ namespace Curiosity.Core.Client.Managers
             await ScreenInterface.FadeIn(3000);
         }
 
-        async void Respawn(CuriosityPlayer curiosityPlayer)
+        public async void Respawn(CuriosityPlayer curiosityPlayer)
         {
             await ScreenInterface.FadeOut();
             PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
