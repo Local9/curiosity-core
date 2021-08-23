@@ -56,7 +56,7 @@ namespace Curiosity.Core.Client.Managers
 
             await Session.Loading();
 
-            List<string> vehicles = GetConfig().VehiclesToSuppress;
+            List<string> vehicles = ConfigurationManager.GetModule().VehiclesToSuppress();
 
             for (int i = 0; i < vehicles.Count; i++)
             {
@@ -67,31 +67,6 @@ namespace Curiosity.Core.Client.Managers
 
                 vehiclesToSuppress.Add(modelHash);
             }
-        }
-
-        private ClientConfig GetConfig()
-        {
-            ClientConfig config = new();
-
-            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/config.json"); // Fuck you VS2019 UTF8 BOM
-
-            try
-            {
-                if (string.IsNullOrEmpty(jsonFile))
-                {
-                    Logger.Error($"config.json file is empty or does not exist, please fix this");
-                }
-                else
-                {
-                    return JsonConvert.DeserializeObject<ClientConfig>(jsonFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"Config JSON File Exception\nDetails: {ex.Message}\nStackTrace:\n{ex.StackTrace}");
-            }
-
-            return config;
         }
 
         private async void UnloadLosSantosIpls()

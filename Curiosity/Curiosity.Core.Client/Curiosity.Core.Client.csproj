@@ -77,6 +77,7 @@
     <Compile Include="Interface\Menus\Data\VehicleData.cs" />
     <Compile Include="Interface\Menus\SubMenu\SettingsMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\JobMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\SupporterMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleDoorMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Interface\Menus\VehicleMods\SubMenu\VehicleNeonSubMenu.cs" />
     <Compile Include="Interface\Menus\VehicleMods\VehicleModMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
+    <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\UI\DamageEffectManager.cs" />
     <Compile Include="Managers\UI\GarageVehicleManager.cs" />
