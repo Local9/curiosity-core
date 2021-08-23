@@ -16,6 +16,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
     {
         // menu pool
         public static MenuPool _MenuPool;
+        bool menuOpen = true;
         // Menus
         private UIMenu menuMain;
         private UIMenu menuCharacterHeritage;
@@ -55,7 +56,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain = new UIMenu(Game.Player.Name, "Player Creator");
             _MenuPool.Add(menuMain);
 
-            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
 
@@ -96,19 +96,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain.InstructionalButtons.Add(btnRotateLeft);
             menuMain.InstructionalButtons.Add(btnRotateRight);
 
+            menuMain.ResetKey(UIMenu.MenuControls.Back);
+
             _MenuPool.RefreshIndex();
 
             if (open)
                 OpenMenu();
-        }
-
-        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
-        {
-            if (state == MenuState.Closed || state.Equals(MenuState.ChangeBackward))
-                OnMenuClose();
-
-            if (state == MenuState.Opened)
-                OnMenuOpen();
         }
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -122,6 +115,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                     await Cache.Character.Save();
 
                     EventSystem.GetModule().Send("character:routing:base");
+
+                    DestroyMenus();
                 }
             }
             catch (Exception ex)
@@ -167,30 +162,19 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void DestroyMenus()
         {
-
             try
             {
                 PluginManager.Instance.DetachTickHandler(OnMenuCreate);
                 PluginManager.Instance.DetachTickHandler(OnPlayerControls);
-                menuMain.Visible = false;
+
+                menuMain.InstructionalButtons.Clear();
+
+                _MenuPool.CloseAllMenus();
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, "Destroy Menus");
             }
-        }
-
-        private void OnMenuClose()
-        {
-            DestroyMenus();
-        }
-
-        private void OnMenuOpen()
-        {
-            PluginManager.Instance.DiscordRichPresence.Status = "Character Creator";
-            PluginManager.Instance.DiscordRichPresence.Commit();
-
-            PluginManager.Instance.AttachTickHandler(OnPlayerControls);
         }
 
         private async Task OnPlayerControls()
@@ -217,9 +201,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             {
                 _MenuPool.ProcessMenus();
                 _MenuPool.ProcessMouse();
-
-                if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
-                    menuMain.Visible = true;
             }
             catch (KeyNotFoundException ex)
             {
@@ -242,8 +223,13 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         internal void OpenMenu()
         {
-            PluginManager.Instance.AttachTickHandler(OnMenuCreate);
+            PluginManager.Instance.DiscordRichPresence.Status = "Character Creator";
+            PluginManager.Instance.DiscordRichPresence.Commit();
+
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
+            PluginManager.Instance.AttachTickHandler(OnMenuCreate);
+
+            menuMain.Visible = true;
         }
     }
 }
