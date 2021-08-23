@@ -270,6 +270,15 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "stat" })]
+        public class StatNotifcation : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                NativeUI.Notifications.ShowStatNotification(10, 9, "Stat Test");
+            }
+        }
+
         [CommandInfo(new[] { "mod" })]
         public class ModVehicleMenu : ICommand
         {
