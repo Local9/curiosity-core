@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Curiosity.Core.Client.Exceptions;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -27,7 +29,80 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         static Vector3 positionSave = Vector3.Zero;
 
+        static List<Ped> companions = new List<Ped>();
+
         #region Player
+        [CommandInfo(new[] { "guard" })]
+        public class Guard : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                string cmd = arguments.ElementAt(0);
+
+                if (cmd == "remove")
+                {
+                    foreach(Ped ped in companions)
+                    {
+                        if (ped.Exists())
+                        {
+                            await ped.FadeOut();
+                            ped.Delete();
+                        }
+                    }
+                    return;
+                }
+
+                try
+                {
+                    if (cmd == "add")
+                    {
+                        if (companions.Count > 4) return;
+
+                        string pedHash = arguments.ElementAt(1);
+
+                        Model companionModel = await Utils.Utility.LoadModel(pedHash);
+
+                        Vector3 offset = new Vector3(2f, 0f, 0f);
+                        Vector3 spawn = Cache.PlayerPed.GetOffsetPosition(offset);
+                        float groundZ = spawn.Z;
+                        Vector3 groundNormal = Vector3.Zero;
+
+                        if (GetGroundZAndNormalFor_3dCoord(spawn.X, spawn.Y, spawn.Z, ref groundZ, ref groundNormal))
+                        {
+                            spawn.Z = groundZ;
+                        }
+
+                        Ped companionPed = await World.CreatePed(companionModel, spawn, Cache.PlayerPed.Heading);
+                        companionModel.MarkAsNoLongerNeeded();
+
+                        PedGroup playerGroup = Cache.PlayerPed.PedGroup;
+                        playerGroup.FormationType = FormationType.Default;
+                        playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
+
+                        playerGroup.Add(Cache.PlayerPed, true);
+                        playerGroup.Add(companionPed, false);
+
+                        SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
+                        SetPedToInformRespectedFriends(Cache.PlayerPed.Handle, 20f, 20);
+
+                        SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
+
+                        companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
+
+                        companions.Add(companionPed);
+                    }
+                }
+                catch (CitizenFxException cfxEx)
+                {
+                    NotificationManager.GetModule().Error(cfxEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"Create Companion");
+                }
+            }
+        }
+
         [CommandInfo(new[] { "god" })]
         public class Godmode : ICommand
         {
