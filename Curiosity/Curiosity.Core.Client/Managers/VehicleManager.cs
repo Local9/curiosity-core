@@ -10,7 +10,7 @@ using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Utils;
+using LibUtils = Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -192,7 +192,7 @@ namespace Curiosity.Core.Client.Managers
                     maxRandomFuel = 100f;
                 }
 
-                float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
+                float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (LibUtils.Utility.RANDOM.NextDouble()));
                 currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", randomFuel, true);
 
                 float classMultiplier = 1 / 1600f;
@@ -519,7 +519,7 @@ namespace Curiosity.Core.Client.Managers
                             EntityBone entityBone = currentVehicle.Vehicle.Bones["bodyshell"];
                             Vector3 spawnOffset = entityBone.Position + new Vector3(0f, -4.1f, -2.5f);
 
-                            containerModel = (int)containers[Utility.RANDOM.Next(containers.Count)];
+                            containerModel = (int)containers[LibUtils.Utility.RANDOM.Next(containers.Count)];
 
                             await containerModel.Request(10000);
 
