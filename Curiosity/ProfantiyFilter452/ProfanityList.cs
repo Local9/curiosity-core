@@ -1214,7 +1214,6 @@ namespace ProfanityFilterNS
              "titwank",
              "tongue in a",
              "toots",
-             "topless",
              "tosser",
              "towelhead",
              "tramp",
