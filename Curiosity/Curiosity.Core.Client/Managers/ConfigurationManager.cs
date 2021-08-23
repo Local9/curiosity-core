@@ -52,5 +52,21 @@ namespace Curiosity.Core.Client.Managers
         {
             return GetConfig().VehiclesToSuppress;
         }
+
+        public List<Companion> SupporterCompanions()
+        {
+            if (GetConfig().Supporter.Companions is null)
+                return new List<Companion>();
+
+            return GetConfig().Supporter.Companions;
+        }
+
+        public List<SupporterModel> SupporterModels()
+        {
+            if (GetConfig().Supporter.Companions is null)
+                return new List<SupporterModel>();
+
+            return GetConfig().Supporter.SupporterModels;
+        }
     }
 }
