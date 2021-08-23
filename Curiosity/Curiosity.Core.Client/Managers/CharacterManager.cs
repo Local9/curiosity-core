@@ -261,14 +261,16 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Notify.Info($"{msg} sleeping with the fishes.");
                     position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
-                    await SafeTeleport.Teleport(API.PlayerPedId(), position);
+                    Game.PlayerPed.Position = position.AsVector();
+                    Game.PlayerPed.Heading = position.H;
                 }
 
                 if (API.IsEntityInAir(API.PlayerPedId()))
                 {
                     Notify.Info($"{msg} being abducted.");
                     position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
-                    await SafeTeleport.Teleport(API.PlayerPedId(), position);
+                    Game.PlayerPed.Position = position.AsVector();
+                    Game.PlayerPed.Heading = position.H;
                 }
 
                 await transition.Wait();
