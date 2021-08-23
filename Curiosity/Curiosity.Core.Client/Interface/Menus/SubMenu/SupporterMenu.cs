@@ -124,10 +124,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 }
 
                 Game.Player.ChangeModel(model);
-
-                await Cache.PlayerPed.FadeIn();
-
-                listItem.Enabled = true;
             }
             else if (listItem == uiLstCompanions)
             {
@@ -136,6 +132,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
 
         EXIT:
+            await Cache.PlayerPed.FadeIn();
             listItem.Enabled = true;
         }
     }
