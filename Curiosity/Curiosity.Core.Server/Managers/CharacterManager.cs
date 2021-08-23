@@ -19,6 +19,21 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
+            EventSystem.GetModule().Attach("character:routing:creator", new EventCallback(metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                if (player is null) return null;
+
+                int initRouting = 5000;
+                int playerHandle = int.Parse(player.Handle);
+                int routingId = initRouting + playerHandle;
+
+                API.SetPlayerRoutingBucket(player.Handle, routingId);
+
+                return null;
+            }));
+
             EventSystem.GetModule().Attach("character:routing:base", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];

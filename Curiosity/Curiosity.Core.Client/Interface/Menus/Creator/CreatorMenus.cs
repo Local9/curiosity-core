@@ -3,6 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
@@ -44,7 +45,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
         private CharacterProps _CharacterProps = new CharacterProps();
 
-        internal void CreateMenu(bool open = false)
+        internal async void CreateMenu(bool open = false)
         {
             // TICKS & SETUP
             _MenuPool = new MenuPool();
@@ -58,21 +59,29 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
 
+            if (open)
+            {
+                await Cache.PlayerPed.FadeOut();
+                Cache.Player.Character.MarkedAsRegistered = false;
+
+                EventSystem.GetModule().Send("character:routing:creator");
+
+                CharacterManager.GetModule().Load(Cache.Player);
+            }
+
             // items
 
-            if (!open)
-            {
-                mLstGender = new UIMenuListItem("Gender", Genders, 0);
-                menuMain.AddItem(mLstGender);
-                menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
-                _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+            mLstGender = new UIMenuListItem("Gender", Genders, 0);
+            menuMain.AddItem(mLstGender);
+                
+            menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
+            _CharacterHeritage.CreateMenu(menuCharacterHeritage);
 
-                menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
-                _CharacterFeatures.CreateMenu(menuCharacterFeatures);
-                menuCharacterAppearance = _MenuPool.AddSubMenu(menuMain, "Appearance");
-                _CharacterAppearance.CreateMenu(menuCharacterAppearance);
+            menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
+            _CharacterFeatures.CreateMenu(menuCharacterFeatures);
 
-            }
+            menuCharacterAppearance = _MenuPool.AddSubMenu(menuMain, "Appearance");
+            _CharacterAppearance.CreateMenu(menuCharacterAppearance);
 
             menuCharacterCustomisation = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterCustomisation.CreateMenu(menuCharacterCustomisation);
@@ -95,7 +104,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Closed)
+            if (state == MenuState.Closed || state.Equals(MenuState.ChangeBackward))
                 OnMenuClose();
 
             if (state == MenuState.Opened)
@@ -171,10 +180,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void OnMenuClose()
         {
-            PluginManager.Instance.DetachTickHandler(OnPlayerControls);
-
-            if (menuMain.InstructionalButtons.Count > 0)
-                menuMain.InstructionalButtons.Clear();
+            DestroyMenus();
         }
 
         private void OnMenuOpen()
