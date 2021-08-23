@@ -121,11 +121,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                     Cache.Player.Character = Cache.Character;
                     await Cache.Character.Save();
 
-                    DestroyMenus();
-                    _MenuPool.CloseAllMenus();
-                    menuMain.Clear();
-                    menuMain = null;
-
                     EventSystem.GetModule().Send("character:routing:base");
                 }
             }
@@ -172,11 +167,17 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void DestroyMenus()
         {
-            if (menuMain.InstructionalButtons.Count > 0)
-                menuMain.InstructionalButtons.Clear();
 
-            PluginManager.Instance.DetachTickHandler(OnMenuCreate);
-            PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+            try
+            {
+                PluginManager.Instance.DetachTickHandler(OnMenuCreate);
+                PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+                menuMain.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Destroy Menus");
+            }
         }
 
         private void OnMenuClose()
