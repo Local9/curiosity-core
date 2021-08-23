@@ -412,11 +412,15 @@ namespace Curiosity.Core.Client.Managers
             {
                 bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
-                if (!serverSpawned && vehicle.Opacity > 100)
-                    vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
-
-                if (serverSpawned && (vehicle.LockStatus == VehicleLockStatus.LockedForPlayer || vehicle.LockStatus == VehicleLockStatus.CannotBeTriedToEnter))
+                if (serverSpawned && vehicle.LockStatus.Equals(VehicleLockStatus.LockedForPlayer))
+                {
                     vehicle.LockStatus = VehicleLockStatus.Unlocked;
+                }
+                else if (!serverSpawned && vehicle.IsVisible)
+                { 
+                        vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+                }
+                
             });
 
             await BaseScript.Delay(500);
