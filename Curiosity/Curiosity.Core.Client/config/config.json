@@ -30,5 +30,43 @@
     "Cargobob3",
     "Cargobob4",
     "Besra"
-  ]
+  ],
+  "supporter": {
+    "companions": [
+      {
+        "label": "Husky",
+        "hash": "A_C_Husky"
+      },
+      {
+        "label": "Poodle",
+        "hash": "A_C_Poodle"
+      },
+      {
+        "label": "Pug",
+        "hash": "A_C_Pug"
+      },
+      {
+        "label": "Retriever",
+        "hash": "A_C_Retriever"
+      },
+      {
+        "label": "Rottweiler",
+        "hash": "A_C_Rottweiler"
+      },
+      {
+        "label": "Shepherd",
+        "hash": "A_C_shepherd"
+      }
+    ],
+    "models": [
+      {
+        "label": "Darth Vader",
+        "hash": "vader_p"
+      },
+      {
+        "label": "Groot",
+        "hash": "minibabygroot_p"
+      }
+    ]
+  }
 }
