@@ -50,6 +50,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                             ped.Delete();
                         }
                     }
+                    companions.Clear();
                     return;
                 }
 
