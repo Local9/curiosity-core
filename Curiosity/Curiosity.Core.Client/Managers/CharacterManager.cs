@@ -251,7 +251,8 @@ namespace Curiosity.Core.Client.Managers
                     position.Z = safePosition.Z;
                 }
 
-                await SafeTeleport.Teleport(API.PlayerPedId(), position);
+                Game.PlayerPed.Position = position.AsVector();
+                Game.PlayerPed.Heading = position.H;
 
                 await BaseScript.Delay(1000);
 
