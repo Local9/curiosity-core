@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Curiosity.Core.Client.Exceptions;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -119,6 +120,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                         }
 
                         companions.Add(companionPed);
+
+                        PluginManager.Instance.AttachTickHandler(OnCleanUpGuards);
                     }
                 }
                 catch (CitizenFxException cfxEx)
@@ -128,6 +131,32 @@ namespace Curiosity.Core.Client.Commands.Impl
                 catch (Exception ex)
                 {
                     Logger.Error(ex, $"Create Companion");
+                }
+            }
+        }
+
+        private static async Task OnCleanUpGuards()
+        {
+            if (companions.Count == 0)
+            {
+                PluginManager.Instance.DetachTickHandler(OnCleanUpGuards);
+            }
+
+            List<Ped> copy = new List<Ped>(companions);
+
+            foreach(Ped ped in copy)
+            {
+                if (ped is not null)
+                {
+                    if (ped.Exists())
+                    {
+                        if (ped.IsDead)
+                        {
+                            await ped.FadeOut();
+                            ped.Delete();
+                            companions.Remove(ped);
+                        }
+                    }
                 }
             }
         }
