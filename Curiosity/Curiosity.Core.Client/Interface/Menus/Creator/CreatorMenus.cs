@@ -172,7 +172,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void DestroyMenus()
         {
-            menuMain.InstructionalButtons.Clear();
+            if (menuMain.InstructionalButtons.Count > 0)
+                menuMain.InstructionalButtons.Clear();
 
             PluginManager.Instance.DetachTickHandler(OnMenuCreate);
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
