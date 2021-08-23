@@ -210,6 +210,8 @@ namespace Curiosity.Core.Client.Managers
             MarkersClose.ForEach(m =>
             {
                 World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
+                Vector3 pos = m.Position;
+                pos.Z = pos.Z + 1f;
                 NativeUI.Notifications.ShowFloatingHelpNotification(m.Message, m.Position);
             });
         }
