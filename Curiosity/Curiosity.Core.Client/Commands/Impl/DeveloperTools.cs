@@ -96,6 +96,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         companionPed.CanSufferCriticalHits = false;
                         companionPed.Health = companionPed.MaxHealth;
                         companionPed.Armor = 200;
+                        companionPed.DropsWeaponsOnDeath = false;
 
                         companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
                         companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableHurt, true);
@@ -106,6 +107,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         if (pedHash == "u_m_y_juggernaut_01")
                         {
                             companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
+                            companionPed.Health = 3000;
                         }
                         else
                         {
