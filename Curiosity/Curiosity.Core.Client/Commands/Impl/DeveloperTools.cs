@@ -203,6 +203,40 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        static string helpText = string.Empty;
+        static Vector3 helpTextPosition;
+
+        [CommandInfo(new[] { "txtHelp" })]
+        public class HelpTextTest : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                string cmd = arguments.ElementAt(0);
+
+                if (cmd == "add")
+                {
+                    helpTextPosition = Game.PlayerPed.Position;
+                    helpText = arguments.ElementAt(1);
+                }
+
+                if (cmd == "stop")
+                {
+                    helpText = string.Empty;
+                }
+            }
+        }
+
+        private async Task OnHelpTextDisplay()
+        {
+            if (string.IsNullOrEmpty(helpText))
+            {
+                PluginManager.Instance.DetachTickHandler(OnHelpTextDisplay);
+                return;
+            }
+
+            NativeUI.Notifications.ShowFloatingHelpNotification(helpText, helpTextPosition);
+        }
+
         [CommandInfo(new[] { "god" })]
         public class Godmode : ICommand
         {
