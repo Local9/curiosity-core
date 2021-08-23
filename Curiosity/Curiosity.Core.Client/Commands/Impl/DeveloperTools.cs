@@ -217,6 +217,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     helpTextPosition = Game.PlayerPed.Position;
                     helpText = arguments.ElementAt(1);
+                    PluginManager.Instance.AttachTickHandler(OnHelpTextDisplay);
                 }
 
                 if (cmd == "stop")
@@ -226,7 +227,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
-        private async Task OnHelpTextDisplay()
+        private static async Task OnHelpTextDisplay()
         {
             if (string.IsNullOrEmpty(helpText))
             {
