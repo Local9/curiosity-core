@@ -91,7 +91,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 await Cache.PlayerPed.FadeOut();
 
-                string modelHash = companions[newIndex].Hash;
+                string modelHash = playerModels[newIndex].Hash;
 
                 Model model = new Model(modelHash);
                 

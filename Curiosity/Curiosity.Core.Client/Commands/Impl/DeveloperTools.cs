@@ -84,6 +84,13 @@ namespace Curiosity.Core.Client.Commands.Impl
                         companionModel.MarkAsNoLongerNeeded();
 
                         PedGroup playerGroup = Cache.PlayerPed.PedGroup;
+
+                        if (playerGroup is null)
+                        {
+                            int playerGroupId = CreateGroup(0);
+                            playerGroup = new PedGroup(playerGroupId);
+                        }
+
                         playerGroup.FormationType = FormationType.Circle2;
                         playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
 
