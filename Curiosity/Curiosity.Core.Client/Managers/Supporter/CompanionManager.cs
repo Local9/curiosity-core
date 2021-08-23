@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
             {
                 await DeleteCurrentCompanion();
 
-                await BaseScript.Delay(100);
+                await BaseScript.Delay(1000);
 
                 if (companionPed is not null) throw new CitizenFxException($"Current companion has not been removed.");
 
@@ -46,6 +46,9 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 companionPed = await World.CreatePed(model, spawn, Game.PlayerPed.Heading);
                 model.MarkAsNoLongerNeeded();
 
+                SetNetworkIdExistsOnAllMachines(companionPed.NetworkId, true);
+                SetNetworkIdCanMigrate(companionPed.NetworkId, true);
+
                 companionPed.Task.ClearAll();
                 companionPed.LeaveGroup();
 
@@ -61,7 +64,6 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 companionPed.CanSufferCriticalHits = false;
                 companionPed.CanRagdoll = false;
                 companionPed.CanBeTargetted = false;
-                companionPed.IsPersistent = true;
 
                 Blip companionBlip = companionPed.AttachBlip();
                 companionBlip.Color = BlipColor.Blue;
@@ -91,7 +93,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 NotificationManager.GetModule().Info($"Your campanion will defend you.");
 
                 SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
-                SetPedToInformRespectedFriends(Cache.PlayerPed.Handle, 20f, 20);
+                SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
 
                 Instance.AttachTickHandler(OnCompanionMasterTick);
             }
@@ -107,29 +109,36 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
         public async Task DeleteCurrentCompanion()
         {
+            Dispose();
+            await BaseScript.Delay(100);
             if (companionPed is not null)
             {
                 if (companionPed.Exists())
                 {
+                    Logger.Debug($"DeleteCurrentCompanion: Companion Ped Exists");
                     Blip companionBlip = companionPed.AttachedBlip;
                     if (companionBlip is not null)
                     {
                         if (companionBlip.Exists()) companionBlip.Delete();
+
+                        Logger.Debug($"DeleteCurrentCompanion: Companion Ped Blip Removing");
                     }
+                    await BaseScript.Delay(100);
 
                     companionPed.LeaveGroup();
-                    companionPed.IsPersistent = false;
 
                     if (companionPed.IsHuman) companionPed.PlayAmbientSpeech("GENERIC_BYE", SpeechModifier.Standard);
 
                     await BaseScript.Delay(500);
                     await companionPed.FadeOut();
+                    await BaseScript.Delay(500);
+                    companionPed.Delete();
+                    companionPed.MarkAsNoLongerNeeded();
                     EventSystem.Send("entitiy:delete", companionPed.NetworkId);
-                    if (companionPed.Exists()) companionPed.Delete();
-                    companionPed = null;
                 }
+                await BaseScript.Delay(500);
 
-                Dispose();
+                companionPed = null;
             }
         }
 
@@ -192,10 +201,10 @@ namespace Curiosity.Core.Client.Managers.Supporter
                         companionPed.Armor = 100;
                         await companionPed.FadeIn();
 
-                        PedGroup currentPedGroup = Cache.PlayerPed.PedGroup;
+                        PedGroup currentPedGroup = Game.PlayerPed.PedGroup;
                         currentPedGroup.SeparationRange = 300f;
 
-                        if (!currentPedGroup.Contains(Cache.PlayerPed)) currentPedGroup.Add(Cache.PlayerPed, true);
+                        if (!currentPedGroup.Contains(Game.PlayerPed)) currentPedGroup.Add(Game.PlayerPed, true);
                         if (!currentPedGroup.Contains(companionPed)) currentPedGroup.Add(companionPed, false);
 
                         await BaseScript.Delay(500);
@@ -215,7 +224,6 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 if (!companionPed.IsInGroup)
                 {
-                    DeleteCurrentCompanion();
                     NotificationManager.GetModule().Info($"Your companion has left you.");
                 }
             }

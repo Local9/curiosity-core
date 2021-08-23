@@ -96,7 +96,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 if (!model.IsInCdImage)
                 {
                     NotificationManager.GetModule().Error($"Model is not loaded.");
-                    goto EXIT;
+                    goto ExitAndFade;
                 }
 
                 DateTime stopDate = DateTime.UtcNow.AddSeconds(5);
@@ -112,13 +112,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 if (!model.IsLoaded)
                 {
                     NotificationManager.GetModule().Error($"Model failed to load.");
-                    goto EXIT;
+                    goto ExitAndFade;
                 }
 
                 if (!model.IsValid)
                 {
                     NotificationManager.GetModule().Error($"Model is invalid.");
-                    goto EXIT;
+                    goto ExitAndFade;
                 }
 
                 Game.Player.ChangeModel(model);
@@ -127,10 +127,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 string modelHash = companions[newIndex].Hash;
                 CompanionManager.GetModule().CreateCompanion(modelHash);
+                goto Exit;
             }
 
-        EXIT:
+        ExitAndFade:
             await Cache.PlayerPed.FadeIn();
+        Exit:
             listItem.Enabled = true;
         }
     }

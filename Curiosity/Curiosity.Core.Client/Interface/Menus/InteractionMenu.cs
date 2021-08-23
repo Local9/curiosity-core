@@ -130,6 +130,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             if (selectedItem == miEditPed)
             {
+                if (Cache.PlayerPed.IsDead)
+                {
+                    NotificationManager.GetModule().Error($"You're currently dead.");
+                    return;
+                }
+
                 Creator.CreatorMenus creatorMenus = new Creator.CreatorMenus();
                 creatorMenus.CreateMenu(true);
                 MenuPool.CloseAllMenus();
