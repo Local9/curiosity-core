@@ -87,6 +87,17 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                         SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
 
+                        companionPed.NeverLeavesGroup = true;
+                        companionPed.CanSufferCriticalHits = false;
+                        companionPed.Health = companionPed.MaxHealth;
+                        companionPed.Armor = 200;
+
+                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableHurt, true);
+                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableShockingEvents, true);
+                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreBeingOnFire, true);
+                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreSeenMelee, true);
+
                         companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
 
                         companions.Add(companionPed);
