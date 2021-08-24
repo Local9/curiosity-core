@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NativeUI;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core;
-using Curiosity.Systems.Library.Models.Shop;
-using Curiosity.Core.Client.Events;
-using Curiosity.Systems.Library.Models;
+﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
+using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
+using NativeUI;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
 {
@@ -52,7 +46,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
             var data = selectedItem.ItemData;
             if (data.amt == 0)
             {
-                NotificationManager.GetModule().Error($"Sorry, you seam to of ran out.");
+                NotificationManager.GetModule().Error($"Sorry, you seem to of ran out.");
                 return;
             }
 
