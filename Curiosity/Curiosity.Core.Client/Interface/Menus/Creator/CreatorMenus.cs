@@ -99,9 +99,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain.ResetKey(UIMenu.MenuControls.Back);
 
             _MenuPool.RefreshIndex();
-
-            if (open)
-                OpenMenu();
         }
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
