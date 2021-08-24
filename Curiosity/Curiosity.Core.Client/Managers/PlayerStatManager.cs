@@ -17,9 +17,11 @@ namespace Curiosity.Core.Client.Managers
 
         bool wasSprinting = false;
         bool wasSwimming = false;
+        bool wasDriving = false;
 
         public int TotalSprinting = 0;
         public int TotalSwiming = 0;
+        public int TotalDriving = 0;
 
         LevelManager levelManager;
 
@@ -30,6 +32,9 @@ namespace Curiosity.Core.Client.Managers
 
         DateTime swimStart = new DateTime(1970, 01, 01);
         DateTime swimEnd = new DateTime(1970, 01, 01);
+
+        DateTime drivingStart = new DateTime(1970, 01, 01);
+        DateTime drivingEnd = new DateTime(1970, 01, 01);
 
         public override void Begin()
         {
@@ -42,12 +47,12 @@ namespace Curiosity.Core.Client.Managers
             if (Game.PlayerPed.IsSprinting && !wasSprinting)
             {
                 wasSprinting = true;
-                sprintStart = DateTime.Now;
+                sprintStart = DateTime.UtcNow;
             }
             else if (!Game.PlayerPed.IsSprinting && wasSprinting)
             {
                 wasSprinting = false;
-                sprintEnd = DateTime.Now;
+                sprintEnd = DateTime.UtcNow;
                 // Log Duration
                 double secondsSprinting = sprintEnd.Subtract(sprintStart).TotalSeconds;
                 // Send data back, update server, get total and find level with total, this then = Stamina Stat
@@ -74,12 +79,12 @@ namespace Curiosity.Core.Client.Managers
             if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
             {
                 wasSwimming = true;
-                swimStart = DateTime.Now;
+                swimStart = DateTime.UtcNow;
             }
             else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming && !PlayerOptionsManager.GetModule().IsScubaGearEnabled)
             {
                 wasSwimming = false;
-                swimEnd = DateTime.Now;
+                swimEnd = DateTime.UtcNow;
 
                 double secondsTotalSwiming = swimEnd.Subtract(swimStart).TotalSeconds;
 
@@ -92,7 +97,7 @@ namespace Curiosity.Core.Client.Managers
                 if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalSwiming), MAX_EXP, MAX_LEVEL))
                 {
                     NotificationManager nm = NotificationManager.GetModule();
-                    int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
+                    int newLevel = levelManager.GetLevelForXP(TotalSwiming, MAX_EXP, MAX_LEVEL);
                     UpdateStat(Cache.Character.MP0_LUNG_CAPACITY, "Breathing Increased", newLevel);
 
                 } // TODO SETUP ON LOAD
@@ -101,6 +106,46 @@ namespace Curiosity.Core.Client.Managers
 
                 swimStart = DEFAULT;
                 swimEnd = DEFAULT;
+            }
+
+            if (Cache.PlayerPed.IsInVehicle())
+            {
+                Vehicle vehicle = Cache.PlayerPed.CurrentVehicle;
+                if (vehicle.Driver == Cache.PlayerPed)
+                {
+                    float speed = vehicle.Speed * 3.6f;
+                    if (speed > 30 && !wasDriving)
+                    {
+                        wasDriving = true;
+                        drivingStart = DateTime.UtcNow;
+                    }
+                    else if (speed < 30 && wasDriving)
+                    {
+                        wasDriving = false;
+                        drivingEnd = DateTime.UtcNow;
+
+                        double secondsTotalDriving = drivingEnd.Subtract(drivingStart).TotalSeconds;
+
+                        int currentLevel = levelManager.GetLevelForXP(TotalDriving, MAX_EXP, MAX_LEVEL);
+                        int currentTotal = TotalDriving;
+                        // Send data back, update server, get total and find level with total, this then = Breathing Stat
+                        int storedTotalDriving = await EventSystem.Request<int>("character:update:stat:timed", Stat.STAT_WHEELIE_ABILITY, secondsTotalDriving);
+                        TotalDriving = storedTotalDriving;
+
+                        if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalDriving), MAX_EXP, MAX_LEVEL))
+                        {
+                            NotificationManager nm = NotificationManager.GetModule();
+                            int newLevel = levelManager.GetLevelForXP(TotalDriving, MAX_EXP, MAX_LEVEL);
+                            UpdateStat(Cache.Character.MP0_WHEELIE_ABILITY, "Driving Increased", newLevel);
+
+                        } // TODO SETUP ON LOAD
+
+                        Logger.Debug($"Duration Swam: {secondsTotalDriving:0.00}. currentLvl: {currentLevel}/{TotalDriving}/{storedTotalDriving}");
+
+                        drivingStart = DEFAULT;
+                        drivingEnd = DEFAULT;
+                    }
+                }
             }
         }
 
