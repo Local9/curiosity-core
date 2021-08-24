@@ -34,7 +34,7 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            GetGarageVehicles();
+            _VehicleCache = GetGarageVehicles();
 
             EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
             {
@@ -42,7 +42,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 string vehicleLabel = metadata.Find<string>(0);
 
-                await GetGarageVehicles();
+                _VehicleCache = await GetGarageVehicles();
 
                 NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
 
@@ -52,7 +52,7 @@ namespace Curiosity.Core.Client.Managers.UI
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
                 if (_VehicleCache.Count == 0)
-                    await GetGarageVehicles();
+                    _VehicleCache = await GetGarageVehicles();
 
                 return _VehicleCache;
             }));
