@@ -76,7 +76,7 @@ namespace Curiosity.Core.Client.Managers
                 wasSwimming = true;
                 swimStart = DateTime.Now;
             }
-            else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming && !N_0xfec9a3b1820f3331(Cache.PlayerPed.Handle))
+            else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming && !PlayerOptionsManager.GetModule().IsScubaGearEnabled)
             {
                 wasSwimming = false;
                 swimEnd = DateTime.Now;

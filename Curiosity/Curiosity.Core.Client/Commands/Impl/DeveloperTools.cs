@@ -47,8 +47,10 @@ namespace Curiosity.Core.Client.Commands.Impl
                 SetEnableScuba(entity.Id, scubaEnabled);
                 entity.CitizenPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IsScuba, scubaEnabled);
                 entity.CitizenPed.DrownsInWater = !scubaEnabled;
-                
+
                 // SetEnableScubaGearLight(entity.Id, scubaEnabled); // this is a light attachment
+
+                PlayerOptionsManager.GetModule().IsScubaGearEnabled = scubaEnabled;
 
                 if (!scubaEnabled)
                 {

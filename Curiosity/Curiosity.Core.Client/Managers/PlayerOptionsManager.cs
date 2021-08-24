@@ -21,6 +21,7 @@ namespace Curiosity.Core.Client.Managers
         public bool IsKillSelfEnabled { get; internal set; } = true;
         public int CostOfKillSelf = 500;
         public int NumberOfTimesKillSelf = 0;
+        public bool IsScubaGearEnabled = false;
 
         public override void Begin()
         {
