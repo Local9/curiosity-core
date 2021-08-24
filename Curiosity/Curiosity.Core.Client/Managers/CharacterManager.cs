@@ -224,6 +224,15 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Debug($"Character Registered: {player.Character.MarkedAsRegistered}");
 
+            if (!player.Character.MarkedAsRegistered)
+            {
+                Cache.Character.IsPassive = true;
+            }
+
+            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
+
+            Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
+
             if (player.Character.MarkedAsRegistered)
             {
                 Vector3 charPos = position.AsVector();
@@ -283,6 +292,7 @@ namespace Curiosity.Core.Client.Managers
             }
             else
             {
+                Cache.Character.IsPassive = true;
                 await player.Character.PostLoad();
             }
 

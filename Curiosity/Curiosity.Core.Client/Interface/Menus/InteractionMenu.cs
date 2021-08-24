@@ -106,15 +106,15 @@ namespace Curiosity.Core.Client.Interface.Menus
             {
                 if (playerOptionsManager.IsPassiveModeEnabledCooldown) return;
 
-                playerOptionsManager.SetPlayerPassive(!playerOptionsManager.IsPassiveModeEnabled);
+                playerOptionsManager.TogglePlayerPassive(!Cache.Character.IsPassive);
                 miPassive.Enabled = false;
 
                 await BaseScript.Delay(1000);
 
-                miPassive.Text = playerOptionsManager.IsPassiveModeEnabled ? "Disable Passive Mode" : "Enable Passive Mode";
+                miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
                 miPassive.Enabled = !playerOptionsManager.IsPassiveModeEnabledCooldown;
 
-                string notificationText = (playerOptionsManager.IsPassiveModeEnabled) ? "Enabled" : "Disabled";
+                string notificationText = (Cache.Character.IsPassive) ? "Enabled" : "Disabled";
                 Notify.Info($"Passive Mode: {notificationText}");
                 return;
             }
@@ -222,7 +222,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             // MID
 
             // BOTTOM
-            miPassive.Text = playerOptionsManager.IsPassiveModeEnabled ? "Disable Passive Mode" : "Enable Passive Mode";
+            miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
             miPassive.Enabled = !playerOptionsManager.IsPassiveModeEnabledCooldown;
 
             miKillYourself.Enabled = playerOptionsManager.IsKillSelfEnabled;

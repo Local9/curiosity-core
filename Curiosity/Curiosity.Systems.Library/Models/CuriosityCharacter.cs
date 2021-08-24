@@ -18,6 +18,7 @@ namespace Curiosity.Systems.Library.Models
         public int Health { get; set; }
         public int Armor { get; set; }
         public bool IsDead { get; set; }
+        public bool IsPassive { get; set; }
         public long Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
         public int Gender { get; set; } = 0; // Default Gender is Male

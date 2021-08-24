@@ -16,7 +16,6 @@ namespace Curiosity.Core.Client.Managers
     public class PlayerOptionsManager : Manager<PlayerOptionsManager>
     {
         DateTime passiveModeDisabled;
-        public bool IsPassiveModeEnabled = false;
         public bool IsPassiveModeEnabledCooldown = false;
         DateTime playerKilledSelf;
         public bool IsKillSelfEnabled { get; internal set; } = true;
@@ -25,14 +24,42 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            SetPlayerPassive(true);
+
         }
 
-        public async void SetPlayerPassive(bool isPassive)
+        public async void SetPlayerPassiveOnStart(bool isPassive)
         {
             await Session.Loading();
 
-            if (IsPassiveModeEnabled == isPassive) return;
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+
+            Game.PlayerPed.IsInvincible = false;
+
+            if (!isPassive)
+            {
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
+                API.NetworkSetFriendlyFireOption(true);
+                API.SetMaxWantedLevel(5);
+                Logger.Debug($"Passive Mode Disabled");
+            }
+
+            if (isPassive)
+            {
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
+                API.NetworkSetFriendlyFireOption(false);
+                API.SetMaxWantedLevel(0);
+                Logger.Debug($"Passive Mode Enabled");
+            }
+
+            Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
+        }
+
+        public async void TogglePlayerPassive(bool isPassive)
+        {
+            await Session.Loading();
+
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
             Game.PlayerPed.IsInvincible = false;
@@ -43,16 +70,13 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            if (IsPassiveModeEnabled != isPassive)
-                IsPassiveModeEnabled = isPassive;
-
             if (!isPassive)
             {
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
                 API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
                 API.NetworkSetFriendlyFireOption(true);
 
-                passiveModeDisabled = DateTime.UtcNow.AddMinutes(5);
+                passiveModeDisabled = DateTime.UtcNow.AddMinutes(2);
                 Instance.AttachTickHandler(PassiveCooldownTick);
                 API.SetMaxWantedLevel(5);
                 IsPassiveModeEnabledCooldown = true;
@@ -72,8 +96,7 @@ namespace Curiosity.Core.Client.Managers
             }
 
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
-
-            Logger.Debug($"PassiveMode: {IsPassiveModeEnabled}, Cooldown: {IsPassiveModeEnabledCooldown}");
+            Cache.Character.IsPassive = isPassive;
         }
 
         public async Task PassiveCooldownTick()
