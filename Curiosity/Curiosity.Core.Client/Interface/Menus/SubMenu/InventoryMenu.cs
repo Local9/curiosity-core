@@ -1,4 +1,6 @@
-﻿using Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory;
+﻿using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory;
+using Curiosity.Core.Client.Managers;
 using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
@@ -6,12 +8,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
     class InventoryMenu
     {
         UIMenu baseMenu;
+        EventSystem EventSystem => EventSystem.GetModule();
 
         UIMenu menuBodyArmor;
         BodyArmorMenu _bodyArmorMenu = new BodyArmorMenu();
 
         UIMenu menuHealth;
         HealthMenu _healthMenu = new HealthMenu();
+
+        PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
+
+        UIMenuCheckboxItem miScubaEquipment = new UIMenuCheckboxItem("Scuba Equipment", false);
         /*
          * Health Kits
          * Armor Kits
@@ -35,12 +42,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            
+            UpdateMenuItems();
         }
 
-        private void UpdateMenuItems()
+        private async void UpdateMenuItems()
         {
-            
+            miScubaEquipment.Enabled = false;
+            miScubaEquipment.Checked = playerOptionsManager.IsScubaGearEnabled;
+            bool hasScubaGear = await EventSystem.Request<bool>("character:inventory:hasItem", 446);
+            miScubaEquipment.Enabled = hasScubaGear;
         }
     }
 }

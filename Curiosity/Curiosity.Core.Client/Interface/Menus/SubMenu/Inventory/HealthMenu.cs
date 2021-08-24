@@ -16,7 +16,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
         UIMenuItem miMediumKit = new UIMenuItem("Meduim Kit", "Use a Meduim Kit to refill your health bar.");
         UIMenuItem miLargeKit = new UIMenuItem("Large Kit", "Use a Large Kit to refill your health bar.");
 
-        public EventSystem EventSystem => EventSystem.GetModule();
+        EventSystem EventSystem => EventSystem.GetModule();
 
         public void CreateMenu(UIMenu menu)
         {
