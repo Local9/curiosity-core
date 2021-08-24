@@ -18,10 +18,12 @@ namespace Curiosity.Core.Client.Managers
         bool wasSprinting = false;
         bool wasSwimming = false;
         bool wasDriving = false;
+        bool wasFlying = false;
 
         public int TotalSprinting = 0;
         public int TotalSwiming = 0;
         public int TotalDriving = 0;
+        public int TotalFlying = 0;
 
         LevelManager levelManager;
 
@@ -36,6 +38,9 @@ namespace Curiosity.Core.Client.Managers
         DateTime drivingStart = new DateTime(1970, 01, 01);
         DateTime drivingEnd = new DateTime(1970, 01, 01);
 
+        DateTime flyingStart = new DateTime(1970, 01, 01);
+        DateTime flyingEnd = new DateTime(1970, 01, 01);
+
         public override void Begin()
         {
             levelManager = LevelManager.GetModule();
@@ -44,7 +49,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnPlayerStateTask()
         {
-            if (Game.PlayerPed.IsSprinting && !wasSprinting)
+            if (Game.PlayerPed.IsSprinting && !wasSprinting && Cache.PlayerPed.IsAlive)
             {
                 wasSprinting = true;
                 sprintStart = DateTime.UtcNow;
@@ -75,7 +80,7 @@ namespace Curiosity.Core.Client.Managers
                 sprintEnd = DEFAULT;
             }
 
-            if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
+            if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming && Cache.PlayerPed.IsAlive)
             {
                 wasSwimming = true;
                 swimStart = DateTime.UtcNow;
@@ -106,9 +111,10 @@ namespace Curiosity.Core.Client.Managers
                 swimEnd = DEFAULT;
             }
 
-            if (Cache.PlayerPed.IsInVehicle())
+            if (Cache.PlayerPed.IsInVehicle() && Cache.PlayerPed.IsAlive)
             {
                 Vehicle vehicle = Cache.PlayerPed.CurrentVehicle;
+
                 if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsCar || vehicle.Model.IsBike))
                 {
                     float speed = vehicle.Speed * 3.6f;
@@ -141,6 +147,41 @@ namespace Curiosity.Core.Client.Managers
 
                         drivingStart = DEFAULT;
                         drivingEnd = DEFAULT;
+                    }
+                }
+
+                if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsPlane || vehicle.Model.IsHelicopter))
+                {
+                    float speed = vehicle.Speed * 3.6f;
+                    if (speed > 30 && !wasFlying && vehicle.IsInAir)
+                    {
+                        wasFlying = true;
+                        flyingStart = DateTime.UtcNow;
+                    }
+                    else if (speed < 30 && wasFlying && !vehicle.IsInAir)
+                    {
+                        wasFlying = false;
+                        flyingEnd = DateTime.UtcNow;
+
+                        double secondsTotalFlying = flyingEnd.Subtract(flyingStart).TotalSeconds;
+
+                        int currentLevel = levelManager.GetLevelForXP(TotalFlying, MAX_EXP, MAX_LEVEL);
+                        int currentTotal = TotalFlying;
+                        // Send data back, update server, get total and find level with total, this then = Breathing Stat
+                        int storedTotalFlying = await EventSystem.Request<int>("character:update:stat:timed", Stat.STAT_FLYING_ABILITY, secondsTotalFlying);
+                        TotalFlying = storedTotalFlying;
+
+                        if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalFlying), MAX_EXP, MAX_LEVEL))
+                        {
+                            int newLevel = levelManager.GetLevelForXP(TotalFlying, MAX_EXP, MAX_LEVEL);
+                            UpdateStat(Cache.Character.MP0_FLYING_ABILITY, "Flying Increased", newLevel);
+
+                        } // TODO SETUP ON LOAD
+
+                        Logger.Debug($"Duration Flying: {secondsTotalFlying:0.00}. currentLvl: {currentLevel}/{TotalFlying}/{storedTotalFlying}");
+
+                        flyingStart = DEFAULT;
+                        flyingEnd = DEFAULT;
                     }
                 }
             }
