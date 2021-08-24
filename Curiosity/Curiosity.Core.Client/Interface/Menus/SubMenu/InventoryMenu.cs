@@ -25,7 +25,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             baseMenu = menu;
 
             menuHealth = InteractionMenu.MenuPool.AddSubMenu(menu, "Health Kits");
-            _healthMenu.CreateMenu(menuBodyArmor);
+            _healthMenu.CreateMenu(menuHealth);
 
             menuBodyArmor = InteractionMenu.MenuPool.AddSubMenu(menu, "Body Armor");
             _bodyArmorMenu.CreateMenu(menuBodyArmor);

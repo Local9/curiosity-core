@@ -56,6 +56,8 @@ namespace Curiosity.Core.Client
 
             PlayerList = Players;
 
+            PlayerRelationshipGroup = World.AddRelationshipGroup("PLAYER");
+
             Instance = this;
 
             API.DoScreenFadeOut(0);
@@ -132,8 +134,6 @@ namespace Curiosity.Core.Client
             AttachTickHandlers(this);
 
             API.DecorRegister(DECOR_PED_OWNER, 3);
-
-            PlayerRelationshipGroup = World.AddRelationshipGroup("PLAYER");
 
             Logger.Info("Load method has been completed.");
         }
