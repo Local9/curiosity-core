@@ -26,7 +26,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
         List<dynamic> _VehicleCache = new List<dynamic>();
 
-        public override void Begin()
+        public async override void Begin()
         {
             API.AddTextEntry(BLIP_PERSONAL_VEHICLE, "Personal Vehicle");
             API.AddTextEntry(BLIP_PERSONAL_TRAILER, "Personal Trailer");
@@ -34,7 +34,7 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            _VehicleCache = GetGarageVehicles();
+            _VehicleCache = await GetGarageVehicles();
 
             EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
             {
