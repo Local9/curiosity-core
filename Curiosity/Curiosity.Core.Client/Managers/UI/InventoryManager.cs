@@ -91,7 +91,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     {
                         int playerArmor = Cache.PlayerPed.Armor;
                         Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
-                        notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Armor}hp");
+                        notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
                     }
                 }
 
