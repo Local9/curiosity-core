@@ -47,6 +47,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
             {
                 if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
                 {
+                    baseMenuIndex = 0;
                     UpdateMods();
                     PluginManager.Instance.AttachTickHandler(TestHorn);
                 }
