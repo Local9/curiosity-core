@@ -8,8 +8,8 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -23,9 +23,31 @@ namespace Curiosity.Core.Client.Managers
         public int NumberOfTimesKillSelf = 0;
         public bool IsScubaGearEnabled = false;
 
+        NotificationManager NotificationManager = NotificationManager.GetModule();
+
         public override void Begin()
         {
 
+        }
+
+        public void ToggleScubaEquipment()
+        {
+            IsScubaGearEnabled = !IsScubaGearEnabled;
+
+            SetEnableScuba(Cache.PlayerPed.Handle, IsScubaGearEnabled);
+            Cache.PlayerPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IsScuba, IsScubaGearEnabled);
+            Cache.PlayerPed.DrownsInWater = !IsScubaGearEnabled;
+
+            // SetEnableScubaGearLight(entity.Id, scubaEnabled); // this is a light attachment
+
+            if (!IsScubaGearEnabled)
+            {
+                NotificationManager.Info($"Scuba Equipment Removed");
+                ClearPedScubaGearVariation(Cache.PlayerPed.Handle);
+                return;
+            }
+            NotificationManager.Info($"Scuba Equipment Applied");
+            SetPedScubaGearVariation(Cache.PlayerPed.Handle);
         }
 
         public async void SetPlayerPassiveOnStart(bool isPassive)

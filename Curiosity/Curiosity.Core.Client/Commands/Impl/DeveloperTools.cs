@@ -41,22 +41,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                scubaEnabled = !scubaEnabled;
-
-                SetEnableScuba(entity.Id, scubaEnabled);
-                entity.CitizenPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IsScuba, scubaEnabled);
-                entity.CitizenPed.DrownsInWater = !scubaEnabled;
-
-                // SetEnableScubaGearLight(entity.Id, scubaEnabled); // this is a light attachment
-
-                PlayerOptionsManager.GetModule().IsScubaGearEnabled = scubaEnabled;
-
-                if (!scubaEnabled)
-                {
-                    ClearPedScubaGearVariation(entity.Id);
-                    return;
-                }
-                SetPedScubaGearVariation(entity.Id);
+                PlayerOptionsManager.GetModule().ToggleScubaEquipment();
             }
         }
 

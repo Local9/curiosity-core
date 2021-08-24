@@ -38,6 +38,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             _bodyArmorMenu.CreateMenu(menuBodyArmor);
 
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
+            baseMenu.OnCheckboxChange += BaseMenu_OnCheckboxChange;
+        }
+
+        private void BaseMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        {
+            if (checkboxItem == miScubaEquipment)
+            {
+                playerOptionsManager.ToggleScubaEquipment();
+            }
         }
 
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
