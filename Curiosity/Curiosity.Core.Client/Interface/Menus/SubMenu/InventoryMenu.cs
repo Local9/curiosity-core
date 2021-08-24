@@ -37,6 +37,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menuBodyArmor = InteractionMenu.MenuPool.AddSubMenu(menu, "Body Armor");
             _bodyArmorMenu.CreateMenu(menuBodyArmor);
 
+            baseMenu.AddItem(miScubaEquipment);
+
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
             baseMenu.OnCheckboxChange += BaseMenu_OnCheckboxChange;
         }
