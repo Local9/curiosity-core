@@ -65,6 +65,7 @@
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
     <Compile Include="Utils\Utility.cs" />
     <None Include="config\jobMenu.json" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />

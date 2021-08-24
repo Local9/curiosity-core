@@ -53,6 +53,38 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
+        internal async static Task<List<CharacterKit>> GetKits(int characterId, int itemCategoryId)
+        {
+            List<CharacterKit> characterKits = new List<CharacterKit>();
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterId", characterId },
+                { "@ItemCategoryId", itemCategoryId },
+            };
+
+            string myQuery = "CALL selCharacterKits(@CharacterId, @ItemCategoryId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    return characterKits;
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    CharacterKit kit = new CharacterKit();
+                    kit.ItemId = kv["ItemId"].ToInt();
+                    kit.ItemCategoryId = kv["ItemCategoryId"].ToInt();
+                    kit.NumberOwned = kv["NumberOwned"].ToInt();
+                    kit.Amount = kv["HealingAmount"].ToInt();
+                    characterKits.Add(kit);
+                }
+
+                return characterKits;
+            }
+        }
+
         public static async Task Save(CuriosityCharacter curiosityCharacter)
         {
             string characterJson = JsonConvert.SerializeObject(curiosityCharacter);

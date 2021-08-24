@@ -94,24 +94,26 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
-        public async Task<dynamic> UseItem(int itemId)
+        public async Task<ExportMessage> UseItem(int itemId)
         {
             NotificationManager notificationManager = NotificationManager.GetModule();
+            ExportMessage result = new ExportMessage();
 
             if (isProcessing)
             {
                 notificationManager.Error($"Currently processing request.");
-                return new { success = false };
+                result.Error = $"Currently processing request.";
+                return result;
             }
 
             isProcessing = true;
 
-            ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
+            result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
 
             if (!result.Success)
             {
                 notificationManager.Error($"{result.Error}");
-                return $"{result}";
+                return result;
             }
 
             if (result.Item is not null)
@@ -133,7 +135,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
             isProcessing = false;
 
-            return $"{result}";
+            return result;
         }
     }
 }

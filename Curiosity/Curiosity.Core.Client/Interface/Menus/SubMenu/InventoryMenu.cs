@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory;
 using NativeUI;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
@@ -13,6 +7,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
     {
         UIMenu baseMenu;
 
+        UIMenu menuBodyArmor;
+        BodyArmorMenu _bodyArmorMenu = new BodyArmorMenu();
         /*
          * Health Kits
          * Armor Kits
@@ -24,6 +20,21 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         public void CreateMenu(UIMenu menu)
         {
             baseMenu = menu;
+
+            menuBodyArmor = InteractionMenu.MenuPool.AddSubMenu(menu, "Body Armor");
+            _bodyArmorMenu.CreateMenu(menuBodyArmor);
+
+            baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
+        }
+
+        private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            
+        }
+
+        private void UpdateMenuItems()
+        {
+            
         }
     }
 }

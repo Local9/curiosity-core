@@ -167,4 +167,20 @@ namespace Curiosity.Systems.Library.Models.Shop
             return JsonConvert.SerializeObject(this);
         }
     }
+
+    [DataContract]
+    public class CharacterKit
+    {
+        [DataMember(Name = "itemId")]
+        public int ItemId;
+
+        [DataMember(Name = "itemCategoryId")]
+        public int ItemCategoryId;
+
+        [DataMember(Name = "numberOwned")]
+        public int NumberOwned;
+
+        [DataMember(Name = "amount")]
+        public int Amount;
+    }
 }

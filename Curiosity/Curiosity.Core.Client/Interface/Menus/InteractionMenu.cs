@@ -58,6 +58,9 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuMain.AddItem(mlGpsLocations);
 
+            menuInventory = MenuPool.AddSubMenu(menuMain, "Inventory");
+            _MenuInventory.CreateMenu(menuInventory);
+
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles");
             _VehicleMenu.CreateMenu(menuVehicle);
 
