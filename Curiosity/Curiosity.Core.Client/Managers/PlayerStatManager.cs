@@ -109,7 +109,7 @@ namespace Curiosity.Core.Client.Managers
             if (Cache.PlayerPed.IsInVehicle())
             {
                 Vehicle vehicle = Cache.PlayerPed.CurrentVehicle;
-                if (vehicle.Driver == Cache.PlayerPed)
+                if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsCar || vehicle.Model.IsBike))
                 {
                     float speed = vehicle.Speed * 3.6f;
                     if (speed > 30 && !wasDriving)
