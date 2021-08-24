@@ -63,7 +63,6 @@ namespace Curiosity.Core.Client.Managers
 
                 if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsSprinting), MAX_EXP, MAX_LEVEL))
                 {
-                    NotificationManager nm = NotificationManager.GetModule();
                     int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
                     UpdateStat(Cache.Character.MP0_STAMINA, "Sprinting Increased", newLevel);
 
@@ -96,7 +95,6 @@ namespace Curiosity.Core.Client.Managers
 
                 if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalSwiming), MAX_EXP, MAX_LEVEL))
                 {
-                    NotificationManager nm = NotificationManager.GetModule();
                     int newLevel = levelManager.GetLevelForXP(TotalSwiming, MAX_EXP, MAX_LEVEL);
                     UpdateStat(Cache.Character.MP0_LUNG_CAPACITY, "Breathing Increased", newLevel);
 
@@ -134,13 +132,12 @@ namespace Curiosity.Core.Client.Managers
 
                         if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalDriving), MAX_EXP, MAX_LEVEL))
                         {
-                            NotificationManager nm = NotificationManager.GetModule();
                             int newLevel = levelManager.GetLevelForXP(TotalDriving, MAX_EXP, MAX_LEVEL);
                             UpdateStat(Cache.Character.MP0_WHEELIE_ABILITY, "Driving Increased", newLevel);
 
                         } // TODO SETUP ON LOAD
 
-                        Logger.Debug($"Duration Swam: {secondsTotalDriving:0.00}. currentLvl: {currentLevel}/{TotalDriving}/{storedTotalDriving}");
+                        Logger.Debug($"Duration Driving: {secondsTotalDriving:0.00}. currentLvl: {currentLevel}/{TotalDriving}/{storedTotalDriving}");
 
                         drivingStart = DEFAULT;
                         drivingEnd = DEFAULT;
