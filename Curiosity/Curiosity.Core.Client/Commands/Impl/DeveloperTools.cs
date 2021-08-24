@@ -50,7 +50,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 
                 // SetEnableScubaGearLight(entity.Id, scubaEnabled); // this is a light attachment
 
-                if (N_0xfec9a3b1820f3331(entity.Id))
+                if (!scubaEnabled)
                 {
                     ClearPedScubaGearVariation(entity.Id);
                     return;
