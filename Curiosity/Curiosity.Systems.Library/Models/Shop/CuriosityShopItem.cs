@@ -43,6 +43,9 @@ namespace Curiosity.Systems.Library.Models.Shop
         [DataMember(Name = "shopItemId")]
         public int? ShopItemId;
 
+        [DataMember(Name = "categoryId")]
+        public int? CategoryId;
+
         [DataMember(Name = "buyValue")]
         public int? BuyValue;
 

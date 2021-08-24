@@ -95,6 +95,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
                 i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
                 i.HealingAmount = kv["HealingAmount"].ToInt();
+                i.CategoryId = kv["ItemCategoryId"].ToInt();
 
                 if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
                 {
@@ -136,6 +137,7 @@ namespace Curiosity.Core.Server.Database.Store
             i.SpawnTypeId = (SpawnType)kv["SpawnTypeId"].ToInt();
             i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
             i.HealingAmount = kv["HealingAmount"].ToInt();
+            i.CategoryId = kv["ItemCategoryId"].ToInt();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
@@ -206,6 +208,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.CarringMaxed = kv["CarringMaxed"].ToBoolean();
                 i.IsHealingItem = kv["IsHealingItem"].ToBoolean();
                 i.HealingAmount = kv["HealingAmount"].ToInt();
+                i.CategoryId = kv["ItemCategoryId"].ToInt();
 
                 lst.Add(i);
             }

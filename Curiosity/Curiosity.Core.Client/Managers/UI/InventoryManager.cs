@@ -81,12 +81,17 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (result.Item is not null)
                 {
-                    if (result.Item.IsHealingItem)
+                    if (result.Item.CategoryId == 19)
                     {
-                        int playerHealth = Game.PlayerPed.Handle;
-                        Game.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
-
+                        int playerHealth = Cache.PlayerPed.Health;
+                        Cache.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
                         notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                    }
+                    if (result.Item.CategoryId == 21)
+                    {
+                        int playerArmor = Cache.PlayerPed.Armor;
+                        Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
+                        notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Armor}hp");
                     }
                 }
 

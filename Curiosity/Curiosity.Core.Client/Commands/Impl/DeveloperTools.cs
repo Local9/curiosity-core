@@ -28,7 +28,6 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
-
         static Vector3 positionSave = Vector3.Zero;
 
         static List<Ped> companions = new List<Ped>();
