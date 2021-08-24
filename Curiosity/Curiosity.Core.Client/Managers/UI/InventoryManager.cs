@@ -4,6 +4,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.UI
 {
@@ -55,14 +56,6 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 NotificationManager notificationManager = NotificationManager.GetModule();
 
-                if (isProcessing)
-                {
-                    notificationManager.Error($"Currently processing request.");
-                    return new { success = false };
-                }
-
-                isProcessing = true;
-
                 int itemId = -1;
 
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
@@ -71,31 +64,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     return new { success = false };
                 }
 
-                ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
-
-                if (!result.Success)
-                {
-                    notificationManager.Error($"{result.Error}");
-                    return $"{result}";
-                }
-
-                if (result.Item is not null)
-                {
-                    if (result.Item.CategoryId == 19)
-                    {
-                        int playerHealth = Cache.PlayerPed.Health;
-                        Cache.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
-                        notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
-                    }
-                    if (result.Item.CategoryId == 21)
-                    {
-                        int playerArmor = Cache.PlayerPed.Armor;
-                        Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
-                        notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
-                    }
-                }
-
-                isProcessing = false;
+                var result = await UseItem(itemId);
 
                 return $"{result}";
             }));
@@ -123,6 +92,48 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 return $"{result}";
             }));
+        }
+
+        public async Task<dynamic> UseItem(int itemId)
+        {
+            NotificationManager notificationManager = NotificationManager.GetModule();
+
+            if (isProcessing)
+            {
+                notificationManager.Error($"Currently processing request.");
+                return new { success = false };
+            }
+
+            isProcessing = true;
+
+            ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
+
+            if (!result.Success)
+            {
+                notificationManager.Error($"{result.Error}");
+                return $"{result}";
+            }
+
+            if (result.Item is not null)
+            {
+                if (result.Item.CategoryId == 19)
+                {
+                    int playerHealth = Cache.PlayerPed.Health;
+                    Cache.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
+                    notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                }
+
+                if (result.Item.CategoryId == 21)
+                {
+                    int playerArmor = Cache.PlayerPed.Armor;
+                    Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
+                    notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
+                }
+            }
+
+            isProcessing = false;
+
+            return $"{result}";
         }
     }
 }
