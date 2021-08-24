@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 {
     public class CuriosityEntity
     {
-        private Ped CitizenPed => Cache.PlayerPed;
+        public Ped CitizenPed => Cache.PlayerPed;
         public int Id { get { return Cache.PlayerPed.Handle; } }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);

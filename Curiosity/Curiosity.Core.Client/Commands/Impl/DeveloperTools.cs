@@ -34,6 +34,31 @@ namespace Curiosity.Core.Client.Commands.Impl
         static List<Ped> companions = new List<Ped>();
 
         #region Player
+
+        static bool scubaEnabled = false;
+
+        [CommandInfo(new[] { "scuba" })]
+        public class ScubaGearTest : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                scubaEnabled = !scubaEnabled;
+
+                SetEnableScuba(entity.Id, scubaEnabled);
+                entity.CitizenPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IsScuba, scubaEnabled);
+                entity.CitizenPed.DrownsInWater = !scubaEnabled;
+                
+                // SetEnableScubaGearLight(entity.Id, scubaEnabled); // this is a light attachment
+
+                if (N_0xfec9a3b1820f3331(entity.Id))
+                {
+                    ClearPedScubaGearVariation(entity.Id);
+                    return;
+                }
+                SetPedScubaGearVariation(entity.Id);
+            }
+        }
+
         [CommandInfo(new[] { "guard" })]
         public class Guard : ICommand
         {

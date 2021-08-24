@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using System;
@@ -75,7 +76,7 @@ namespace Curiosity.Core.Client.Managers
                 wasSwimming = true;
                 swimStart = DateTime.Now;
             }
-            else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming)
+            else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming && !N_0xfec9a3b1820f3331(Cache.PlayerPed.Handle))
             {
                 wasSwimming = false;
                 swimEnd = DateTime.Now;
