@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Extensions;
+﻿using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
@@ -71,31 +72,38 @@ namespace Curiosity.Core.Server.Database.Store
 
         internal async static Task<CharacterSkillExport> GetSkill(int characterId, int skillId)
         {
-            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            CharacterSkillExport characterSkill = new CharacterSkillExport();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
                     { "@characterId", characterId },
                     { "@skillId", skillId },
                 };
 
-            CharacterSkillExport characterSkill = new CharacterSkillExport();
+                string myQuery = "call selCharacterSkill(@characterId, @skillId);";
 
-            string myQuery = "call selCharacterSkill(@characterId, @skillId);";
-
-            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
-            {
-                ResultSet keyValuePairs = await result;
-
-                if (keyValuePairs.Count == 0)
-                    return null;
-
-                foreach (Dictionary<string, object> kv in keyValuePairs)
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
-                    characterSkill.SkillExperience = kv["SkillExperience"].ToLong();
-                    characterSkill.KnowledgeExperience = kv["KnowledgeExperience"].ToLong();
-                }
-            }
+                    ResultSet keyValuePairs = await result;
 
-            return characterSkill;
+                    if (keyValuePairs.Count == 0)
+                        return null;
+
+                    foreach (Dictionary<string, object> kv in keyValuePairs)
+                    {
+                        characterSkill.SkillExperience = kv["SkillExperience"].ToLong();
+                        characterSkill.KnowledgeExperience = kv["KnowledgeExperience"].ToLong();
+                    }
+                }
+
+                return characterSkill;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"cid: {characterId}, sid: {skillId}");
+                return null;
+            }
         }
     }
 }
