@@ -346,6 +346,20 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:hasItem", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                int itemId = metadata.Find<int>(0);
+
+                CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(player.Character.CharacterId, itemId);
+
+                if (item is null)
+                    return false;
+
+                return item.NumberOwned > 0;
+            }));
+
             EventSystem.GetModule().Attach("character:inventory:equipped", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
