@@ -25,6 +25,7 @@ namespace Curiosity.Core.Client.Managers.UI
         private const string BLIP_PERSONAL_HELICOPTER = "blipPersonalHelicopter";
 
         List<dynamic> _VehicleCache = new List<dynamic>();
+        bool _requestingGarage = false;
 
         public async override void Begin()
         {
@@ -34,7 +35,7 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            _VehicleCache = await GetGarageVehicles();
+            GetGarageVehicles();
 
             EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
             {
@@ -42,7 +43,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 string vehicleLabel = metadata.Find<string>(0);
 
-                _VehicleCache = await GetGarageVehicles();
+                await GetGarageVehicles();
 
                 NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
 
@@ -52,7 +53,7 @@ namespace Curiosity.Core.Client.Managers.UI
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
                 if (_VehicleCache.Count == 0)
-                    _VehicleCache = await GetGarageVehicles();
+                    await GetGarageVehicles();
 
                 return _VehicleCache;
             }));
@@ -316,29 +317,50 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
-        private async Task<List<dynamic>> GetGarageVehicles()
+        private async Task GetGarageVehicles()
         {
+            if (_requestingGarage)
+            {
+                NotificationManager.GetModule().Info("Mechanic is hard at work, please give them a moment");
+                return;
+            }
+            _requestingGarage = true;
+
             List<dynamic> vehicles = new List<dynamic>();
 
-            List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
-
-            if (srvVeh is null)
-                return vehicles;
-
-            foreach (VehicleItem v in srvVeh)
+            try
             {
-                var m = new
-                {
-                    characterVehicleId = v.CharacterVehicleId,
-                    label = v.Label,
-                    licensePlate = v.VehicleInfo.plateText,
-                    datePurchased = v.DatePurchased,
-                    hash = v.Hash
-                };
-                vehicles.Add(m);
-            }
+                List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
 
-            return vehicles;
+                if (srvVeh is null)
+                {
+                    NotificationManager.GetModule().Info("No vehicles returned from the Garage");
+                    return;
+                }
+
+
+                foreach (VehicleItem v in srvVeh)
+                {
+                    var m = new
+                    {
+                        characterVehicleId = v.CharacterVehicleId,
+                        label = v.Label,
+                        licensePlate = v.VehicleInfo.plateText,
+                        datePurchased = v.DatePurchased,
+                        hash = v.Hash
+                    };
+                    vehicles.Add(m);
+                }
+
+                _VehicleCache = vehicles;
+
+                _requestingGarage = false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "GetGarageVehicles");
+                _requestingGarage = false;
+            }
         }
 
         public Blip CreateBlip(Vehicle vehicle, SpawnType spawnType = SpawnType.Unknown)
