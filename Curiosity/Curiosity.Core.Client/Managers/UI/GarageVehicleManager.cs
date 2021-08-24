@@ -11,6 +11,7 @@ using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.UI
@@ -23,6 +24,8 @@ namespace Curiosity.Core.Client.Managers.UI
         private const string BLIP_PERSONAL_BOAT = "blipPersonalBoat";
         private const string BLIP_PERSONAL_HELICOPTER = "blipPersonalHelicopter";
 
+        List<dynamic> _VehicleCache = new List<dynamic>();
+
         public override void Begin()
         {
             API.AddTextEntry(BLIP_PERSONAL_VEHICLE, "Personal Vehicle");
@@ -31,29 +34,24 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
+            GetGarageVehicles();
+
+            EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
             {
-                List<dynamic> vehicles = new List<dynamic>();
+                await Session.Loading();
 
-                List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
+                string vehicleLabel = metadata.Find<string>(0);
 
-                if (srvVeh is null)
-                    return vehicles;
+                await GetGarageVehicles();
 
-                foreach (VehicleItem v in srvVeh)
-                {
-                    var m = new
-                    {
-                        characterVehicleId = v.CharacterVehicleId,
-                        label = v.Label,
-                        licensePlate = v.VehicleInfo.plateText,
-                        datePurchased = v.DatePurchased,
-                        hash = v.Hash
-                    };
-                    vehicles.Add(m);
-                }
+                NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
 
-                return vehicles;
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("GarageVehicles", new EventCallback(metadata =>
+            {
+                return _VehicleCache;
             }));
 
             Instance.AttachNuiHandler("GarageVehicleRequest", new AsyncEventCallback(async metadata =>
@@ -313,6 +311,31 @@ namespace Curiosity.Core.Client.Managers.UI
                     return new { success = false };
                 }
             }));
+        }
+
+        private async Task<List<dynamic>> GetGarageVehicles()
+        {
+            List<dynamic> vehicles = new List<dynamic>();
+
+            List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
+
+            if (srvVeh is null)
+                return vehicles;
+
+            foreach (VehicleItem v in srvVeh)
+            {
+                var m = new
+                {
+                    characterVehicleId = v.CharacterVehicleId,
+                    label = v.Label,
+                    licensePlate = v.VehicleInfo.plateText,
+                    datePurchased = v.DatePurchased,
+                    hash = v.Hash
+                };
+                vehicles.Add(m);
+            }
+
+            return vehicles;
         }
 
         public Blip CreateBlip(Vehicle vehicle, SpawnType spawnType = SpawnType.Unknown)

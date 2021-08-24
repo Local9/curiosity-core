@@ -229,6 +229,11 @@ namespace Curiosity.Core.Server.Managers
                     Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' purchased '{item.Label}' for ${item.BuyValue}"); // MOVE TO DB LOG
 
+                    if (item.IsVehicle)
+                    {
+                        EventSystem.Send("garage:update", metadata.Sender, item.Label);
+                    }
+
                     goto ReturnResult;
 
                 FailedPurchase:
