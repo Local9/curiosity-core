@@ -112,6 +112,14 @@ namespace Curiosity.Core.Server.Web
 
             string discordIdStr = player.Identifiers["discord"];
 
+            if (string.IsNullOrEmpty(discordIdStr))
+            {
+                Logger.Info($"DiscordClient : {player.Name} not authorised with FiveM.");
+                await BaseScript.Delay(0);
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.");
+                return IsMember;
+            }
+
             ulong discordId = 0;
             if (!ulong.TryParse(discordIdStr, out discordId))
             {
