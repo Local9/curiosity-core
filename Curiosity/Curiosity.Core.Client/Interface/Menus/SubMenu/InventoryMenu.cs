@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Events;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory;
 using Curiosity.Core.Client.Managers;
 using NativeUI;
@@ -43,11 +44,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             baseMenu.OnCheckboxChange += BaseMenu_OnCheckboxChange;
         }
 
-        private void BaseMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        private async void BaseMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
             if (checkboxItem == miScubaEquipment)
             {
+                miScubaEquipment.Enabled = false;
                 playerOptionsManager.ToggleScubaEquipment();
+                await BaseScript.Delay(1000);
+                miScubaEquipment.Enabled = true;
             }
         }
 
