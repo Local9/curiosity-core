@@ -1080,7 +1080,6 @@ namespace ProfanityFilterNS
              "rectal",
              "rectum",
              "rectus",
-             "reefer",
              "reetard",
              "reich",
              "renob",
