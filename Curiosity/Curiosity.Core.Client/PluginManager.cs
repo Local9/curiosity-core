@@ -228,7 +228,7 @@ namespace Curiosity.Core.Client
                         await Session.Loading();
                     }
 
-                    Logger.Debug($"{self.Name}");
+                    Logger.Debug($"AttachTickHandlers -> {self.Name}");
 
                     Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
 
