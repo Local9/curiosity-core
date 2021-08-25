@@ -31,6 +31,11 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                    {
+                        return new List<VehicleItem>();
+                    }
+
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     return await Database.Store.VehicleDatabase.GetAllVehicles(curiosityUser.Character.CharacterId);
                 }

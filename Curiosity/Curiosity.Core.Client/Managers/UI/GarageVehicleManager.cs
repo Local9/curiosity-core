@@ -319,6 +319,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
         private async Task GetGarageVehicles()
         {
+            await Session.Loading();
+
             if (_requestingGarage)
             {
                 NotificationManager.GetModule().Info("Mechanic is hard at work, please give them a moment");
