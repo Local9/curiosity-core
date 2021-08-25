@@ -181,12 +181,17 @@ namespace Curiosity.Core.Server.Managers
                     if (!pos.IsZero)
                         curiosityCharacter.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
 
-                    player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
-                    player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+                    player.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                    player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
 
                     if (curiosityCharacter.IsDead)
                     {
                         Logger.Debug($"Player state saved as dead");
+                    }
+
+                    if (curiosityCharacter.IsPassive)
+                    {
+                        Logger.Debug($"Player state saved as passive");
                     }
 
                     if (!user.IsStaff)
