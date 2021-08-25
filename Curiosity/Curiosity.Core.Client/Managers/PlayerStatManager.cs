@@ -153,12 +153,12 @@ namespace Curiosity.Core.Client.Managers
                 if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsPlane || vehicle.Model.IsHelicopter))
                 {
                     float speed = vehicle.Speed * 3.6f;
-                    if (speed > 30 && !wasFlying && vehicle.IsInAir)
+                    if (speed > 10 && !wasFlying && vehicle.IsInAir)
                     {
                         wasFlying = true;
                         flyingStart = DateTime.UtcNow;
                     }
-                    else if (speed < 30 && wasFlying && !vehicle.IsInAir)
+                    else if (speed < 10 && wasFlying && !vehicle.IsInAir)
                     {
                         wasFlying = false;
                         flyingEnd = DateTime.UtcNow;
