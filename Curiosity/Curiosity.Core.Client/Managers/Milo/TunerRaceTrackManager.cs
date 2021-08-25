@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -19,11 +20,27 @@ namespace Curiosity.Core.Client.Managers.Milo
 
         public override void Begin()
         {
-            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, enter.AsVector(), 20f, System.Drawing.Color.FromArgb(100, 100, 100, 100));
-            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, exit.AsVector(), 20f, System.Drawing.Color.FromArgb(100, 100, 100, 100));
+            Logger.Info($"Started Tuner Race Track Manager");
+
+            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, enter.AsVector(), 30f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
+            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, exit.AsVector(), 30f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnTurnerTeleporterTick()
+        {
+            if (markerEnter.IsInRange)
+            {
+                NativeUI.Notifications.ShowFloatingHelpNotification("Enter Tuner Track", markerEnter.Position);
+            }
+
+            if (markerExit.IsInRange)
+            {
+                NativeUI.Notifications.ShowFloatingHelpNotification("Exit Tuner Track", markerExit.Position);
+            }
         }
     }
 }
