@@ -14,7 +14,7 @@ namespace Curiosity.Core.Client.Managers
     public class CharacterManager : Manager<CharacterManager>
     {
         public CuriosityCharacter curiosityCharacter = new CuriosityCharacter();
-
+        Vector3 CityHallPosition = new Vector3(-542.1675f, -216.1688f, -216.1688f);
         public override void Begin()
         {
             
@@ -280,7 +280,7 @@ namespace Curiosity.Core.Client.Managers
                     MoveToCityHall();
                 }
 
-                if (Game.PlayerPed.IsInRangeOf(new Vector3(-542.1675f, -216.1688f, -216.1688f), 100f))
+                if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
                     MoveToCityHall();
 
                 await transition.Wait();
@@ -319,7 +319,8 @@ namespace Curiosity.Core.Client.Managers
 
         private void MoveToCityHall()
         {
-            Position pos = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+            Logger.Debug($"Moving to City Hall");
+            Position pos = new Position(CityHallPosition.X, CityHallPosition.Y, CityHallPosition.Z, 276.3713f);
             Game.PlayerPed.Position = pos.AsVector();
             Game.PlayerPed.Heading = pos.H;
         }
