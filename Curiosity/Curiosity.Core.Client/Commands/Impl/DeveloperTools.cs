@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
@@ -34,7 +35,86 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         #region Player
 
-        static bool scubaEnabled = false;
+        [CommandInfo(new[] { "textEntity" })]
+        public class TextEntity : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Vehicle veh = Game.PlayerPed.CurrentVehicle;
+
+                Scaleform scaleform = new Scaleform("mp_car_stats_01");
+
+                int timeout = 1000;
+                DateTime start = DateTime.Now;
+                while (!scaleform.IsLoaded && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) await BaseScript.Delay(0);
+
+                Logger.Debug($"Scaleform Loaded: {scaleform.IsLoaded}");
+
+                string make = GetMakeNameFromVehicleModel((uint)veh.Model.Hash);
+                string model = veh.DisplayName;
+
+                uint hash = (uint)veh.Model.Hash;
+
+                float maxSpeed = GetVehicleModelMaxSpeed(hash);
+                float maxTraction = GetVehicleModelMaxTraction(hash);
+                float accel = GetVehicleModelAcceleration(hash);
+                float breaking = GetVehicleModelHandBrake(hash);
+
+                scaleform.CallFunction("SET_VEHICLE_INFOR_AND_STATS",
+                                       model,
+                                       "Tracked and Registered",
+                                       "MPCarHUD",
+                                       make,
+                                       "Top Speed",
+                                       "Accelration",
+                                       "Braking",
+                                       "Traction",
+                                       maxSpeed,
+                                       accel,
+                                       breaking,
+                                       maxTraction);
+                //scaleform.CallFunction("setBars", 1, 10);
+                //scaleform.CallFunction("setBars", 2, 20);
+                //scaleform.CallFunction("setBars", 3, 30);
+                //scaleform.CallFunction("setBars", 4, 40);
+                //scaleform.CallFunction("debug");
+
+                Logger.Debug($"V: {maxSpeed}, {accel}, {breaking}, {maxTraction}");
+
+                Vector3 min = Vector3.Zero;
+                Vector3 max = Vector3.Zero;
+
+                GetModelDimensions((uint)veh.Model.Hash, ref min, ref max);
+                Vector3 size = (max - min);
+
+                if (size.Z < 2.5f)
+                    size.Z = 2.5f;
+
+                await BaseScript.Delay(100);
+
+                while (scaleform.IsLoaded && veh.Exists())
+                {
+                    Vector3 vehPos = veh.Position;
+                    
+                    vehPos.Z = vehPos.Z + size.Z;
+
+                    var rotation = GameplayCamera.Rotation;
+
+                    scaleform.Render3D(vehPos, rotation, new Vector3(4.5f, 3f, 3f));
+
+                    await BaseScript.Delay(0);
+                }
+
+                scaleform.Dispose();
+
+            }
+        }
+
+        private static Vector3 GameplayCameraForwardVector()
+        {
+            var rotation = (float)(Math.PI / 180.0) * GameplayCamera.Rotation;
+            return Vector3.Normalize(new Vector3((float)-Math.Sin(rotation.Z) * (float)Math.Abs(Math.Cos(rotation.X)), (float)Math.Cos(rotation.Z) * (float)Math.Abs(Math.Cos(rotation.X)), (float)Math.Sin(rotation.X)));
+        }
 
         [CommandInfo(new[] { "scuba" })]
         public class ScubaGearTest : ICommand
