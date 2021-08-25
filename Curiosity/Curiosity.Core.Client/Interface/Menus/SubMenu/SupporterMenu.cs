@@ -53,6 +53,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
             baseMenu.OnListSelect += BaseMenu_OnListSelect;
+            baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
+        }
+
+        private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            uiLstCompanions.Enabled = Cache.Player.User.IsDeveloper;
+            uiItemRemoveCompanion.Enabled = Cache.Player.User.IsDeveloper;
+            uiLstCompanions.Description = "Currently Disabled due to online issues";
         }
 
         private async void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
