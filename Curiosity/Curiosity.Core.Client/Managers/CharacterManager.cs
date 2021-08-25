@@ -280,6 +280,9 @@ namespace Curiosity.Core.Client.Managers
                     MoveToCityHall();
                 }
 
+                if (Game.PlayerPed.IsInRangeOf(new Vector3(-542.1675f, -216.1688f, -216.1688f), 100f))
+                    MoveToCityHall();
+
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
