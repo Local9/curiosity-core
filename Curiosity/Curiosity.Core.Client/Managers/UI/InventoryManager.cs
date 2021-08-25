@@ -3,6 +3,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Curiosity.Core.Client.Managers.UI
     public class InventoryManager : Manager<InventoryManager>
     {
         bool isProcessing = false;
+        DateTime processingDate;
 
         public override void Begin()
         {
@@ -94,6 +96,21 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
+        private async Task OnProcessingReset()
+        {
+            if (!isProcessing)
+            {
+                Instance.DetachTickHandler(OnProcessingReset);
+            }
+
+            if (DateTime.UtcNow > processingDate)
+            {
+                isProcessing = false;
+                Instance.DetachTickHandler(OnProcessingReset);
+                NotificationManager.GetModule().Info($"Processing has been force completed.");
+            }
+        }
+
         public async Task<ExportMessage> UseItem(int itemId, Vehicle veh = null)
         {
             NotificationManager notificationManager = NotificationManager.GetModule();
@@ -105,8 +122,10 @@ namespace Curiosity.Core.Client.Managers.UI
                 result.Error = $"Currently processing request.";
                 return result;
             }
-
             isProcessing = true;
+
+            processingDate = DateTime.UtcNow.AddSeconds(15);
+            Instance.AttachTickHandler(OnProcessingReset);
 
             result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
 

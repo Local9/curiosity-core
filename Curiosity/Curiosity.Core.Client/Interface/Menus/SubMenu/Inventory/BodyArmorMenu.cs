@@ -47,6 +47,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
             if (data.amt == 0)
             {
                 NotificationManager.GetModule().Error($"Sorry, you seem to of ran out.");
+                selectedItem.Enabled = true;
                 return;
             }
 

@@ -19,16 +19,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenu menuBodyArmor;
         BodyArmorMenu _bodyArmorMenu = new BodyArmorMenu();
 
+        UIMenu menuRepairKit;
+        RepairKitMenu _repairKitMenu = new RepairKitMenu();
+
         UIMenu menuHealth;
         HealthMenu _healthMenu = new HealthMenu();
 
         PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
         UIMenuCheckboxItem miScubaEquipment = new UIMenuCheckboxItem("Scuba Equipment", false);
-
-        UIMenuItem miRepairKit = new UIMenuItem("Repair Kits");
-        UIMenuListItem miLstRepairKit;
-        List<dynamic> repairKitList = new List<dynamic>() { "Vehicle", "Trailer", "Boat", "Plane", "Helicopter" };
         /*
          * Health Kits
          * Armor Kits
@@ -47,85 +46,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menuBodyArmor = InteractionMenu.MenuPool.AddSubMenu(menu, "Body Armor");
             _bodyArmorMenu.CreateMenu(menuBodyArmor);
 
-            miRepairKit.SetRightLabel($"0");
-            miRepairKit.Enabled = false;
-            baseMenu.AddItem(miRepairKit);
-
-            miLstRepairKit = new UIMenuListItem("Repair", repairKitList, 0);
-            baseMenu.AddItem(miLstRepairKit);
+            menuRepairKit = InteractionMenu.MenuPool.AddSubMenu(menu, "Repair Kits");
+            _repairKitMenu.CreateMenu(menuRepairKit);
 
             baseMenu.AddItem(miScubaEquipment);
 
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
             baseMenu.OnCheckboxChange += BaseMenu_OnCheckboxChange;
-            baseMenu.OnListSelect += BaseMenu_OnListSelect;
-        }
-
-        private async void BaseMenu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
-        {
-            NotificationManager notificationManager = NotificationManager.GetModule();
-            if (listItem == miLstRepairKit)
-            {
-                bool canRepair = false;
-                Vehicle vehicle = null;
-
-                switch (newIndex)
-                {
-                    case 1: // Trailer
-                        vehicle = Cache.PersonalTrailer?.Vehicle ?? null;
-                        break;
-                    case 2: // Boat
-                        vehicle = Cache.PersonalBoat?.Vehicle ?? null;
-                        break;
-                    case 3: // Plane
-                        vehicle = Cache.PersonalPlane?.Vehicle ?? null;
-                        break;
-                    case 4: // Heli
-                        vehicle = Cache.PersonalHelicopter?.Vehicle ?? null;
-                        break;
-                    default: // Vehicle
-                        vehicle = Cache.PersonalVehicle?.Vehicle ?? null;
-                        break;
-                }
-
-                if (vehicle is null)
-                {
-                    notificationManager.Error($"Vehicle not found.");
-                    return;
-                }
-
-                canRepair = vehicle.Exists() && !vehicle.IsDead && vehicle.IsDriveable;
-
-                if (!canRepair)
-                {
-                    notificationManager.Error($"Cannot repair that vehicle.");
-                    return;
-                }
-
-                ExportMessage exportMessage = await InventoryManager.GetModule().UseItem(447, vehicle);
-
-                if (exportMessage.Success)
-                {
-                    UpdateRepairKits();
-                }
-            }
-        }
-
-        private async void UpdateRepairKits()
-        {
-            List<CharacterKit> kits = await EventSystem.Request<List<CharacterKit>>("character:inventory:repair");
-            if (kits is null)
-            {
-                miRepairKit.SetRightLabel($"0");
-            }
-            else if (kits.Count == 0)
-            {
-                miRepairKit.SetRightLabel($"0");
-            }
-            else
-            {
-                miRepairKit.SetRightLabel($"{kits[0].NumberOwned}");
-            }
         }
 
         private async void BaseMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
@@ -150,8 +77,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             miScubaEquipment.Checked = playerOptionsManager.IsScubaGearEnabled;
             bool hasScubaGear = await EventSystem.Request<bool>("character:inventory:hasItem", 446);
             miScubaEquipment.Enabled = hasScubaGear;
-
-            UpdateRepairKits();
         }
     }
 }
