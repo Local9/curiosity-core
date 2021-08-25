@@ -230,10 +230,6 @@ namespace Curiosity.Core.Client.Managers
                 Cache.Character.IsPassive = true;
             }
 
-            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
-
-            Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
-
             if (player.Character.MarkedAsRegistered)
             {
                 Vector3 charPos = position.AsVector();
@@ -311,6 +307,9 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Send("character:routing:base");
             Instance.ExportDictionary["pma-voice"].toggleMute();
+
+            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
+            Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
 
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
