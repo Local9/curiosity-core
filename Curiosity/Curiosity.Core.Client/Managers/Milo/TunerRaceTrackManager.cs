@@ -14,16 +14,19 @@ namespace Curiosity.Core.Client.Managers.Milo
     {
         Position enter = new Position(-2152.99f, 1105.97f, -24.76f, 90.0f);
         Position exit = new Position(-2134.82f, 1106.42f, -27.27f, 270.0f);
+        Vector3 scale = new Vector3(5f, 5f, 0.5f);
 
         NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
 
-        public override void Begin()
+        public async override void Begin()
         {
             Logger.Info($"Started Tuner Race Track Manager");
 
-            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, enter.AsVector(), 30f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
-            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, exit.AsVector(), 30f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
+            await Session.Loading();
+
+            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, enter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
+            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, exit.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
@@ -32,14 +35,25 @@ namespace Curiosity.Core.Client.Managers.Milo
         [TickHandler(SessionWait = true)]
         private async Task OnTurnerTeleporterTick()
         {
+            string message = $"Tuner Track";
+            Vector3 notificationPosition = Vector3.Zero;
+
             if (markerEnter.IsInRange)
             {
-                NativeUI.Notifications.ShowFloatingHelpNotification("Enter Tuner Track", markerEnter.Position);
+                message = $"Enter {message}";
+                notificationPosition = markerEnter.Position;
             }
 
             if (markerExit.IsInRange)
             {
-                NativeUI.Notifications.ShowFloatingHelpNotification("Exit Tuner Track", markerExit.Position);
+                message = $"Exit {message}";
+                notificationPosition = markerEnter.Position;
+            }
+
+            if (notificationPosition != Vector3.Zero)
+            {
+                notificationPosition.Z = notificationPosition.Z + 1f;
+                NativeUI.Notifications.ShowFloatingHelpNotification(message, notificationPosition);
             }
         }
     }

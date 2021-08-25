@@ -8,9 +8,15 @@ namespace Curiosity.Core.Client.Extensions
 {
     public static class PositionExtensions
     {
-        public static Vector3 AsVector(this Position position)
+        public static Vector3 AsVector(this Position position, bool setGround = false)
         {
-            return new Vector3(position.X, position.Y, position.Z);
+            Vector3 positionV = new Vector3(position.X, position.Y, position.Z);
+            float ground = position.Z;
+
+            if (API.GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref ground, false) && setGround)
+                positionV.Z = ground;
+
+            return positionV;
         }
 
         public static Vector3 AsVector(this RotatablePosition position)
