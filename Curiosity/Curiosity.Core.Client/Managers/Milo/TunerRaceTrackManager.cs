@@ -40,13 +40,13 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             if (markerEnter.IsInRange)
             {
-                message = $"Enter {message}";
+                message = $"~INPUT_CONTEXT~ to enter {message}";
                 notificationPosition = markerEnter.Position;
             }
 
             if (markerExit.IsInRange)
             {
-                message = $"Exit {message}";
+                message = $"~INPUT_CONTEXT~to exit {message}";
                 notificationPosition = markerEnter.Position;
             }
 
