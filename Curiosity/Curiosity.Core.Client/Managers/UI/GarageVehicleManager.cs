@@ -323,7 +323,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
             if (_requestingGarage)
             {
-                NotificationManager.GetModule().Info("Mechanic is hard at work, please give them a moment");
+                NotificationManager.GetModule().Info("Mechanic is hard at work, please give them a moment.");
                 return;
             }
             _requestingGarage = true;
@@ -339,7 +339,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     NotificationManager.GetModule().Info("No vehicles returned from the Garage");
                     return;
                 }
-
 
                 foreach (VehicleItem v in srvVeh)
                 {
