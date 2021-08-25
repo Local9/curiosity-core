@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
@@ -158,7 +159,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (Game.PlayerPed.Exists())
             {
-                Game.PlayerPed.Position = new Vector3(405.9228f, -954.1149f, -99.6627f);
+                // Game.PlayerPed.Position = new Vector3(405.9228f, -954.1149f, -99.6627f);
                 Game.PlayerPed.IsPositionFrozen = true;
                 Game.PlayerPed.IsInvincible = true;
                 Game.PlayerPed.IsCollisionEnabled = false;
@@ -232,37 +233,20 @@ namespace Curiosity.Core.Client.Managers
 
             if (player.Character.MarkedAsRegistered)
             {
-                Vector3 charPos = position.AsVector();
-                Vector3 spawnPos = Vector3.Zero;
-                float spawnHeading = 0f;
-
-                Vector3 spawnRoad = Vector3.Zero;
-
-                API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
-                API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
-
-                spawnRoad.Z = World.GetGroundHeight(spawnRoad) + 2;
-
-                position.X = spawnRoad.X;
-                position.Y = spawnRoad.Y;
-                position.Z = spawnRoad.Z;
-                position.H = spawnHeading;
-
-                Vector3 safePosition = Vector3.Zero;
-
-                if (API.GetSafeCoordForPed(spawnRoad.X, spawnRoad.Y, spawnRoad.Z, true, ref safePosition, 16))
-                {
-                    position.X = safePosition.X;
-                    position.Y = safePosition.Y;
-                    position.Z = safePosition.Z;
-                }
-
-                Game.PlayerPed.Position = position.AsVector();
-                Game.PlayerPed.Heading = position.H;
-
                 await BaseScript.Delay(1000);
 
+                Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
+                int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
+
+                Logger.Debug($"Interior {interiorId} @ {currentPos.X},{currentPos.Y},{currentPos.Z}");
+
                 string msg = "You have been moved to the City Hall as you were found";
+
+                if (interiorId > 0)
+                {
+                    Notify.Info($"{msg} in some weird location.");
+                    MoveToCityHall();
+                }
 
                 if (API.IsEntityInWater(API.PlayerPedId()))
                 {
@@ -320,6 +304,7 @@ namespace Curiosity.Core.Client.Managers
         {
             Logger.Debug($"Moving to City Hall");
             Position pos = new Position(CityHallPosition.X, CityHallPosition.Y, CityHallPosition.Z, 276.3713f);
+            // StartPlayerTeleport(Cache.PlayerPed.Handle, CityHallPosition.X, CityHallPosition.Y, CityHallPosition.Z, 276.3713f, false, true, false);
             Game.PlayerPed.Position = pos.AsVector();
             Game.PlayerPed.Heading = pos.H;
         }

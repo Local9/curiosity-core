@@ -84,6 +84,7 @@ namespace Curiosity.Core.Client.Environment
                 await BaseScript.Delay(interval);
             }
 
+            // API.StartPlayerTeleport(entity, position.X, position.Y, position.Z, position.H, false, true, false);
             API.SetEntityCoordsNoOffset(entity, position.X, position.Y, position.Z, false, false, false);
             API.SetEntityHeading(entity, position.H);
         }

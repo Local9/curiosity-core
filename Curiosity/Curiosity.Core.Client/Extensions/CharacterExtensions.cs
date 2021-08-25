@@ -74,7 +74,10 @@ namespace Curiosity.Core.Client.Extensions
 
         public static async Task Save(this CuriosityCharacter character)
         {
+            Vector3 position = Game.PlayerPed.Position;
+            Cache.Entity.Position = new Position(position.X, position.Y, position.Z, Game.PlayerPed.Heading);
             character.LastPosition = Cache.Entity.Position;
+
             character.IsDead = Cache.PlayerPed.IsDead;
             character.IsPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
