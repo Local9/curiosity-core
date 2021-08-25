@@ -49,7 +49,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnPlayerStateTask()
         {
-            if (Game.PlayerPed.IsSprinting && !wasSprinting && Cache.PlayerPed.IsAlive)
+            if (Game.PlayerPed.IsSprinting && !wasSprinting)
             {
                 wasSprinting = true;
                 sprintStart = DateTime.UtcNow;
@@ -85,7 +85,7 @@ namespace Curiosity.Core.Client.Managers
                 sprintEnd = DEFAULT;
             }
 
-            if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming && Cache.PlayerPed.IsAlive)
+            if (Game.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
             {
                 wasSwimming = true;
                 swimStart = DateTime.UtcNow;
@@ -121,7 +121,7 @@ namespace Curiosity.Core.Client.Managers
                 swimEnd = DEFAULT;
             }
 
-            if (Cache.PlayerPed.IsInVehicle() && Cache.PlayerPed.IsAlive)
+            if (Cache.PlayerPed.IsInVehicle())
             {
                 Vehicle vehicle = Cache.PlayerPed.CurrentVehicle;
 
@@ -165,7 +165,7 @@ namespace Curiosity.Core.Client.Managers
                         drivingEnd = DEFAULT;
                     }
                 }
-
+                
                 if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsPlane || vehicle.Model.IsHelicopter))
                 {
                     float speed = vehicle.Speed * 3.6f;
