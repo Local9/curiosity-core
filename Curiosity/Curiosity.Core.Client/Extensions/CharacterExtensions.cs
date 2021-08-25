@@ -76,6 +76,7 @@ namespace Curiosity.Core.Client.Extensions
         {
             character.LastPosition = Cache.Entity.Position;
             character.IsDead = Cache.PlayerPed.IsDead;
+            character.IsPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
             bool success = await EventSystem.GetModule().Request<bool>("character:save", character);
 
