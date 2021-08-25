@@ -585,6 +585,18 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "blip" })]
+        public class BlipTest : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Blip blip = World.CreateBlip(Game.PlayerPed.Position);
+                blip.Sprite = (BlipSprite)int.Parse(arguments.ElementAt(0));
+                blip.IsShortRange = true;
+                API.SetBlipShrink(blip.Handle, true);
+            }
+        }
+
         [CommandInfo(new[] { "pos" })]
         public class SaveCoords : ICommand
         {

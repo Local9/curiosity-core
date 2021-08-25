@@ -1,6 +1,22 @@
 {
   "locations": [
     {
+      "name": "Los Santos Tuner Track",
+      "sprite": 777,
+      "color": 0,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 783.46,
+          "Y": -1868.02,
+          "Z": 28.27
+        }
+      ]
+    },
+    {
       "name": "Jail",
       "sprite": 253,
       "color": 3,

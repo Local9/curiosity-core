@@ -21,7 +21,8 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
                 blip.Sprite = (BlipSprite)Sprite;
                 blip.Color = (BlipColor)Color;
                 blip.IsShortRange = IsShortRange;
-                blip.Priority = Priority;                
+                blip.Priority = Priority;
+                API.SetBlipShrink(blip.Handle, true);
 
                 string key = Name.Trim().Replace(" ", "");
                 API.AddTextEntry(key, Name);
