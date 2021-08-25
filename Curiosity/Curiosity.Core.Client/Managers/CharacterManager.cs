@@ -161,6 +161,7 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.Position = new Vector3(405.9228f, -954.1149f, -99.6627f);
                 Game.PlayerPed.IsPositionFrozen = true;
                 Game.PlayerPed.IsInvincible = true;
+                Game.PlayerPed.IsCollisionEnabled = false;
             }
 
             Screen.Fading.FadeOut(0);
@@ -270,23 +271,20 @@ namespace Curiosity.Core.Client.Managers
                 if (API.IsEntityInWater(API.PlayerPedId()))
                 {
                     Notify.Info($"{msg} sleeping with the fishes.");
-                    position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
-                    Game.PlayerPed.Position = position.AsVector();
-                    Game.PlayerPed.Heading = position.H;
+                    MoveToCityHall();
                 }
 
                 if (API.IsEntityInAir(API.PlayerPedId()))
                 {
                     Notify.Info($"{msg} being abducted.");
-                    position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
-                    Game.PlayerPed.Position = position.AsVector();
-                    Game.PlayerPed.Heading = position.H;
+                    MoveToCityHall();
                 }
 
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
 
+                Game.PlayerPed.IsCollisionEnabled = true;
                 Game.PlayerPed.IsPositionFrozen = false;
                 Game.PlayerPed.IsInvincible = false;
             }
@@ -314,6 +312,13 @@ namespace Curiosity.Core.Client.Managers
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
             Cache.UpdatePedId(true);
+        }
+
+        private void MoveToCityHall()
+        {
+            Position pos = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+            Game.PlayerPed.Position = pos.AsVector();
+            Game.PlayerPed.Heading = pos.H;
         }
     }
 }
