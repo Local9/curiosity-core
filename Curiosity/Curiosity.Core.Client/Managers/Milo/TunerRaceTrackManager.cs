@@ -140,7 +140,6 @@ namespace Curiosity.Core.Client.Managers.Milo
             //    Cache.PlayerPed.IsCollisionEnabled = false;
             //    Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
             //}
-
         }
 
         private async Task FadeScreenOut()

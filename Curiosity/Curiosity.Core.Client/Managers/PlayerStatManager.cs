@@ -53,6 +53,11 @@ namespace Curiosity.Core.Client.Managers
             {
                 wasSprinting = true;
                 sprintStart = DateTime.UtcNow;
+
+                while (Game.PlayerPed.IsSprinting)
+                {
+                    await BaseScript.Delay(100);
+                }
             }
             else if (!Game.PlayerPed.IsSprinting && wasSprinting)
             {
@@ -84,6 +89,11 @@ namespace Curiosity.Core.Client.Managers
             {
                 wasSwimming = true;
                 swimStart = DateTime.UtcNow;
+
+                while (Game.PlayerPed.IsSwimmingUnderWater)
+                {
+                    await BaseScript.Delay(100);
+                }
             }
             else if (!Game.PlayerPed.IsSwimmingUnderWater && wasSwimming && !PlayerOptionsManager.GetModule().IsScubaGearEnabled)
             {
@@ -122,6 +132,12 @@ namespace Curiosity.Core.Client.Managers
                     {
                         wasDriving = true;
                         drivingStart = DateTime.UtcNow;
+
+                        while (speed > 30)
+                        {
+                            speed = vehicle.Speed * 3.6f;
+                            await BaseScript.Delay(100);
+                        }
                     }
                     else if (speed < 30 && wasDriving)
                     {
@@ -157,6 +173,12 @@ namespace Curiosity.Core.Client.Managers
                     {
                         wasFlying = true;
                         flyingStart = DateTime.UtcNow;
+                        
+                        while (speed > 10 && vehicle.IsInAir)
+                        {
+                            speed = vehicle.Speed * 3.6f;
+                            await BaseScript.Delay(100);
+                        }
                     }
                     else if (speed < 10 && wasFlying && !vehicle.IsInAir)
                     {
@@ -185,6 +207,8 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
             }
+
+            await BaseScript.Delay(500);
         }
 
         void UpdateStat(string stat, string message, int newLevel)
