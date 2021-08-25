@@ -94,7 +94,7 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
-        public async Task<ExportMessage> UseItem(int itemId)
+        public async Task<ExportMessage> UseItem(int itemId, Vehicle veh = null)
         {
             NotificationManager notificationManager = NotificationManager.GetModule();
             ExportMessage result = new ExportMessage();
@@ -130,6 +130,12 @@ namespace Curiosity.Core.Client.Managers.UI
                     int playerArmor = Cache.PlayerPed.Armor;
                     Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
                     notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
+                }
+
+                if (result.Item.CategoryId == 24)
+                {
+                    veh.Repair();
+                    notificationManager.Success($"Vehicle Repaired");
                 }
             }
 
