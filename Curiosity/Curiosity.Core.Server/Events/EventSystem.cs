@@ -131,13 +131,13 @@ namespace Curiosity.Core.Server.Events
             string jsonObject = JsonConvert.SerializeObject(wrapped);
 
             int fileSize = Encoding.UTF8.GetByteCount(jsonObject);
-            bool latentEvent = fileSize > 4000;
+            bool latentEvent = fileSize > 2097152;
 
             if (handle == -1)
             {
                 if (latentEvent)
                 {
-                    BaseScript.TriggerLatentClientEvent(EVENT_KEY, 2000, jsonObject);
+                    BaseScript.TriggerLatentClientEvent(EVENT_KEY, 2097152, jsonObject);
                 }
                 else
                 {
@@ -148,7 +148,7 @@ namespace Curiosity.Core.Server.Events
             {
                 if (latentEvent)
                 {
-                    BaseScript.TriggerLatentClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, 2000, jsonObject);
+                    BaseScript.TriggerLatentClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, 2097152, jsonObject);
                 }
                 else
                 {
