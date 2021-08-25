@@ -125,6 +125,9 @@ namespace Curiosity.Core.Client.Managers.Milo
             if (IsValidInterior(interiorId))
                 RefreshInterior(interiorId);
 
+            Cache.PlayerPed.IsCollisionEnabled = true;
+            Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = true;
+
             SetPedCoordsKeepVehicle(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z);
             Cache.PlayerPed.CurrentVehicle.Heading = pos.H;
 
@@ -132,14 +135,12 @@ namespace Curiosity.Core.Client.Managers.Milo
             await FadeScreenIn();
             await Cache.PlayerPed.FadeIn();
 
-            while(Cache.PlayerPed.IsInRangeOf(pos.AsVector(), 10f))
-            {
-                Cache.PlayerPed.IsCollisionEnabled = false;
-                Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
-            }
+            //while(Cache.PlayerPed.IsInRangeOf(pos.AsVector(), 10f))
+            //{
+            //    Cache.PlayerPed.IsCollisionEnabled = false;
+            //    Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
+            //}
 
-            Cache.PlayerPed.IsCollisionEnabled = true;
-            Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = true;
         }
 
         private async Task FadeScreenOut()
