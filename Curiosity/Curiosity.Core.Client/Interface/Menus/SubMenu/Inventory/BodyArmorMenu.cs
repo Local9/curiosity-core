@@ -82,22 +82,27 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
                     case 448:
                         miSuperLightArmor.SetRightLabel($"{kit.NumberOwned}");
                         miSuperLightArmor.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miSuperLightArmor.Enabled = kit.NumberOwned > 0;
                         break;
                     case 449:
                         miLightArmor.SetRightLabel($"{kit.NumberOwned}");
                         miLightArmor.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miLightArmor.Enabled = kit.NumberOwned > 0;
                         break;
                     case 450:
                         miStandardArmor.SetRightLabel($"{kit.NumberOwned}");
                         miStandardArmor.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miStandardArmor.Enabled = kit.NumberOwned > 0;
                         break;
                     case 451:
                         miHeavyArmor.SetRightLabel($"{kit.NumberOwned}");
                         miHeavyArmor.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miHeavyArmor.Enabled = kit.NumberOwned > 0;
                         break;
                     case 452:
                         miSuperHeavyArmor.SetRightLabel($"{kit.NumberOwned}");
                         miSuperHeavyArmor.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miSuperHeavyArmor.Enabled = kit.NumberOwned > 0;
                         break;
                 }
             }

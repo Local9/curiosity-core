@@ -99,22 +99,27 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
                     case 447:
                         miVehicle.SetRightLabel($"{kit.NumberOwned}");
                         miVehicle.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId, vehicle = Cache.PersonalVehicle };
+                        miVehicle.Enabled = kit.NumberOwned > 0;
                         break;
                     case 462:
                         miTrailer.SetRightLabel($"{kit.NumberOwned}");
                         miTrailer.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId, vehicle = Cache.PersonalTrailer };
+                        miTrailer.Enabled = kit.NumberOwned > 0;
                         break;
                     case 464:
                         miPlane.SetRightLabel($"{kit.NumberOwned}");
                         miPlane.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId, vehicle = Cache.PersonalPlane };
+                        miPlane.Enabled = kit.NumberOwned > 0;
                         break;
                     case 463:
                         miBoat.SetRightLabel($"{kit.NumberOwned}");
                         miBoat.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId, vehicle = Cache.PersonalBoat };
+                        miBoat.Enabled = kit.NumberOwned > 0;
                         break;
                     case 465:
                         miHelicopter.SetRightLabel($"{kit.NumberOwned}");
                         miHelicopter.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId, vehicle = Cache.PersonalHelicopter };
+                        miHelicopter.Enabled = kit.NumberOwned > 0;
                         break;
                 }
             }

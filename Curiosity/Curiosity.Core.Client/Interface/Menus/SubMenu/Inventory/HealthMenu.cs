@@ -76,14 +76,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
                     case 424:
                         miLightKit.SetRightLabel($"{kit.NumberOwned}");
                         miLightKit.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miLightKit.Enabled = kit.NumberOwned > 0;
                         break;
                     case 425:
                         miMediumKit.SetRightLabel($"{kit.NumberOwned}");
                         miMediumKit.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miMediumKit.Enabled = kit.NumberOwned > 0;
                         break;
                     case 426:
                         miLargeKit.SetRightLabel($"{kit.NumberOwned}");
                         miLargeKit.ItemData = new { amt = kit.NumberOwned, id = kit.ItemId };
+                        miLargeKit.Enabled = kit.NumberOwned > 0;
                         break;
                 }
             }
