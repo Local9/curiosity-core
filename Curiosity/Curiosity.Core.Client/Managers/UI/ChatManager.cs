@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -145,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
         }
 
         [TickHandler]
-        private async void OnCheckPauseMenu()
+        private async Task OnCheckPauseMenu()
         {
             if (API.IsPauseMenuActive() && IsChatboxOpen)
             {
