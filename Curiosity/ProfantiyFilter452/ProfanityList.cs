@@ -35,6 +35,7 @@ namespace ProfanityFilterNS
              "nigg3r",
              "nigg4h",
              "nigga",
+             "niggar",
              "niggah",
              "niggas",
              "niggaz",
