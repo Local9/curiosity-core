@@ -24,9 +24,6 @@ namespace Curiosity.Core.Client.Managers.UI
         private const string BLIP_PERSONAL_BOAT = "blipPersonalBoat";
         private const string BLIP_PERSONAL_HELICOPTER = "blipPersonalHelicopter";
 
-        List<dynamic> _VehicleCache = new List<dynamic>();
-        bool _requestingGarage = false;
-
         public async override void Begin()
         {
             API.AddTextEntry(BLIP_PERSONAL_VEHICLE, "Personal Vehicle");
