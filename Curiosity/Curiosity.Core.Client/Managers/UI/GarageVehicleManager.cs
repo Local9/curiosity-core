@@ -49,6 +49,12 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
 
+                    if (srvVeh.Count == 0)
+                    {
+                        NotificationManager.GetModule().Info("No vehicles returned from the Garage");
+                        return vehicles;
+                    }
+
                     if (srvVeh is null)
                     {
                         NotificationManager.GetModule().Info("No vehicles returned from the Garage");

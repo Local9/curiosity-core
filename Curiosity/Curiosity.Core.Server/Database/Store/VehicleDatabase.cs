@@ -27,7 +27,7 @@ namespace Curiosity.Core.Server.Database.Store
                 ResultSet keyValuePairs = await result;
 
                 if (keyValuePairs.Count == 0)
-                    return null;
+                    return lst;
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
