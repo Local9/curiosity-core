@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Environment.Entities.Models;
 
 namespace Curiosity.Core.Client.Managers.Milo
 {
@@ -122,6 +123,16 @@ namespace Curiosity.Core.Client.Managers.Milo
                 DeactivateInteriorEntitySet(interiorId, "entity_set_test_lights");
                 DeactivateInteriorEntitySet(interiorId, "entity_set_test_lights_cheap");
                 DeactivateInteriorEntitySet(interiorId, "entity_set_time_trial");
+            }
+
+            Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
+            foreach (KeyValuePair<string, BlipData> kvp in blips)
+            {
+                BlipData blip = kvp.Value;
+                foreach (Blip b in blip.Blips)
+                {
+                    SetBlipHiddenOnLegend(b.Handle, !enter);
+                }
             }
 
             if (IsValidInterior(interiorId))
