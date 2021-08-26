@@ -65,5 +65,29 @@ namespace Curiosity.Core.Client.Managers
 
             return GetConfig().Supporter.SupporterModels;
         }
+
+        public List<string> ActiveIpls()
+        {
+            if (GetConfig().Milos.ActiveIpls is null)
+                return new List<string>();
+
+            return GetConfig().Milos.ActiveIpls;
+        }
+
+        public List<string> CayoIslandIpls()
+        {
+            if (GetConfig().Milos.CayoLOD is null)
+                return new List<string>();
+
+            return GetConfig().Milos.CayoLOD;
+        }
+
+        public List<string> LosSantosIpls()
+        {
+            if (GetConfig().Milos.LosSantosLOD is null)
+                return new List<string>();
+
+            return GetConfig().Milos.LosSantosLOD;
+        }
     }
 }
