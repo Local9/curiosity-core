@@ -35,15 +35,11 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            GetGarageVehicles();
-
             EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
             {
                 await Session.Loading();
 
                 string vehicleLabel = metadata.Find<string>(0);
-
-                await GetGarageVehicles();
 
                 NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
 
@@ -52,8 +48,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
-                await Session.Loading();
-
                 List<dynamic> vehicles = new List<dynamic>();
 
                 try
@@ -345,53 +339,6 @@ namespace Curiosity.Core.Client.Managers.UI
                     return new { success = false };
                 }
             }));
-        }
-
-        private async Task GetGarageVehicles()
-        {
-            await Session.Loading();
-
-            if (_requestingGarage)
-            {
-                NotificationManager.GetModule().Info("Mechanic is hard at work, please give them a moment.");
-                return;
-            }
-            _requestingGarage = true;
-
-            List<dynamic> vehicles = new List<dynamic>();
-
-            try
-            {
-                List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
-
-                if (srvVeh is null)
-                {
-                    NotificationManager.GetModule().Info("No vehicles returned from the Garage");
-                    return;
-                }
-
-                foreach (VehicleItem v in srvVeh)
-                {
-                    var m = new
-                    {
-                        characterVehicleId = v.CharacterVehicleId,
-                        label = v.Label,
-                        licensePlate = v.VehicleInfo.plateText,
-                        datePurchased = v.DatePurchased,
-                        hash = v.Hash
-                    };
-                    vehicles.Add(m);
-                }
-
-                _VehicleCache = vehicles;
-
-                _requestingGarage = false;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "GetGarageVehicles");
-                _requestingGarage = false;
-            }
         }
 
         public Blip CreateBlip(Vehicle vehicle, SpawnType spawnType = SpawnType.Unknown)
