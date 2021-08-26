@@ -32,10 +32,8 @@ namespace Curiosity.Core.Client.Managers.UI
             API.AddTextEntry(BLIP_PERSONAL_BOAT, "Personal Boat");
             API.AddTextEntry(BLIP_PERSONAL_HELICOPTER, "Personal Helicopter");
 
-            EventSystem.Attach("garage:update", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("garage:update", new EventCallback(metadata =>
             {
-                await Session.Loading();
-
                 string vehicleLabel = metadata.Find<string>(0);
 
                 NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
