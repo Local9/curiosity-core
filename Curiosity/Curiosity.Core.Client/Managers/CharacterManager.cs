@@ -240,41 +240,41 @@ namespace Curiosity.Core.Client.Managers
 
                 if (Cache.Character.IsOnIsland)
                 {
-                    cayoPericoManager.SetupCayPerico();
+                    await cayoPericoManager.SetupCayPerico();
                 }
 
                 if (!Cache.Character.IsOnIsland)
                 {
-                    cayoPericoManager.SetupLosSantos();
+                    await cayoPericoManager.SetupLosSantos();
+
+                    Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
+                    int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
+
+                    Logger.Debug($"Interior {interiorId} @ {currentPos.X},{currentPos.Y},{currentPos.Z}");
+
+                    string msg = "You have been moved to the City Hall as you were found";
+
+                    if (interiorId > 0)
+                    {
+                        Notify.Info($"{msg} in some weird location.");
+                        MoveToCityHall();
+                    }
+
+                    if (API.IsEntityInWater(API.PlayerPedId()))
+                    {
+                        Notify.Info($"{msg} sleeping with the fishes.");
+                        MoveToCityHall();
+                    }
+
+                    if (API.IsEntityInAir(API.PlayerPedId()))
+                    {
+                        Notify.Info($"{msg} being abducted.");
+                        MoveToCityHall();
+                    }
+
+                    if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
+                        MoveToCityHall();
                 }
-
-                Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
-                int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
-
-                Logger.Debug($"Interior {interiorId} @ {currentPos.X},{currentPos.Y},{currentPos.Z}");
-
-                string msg = "You have been moved to the City Hall as you were found";
-
-                if (interiorId > 0)
-                {
-                    Notify.Info($"{msg} in some weird location.");
-                    MoveToCityHall();
-                }
-
-                if (API.IsEntityInWater(API.PlayerPedId()))
-                {
-                    Notify.Info($"{msg} sleeping with the fishes.");
-                    MoveToCityHall();
-                }
-
-                if (API.IsEntityInAir(API.PlayerPedId()))
-                {
-                    Notify.Info($"{msg} being abducted.");
-                    MoveToCityHall();
-                }
-
-                if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
-                    MoveToCityHall();
 
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
