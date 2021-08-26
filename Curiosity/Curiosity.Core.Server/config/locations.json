@@ -17,6 +17,32 @@
       ]
     },
     {
+      "name": "Cayo Perico Island",
+      "sprite": 798,
+      "color": 0,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 3857.16,
+          "Y": 4459.48,
+          "Z": 0.85
+        },
+        {
+          "X": -1605.7,
+          "Y": 5258.76,
+          "Z": 1.2
+        },
+        {
+          "X": -1016.42,
+          "Y": -2468.58,
+          "Z": 12.99
+        }
+      ]
+    },
+    {
       "name": "Jail",
       "sprite": 253,
       "color": 3,
