@@ -82,10 +82,15 @@ namespace Curiosity.Core.Client.Extensions
             character.IsPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             character.AllowHelmet = Cache.Character.AllowHelmet;
 
+            if (Cache.Player.User.IsSeniorDeveloper)
+                Logger.Debug($"{character}");
+
             bool success = await EventSystem.GetModule().Request<bool>("character:save", character);
 
             if (success)
+            {
                 Logger.Debug($"Character Saved");
+            }
 
             // Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
         }

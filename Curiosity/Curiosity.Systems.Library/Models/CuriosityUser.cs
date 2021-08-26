@@ -54,6 +54,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsStaff => Role == Role.COMMUNITY_MANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER;
         public bool IsAdmin => Role == Role.COMMUNITY_MANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER;
         public bool IsTrustedAdmin => Role == Role.COMMUNITY_MANAGER || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER;
+        public bool IsSeniorDeveloper => Role == Role.DEVELOPER;
         public bool IsDeveloper => Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER;
         public bool IsProjectManager => Role == Role.PROJECT_MANAGER;
         public bool IsDonator => Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3 || Role == Role.DONATOR_LIFE;

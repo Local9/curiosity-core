@@ -55,5 +55,10 @@ namespace Curiosity.Systems.Library.Models
 
             return costOfRespawn;
         }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

@@ -87,7 +87,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             bool hasScubaGear = await EventSystem.Request<bool>("character:inventory:hasItem", 446);
             miScubaEquipment.Enabled = hasScubaGear;
 
-            miWearHelmet.Checked = Cache.Character.AllowHelmet ?? false;
+            miWearHelmet.Checked = Cache.Character.AllowHelmet;
         }
     }
 }
