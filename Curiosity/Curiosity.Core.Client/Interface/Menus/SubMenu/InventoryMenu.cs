@@ -8,6 +8,7 @@ using Curiosity.Systems.Library.Models.Shop;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
@@ -28,6 +29,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
         UIMenuCheckboxItem miScubaEquipment = new UIMenuCheckboxItem("Scuba Equipment", false);
+        UIMenuCheckboxItem miWearHelmet = new UIMenuCheckboxItem("Wear Helmet", true);
         /*
          * Health Kits
          * Armor Kits
@@ -50,6 +52,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             _repairKitMenu.CreateMenu(menuRepairKit);
 
             baseMenu.AddItem(miScubaEquipment);
+            baseMenu.AddItem(miWearHelmet);
 
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
             baseMenu.OnCheckboxChange += BaseMenu_OnCheckboxChange;
@@ -57,13 +60,18 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async void BaseMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
+            checkboxItem.Enabled = false;
             if (checkboxItem == miScubaEquipment)
             {
-                miScubaEquipment.Enabled = false;
                 playerOptionsManager.ToggleScubaEquipment();
-                await BaseScript.Delay(1000);
-                miScubaEquipment.Enabled = true;
             }
+
+            if (checkboxItem == miWearHelmet)
+            {
+                SetPedHelmet(Cache.PlayerPed.Handle, Checked);
+            }
+            await BaseScript.Delay(1000);
+            checkboxItem.Enabled = true;
         }
 
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
