@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Curiosity.Core.Client.Utils;
+using Curiosity.Core.Client.Interface;
 
 namespace Curiosity.Core.Client.Managers.Milo
 {
@@ -90,7 +92,7 @@ namespace Curiosity.Core.Client.Managers.Milo
         private async Task MovePlayer(bool enter = false)
         {
             await Cache.PlayerPed.FadeOut();
-            await FadeScreenOut();
+            await ScreenInterface.FadeOut(1000);
 
             Cache.PlayerPed.IsCollisionEnabled = false;
             Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
@@ -132,7 +134,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             Cache.PlayerPed.CurrentVehicle.Heading = pos.H;
 
             await BaseScript.Delay(1500);
-            await FadeScreenIn();
+            await ScreenInterface.FadeIn(1000);
             await Cache.PlayerPed.FadeIn();
 
             //while(Cache.PlayerPed.IsInRangeOf(pos.AsVector(), 10f))
@@ -140,28 +142,6 @@ namespace Curiosity.Core.Client.Managers.Milo
             //    Cache.PlayerPed.IsCollisionEnabled = false;
             //    Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
             //}
-        }
-
-        private async Task FadeScreenOut()
-        {
-            Screen.Fading.FadeOut(1000);
-
-            while (Screen.Fading.IsFadingOut)
-            {
-                await BaseScript.Delay(100);
-            }
-
-            await BaseScript.Delay(1000);
-        }
-
-        private async Task FadeScreenIn()
-        {
-            Screen.Fading.FadeIn(1000);
-
-            while (Screen.Fading.IsFadingIn)
-            {
-                await BaseScript.Delay(100);
-            }
         }
     }
 }

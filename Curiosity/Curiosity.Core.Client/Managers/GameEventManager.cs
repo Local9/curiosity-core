@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
+using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -314,7 +315,17 @@ namespace Curiosity.Core.Client.Managers
 
         async void RespawnAtHospital(CuriosityPlayer curiosityPlayer)
         {
+            Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut();
+
+            if (Cache.Character.IsOnIsland)
+            {
+                CayoPericoManager.GetModule().SetupLosSantos();
+
+                NotificationManager.GetModule().Info($"Chartering a flight to the nearest hospital.");
+
+                await BaseScript.Delay(3000);
+            }
 
             Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
 
@@ -325,7 +336,7 @@ namespace Curiosity.Core.Client.Managers
 
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, spawnLocation.H));
             BaseScript.TriggerEvent("onPlayerResurrected:hospital");
-
+            Cache.PlayerPed.FadeIn();
             RemoveCamera();
 
             await BaseScript.Delay(3000);

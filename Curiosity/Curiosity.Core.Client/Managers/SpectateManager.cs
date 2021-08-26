@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Events;
 using static CitizenFX.Core.Native.API;
 
@@ -34,7 +35,7 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            await Utils.ScreenOptions.ScreenFadeOut(250);
+            await ScreenInterface.FadeOut(250);
 
             int playerPedId = GetPlayerPed(playerId);
 
@@ -58,7 +59,7 @@ namespace Curiosity.Core.Client.Managers
 
             currentSpectateHandle = playerPedId;
 
-            await Utils.ScreenOptions.ScreenFadeIn(250);
+            await ScreenInterface.FadeIn(250);
         }
 
         private async void Stop()
@@ -86,7 +87,7 @@ namespace Curiosity.Core.Client.Managers
                 currentSpectate = null;
                 currentSpectateHandle = 0;
 
-                await Utils.ScreenOptions.ScreenFadeIn(250);
+                await ScreenInterface.FadeIn(250);
                 await Cache.PlayerPed.FadeIn();
 
                 Cache.PlayerPed.IsInvincible = false;

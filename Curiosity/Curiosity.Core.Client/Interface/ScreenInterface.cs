@@ -159,18 +159,20 @@ namespace Curiosity.Core.Client.Interface
         internal static async Task FadeOut(int ms = 1000)
         {
             Screen.Fading.FadeOut(ms);
-            while (Screen.Fading.IsFadingOut)
+            while (IsScreenFadingOut())
             {
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(10);
+                if (Screen.Fading.IsFadedOut) break;
             }
         }
 
         internal static async Task FadeIn(int ms = 1000)
         {
             Screen.Fading.FadeIn(ms);
-            while (Screen.Fading.IsFadingIn)
+            while (IsScreenFadingIn())
             {
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(10);
+                if (Screen.Fading.IsFadedIn) break;
             }
         }
     }

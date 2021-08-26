@@ -64,6 +64,7 @@
     <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
+    <Compile Include="Extensions\Native\NUIMarker.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\DebugDisplay.cs" />
     <Compile Include="Managers\PlayerOptionsManager.cs" />
-    <Compile Include="Utils\ScreenOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\scenarios.json">

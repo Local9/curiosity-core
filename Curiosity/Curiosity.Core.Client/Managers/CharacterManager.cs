@@ -210,6 +210,8 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.Armor = character.Armor;
             }
 
+            Cache.PlayerPed.FadeOut();
+
             Logger.Info("[Character] Base Settings Loaded...");
 
             // INVENTORIES
@@ -238,14 +240,16 @@ namespace Curiosity.Core.Client.Managers
 
                 CayoPericoManager cayoPericoManager = CayoPericoManager.GetModule();
 
-                if (Cache.Character.IsOnIsland)
+                if (Cache.Character.IsOnIsland) // This is done to get around an IPL Bug in GTA
                 {
-                    await cayoPericoManager.SetupCayPerico();
+                    Cache.PlayerPed.Position = new Vector3(-1016.42f, -2468.58f, 12.99f);
+                    Cache.PlayerPed.Heading = 233.31f;
+                    Cache.Character.IsOnIsland = false;
                 }
 
                 if (!Cache.Character.IsOnIsland)
                 {
-                    await cayoPericoManager.SetupLosSantos();
+                    cayoPericoManager.SetupLosSantos();
 
                     Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
                     int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
@@ -283,9 +287,11 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.IsCollisionEnabled = true;
                 Game.PlayerPed.IsPositionFrozen = false;
                 Game.PlayerPed.IsInvincible = false;
+                Cache.PlayerPed.FadeIn();
             }
             else
             {
+                Cache.PlayerPed.FadeIn();
                 Cache.Character.IsPassive = true;
                 await player.Character.PostLoad();
             }
