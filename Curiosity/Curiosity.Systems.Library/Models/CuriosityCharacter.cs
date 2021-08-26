@@ -28,6 +28,7 @@ namespace Curiosity.Systems.Library.Models
         public CharacterInfo CharacterInfo { get; set; } = new CharacterInfo();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();
         public bool AllowHelmet { get; set; }
+        public bool IsOnIsland { get; set; }
 
         public void ChangeFeature(int feature, float value)
         {
