@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
         UIMenuCheckboxItem miScubaEquipment = new UIMenuCheckboxItem("Scuba Equipment", false);
-        UIMenuCheckboxItem miWearHelmet = new UIMenuCheckboxItem("Wear Helmet", true);
+        UIMenuCheckboxItem miWearHelmet = new UIMenuCheckboxItem("Wear Helmet", false);
         /*
          * Health Kits
          * Armor Kits
