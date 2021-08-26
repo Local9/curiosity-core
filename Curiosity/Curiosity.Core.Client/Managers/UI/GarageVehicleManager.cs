@@ -52,8 +52,40 @@ namespace Curiosity.Core.Client.Managers.UI
 
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
-                await GetGarageVehicles();
-                return _VehicleCache;
+                await Session.Loading();
+
+                List<dynamic> vehicles = new List<dynamic>();
+
+                try
+                {
+                    List<VehicleItem> srvVeh = await EventSystem.Request<List<VehicleItem>>("garage:get:list");
+
+                    if (srvVeh is null)
+                    {
+                        NotificationManager.GetModule().Info("No vehicles returned from the Garage");
+                        return vehicles;
+                    }
+
+                    foreach (VehicleItem v in srvVeh)
+                    {
+                        var m = new
+                        {
+                            characterVehicleId = v.CharacterVehicleId,
+                            label = v.Label,
+                            licensePlate = v.VehicleInfo.plateText,
+                            datePurchased = v.DatePurchased,
+                            hash = v.Hash
+                        };
+                        vehicles.Add(m);
+                    }
+
+                    return vehicles;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "GetGarageVehicles");
+                    return vehicles;
+                }
             }));
 
             Instance.AttachNuiHandler("GarageVehicleRequest", new AsyncEventCallback(async metadata =>
