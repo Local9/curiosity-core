@@ -52,9 +52,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
             Instance.AttachNuiHandler("GarageVehicles", new AsyncEventCallback(async metadata =>
             {
-                if (_VehicleCache.Count == 0)
-                    await GetGarageVehicles();
-
+                await GetGarageVehicles();
                 return _VehicleCache;
             }));
 
