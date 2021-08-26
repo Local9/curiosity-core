@@ -11,6 +11,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "supporter")]
         public Supporter Supporter;
+
+        [DataMember(Name = "milos")]
+        public Milos Milos;
     }
 
     [DataContract]
@@ -43,5 +46,18 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "hash")]
         public string Hash;
+    }
+
+    [DataContract]
+    public class Milos
+    {
+        [DataMember(Name = "activeIpls")]
+        public List<string> ActiveIpls;
+
+        [DataMember(Name = "cayoLOD")]
+        public List<string> CayoLOD;
+
+        [DataMember(Name = "losSantosLOD")]
+        public List<string> LosSantosLOD;
     }
 }

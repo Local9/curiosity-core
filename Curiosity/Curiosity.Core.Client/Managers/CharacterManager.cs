@@ -9,6 +9,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;
+using Curiosity.Core.Client.Managers.Milo;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -234,6 +235,18 @@ namespace Curiosity.Core.Client.Managers
             if (player.Character.MarkedAsRegistered)
             {
                 await BaseScript.Delay(1000);
+
+                CayoPericoManager cayoPericoManager = CayoPericoManager.GetModule();
+
+                if (Cache.Character.IsOnIsland)
+                {
+                    cayoPericoManager.SetupCayPerico();
+                }
+
+                if (!Cache.Character.IsOnIsland)
+                {
+                    cayoPericoManager.SetupLosSantos();
+                }
 
                 Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
                 int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
