@@ -80,6 +80,7 @@ namespace Curiosity.Core.Client.Extensions
 
             character.IsDead = Cache.PlayerPed.IsDead;
             character.IsPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+            character.AllowHelmet = Cache.Character.AllowHelmet;
 
             bool success = await EventSystem.GetModule().Request<bool>("character:save", character);
 

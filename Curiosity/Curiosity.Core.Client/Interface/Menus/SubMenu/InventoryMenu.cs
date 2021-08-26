@@ -69,6 +69,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (checkboxItem == miWearHelmet)
             {
                 SetPedHelmet(Cache.PlayerPed.Handle, Checked);
+                Cache.Character.AllowHelmet = Checked;
             }
             await BaseScript.Delay(1000);
             checkboxItem.Enabled = true;
@@ -85,6 +86,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             miScubaEquipment.Checked = playerOptionsManager.IsScubaGearEnabled;
             bool hasScubaGear = await EventSystem.Request<bool>("character:inventory:hasItem", 446);
             miScubaEquipment.Enabled = hasScubaGear;
+
+            miWearHelmet.Checked = Cache.Character.AllowHelmet ?? false;
         }
     }
 }

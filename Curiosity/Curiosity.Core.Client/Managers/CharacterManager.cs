@@ -294,6 +294,7 @@ namespace Curiosity.Core.Client.Managers
 
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
+            SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
