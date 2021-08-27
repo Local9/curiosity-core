@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Managers.Milo
         Position posCayoVehicle = new Position(4058.679f, -4674.118f, 4.184523f, 28.08182f);
 
         Color markerColor = Color.FromArgb(255, 135, 206, 235);
-        Vector3 markerScale = new Vector3(3f, 3f, .5f);
+        Vector3 markerScale = new Vector3(1f, 1f, .5f);
         Vector3 markerScaleVehicle = new Vector3(10f, 10f, 1f);
 
         NUIMarker markerLs1;
@@ -56,42 +56,53 @@ namespace Curiosity.Core.Client.Managers.Milo
 
         public override void Begin()
         {
-            markerLs1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos1.AsVector(true), markerScale, 10f, markerColor);
+            markerLs1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos1.AsVector(), markerScale, 10f, markerColor);
             markerLs1.TeleportPosition = posCayo1;
             markerLs1.Data = new { teleportToLosSantos = false, allowVehicle = false };
-            markerLs2 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos2.AsVector(true), markerScale, 10f, markerColor);
+            markerLs1.PlaceOnGround = true;
+            markerLs1.Add();
+
+            markerLs2 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos2.AsVector(), markerScale, 10f, markerColor);
             markerLs2.TeleportPosition = posCayo2;
             markerLs2.Data = new { teleportToLosSantos = false, allowVehicle = false };
-            markerLs3 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos3.AsVector(true), markerScale, 10f, markerColor);
+            markerLs3.PlaceOnGround = true;
+            markerLs3.Add();
+
+            markerLs3 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos3.AsVector(), markerScale, 10f, markerColor);
             markerLs3.TeleportPosition = posCayo3;
             markerLs3.Data = new { teleportToLosSantos = false, allowVehicle = false };
+            markerLs3.PlaceOnGround = true;
+            markerLs3.Add();
 
-            markerLsv1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantosVehicle.AsVector(true), markerScaleVehicle, 10f, markerColor);
+            markerLsv1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantosVehicle.AsVector(), markerScaleVehicle, 10f, markerColor);
             markerLsv1.TeleportPosition = posCayoVehicle;
             markerLsv1.Data = new { teleportToLosSantos = false, allowVehicle = true };
+            markerLsv1.PlaceOnGround = true;
             markerLsv1.Add();
 
-            markerCp1 = new NUIMarker(MarkerType.VerticalCylinder, posCayo1.AsVector(true), markerScale, 10f, markerColor);
+            markerCp1 = new NUIMarker(MarkerType.VerticalCylinder, posCayo1.AsVector(), markerScale, 10f, markerColor);
             markerCp1.TeleportPosition = posLosSantos1;
             markerCp1.Data = new { teleportToLosSantos = true, allowVehicle = false };
-            markerCp2 = new NUIMarker(MarkerType.VerticalCylinder, posCayo2.AsVector(true), markerScale, 10f, markerColor);
+            markerCp1.PlaceOnGround = true;
+            markerCp1.Add();
+
+            markerCp2 = new NUIMarker(MarkerType.VerticalCylinder, posCayo2.AsVector(), markerScale, 10f, markerColor);
             markerCp2.TeleportPosition = posLosSantos2;
             markerCp2.Data = new { teleportToLosSantos = true, allowVehicle = false };
-            markerCp3 = new NUIMarker(MarkerType.VerticalCylinder, posCayo3.AsVector(true), markerScale, 10f, markerColor);
+            markerCp2.PlaceOnGround = true;
+            markerCp2.Add();
+
+            markerCp3 = new NUIMarker(MarkerType.VerticalCylinder, posCayo3.AsVector(), markerScale, 10f, markerColor);
             markerCp3.TeleportPosition = posLosSantos3;
             markerCp3.Data = new { teleportToLosSantos = true, allowVehicle = false };
+            markerCp3.PlaceOnGround = true;
+            markerCp3.Add();
 
-            markerCpv1 = new NUIMarker(MarkerType.VerticalCylinder, posCayoVehicle.AsVector(true), markerScaleVehicle, 10f, markerColor);
+            markerCpv1 = new NUIMarker(MarkerType.VerticalCylinder, posCayoVehicle.AsVector(), markerScaleVehicle, 10f, markerColor);
             markerCpv1.TeleportPosition = posLosSantosVehicle;
             markerCpv1.Data = new { teleportToLosSantos = true, allowVehicle = true };
+            markerCpv1.PlaceOnGround = true;
             markerCpv1.Add();
-
-            NativeUI.MarkersHandler.AddMarker(markerLs1);
-            NativeUI.MarkersHandler.AddMarker(markerLs2);
-            NativeUI.MarkersHandler.AddMarker(markerLs3);
-            NativeUI.MarkersHandler.AddMarker(markerCp1);
-            NativeUI.MarkersHandler.AddMarker(markerCp2);
-            NativeUI.MarkersHandler.AddMarker(markerCp3);
         }
 
         [TickHandler(SessionWait = true)]
