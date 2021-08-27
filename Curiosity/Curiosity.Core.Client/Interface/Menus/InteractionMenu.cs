@@ -37,6 +37,9 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
 
+        private UIMenu jobMenu;
+        private SubMenu.JobMenu _JobMenu = new SubMenu.JobMenu();
+
         private UIMenu menuInventory;
         private SubMenu.InventoryMenu _MenuInventory = new SubMenu.InventoryMenu();
 
@@ -63,6 +66,9 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles");
             _VehicleMenu.CreateMenu(menuVehicle);
+
+            jobMenu = MenuPool.AddSubMenu(menuMain, "Jobs");
+            _JobMenu.CreateMenu(jobMenu);
 
             menuSettings = MenuPool.AddSubMenu(menuMain, "Settings");
             _MenuSettings.CreateMenu(menuSettings);

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
@@ -24,19 +25,10 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
 
-                Vector3 position = Vector3.Zero;
-                position.X = metadata.Find<float>(0);
-                position.Y = metadata.Find<float>(1);
-                position.Z = metadata.Find<float>(2);
-
-                bool result = config.IsNearEventLocation(position, JOB_POLICE_DUTY);
-
-                if (result)
-                {
-                    user.CurrentJob = "Police Officer";
-                }
-
+                user.CurrentJob = "Police Officer";
                 user.Send(JOB_POLICE_DUTY);
+
+                Logger.Debug($"'{user.LatestName}' is now a {user.CurrentJob}");
 
                 await BaseScript.Delay(5000);
 

@@ -18,7 +18,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
             var pedHandle = Cache.PlayerPed.Handle;
 
-            var user = await EventSystem.Request<CuriosityUser>("user:login");
+            var user = await EventSystem.Request<CuriosityUser>("user:login:module");
 
             Logger.Info($"[User] [{user.DiscordId}] Creating local player...");
 

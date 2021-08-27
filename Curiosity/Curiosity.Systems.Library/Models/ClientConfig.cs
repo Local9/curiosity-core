@@ -6,6 +6,9 @@ namespace Curiosity.Systems.Library.Models
     [DataContract]
     public class ClientConfig
     {
+        [DataMember(Name = "jobs")]
+        public List<Job> Jobs;
+
         [DataMember(Name = "suppressedVehicles")]
         public List<string> VehiclesToSuppress;
 
@@ -59,5 +62,22 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "losSantosLOD")]
         public List<string> LosSantosLOD;
+    }
+
+    public class Job
+    {
+        [DataMember(Name = "label")]
+        public string Label;
+
+        [DataMember(Name = "jobEvent")]
+        public string JobEvent;
+
+        [DataMember(Name = "legacyEvent")]
+        public bool LegacyEvent;
+
+        public override string ToString()
+        {
+            return this.Label;
+        }
     }
 }

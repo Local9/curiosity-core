@@ -80,6 +80,25 @@ namespace Curiosity.Core.Server.Managers
 
                 return curiosityUser;
             }));
+            
+            EventSystem.GetModule().Attach("user:login:module", new AsyncEventCallback(async metadata =>
+            {
+                var player = PluginManager.PlayersList[metadata.Sender];
+
+                if (player == null)
+                {
+                    return null;
+                }
+
+                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
+
+                if (curiosityUser is null)
+                    return null;
+
+                curiosityUser.Handle = metadata.Sender;
+
+                return curiosityUser;
+            }));
 
             EventSystem.GetModule().Attach("user:kick:afk", new EventCallback(metadata =>
             {

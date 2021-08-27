@@ -1,4 +1,11 @@
 {
+  "jobs": [
+    {
+      "label": "Police Officer",
+      "jobEvent": "job:police:duty",
+      "legacyEvent": false
+    }
+  ],
   "suppressedVehicles": [
     "Jet",
     "Lazer",
