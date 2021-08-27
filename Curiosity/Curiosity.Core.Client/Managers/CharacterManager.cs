@@ -323,10 +323,8 @@ namespace Curiosity.Core.Client.Managers
         private void MoveToCityHall()
         {
             Logger.Debug($"Moving to City Hall");
-            Position pos = new Position(CityHallPosition.X, CityHallPosition.Y, CityHallPosition.Z, 276.3713f);
-            // StartPlayerTeleport(Cache.PlayerPed.Handle, CityHallPosition.X, CityHallPosition.Y, CityHallPosition.Z, 276.3713f, false, true, false);
-            Game.PlayerPed.Position = pos.AsVector();
-            Game.PlayerPed.Heading = pos.H;
+            Game.PlayerPed.Position = CityHallPosition;
+            Game.PlayerPed.Heading = 276.3713f;
         }
     }
 }
