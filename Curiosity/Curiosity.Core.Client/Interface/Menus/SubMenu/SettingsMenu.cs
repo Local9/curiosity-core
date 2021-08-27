@@ -14,8 +14,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu settingsMenu;
 
         UIMenuListItem miDamageEffects;
+
+        UIMenuCheckboxItem miShowServerId;
+        UIMenuCheckboxItem miShowPlayerNames;
+        UIMenuCheckboxItem miShowMyName;
+
         UIMenuCheckboxItem miDevEnableGameEventLogger;
         UIMenuCheckboxItem miDevEnableDebugLog;
+
+        PlayerNameManager PlayerNameManager = PlayerNameManager.GetModule();
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -42,8 +49,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
 
             miDamageEffects = new UIMenuListItem("Damage Effect", effects, index);
-
             menu.AddItem(miDamageEffects);
+
+            miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
+            miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
+            miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
 
             return menu;
         }
@@ -58,6 +68,21 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (miDevEnableDebugLog is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableGameEventLogger)
             {
                 Logger.IsDebugEnabled = Checked;
+            }
+
+            if (checkboxItem == miShowServerId)
+            {
+                PlayerNameManager.ShowServerHandle = Checked;
+            }
+
+            if (checkboxItem == miShowPlayerNames)
+            {
+                PlayerNameManager.ShowPlayerNames = Checked;
+            }
+
+            if (checkboxItem == miShowMyName)
+            {
+                PlayerNameManager.ShowMyName = Checked;
             }
         }
 
