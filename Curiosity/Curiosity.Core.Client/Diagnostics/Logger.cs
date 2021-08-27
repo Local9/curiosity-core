@@ -4,7 +4,7 @@ namespace Curiosity.Core.Client.Diagnostics
 {
     public static class Logger
     {
-        public static bool IsDebugEnabled;
+        public static bool IsDebugEnabled = true;
 
         public static void Info(string msg)
         {
