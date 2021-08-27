@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using NativeUI;
@@ -14,6 +15,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         UIMenuListItem miDamageEffects;
         UIMenuCheckboxItem miDevEnableGameEventLogger;
+        UIMenuCheckboxItem miDevEnableDebugLog;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -52,6 +54,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 GameEventManager.GetModule().EnableDebug = Checked;
             }
+
+            if (miDevEnableDebugLog is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableGameEventLogger)
+            {
+                Logger.IsDebugEnabled = Checked;
+            }
         }
 
         private async void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -80,8 +87,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             if (Cache.Player.User.IsDeveloper && miDevEnableGameEventLogger is null)
             {
-                miDevEnableGameEventLogger = new UIMenuCheckboxItem("Enable Game Event Logger", GameEventManager.GetModule().EnableDebug);
-                menu.AddItem(miDevEnableGameEventLogger);
+                if (miDevEnableGameEventLogger is null)
+                {
+                    miDevEnableGameEventLogger = new UIMenuCheckboxItem("Enable Game Event Logger", GameEventManager.GetModule().EnableDebug);
+                    menu.AddItem(miDevEnableGameEventLogger);
+                }
+
+                if (miDevEnableDebugLog is null)
+                {
+                    miDevEnableGameEventLogger = new UIMenuCheckboxItem("Enable Game Event Logger", Logger.IsDebugEnabled);
+                    menu.AddItem(miDevEnableGameEventLogger);
+                }
             }
         }
     }

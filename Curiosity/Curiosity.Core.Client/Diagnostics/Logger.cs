@@ -4,6 +4,8 @@ namespace Curiosity.Core.Client.Diagnostics
 {
     public static class Logger
     {
+        public static bool IsDebugEnabled;
+
         public static void Info(string msg)
         {
             WriteLine("INFO", msg, ConsoleColor.White);
@@ -48,7 +50,7 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (!Cache.Player.User.IsDeveloper) return;
+                if (!Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
 
                 WriteLine("DEBUG", $"{msg}\r\n{ex}", ConsoleColor.DarkGray);
             }
