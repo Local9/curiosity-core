@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (!Cache.Player.User.IsDeveloper) return;
+                if (!Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
 
                 WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
             }
