@@ -65,8 +65,8 @@ namespace Curiosity.Core.Client.Managers.Milo
             markerLs2 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos2.AsVector(), markerScale, 10f, markerColor);
             markerLs2.TeleportPosition = posCayo2;
             markerLs2.Data = new { teleportToLosSantos = false, allowVehicle = false };
-            markerLs3.PlaceOnGround = true;
-            markerLs3.Add();
+            markerLs2.PlaceOnGround = true;
+            markerLs2.Add();
 
             markerLs3 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos3.AsVector(), markerScale, 10f, markerColor);
             markerLs3.TeleportPosition = posCayo3;
