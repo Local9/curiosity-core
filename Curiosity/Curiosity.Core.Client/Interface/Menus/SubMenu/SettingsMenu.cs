@@ -55,10 +55,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             miShowServerId.Enabled = false;
             menu.AddItem(miShowServerId);
             miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
-            miShowServerId.Enabled = false;
+            miShowPlayerNames.Enabled = false;
             menu.AddItem(miShowPlayerNames);
             miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
-            miShowServerId.Enabled = false;
+            miShowMyName.Enabled = false;
             menu.AddItem(miShowMyName);
 
             return menu;
