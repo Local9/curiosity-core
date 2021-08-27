@@ -127,7 +127,14 @@ namespace Curiosity.Core.Client.Managers.UI
             processingDate = DateTime.UtcNow.AddSeconds(15);
             Instance.AttachTickHandler(OnProcessingReset);
 
-            result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId);
+            int networkId = Cache.PlayerPed.NetworkId;
+
+            if (veh != null)
+            {
+                networkId = veh.NetworkId;
+            }
+
+            result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId, networkId);
 
             if (!result.Success)
             {

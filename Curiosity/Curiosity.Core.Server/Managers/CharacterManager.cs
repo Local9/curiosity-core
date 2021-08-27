@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
@@ -394,9 +395,10 @@ namespace Curiosity.Core.Server.Managers
                 ExportMessage exportMessage = new ExportMessage();
 
                 int itemId = metadata.Find<int>(0);
+                int networkId = metadata.Find<int>(1);
 
                 CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(curiosityUser.Character.CharacterId, itemId);
-
+                await BaseScript.Delay(0);
                 if (!item.IsUsable)
                 {
                     exportMessage.Error = "Item is not usable.";
@@ -409,10 +411,36 @@ namespace Curiosity.Core.Server.Managers
                     goto ReturnResult;
                 }
 
+                int entityHandle = NetworkGetEntityFromNetworkId(networkId);
+
+                if (entityHandle > 0)
+                {
+                    int entType = GetEntityType(entityHandle);
+                    if (entType == 1)
+                    {
+                        Ped ped = new Ped(entityHandle);
+                        if (item.CategoryId == 19)
+                        {
+                            int health = GetEntityHealth(entityHandle);
+                        }
+
+                        if (item.CategoryId == 21)
+                        {
+                            SetPedArmour(entityHandle, item.HealingAmount);
+                        }
+                    }
+
+                    if (entType == 2)
+                    {
+                        Vehicle vehicle = new Vehicle(entityHandle);
+                        SetVehicleBodyHealth(entityHandle, 1000f);
+                    }
+                }
+
                 exportMessage.Item = item;
 
                 await Database.Store.CharacterDatabase.UseItem(curiosityUser.Character.CharacterId, itemId);
-
+                await BaseScript.Delay(0);
             ReturnResult:
                 return exportMessage;
             }));
