@@ -72,7 +72,6 @@
     <Compile Include="Managers\Milo\CayoPericoManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Utils\Utility.cs" />
-    <None Include="config\jobMenu.json" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
