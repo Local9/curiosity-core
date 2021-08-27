@@ -14,5 +14,15 @@ namespace Curiosity.Core.Client.Extensions.Native
         {
 
         }
+
+        public void Add()
+        {
+            NativeUI.MarkersHandler.AddMarker(this);
+        }
+
+        public void Remove()
+        {
+            NativeUI.MarkersHandler.RemoveMarker(this);
+        }
     }
 }

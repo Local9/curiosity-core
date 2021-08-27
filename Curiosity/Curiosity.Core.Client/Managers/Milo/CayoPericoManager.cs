@@ -35,16 +35,22 @@ namespace Curiosity.Core.Client.Managers.Milo
         Position posCayo2 = new Position(5094.14f, -4655.52f, 0.8f, 70.03f);
         Position posCayo3 = new Position(4425.68f, -4487.06f, 3.25f, 200.56f);
 
+        Position posLosSantosVehicle = new Position(977.9388f, -2920.137f, 5.902136f, 267.3707f);
+        Position posCayoVehicle = new Position(4058.679f, -4674.118f, 4.184523f, 28.08182f);
+
         Color markerColor = Color.FromArgb(255, 135, 206, 235);
         Vector3 markerScale = new Vector3(3f, 3f, .5f);
+        Vector3 markerScaleVehicle = new Vector3(10f, 10f, 1f);
 
         NUIMarker markerLs1;
         NUIMarker markerLs2;
         NUIMarker markerLs3;
+        NUIMarker markerLsv1;
 
         NUIMarker markerCp1;
         NUIMarker markerCp2;
         NUIMarker markerCp3;
+        NUIMarker markerCpv1;
 
         ConfigurationManager configurationManager = ConfigurationManager.GetModule();
 
@@ -52,23 +58,33 @@ namespace Curiosity.Core.Client.Managers.Milo
         {
             markerLs1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos1.AsVector(true), markerScale, 10f, markerColor);
             markerLs1.TeleportPosition = posCayo1;
-            markerLs1.Data = new { teleportToLosSantos = false };
+            markerLs1.Data = new { teleportToLosSantos = false, allowVehicle = false };
             markerLs2 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos2.AsVector(true), markerScale, 10f, markerColor);
             markerLs2.TeleportPosition = posCayo2;
-            markerLs2.Data = new { teleportToLosSantos = false };
+            markerLs2.Data = new { teleportToLosSantos = false, allowVehicle = false };
             markerLs3 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantos3.AsVector(true), markerScale, 10f, markerColor);
             markerLs3.TeleportPosition = posCayo3;
-            markerLs3.Data = new { teleportToLosSantos = false };
+            markerLs3.Data = new { teleportToLosSantos = false, allowVehicle = false };
+
+            markerLsv1 = new NUIMarker(MarkerType.VerticalCylinder, posLosSantosVehicle.AsVector(true), markerScaleVehicle, 10f, markerColor);
+            markerLsv1.TeleportPosition = posCayoVehicle;
+            markerLsv1.Data = new { teleportToLosSantos = false, allowVehicle = true };
+            markerLsv1.Add();
 
             markerCp1 = new NUIMarker(MarkerType.VerticalCylinder, posCayo1.AsVector(true), markerScale, 10f, markerColor);
             markerCp1.TeleportPosition = posLosSantos1;
-            markerCp1.Data = new { teleportToLosSantos = true };
+            markerCp1.Data = new { teleportToLosSantos = true, allowVehicle = false };
             markerCp2 = new NUIMarker(MarkerType.VerticalCylinder, posCayo2.AsVector(true), markerScale, 10f, markerColor);
             markerCp2.TeleportPosition = posLosSantos2;
-            markerCp2.Data = new { teleportToLosSantos = true };
+            markerCp2.Data = new { teleportToLosSantos = true, allowVehicle = false };
             markerCp3 = new NUIMarker(MarkerType.VerticalCylinder, posCayo3.AsVector(true), markerScale, 10f, markerColor);
             markerCp3.TeleportPosition = posLosSantos3;
-            markerCp3.Data = new { teleportToLosSantos = true };
+            markerCp3.Data = new { teleportToLosSantos = true, allowVehicle = false };
+
+            markerCpv1 = new NUIMarker(MarkerType.VerticalCylinder, posCayoVehicle.AsVector(true), markerScaleVehicle, 10f, markerColor);
+            markerCpv1.TeleportPosition = posLosSantosVehicle;
+            markerCpv1.Data = new { teleportToLosSantos = true, allowVehicle = true };
+            markerCpv1.Add();
 
             NativeUI.MarkersHandler.AddMarker(markerLs1);
             NativeUI.MarkersHandler.AddMarker(markerLs2);
@@ -96,7 +112,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 return;
             }
 
-            if (markerLs1.IsInRange || markerLs2.IsInRange || markerLs3.IsInRange)
+            if (markerLs1.IsInRange || markerLs2.IsInRange || markerLs3.IsInRange || markerLsv1.IsInRange)
             {
                 notificationMessage = NOTIFI_CAYO_ISLAND;
 
@@ -112,9 +128,13 @@ namespace Curiosity.Core.Client.Managers.Milo
                 {
                     activeMarker = markerLs3;
                 }
+                else if (markerLsv1.IsInRange)
+                {
+                    activeMarker = markerLsv1;
+                }
             }
 
-            if (markerCp1.IsInRange || markerCp2.IsInRange || markerCp3.IsInRange)
+            if (markerCp1.IsInRange || markerCp2.IsInRange || markerCp3.IsInRange || markerCpv1.IsInRange)
             {
                 notificationMessage = NOTIFI_LOS_SANTOS;
 
@@ -130,6 +150,10 @@ namespace Curiosity.Core.Client.Managers.Milo
                 {
                     activeMarker = markerCp3;
                 }
+                else if (markerCpv1.IsInRange)
+                {
+                    activeMarker = markerCpv1;
+                }
             }
 
             if (activeMarker is null && !Screen.Fading.IsFadedIn)
@@ -144,7 +168,16 @@ namespace Curiosity.Core.Client.Managers.Milo
                 return;
             }
 
-            while (activeMarker.IsInRange && !Cache.PlayerPed.IsInVehicle())
+            Vector3 position = activeMarker.Position;
+            Vector3 positionV = new Vector3(position.X, position.Y, position.Z);
+            float ground = position.Z;
+
+            if (GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref ground, false))
+                positionV.Z = ground;
+
+            activeMarker.Position = positionV;
+
+            while (activeMarker.IsInRange)
             {
                 if (activeMarker.IsInMarker)
                 {
@@ -152,7 +185,7 @@ namespace Curiosity.Core.Client.Managers.Milo
 
                     if (Game.IsControlPressed(0, Control.Context) && !Cache.PlayerPed.IsDead)
                     {
-                        MovePlayer(activeMarker.TeleportPosition, activeMarker.Data.teleportToLosSantos);
+                        MovePlayer(activeMarker.TeleportPosition, activeMarker.Data.teleportToLosSantos, activeMarker.Data.allowVehicle);
                         await BaseScript.Delay(10000);
                     }
                 }
@@ -168,7 +201,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             }
         }
 
-        private async Task MovePlayer(Position pos, bool teleportToLosSantos)
+        private async Task MovePlayer(Position pos, bool teleportToLosSantos, bool allowVehicle)
         {
             Logger.Debug($"teleportToLosSantos: {teleportToLosSantos} Position: {pos}");
 
@@ -200,13 +233,29 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             Logger.Debug($"Character.IsOnIsland: {Cache.Character.IsOnIsland}");
 
-            Cache.PlayerPed.Position = pos.AsVector();
-            Cache.PlayerPed.Heading = pos.H;
+            if (!allowVehicle)
+            {
+                Cache.PlayerPed.Position = pos.AsVector();
+                Cache.PlayerPed.Heading = pos.H;
+            }
+
+            if (allowVehicle)
+            {
+                if (Cache.PlayerPed.IsInVehicle())
+                {
+                    SetPedCoordsKeepVehicle(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z);
+                    Cache.PlayerPed.CurrentVehicle.Heading = pos.H;
+                }
+                else
+                {
+                    Cache.PlayerPed.Position = pos.AsVector();
+                    Cache.PlayerPed.Heading = pos.H;
+                }
+            }
 
             await BaseScript.Delay(2000);
 
-            //SetPedCoordsKeepVehicle(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z);
-            //Cache.PlayerPed.CurrentVehicle.Heading = pos.H;
+            
 
             await ScreenInterface.FadeIn(1000);
             Cache.PlayerPed.FadeIn();
