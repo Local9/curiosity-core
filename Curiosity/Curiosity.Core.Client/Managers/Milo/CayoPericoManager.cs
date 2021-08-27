@@ -181,12 +181,19 @@ namespace Curiosity.Core.Client.Managers.Milo
             {
                 if (activeMarker.IsInMarker)
                 {
-                    NativeUI.Notifications.ShowHelpNotification($"{notificationMessage}, press ~INPUT_CONTEXT~");
-
-                    if (Game.IsControlPressed(0, Control.Context) && !Cache.PlayerPed.IsDead)
+                    if (Cache.PlayerPed.IsInVehicle() && !activeMarker.Data.allowVehicle)
                     {
-                        MovePlayer(activeMarker.TeleportPosition, activeMarker.Data.teleportToLosSantos, activeMarker.Data.allowVehicle);
-                        await BaseScript.Delay(10000);
+                        NativeUI.Notifications.ShowHelpNotification($"Cannot use this location with a vehicle");
+                    }
+                    else
+                    {
+                        NativeUI.Notifications.ShowHelpNotification($"{notificationMessage}, press ~INPUT_CONTEXT~");
+
+                        if (Game.IsControlPressed(0, Control.Context) && !Cache.PlayerPed.IsDead)
+                        {
+                            MovePlayer(activeMarker.TeleportPosition, activeMarker.Data.teleportToLosSantos, activeMarker.Data.allowVehicle);
+                            await BaseScript.Delay(10000);
+                        }
                     }
                 }
 
