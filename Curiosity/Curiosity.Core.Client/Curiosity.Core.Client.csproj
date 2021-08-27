@@ -180,7 +180,6 @@
     <Content Include="config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="config\pedComponentVariations.json" />
     <Content Include="config\sirens.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
