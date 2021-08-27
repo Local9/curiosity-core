@@ -41,11 +41,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             { 
-                var _value = Fx.State.Get(StateBagKey.PED_IS_DRIVER);
+                var _value = Fx.State.Get(StateBagKey.PED_IS_DRIVER) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IS_DRIVER);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_IS_DRIVER, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_IS_DRIVER, false);
                     return false;
                 }
                 else
@@ -55,6 +56,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
             set
             {
+                Decorators.Set(Fx.Handle, StateBagKey.PED_IS_DRIVER, value);
                 Fx.State.Set(StateBagKey.PED_IS_DRIVER, value, true);
                 EventSystem.Send("mission:update:ped:driver", Fx.NetworkId, value);
             }
@@ -64,10 +66,11 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_FLEE);
+                var _value = Fx.State.Get(StateBagKey.PED_FLEE) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FLEE);
 
                 if (_value == null)
                 {
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_FLEE, false);
                     Fx.State.Set(StateBagKey.PED_FLEE, false, true);
                     return false;
                 }
@@ -80,6 +83,7 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Fx.State.Set(StateBagKey.PED_FLEE, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_FLEE, value);
             }
         }
 
@@ -87,11 +91,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_SUSPECT);
+                var _value = Fx.State.Get(StateBagKey.PED_SUSPECT) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_SUSPECT);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_SUSPECT, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_SUSPECT, false);
                     return false;
                 }
                 else
@@ -103,6 +108,7 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Fx.State.Set(StateBagKey.PED_SUSPECT, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_SUSPECT, value);
 
                 EventSystem.Send("mission:update:ped:suspect", Fx.NetworkId, value);
             }
@@ -112,11 +118,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_ARRESTABLE);
+                var _value = Fx.State.Get(StateBagKey.PED_ARRESTABLE) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_ARRESTABLE);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_ARRESTABLE, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_SUSPECT, false);
                     return false;
                 }
                 else
@@ -127,6 +134,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Fx.State.Set(StateBagKey.PED_ARRESTABLE, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_SUSPECT, value);
             }
         }
 
@@ -134,11 +142,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get($"{StateBagKey.PED_MISSION}");
+                var _value = Fx.State.Get(StateBagKey.PED_MISSION) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_MISSION, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_MISSION, false);
                     return false;
                 }
                 else
@@ -153,6 +162,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 Fx.IsPersistent = value;
                 Fx.State.Set(StateBagKey.PED_MISSION, value, true);
                 EventSystem.Send("mission:update:ped:mission", Fx.NetworkId, value);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_MISSION, value);
 
                 Logger.Debug($"IsMission: {value}");
             }
@@ -162,11 +172,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE) ?? false;
+                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_DIALOGUE, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_DIALOGUE, false);
                     return false;
                 }
                 else
@@ -177,6 +188,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Fx.State.Set(StateBagKey.PED_DIALOGUE, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_DIALOGUE, value);
             }
         }
 
@@ -184,11 +196,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT) ?? false;
+                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IMPORTANT);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_IMPORTANT, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_IMPORTANT, false);
                     return false;
                 }
                 else
@@ -199,6 +212,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Fx.State.Set(StateBagKey.PED_IMPORTANT, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_IMPORTANT, value);
             }
         }
 
@@ -206,11 +220,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE) ?? false;
+                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HOSTAGE);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_HOSTAGE, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_HOSTAGE, false);
                     return false;
                 }
                 else
@@ -221,6 +236,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Fx.State.Set(StateBagKey.PED_HOSTAGE, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_HOSTAGE, value);
             }
         }
 
@@ -228,11 +244,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY) ?? true;
+                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FRIENDLY);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_FRIENDLY, true, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_FRIENDLY, true);
                     return true;
                 }
                 else
@@ -251,7 +268,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.RelationshipGroup = (uint)Collections.RelationshipHash.NoRelationship;
                 }
 
-                Fx.State.Set(StateBagKey.PED_HOSTAGE, !value, true);
+                Fx.State.Set(StateBagKey.PED_FRIENDLY, !value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_FRIENDLY, !value);
             }
         }
 
@@ -259,11 +277,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_RELEASED) ?? false;
+                var _value = Fx.State.Get(StateBagKey.PED_RELEASED) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_RELEASED);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_RELEASED, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_RELEASED, false);
                     return false;
                 }
                 else
@@ -274,6 +293,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Fx.State.Set(StateBagKey.PED_RELEASED, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_RELEASED, value);
             }
         }
 
@@ -281,11 +301,12 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_HANDCUFFED);
+                var _value = Fx.State.Get(StateBagKey.PED_HANDCUFFED) ?? Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HANDCUFFED);
 
                 if (_value == null)
                 {
                     Fx.State.Set(StateBagKey.PED_HANDCUFFED, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.PED_HANDCUFFED, false);
                     return false;
                 }
                 else
@@ -305,6 +326,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
 
                 Fx.State.Set(StateBagKey.PED_HANDCUFFED, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.PED_HANDCUFFED, value);
 
                 EventSystem.Send("mission:update:ped:handcuffed", Fx.NetworkId, value);
             }
