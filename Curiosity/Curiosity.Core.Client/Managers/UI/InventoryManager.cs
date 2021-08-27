@@ -149,6 +149,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     int playerHealth = Cache.PlayerPed.Health;
                     Cache.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
                     notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                    await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
                 if (result.Item.CategoryId == 21)
@@ -156,6 +157,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     int playerArmor = Cache.PlayerPed.Armor;
                     Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
                     notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
+                    await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
                 if (result.Item.CategoryId == 24)
@@ -168,6 +170,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     {
                         veh.Repair();
                         notificationManager.Success($"Vehicle Repaired");
+                        await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                     }
                 }
             }

@@ -388,6 +388,17 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:success", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                int itemId = metadata.Find<int>(0);
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                await Database.Store.CharacterDatabase.UseItem(curiosityUser.Character.CharacterId, itemId);
+                await BaseScript.Delay(0);
+                return null;
+            }));
+
             EventSystem.GetModule().Attach("character:inventory:use", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -438,9 +449,6 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 exportMessage.Item = item;
-
-                await Database.Store.CharacterDatabase.UseItem(curiosityUser.Character.CharacterId, itemId);
-                await BaseScript.Delay(0);
             ReturnResult:
                 return exportMessage;
             }));
