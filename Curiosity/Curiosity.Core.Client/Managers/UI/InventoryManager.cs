@@ -153,8 +153,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (result.Item.CategoryId == 24)
                 {
-                    veh.Repair();
-                    notificationManager.Success($"Vehicle Repaired");
+                    if (veh is null)
+                    {
+                        notificationManager.Success($"Vehicle Repair Unsuccessful");
+                    }
+                    else
+                    {
+                        veh.Repair();
+                        notificationManager.Success($"Vehicle Repaired");
+                    }
                 }
             }
 
