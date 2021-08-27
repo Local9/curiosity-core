@@ -52,8 +52,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.AddItem(miDamageEffects);
 
             miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
+            miShowServerId.Enabled = false;
+            menu.AddItem(miShowServerId);
             miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
+            miShowServerId.Enabled = false;
+            menu.AddItem(miShowPlayerNames);
             miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
+            miShowServerId.Enabled = false;
+            menu.AddItem(miShowMyName);
 
             return menu;
         }
