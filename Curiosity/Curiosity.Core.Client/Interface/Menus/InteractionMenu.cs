@@ -37,7 +37,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
 
-        private UIMenu jobMenu;
+        private UIMenu menuJobs;
         private SubMenu.JobMenu _JobMenu = new SubMenu.JobMenu();
 
         private UIMenu menuInventory;
@@ -67,8 +67,8 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles");
             _VehicleMenu.CreateMenu(menuVehicle);
 
-            jobMenu = MenuPool.AddSubMenu(menuMain, "Jobs");
-            _JobMenu.CreateMenu(jobMenu);
+            menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs");
+            _JobMenu.CreateMenu(menuJobs);
 
             menuSettings = MenuPool.AddSubMenu(menuMain, "Settings");
             _MenuSettings.CreateMenu(menuSettings);
@@ -245,6 +245,12 @@ namespace Curiosity.Core.Client.Interface.Menus
             supporterButton.Description = "Please visit our Patreon to see our supporter benefits.";
             if (supporterButton.Enabled)
                 supporterButton.Description = "Supporter Menu";
+
+            UIMenuItem jobButton = menuJobs.ParentItem;
+            jobButton.Enabled = Cache.Player.User.IsStaff;
+            supporterButton.Description = "Menu is currently disabled while its in development.";
+            if (supporterButton.Enabled)
+                supporterButton.Description = "Access to the jobs menu.";
         }
 
         private async Task OnMenuDisplay()
