@@ -231,6 +231,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "..\thirdparty\m
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.GangFight", "Curiosity.GangFight\Curiosity.GangFight.csproj", "{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "..\thirdparty\NativeUI\NativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -529,6 +531,10 @@ Global
 		{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -627,6 +633,7 @@ Global
 		{C31EC98B-B483-400E-A93C-ECB07C0405F5} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{46D6D485-010C-4806-BC0A-6CE158717E64} = {C31EC98B-B483-400E-A93C-ECB07C0405F5}
 		{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
+		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
