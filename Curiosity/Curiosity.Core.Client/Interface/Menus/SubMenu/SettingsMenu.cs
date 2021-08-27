@@ -95,8 +95,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
                 if (miDevEnableDebugLog is null)
                 {
-                    miDevEnableGameEventLogger = new UIMenuCheckboxItem("Enable Game Event Logger", Logger.IsDebugEnabled);
-                    menu.AddItem(miDevEnableGameEventLogger);
+                    miDevEnableDebugLog = new UIMenuCheckboxItem("Enable Debug", Logger.IsDebugEnabled);
+                    menu.AddItem(miDevEnableDebugLog);
                 }
             }
         }
