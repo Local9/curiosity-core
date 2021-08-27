@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,11 @@ namespace Curiosity.Core.Client.Managers.UI
     public class PlayerNameManager : Manager<PlayerNameManager>
     {
         Dictionary<int, PlayerNameTag> currentPlayerNameTags = new Dictionary<int, PlayerNameTag>();
-        int nameTagColor = 0;
-        int debugColor = 0;
+        int StaffStarColor = 0;
+        public int NameTagColor = 0;
+        public bool ShowMyName = false;
+        public bool ShowServerHandle = false;
+        public bool ShowPlayerNames = true;
 
         public override void Begin()
         {
@@ -38,16 +42,21 @@ namespace Curiosity.Core.Client.Managers.UI
         {
             foreach (Player player in Instance.PlayerList)
             {
-                if (player == Game.Player) continue;
+                if (player == Game.Player && !ShowMyName) continue;
 
                 int playerHandle = player.Handle;
                 int pedHandle = player.Character.Handle;
 
                 if (NetworkIsPlayerActive(playerHandle))
                 {
-                    if (!currentPlayerNameTags.ContainsKey(playerHandle))
+                    if (!currentPlayerNameTags.ContainsKey(playerHandle) && ShowPlayerNames)
                     {
-                        string playerName = $"{GetPlayerName(playerHandle)} [{GetPlayerServerId(playerHandle)}]";
+                        string playerName = $"{GetPlayerName(playerHandle)}";
+                        if (ShowServerHandle)
+                        {
+                            playerName += $" [{GetPlayerServerId(playerHandle)}]";
+                        }
+
                         if (currentPlayerNameTags.ContainsKey(playerHandle))
                         {
                             RemoveMpGamerTag(currentPlayerNameTags[playerHandle].TagHandle);
@@ -58,7 +67,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         bool isStaff = player.State.Get($"{StateBagKey.STAFF_MEMBER}") == null ? false : player.State.Get($"{StateBagKey.STAFF_MEMBER}");
 
                         if (isStaff)
-                            nameTagColor = 64;
+                            StaffStarColor = 64;
 
                         playerNameTag.TagHandle = CreateMpGamerTag(pedHandle, playerName, false, isStaff, string.Empty, 0);
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.GamerName, true);
@@ -107,14 +116,21 @@ namespace Curiosity.Core.Client.Managers.UI
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpBomb, false);
 
                         SetMpGamerTagIcons(playerNameTag.TagHandle, false);
-                        SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, nameTagColor);
+                        SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, StaffStarColor);
                         //SetMpGamerTagBigText(playerNameTag.TagHandle, "BIG TEXT");
                         //SetMpGamerTagChatting(playerNameTag.TagHandle, "typing...");
+
+                        SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.GamerName, NameTagColor);
 
                         playerNameTag.PedHandle = pedHandle;
 
                     }
-                } else if (currentPlayerNameTags.ContainsKey(playerHandle))
+                    else if (!ShowPlayerNames)
+                    {
+                        RemoveMpGamerTag(currentPlayerNameTags[playerHandle].TagHandle);
+                    }
+                }
+                else if (currentPlayerNameTags.ContainsKey(playerHandle))
                 {
                     RemoveMpGamerTag(currentPlayerNameTags[playerHandle].TagHandle);
                     currentPlayerNameTags.Remove(playerHandle);
