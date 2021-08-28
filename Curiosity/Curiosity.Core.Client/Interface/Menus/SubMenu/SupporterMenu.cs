@@ -58,9 +58,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            uiLstCompanions.Enabled = Cache.Player.User.IsDeveloper;
+            uiLstCompanions.Enabled = Cache.Player.User.IsStaff;
             uiItemRemoveCompanion.Enabled = Cache.Player.User.IsStaff;
             uiLstCompanions.Description = "Currently Disabled due to online issues";
+            if (uiLstCompanions.Enabled)
+                uiLstCompanions.Description = "Able to create a companion."
         }
 
         private async void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
