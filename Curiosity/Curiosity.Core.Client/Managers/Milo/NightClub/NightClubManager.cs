@@ -272,21 +272,9 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
                 }
 
                 EffectsManager.GetModule().RemoveSmokeParticles();
-
-                DisableWeapons(false);
             }
-        }
 
-        void DisableWeapons(bool state)
-        {
-            DisablePlayerFiring(Game.Player.Handle, state);
-            DisableControlAction(0, 22, state);
-            DisableControlAction(0, 24, state);
-            DisableControlAction(0, 25, state);
-            DisableControlAction(0, 257, state);
-            DisableControlAction(0, 263, state);
-            DisableControlAction(0, 264, state);
-            DisableControlAction(0, (int)Control.Jump, state);
+            PlayerOptionsManager.GetModule().DisableWeapons(isInNightClub);
         }
 
         public async void StartTv()

@@ -90,7 +90,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             }
         }
 
-        private async Task MovePlayer(bool enter = false)
+        private async Task MovePlayer(bool enterTrack = false)
         {
             await Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut(1000);
@@ -98,11 +98,11 @@ namespace Curiosity.Core.Client.Managers.Milo
             Cache.PlayerPed.IsCollisionEnabled = false;
             Cache.PlayerPed.CurrentVehicle.IsCollisionEnabled = false;
 
-            Position pos = enter ? posExit : posEnter;
+            Position pos = enterTrack ? posExit : posEnter;
 
             int interiorId = GetInteriorAtCoords(-2000.0f, 1113.211f, -25.36243f);
 
-            if (enter)
+            if (enterTrack)
             {
                 RequestIpl("tr_tuner_meetup");
                 RequestIpl("tr_tuner_race_line");
@@ -125,13 +125,15 @@ namespace Curiosity.Core.Client.Managers.Milo
                 DeactivateInteriorEntitySet(interiorId, "entity_set_time_trial");
             }
 
+            PlayerOptionsManager.GetModule().DisableWeapons(enterTrack);
+
             Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
             foreach (KeyValuePair<string, BlipData> kvp in blips)
             {
                 BlipData blip = kvp.Value;
                 foreach (Blip b in blip.Blips)
                 {
-                    SetBlipHiddenOnLegend(b.Handle, !enter);
+                    SetBlipHiddenOnLegend(b.Handle, !enterTrack);
                 }
             }
 

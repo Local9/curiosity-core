@@ -208,5 +208,17 @@ namespace Curiosity.Core.Client.Managers
 
             await BaseScript.Delay(1500);
         }
+
+        public void DisableWeapons(bool state)
+        {
+            DisablePlayerFiring(Game.Player.Handle, state);
+            DisableControlAction(0, 22, state);
+            DisableControlAction(0, 24, state);
+            DisableControlAction(0, 25, state);
+            DisableControlAction(0, 257, state);
+            DisableControlAction(0, 263, state);
+            DisableControlAction(0, 264, state);
+            DisableControlAction(0, (int)Control.Jump, state);
+        }
     }
 }
