@@ -174,24 +174,31 @@ namespace Curiosity.Core.Client.Commands.Impl
                         Ped companionPed = await World.CreatePed(companionModel, spawn, Game.PlayerPed.Heading);
                         companionModel.MarkAsNoLongerNeeded();
 
-                        PedGroup playerGroup = Cache.PedGroup;
+                        if (companionPed.IsInGroup)
+                            companionPed.LeaveGroup();
 
-                        if (playerGroup is null)
+                        PedGroup playerPedGroup = Cache.PedGroup;
+
+                        if (playerPedGroup is not null)
+                            Logger.Debug($"Current ped group is {playerPedGroup.Handle}");
+
+                        if (playerPedGroup is null)
+                            playerPedGroup = new PedGroup();
+
+                        if (!playerPedGroup.Contains(Game.PlayerPed))
                         {
-                            playerGroup = new PedGroup();
-                            playerGroup.Add(Cache.PlayerPed, true);
-                            Cache.PedGroup = playerGroup;
+                            playerPedGroup.Add(Game.PlayerPed, true);
+                            Logger.Debug($"Added player as group leader");
                         }
 
-                        playerGroup.FormationType = FormationType.Circle2;
-                        playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
-
-                        playerGroup.Add(companionPed, false);
+                        if (!playerPedGroup.Contains(companionPed))
+                        {
+                            playerPedGroup.Add(companionPed, false);
+                            Logger.Debug($"Added companion as group member");
+                        }
 
                         SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
                         SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
-
-                        SetGroupFormationSpacing(playerGroup.Handle, 3f, 3f, 3f);
 
                         companionPed.NeverLeavesGroup = true;
                         companionPed.CanSufferCriticalHits = false;

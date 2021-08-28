@@ -50,14 +50,10 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 SetNetworkIdCanMigrate(companionPed.NetworkId, true);
 
                 companionPed.Task.ClearAll();
-                companionPed.LeaveGroup();
 
                 await companionPed.FadeIn();
 
                 await BaseScript.Delay(100);
-
-                companionPed.RelationshipGroup = Game.PlayerPed.RelationshipGroup;
-                companionPed.NeverLeavesGroup = true;
 
                 companionPed.Health = 200;
                 companionPed.Armor = 100;
@@ -65,14 +61,12 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 companionPed.CanRagdoll = false;
                 companionPed.CanBeTargetted = false;
 
-                Blip companionBlip = companionPed.AttachBlip();
-                companionBlip.Color = BlipColor.Blue;
-                companionBlip.Scale = 0.7f;
-                companionBlip.Name = "Compainion";
-
                 if (!companionPed.IsHuman) PlayAnimalVocalization(companionPed.Handle, 3, "BARK");
 
                 await BaseScript.Delay(100);
+
+                if (companionPed.IsInGroup)
+                    companionPed.LeaveGroup();
 
                 PedGroup playerPedGroup = Cache.PedGroup;
 
@@ -80,19 +74,22 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     Logger.Debug($"Current ped group is {playerPedGroup.Handle}");
 
                 if (playerPedGroup is null)
-                {
                     playerPedGroup = new PedGroup();
-                    playerPedGroup.Add(Cache.PlayerPed, true);
-                    Cache.PedGroup = playerPedGroup;
-                    Logger.Debug($"Created a new PedGroup for the Player {Cache.PlayerPed.PedGroup.Handle}");
-                }
-                else
+
+                if (!playerPedGroup.Contains(Game.PlayerPed))
                 {
-                    playerPedGroup.Add(companionPed, false);
+                    playerPedGroup.Add(Game.PlayerPed, true);
+                    Logger.Debug($"Added player as group leader");
                 }
 
                 if (!playerPedGroup.Contains(companionPed))
-                    SetPedAsGroupMember(companionPed.Handle, playerPedGroup.Handle);
+                {
+                    playerPedGroup.Add(companionPed, false);
+                    Logger.Debug($"Added companion as group member");
+                }
+
+                companionPed.RelationshipGroup = Game.PlayerPed.RelationshipGroup;
+                companionPed.NeverLeavesGroup = true;
 
                 await BaseScript.Delay(100);
 
@@ -101,7 +98,13 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     Logger.Debug($"Companion Group {companionPed.PedGroup.Handle}");
                     SetPedCanTeleportToGroupLeader(companionPed.Handle, playerPedGroup.Handle, true);
                 }
+
                 NotificationManager.GetModule().Info($"Your campanion will defend you.");
+
+                Blip companionBlip = companionPed.AttachBlip();
+                companionBlip.Color = BlipColor.Blue;
+                companionBlip.Scale = 0.7f;
+                companionBlip.Name = "Compainion";
 
                 SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
                 SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
@@ -231,11 +234,6 @@ namespace Curiosity.Core.Client.Managers.Supporter
                     }
                     GameEventTigger.GetModule().Respawn(Cache.Player);
                     await BaseScript.Delay(3000);
-                }
-
-                if (!companionPed.IsInGroup)
-                {
-                    NotificationManager.GetModule().Info($"Your companion has left you.");
                 }
             }
             catch (Exception ex)

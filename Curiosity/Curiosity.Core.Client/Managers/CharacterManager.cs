@@ -327,13 +327,27 @@ namespace Curiosity.Core.Client.Managers
 
         private static void CreatePlayerGroup()
         {
-            PedGroup pedGroup = new PedGroup();
+            PedGroup pedGroup;
+
+            if (Cache.PlayerPed.IsInGroup)
+            {
+                pedGroup = Cache.PlayerPed.PedGroup;
+                Logger.Debug($"Player already in a group: Player Group: {Cache.PlayerPed.PedGroup.Handle}");
+                goto SetupGroup;
+            }
+
+            pedGroup = new PedGroup();
+
+        SetupGroup:
             pedGroup.Add(Cache.PlayerPed, true);
             Cache.PedGroup = pedGroup;
 
             pedGroup.FormationType = FormationType.Default;
             pedGroup.SeparationRange = 300f;
             SetGroupFormationSpacing(pedGroup.Handle, 1f, 0.9f, 3f);
+
+            if (Cache.PlayerPed.PedGroup is not null)
+                Logger.Debug($"Player Group: {Cache.PlayerPed.PedGroup.Handle}");
         }
 
         private void MoveToCityHall()
