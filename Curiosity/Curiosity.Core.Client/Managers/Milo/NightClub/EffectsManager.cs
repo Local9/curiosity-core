@@ -14,8 +14,8 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
         /// </summary>
         /// 
 
-        Vector3 posNightClubInterior = new Vector3(-1604.664f, -3012.583f, -78.000f);
-        const int NIGHTCLUB_INTERIORID = 271617;
+        public Vector3 posNightClubInterior = new Vector3(-1604.664f, -3012.583f, -78.000f);
+        public const int NIGHTCLUB_INTERIORID = 271617;
 
         public override void Begin()
         {
