@@ -76,9 +76,9 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 if (playerGroup is null)
                 {
-                    int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
-                    playerGroup = new PedGroup(playerGroupId);
-                    Logger.Debug($"PedGroup was Null, made a new group: {playerGroupId}");
+                    playerGroup = new PedGroup();
+                    playerGroup.Add(Cache.PlayerPed, true);
+                    Cache.PedGroup = playerGroup;
                 }
 
                 playerGroup.FormationType = FormationType.Default;
