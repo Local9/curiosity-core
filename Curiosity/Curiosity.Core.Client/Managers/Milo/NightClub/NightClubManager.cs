@@ -150,13 +150,13 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
                 await Cache.PlayerPed.FadeIn();
             }
 
-            Logger.Debug($"Teleport to: Los Santos");
+            Logger.Debug($"Teleport to: Club");
             if (enterNightClub)
             {
                 EnterNightClub();
             }
 
-            Logger.Debug($"Teleport to: Cayo Perico");
+            Logger.Debug($"Teleport to: Out of Club");
             if (!enterNightClub)
             {
                 ExitNightClub();

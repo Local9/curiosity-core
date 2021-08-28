@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
@@ -42,11 +43,13 @@ namespace Curiosity.Core.Client.Managers
             timeLockHour = hour;
             timeLockMins = minute;
             isTimeLocked = true;
+            Logger.Debug($"LockAndSetTime: {hour:00}:{minute:00}");
         }
 
         public void UnlockTime()
         {
             isTimeLocked = false;
+            Logger.Debug($"UnlockTime");
         }
 
         public void LockAndSetWeather(WeatherType weatherType)
@@ -54,13 +57,18 @@ namespace Curiosity.Core.Client.Managers
             ClearOverrideWeather();
             ClearWeatherTypePersist();
             SetWeatherTypeOvertimePersist($"{weatherType}", 2f);
+
+            lastWeather = weatherType; // for when we update later
+
             isWeatherLocked = true;
+            Logger.Debug($"LockAndSetWeather: {weatherType}");
         }
 
         public void UnlockAndUpdateWeather()
         {
             isWeatherLocked = false;
-            UpdateWeather();
+            UpdateWeather(true);
+            Logger.Debug($"UnlockAndUpdateWeather");
         }
 
         public override async void Begin()
@@ -107,11 +115,15 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(1000);
         }
 
-        async void UpdateWeather()
+        async void UpdateWeather(bool instant = false)
         {
             await Session.Loading();
 
-            if (isWeatherLocked) return;
+            if (isWeatherLocked)
+            {
+                Logger.Debug($"Weather State: Locked | {lastWeather}");
+                return;
+            }
 
             lastRunWeatherUpdate = DateTime.Now;
 
@@ -136,7 +148,15 @@ namespace Curiosity.Core.Client.Managers
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();
-                SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
+
+                if (instant)
+                {
+                    SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
+                }
+                else
+                {
+                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
+                }
                 // SetWeatherTypePersist($"{weatherType}");
                 // SetWeatherTypeNow($"{weatherType}");
                 // SetWeatherTypeNowPersist($"{weatherType}");
