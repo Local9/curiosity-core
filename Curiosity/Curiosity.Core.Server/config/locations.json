@@ -122,6 +122,22 @@
       ]
     },
     {
+      "name": "Night Club",
+      "sprite": 614,
+      "color": 3,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 194.6124,
+          "Y": -3167.278,
+          "Z": 5.790269
+        }
+      ]
+    },
+    {
       "name": "Los Santos Tuner Track",
       "sprite": 777,
       "color": 0,
