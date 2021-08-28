@@ -209,16 +209,36 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(1500);
         }
 
+        bool disableWeapons = false;
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnDisablePlayerWeapons()
+        {
+            if (!disableWeapons)
+            {
+                await BaseScript.Delay(500);
+                return;
+            }
+
+            DisablePlayerFiring(Game.Player.Handle, disableWeapons);
+            DisableControlAction(0, 22, disableWeapons);
+            DisableControlAction(0, 24, disableWeapons);
+            DisableControlAction(0, 25, disableWeapons);
+            DisableControlAction(0, (int)Control.SelectWeapon, disableWeapons);
+            DisableControlAction(0, (int)Control.Cover, disableWeapons);
+            DisableControlAction(0, 257, disableWeapons);
+            DisableControlAction(0, 263, disableWeapons);
+            DisableControlAction(0, 264, disableWeapons);
+            DisableControlAction(0, (int)Control.Jump, disableWeapons);
+            API.BlockWeaponWheelThisFrame();
+
+            if (Cache.PlayerPed.Weapons.Current.Hash != WeaponHash.Unarmed)
+                Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
+        }
+
         public void DisableWeapons(bool state)
         {
-            DisablePlayerFiring(Game.Player.Handle, state);
-            DisableControlAction(0, 22, state);
-            DisableControlAction(0, 24, state);
-            DisableControlAction(0, 25, state);
-            DisableControlAction(0, 257, state);
-            DisableControlAction(0, 263, state);
-            DisableControlAction(0, 264, state);
-            DisableControlAction(0, (int)Control.Jump, state);
+            disableWeapons = state;
         }
     }
 }
