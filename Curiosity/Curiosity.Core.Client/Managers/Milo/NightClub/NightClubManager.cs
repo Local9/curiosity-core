@@ -23,7 +23,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
         private const string NIGHTCLUB_MILO = "ba_int_placement_ba_interior_0_dlc_int_01_ba_milo_";
 
         Position posEntrance = new Position(194.6124f, -3167.278f, 5.790269f, 86.42644f);
-        Position posExit = new Position(-1569.665f, -3016.758f, -74.40615f, 86.42644f);
+        Position posExit = new Position(-1569.665f, -3016.758f, -74.40615f, 1.268f);
         Vector3 markerScale = new Vector3(1.5f, 1.5f, .5f);
 
         WorldManager _WorldManager = WorldManager.GetModule();
