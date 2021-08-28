@@ -22,6 +22,16 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             
         }
 
+        public void Init()
+        {
+            Instance.AttachTickHandler(NightClubLightAnimations);
+        }
+
+        public void Dispose()
+        {
+            Instance.DetachTickHandler(NightClubLightAnimations);
+        }
+
         internal int[] lampObjects { get; private set; } = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         internal int[] rotatorObjects { get; private set; } = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         internal int[] beamObjects { get; private set; } = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -112,7 +122,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             }
         };
 
-        internal async void CreateLight(int club, int firstRandom, int secondRandom)
+        internal async void CreateLight(int firstRandom, int secondRandom)
         {
             var modellamp = (uint)GetHashKey("ba_prop_club_emis_rig_10_shad");
             RequestModel(modellamp);
@@ -341,7 +351,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
 
         public async Task NightClubLightAnimations()
         {
-            if (IsInInterior)
+            if (false)
             {
                 if ((!DoesEntityExist(beamObjects[0]) || !IsInteriorReady(NIGHTCLUB_INTERIORID)))
                 {
@@ -352,22 +362,22 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
                     if (GetGameTimer() - newLightTimer1 > 800)
                     {
                         newLightTimer1 = GetGameTimer();
-                        CreateLight(NIGHTCLUB_INTERIORID, randomizer.Next(0, 5), randomizer.Next(0, 6));
+                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
                     }
                     if (GetGameTimer() - newLightTimer2 > 900)
                     {
                         newLightTimer2 = GetGameTimer();
-                        CreateLight(NIGHTCLUB_INTERIORID, randomizer.Next(0, 5), randomizer.Next(0, 6));
+                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
                     }
                     if (GetGameTimer() - newLightTimer3 > 1000)
                     {
                         newLightTimer3 = GetGameTimer();
-                        CreateLight(NIGHTCLUB_INTERIORID, randomizer.Next(0, 5), randomizer.Next(0, 6));
+                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
                     }
                     if (GetGameTimer() - newLightTimer4 > 1100)
                     {
                         newLightTimer4 = GetGameTimer();
-                        CreateLight(NIGHTCLUB_INTERIORID, randomizer.Next(0, 5), randomizer.Next(0, 6));
+                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
                     }
 
                     //var ii = 0;
