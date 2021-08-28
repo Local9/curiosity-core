@@ -104,6 +104,8 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             if (enterTrack)
             {
+                Instance.DiscordRichPresence.Status = $"Drifting on the Tuner Track...";
+
                 RequestIpl("tr_tuner_meetup");
                 RequestIpl("tr_tuner_race_line");
 
@@ -115,6 +117,8 @@ namespace Curiosity.Core.Client.Managers.Milo
             }
             else
             {
+                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
+
                 RemoveIpl("tr_tuner_meetup");
                 RemoveIpl("tr_tuner_race_line");
 
@@ -124,6 +128,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 DeactivateInteriorEntitySet(interiorId, "entity_set_test_lights_cheap");
                 DeactivateInteriorEntitySet(interiorId, "entity_set_time_trial");
             }
+            Instance.DiscordRichPresence.Commit();
 
             PlayerOptionsManager.GetModule().DisableWeapons(enterTrack);
 

@@ -229,6 +229,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             Logger.Debug($"Teleport to: Los Santos");
             if (teleportToLosSantos)
             {
+                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
                 SetupLosSantos();
             }
 
@@ -236,7 +237,9 @@ namespace Curiosity.Core.Client.Managers.Milo
             if (!teleportToLosSantos)
             {
                 SetupCayoPerico();
+                Instance.DiscordRichPresence.Status = $"Roaming Cayo Perico...";
             }
+            Instance.DiscordRichPresence.Commit();
 
             Cache.Character.IsOnIsland = !teleportToLosSantos;
 

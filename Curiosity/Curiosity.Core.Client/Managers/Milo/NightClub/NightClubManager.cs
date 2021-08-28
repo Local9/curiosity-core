@@ -96,13 +96,17 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             {
                 notificationMessage = "Enter Nightclub";
                 activeMarker = markerEnter;
+                Instance.DiscordRichPresence.Status = $"Partying in the Nightclub";
             }
 
             if (markerExit.IsInRange)
             {
                 notificationMessage = "Exit Nightclub";
                 activeMarker = markerExit;
+                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
+                
             }
+            Instance.DiscordRichPresence.Commit();
 
             if (activeMarker is null)
             {
