@@ -1,17 +1,14 @@
-﻿using Curiosity.Systems.Library.Data;
-using Curiosity.Systems.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Core.Client.Extensions.Native;
-using Curiosity.Core.Client.Extensions;
-using System.Drawing;
-using Curiosity.Core.Client.Interface;
+﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Extensions.Native;
+using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Models;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.Milo.NightClub
 {
@@ -27,7 +24,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
 
         Position posEntrance = new Position(194.6124f, -3167.278f, 5.790269f, 86.42644f);
         Position posExit = new Position(-1569.665f, -3016.758f, -74.40615f, 86.42644f);
-        Vector3 markerScale = new Vector3(1f, 1f, .5f);
+        Vector3 markerScale = new Vector3(1.5f, 1.5f, .5f);
 
         WorldManager _WorldManager = WorldManager.GetModule();
         EffectsManager _EffectsManager = EffectsManager.GetModule();
