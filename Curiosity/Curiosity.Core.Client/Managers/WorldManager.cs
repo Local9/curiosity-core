@@ -64,9 +64,10 @@ namespace Curiosity.Core.Client.Managers
             Logger.Debug($"LockAndSetWeather: {weatherType}");
         }
 
-        public void UnlockAndUpdateWeather()
+        public async void UnlockAndUpdateWeather()
         {
             isWeatherLocked = false;
+            await BaseScript.Delay(100);
             UpdateWeather(true);
             Logger.Debug($"UnlockAndUpdateWeather");
         }
@@ -151,11 +152,12 @@ namespace Curiosity.Core.Client.Managers
 
                 if (instant)
                 {
-                    SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
+                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
+                    Logger.Debug($"Force weather change: {weatherType}");
                 }
                 else
                 {
-                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
+                    SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
                 }
                 // SetWeatherTypePersist($"{weatherType}");
                 // SetWeatherTypeNow($"{weatherType}");
