@@ -59,7 +59,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
             uiLstCompanions.Enabled = Cache.Player.User.IsDeveloper;
-            uiItemRemoveCompanion.Enabled = Cache.Player.User.IsDeveloper;
+            uiItemRemoveCompanion.Enabled = Cache.Player.User.IsStaff;
             uiLstCompanions.Description = "Currently Disabled due to online issues";
         }
 
