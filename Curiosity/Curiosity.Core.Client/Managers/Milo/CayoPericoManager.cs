@@ -179,15 +179,6 @@ namespace Curiosity.Core.Client.Managers.Milo
                 return;
             }
 
-            Vector3 position = activeMarker.Position;
-            Vector3 positionV = new Vector3(position.X, position.Y, position.Z);
-            float ground = position.Z;
-
-            if (GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref ground, false))
-                positionV.Z = ground;
-
-            activeMarker.Position = positionV;
-
             while (activeMarker.IsInRange)
             {
                 if (activeMarker.IsInMarker)
