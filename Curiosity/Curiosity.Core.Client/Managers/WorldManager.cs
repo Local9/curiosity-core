@@ -32,6 +32,37 @@ namespace Curiosity.Core.Client.Managers
         int hour;
         int minute;
 
+        bool isWeatherLocked = false;
+        bool isTimeLocked = false;
+        int timeLockHour = 0;
+        int timeLockMins = 0;
+
+        public void LockAndSetTime(int hour, int minute)
+        {
+            timeLockHour = hour;
+            timeLockMins = minute;
+            isTimeLocked = true;
+        }
+
+        public void UnlockTime()
+        {
+            isTimeLocked = false;
+        }
+
+        public void LockAndSetWeather(WeatherType weatherType)
+        {
+            ClearOverrideWeather();
+            ClearWeatherTypePersist();
+            SetWeatherTypeOvertimePersist($"{weatherType}", 2f);
+            isWeatherLocked = true;
+        }
+
+        public void UnlockAndUpdateWeather()
+        {
+            isWeatherLocked = false;
+            UpdateWeather();
+        }
+
         public override async void Begin()
         {
             EventSystem.Attach("world:time", new EventCallback(metadata =>
@@ -79,6 +110,8 @@ namespace Curiosity.Core.Client.Managers
         async void UpdateWeather()
         {
             await Session.Loading();
+
+            if (isWeatherLocked) return;
 
             lastRunWeatherUpdate = DateTime.Now;
 
@@ -184,6 +217,14 @@ namespace Curiosity.Core.Client.Managers
                 SetClockTime(12, 1, 0);
                 SetWeatherTypeNow("EXTRASUNNY");
                 await BaseScript.Delay(0);
+            }
+
+            if (isTimeLocked)
+            {
+                NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
+                SetClockTime(timeLockHour, timeLockMins, 0);
+                await BaseScript.Delay(500);
+                return;
             }
 
             //int interior = GetInteriorFromEntity(Cache.PlayerPed.Handle);
