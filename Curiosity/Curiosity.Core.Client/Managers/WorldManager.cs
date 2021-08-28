@@ -138,6 +138,15 @@ namespace Curiosity.Core.Client.Managers
 
             if (!weatherType.Equals(lastWeather))
             {
+                if (instant)
+                {
+                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
+                    Logger.Debug($"Force weather change: {weatherType}");
+
+                    lastWeather = weatherType;
+                    return;
+                }
+
                 string area = World.GetZoneLocalizedName(pos);
 
                 int interiorId = GetInteriorFromEntity(PlayerPedId());
@@ -149,16 +158,7 @@ namespace Curiosity.Core.Client.Managers
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();
-
-                if (instant)
-                {
-                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
-                    Logger.Debug($"Force weather change: {weatherType}");
-                }
-                else
-                {
-                    SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
-                }
+                SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
                 // SetWeatherTypePersist($"{weatherType}");
                 // SetWeatherTypeNow($"{weatherType}");
                 // SetWeatherTypeNowPersist($"{weatherType}");
