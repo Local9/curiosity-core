@@ -68,6 +68,9 @@ namespace Curiosity.Core.Client.Managers
         {
             isWeatherLocked = false;
             await BaseScript.Delay(100);
+
+            lastWeather = WeatherType.UNKNOWN; // force changes
+
             UpdateWeather(true);
             Logger.Debug($"UnlockAndUpdateWeather");
         }
