@@ -296,6 +296,18 @@ namespace Curiosity.Core.Client.Commands.Impl
                             ped.Delete();
                             companions.Remove(ped);
                         }
+
+                        if (!ped.IsInGroup)
+                        {
+                            await ped.FadeOut();
+                            ped.Delete();
+                            companions.Remove(ped);
+                        }
+                    }
+
+                    if (!ped.Exists())
+                    {
+                        companions.Remove(ped);
                     }
                 }
             }
