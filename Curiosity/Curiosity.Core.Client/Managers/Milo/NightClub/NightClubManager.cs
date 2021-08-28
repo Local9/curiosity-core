@@ -96,17 +96,14 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             {
                 notificationMessage = "Enter Nightclub";
                 activeMarker = markerEnter;
-                Instance.DiscordRichPresence.Status = $"Partying in the Nightclub";
             }
 
             if (markerExit.IsInRange)
             {
                 notificationMessage = "Exit Nightclub";
                 activeMarker = markerExit;
-                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
                 
             }
-            Instance.DiscordRichPresence.Commit();
 
             if (activeMarker is null)
             {
@@ -158,13 +155,16 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             if (enterNightClub)
             {
                 EnterNightClub();
+                Instance.DiscordRichPresence.Status = $"Partying in the Nightclub";
             }
 
             Logger.Debug($"Teleport to: Out of Club");
             if (!enterNightClub)
             {
                 ExitNightClub();
+                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
             }
+            Instance.DiscordRichPresence.Commit();
 
             Cache.PlayerPed.Position = teleportPosition.AsVector();
             Cache.PlayerPed.Heading = teleportPosition.H;
