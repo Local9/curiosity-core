@@ -222,14 +222,25 @@ namespace Curiosity.Core.Client.Managers
 
             DisablePlayerFiring(Game.Player.Handle, disableWeapons);
             DisableControlAction(0, 22, disableWeapons);
+            DisableControlAction(2, 22, disableWeapons);
             DisableControlAction(0, 24, disableWeapons);
+            DisableControlAction(2, 24, disableWeapons);
             DisableControlAction(0, 25, disableWeapons);
+            DisableControlAction(2, 25, disableWeapons);
             DisableControlAction(0, (int)Control.SelectWeapon, disableWeapons);
+            DisableControlAction(2, (int)Control.SelectWeapon, disableWeapons);
             DisableControlAction(0, (int)Control.Cover, disableWeapons);
+            DisableControlAction(2, (int)Control.Cover, disableWeapons);
             DisableControlAction(0, 257, disableWeapons);
+            DisableControlAction(2, 257, disableWeapons);
             DisableControlAction(0, 263, disableWeapons);
+            DisableControlAction(2, 263, disableWeapons);
             DisableControlAction(0, 264, disableWeapons);
+            DisableControlAction(2, 264, disableWeapons);
             DisableControlAction(0, (int)Control.Jump, disableWeapons);
+            DisableControlAction(2, (int)Control.Jump, disableWeapons);
+            DisableControlAction(0, (int)Control.Duck, disableWeapons);
+            DisableControlAction(2, (int)Control.Duck, disableWeapons);
             API.BlockWeaponWheelThisFrame();
 
             if (Cache.PlayerPed.Weapons.Current.Hash != WeaponHash.Unarmed)
