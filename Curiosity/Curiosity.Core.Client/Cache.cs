@@ -36,6 +36,8 @@ namespace Curiosity.Core.Client
             internal set => _ped = value;
         }
 
+        public static PedGroup PedGroup { get; internal set; }
+
         static Cache()
         {
             _ped = new Ped(PlayerPedId());

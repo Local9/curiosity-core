@@ -72,7 +72,7 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 if (!companionPed.IsHuman) PlayAnimalVocalization(companionPed.Handle, 3, "BARK");
 
-                PedGroup playerGroup = Game.PlayerPed.PedGroup;
+                PedGroup playerGroup = Cache.PedGroup;
 
                 if (playerGroup is null)
                 {
@@ -84,7 +84,6 @@ namespace Curiosity.Core.Client.Managers.Supporter
                 playerGroup.FormationType = FormationType.Default;
                 playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
 
-                playerGroup.Add(Game.PlayerPed, true);
                 playerGroup.Add(companionPed, false);
 
                 SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
