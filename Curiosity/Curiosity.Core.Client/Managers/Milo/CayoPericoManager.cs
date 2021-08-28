@@ -264,8 +264,6 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             await BaseScript.Delay(2000);
 
-            
-
             await ScreenInterface.FadeIn(1000);
             Cache.PlayerPed.FadeIn();
         }
