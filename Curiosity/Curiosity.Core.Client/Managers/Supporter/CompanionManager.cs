@@ -72,23 +72,35 @@ namespace Curiosity.Core.Client.Managers.Supporter
 
                 if (!companionPed.IsHuman) PlayAnimalVocalization(companionPed.Handle, 3, "BARK");
 
-                PedGroup playerGroup = Cache.PedGroup;
+                await BaseScript.Delay(100);
 
-                if (playerGroup is null)
+                PedGroup playerPedGroup = Cache.PedGroup;
+
+                if (playerPedGroup is not null)
+                    Logger.Debug($"Current ped group is {playerPedGroup.Handle}");
+
+                if (playerPedGroup is null)
                 {
-                    playerGroup = new PedGroup();
-                    playerGroup.Add(Cache.PlayerPed, true);
-                    Cache.PedGroup = playerGroup;
+                    playerPedGroup = new PedGroup();
+                    playerPedGroup.Add(Cache.PlayerPed, true);
+                    Cache.PedGroup = playerPedGroup;
+                    Logger.Debug($"Created a new PedGroup for the Player {Cache.PlayerPed.PedGroup.Handle}");
+                }
+                else
+                {
+                    playerPedGroup.Add(companionPed, false);
                 }
 
-                playerGroup.FormationType = FormationType.Default;
-                playerGroup.SeparationRange = 2.14748365E+09f; // inifinity
+                if (!playerPedGroup.Contains(companionPed))
+                    SetPedAsGroupMember(companionPed.Handle, playerPedGroup.Handle);
 
-                playerGroup.Add(companionPed, false);
+                await BaseScript.Delay(100);
 
-                SetGroupFormationSpacing(playerGroup.Handle, 1f, 0.9f, 3f);
-
-                SetPedCanTeleportToGroupLeader(companionPed.Handle, playerGroup.Handle, true);
+                if (companionPed.PedGroup is not null)
+                {
+                    Logger.Debug($"Companion Group {companionPed.PedGroup.Handle}");
+                    SetPedCanTeleportToGroupLeader(companionPed.Handle, playerPedGroup.Handle, true);
+                }
                 NotificationManager.GetModule().Info($"Your campanion will defend you.");
 
                 SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);

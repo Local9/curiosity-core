@@ -320,11 +320,20 @@ namespace Curiosity.Core.Client.Managers
 
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
+            CreatePlayerGroup();
+
+            Cache.UpdatePedId(true);
+        }
+
+        private static void CreatePlayerGroup()
+        {
             PedGroup pedGroup = new PedGroup();
             pedGroup.Add(Cache.PlayerPed, true);
             Cache.PedGroup = pedGroup;
 
-            Cache.UpdatePedId(true);
+            pedGroup.FormationType = FormationType.Default;
+            pedGroup.SeparationRange = 300f;
+            SetGroupFormationSpacing(pedGroup.Handle, 1f, 0.9f, 3f);
         }
 
         private void MoveToCityHall()
