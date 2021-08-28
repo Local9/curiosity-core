@@ -351,198 +351,195 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
 
         public async Task NightClubLightAnimations()
         {
-            if (false)
+            if ((!DoesEntityExist(beamObjects[0]) || !IsInteriorReady(NIGHTCLUB_INTERIORID)))
             {
-                if ((!DoesEntityExist(beamObjects[0]) || !IsInteriorReady(NIGHTCLUB_INTERIORID)))
+                EnableLights(NIGHTCLUB_INTERIORID);
+            }
+            else
+            {
+                if (GetGameTimer() - newLightTimer1 > 800)
                 {
-                    EnableLights(NIGHTCLUB_INTERIORID);
+                    newLightTimer1 = GetGameTimer();
+                    CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
                 }
-                else
+                if (GetGameTimer() - newLightTimer2 > 900)
                 {
-                    if (GetGameTimer() - newLightTimer1 > 800)
-                    {
-                        newLightTimer1 = GetGameTimer();
-                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
-                    }
-                    if (GetGameTimer() - newLightTimer2 > 900)
-                    {
-                        newLightTimer2 = GetGameTimer();
-                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
-                    }
-                    if (GetGameTimer() - newLightTimer3 > 1000)
-                    {
-                        newLightTimer3 = GetGameTimer();
-                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
-                    }
-                    if (GetGameTimer() - newLightTimer4 > 1100)
-                    {
-                        newLightTimer4 = GetGameTimer();
-                        CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
-                    }
+                    newLightTimer2 = GetGameTimer();
+                    CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
+                }
+                if (GetGameTimer() - newLightTimer3 > 1000)
+                {
+                    newLightTimer3 = GetGameTimer();
+                    CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
+                }
+                if (GetGameTimer() - newLightTimer4 > 1100)
+                {
+                    newLightTimer4 = GetGameTimer();
+                    CreateLight(randomizer.Next(0, 5), randomizer.Next(0, 6));
+                }
 
-                    //var ii = 0;
-                    var index = 0;
+                //var ii = 0;
+                var index = 0;
 
-                    foreach (var obj in lampObjects)
+                foreach (var obj in lampObjects)
+                {
+
+                    var beam = beamObjects[index];
+
+                    var rot = GetEntityRotation(obj, 2);
+                    if (DoesEntityExist(obj))
                     {
-
-                        var beam = beamObjects[index];
-
-                        var rot = GetEntityRotation(obj, 2);
-                        if (DoesEntityExist(obj))
+                        if (step < 4)
                         {
-                            if (step < 4)
+                            if (index == 1)
                             {
-                                if (index == 1)
+                                if (rotationAngle > 4.0f)
                                 {
-                                    if (rotationAngle > 4.0f)
+                                    foreach (var l in beamObjects)
                                     {
-                                        foreach (var l in beamObjects)
-                                        {
-                                            SetEntityAlpha(l, 0, 0);
-                                        }
-                                        await BaseScript.Delay(0);
-                                        for (int l = 0; l < 9; l++)
-                                        {
-                                            SetEntityRotation(lampObjects[l], lampRotations[l].X, lampRotations[l].Y, lampRotations[l].Z, 2, true);
-                                            SetEntityRotation(rotatorObjects[l], lampRotations[l].X, lampRotations[l].Y, lampRotations[l].Z, 2, true);
-                                            var color = GetRandomLightColor();
-                                            SetBeamColor(beamObjects[l], color);
-                                        }
-                                        foreach (var l in beamObjects)
-                                        {
-                                            ResetEntityAlpha(l);
-                                        }
-                                        step++;
-                                        //reverse = !reverse;
-                                        rotationAngle = 0f;
-                                        break;
-                                        //Debug.WriteLine("step up, color should change");
+                                        SetEntityAlpha(l, 0, 0);
                                     }
-                                    rotationAngle += 0.01f;
+                                    await BaseScript.Delay(0);
+                                    for (int l = 0; l < 9; l++)
+                                    {
+                                        SetEntityRotation(lampObjects[l], lampRotations[l].X, lampRotations[l].Y, lampRotations[l].Z, 2, true);
+                                        SetEntityRotation(rotatorObjects[l], lampRotations[l].X, lampRotations[l].Y, lampRotations[l].Z, 2, true);
+                                        var color = GetRandomLightColor();
+                                        SetBeamColor(beamObjects[l], color);
+                                    }
+                                    foreach (var l in beamObjects)
+                                    {
+                                        ResetEntityAlpha(l);
+                                    }
+                                    step++;
+                                    //reverse = !reverse;
+                                    rotationAngle = 0f;
+                                    break;
+                                    //Debug.WriteLine("step up, color should change");
                                 }
-
-                                var rot2 = GetEntityRotation(rotatorObjects[index], 2);
-                                float rotation = (float)((Math.PI * 2f) + (rotationAngle * 2f));
-
-                                float radius = 0.8f;
-
-                                var newRot1 = new Vector3(rot.X, (float)(radius * Math.Cos(rotation)) + rot.Y, (float)(radius * Math.Sin(rotation)) + rot.Z);
-                                var newRot2 = new Vector3(rot.X, rot2.Y, (float)(radius * Math.Sin(rotation)) + rot2.Z);
-
-                                SetEntityRotation(obj, newRot1.X, newRot1.Y, newRot1.Z, 2, true);
-                                SetEntityRotation(rotatorObjects[index], newRot2.X, newRot2.Y, newRot2.Z, 2, true);
-
+                                rotationAngle += 0.01f;
                             }
-                            else if (step < 5)
-                            {
-                                await RefreshLights(NIGHTCLUB_INTERIORID);
-                                step++;
-                                break;
-                            }
-                            else if (step < 9)
-                            {
-                                if (index == 1)
-                                {
-                                    if (rot.Y < -20)
-                                    {
-                                        reverse = false;
-                                    }
-                                    else if (rot.Y > 70)
-                                    {
-                                        reverse = true;
 
-                                        foreach (var c in beamObjects)
-                                        {
-                                            var color = GetRandomLightColor();
-                                            SetBeamColor(c, color);
-                                        }
-                                        step++;
-                                    }
-                                }
+                            var rot2 = GetEntityRotation(rotatorObjects[index], 2);
+                            float rotation = (float)((Math.PI * 2f) + (rotationAngle * 2f));
 
-                                //var lr = step > 6 ? 0.3f : -0.3f;
-                                var lr = step % 2 == 0 ? (reverse ? 0.3f : -0.3f) : (reverse ? -0.3f : 0.3f);
-                                var rot2 = GetEntityRotation(rotatorObjects[index], 2);
-                                if (reverse)
+                            float radius = 0.8f;
+
+                            var newRot1 = new Vector3(rot.X, (float)(radius * Math.Cos(rotation)) + rot.Y, (float)(radius * Math.Sin(rotation)) + rot.Z);
+                            var newRot2 = new Vector3(rot.X, rot2.Y, (float)(radius * Math.Sin(rotation)) + rot2.Z);
+
+                            SetEntityRotation(obj, newRot1.X, newRot1.Y, newRot1.Z, 2, true);
+                            SetEntityRotation(rotatorObjects[index], newRot2.X, newRot2.Y, newRot2.Z, 2, true);
+
+                        }
+                        else if (step < 5)
+                        {
+                            await RefreshLights(NIGHTCLUB_INTERIORID);
+                            step++;
+                            break;
+                        }
+                        else if (step < 9)
+                        {
+                            if (index == 1)
+                            {
+                                if (rot.Y < -20)
                                 {
-                                    SetEntityRotation(obj, rot.X, rot.Y - 1f, rot.Z + lr, 2, true);
-                                    SetEntityRotation(rotatorObjects[index], rot2.X, rot2.Y, rot2.Z + lr, 2, true);
+                                    reverse = false;
                                 }
-                                else
+                                else if (rot.Y > 70)
                                 {
-                                    SetEntityRotation(obj, rot.X, rot.Y + 1f, rot.Z - lr, 2, true);
-                                    SetEntityRotation(rotatorObjects[index], rot2.X, rot2.Y, rot2.Z - lr, 2, true);
+                                    reverse = true;
+
+                                    foreach (var c in beamObjects)
+                                    {
+                                        var color = GetRandomLightColor();
+                                        SetBeamColor(c, color);
+                                    }
+                                    step++;
                                 }
                             }
-                            else if (step < 10)
+
+                            //var lr = step > 6 ? 0.3f : -0.3f;
+                            var lr = step % 2 == 0 ? (reverse ? 0.3f : -0.3f) : (reverse ? -0.3f : 0.3f);
+                            var rot2 = GetEntityRotation(rotatorObjects[index], 2);
+                            if (reverse)
                             {
-                                await RefreshLights(NIGHTCLUB_INTERIORID);
-                                step++;
-                                break;
+                                SetEntityRotation(obj, rot.X, rot.Y - 1f, rot.Z + lr, 2, true);
+                                SetEntityRotation(rotatorObjects[index], rot2.X, rot2.Y, rot2.Z + lr, 2, true);
                             }
-                            else if (step < 14)
+                            else
                             {
-                                if (index == 1)
-                                {
-                                    if (rot.Y < -100f)
-                                    {
-                                        await BaseScript.Delay(0);
-                                        reverse = false;
-                                    }
-                                    else if (rot.Y > 70f)
-                                    {
-                                        await BaseScript.Delay(0);
-                                        reverse = true;
-                                        foreach (var c in beamObjects)
-                                        {
-                                            var color = GetRandomLightColor();
-                                            SetBeamColor(c, color);
-                                        }
-                                        step++;
-                                    }
-                                }
-
-                                if (reverse)
-                                {
-                                    SetEntityRotation(obj, rot.X, rot.Y - 4f, rot.Z, 2, true);
-                                }
-                                else
-                                {
-                                    SetEntityRotation(obj, rot.X, rot.Y + 4f, rot.Z, 2, true);
-                                }
-                            }
-                            else if (step >= 14)
-                            {
-                                rotationAngle = 0f;
-                                step = 0;
-                                //foreach (var tmpBeam in IplManager.beamObjects)
-                                //{
-                                //    SetEntityAlpha(tmpBeam, 0, 0);
-                                //}
-
-                                //await BaseScript.Delay(0);
-
-                                //var iter = 0;
-                                //foreach (var lamp in IplManager.lampObjects)
-                                //{
-                                //    SetEntityRotation(lamp, IplManager.lampRotations[iter].X, IplManager.lampRotations[iter].Y, IplManager.lampRotations[iter].Z, 2, true);
-                                //    SetEntityRotation(IplManager.rotatorObjects[iter], IplManager.lampRotations[iter].X, IplManager.lampRotations[iter].Y, IplManager.lampRotations[iter].Z, 2, true);
-                                //    iter++;
-                                //}
-
-                                //await BaseScript.Delay(0);
-
-                                //foreach (var tmpBeam in IplManager.beamObjects)
-                                //{
-                                //    SetEntityAlpha(tmpBeam, 255, 0);
-                                //}
-                                await RefreshLights(NIGHTCLUB_INTERIORID);
-                                break;
+                                SetEntityRotation(obj, rot.X, rot.Y + 1f, rot.Z - lr, 2, true);
+                                SetEntityRotation(rotatorObjects[index], rot2.X, rot2.Y, rot2.Z - lr, 2, true);
                             }
                         }
-                        index++;
+                        else if (step < 10)
+                        {
+                            await RefreshLights(NIGHTCLUB_INTERIORID);
+                            step++;
+                            break;
+                        }
+                        else if (step < 14)
+                        {
+                            if (index == 1)
+                            {
+                                if (rot.Y < -100f)
+                                {
+                                    await BaseScript.Delay(0);
+                                    reverse = false;
+                                }
+                                else if (rot.Y > 70f)
+                                {
+                                    await BaseScript.Delay(0);
+                                    reverse = true;
+                                    foreach (var c in beamObjects)
+                                    {
+                                        var color = GetRandomLightColor();
+                                        SetBeamColor(c, color);
+                                    }
+                                    step++;
+                                }
+                            }
+
+                            if (reverse)
+                            {
+                                SetEntityRotation(obj, rot.X, rot.Y - 4f, rot.Z, 2, true);
+                            }
+                            else
+                            {
+                                SetEntityRotation(obj, rot.X, rot.Y + 4f, rot.Z, 2, true);
+                            }
+                        }
+                        else if (step >= 14)
+                        {
+                            rotationAngle = 0f;
+                            step = 0;
+                            //foreach (var tmpBeam in IplManager.beamObjects)
+                            //{
+                            //    SetEntityAlpha(tmpBeam, 0, 0);
+                            //}
+
+                            //await BaseScript.Delay(0);
+
+                            //var iter = 0;
+                            //foreach (var lamp in IplManager.lampObjects)
+                            //{
+                            //    SetEntityRotation(lamp, IplManager.lampRotations[iter].X, IplManager.lampRotations[iter].Y, IplManager.lampRotations[iter].Z, 2, true);
+                            //    SetEntityRotation(IplManager.rotatorObjects[iter], IplManager.lampRotations[iter].X, IplManager.lampRotations[iter].Y, IplManager.lampRotations[iter].Z, 2, true);
+                            //    iter++;
+                            //}
+
+                            //await BaseScript.Delay(0);
+
+                            //foreach (var tmpBeam in IplManager.beamObjects)
+                            //{
+                            //    SetEntityAlpha(tmpBeam, 255, 0);
+                            //}
+                            await RefreshLights(NIGHTCLUB_INTERIORID);
+                            break;
+                        }
                     }
+                    index++;
                 }
             }
         }
