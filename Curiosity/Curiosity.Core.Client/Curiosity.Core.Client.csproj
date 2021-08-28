@@ -120,7 +120,6 @@
     <Compile Include="Managers\UI\StaffManager.cs" />
     <Compile Include="Managers\UI\ShopManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
-    <Compile Include="Managers\VehicleModShopManager.cs" />
     <Compile Include="Managers\VehicleSpawnSafetyManager.cs" />
     <Compile Include="Managers\WeaponManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
