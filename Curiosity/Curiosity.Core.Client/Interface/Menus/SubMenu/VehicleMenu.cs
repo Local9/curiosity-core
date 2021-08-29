@@ -25,36 +25,31 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         List<int> driftVehicleHashes = new List<int>();
 
+        List<string> driftVehicles = new List<string>() {
+            "growler",
+            "vectre",
+            "dominator7",
+            "comet6",
+            "remus",
+            "jester4",
+            "tailgater2",
+            "warrener2",
+            "rt3000",
+            "zr350",
+            "dominator8",
+            "euros",
+            "futo2",
+            "calico",
+            "sultan3"
+        };
+
         public UIMenu CreateMenu(UIMenu menu)
         {
-            int growler = GetHashKey("growler");
-            driftVehicleHashes.Add(growler);
-            int vectre = GetHashKey("vectre");
-            driftVehicleHashes.Add(vectre);
-            int dominatorASP = GetHashKey("dominator7");
-            driftVehicleHashes.Add(dominatorASP);
-            int comet = GetHashKey("comet6");
-            driftVehicleHashes.Add(comet);
-            int remus = GetHashKey("remus");
-            driftVehicleHashes.Add(remus);
-            int jester = GetHashKey("jester4");
-            driftVehicleHashes.Add(jester);
-            int tailgater = GetHashKey("tailgater2");
-            driftVehicleHashes.Add(tailgater);
-            int warrener = GetHashKey("warrener2");
-            driftVehicleHashes.Add(warrener);
-            int rt3000 = GetHashKey("rt3000");
-            driftVehicleHashes.Add(rt3000);
-            int zr350 = GetHashKey("zr350");
-            driftVehicleHashes.Add(zr350);
-            int dominatorGTT = GetHashKey("dominator8");
-            driftVehicleHashes.Add(dominatorGTT);
-            int euros = GetHashKey("euros");
-            driftVehicleHashes.Add(euros);
-            int futo2 = GetHashKey("futo2");
-            driftVehicleHashes.Add(futo2);
-            int calicoGTF = GetHashKey("calico");
-            driftVehicleHashes.Add(calicoGTF);
+            foreach (string hash in driftVehicles)
+            {
+                int vehHash = GetHashKey(hash);
+                driftVehicleHashes.Add(vehHash);
+            }
 
             menuVehicleDoors = InteractionMenu.MenuPool.AddSubMenu(menu, "Doors");
             _VehicleDoorMenu.CreateMenu(menuVehicleDoors);
