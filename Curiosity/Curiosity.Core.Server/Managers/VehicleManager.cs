@@ -3,9 +3,11 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
 
@@ -463,6 +465,165 @@ namespace Curiosity.Core.Server.Managers
 
                 // Select a list of vehicle IDs and Names that the user owns
 
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:drive:check", new AsyncEventCallback(async metadata =>
+            {
+                SqlResult sqlResult = new SqlResult();
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                {
+                    sqlResult.Message = "User is missing from session";
+                    return sqlResult;
+                }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                if (curiosityUser.IsStaff)
+                {
+                    sqlResult.Message = "User is staff, and is ignored";
+                    sqlResult.Success = true;
+                    return sqlResult;
+                }
+
+                Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
+
+                try
+                {
+                    if (curiosityUser.Purchasing)
+                    {
+                        sqlResult.Message = "Vehicle check is currently processing";
+                        return sqlResult;
+                    }
+
+                    int itemId = metadata.Find<int>(0);
+                    int characterId = curiosityUser.Character.CharacterId;
+
+                    curiosityUser.Purchasing = true;
+
+                    CuriosityShopItem item = new CuriosityShopItem();
+
+                    goto GetItem;
+
+                GetItem:
+                    item = await Database.Store.ShopDatabase.GetItem(itemId, characterId);
+
+                    if (item is null)
+                        goto FailedItemCheckCannotDriveOwner;
+
+                    if (item.NumberOwned == 0)
+                        goto FailedItemCheckCannotDriveOwner;
+
+                    goto CheckRoles;
+
+                CheckRoles:
+                    // Check if item has roles
+                    List<RoleRequirement> roleRequirements = await Database.Store.ShopDatabase.GetRoleRequirements(itemId, characterId);
+
+                    if (roleRequirements.Count > 0)
+                    {
+                        Role role = curiosityUser.Role;
+
+                        foreach (RoleRequirement roleRequirement in roleRequirements)
+                        {
+                            if (role == (Role)roleRequirement.RoleId)
+                            {
+                                goto CheckItems;
+                            }
+                        }
+
+                        goto FailedRoleCheckCannotDrive;
+                    }
+
+                    goto CheckItems; // Goto Item check is there are no role requirements to check
+
+                CheckItems:
+                    // check if item has item requirements
+                    List<ItemRequirement> itemRequirements = await Database.Store.ShopDatabase.GetItemRequirements(itemId, characterId);
+
+                    if (itemRequirements.Count > 0)
+                    {
+                        int requirements = itemRequirements.Count;
+                        int metRequirements = 0;
+
+                        foreach (ItemRequirement itemRequirement in itemRequirements)
+                        {
+                            if (itemRequirement.RequirementMet)
+                                metRequirements++;
+                        }
+
+                        if (metRequirements == requirements) goto CheckSkills;
+
+                        goto FailedItemCheckCannotDrive;
+                    }
+
+                    goto CheckSkills; // Goto skill check is there are no item requirements to check
+
+                CheckSkills:
+                    // check if item has skill requirements
+                    List<SkillRequirement> skillRequirements = await Database.Store.ShopDatabase.GetSkillRequirements(itemId, characterId);
+
+                    if (skillRequirements.Count > 0)
+                    {
+                        int requirements = skillRequirements.Count;
+                        int metRequirements = 0;
+
+                        foreach (SkillRequirement skillRequirement in skillRequirements)
+                        {
+                            if (skillRequirement.RequirementMet)
+                                metRequirements++;
+                        }
+
+                        if (metRequirements == requirements)
+                            goto CanDriveVehicle;
+
+                        goto FailedSkillCheckCannotDrive;
+                    }
+
+                    goto CanDriveVehicle;
+
+                CanDriveVehicle:
+                    sqlResult.Success = true;
+                    goto ReturnResult;
+
+                FailedItemCheckCannotDriveOwner:
+                    sqlResult.Message = "Cannot drive what you do not own";
+                    goto FailedDiscordMessageOwn;
+
+                FailedRoleCheckCannotDrive:
+                    sqlResult.Message = "Role Requirement not met";
+                    goto FailedDiscordMessage;
+
+                FailedItemCheckCannotDrive:
+                    sqlResult.Message = "Item Requirement not met";
+                    goto FailedDiscordMessage;
+
+                FailedSkillCheckCannotDrive:
+                    sqlResult.Message = "Skill Requirement not met";
+                    goto FailedDiscordMessage;
+
+                FailedDiscordMessageOwn:
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' tried to drive a vehicle they do not own"); // MOVE TO DB LOG
+                    goto ReturnResult;
+
+                FailedDiscordMessage:
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' vehicle check '{sqlResult.Message}'"); // MOVE TO DB LOG
+                    goto ReturnResult;
+
+                ReturnResult:
+                    curiosityUser.Purchasing = false;
+                    return sqlResult;
+
+                }
+                catch (Exception ex)
+                {
+                    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[ERROR] vehicle:drive:check\r{ex}");
+
+                    Logger.Error(ex, "vehicle:drive:check");
+                    curiosityUser.Purchasing = false;
+                    sqlResult.Message = "Error when trying to check vehicle, if this continues, please open a ticket.";
+                    return sqlResult;
+                }
             }));
         }
     }
