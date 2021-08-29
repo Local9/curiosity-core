@@ -35,7 +35,7 @@ namespace Curiosity.Core.Client.Managers.Milo
         Position posCayo2 = new Position(5094.14f, -4655.52f, 0.8f, 70.03f);
         Position posCayo3 = new Position(4425.68f, -4487.06f, 3.25f, 200.56f);
 
-        Position posLosSantosVehicle = new Position(977.9388f, -2920.137f, 5.902136f, 267.3707f);
+        Position posLosSantosVehicle = new Position(1098.302f, -2920.985f, 5.902138f, 278.2482f);
         Position posCayoVehicle = new Position(4058.679f, -4674.118f, 4.184523f, 28.08182f);
 
         Color markerColor = Color.FromArgb(255, 135, 206, 235);
