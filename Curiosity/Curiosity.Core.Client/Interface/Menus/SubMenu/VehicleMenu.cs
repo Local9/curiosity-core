@@ -40,15 +40,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             "euros",
             "futo2",
             "calico",
-            "sultan3"
+            "sultan3",
+            "cypher",
+            "previon"
         };
 
         public UIMenu CreateMenu(UIMenu menu)
         {
             foreach (string hash in driftVehicles)
             {
-                int vehHash = GetHashKey(hash);
-                driftVehicleHashes.Add(vehHash);
+                int sultanRS = GetHashKey(hash);
+                driftVehicleHashes.Add(sultanRS);
             }
 
             menuVehicleDoors = InteractionMenu.MenuPool.AddSubMenu(menu, "Doors");
