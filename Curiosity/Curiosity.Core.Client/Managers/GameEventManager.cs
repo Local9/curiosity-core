@@ -136,13 +136,10 @@ namespace Curiosity.Core.Client.Managers
 
                     vehicleManager.InitialiseVehicleFuel(currentVehicle);
 
-                    // run skylift tick
                     if (vehicle.Model.Hash == (int)VehicleHash.Skylift)
                     {
                         vehicleManager.InitialiseSkylift(currentVehicle);
                     }
-
-                    // emergencyVehicleSirenManager.EnableSirenManager(vehicle);
                 }
 
                 if (vehicle.AttachedBlip is not null)
