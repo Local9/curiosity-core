@@ -2,12 +2,7 @@
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Managers.UI;
-using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Models.Shop;
 using NativeUI;
-using System;
-using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu

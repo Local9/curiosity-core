@@ -5,13 +5,9 @@ using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Extensions.Native;
 using Curiosity.Core.Client.Interface;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
