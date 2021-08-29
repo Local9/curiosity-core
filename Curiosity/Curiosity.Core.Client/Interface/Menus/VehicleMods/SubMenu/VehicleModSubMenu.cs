@@ -54,7 +54,6 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
                 if (newMenu == menu && state == MenuState.ChangeBackward)
                 {
-                    menu.CurrentSelection = baseMenuIndex;
                     PluginManager.Instance.DetachTickHandler(TestHorn);
                 }
             };
