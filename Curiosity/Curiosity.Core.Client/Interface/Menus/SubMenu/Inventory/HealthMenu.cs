@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
         UIMenu baseMenu;
 
         UIMenuItem miLightKit = new UIMenuItem("Light Kit", "Use a Light Kit to refill your health bar.");
-        UIMenuItem miMediumKit = new UIMenuItem("Meduim Kit", "Use a Meduim Kit to refill your health bar.");
+        UIMenuItem miMediumKit = new UIMenuItem("Medium Kit", "Use a Medium Kit to refill your health bar.");
         UIMenuItem miLargeKit = new UIMenuItem("Large Kit", "Use a Large Kit to refill your health bar.");
 
         EventSystem EventSystem => EventSystem.GetModule();
