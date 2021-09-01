@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Managers.Supporter;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;

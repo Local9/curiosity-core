@@ -8,7 +8,6 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Managers.Supporter;
 using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
@@ -712,11 +711,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                         {
                             NotificationManager.GetModule().Error($"Missing arguments");
                             return;
-                        }
-
-                        if (arguments[1] == "compDebug") // /d ui ped compDebug
-                        {
-                            CompanionManager.GetModule().ToggleDebugUI();
                         }
                     }
                 }
