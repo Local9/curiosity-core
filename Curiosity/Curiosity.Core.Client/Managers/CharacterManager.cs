@@ -199,17 +199,8 @@ namespace Curiosity.Core.Client.Managers
             if (health > API.GetEntityMaxHealth(ped))
                 health = API.GetEntityMaxHealth(ped);
 
-            if (character.IsDead && player.Character.MarkedAsRegistered)
-            {
-                Cache.PlayerPed.Health = 0;
-                Cache.PlayerPed.Armor = 0;
-                Cache.PlayerPed.Kill();
-            }
-            else
-            {
-                Cache.PlayerPed.Health = health;
-                Cache.PlayerPed.Armor = character.Armor;
-            }
+            Cache.PlayerPed.Health = health;
+            Cache.PlayerPed.Armor = character.Armor;
 
             Cache.PlayerPed.FadeOut();
 
