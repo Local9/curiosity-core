@@ -106,7 +106,7 @@ namespace Curiosity.Template.Client.Environment
                     Vector3 spawnPosition = Position.AsVector();
 
                     // Create ped but not over network, don't need duplications
-                    int ped = API.CreatePed((int)PedTypes.PED_TYPE_MISSION, (uint)_model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Position.H, false, true);
+                    int ped = API.CreatePed((int)PedType.PED_TYPE_MISSION, (uint)_model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Position.H, false, true);
                     _ped = new Ped(ped);
 
                     API.PlaceObjectOnGroundProperly(_ped.Handle);

@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Systems.Library.Enums
 {
-    public enum PedTypes
+    public enum PedType
     {
         PED_TYPE_PLAYER_0,// michael  
         PED_TYPE_PLAYER_1,// franklin  

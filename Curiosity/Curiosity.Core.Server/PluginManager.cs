@@ -296,6 +296,7 @@ namespace Curiosity.Core.Server
             var commands = new CommandFramework();
             commands.Bind(typeof(ServerCommands));
             commands.Bind(typeof(StaffCommands));
+            commands.Bind(typeof(PedCommands));
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 

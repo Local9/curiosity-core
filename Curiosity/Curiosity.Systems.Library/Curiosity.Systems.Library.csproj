@@ -126,7 +126,6 @@
     <Compile Include="Threading\ThreadLock.cs" />
     <Compile Include="Utils\Encode.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\PedType.cs" />
     <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -71,6 +71,7 @@
     <Compile Include="Commands\CommandFramework.cs" />
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\Impl\PedCommands.cs" />
     <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="Commands\Impl\ServerCommands.cs" />
     <Compile Include="Database\MySqlDatabase.cs" />
