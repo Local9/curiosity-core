@@ -31,6 +31,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         public UIMenu CreateMenu(UIMenu menu)
         {
             menuCheckboxEnableCallouts = new UIMenuCheckboxItem("Callouts", MissionDirectorManager.MissionDirectorState, "If enabled ~b~Dispatch A.I.~s~ will assign random callouts.");
+            menuCheckboxEnableCallouts.Enabled = false;
+            menuCheckboxEnableCallouts.Description = "Disabled until the system is refactored to support a new method.";
             menu.AddItem(menuCheckboxEnableCallouts);
 
             menuCheckboxEnableNotificationsBackup = new UIMenuCheckboxItem("Back Up Notifications", notificationBackup, "Show Notifications when a player is requesting back up");

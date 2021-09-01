@@ -246,11 +246,11 @@ namespace Curiosity.Core.Client.Interface.Menus
             if (supporterButton.Enabled)
                 supporterButton.Description = "Supporter Menu";
 
-            UIMenuItem jobButton = menuJobs.ParentItem;
-            jobButton.Enabled = Cache.Player.User.IsStaff;
-            supporterButton.Description = "Menu is currently disabled while its in development.";
-            if (supporterButton.Enabled)
-                supporterButton.Description = "Access to the jobs menu.";
+            //UIMenuItem jobButton = menuJobs.ParentItem;
+            //jobButton.Enabled = Cache.Player.User.IsStaff;
+            //jobButton.Description = "Menu is currently disabled while its in development.";
+            //if (jobButton.Enabled)
+            //    jobButton.Description = "Access to the jobs menu.";
         }
 
         private async Task OnMenuDisplay()
