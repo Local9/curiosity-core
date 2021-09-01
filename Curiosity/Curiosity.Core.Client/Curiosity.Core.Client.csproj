@@ -101,7 +101,6 @@
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
-    <Compile Include="Managers\Supporter\CompanionManager.cs" />
     <Compile Include="Managers\UI\DamageEffectManager.cs" />
     <Compile Include="Managers\UI\GarageVehicleManager.cs" />
     <Compile Include="Managers\LevelManager.cs" />
@@ -196,6 +195,8 @@
       <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Managers\Supporter\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

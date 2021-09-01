@@ -21,12 +21,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
          * */
 
         UIMenuListItem uiLstPlayerModels;
-        UIMenuListItem uiLstCompanions;
 
-        UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companion");
         UIMenuItem uiItemResetCharacter = new UIMenuItem("Reset Character");
 
-        List<Companion> companions;
         List<SupporterModel> playerModels;
 
         public void CreateMenu(UIMenu menu)
@@ -34,7 +31,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             baseMenu = menu;
             ConfigurationManager configuration = ConfigurationManager.GetModule();
 
-            companions = configuration.SupporterCompanions();
             playerModels = configuration.SupporterModels();
 
             if (playerModels is not null)
@@ -44,25 +40,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 baseMenu.AddItem(uiItemResetCharacter);
             }
 
-            if (companions is not null)
-            {
-                uiLstCompanions = new UIMenuListItem("Companion", companions.Select(x => x.Label).ToList<dynamic>(), 0);
-                baseMenu.AddItem(uiLstCompanions);
-                baseMenu.AddItem(uiItemRemoveCompanion);
-            }
-
             baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
             baseMenu.OnListSelect += BaseMenu_OnListSelect;
-            baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
-        }
-
-        private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
-        {
-            uiLstCompanions.Enabled = Cache.Player.User.IsStaff;
-            uiItemRemoveCompanion.Enabled = Cache.Player.User.IsStaff;
-            uiLstCompanions.Description = "Currently Disabled due to online issues";
-            if (uiLstCompanions.Enabled)
-                uiLstCompanions.Description = "Able to create a companion.";
         }
 
         private async void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -82,10 +61,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 Cache.Player.Character.Load();
                 await BaseScript.Delay(500); // JIC
                 await Cache.PlayerPed.FadeIn();
-            }
-            else if (selectedItem == uiItemRemoveCompanion)
-            {
-                CompanionManager.GetModule().DeleteCurrentCompanion();
             }
 
             selectedItem.Enabled = true;
@@ -133,16 +108,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
                 Game.Player.ChangeModel(model);
             }
-            else if (listItem == uiLstCompanions)
-            {
-                string modelHash = companions[newIndex].Hash;
-                CompanionManager.GetModule().CreateCompanion(modelHash);
-                goto Exit;
-            }
 
         ExitAndFade:
             await Cache.PlayerPed.FadeIn();
-        Exit:
             listItem.Enabled = true;
         }
     }

@@ -97,11 +97,11 @@ namespace Curiosity.Core.Client.Utils
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
 
-                    //if (ped.Fx.IsInGroup)
-                    //{
-                    //    list["GroupId"] = $"{ped.Fx.PedGroup.Handle}";
-                    //    list["Player GroupID"] = $"{Cache.PlayerPed.PedGroup.Handle}";
-                    //}
+                    if (ped.IsInGroup)
+                    {
+                        list["GroupId"] = $"{ped.PedGroup.Handle}";
+                        list["Player GroupID"] = $"{Cache.PlayerPed.PedGroup.Handle}";
+                    }
                 }
                 else
                 {

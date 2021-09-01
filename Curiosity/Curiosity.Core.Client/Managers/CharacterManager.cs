@@ -311,7 +311,7 @@ namespace Curiosity.Core.Client.Managers
 
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
 
-            CreatePlayerGroup();
+            // CreatePlayerGroup();
 
             Cache.UpdatePedId(true);
         }
