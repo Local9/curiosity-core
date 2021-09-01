@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="Classes\GangMember.cs" />
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="ClientEvents\EventSystem.cs" />

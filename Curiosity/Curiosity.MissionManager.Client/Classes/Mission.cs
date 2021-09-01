@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Classes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
@@ -560,8 +561,6 @@ namespace Curiosity.MissionManager.Client
                 }
                 await BaseScript.Delay(0);
 
-                fxPed = new CitizenFX.Core.Ped(pedId);
-
                 fxPed.FadeIn();
 
                 Logger.Debug(fxPed.ToString());
@@ -611,7 +610,6 @@ namespace Curiosity.MissionManager.Client
 
                 API.SetNetworkIdExistsOnAllMachines(fxPed.NetworkId, true);
                 API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
-                API.SetVehicleHasBeenOwnedByPlayer(fxPed.Handle, true);
 
                 // await fxPed.FadeOut();
                 int pedNetworkId = fxPed.NetworkId;
@@ -634,15 +632,83 @@ namespace Curiosity.MissionManager.Client
                 }
                 await BaseScript.Delay(0);
 
-                fxPed = new CitizenFX.Core.Ped(pedId);
-
                 fxPed.FadeIn();
 
                 Logger.Debug(fxPed.ToString());
                 var ped = new Ped(fxPed);
                 return ped;
             }
-            return null;                
+            return null;
+        }
+
+        public async Task<GangMember> PedSpawnGangMember(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE)
+        {
+            Vector3 spawnPosition = position;
+
+            if (sidewalk)
+            {
+                spawnPosition = position.Sidewalk();
+            }
+            else
+            {
+                float groundZ = position.Z;
+                Vector3 normal = Vector3.Zero;
+
+                if (API.GetNextWeatherType() == (int)WeatherTypeHash.Christmas)
+                    position.Z += 1f;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+                {
+                    spawnPosition.Z = groundZ;
+                }
+            }
+
+            await model.Request(10000);
+
+            while (!model.IsLoaded)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
+            bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
+
+            if (requestLogged)
+            {
+                CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
+
+                API.SetNetworkIdExistsOnAllMachines(fxPed.NetworkId, true);
+                API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
+
+                // await fxPed.FadeOut();
+                int pedNetworkId = fxPed.NetworkId;
+                await BaseScript.Delay(100);
+                int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+                API.NetworkRequestControlOfNetworkId(pedNetworkId);
+                await BaseScript.Delay(0);
+
+                Logger.Debug($"Ped NetworkID: {pedNetworkId}");
+                await EventSystem.GetModule().Request<int>("entity:setup:ped", fxPed.NetworkId);
+
+                model.MarkAsNoLongerNeeded();
+
+                await BaseScript.Delay(0);
+
+                while (!API.NetworkHasControlOfEntity(pedId))
+                {
+                    await BaseScript.Delay(0);
+                    API.NetworkRequestControlOfEntity(pedId);
+                }
+                await BaseScript.Delay(0);
+
+                fxPed.FadeIn();
+
+                Logger.Debug(fxPed.ToString());
+                var ped = new GangMember(fxPed);
+                return ped;
+            }
+            return null;
         }
 
         public async Task<Vehicle> VehicleSpawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true)
