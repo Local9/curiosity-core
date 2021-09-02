@@ -95,7 +95,7 @@ namespace Curiosity.LifeV.Bot.EventHandler
                     if (user != null)
                     {
                         user.SendMessageAsync(embed: builder.Build());
-                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"User {user.Username}, Role Change {donatorRole}, DiscordID: {user.Id}");
+                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm")}] User {user.Username}, Role Change {donatorRole}, DiscordID: {user.Id}");
                     }
                 }
                 
