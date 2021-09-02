@@ -85,7 +85,6 @@ namespace Curiosity.LifeV.Bot.EventHandler
                     else
                     {
                         builder.AddField("Supporter Level", $"We're sorry to see you go, if there is anything you'd like use to improve please let us know on our forums. We hope to see you return.");
-                        builder.AddField("Temp Message", $"::1 knows about the current issues with delays and has been working on a new framework, please keep your eye out for more information in the future.");
                     }
 
                     builder.WithColor(hasDonatorRole ? Color.Green : Color.Blue)
@@ -94,7 +93,10 @@ namespace Curiosity.LifeV.Bot.EventHandler
 
                     SocketGuildUser user = _client.GetGuild(_guildId).GetUser(after.Id);
                     if (user != null)
+                    {
                         user.SendMessageAsync(embed: builder.Build());
+                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"User {user.Username}, Role Change {donatorRole}, DiscordID: {user.Id}");
+                    }
                 }
                 
             }
