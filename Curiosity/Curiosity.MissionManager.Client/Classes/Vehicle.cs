@@ -65,7 +65,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
-        public bool IsMarked
+        public bool IsTrafficStopMarked
         {
             get
             {
@@ -404,13 +404,13 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 if (Cache.PlayerPed.CurrentVehicle == PlayerManager.GetModule().PersonalVehicle && Cache.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Cache.PlayerPed.IsInVehicle())
                 {
-                    if (Utility.RANDOM.Bool(0.10f) && !IsMarked && Fx.Driver.Exists())
+                    if (Utility.RANDOM.Bool(0.10f) && !IsTrafficStopMarked && Fx.Driver.Exists())
                     {
                         IsTrafficStopAllowed = true;
                         AttachSuspectBlip();
                     }
 
-                    IsMarked = true;
+                    IsTrafficStopMarked = true;
 
                     CitizenFX.Core.Vehicle playerVeh = PlayerManager.GetModule().PersonalVehicle;
 
