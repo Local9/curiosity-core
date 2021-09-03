@@ -43,6 +43,7 @@ namespace Curiosity.Core.Server.Managers
                             EventSystem.GetModule().SendAll("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
                             break;
                         case "global":
+                        case "international":
                             playersInSameWorld.ForEach(u =>
                             {
                                 u.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
