@@ -65,6 +65,54 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        public bool IsMarked
+        {
+            get
+            {
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, false);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
+            }
+            set
+            {
+                Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, value);
+            }
+        }
+
+        public bool IsTrafficStopAllowed
+        {
+            get
+            {
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false, true);
+                    Decorators.Set(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, false);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
+            }
+            set
+            {
+                Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, value, true);
+                Decorators.Set(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, value);
+            }
+        }
+
         public bool IsTowable
         {
             get
@@ -356,21 +404,17 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 if (Cache.PlayerPed.CurrentVehicle == PlayerManager.GetModule().PersonalVehicle && Cache.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Cache.PlayerPed.IsInVehicle())
                 {
-                    bool isMarked = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED) ?? false;
-
-                    if (Utility.RANDOM.Bool(0.10f) && !isMarked && Fx.Driver.Exists())
+                    if (Utility.RANDOM.Bool(0.10f) && !IsMarked && Fx.Driver.Exists())
                     {
-                        Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER, true, true);
+                        IsTrafficStopAllowed = true;
                         AttachSuspectBlip();
                     }
 
-                    Fx.State.Set(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED, true, true);
+                    IsMarked = true;
 
                     CitizenFX.Core.Vehicle playerVeh = PlayerManager.GetModule().PersonalVehicle;
 
-                    bool isPullover = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER) ?? false;
-
-                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null && isPullover)
+                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null && IsTrafficStopAllowed)
                     {
                         HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
 
