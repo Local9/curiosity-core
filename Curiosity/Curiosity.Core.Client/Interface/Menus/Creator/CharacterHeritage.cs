@@ -59,7 +59,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             ResembalanceBlend = (100 - Resemblance.Value) / 100f;
             SkinToneBlend = (100 - SkinTone.Value) / 100f;
 
-            UpdatePedBlendData();
+            UpdatePedBlendData(true);
 
             menu.AddItem(Mothers);
             menu.AddItem(Fathers);
@@ -232,9 +232,16 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             Parents.Add("Misty", 45);
         }
 
-        public void UpdatePedBlendData()
+        public void UpdatePedBlendData(bool checkExisting = false)
         {
             // Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
+            if (checkExisting)
+            {
+                FatherId = Cache.Character.Heritage.FatherId;
+                MotherId = Cache.Character.Heritage.MotherId;
+                ResembalanceBlend = Cache.Character.Heritage.BlendApperance;
+                SkinToneBlend = Cache.Character.Heritage.BlendSkin;
+            }
 
             Cache.Character.Heritage.UpdateBlendData(FatherId, MotherId, ResembalanceBlend, SkinToneBlend);
             API.SetPedHeadBlendData(Cache.Entity.Id, FatherId, MotherId, 0, FatherId, MotherId, 0, ResembalanceBlend, SkinToneBlend, 0f, false);
