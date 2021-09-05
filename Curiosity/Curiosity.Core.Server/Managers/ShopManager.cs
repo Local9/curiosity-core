@@ -22,6 +22,21 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
+            EventSystem.GetModule().Attach("shop:get:stock", new AsyncEventCallback(async metadata =>
+            {
+                List<ShopStock> shopStocks = new List<ShopStock>();
+                try
+                {
+                    shopStocks = await Database.Store.ShopDatabase.GetShopStock();
+                    return shopStocks;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "shop:get:stock");
+                    return shopStocks;
+                }
+            }));
+
             EventSystem.GetModule().Attach("shop:get:categories", new AsyncEventCallback(async metadata =>
             {
                 try

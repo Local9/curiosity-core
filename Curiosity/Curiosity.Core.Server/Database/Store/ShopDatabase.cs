@@ -389,6 +389,46 @@ namespace Curiosity.Core.Server.Database.Store
             return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }
 
+        internal static async Task<List<ShopStock>> GetShopStock()
+        {
+            //Dictionary<string, object> myParams = new Dictionary<string, object>()
+            //{
+            //    { "@ShopItemId", shopItemId },
+            //    { "@Amount", amount }
+            //};
+
+            // When individual stores exist this will then get changed
+
+            string myQuery = "CALL selShopStockValues();";
+
+            List<ShopStock> lst = new List<ShopStock>();
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                {
+                    return lst;
+                }
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    ShopStock item = new ShopStock();
+                    item.ShopCategory = $"{kv["ShopCategory"]}";
+                    item.ItemCategory = $"{kv["ItemCategory"]}";
+                    item.Label = $"{kv["Label"]}";
+                    item.NumberInStock = kv["NumberInStock"].ToInt();
+                    item.IsLow = kv["IsLow"].ToBoolean();
+                    item.IsOverStocked = kv["IsOverStocked"].ToBoolean();
+
+                    lst.Add(item);
+                }
+
+                return lst;
+            }
+        }
+
         //public static async Task<SqlResult> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
         //{
         //    SqlResult rtValue = new SqlResult();

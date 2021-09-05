@@ -116,6 +116,7 @@
     <Compile Include="Models\CharacterSkill.cs" />
     <Compile Include="Models\Shop\ShopCategory.cs" />
     <Compile Include="Models\Shop\ShopCategoryItem.cs" />
+    <Compile Include="Models\Shop\ShopStock.cs" />
     <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Models\VehicleItem.cs" />
