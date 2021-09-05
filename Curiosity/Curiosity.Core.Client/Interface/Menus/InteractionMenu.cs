@@ -149,7 +149,7 @@ namespace Curiosity.Core.Client.Interface.Menus
                 }
 
                 Creator.CreatorMenus creatorMenus = new Creator.CreatorMenus();
-                creatorMenus.CreateMenu(true);
+                creatorMenus.CreateMenu(true, false);
                 MenuPool.CloseAllMenus();
             }
         }

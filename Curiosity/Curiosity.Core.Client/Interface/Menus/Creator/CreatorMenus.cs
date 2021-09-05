@@ -46,7 +46,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
         private CharacterProps _CharacterProps = new CharacterProps();
 
-        internal async void CreateMenu(bool open = false)
+        internal async void CreateMenu(bool open = false, bool canChangeParents = true)
         {
             // TICKS & SETUP
             _MenuPool = new MenuPool();
@@ -55,6 +55,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             //UIMenu
             menuMain = new UIMenu(Game.Player.Name, "Player Creator");
             _MenuPool.Add(menuMain);
+            
+            menuMain.Clear();
 
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
@@ -73,9 +75,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             mLstGender = new UIMenuListItem("Gender", Genders, 0);
             menuMain.AddItem(mLstGender);
-                
-            menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
-            _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+
+            if (canChangeParents)
+            {
+                menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
+                _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+            }
 
             menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
             _CharacterFeatures.CreateMenu(menuCharacterFeatures);

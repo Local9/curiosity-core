@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using NativeUI;
 using System.Collections.Generic;
@@ -7,6 +8,17 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {
+    class ParentFace
+    {
+        public string Parent;
+        public int ParentId;
+
+        public override string ToString()
+        {
+            return Parent;
+        }
+    }
+
     class CharacterHeritage
     {
         private UIMenuHeritageWindow HeritageWindow;
@@ -39,30 +51,33 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnSliderChange += Menu_OnSliderChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
-            if (Cache.Character is not null)
-            {
-                if (Cache.Character.Heritage is not null)
-                {
-                    MenuMotherIndex = Cache.Character.Heritage.MotherId;
-                    MenuFatherIndex = Cache.Character.Heritage.FatherId;
-                }
-                else
-                {
-                    MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
-                    MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
-                }
-            }
-            else
-            {
-                MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
-                MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
-            }
+            //if (Cache.Character is not null)
+            //{
+            //    if (Cache.Character.Heritage is not null)
+            //    {
+            //        MenuMotherIndex = Cache.Character.Heritage.MotherId;
+            //        MenuFatherIndex = Cache.Character.Heritage.FatherId;
 
-            if (MenuMotherIndex < 0)
-                MenuMotherIndex = 0;
+            //        foreach(KeyValuePair<string, int> keyValuePair in Parents)
+            //        {
+            //            if (keyValuePair.Value == MenuMotherIndex)
+            //            {
+            //                MenuMotherIndex = MotherFaces.
+            //            }
+            //        }
 
-            if (MenuFatherIndex < 0)
-                MenuFatherIndex = 0;
+            //    }
+            //    else
+            //    {
+            //        MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
+            //        MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
+            //    }
+            //}
+            //else
+            //{
+            //    MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
+            //    MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
+            //}
 
             HeritageWindow = new UIMenuHeritageWindow(MenuMotherIndex, MenuFatherIndex);
             menu.AddWindow(HeritageWindow);
