@@ -58,6 +58,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
             }
 
+            if (MenuMotherIndex < 0)
+                MenuMotherIndex = 0;
+
+            if (MenuFatherIndex < 0)
+                MenuFatherIndex = 0;
+
             HeritageWindow = new UIMenuHeritageWindow(MenuMotherIndex, MenuFatherIndex);
             menu.AddWindow(HeritageWindow);
 
