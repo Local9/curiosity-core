@@ -75,7 +75,7 @@ namespace Curiosity.Core.Client.Managers
                 return JsonConvert.SerializeObject(result);
             }));
 
-            Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("GetShopStock", new AsyncEventCallback(async metadata =>
             {
                 if (isProcessing)
                 {
