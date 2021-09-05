@@ -70,40 +70,24 @@ namespace Curiosity.Core.Client.Managers
 
                 List<CuriosityShopItem> result = await EventSystem.Request<List<CuriosityShopItem>>("shop:get:items", categoryId);
 
-                //var items = new List<dynamic>();
-
-                //if (result is not null)
-                //{
-                //    foreach (CuriosityShopItem storeItem in result)
-                //    {
-                //        var i = new
-                //        {
-                //            shopItemId = storeItem?.ShopItemId,
-                //            itemId = storeItem?.ItemId,
-                //            label = storeItem?.Label,
-                //            description = storeItem?.Description,
-                //            buyValue = storeItem?.BuyValue,
-                //            buyBackValue = storeItem?.BuyBackValue,
-                //            numberInStock = storeItem?.NumberInStock,
-                //            itemPurchased = storeItem?.ItemPurchased,
-                //            numberOwned = storeItem?.NumberOwned,
-                //            isStockManaged = storeItem?.IsStockManaged,
-                //            maximumAllowed = storeItem?.MaximumAllowed,
-                //            hasRoleRequirement = storeItem?.HasRoleRequirement,
-                //            numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
-                //            numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
-                //            imageUri = storeItem?.ImageUri,
-                //            spawnTypeId = (int)storeItem.SpawnTypeId,
-                //            originalValue = storeItem?.OriginalValue
-                //        };
-
-                //        items.Add(i);
-                //    }
-                //}
-
                 isProcessing = false;
 
-                //return items;
+                return JsonConvert.SerializeObject(result);
+            }));
+
+            Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
+            {
+                if (isProcessing)
+                {
+                    NotificationManager.GetModule().Warn($"You have a request pending.");
+                    return new List<dynamic>();
+                }
+
+                isProcessing = true;
+
+                List<ShopStock> result = await EventSystem.Request<List<ShopStock>>("shop:get:stock");
+
+                isProcessing = false;
 
                 return JsonConvert.SerializeObject(result);
             }));
