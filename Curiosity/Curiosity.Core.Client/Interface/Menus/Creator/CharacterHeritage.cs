@@ -4,18 +4,27 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using NativeUI;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {
-    class ParentFace
+    class Parent
     {
-        public string Parent;
+        public string Name;
         public int ParentId;
+        public bool IsFather;
+
+        public Parent(string name, int id, bool isFather)
+        {
+            Name = name;
+            ParentId = id;
+            IsFather = isFather;
+        }
 
         public override string ToString()
         {
-            return Parent;
+            return Name;
         }
     }
 
@@ -36,17 +45,60 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private float ResembalanceBlend = .5f;
         private float SkinToneBlend = .5f;
 
-        private Dictionary<string, int> Parents = new Dictionary<string, int>();
+        List<dynamic> Parents = new List<dynamic>() {
+            new Parent("Benjamin", 0, true),
+            new Parent("Daniel", 1, true),
+            new Parent("Joshua", 2, true),
+            new Parent("Noah", 3, true),
+            new Parent("Andrew", 4, true),
+            new Parent("Joan", 5, true),
+            new Parent("Alex", 6, true),
+            new Parent("Isaac", 7, true),
+            new Parent("Evan", 8, true),
+            new Parent("Ethan", 9, true),
+            new Parent("Vincent", 10, true),
+            new Parent("Angel", 11, true),
+            new Parent("Diego", 12, true),
+            new Parent("Adrian", 13, true),
+            new Parent("Gabriel", 14, true),
+            new Parent("Michael", 15, true),
+            new Parent("Santiago", 16, true),
+            new Parent("Kevin", 17, true),
+            new Parent("Louis", 18, true),
+            new Parent("Samuel", 19, true),
+            new Parent("Anthony", 20, true),
+            new Parent("Claude", 42, true),
+            new Parent("Niko", 43, true),
+            new Parent("John", 44, true),
+            new Parent("Hannah", 21, false),
+            new Parent("Audrey", 22, false),
+            new Parent("Jasmine", 23, false),
+            new Parent("Giselle", 24, false),
+            new Parent("Amelia", 25, false),
+            new Parent("Isabella", 26, false),
+            new Parent("Zoe", 27, false),
+            new Parent("Ava", 28, false),
+            new Parent("Camilla", 29, false),
+            new Parent("Violet", 30, false),
+            new Parent("Sophia", 31, false),
+            new Parent("Eveline", 32, false),
+            new Parent("Nicole", 33, false),
+            new Parent("Ashley", 34, false),
+            new Parent("Grace", 35, false),
+            new Parent("Brianna", 36, false),
+            new Parent("Natalie", 37, false),
+            new Parent("Olivia", 38, false),
+            new Parent("Elizabeth", 39, false),
+            new Parent("Charlotte", 40, false),
+            new Parent("Emma", 41, false),
+            new Parent("Misty", 45, false),
+        };
 
-        // 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 45
-        List<dynamic> MotherFaces = new List<dynamic>() { "Hannah", "Audrey", "Jasmine", "Giselle", "Amelia", "Isabella", "Zoe", "Ava", "Camilla", "Violet", "Sophia", "Eveline", "Nicole", "Ashley", "Grace", "Brianna", "Natalie", "Olivia", "Elizabeth", "Charlotte", "Emma", "Misty" };
-        // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 42, 43, 44
-        List<dynamic> FatherFaces = new List<dynamic>() { "Benjamin", "Daniel", "Joshua", "Noah", "Andrew", "Joan", "Alex", "Isaac", "Evan", "Ethan", "Vincent", "Angel", "Diego", "Adrian", "Gabriel", "Michael", "Santiago", "Kevin", "Louis", "Samuel", "Anthony", "Claude", "Niko", "John" };
+        List<dynamic> MothersList => Parents.Where(x => !x.IsFather).ToList();
+        List<dynamic> FathersList => Parents.Where(x => x.IsFather).ToList();
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            SetupParents();
-
             menu.OnListChange += Menu_OnListChange;
             menu.OnSliderChange += Menu_OnSliderChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
@@ -82,11 +134,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             HeritageWindow = new UIMenuHeritageWindow(MenuMotherIndex, MenuFatherIndex);
             menu.AddWindow(HeritageWindow);
 
-            Mothers = new UIMenuListItem("Mother", MotherFaces, MenuMotherIndex);
-            Fathers = new UIMenuListItem("Father", FatherFaces, MenuFatherIndex);
-
-            MotherId = Parents[$"{MotherFaces[MenuMotherIndex]}"];
-            FatherId = Parents[$"{FatherFaces[MenuFatherIndex]}"];
+            Mothers = new UIMenuListItem("Mother", MothersList, MenuMotherIndex);
+            Fathers = new UIMenuListItem("Father", FathersList, MenuFatherIndex);
 
             Resemblance = new UIMenuSliderHeritageItem("Resemblance", "", true);
             Resemblance.Value = PluginManager.Rand.Next(100);
@@ -167,8 +216,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void Randomise()
         {
-            MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
-            MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
+            MenuMotherIndex = PluginManager.Rand.Next(MothersList.Count);
+            MenuFatherIndex = PluginManager.Rand.Next(FathersList.Count);
 
             MotherId = MenuMotherIndex;
             FatherId = MenuFatherIndex;
@@ -199,74 +248,22 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            var value = listItem.Items[newIndex];
-
-            int index = Parents[$"{value}"];
+            Parent parent = (Parent)listItem.Items[newIndex];
 
             if (listItem == Mothers)
             {
-                MotherId = index;
+                MotherId = parent.ParentId;
                 MenuMotherIndex = newIndex;
             }
 
             if (listItem == Fathers)
             {
-                FatherId = index;
+                FatherId = parent.ParentId;
                 MenuFatherIndex = newIndex;
             }
 
             HeritageWindow.Index(MenuMotherIndex, MenuFatherIndex);
             UpdatePedBlendData();
-        }
-
-        public void SetupParents()
-        {
-            Parents.Add("Benjamin", 0);
-            Parents.Add("Daniel", 1);
-            Parents.Add("Joshua", 2);
-            Parents.Add("Noah", 3);
-            Parents.Add("Andrew", 4);
-            Parents.Add("Joan", 5);
-            Parents.Add("Alex", 6);
-            Parents.Add("Isaac", 7);
-            Parents.Add("Evan", 8);
-            Parents.Add("Ethan", 9);
-            Parents.Add("Vincent", 10);
-            Parents.Add("Angel", 11);
-            Parents.Add("Diego", 12);
-            Parents.Add("Adrian", 13);
-            Parents.Add("Gabriel", 14);
-            Parents.Add("Michael", 15);
-            Parents.Add("Santiago", 16);
-            Parents.Add("Kevin", 17);
-            Parents.Add("Louis", 18);
-            Parents.Add("Samuel", 19);
-            Parents.Add("Anthony", 20);
-            Parents.Add("Hannah", 21);
-            Parents.Add("Audrey", 22);
-            Parents.Add("Jasmine", 23);
-            Parents.Add("Giselle", 24);
-            Parents.Add("Amelia", 25);
-            Parents.Add("Isabella", 26);
-            Parents.Add("Zoe", 27);
-            Parents.Add("Ava", 28);
-            Parents.Add("Camilla", 29);
-            Parents.Add("Violet", 30);
-            Parents.Add("Sophia", 31);
-            Parents.Add("Eveline", 32);
-            Parents.Add("Nicole", 33);
-            Parents.Add("Ashley", 34);
-            Parents.Add("Grace", 35);
-            Parents.Add("Brianna", 36);
-            Parents.Add("Natalie", 37);
-            Parents.Add("Olivia", 38);
-            Parents.Add("Elizabeth", 39);
-            Parents.Add("Charlotte", 40);
-            Parents.Add("Emma", 41);
-            Parents.Add("Claude", 42);
-            Parents.Add("Niko", 43);
-            Parents.Add("John", 44);
-            Parents.Add("Misty", 45);
         }
 
         public void UpdatePedBlendData(bool checkExisting = false)
