@@ -103,33 +103,41 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnSliderChange += Menu_OnSliderChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
-            //if (Cache.Character is not null)
-            //{
-            //    if (Cache.Character.Heritage is not null)
-            //    {
-            //        MenuMotherIndex = Cache.Character.Heritage.MotherId;
-            //        MenuFatherIndex = Cache.Character.Heritage.FatherId;
+            if (Cache.Character is not null)
+            {
+                if (Cache.Character.Heritage is not null)
+                {
+                    for (int i = 0; i < FathersList.Count; i++)
+                    {
+                        Parent parent = FathersList[i];
+                        if (parent.ParentId == Cache.Character.Heritage.FatherId)
+                        {
+                            MenuFatherIndex = i;
+                            break;
+                        }
+                    }
 
-            //        foreach(KeyValuePair<string, int> keyValuePair in Parents)
-            //        {
-            //            if (keyValuePair.Value == MenuMotherIndex)
-            //            {
-            //                MenuMotherIndex = MotherFaces.
-            //            }
-            //        }
-
-            //    }
-            //    else
-            //    {
-            //        MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
-            //        MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
-            //    }
-            //}
-            //else
-            //{
-            //    MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
-            //    MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
-            //}
+                    for (int i = 0; i < MothersList.Count; i++)
+                    {
+                        Parent parent = MothersList[i];
+                        if (parent.ParentId == Cache.Character.Heritage.MotherId)
+                        {
+                            MenuMotherIndex = i;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    MenuMotherIndex = PluginManager.Rand.Next(MothersList.Count);
+                    MenuFatherIndex = PluginManager.Rand.Next(FathersList.Count);
+                }
+            }
+            else
+            {
+                MenuMotherIndex = PluginManager.Rand.Next(MothersList.Count);
+                MenuFatherIndex = PluginManager.Rand.Next(FathersList.Count);
+            }
 
             HeritageWindow = new UIMenuHeritageWindow(MenuMotherIndex, MenuFatherIndex);
             menu.AddWindow(HeritageWindow);
