@@ -4,6 +4,7 @@ using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Database.Store
@@ -92,8 +93,16 @@ namespace Curiosity.Core.Server.Database.Store
 
                     foreach (Dictionary<string, object> kv in keyValuePairs)
                     {
-                        characterSkill.SkillExperience = kv["SkillExperience"].ToLong();
-                        characterSkill.KnowledgeExperience = kv["KnowledgeExperience"].ToLong();
+                        string skillExpStr = $"{kv["SkillExperience"]}";
+                        long skillExp = -1;
+                        long.TryParse(skillExpStr, out skillExp);
+
+                        string knowledgeExpStr = $"{kv["KnowledgeExperience"]}";
+                        long knowledgeExp = -1;
+                        long.TryParse(knowledgeExpStr, out knowledgeExp);
+
+                        characterSkill.SkillExperience = skillExp;
+                        characterSkill.KnowledgeExperience = knowledgeExp;
                     }
                 }
 
