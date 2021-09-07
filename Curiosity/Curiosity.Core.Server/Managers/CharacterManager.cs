@@ -35,6 +35,19 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            EventSystem.GetModule().Attach("character:inventory:items:all", new AsyncEventCallback(async metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                if (player is null) return null;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                List<CharacterItem> items = await Database.Store.CharacterDatabase.GetAllItems(curiosityUser.Character.CharacterId);
+
+                return items;
+            }));
+
             EventSystem.GetModule().Attach("character:inventory:armor", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
