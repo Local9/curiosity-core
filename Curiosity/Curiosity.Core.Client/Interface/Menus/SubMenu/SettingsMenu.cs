@@ -21,6 +21,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         UIMenuCheckboxItem miDevEnableGameEventLogger;
         UIMenuCheckboxItem miDevEnableDebugLog;
+        UIMenuCheckboxItem miDevEnableDebugTimeLog;
 
         PlayerNameManager PlayerNameManager = PlayerNameManager.GetModule();
 
@@ -76,6 +77,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 Logger.IsDebugEnabled = Checked;
             }
 
+            if (miDevEnableDebugTimeLog is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableDebugTimeLog)
+            {
+                Logger.IsDebugTimeEnabled = Checked;
+            }
+
             if (checkboxItem == miShowServerId)
             {
                 PlayerNameManager.ShowServerHandle = Checked;
@@ -128,6 +134,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 {
                     miDevEnableDebugLog = new UIMenuCheckboxItem("Enable Debug", Logger.IsDebugEnabled);
                     menu.AddItem(miDevEnableDebugLog);
+                }
+
+                if (miDevEnableDebugTimeLog is null)
+                {
+                    miDevEnableDebugTimeLog = new UIMenuCheckboxItem("Enable Time Debug", Logger.IsDebugTimeEnabled);
+                    menu.AddItem(miDevEnableDebugTimeLog);
                 }
             }
         }

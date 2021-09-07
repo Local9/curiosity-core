@@ -44,6 +44,10 @@ namespace Curiosity.Core.Client.Managers
             {
                 clientBaseTime = metadata.Find<double>(0);
                 clientTimeOffset = metadata.Find<double>(1);
+
+                if (Logger.IsDebugTimeEnabled)
+                    Logger.Debug($"World Time: clientBaseTime: {clientBaseTime}, clientTimeOffset: {clientTimeOffset} | {hour:00}:{minute:00}");
+
                 return null;
             }));
 
