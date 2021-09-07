@@ -41,7 +41,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             { 
-                var _value = Fx.State.Get(StateBagKey.PED_IS_DRIVER) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IS_DRIVER);
+                var _value = Fx.State.Get(StateBagKey.PED_IS_DRIVER) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IS_DRIVER);
 
                 if (_value == null)
                 {
@@ -66,7 +66,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_FLEE) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FLEE);
+                var _value = Fx.State.Get(StateBagKey.PED_FLEE) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FLEE);
 
                 if (_value == null)
                 {
@@ -91,7 +91,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_SUSPECT) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_SUSPECT);
+                var _value = Fx.State.Get(StateBagKey.PED_SUSPECT) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_SUSPECT);
 
                 if (_value == null)
                 {
@@ -118,7 +118,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_ARRESTABLE) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_ARRESTABLE);
+                var _value = Fx.State.Get(StateBagKey.PED_ARRESTABLE) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_ARRESTABLE);
 
                 if (_value == null)
                 {
@@ -142,7 +142,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_MISSION) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
+                var _value = Fx.State.Get(StateBagKey.PED_MISSION) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
 
                 if (_value == null)
                 {
@@ -172,7 +172,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
+                var _value = Fx.State.Get(StateBagKey.PED_DIALOGUE) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_MISSION);
 
                 if (_value == null)
                 {
@@ -196,7 +196,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IMPORTANT);
+                var _value = Fx.State.Get(StateBagKey.PED_IMPORTANT) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_IMPORTANT);
 
                 if (_value == null)
                 {
@@ -220,7 +220,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HOSTAGE);
+                var _value = Fx.State.Get(StateBagKey.PED_HOSTAGE) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HOSTAGE);
 
                 if (_value == null)
                 {
@@ -244,7 +244,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FRIENDLY);
+                var _value = Fx.State.Get(StateBagKey.PED_FRIENDLY) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_FRIENDLY);
 
                 if (_value == null)
                 {
@@ -277,7 +277,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_RELEASED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_RELEASED);
+                var _value = Fx.State.Get(StateBagKey.PED_RELEASED) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_RELEASED);
 
                 if (_value == null)
                 {
@@ -301,7 +301,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.PED_HANDCUFFED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HANDCUFFED);
+                var _value = Fx.State.Get(StateBagKey.PED_HANDCUFFED) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.PED_HANDCUFFED);
 
                 if (_value == null)
                 {

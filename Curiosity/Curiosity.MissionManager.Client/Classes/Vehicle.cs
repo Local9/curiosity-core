@@ -45,7 +45,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_IMPORTANT) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_IMPORTANT);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_IMPORTANT) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_IMPORTANT);
 
                 if (_value == null)
                 {
@@ -69,7 +69,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_MARKED);
 
                 if (_value == null)
                 {
@@ -93,7 +93,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_PULLOVER);
 
                 if (_value == null)
                 {
@@ -117,7 +117,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_TOW) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_IMPORTANT);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TOW) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_IMPORTANT);
 
                 if (_value == null)
                 {
@@ -143,7 +143,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_SEARCH) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_SEARCH);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_SEARCH) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_SEARCH);
 
                 if (_value == null)
                 {
@@ -167,7 +167,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_MISSION) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_MISSION);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_MISSION) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_MISSION);
 
                 if (_value == null)
                 {
@@ -199,7 +199,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_SPIKE_ALLOWED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_SPIKE_ALLOWED);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_SPIKE_ALLOWED) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_SPIKE_ALLOWED);
 
                 if (_value == null)
                 {
@@ -223,7 +223,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED) || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED);
+                var _value = Fx.State.Get(StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED) ?? false || Decorators.GetBoolean(Fx.Handle, StateBagKey.VEHICLE_TRAFFIC_STOP_IGNORED);
 
                 if (_value == null)
                 {
