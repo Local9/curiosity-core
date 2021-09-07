@@ -144,17 +144,17 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.SetupSuspectLocation:
 
-                    Vector3 spawnLocation = storeClerk.Position.AroundStreet(200f, 400f);
+                    Vector3 spawnLocation = storeClerk.Position.AroundStreet(50f, 120f);
 
                     if (spawnLocation == Vector3.Zero)
                     {
-                        spawnLocation = storeClerk.Position.Around(200f, 400f);
+                        spawnLocation = storeClerk.Position.Around(50f, 120f);
                     }
 
                     locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
                     RegisterBlip(locationBlip);
 
-                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 150f)
+                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 100f)
                     {
                         await BaseScript.Delay(100);
                     }
