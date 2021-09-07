@@ -294,7 +294,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
-                ResultSet kvp = await GetCharacterItems(characterId, inventoryOnly: true);
+                ResultSet kvp = await result;
 
                 if (kvp.Count == 0)
                     return lst;
