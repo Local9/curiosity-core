@@ -23,6 +23,12 @@ namespace Curiosity.Core.Client.Managers.UI
                 return JsonConvert.SerializeObject(lst);
             }));
 
+            Instance.AttachNuiHandler("GetAllItems", new AsyncEventCallback(async metadata =>
+            {
+                List<CharacterItem> items = await EventSystem.Request<List<CharacterItem>>("character:inventory:items:all");
+                return JsonConvert.SerializeObject(items);
+            }));
+
             Instance.AttachNuiHandler("GetPlayerInventory", new AsyncEventCallback(async metadata =>
             {
                 List<CuriosityShopItem> lst = await EventSystem.Request<List<CuriosityShopItem>>("character:inventory:equipped");
