@@ -22,9 +22,9 @@ namespace Curiosity.Systems.Library.Models
     public class CharacterSkillExport
     {
         [DataMember(Name = "skillExperience")]
-        public long SkillExperience;
+        public long SkillExperience = 0;
 
         [DataMember(Name = "knowledgeExperience")]
-        public long KnowledgeExperience;
+        public long KnowledgeExperience = 0;
     }
 }

@@ -89,16 +89,16 @@ namespace Curiosity.Core.Server.Database.Store
                     ResultSet keyValuePairs = await result;
 
                     if (keyValuePairs.Count == 0)
-                        return null;
+                        return characterSkill;
 
                     foreach (Dictionary<string, object> kv in keyValuePairs)
                     {
                         string skillExpStr = $"{kv["SkillExperience"]}";
-                        long skillExp = -1;
+                        long skillExp = 0;
                         long.TryParse(skillExpStr, out skillExp);
 
                         string knowledgeExpStr = $"{kv["KnowledgeExperience"]}";
-                        long knowledgeExp = -1;
+                        long knowledgeExp = 0;
                         long.TryParse(knowledgeExpStr, out knowledgeExp);
 
                         characterSkill.SkillExperience = skillExp;
