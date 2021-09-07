@@ -61,12 +61,12 @@ namespace Curiosity.StolenVehicle.Missions
         {
             missionState = MissionState.Started;
 
-            Vector3 location = Players[0].Character.Position.AroundStreet(200f, 400f);
+            Vector3 location = Players[0].Character.Position.AroundStreet(100f, 200f);
 
             Blip locationBlip = Functions.SetupLocationBlip(location);
             RegisterBlip(locationBlip);
 
-            while (location.Distance(Game.PlayerPed.Position) > 250f)
+            while (location.Distance(Game.PlayerPed.Position) > 200f)
             {
                 await BaseScript.Delay(100);
             }
@@ -229,7 +229,7 @@ namespace Curiosity.StolenVehicle.Missions
                 }
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && NumberPedsArrested == 0)
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 300f && isMissionStarted && NumberPedsArrested == 0)
             {
                 missionState = MissionState.Escaped;
             }
