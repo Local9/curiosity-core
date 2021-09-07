@@ -61,8 +61,6 @@ namespace Curiosity.Core.Server.Managers
                 return weather;
             }));
 
-            // Need to add a time sync
-
             RandomiseWeather();
             WeatherDebugOutput();
         }

@@ -38,6 +38,43 @@ namespace Curiosity.Core.Client.Managers
         int timeLockHour = 0;
         int timeLockMins = 0;
 
+        public override async void Begin()
+        {
+            EventSystem.Attach("world:time", new EventCallback(metadata =>
+            {
+                clientBaseTime = metadata.Find<double>(0);
+                clientTimeOffset = metadata.Find<double>(1);
+                return null;
+            }));
+
+            Instance.ExportDictionary.Add("GetWeather", new Func<int>(
+                () =>
+                {
+                    return (int)CuriosityWeather.WeatherType;
+                }));
+
+            UpdateWeather();
+
+            API.SetWeatherOwnedByNetwork(false);
+
+            await Session.Loading();
+
+            UnlockAndUpdateWeather();
+            UnlockTime();
+
+            List<string> vehicles = ConfigurationManager.GetModule().VehiclesToSuppress();
+
+            for (int i = 0; i < vehicles.Count; i++)
+            {
+                int modelHash = API.GetHashKey(vehicles[i]);
+                Model model = new Model(modelHash);
+
+                if (!model.IsValid) continue;
+
+                vehiclesToSuppress.Add(modelHash);
+            }
+        }
+
         public void LockAndSetTime(int hour, int minute)
         {
             timeLockHour = hour;
@@ -73,40 +110,6 @@ namespace Curiosity.Core.Client.Managers
 
             UpdateWeather(true);
             Logger.Debug($"UnlockAndUpdateWeather");
-        }
-
-        public override async void Begin()
-        {
-            EventSystem.Attach("world:time", new EventCallback(metadata =>
-            {
-                clientBaseTime = metadata.Find<double>(0);
-                clientTimeOffset = metadata.Find<double>(1);
-                return null;
-            }));
-
-            Instance.ExportDictionary.Add("GetWeather", new Func<int>(
-                () =>
-                {
-                    return (int)CuriosityWeather.WeatherType;
-                }));
-
-            UpdateWeather();
-
-            API.SetWeatherOwnedByNetwork(false);
-
-            await Session.Loading();
-
-            List<string> vehicles = ConfigurationManager.GetModule().VehiclesToSuppress();
-
-            for (int i = 0; i < vehicles.Count; i++)
-            {
-                int modelHash = API.GetHashKey(vehicles[i]);
-                Model model = new Model(modelHash);
-
-                if (!model.IsValid) continue;
-
-                vehiclesToSuppress.Add(modelHash);
-            }
         }
 
         [TickHandler(SessionWait = true)]
