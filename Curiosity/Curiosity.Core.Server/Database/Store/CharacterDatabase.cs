@@ -282,6 +282,39 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
+        public static async Task<List<CharacterItem>> GetAllItems(int characterId)
+        {
+            List<CharacterItem> lst = new List<CharacterItem>();
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+            };
+
+            string myQuery = "CALL selCharacterItemsAll(@CharacterID);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet kvp = await GetCharacterItems(characterId, inventoryOnly: true);
+
+                if (kvp.Count == 0)
+                    return lst;
+
+                foreach (Dictionary<string, object> kv in kvp)
+                {
+                    CharacterItem i = new CharacterItem();
+
+                    i.ShopCategory = $"{kv["ShopCategory"]}";
+                    i.ItemCategory = $"{kv["ItemCategory"]}";
+                    i.Label = $"{kv["Label"]}";
+                    i.NumberOwned = kv["NumberOwned"].ToInt();
+                    
+                    lst.Add(i);
+                }
+
+                return lst;
+            }
+        }
+
         internal static async Task<bool> RemoveItem(int characterId, int itemId)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
