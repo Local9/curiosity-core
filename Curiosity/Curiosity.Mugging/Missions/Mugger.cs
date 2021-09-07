@@ -22,7 +22,7 @@ namespace Curiosity.Mugging.Missions
 
         public override void Start()
         {
-            spawnPoint = Game.PlayerPed.Position.AroundStreet(200f, 400f);
+            spawnPoint = Game.PlayerPed.Position.AroundStreet(100f, 200f);
 
             locationBlip = Functions.SetupLocationBlip(spawnPoint);
             RegisterBlip(locationBlip);
@@ -42,7 +42,7 @@ namespace Curiosity.Mugging.Missions
             switch(missionState)
             {
                 case MissionState.Start:
-                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 250f)
+                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 100f)
                         missionState = MissionState.SpawnPeds;
                     break;
                 case MissionState.SpawnPeds:
