@@ -62,10 +62,10 @@ namespace Curiosity.StolenVehicle.Missions
 
                 Vector3 location = storeClerkPosition;
 
-                locationBlip = Functions.SetupLocationBlip(location);
+                locationBlip = Functions.SetupLocationBlip(location, BlipSprite.GTAOMission);
                 RegisterBlip(locationBlip);
 
-                while (location.Distance(Game.PlayerPed.Position) > 100f)
+                while (location.Distance(Game.PlayerPed.Position) > 10f)
                 {
                     await BaseScript.Delay(100);
                 }
@@ -154,7 +154,7 @@ namespace Curiosity.StolenVehicle.Missions
                     locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
                     RegisterBlip(locationBlip);
 
-                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 100f)
+                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 10f)
                     {
                         await BaseScript.Delay(100);
                     }
@@ -193,6 +193,7 @@ namespace Curiosity.StolenVehicle.Missions
                     {
                         thief.Task.ClearAllImmediately();
                         thief.Task.ReactAndFlee(Game.PlayerPed);
+                        thief.AttachSuspectBlip();
 
                         missionState = MissionState.SuspectFlee;
                     }
