@@ -17,7 +17,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task NodeMarkers()
         {
             try
@@ -31,23 +31,6 @@ namespace Curiosity.MissionManager.Client.Managers
                     {
                         NativeUI.Notifications.ShowFloatingHelpNotification("Vehicle Node", vehicleNode);
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        [TickHandler]
-        private async Task Position()
-        {
-            try
-            {
-                if (Game.PlayerPed.IsAlive)
-                {
-                    Vector3 pos = Game.PlayerPed.Position;
-                    Screen.ShowSubtitle($"{pos.X}/{pos.Y}/{pos.Z}");
                 }
             }
             catch (Exception ex)

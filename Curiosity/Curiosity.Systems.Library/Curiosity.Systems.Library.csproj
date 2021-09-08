@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
+    <Compile Include="Enums\CombatAttributes.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />

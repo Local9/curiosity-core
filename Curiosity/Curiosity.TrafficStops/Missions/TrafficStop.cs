@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
@@ -12,6 +13,7 @@ using Curiosity.Systems.Library.Utils;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
+using System.Collections.Generic;
 
 namespace Curiosity.TrafficStops.Missions
 {
@@ -22,8 +24,17 @@ namespace Curiosity.TrafficStops.Missions
         Ped driver;
 
         bool vehicleFlee = false;
+        bool vehicleFleeAfterStopping = false;
+        bool pedsHaveWeapons = false;
 
         MissionState missionState;
+
+        List<WeaponHash> weaponHashes = new List<WeaponHash>()
+        {
+            WeaponHash.Pistol,
+            WeaponHash.SMG,
+            WeaponHash.MicroSMG
+        };
 
         public async override void Start()
         {
@@ -48,7 +59,9 @@ namespace Curiosity.TrafficStops.Missions
 
             await BaseScript.Delay(100);
 
-            vehicleFlee = Utility.RANDOM.Bool(0.15f);
+            vehicleFlee = Utility.RANDOM.Bool(0.33f);
+            vehicleFleeAfterStopping = Utility.RANDOM.Bool(0.15f);
+            pedsHaveWeapons = Utility.RANDOM.Bool(0.1f);
 
             TrafficStopManager.Manager.tsPassengers.ForEach(p =>
             {
@@ -58,13 +71,38 @@ namespace Curiosity.TrafficStops.Missions
                 p.AddToMission();
             });
 
-            // https://runtime.fivem.net/doc/natives/?_0x0FA6E4B75F302400
-            // Pull over this will try to avoid
-            API.TaskVehicleEscort(driver.Handle, veh.Handle, Game.PlayerPed.CurrentVehicle.Handle, 0, 8f, (int)Collections.CombinedVehicleDrivingFlags.Normal, 5f, 0, 0f);
+            if (vehicleFlee)
+            {
+                missionState = MissionState.VehicleIsFleeing;
+                driver.RunSequence(Ped.Sequence.FLEE_IN_VEHICLE);
+                driver.IsSuspect = true;
+                SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_IgnoreTrafficWhenDriving, true);
+            }
+            else
+            {
+                // https://runtime.fivem.net/doc/natives/?_0x0FA6E4B75F302400
+                // Pull over this will try to avoid
+                API.TaskVehicleEscort(driver.Handle, veh.Handle, Game.PlayerPed.CurrentVehicle.Handle, 0, 8f, (int)Collections.CombinedVehicleDrivingFlags.Normal, 5f, 0, 0f);
+                Notify.Info($"Vehicle is attempting to pull over.");
+                missionState = MissionState.AwaitingVehicleToStop;
+            }
 
-            Notify.Info($"Vehicle is attempting to pull over.");
-
-            missionState = MissionState.AwaitingVehicleToStop;
+            if (pedsHaveWeapons && vehicleFlee)
+            {
+                Mission.RegisteredPeds.ForEach(ped =>
+                {
+                    Game.PlayerPed.RelationshipGroup.SetRelationshipBetweenGroups(ped.Fx.RelationshipGroup, Relationship.Hate, true);
+                    ped.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Gang1;
+                    ped.Fx.Weapons.Give(weaponHashes[Utility.RANDOM.Next(weaponHashes.Count)], 999, false, true);
+                    ped.Fx.DropsWeaponsOnDeath = false;
+                    ped.Task.FightAgainstHatedTargets(300f);
+                    SetPedCombatAttributes(ped.Handle, (int)CombatAttributes.BF_AlwaysFight, true);
+                    SetPedCombatAttributes(ped.Handle, (int)CombatAttributes.BF_CanDoDrivebys, true);
+                    SetPedCombatAttributes(ped.Handle, (int)CombatAttributes.BF_CanFightArmedPedsWhenNotArmed, true);
+                    SetPedCombatAttributes(ped.Handle, (int)CombatAttributes.BF_CanTauntInVehicle, true);
+                    ped.IsSuspect = true;
+                });
+            }
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -79,10 +117,18 @@ namespace Curiosity.TrafficStops.Missions
             switch (missionState)
             {
                 case MissionState.AwaitingVehicleToStop:
-                    if (vehicleFlee && Game.PlayerPed.Position.Distance(driver.Position) < 4f)
+                    if (vehicleFleeAfterStopping && !Game.PlayerPed.IsInVehicle())
                     {
                         driver.RunSequence(Ped.Sequence.FLEE_IN_VEHICLE);
                         missionState = MissionState.VehicleIsFleeing;
+                        SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_IgnoreTrafficWhenDriving, true);
+                        driver.IsSuspect = true;
+                    }
+                    break;
+                case MissionState.VehicleIsFleeing:
+                    if (veh.Position.Distance(Game.PlayerPed.Position) > 300f)
+                    {
+                        Fail("They got away.", EndState.Fail);
                     }
                     break;
             }
