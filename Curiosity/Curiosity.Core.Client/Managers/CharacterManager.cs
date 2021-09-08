@@ -232,6 +232,9 @@ namespace Curiosity.Core.Client.Managers
 
                 CayoPericoManager cayoPericoManager = CayoPericoManager.GetModule();
 
+                Game.PlayerPed.IsCollisionEnabled = true;
+                Game.PlayerPed.IsPositionFrozen = false;
+
                 if (Cache.Character.IsOnIsland) // This is done to get around an IPL Bug in GTA
                 {
                     Cache.PlayerPed.Position = new Vector3(-1016.42f, -2468.58f, 12.99f);
@@ -282,8 +285,6 @@ namespace Curiosity.Core.Client.Managers
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
 
-                Game.PlayerPed.IsCollisionEnabled = true;
-                Game.PlayerPed.IsPositionFrozen = false;
                 Game.PlayerPed.IsInvincible = false;
                 Cache.PlayerPed.FadeIn();
             }

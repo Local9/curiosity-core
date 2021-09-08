@@ -203,11 +203,6 @@ namespace Curiosity.Core.Server.Managers
 
                 if (player.Character != null)
                 {
-                    Vector3 pos = player.Character.Position;
-
-                    if (!pos.IsZero)
-                        curiosityCharacter.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
-
                     player.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                     player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
 
