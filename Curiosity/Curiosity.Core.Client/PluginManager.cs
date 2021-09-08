@@ -67,6 +67,7 @@ namespace Curiosity.Core.Client
 
         private async void OnResourceStop(string resourceName)
         {
+            Logger.Debug($"[STOPPING RESOURCE] {resourceName}");
             if (API.GetCurrentResourceName() != resourceName) return;
 
             await Cache.Character.Save();
@@ -195,6 +196,22 @@ namespace Curiosity.Core.Client
             API.DisablePlayerVehicleRewards(Game.Player.Handle);
 
             Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death            
+        }
+
+        DateTime nextTimeToSave = DateTime.UtcNow.AddSeconds(30);
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnPeroidicSave()
+        {
+            if (DateTime.UtcNow < nextTimeToSave) return;
+
+            if (Cache.Character.MarkedAsRegistered)
+            {
+                await Cache.Character.Save();
+                await Delay(5000);
+            }
+
+            nextTimeToSave = DateTime.UtcNow.AddMinutes(1);
         }
 
         public object LoadManager(Type type)

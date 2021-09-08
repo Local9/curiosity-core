@@ -86,6 +86,8 @@ namespace Curiosity.Core.Client.Extensions
             Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
             character.LastPosition = position;
 
+            Logger.Debug($"[LAST POSITION] {character.LastPosition}");
+
             await BaseScript.Delay(100);
 
             character.IsDead = Cache.PlayerPed.IsDead;
@@ -100,6 +102,10 @@ namespace Curiosity.Core.Client.Extensions
             if (success)
             {
                 Logger.Debug($"Character Saved");
+            }
+            else
+            {
+                Logger.Debug($"Didn't save shit");
             }
 
             // Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");

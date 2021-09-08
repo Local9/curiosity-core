@@ -8,6 +8,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -189,8 +190,7 @@ namespace Curiosity.Core.Client.Managers
                 ? CharacterExtensions.RegistrationPosition
                 : character.LastPosition ?? CharacterExtensions.DefaultPosition;
 
-            if (position == character.LastPosition) position.Y += 1f;
-
+            Logger.Debug($"[SPAWN POSITION] {position}");
             character.Revive(position);
 
             var ped = Cache.Entity.Id;
@@ -277,8 +277,17 @@ namespace Curiosity.Core.Client.Managers
 
                     await BaseScript.Delay(100);
 
-                    if (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
+                    DateTime timeToBreak = DateTime.UtcNow.AddSeconds(5);
+
+                    while (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
+                    {
                         Game.PlayerPed.Position = safeCoord;
+                        safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
+                        await BaseScript.Delay(100);
+
+                        if (DateTime.UtcNow > timeToBreak) break;
+                    }
+                        
                 }
 
                 await transition.Wait();
