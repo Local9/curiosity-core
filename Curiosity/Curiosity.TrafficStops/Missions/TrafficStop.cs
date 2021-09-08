@@ -124,6 +124,10 @@ namespace Curiosity.TrafficStops.Missions
                         SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_IgnoreTrafficWhenDriving, true);
                         driver.IsSuspect = true;
                     }
+                    if (!driver.IsInVehicle)
+                    {
+                        missionState = MissionState.End;
+                    }
                     break;
                 case MissionState.VehicleIsFleeing:
                     if (veh.Position.Distance(Game.PlayerPed.Position) > 300f)
@@ -131,6 +135,13 @@ namespace Curiosity.TrafficStops.Missions
                         Fail("They got away.", EndState.Fail);
                         missionState = MissionState.End;
                     }
+                    if (!driver.IsInVehicle)
+                    {
+                        missionState = MissionState.Shootout;
+                    }
+                    break;
+                case MissionState.Shootout:
+
                     break;
             }
 
@@ -150,7 +161,8 @@ namespace Curiosity.TrafficStops.Missions
         {
             AwaitingVehicleToStop,
             VehicleIsFleeing,
-            End
+            End,
+            Shootout
         }
     }
 }
