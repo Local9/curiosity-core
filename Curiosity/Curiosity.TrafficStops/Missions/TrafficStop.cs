@@ -61,7 +61,7 @@ namespace Curiosity.TrafficStops.Missions
 
             vehicleFlee = Utility.RANDOM.Bool(0.33f);
             vehicleFleeAfterStopping = Utility.RANDOM.Bool(0.15f);
-            pedsHaveWeapons = Utility.RANDOM.Bool(0.1f);
+            pedsHaveWeapons = Utility.RANDOM.Bool(0.5f);
 
             TrafficStopManager.Manager.tsPassengers.ForEach(p =>
             {
