@@ -102,6 +102,7 @@
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\PlayerVehicleManager.cs" />
     <Compile Include="Managers\PlayerWeaponManager.cs" />
+    <Compile Include="Managers\TestCode.cs" />
     <Compile Include="Managers\TrafficStopManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
@@ -137,14 +138,6 @@
     <ProjectReference Include="..\..\thirdparty\NativeUI\NativeUI.csproj">
       <Project>{f3e16ed9-dbf7-4e7b-b04b-9b24b11891d3}</Project>
       <Name>NativeUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
-      <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
-      <Name>Curiosity.Global.Shared.net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
-      <Project>{37F1F478-BE0B-4C2B-A062-24077F851B69}</Project>
-      <Name>Curiosity.Shared.Client.net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
       <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>

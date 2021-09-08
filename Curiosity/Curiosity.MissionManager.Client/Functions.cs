@@ -4,7 +4,6 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
-using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Curiosity.MissionManager.Client
             if (mission.GetCustomAttributes(false).FirstOrDefault(x => x.GetType() == typeof(MissionInfo)) == null)
                 throw new Exception("Mission must have the MissionInfo attribute!");
 
-            Log.Info($"[MissionManager] Registered: {mission.Name}");
+            Logger.Info($"[MissionManager] Registered: {mission.Name}");
 
             MissionInfo missionInfo = GetMissionInfo(mission);
             if (missionInfo.startPoint.X > 0f && missionInfo.startPoint.Y > 0f)

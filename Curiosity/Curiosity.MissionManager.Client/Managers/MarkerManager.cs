@@ -4,7 +4,6 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Environment.Enums;
 using Curiosity.MissionManager.Client.Extensions;
-using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,9 @@ namespace Curiosity.MissionManager.Client.Managers
                 MarkersClose.ForEach(m =>
                 {
                     World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true);
-                    NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, m.Message, 50f, 15f);
+                    Vector3 pos = m.Position;
+                    pos.Z = pos.Z + 1f;
+                    NativeUI.Notifications.DrawText3D(m.Message, pos, System.Drawing.Color.FromArgb(255, 255, 255, 255));
                 });
             }
             catch (Exception ex)
