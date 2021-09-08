@@ -17,6 +17,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         public PatrolZone patrolZone;
         public double chanceOfSpawn;
         public bool unique;
+        public bool requiresInVehicle;
 
         /// <summary>
         /// The basic information about a mission
@@ -33,7 +34,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         /// <param name="chanceOfSpawn">chance of the mission activating</param>
         /// <param name="unique">If the mission is unique, this is to stop duplication</param>
 
-        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, double chanceOfSpawn = 1.0, bool unique = false)
+        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, double chanceOfSpawn = 1.0, bool unique = false, bool requiresInVehicle = false)
         {
             // Might be worth working on roles availability?
 
@@ -49,6 +50,7 @@ namespace Curiosity.MissionManager.Client.Attributes
             this.patrolZone = patrolZone;
             this.chanceOfSpawn = chanceOfSpawn;
             this.unique = unique;
+            this.requiresInVehicle = requiresInVehicle;
         }
     }
 }
