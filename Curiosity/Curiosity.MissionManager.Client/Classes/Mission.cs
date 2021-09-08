@@ -164,7 +164,7 @@ namespace Curiosity.MissionManager.Client
                 }
 
                 if (currentMissionType.Equals(MissionType.TrafficStop))
-                    TrafficStopManager.Manager.Reset();
+                    TrafficStopManager.GetModule().Reset();
 
                 isOnMission = false;
                 missionType = null;

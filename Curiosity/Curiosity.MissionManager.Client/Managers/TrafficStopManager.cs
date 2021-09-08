@@ -10,8 +10,6 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class TrafficStopManager : Manager<TrafficStopManager>
     {
-        public static TrafficStopManager Manager;
-
         public Vehicle tsVehicle { get; private set; }
         public Ped tsDriver { get; private set; }
 
@@ -19,7 +17,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public override void Begin()
         {
-            Manager = this;
+
         }
 
         public async void SetVehicle(Vehicle vehicle)

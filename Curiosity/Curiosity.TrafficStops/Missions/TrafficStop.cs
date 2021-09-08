@@ -38,7 +38,7 @@ namespace Curiosity.TrafficStops.Missions
 
         public async override void Start()
         {
-            driver = TrafficStopManager.Manager.tsDriver;
+            driver = TrafficStopManager.GetModule().tsDriver;
             driver.AddToMission();
 
             Logger.Debug($"Traffic Stop -> Driver {driver.Handle}");
@@ -46,7 +46,7 @@ namespace Curiosity.TrafficStops.Missions
 
             await BaseScript.Delay(100);
 
-            veh = TrafficStopManager.Manager.tsVehicle;
+            veh = TrafficStopManager.GetModule().tsVehicle;
             veh.AddToMission();
 
             await BaseScript.Delay(100);
@@ -63,7 +63,7 @@ namespace Curiosity.TrafficStops.Missions
             vehicleFleeAfterStopping = Utility.RANDOM.Bool(0.15f);
             pedsHaveWeapons = Utility.RANDOM.Bool(0.5f);
 
-            TrafficStopManager.Manager.tsPassengers.ForEach(p =>
+            TrafficStopManager.GetModule().tsPassengers.ForEach(p =>
             {
                 Logger.Debug($"Traffic Stop -> Passenger {p.Handle}");
 

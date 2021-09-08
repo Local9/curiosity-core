@@ -414,7 +414,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     CitizenFX.Core.Vehicle playerVeh = PlayerManager.GetModule().PersonalVehicle;
 
-                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null && IsTrafficStopAllowed)
+                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.GetModule().tsVehicle == null && IsTrafficStopAllowed)
                     {
                         HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
 
@@ -426,7 +426,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                         if (ControlHelper.IsControlJustPressed(Control.Context, false))
                         {
-                            TrafficStopManager.Manager.SetVehicle(this);
+                            TrafficStopManager.GetModule().SetVehicle(this);
 
                             for (int i = 0; i < 8; i++)
                             {

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Concurrent;
@@ -32,6 +33,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public void Stop()
         {
+            Logger.Debug($"Traffic Stop System Stopped");
             Instance.DetachTickHandler(OnVehicleCreator);
             Instance.DetachTickHandler(OnWorldVehicleList);
 
@@ -89,7 +91,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 vehicles.ForEach(async veh =>
                 {
-                    bool setup = veh.State.Get(StateBagKey.VEHICLE_SETUP) ?? false;
+                    bool setup = veh.State.Get(StateBagKey.VEHICLE_SETUP) ?? false || Decorators.GetBoolean(veh.Handle, StateBagKey.VEHICLE_SETUP);
 
                     if (!setup && !veh.Driver.IsPlayer)
                     {
