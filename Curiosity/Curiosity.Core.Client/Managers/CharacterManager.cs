@@ -268,8 +268,14 @@ namespace Curiosity.Core.Client.Managers
                         MoveToCityHall();
                     }
 
-                    if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
-                        MoveToCityHall();
+                    await BaseScript.Delay(100);
+
+                    Vector3 safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
+
+                    await BaseScript.Delay(100);
+
+                    if (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
+                        Game.PlayerPed.Position = safeCoord;
                 }
 
                 await transition.Wait();
