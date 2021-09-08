@@ -80,8 +80,35 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Entity entityToDelete = Cache.PlayerPed.GetEntityInFront();
 
+                if (arguments.Count == 0)
+                {
+                    Entity entityToDelete = Cache.PlayerPed.GetEntityInFront();
+                    DeleteEntity(entityToDelete);
+                }
+
+                if (arguments.Count > 0)
+                {
+                    if (arguments[0] == "ped")
+                    {
+                        Ped[] peds = World.GetAllPeds();
+
+                        foreach(Ped ped in peds)
+                        {
+                            if (ped.Exists())
+                            {
+                                if (ped.IsDead && !ped.IsPlayer)
+                                {
+                                    DeleteEntity(ped);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            private async void DeleteEntity(Entity entityToDelete)
+            {
                 if (entityToDelete == null)
                 {
                     Notify.Alert($"No entity found.");
