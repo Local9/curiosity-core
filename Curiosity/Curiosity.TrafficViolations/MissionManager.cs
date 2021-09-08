@@ -21,7 +21,7 @@ namespace Curiosity.TrafficViolations
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            Functions.RegisterMission(typeof(Insurance));
+            // Functions.RegisterMission(typeof(Insurance));
         }
 
         private void OnClientResourceStop(string resourceName)
