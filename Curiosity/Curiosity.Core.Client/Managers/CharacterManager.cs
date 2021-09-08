@@ -271,23 +271,29 @@ namespace Curiosity.Core.Client.Managers
                         MoveToCityHall();
                     }
 
+                    if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
+                        MoveToCityHall();
+
                     await BaseScript.Delay(100);
 
-                    Vector3 safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
+                    Vector3 safeCoord = World.GetSafeCoordForPed(Cache.Character.LastPosition.AsVector(), true, 1);
 
                     await BaseScript.Delay(100);
 
                     DateTime timeToBreak = DateTime.UtcNow.AddSeconds(5);
 
-                    while (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
+                    if (safeCoord.Distance(Vector3.One) > 2f)
                     {
-                        Game.PlayerPed.Position = safeCoord;
-                        safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
-                        await BaseScript.Delay(100);
+                        while (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
+                        {
+                            Game.PlayerPed.Position = safeCoord;
+                            safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
+                            await BaseScript.Delay(100);
 
-                        if (DateTime.UtcNow > timeToBreak) break;
+                            if (DateTime.UtcNow > timeToBreak) break;
+                        }
                     }
-                        
+
                 }
 
                 await transition.Wait();
