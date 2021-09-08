@@ -76,12 +76,6 @@ namespace Curiosity.Core.Client.Extensions
         {
             character = Cache.Character;
 
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                Game.PlayerPed.Task.WarpOutOfVehicle(Game.PlayerPed.CurrentVehicle);
-                await BaseScript.Delay(100);
-            }
-
             Vector3 vPos = Game.PlayerPed.Position;
             Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
             character.LastPosition = position;
