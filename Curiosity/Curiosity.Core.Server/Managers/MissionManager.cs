@@ -312,13 +312,29 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
+                int networkId = metadata.Find<int>(0);
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, networkId);
 
                 if (missionDataPed == null) return null;
+
+                int entityId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                bool flee = false;
+                if (API.DoesEntityExist(entityId))
+                {
+                    Ped ped = new Ped(entityId);
+                    flee = ped.State.Get(StateBagKey.PED_FLEE) ?? false;
+                }
 
                 bool successfulArrest = false;
 
                 int experienceEarned = 10;
+
+                if (flee)
+                {
+                    experienceEarned += 50;
+                    successfulArrest = true;
+                }
 
                 if (missionDataPed.StoleVehicle)
                 {
@@ -335,6 +351,7 @@ namespace Curiosity.Core.Server.Managers
                 if (missionDataPed.IsCarryingIllegalItems && missionDataPed.HasBeenSearched)
                 {
                     experienceEarned += 50;
+                    successfulArrest = true;
                 }
 
                 if (missionDataPed.IsWanted)
