@@ -567,6 +567,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.Task.CruiseWithVehicle(Fx.CurrentVehicle, float.MaxValue,
                         (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
 
+                    IsFleeing = true;
+
                     await BaseScript.Delay(10000);
 
                     break;
