@@ -17,6 +17,7 @@ namespace Curiosity.Core.Client.Managers
     {
         DateTime passiveModeDisabled;
         public bool IsPassiveModeEnabledCooldown = false;
+        public bool IsPassive = false;
         DateTime playerKilledSelf;
         public bool IsKillSelfEnabled { get; internal set; } = true;
         public int CostOfKillSelf = 500;
@@ -78,6 +79,7 @@ namespace Curiosity.Core.Client.Managers
 
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
             Cache.Character.IsPassive = isPassive;
+            IsPassive = isPassive;
         }
 
         public async void TogglePlayerPassive(bool isPassive)
@@ -121,6 +123,7 @@ namespace Curiosity.Core.Client.Managers
 
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
             Cache.Character.IsPassive = isPassive;
+            IsPassive = isPassive;
         }
 
         public async Task PassiveCooldownTick()

@@ -76,12 +76,20 @@ namespace Curiosity.Core.Client.Extensions
         {
             character = Cache.Character;
 
-            Vector3 position = Game.PlayerPed.Position;
-            Cache.Entity.Position = new Position(position.X, position.Y, position.Z, Game.PlayerPed.Heading);
-            character.LastPosition = Cache.Entity.Position;
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Game.PlayerPed.Task.WarpOutOfVehicle(Game.PlayerPed.CurrentVehicle);
+                await BaseScript.Delay(100);
+            }
+
+            Vector3 vPos = Game.PlayerPed.Position;
+            Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
+            character.LastPosition = position;
+
+            await BaseScript.Delay(100);
 
             character.IsDead = Cache.PlayerPed.IsDead;
-            character.IsPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+            character.IsPassive = PlayerOptionsManager.GetModule().IsPassive;
             character.AllowHelmet = Cache.Character.AllowHelmet;
 
             if (Cache.Player.User.IsSeniorDeveloper)
