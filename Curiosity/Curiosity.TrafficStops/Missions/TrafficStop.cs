@@ -129,6 +129,7 @@ namespace Curiosity.TrafficStops.Missions
                     if (veh.Position.Distance(Game.PlayerPed.Position) > 300f)
                     {
                         Fail("They got away.", EndState.Fail);
+                        missionState = MissionState.End;
                     }
                     break;
             }
@@ -148,7 +149,8 @@ namespace Curiosity.TrafficStops.Missions
         enum MissionState
         {
             AwaitingVehicleToStop,
-            VehicleIsFleeing
+            VehicleIsFleeing,
+            End
         }
     }
 }
