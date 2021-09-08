@@ -117,10 +117,10 @@ namespace Curiosity.MissionManager.Client
             return info;
         }
 
-        public static Blip SetupLocationBlip(Vector3 location, float scale = 0.5f, BlipColor blipColor = BlipColor.Yellow)
+        public static Blip SetupLocationBlip(Vector3 location, BlipSprite blipSprite = BlipSprite.BigCircle, float scale = 0.5f, BlipColor blipColor = BlipColor.Yellow)
         {
             Blip locationBlip = World.CreateBlip(location);
-            locationBlip.Sprite = BlipSprite.BigCircle;
+            locationBlip.Sprite = blipSprite;
             locationBlip.Scale = scale;
             locationBlip.Color = blipColor;
             locationBlip.Alpha = 126;
