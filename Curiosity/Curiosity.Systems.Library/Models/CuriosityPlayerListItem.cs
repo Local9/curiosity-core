@@ -29,5 +29,7 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "discordId", Order = 6)]
         public ulong DiscordId;
 
+        [DataMember(Name = "discordAvatar", Order = 7)]
+        public string DiscordAvatar;
     }
 }

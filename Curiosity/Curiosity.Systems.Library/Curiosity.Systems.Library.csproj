@@ -55,6 +55,7 @@
     <Compile Include="Models\CharacterInfo.cs" />
     <Compile Include="Models\CharacterItem.cs" />
     <Compile Include="Models\ClientConfig.cs" />
+    <Compile Include="Models\Discord\DiscordAvatar.cs" />
     <Compile Include="Models\GenericMessage.cs" />
     <Compile Include="Models\ScenarioItem.cs" />
     <Compile Include="Models\Shop\CuriosityShopItem.cs" />

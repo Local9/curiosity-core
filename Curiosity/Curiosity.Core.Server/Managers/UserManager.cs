@@ -38,6 +38,7 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Role = curiosityUser.Role.GetStringValue();
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
                     cpl.DiscordId = curiosityUser.DiscordId;
+                    cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
 
                     lst.Add(cpl);
                 }
@@ -78,6 +79,8 @@ namespace Curiosity.Core.Server.Managers
 
                 player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
                 player.State.Set($"{StateBagKey.PLAYER_ASSISTING}", false, true);
+
+                curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
 
                 return curiosityUser;
             }));

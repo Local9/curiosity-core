@@ -106,6 +106,20 @@ namespace Curiosity.Core.Server.Web
             return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
         }
 
+        public async Task<string> Avatar(ulong discordId)
+        {
+            string url = $"https://api.discord.wf/v2/users/{discordId}/avatar";
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Content-Type", "application/json");
+            RequestResponse requestResponse = await request.Http(url, "GET", null, headers);
+            if (requestResponse.status == System.Net.HttpStatusCode.OK)
+            {
+                DiscordAvatar avatar = JsonConvert.DeserializeObject<DiscordAvatar>(requestResponse.content);
+                return avatar.Avatarurl;
+            }
+            return string.Empty;
+        }
+
         public async Task<bool> CheckDiscordIdIsInGuild(Player player)
         {
             bool IsMember = false;
