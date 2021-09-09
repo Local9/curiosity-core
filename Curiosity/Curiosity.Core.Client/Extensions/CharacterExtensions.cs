@@ -80,7 +80,7 @@ namespace Curiosity.Core.Client.Extensions
             Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
             character.LastPosition = position;
 
-            Logger.Debug($"[LAST POSITION] {character.LastPosition}");
+            //Logger.Debug($"[LAST POSITION] {character.LastPosition}");
 
             await BaseScript.Delay(100);
 
