@@ -21,7 +21,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("user:get:playerlist", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:get:playerlist", new AsyncEventCallback(async metadata =>
             {
                 List<CuriosityPlayerListItem> lst = new List<CuriosityPlayerListItem>();
 
@@ -38,7 +38,16 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Role = curiosityUser.Role.GetStringValue();
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
                     cpl.DiscordId = curiosityUser.DiscordId;
-                    cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+
+                    if (string.IsNullOrEmpty(curiosityUser.DiscordAvatar) && curiosityUser.DiscordId > 0)
+                    {
+                        PluginManager.ActiveUsers[kv.Key].DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
+                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+                    }
+                    else
+                    {
+                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+                    }
 
                     lst.Add(cpl);
                 }
@@ -60,8 +69,6 @@ namespace Curiosity.Core.Server.Managers
                 if (curiosityUser is null)
                     return null;
 
-                Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
-
                 curiosityUser.Handle = metadata.Sender;
 
                 PluginManager.ActiveUsers.TryAdd(metadata.Sender, curiosityUser);
@@ -80,7 +87,22 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
                 player.State.Set($"{StateBagKey.PLAYER_ASSISTING}", false, true);
 
-                curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
+                //string discordIdStr = player.Identifiers["discord"];
+
+                //if (!string.IsNullOrWhiteSpace(discordIdStr))
+                //{
+                //    ulong discordId = 0;
+
+                //    if (ulong.TryParse(discordIdStr, out discordId))
+                //    {
+                //        curiosityUser.DiscordId = discordId;
+
+                //        if (discordId > 0)
+                //            curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(discordId);
+                //    }
+                //}
+
+                Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
                 return curiosityUser;
             }));

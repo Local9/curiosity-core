@@ -132,6 +132,7 @@ namespace Curiosity.Core.Client.Managers
                         ping = p.Ping,
                         routingBucket = p.RoutingBucket,
                         isMuted = MutedPlayers.Contains($"{p.ServerHandle}"),
+                        discordId = p.DiscordId,
                         discordUrl = p.DiscordAvatar
                     };
 

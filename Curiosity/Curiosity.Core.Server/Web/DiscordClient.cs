@@ -90,7 +90,7 @@ namespace Curiosity.Core.Server.Web
             }
         }
 
-        public async Task<RequestResponse> DiscordWebsocket(string method, string url, string jsonData)
+        public async Task<RequestResponse> DiscordWebsocket(string method, string url, string jsonData = "")
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json");
@@ -98,7 +98,7 @@ namespace Curiosity.Core.Server.Web
             return await request.Http($"{url}", method, jsonData, headers);
         }
 
-        public async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData)
+        public async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData = "")
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json");
@@ -109,9 +109,7 @@ namespace Curiosity.Core.Server.Web
         public async Task<string> Avatar(ulong discordId)
         {
             string url = $"https://api.discord.wf/v2/users/{discordId}/avatar";
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Content-Type", "application/json");
-            RequestResponse requestResponse = await request.Http(url, "GET", null, headers);
+            RequestResponse requestResponse = await request.Http(url);
             if (requestResponse.status == System.Net.HttpStatusCode.OK)
             {
                 DiscordAvatar avatar = JsonConvert.DeserializeObject<DiscordAvatar>(requestResponse.content);
@@ -151,7 +149,7 @@ namespace Curiosity.Core.Server.Web
                 return IsMember;
             }
 
-            RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{PluginManager.DiscordGuildId}/members/{discordId}", string.Empty);
+            RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{PluginManager.DiscordGuildId}/members/{discordId}");
 
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {

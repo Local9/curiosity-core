@@ -131,9 +131,9 @@ namespace Curiosity.Core.Server.Managers
 
                 API.SetPlayerRoutingBucket(player.Handle, routingId);
 
-                player.State.Set($"{StateBagKey.PLAYER_ROUTING}", routingId, true);
-                player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
-                player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+                player.State.Set(StateBagKey.PLAYER_ROUTING, routingId, true);
+                player.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
 
                 string license = player.Identifiers["license"];
 
