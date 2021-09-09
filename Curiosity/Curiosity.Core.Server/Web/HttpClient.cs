@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Web
             headers = headers ?? new Dictionary<string, string>();
 
             return ParseRequestResponseInternal(
-                await Exports["curiosity-core"].HttpRequest(url, method, data, headers)
+                await Exports[API.GetCurrentResourceName()].HttpRequest(url, method, data, headers)
             );
         }
 
