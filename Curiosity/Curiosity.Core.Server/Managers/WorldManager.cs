@@ -15,7 +15,6 @@ namespace Curiosity.Core.Server.Managers
     public class WorldManager : Manager<WorldManager>
     {
         public static WorldManager WorldInstance;
-        private const int WEATHER_UPDATE_MS = 60000;
         DateTime lastTimeWeatherUpdated = DateTime.UtcNow;
 
         int numberOfWeatherCyclesProcessed = 0;
@@ -129,7 +128,7 @@ namespace Curiosity.Core.Server.Managers
                 lastTimeWeatherUpdated = DateTime.UtcNow.AddMinutes(60);
             }
 
-            await BaseScript.Delay(WEATHER_UPDATE_MS);
+            await BaseScript.Delay(1000);
         }
 
         [TickHandler]
