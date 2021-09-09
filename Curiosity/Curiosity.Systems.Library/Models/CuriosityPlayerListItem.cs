@@ -25,5 +25,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "routingBucket", Order = 5)]
         public int RoutingBucket;
+
+        [DataMember(Name = "discordId", Order = 6)]
+        public ulong DiscordId;
+
     }
 }

@@ -37,6 +37,7 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Job = curiosityUser.CurrentJob;
                     cpl.Role = curiosityUser.Role.GetStringValue();
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
+                    cpl.DiscordId = curiosityUser.DiscordId;
 
                     lst.Add(cpl);
                 }
