@@ -120,13 +120,13 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWeatherTick()
         {
-            if (DateTime.UtcNow.Subtract(lastTimeWeatherUpdated).TotalMinutes >= 60)
+            if (DateTime.UtcNow > lastTimeWeatherUpdated)
             {
                 if (IsWeatherFrozen) return;
 
                 RandomiseWeather();
 
-                lastTimeWeatherUpdated = DateTime.UtcNow;
+                lastTimeWeatherUpdated = DateTime.UtcNow.AddMinutes(60);
             }
 
             await BaseScript.Delay(WEATHER_UPDATE_MS);
@@ -135,9 +135,8 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWorldTimeTick()
         {
-            if (DateTime.Now.Subtract(lastTimeTick).TotalMilliseconds >= 500)
+            if (DateTime.UtcNow > lastTimeTick)
             {
-
                 TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1);
                 int secondsSinceEpoch = (int)timeSpan.TotalSeconds;
 
@@ -145,7 +144,7 @@ namespace Curiosity.Core.Server.Managers
 
                 _baseTime = IsTimeFrozen ? _baseTime : newBaseTime;
 
-                lastTimeTick = DateTime.UtcNow;
+                lastTimeTick = DateTime.UtcNow.AddMilliseconds(500);
             }
 
             await BaseScript.Delay(250);
