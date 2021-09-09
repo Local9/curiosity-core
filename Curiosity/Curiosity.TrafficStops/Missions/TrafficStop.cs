@@ -141,7 +141,20 @@ namespace Curiosity.TrafficStops.Missions
                     }
                     break;
                 case MissionState.Shootout:
-
+                    if (pedsHaveWeapons)
+                    {
+                        Game.PlayerPed.RelationshipGroup.SetRelationshipBetweenGroups(driver.Fx.RelationshipGroup, Relationship.Hate, true);
+                        driver.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Gang1;
+                        driver.Fx.Weapons.Give(weaponHashes[Utility.RANDOM.Next(weaponHashes.Count)], 999, false, true);
+                        driver.Fx.DropsWeaponsOnDeath = false;
+                        driver.Task.FightAgainstHatedTargets(300f);
+                        SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_AlwaysFight, true);
+                        SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_CanDoDrivebys, true);
+                        SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_CanFightArmedPedsWhenNotArmed, true);
+                        SetPedCombatAttributes(driver.Handle, (int)CombatAttributes.BF_CanTauntInVehicle, true);
+                        driver.IsSuspect = true;
+                    }
+                    missionState = MissionState.End;
                     break;
             }
 
