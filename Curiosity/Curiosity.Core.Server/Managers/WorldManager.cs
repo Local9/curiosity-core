@@ -154,9 +154,9 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWorldTimeSyncTick()
         {
-            if (DateTime.Now.Subtract(lastTimeSyncTick).TotalSeconds >= 5) {
-                EventSystem.GetModule().SendAll("world:time", _baseTime, _timeOffset);
-                lastTimeSyncTick = DateTime.UtcNow;
+            if (DateTime.UtcNow > lastTimeSyncTick) {
+                EventSystem.GetModule().SendAll("world:time:sync", _baseTime, _timeOffset);
+                lastTimeSyncTick = DateTime.UtcNow.AddSeconds(5);
             }
 
             await BaseScript.Delay(1000);

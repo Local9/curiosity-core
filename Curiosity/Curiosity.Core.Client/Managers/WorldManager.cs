@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Managers
 
         public override async void Begin()
         {
-            EventSystem.Attach("world:time", new EventCallback(metadata =>
+            EventSystem.Attach("world:time:sync", new EventCallback(metadata =>
             {
                 clientBaseTime = metadata.Find<double>(0);
                 clientTimeOffset = metadata.Find<double>(1);
