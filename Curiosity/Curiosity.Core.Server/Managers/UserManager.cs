@@ -66,6 +66,8 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
 
+                await BaseScript.Delay(0);
+
                 if (curiosityUser is null)
                     return null;
 
@@ -87,20 +89,25 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
                 player.State.Set($"{StateBagKey.PLAYER_ASSISTING}", false, true);
 
-                //string discordIdStr = player.Identifiers["discord"];
+                string discordIdStr = player.Identifiers["discord"];
 
-                //if (!string.IsNullOrWhiteSpace(discordIdStr))
-                //{
-                //    ulong discordId = 0;
+                if (!string.IsNullOrWhiteSpace(discordIdStr))
+                {
+                    ulong discordId = 0;
 
-                //    if (ulong.TryParse(discordIdStr, out discordId))
-                //    {
-                //        curiosityUser.DiscordId = discordId;
+                    if (ulong.TryParse(discordIdStr, out discordId))
+                    {
+                        curiosityUser.DiscordId = discordId;
 
-                //        if (discordId > 0)
-                //            curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(discordId);
-                //    }
-                //}
+                        string resourceName = API.GetCurrentResourceName();
+
+                        if (!string.IsNullOrEmpty(resourceName)) {
+
+                            curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(discordId);
+                            Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Set Discord Avatar URL");
+                        }
+                    }
+                }
 
                 Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
