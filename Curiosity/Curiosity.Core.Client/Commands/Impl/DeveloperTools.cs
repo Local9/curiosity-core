@@ -353,14 +353,9 @@ namespace Curiosity.Core.Client.Commands.Impl
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 player.Entity.ToggleGodMode();
-                if (Cache.PlayerPed.IsInvincible)
-                {
-                    Chat.SendLocalMessage("God Mode: Enabled");
-                }
-                else
-                {
-                    Chat.SendLocalMessage("God Mode: Disabled");
-                }
+                string message = Cache.PlayerPed.IsInvincible ? "God Mode: Enabled" : "God Mode: Disabled";
+                Chat.SendLocalMessage(message);
+                NotificationManager.GetModule().Info(message);
             }
         }
 
