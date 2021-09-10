@@ -308,7 +308,6 @@ namespace Curiosity.Core.Client.Managers
             {
                 EventSystem.Send("user:job", "Character Creation");
                 Cache.PlayerPed.FadeIn();
-                Game.PlayerPed.IsInvincible = false;
                 Cache.Character.IsPassive = true;
                 await player.Character.PostLoad();
             }
