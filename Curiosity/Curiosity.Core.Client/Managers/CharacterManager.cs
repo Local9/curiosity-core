@@ -185,6 +185,7 @@ namespace Curiosity.Core.Client.Managers
             if (!player.Character.MarkedAsRegistered)
             {
                 API.StopPlayerSwitch();
+                player.Character.IsPassive = true;
             }
 
             var character = player.Character;
@@ -225,7 +226,6 @@ namespace Curiosity.Core.Client.Managers
 
             if (!player.Character.MarkedAsRegistered)
             {
-                Cache.Character.IsPassive = true;
             }
 
             if (player.Character.MarkedAsRegistered)
@@ -329,7 +329,7 @@ namespace Curiosity.Core.Client.Managers
             if (Instance.ExportDictionary["pma-voice"] is not null)
                 Instance.ExportDictionary["pma-voice"].toggleMute();
 
-            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
+            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(player.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
@@ -339,7 +339,6 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Send("user:job", "Unemployed");
 
             // CreatePlayerGroup();
-
             Cache.UpdatePedId(true);
         }
 
