@@ -157,6 +157,8 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Send("user:queue:active");
 
+            EventSystem.Send("user:job", "Loading...");
+
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
 
@@ -299,12 +301,12 @@ namespace Curiosity.Core.Client.Managers
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
-
                 Game.PlayerPed.IsInvincible = false;
                 Cache.PlayerPed.FadeIn();
             }
             else
             {
+                EventSystem.Send("user:job", "Character Creation");
                 Cache.PlayerPed.FadeIn();
                 Game.PlayerPed.IsInvincible = false;
                 Cache.Character.IsPassive = true;
@@ -333,6 +335,9 @@ namespace Curiosity.Core.Client.Managers
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
             Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
+            Game.PlayerPed.IsInvincible = false;
+
+            EventSystem.Send("user:job", "Unemployed");
 
             // CreatePlayerGroup();
 
