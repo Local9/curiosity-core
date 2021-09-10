@@ -37,8 +37,6 @@ namespace Curiosity.Core.Client.Managers
 
                 string nuiMessage = jsonBuilder.Build();
 
-                Logger.Debug($"{nuiMessage}");
-
                 API.SendNuiMessage(nuiMessage);
 
                 return null;
