@@ -12,6 +12,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         UIMenu menu;
 
         UIMenuListItem uiLstWheelType;
+        Vehicle currentVehicle = null;
 
         bool hornTest = false;
 
@@ -31,25 +32,15 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     "Street"        // 11
                 };
 
-        private int baseMenuIndex = 0;
-
         internal void Create(UIMenu vehicleModMenu)
         {
             menu = vehicleModMenu;
             menu.MouseControlsEnabled = false;
 
-            menu.OnIndexChange += (sender, newIndex) =>
-            {
-                baseMenuIndex = newIndex;
-            };
-
             menu.OnMenuStateChanged += (oldMenu, newMenu, state) =>
             {
                 if (Equals(MenuState.Opened, state) || Equals(MenuState.ChangeForward, state))
                 {
-                    if (baseMenuIndex > menu.MenuItems.Count)
-                        baseMenuIndex = 0;
-
                     UpdateMods();
                     PluginManager.Instance.AttachTickHandler(TestHorn);
                 }
@@ -73,14 +64,17 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         void UpdateMods()
         {
             // clear the menu
-            menu.Clear();
-            uiLstWheelType = null;
 
             // get the vehicle they are sat in
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
             // check it
-            if (vehicle is not null && vehicle.Exists() && !vehicle.IsDead)
+            if (vehicle is not null && vehicle.Exists() && !vehicle.IsDead && currentVehicle != vehicle)
             {
+                menu.Clear();
+                uiLstWheelType = null;
+
+                currentVehicle = vehicle;
+
                 // Set the vehicle mod kit
                 vehicle.Mods.InstallModKit();
                 // Get the vehicles mods
@@ -138,6 +132,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                         Logger.Debug($"Vehicle Mod Ignored: {mod}");
                     }
                 }
+
+                menu.RefreshIndex();
 
                 menu.OnListChange += (sender, item, index) =>
                 {
