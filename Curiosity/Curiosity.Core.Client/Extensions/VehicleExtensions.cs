@@ -72,6 +72,7 @@ namespace Curiosity.Core.Client.Extensions
             if (!vehicle.Exists()) return;
 
             await vehicle.FadeOut();
+            vehicle.MarkAsNoLongerNeeded();
             vehicle.Delete();
         }
 
