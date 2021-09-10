@@ -306,6 +306,7 @@ namespace Curiosity.Core.Client.Managers
             else
             {
                 Cache.PlayerPed.FadeIn();
+                Game.PlayerPed.IsInvincible = false;
                 Cache.Character.IsPassive = true;
                 await player.Character.PostLoad();
             }
