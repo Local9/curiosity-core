@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -31,11 +32,12 @@ namespace Curiosity.Core.Client.Managers
                     name = metadata.Find<string>(0),
                     message = metadata.Find<string>(2),
                     showChat = !API.IsPauseMenuActive(),
-                    avatar = metadata.Find<string>(5),
+                    avatar = metadata.Find<string>(6),
                 });
 
                 string nuiMessage = jsonBuilder.Build();
 
+                Logger.Debug($"{nuiMessage}");
 
                 API.SendNuiMessage(nuiMessage);
 
