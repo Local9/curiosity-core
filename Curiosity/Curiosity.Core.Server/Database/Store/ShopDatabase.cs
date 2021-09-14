@@ -305,6 +305,7 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.ImageUri = $"{kv[0]["ImageUri"]}";
                     curiosityStoreItem.SpawnTypeId = (SpawnType)kv[0]["SpawnTypeId"];
                     curiosityStoreItem.OriginalValue = int.Parse($"{kv[0]["OriginalValue"]}");
+                    curiosityStoreItem.HashKey = $"{kv[0]["HashKey"]}";
 
                     return curiosityStoreItem;
                 }

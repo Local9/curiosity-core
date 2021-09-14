@@ -1,4 +1,6 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
@@ -102,6 +104,7 @@ namespace Curiosity.Core.Server.Managers
                 SqlResult sqlResult = new SqlResult();
                 SqlResult purchaseResult = new SqlResult();
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 try
                 {
@@ -247,6 +250,14 @@ namespace Curiosity.Core.Server.Managers
                     if (item.IsVehicle)
                     {
                         EventSystem.Send("garage:update", metadata.Sender, item.Label);
+                    }
+
+                    if (item.IsWeapon)
+                    {
+                        int hash = API.GetHashKey(item.HashKey);
+                        await BaseScript.Delay(0);
+                        API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
+                        await Database.Store.CharacterDatabase.InsertInventoryItem(curiosityUser.Character.CharacterId, item.ItemId, 1);
                     }
 
                     goto ReturnResult;

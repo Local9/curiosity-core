@@ -81,6 +81,8 @@ namespace Curiosity.Systems.Library.Models.Shop
             || SpawnTypeId == SpawnType.Boat
             || SpawnTypeId == SpawnType.Vehicle;
 
+        public bool IsWeapon => SpawnTypeId == SpawnType.Weapon;
+
         [DataMember(Name = "isHealingItem")]
         public bool IsHealingItem;
 
