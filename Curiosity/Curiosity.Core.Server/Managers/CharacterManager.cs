@@ -90,6 +90,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("character:routing:base", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
 
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
@@ -104,11 +105,12 @@ namespace Curiosity.Core.Server.Managers
 
                 player.State.Set(StateBagKey.PLAYER_ROUTING, 0, true);
                 player.State.Set(StateBagKey.PLAYER_HANDLE, player.Handle, true);
-                player.State.Set(StateBagKey.PLAYER_PASSIVE, true, true);
+
+                player.State.Set(StateBagKey.PLAYER_PASSIVE, u.Character.IsPassive, true);
 
                 API.SetPlayerCullingRadius($"{metadata.Sender}", 400.0f);
 
-                CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
+                
                 u.RoutingBucket = 0;
 
                 if (u.Character.LastPosition is null)
