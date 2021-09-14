@@ -9,6 +9,7 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -253,24 +254,34 @@ namespace Curiosity.Core.Client.Managers
 
                     Logger.Debug($"Interior {interiorId} @ {currentPos.X},{currentPos.Y},{currentPos.Z}");
 
-                    string msg = "You have been moved to the City Hall as you were found";
+                    StringBuilder strBuilder = new StringBuilder();
+                    strBuilder.Append("You have been moved to the City Hall as you were found");
+                    bool sendMessage = false;
 
                     if (interiorId > 0)
                     {
-                        Notify.Info($"{msg} in some weird location.");
+                        sendMessage = true;
+                        strBuilder.Append(" in some weird location.");
                         MoveToCityHall();
                     }
 
                     if (API.IsEntityInWater(API.PlayerPedId()))
                     {
-                        Notify.Info($"{msg} sleeping with the fishes.");
+                        sendMessage = true;
+                        strBuilder.Append(" sleeping with the fishes.");
                         MoveToCityHall();
                     }
 
                     if (API.IsEntityInAir(API.PlayerPedId()))
                     {
-                        Notify.Info($"{msg} being abducted.");
+                        sendMessage = true;
+                        strBuilder.Append(" being abducted.");
                         MoveToCityHall();
+                    }
+
+                    if (sendMessage)
+                    {
+                        NotificationManager.GetModule().Info(strBuilder.ToString());
                     }
 
                     if (Game.PlayerPed.IsInRangeOf(CityHallPosition, 300f))
