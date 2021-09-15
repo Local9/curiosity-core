@@ -162,7 +162,7 @@ namespace Curiosity.Core.Client.Managers
                 int interiorId = GetInteriorFromEntity(PlayerPedId());
 
                 if (interiorId == 0)
-                    NotificationManager.GetModule().Info($"<b>Weather Update<b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
+                    NotificationManager.GetModule().Info($"<b>Weather Update</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
                 
                 await BaseScript.Delay(15000);
 
