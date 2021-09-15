@@ -29,10 +29,40 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
         static Vector3 positionSave = Vector3.Zero;
-
         static List<Ped> companions = new List<Ped>();
+        static Scaleform testScaleform;
 
         #region Player
+
+        [CommandInfo(new[] { "scaleform" })]
+        public class ScalefromTest : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (testScaleform is not null)
+                {
+                    testScaleform.Dispose();
+                }
+
+                testScaleform = new Scaleform("scaleform_test");
+
+                int timeout = 1000;
+                DateTime start = DateTime.Now;
+                while (!testScaleform.IsLoaded && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) await BaseScript.Delay(0);
+
+                Logger.Debug($"Scaleform Loaded: {testScaleform.IsLoaded}");
+
+                testScaleform.CallFunction("SET_PLAYER_NAME", arguments[0]);
+
+                while (testScaleform.IsLoaded)
+                {
+                    testScaleform.Render2D();
+                    await BaseScript.Delay(0);
+                }
+
+                testScaleform.Dispose();
+            }
+        }
 
         [CommandInfo(new[] { "textEntity" })]
         public class TextEntity : ICommand
