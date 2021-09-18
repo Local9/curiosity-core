@@ -52,11 +52,9 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 Logger.Debug($"Scaleform Loaded: {testScaleform.IsLoaded}");
 
-                testScaleform.CallFunction("SET_PLAYER_NAME", arguments[0]);
-
                 while (testScaleform.IsLoaded)
                 {
-                    testScaleform.Render2D();
+                    testScaleform.Render3D(Cache.PlayerPed.GetOffsetPosition(new Vector3(.5f, .5f, .5f)), Vector3.Zero, new Vector3(3f, 2f, 1f));
                     await BaseScript.Delay(0);
                 }
 
