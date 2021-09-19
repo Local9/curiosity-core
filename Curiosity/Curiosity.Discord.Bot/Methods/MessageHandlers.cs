@@ -101,7 +101,18 @@ namespace Curiosity.LifeV.Bot.Methods
             //if (message.Content.Contains("twitch.tv"))
             //    return;
 
-            if (message.Content.Contains("bit.ly") || message.Content.Contains(".ru/") || message.Content.Contains(".link/") || message.Content.Contains("ramlucky.xyz") || message.Content.Contains("discord.shop") || message.Content.Contains("free discord nitro") || message.Content.Contains("/airdrop"))
+            if (message.Content.Contains("bit.ly")
+                || message.Content.Contains(".ru/")
+                || message.Content.Contains(".link/")
+                || message.Content.Contains("ramlucky.xyz")
+                || message.Content.Contains("discord.shop")
+                || message.Content.Contains("free discord nitro")
+                || message.Content.Contains("Free Discord Nitro")
+                || message.Content.Contains(".com/airdrop")
+                || message.Content.Contains("steam/gifts")
+                || message.Content.Contains("Get Discord Nitro")
+                || message.Content.Contains("offer is valid")
+                )
             {
                 await message.DeleteAsync();
 
