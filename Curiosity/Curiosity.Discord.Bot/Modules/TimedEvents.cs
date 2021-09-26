@@ -28,6 +28,7 @@ namespace Curiosity.LifeV.Bot
         {
             { "Worlds", "5.9.0.85:30120" }
         };
+
         private int currentServer = 0;
 
         public TimedEvents(DiscordSocketClient client, ulong guildId)

@@ -115,7 +115,7 @@ namespace Curiosity.LifeV.Bot.Methods
             "Have you heard about the new restaurant called ‘Karma?’ There’s no menu—you get what you deserve.",
         };
 
-        public async static Task ReactToPing(SocketUserMessage message, SocketCommandContext context)
+        public async static Task ReactToMention(SocketUserMessage message, SocketCommandContext context)
         {
             await message.DeleteAsync();
 

@@ -1,7 +1,10 @@
-﻿using Discord.Commands;
+﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
+using Discord.Commands;
 using Discord.WebSocket;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +20,11 @@ namespace Curiosity.LifeV.Bot.Methods
         static Dictionary<ulong, DateTime> discordChannel = new Dictionary<ulong, DateTime>();
 
         static Dictionary<ulong, KeyValuePair<ulong, string>> stickyMessages = new Dictionary<ulong, KeyValuePair<ulong, string>>();
+
+        private Dictionary<string, string> servers = new Dictionary<string, string>()
+        {
+            { "Worlds", "5.9.0.85:30120" }
+        };
 
         public MessageHandlers(DiscordSocketClient client, ulong guildId)
         {
@@ -83,24 +91,6 @@ namespace Curiosity.LifeV.Bot.Methods
 
         public async Task HandleAutomatedResponses(SocketUserMessage message, SocketCommandContext context)
         {
-            //if (message.Content.Contains("cfx.re"))
-            //    return;
-
-            //if (message.Content.Contains("fivem.net"))
-            //    return;
-
-            //if (message.Content.Contains("lifev.net"))
-            //    return;
-
-            //if (message.Content.Contains("giphy.com"))
-            //    return;
-
-            //if (message.Content.Contains("tenor.com"))
-            //    return;
-
-            //if (message.Content.Contains("twitch.tv"))
-            //    return;
-
             if (message.Content.Contains("bit.ly")
                 || message.Content.Contains(".ru/")
                 || message.Content.Contains(".link/")
@@ -132,6 +122,39 @@ namespace Curiosity.LifeV.Bot.Methods
                 await Task.Delay(5000);
 
                 await msg.DeleteAsync();
+            }
+        }
+
+        public async Task HandleCustomResponseMessage(SocketUserMessage message, SocketCommandContext context)
+        {
+            string messageContent = message.Content.ToLower();
+            KeyValuePair<string, string> server = servers.ElementAt(0);
+
+            if (messageContent.Contains("!ip"))
+            {
+                await context.Channel.SendMessageAsync($"http://connect.lifev.net or `connect {server.Value}`");
+            }
+
+            if (messageContent.Contains("server on?") || messageContent.Contains("server up?"))
+            {
+                try
+                {
+                    string result = await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/players.json");
+
+                    List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
+
+                    await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/info.json");
+                    await context.Channel.SendMessageAsync($"Server is online with {lst.Count} players; http://connect.lifev.net");
+                }
+                catch (Exception ex)
+                {
+                    await context.Channel.SendMessageAsync("Either the server is currently offline, or there is another issue.");
+                }
+            }
+
+            if (messageContent.Contains("fivem down?"))
+            {
+                await context.Channel.SendMessageAsync("Best place to check; https://status.cfx.re/");
             }
         }
 

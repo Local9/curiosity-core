@@ -126,18 +126,15 @@ namespace Curiosity.LifeV.Bot
 
                 if (message.MentionedUsers.Select(u => u).Where(x => x.IsBot && x.Id == _client.CurrentUser.Id).ToList().Count > 0)
                 {
-                    PingHandler.ReactToPing(message, context);
+                    PingHandler.ReactToMention(message, context);
                 }
-
-                //if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
-                //{
-                //    messageHandlers.HandleGunMessage(message, context);
-                //}
 
                 if (urlRE.IsMatch(message.Content))
                 {
                     messageHandlers.HandleAutomatedResponses(message, context);
                 }
+
+                messageHandlers.HandleCustomResponseMessage(message, context);
 
                 if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
                 {
