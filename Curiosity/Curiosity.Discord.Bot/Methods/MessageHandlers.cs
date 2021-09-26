@@ -132,7 +132,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
             if (messageContent.Contains("!ip"))
             {
-                await context.Channel.SendMessageAsync($"http://connect.lifev.net or `connect {server.Value}`");
+                await context.Channel.SendMessageAsync($"<http://connect.lifev.net> or `connect {server.Value}`");
             }
 
             if (messageContent.Contains("server on?") || messageContent.Contains("server up?"))
@@ -144,7 +144,7 @@ namespace Curiosity.LifeV.Bot.Methods
                     List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
 
                     await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/info.json");
-                    await context.Channel.SendMessageAsync($"Server is online with {lst.Count} players; http://connect.lifev.net");
+                    await context.Channel.SendMessageAsync($"Server is online with {lst.Count} players; <http://connect.lifev.net>");
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +154,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
             if (messageContent.Contains("fivem down?"))
             {
-                await context.Channel.SendMessageAsync("Best place to check; https://status.cfx.re/");
+                await context.Channel.SendMessageAsync("Best place to check; <https://status.cfx.re/>");
             }
         }
 
