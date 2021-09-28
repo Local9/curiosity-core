@@ -107,6 +107,15 @@ namespace Curiosity.Core.Server.Managers
                         weatherTypes.Add(WeatherType.RAIN);
                     }
 
+                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
+                    {
+                        if (Utility.RANDOM.Bool(.25f))
+                            weatherTypes.Add(WeatherType.RAIN);
+
+                        if(Utility.RANDOM.Bool(.1f))
+                            weatherTypes.Add(WeatherType.THUNDER);
+                    }
+
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
                 }
             }
