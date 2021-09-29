@@ -35,33 +35,52 @@ namespace Curiosity.Racing.Client.Managers
             checkpoints.Clear();
         }
 
-        [TickHandler]
-        private async Task OnTrackManagerTick()
+        //[TickHandler]
+        //private async Task OnTrackManagerTick()
+        //{
+        //    if (Game.IsControlJustPressed(0, Control.Context))
+        //    {
+        //        int hudRed = 0;
+        //        int hudGreen = 0;
+        //        int hudBlue = 0;
+        //        int hudAlpha = 0;
+        //        GetHudColour(1, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
+
+        //        Vector3 pos = Game.PlayerPed.Position;
+        //        int cp = CreateCheckpoint((int)CP_ARROW_ONE, pos.X, pos.Y, pos.Z - 1f, pos.X, pos.Y, pos.Z, 7.5f, hudRed, hudGreen, hudBlue, hudAlpha, 0);
+        //        Checkpoint checkpoint = new Checkpoint(cp);
+
+        //        GetHudColour(13, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
+        //        SetCheckpointRgba(cp, hudRed, hudGreen, hudBlue, hudAlpha);
+
+        //        GetHudColour(134, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
+        //        SetCheckpointRgba2(cp, hudRed, hudGreen, hudBlue, hudAlpha);
+
+        //        SetCheckpointCylinderHeight(cp, 1.6f, 5f, 100f);
+
+        //        checkpoints.Add(checkpoint);
+
+        //        UpdateCheckpoints();
+
+        //        PlaySoundFrontend(-1, "CHECKPOINT_NORMAL", "HUD_MINI_GAME_SOUNDSET", false);
+        //    }
+        //}
+
+        public void UpdateCheckpoints()
         {
-            if (Game.IsControlJustPressed(0, Control.Context))
+            try
             {
-                int hudRed = 0;
-                int hudGreen = 0;
-                int hudBlue = 0;
-                int hudAlpha = 0;
-                GetHudColour(1, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
+                for (int i = 0; i < checkpoints.Count; i++)
+                {
+                    if (i == checkpoints.Count)
+                        continue;
 
-                Vector3 pos = Game.PlayerPed.Position;
-                int cp = CreateCheckpoint((int)CP_FINISH, pos.X, pos.Y, pos.Z - 2f, pos.X, pos.Y, pos.Z, 7.5f, hudRed, hudGreen, hudBlue, hudAlpha, 0);
-                Checkpoint checkpoint = new Checkpoint(cp);
-
-                GetHudColour(13, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
-                SetCheckpointRgba(cp, hudRed, hudGreen, hudBlue, hudAlpha);
-
-                GetHudColour(134, ref hudRed, ref hudGreen, ref hudBlue, ref hudAlpha);
-                SetCheckpointRgba2(cp, hudRed, hudGreen, hudBlue, hudAlpha);
-
-                checkpoint.CylinderNearHeight = 3f;
-                checkpoint.CylinderFarHeight = 100f;
-
-                checkpoints.Add(checkpoint);
-
-                PlaySoundFrontend(-1, "CHECKPOINT_NORMAL", "HUD_MINI_GAME_SOUNDSET", false);
+                    checkpoints[i].TargetPosition = checkpoints[i + 1].Position;
+                }
+            }
+            catch(Exception ex)
+            {
+                // IGNORE
             }
         }
     }
