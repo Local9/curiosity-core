@@ -5,7 +5,6 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Models;
 using System;
