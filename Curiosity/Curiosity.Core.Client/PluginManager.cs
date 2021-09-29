@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client
         public static Random Rand = new Random();
 
         public readonly DiscordRichPresence DiscordRichPresence =
-            new DiscordRichPresence("590126930066407424", "Live V Universe", "forums.lifev.net")
+            new DiscordRichPresence("590126930066407424", "LiveV Worlds", "forums.lifev.net")
             {
                 SmallAsset = "fivem",
                 SmallAssetText = "fivem.net",
