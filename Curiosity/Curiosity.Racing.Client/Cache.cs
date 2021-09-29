@@ -1,13 +1,11 @@
-using Curiosity.Racing.Client.Environment.Entities;
-using Curiosity.Systems.Library.Models;
+using CitizenFX.Core;
+
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Racing.Client
 {
     public class Cache
     {
-        public static CuriosityPlayer Player => CuriosityPlugin.Instance.Local;
-        public static CuriosityEntity Entity => Player?.Entity;
-        public static CuriosityCharacter Character => Player?.Character;
-        public static Position Position => Entity.Position;
+        public static Player Player => new Player(GetPlayerPed(PlayerId()));
     }
 }

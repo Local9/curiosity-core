@@ -1,13 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Racing.Client.Commands;
-using Curiosity.Racing.Client.Commands.Impl;
 using Curiosity.Racing.Client.Diagnostics;
 using Curiosity.Racing.Client.Discord;
 using Curiosity.Racing.Client.Environment.Entities;
 using Curiosity.Racing.Client.Events;
-using Curiosity.Racing.Client.Extensions;
 using Curiosity.Racing.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
@@ -19,16 +16,16 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Racing.Client
 {
-    public class CuriosityPlugin : BaseScript
+    public class PluginManager : BaseScript
     {
         public const string DECOR_PED_OWNER = "PED_OWNER";
 
-        public static CuriosityPlugin Instance { get; private set; }
+        public static PluginManager Instance { get; private set; }
         public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
 
         public readonly DiscordRichPresence DiscordRichPresence =
-            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "Live V", "forums.lifev.net")
+            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "LiveV Worlds", "forums.lifev.net")
             {
                 SmallAsset = "fivem",
                 SmallAssetText = "fivem.net",
@@ -44,7 +41,7 @@ namespace Curiosity.Racing.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
-        public CuriosityPlugin()
+        public PluginManager()
         {
             Logger.Info("[Curiosity]: Constructor Call from CitizenFX - BaseScript");
 
@@ -109,33 +106,11 @@ namespace Curiosity.Racing.Client
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
-            var commands = new CommandFramework();
-
-            commands.Bind(typeof(DeveloperTools));
-            commands.Bind(typeof(PlayerCommands));
-
             AttachTickHandlers(this);
 
             API.DecorRegister(DECOR_PED_OWNER, 3);
 
             Logger.Info("Load method has been completed.");
-        }
-
-        [TickHandler]
-        private async Task SaveTask()
-        {
-            if (Local?.Character != null)
-            {
-                if (Local.Character.MarkedAsRegistered)
-                {
-                    Local.Character.LastPosition = Local.Entity.Position;
-                    Local.Character.Health = API.GetEntityHealth(Cache.Entity.Id);
-                    Local.Character.Armor = API.GetPedArmour(Cache.Entity.Id);
-                    Local.Character.Save();
-                }
-            }
-
-            await Delay(5000);
         }
 
         [TickHandler]

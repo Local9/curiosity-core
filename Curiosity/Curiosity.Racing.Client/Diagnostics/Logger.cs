@@ -38,8 +38,6 @@ namespace Curiosity.Racing.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (!Cache.Player.User.IsDeveloper) return;
-
                 WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
             }
         }
