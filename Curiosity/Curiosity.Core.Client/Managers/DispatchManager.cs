@@ -288,6 +288,30 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
+            string init = GetResourceKvpString("curiosity:dispatch:setup");
+
+            if (init != "SETUP")
+            {
+                ResetCopsWhenCleared = false;
+                RemoveCopsWhenFarAway = true;
+                RemoveCopsWhenFarAwayChase = true;
+                ClearWantedLevelWhenClear = true;
+
+                BackupEnabled = true;
+                BackupPauseWhenSearching = true;
+                BackupDuration = 60000;
+                BackupCooldown = 10000;
+
+                BackupFraction = .25f;
+
+                DisplayDispatchUI = true;
+                DisplayNumberOfRemainingPolice = false;
+
+                SetResourceKvp("curiosity:dispatch:setup", "SETUP");
+            }
+            
+            
+
             _colours.Add("Bg", new Colour(0, 0, 0));
             _colours.Add("BgNoCops", new Colour(50, 0, 0));
             _colours.Add("BarCops", new Colour(240));

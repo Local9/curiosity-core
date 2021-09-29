@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using NativeUI;
@@ -11,8 +12,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class SettingsMenu
     {
-        private UIMenu settingsMenu;
-
         UIMenuListItem miDamageEffects;
 
         UIMenuCheckboxItem miShowServerId;
@@ -22,6 +21,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuCheckboxItem miDevEnableGameEventLogger;
         UIMenuCheckboxItem miDevEnableDebugLog;
         UIMenuCheckboxItem miDevEnableDebugTimeLog;
+
+        UIMenu dispatchSettingsMenu;
+        PoliceSettingsMenu _policeSettingsMenu = new PoliceSettingsMenu();
 
         PlayerNameManager PlayerNameManager = PlayerNameManager.GetModule();
 
@@ -52,15 +54,21 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             miDamageEffects = new UIMenuListItem("Damage Effect", effects, index);
             menu.AddItem(miDamageEffects);
 
-            miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
-            miShowServerId.Enabled = false;
-            menu.AddItem(miShowServerId);
-            miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
-            miShowPlayerNames.Enabled = false;
-            menu.AddItem(miShowPlayerNames);
-            miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
-            miShowMyName.Enabled = false;
-            menu.AddItem(miShowMyName);
+            dispatchSettingsMenu = InteractionMenu.MenuPool.AddSubMenu(menu, "World Police Settings");
+            _policeSettingsMenu.CreateMenu(dispatchSettingsMenu);
+
+            //miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
+            //miShowServerId.Enabled = false;
+            //menu.AddItem(miShowServerId);
+            //miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
+            //miShowPlayerNames.Enabled = false;
+            //menu.AddItem(miShowPlayerNames);
+
+            //miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
+            //miShowMyName.Enabled = false;
+            //menu.AddItem(miShowMyName);
+
+
 
             return menu;
         }

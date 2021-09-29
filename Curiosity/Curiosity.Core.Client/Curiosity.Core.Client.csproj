@@ -71,6 +71,7 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\SettingsSubMenu\PoliceSettingsMenu.cs" />
     <Compile Include="Managers\DispatchManager.cs" />
     <Compile Include="Managers\Milo\CayoPericoManager.cs" />
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
@@ -199,7 +200,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interface\Menus\SubMenu\SettingsSubMenu\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
