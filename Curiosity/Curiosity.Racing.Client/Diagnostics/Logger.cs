@@ -36,10 +36,9 @@ namespace Curiosity.Racing.Client.Diagnostics
 
         public static void Debug(string msg)
         {
-            if (Cache.Player != null)
-            {
-                WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
-            }
+#if DEBUG
+            WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+#endif
         }
 
         private static void WriteLine(string title, string msg, ConsoleColor color)
