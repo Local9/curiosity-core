@@ -47,35 +47,241 @@ namespace Curiosity.Core.Client.Managers
         private int countdownTick = -1;
         private int countdown = -1;
 
+        private float curFill = 0.0f;
+
         private bool dispatch = false;
         private bool active = false;
         private bool decreased = false;
 
         // CONFIGURATION VALUES
         private int copsMinimum = 0; // Minimum cop number (Use negative values for longer grace periods)
-        private int decreaseLevel = 0; // Wanted level stars to decrease when there are no cops remaining - This overrides WantedClear (0 = Disable)
+        private int DecreaseLevel = 0; // Wanted level stars to decrease when there are no cops remaining - This overrides WantedClear (0 = Disable)
 
-        private bool resetCopsWhenCleared = false; // Reset cop number to base when wanted level is cleared/decreased
-        private bool removeCopsWhenFarAway = true; // Decrease cop number for evaded cops (Far away)
-        private bool removeCopsWhenFarAwayChase = true; // CopsRemoveEvaded only decreases cop number during chases
-        private bool clearWantedLevelWhenClear = true; // Clear wanted level when there are no cops remaining
+        public bool ResetCopsWhenCleared // Reset cop number to base when wanted level is cleared/decreased
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:ResetCopsWhenCleared");
+
+                if (val is null)
+                    ResetCopsWhenCleared = false;
+
+                return GetResourceKvpInt("curiosity:dispatch:ResetCopsWhenCleared") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:ResetCopsWhenCleared", val);
+            }
+        }
+
+        public bool RemoveCopsWhenFarAway // Decrease cop number for evaded cops (Far away)
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAway");
+
+                if (val is null)
+                    RemoveCopsWhenFarAway = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAway") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAway", val);
+            }
+        }
+
+        public bool RemoveCopsWhenFarAwayChase // CopsRemoveEvaded only decreases cop number during chases
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAwayChase");
+
+                if (val is null)
+                    RemoveCopsWhenFarAwayChase = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAwayChase") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:RemoveCopsWhenFarAwayChase", val);
+            }
+        }
+
+        public bool ClearWantedLevelWhenClear// Clear wanted level when there are no cops remaining
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:ClearWantedLevelWhenClear");
+
+                if (val is null)
+                    ClearWantedLevelWhenClear = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:ClearWantedLevelWhenClear") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:ClearWantedLevelWhenClear", val);
+            }
+        }
 
         // BACK UP
-        private bool backupEnabled = true; // Enables backup
-        private bool backupPauseWhenSearching = true; // Pause backup progress when cops are searching for the player (If any are still left)
-        private int backupDuration = 60000; // Backup duration in milliseconds
-        private int backupCooldown = 10000; // Backup cooldown in milliseconds
-        private float backupFraction = 0.25f; // Maximum cop number fraction before backup can be activated (2500 = 25%, 5000 = 50%)
+        public bool BackupEnabled // Enables backup
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:BackupEnabled");
 
-        private float curFill = 0.0f;
+                if (val is null)
+                    BackupEnabled = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:BackupEnabled") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:BackupEnabled", val);
+            }
+        }
+
+        public bool BackupPauseWhenSearching // Pause backup progress when cops are searching for the player (If any are still left)
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:BackupPauseWhenSearching");
+
+                if (val is null)
+                    BackupPauseWhenSearching = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:BackupPauseWhenSearching") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:BackupPauseWhenSearching", val);
+            }
+        }
+
+        public int BackupDuration // Backup duration in milliseconds
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:BackupDuration");
+
+                if (val is null)
+                    BackupDuration = 60000;
+
+                return GetResourceKvpInt("curiosity:dispatch:BackupDuration");
+            }
+            set
+            {
+                SetResourceKvpInt("curiosity:dispatch:BackupDuration", value);
+            }
+        }
+
+        public int BackupCooldown // Backup cooldown in milliseconds
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:BackupCooldown");
+
+                if (val is null)
+                    BackupCooldown = 10000;
+
+                return GetResourceKvpInt("curiosity:dispatch:BackupCooldown");
+            }
+            set
+            {
+                SetResourceKvpInt("curiosity:dispatch:BackupCooldown", value);
+            }
+        }
+
+        public float BackupFraction // Maximum cop number fraction before backup can be activated (2500 = 25%, 5000 = 50%)
+        {
+            get
+            {
+                float? val = GetResourceKvpFloat("curiosity:dispatch:BackupFraction");
+
+                if (val is null)
+                    BackupFraction = .25f;
+
+                return GetResourceKvpFloat("curiosity:dispatch:BackupFraction");
+            }
+            set
+            {
+                SetResourceKvpFloat("curiosity:dispatch:BackupFraction", value);
+            }
+        }
 
         // DISPLAY
-        private bool _displayEnabled = true; // Enables the status display
+        public bool DisplayDispatchUI // Enables the status display
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:DisplayDispatchUI");
+
+                if (val is null)
+                    DisplayDispatchUI = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:DisplayDispatchUI") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:DisplayDispatchUI", val);
+            }
+        }
+
         private float _displayPosX = 0.0f; // X screen coordinate (From right side)
         private float _displayPosY = 0.0335f; // Y screen coordinate (From top side)
         private float _displayWidth = 0.0725f; // Width of status
         private float _displayHeight = 0.01f; // Height of status
-        private bool _displayNumberOfCopsRemaining = false; // Displays cop number next to status
+
+        public bool DisplayNumberOfRemainingPolice // Displays cop number next to status
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:DisplayNumberOfRemainingPolice");
+
+                if (val is null)
+                    DisplayNumberOfRemainingPolice = false;
+
+                return GetResourceKvpInt("curiosity:dispatch:DisplayNumberOfRemainingPolice") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:DisplayNumberOfRemainingPolice", val);
+            }
+        }
 
         // SOUND
         private bool soundEnabled = true; // Enables sounds
@@ -168,7 +374,7 @@ namespace Curiosity.Core.Client.Managers
                 countdown = -1;
                 curFill = 0.0f;
                 coolTick = 0;
-                if (resetCopsWhenCleared)
+                if (ResetCopsWhenCleared)
                 {
                     currentCops = maxCops[4];
                     ToggleDispatch(true);
@@ -176,7 +382,7 @@ namespace Curiosity.Core.Client.Managers
                 }
             }
 
-            if (((!_displayEnabled ? 0 : (wantedLevel > 0 ? 1 : 0)) & (displayUi ? 1 : 0)) != 0)
+            if (((!DisplayDispatchUI ? 0 : (wantedLevel > 0 ? 1 : 0)) & (displayUi ? 1 : 0)) != 0)
             {
                 float num3 = Math.Min((float)currentCops / (float)GetMaxCops(wantedLevel), 1f);
                 float val2 = num3 - curFill;
@@ -202,11 +408,11 @@ namespace Curiosity.Core.Client.Managers
                 bool flag3 = currentCops <= 0;
                 float width4 = num3 * width1;
                 float num9 = (double)width2 < 0.0 ? width2 : 0.0f;
-                float width5 = (float)((1.0 - 0.0 / (double)backupDuration) * ((double)Math.Min(width1 - width2, num8 * (float)num7) + (double)num9));
-                float width6 = (float)((1.0 - (double)((copTick == -1 ? tickInitTime : copTick) - tickInitTime) / (double)backupDuration) * ((double)Math.Min(width1 - width2, num8 * (float)num7) + (double)num9));
-                bool flag4 = ((!backupPauseWhenSearching ? 0 : (copTick != -1 ? 1 : 0)) & (areStarsGreyedOut ? 1 : 0)) != 0 && (_trackedPeds.Count > 0 || dispatch);
+                float width5 = (float)((1.0 - 0.0 / (double)BackupDuration) * ((double)Math.Min(width1 - width2, num8 * (float)num7) + (double)num9));
+                float width6 = (float)((1.0 - (double)((copTick == -1 ? tickInitTime : copTick) - tickInitTime) / (double)BackupDuration) * ((double)Math.Min(width1 - width2, num8 * (float)num7) + (double)num9));
+                bool flag4 = ((!BackupPauseWhenSearching ? 0 : (copTick != -1 ? 1 : 0)) & (areStarsGreyedOut ? 1 : 0)) != 0 && (_trackedPeds.Count > 0 || dispatch);
 
-                if (_displayNumberOfCopsRemaining)
+                if (DisplayNumberOfRemainingPolice)
                 {
                     float width7 = ScreenInterface.TextWidth(currentCops.ToString(), 0.5f, 2);
                     DrawRect((float)((double)num5 - (double)displayWidth - 3.0 / 1000.0 - (double)width7 / 2.0), y, width7, 0.025f, flag3 ? _colours["BgNoCops"] : _colours["Bg"], 128);
@@ -238,12 +444,12 @@ namespace Curiosity.Core.Client.Managers
                     DrawRect((float)((double)num5 - (double)num6 - 0.00150000001303852), y, width3, height, flag3 ? _colours["BgNoCops"] : _colours["Bg"]);
             }
 
-            if (clearWantedLevelWhenClear && currentCops <= 0 && _trackedPeds.Count <= 0 && wantedLevel > 0 && (decreaseLevel == 0 || !decreased))
+            if (ClearWantedLevelWhenClear && currentCops <= 0 && _trackedPeds.Count <= 0 && wantedLevel > 0 && (DecreaseLevel == 0 || !decreased))
             {
-                if ((uint)decreaseLevel > 0U)
+                if ((uint)DecreaseLevel > 0U)
                 {
                     decreased = true;
-                    SetPlayerWantedLevel(playerHandle, (wantedLevel - decreaseLevel), false);
+                    SetPlayerWantedLevel(playerHandle, (wantedLevel - DecreaseLevel), false);
                 }
                 else
                     ClearPlayerWantedLevel(playerHandle);
@@ -302,7 +508,7 @@ namespace Curiosity.Core.Client.Managers
                         bool flag7 = !flag6 && ((Entity)ped).IsDead;
                         if (flag6 | flag7)
                         {
-                            if (active && (flag7 || removeCopsWhenFarAway && (!removeCopsWhenFarAwayChase || !areStarsGreyedOut) && flag6 && trackedPed2.near))
+                            if (active && (flag7 || RemoveCopsWhenFarAway && (!RemoveCopsWhenFarAwayChase || !areStarsGreyedOut) && flag6 && trackedPed2.near))
                             {
                                 currentCops = Math.Max(currentCops - 1, copsMinimum);
                                 if (dispatch && currentCops <= 0)
@@ -317,13 +523,13 @@ namespace Curiosity.Core.Client.Managers
                 while (!flag5);
             }
 
-            if (!backupEnabled && (coolTick != -1 || copTick != -1))
+            if (!BackupEnabled && (coolTick != -1 || copTick != -1))
             {
                 coolTick = -1;
                 copTick = -1;
             }
 
-            if (countdown == -1 && backupDuration >= 4000 && copTick != -1 && copTick - tickInitTime <= 4000)
+            if (countdown == -1 && BackupDuration >= 4000 && copTick != -1 && copTick - tickInitTime <= 4000)
             {
                 countdown = 4;
                 countdownTick = -1;
@@ -340,9 +546,9 @@ namespace Curiosity.Core.Client.Managers
                     PlaySoundFrontend(-1, "HORDE_COOL_DOWN_TIMER", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
             }
 
-            if (coolTick != -1 && coolTick <= tickInitTime && currentCops < GetMaxCops(wantedLevel) && (double)currentCops / (double)GetMaxCops(wantedLevel) <= (double)backupFraction)
+            if (coolTick != -1 && coolTick <= tickInitTime && currentCops < GetMaxCops(wantedLevel) && (double)currentCops / (double)GetMaxCops(wantedLevel) <= (double)BackupFraction)
             {
-                copTick = tickInitTime + backupDuration;
+                copTick = tickInitTime + BackupDuration;
 
                 if (displayUi && active && soundEnabled && wantedLevel > 0 && currentCops + addCopsAmount[wantedLevel - 1] > 0)
                     PlaySoundFrontend(-1, "Start_Squelch", "CB_RADIO_SFX", false);
@@ -350,7 +556,7 @@ namespace Curiosity.Core.Client.Managers
                 coolTick = -1;
             }
 
-            if (((!backupPauseWhenSearching ? 0 : (copTick != -1 ? 1 : 0)) & (areStarsGreyedOut ? 1 : 0)) != 0 && (_trackedPeds.Count > 0 || dispatch))
+            if (((!BackupPauseWhenSearching ? 0 : (copTick != -1 ? 1 : 0)) & (areStarsGreyedOut ? 1 : 0)) != 0 && (_trackedPeds.Count > 0 || dispatch))
             {
                 if (copTickStore == -1)
                     copTickStore = copTick - tickInitTime;
@@ -369,7 +575,7 @@ namespace Curiosity.Core.Client.Managers
             if (copTick == -1 || copTick > tickInitTime)
                 return;
 
-            coolTick = tickInitTime + backupCooldown;
+            coolTick = tickInitTime + BackupCooldown;
             copTick = -1;
 
             if (currentCops < GetMaxCops(wantedLevel))

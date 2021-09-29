@@ -199,6 +199,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Interface\Menus\SubMenu\SettingsSubMenu\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
