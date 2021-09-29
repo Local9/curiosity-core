@@ -111,34 +111,6 @@ namespace Curiosity.Racing.Client
             Logger.Info("Load method has been completed.");
         }
 
-        [TickHandler]
-        private async Task OnTick()
-        {
-            Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
-            Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
-            Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
-            Screen.Hud.HideComponentThisFrame(HudComponent.MpCash);
-            Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
-            Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
-
-            API.SetTextChatEnabled(false);
-
-            // Disable wanted levels
-            API.ClearPlayerWantedLevel(Game.Player.Handle);
-            API.SetMaxWantedLevel(0);
-            API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
-            API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
-            API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
-            Game.Player.WantedLevel = 0;
-
-            Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death
-
-            // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
-            Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
-
-            await Task.FromResult(0);
-        }
-
         public object LoadManager(Type type)
         {
             if (GetManager(type) != null) return null;
