@@ -65,7 +65,7 @@ namespace Curiosity.Core.Client.Managers
         private bool backupEnabled = true; // Enables backup
         private bool backupPauseWhenSearching = true; // Pause backup progress when cops are searching for the player (If any are still left)
         private int backupDuration = 60000; // Backup duration in milliseconds
-        private int backupCooldown = 15000; // Backup cooldown in milliseconds
+        private int backupCooldown = 10000; // Backup cooldown in milliseconds
         private float backupFraction = 0.25f; // Maximum cop number fraction before backup can be activated (2500 = 25%, 5000 = 50%)
 
         private float curFill = 0.0f;
