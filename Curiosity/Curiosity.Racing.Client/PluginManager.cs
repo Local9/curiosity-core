@@ -49,8 +49,6 @@ namespace Curiosity.Racing.Client
 
             Instance = this;
 
-            API.DoScreenFadeOut(0);
-
             Load();
         }
 
