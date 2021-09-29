@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Cache.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Environment\Entities\Models\Colour.cs" />
+    <Compile Include="Environment\Entities\TrackedPed.cs" />
     <Compile Include="Managers\TrackManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />

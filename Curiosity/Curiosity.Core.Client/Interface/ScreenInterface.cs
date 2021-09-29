@@ -58,18 +58,27 @@ namespace Curiosity.Core.Client.Interface
         };
 
         public static bool TimeoutStateValue = false;
+
+        public static void DrawText(string text, float x, float y, float scale = 0.4f, bool centered = false, int font = 4, int r  = 255, int g = 255, int b = 244, int alpha = 255)
+        {
+            DrawText(text, scale, new Vector2(x, y), Color.FromArgb(alpha, r, g, b), centered, (Font)font, Alignment.Right);
+        }
+
         public static void DrawText(string text, float scale, Vector2 position, Color color, bool centered = false, Font font = Font.ChaletLondon, Alignment alignment = Alignment.Left)
         {
-            SetTextFont(0);
-            SetTextScale(scale, scale);
-            SetTextColour(color.R, color.G, color.B, color.A);
-            SetTextDropshadow(0, 0, 0, 0, 255);
+            SetTextFont((int)font); // 7412968334783068634L
+            SetTextScale(scale, scale); // 560759698880214217L
+            SetTextColour(color.R, color.G, color.B, color.A); // -4725643803099155390L
+            SetTextDropshadow(10, 0, 0, 0, 192); // 2063750248883895902L
             SetTextOutline();
-            SetTextCentre(centered);
+            SetTextCentre(centered); // -4598371208749279093L
+            SetTextWrap(position.Y, position.X); // 7139434236170869360L
 
-            BeginTextCommandDisplayText("STRING");
-            AddTextComponentSubstringPlayerName(text);
-            EndTextCommandDisplayText(position.X, position.Y);
+            SetTextJustification((int)alignment); // 5623137247512493770L
+
+            BeginTextCommandDisplayText("STRING"); // 2736978246810207435L
+            AddTextComponentSubstringPlayerName(text); // 7789129354908300458L
+            EndTextCommandDisplayText(0f, position.Y);
         }
 
         public static async void Draw3DTextTimeout(float x, float y, float z, string message, int timeout = 2500, float scaleMod = 20.0f, float distanceToHide = 20f)
@@ -124,9 +133,13 @@ namespace Curiosity.Core.Client.Interface
             API.ClearDrawOrigin();
         }
 
-        public static void Text(string text, float scale, PointF position, Color color, CitizenFX.Core.UI.Font font = CitizenFX.Core.UI.Font.Monospace, Alignment alignment = Alignment.Center, bool shadow = false, bool outline = false)
+        public static float TextWidth(string text, float size, int font = 4)
         {
-
+            BeginTextCommandGetWidth("STRING");
+            SetTextFont(font);
+            SetTextScale(size, size);
+            AddTextComponentSubstringPlayerName(text);
+            return EndTextCommandGetWidth(true);
         }
 
         public static Tuple<float, float> MinimapAnchor()

@@ -387,6 +387,25 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "test" })]
+        public class TestMode : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                player.Entity.ToggleGodMode();
+                string message = Cache.PlayerPed.IsInvincible ? "God Mode: Enabled" : "God Mode: Disabled";
+                Chat.SendLocalMessage(message);
+                NotificationManager.GetModule().Info(message);
+
+                Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
+                {
+                    Cache.PlayerPed.Weapons.Give(w, 999, false, true);
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                });
+            }
+        }
+
         [CommandInfo(new[] { "yeet" })]
         public class Yeet : ICommand
         {

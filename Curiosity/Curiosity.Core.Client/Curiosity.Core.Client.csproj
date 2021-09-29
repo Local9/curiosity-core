@@ -63,12 +63,15 @@
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Environment\Entities\Models\Colour.cs" />
+    <Compile Include="Environment\Entities\TrackedPed.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
+    <Compile Include="Managers\DispatchManager.cs" />
     <Compile Include="Managers\Milo\CayoPericoManager.cs" />
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
