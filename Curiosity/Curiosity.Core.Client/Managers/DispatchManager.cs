@@ -76,7 +76,7 @@ namespace Curiosity.Core.Client.Managers
         private float _displayPosY = 0.0335f; // Y screen coordinate (From top side)
         private float _displayWidth = 0.0725f; // Width of status
         private float _displayHeight = 0.01f; // Height of status
-        private bool _displayNumberOfCopsRemaining = true; // Displays cop number next to status
+        private bool _displayNumberOfCopsRemaining = false; // Displays cop number next to status
 
         // SOUND
         private bool soundEnabled = true; // Enables sounds
