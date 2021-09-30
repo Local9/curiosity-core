@@ -34,12 +34,12 @@ namespace Curiosity.Systems.Library.Data
 
         public static WeatherSeason GetCurrentSeason()
         {
-            return SeasonalMonth[(WeatherMonth)DateTime.Now.Month];
+            return SeasonalMonth[(WeatherMonth)DateTime.UtcNow.Month];
         }
 
         public static bool IsSnowDay()
         {
-            return SnowDays.Contains(DateTime.Now.Day) && DateTime.Now.Month == 12;
+            return SnowDays.Contains(DateTime.UtcNow.Day) && DateTime.UtcNow.Month == 12;
         }
     }
 
