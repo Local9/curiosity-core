@@ -27,12 +27,16 @@ namespace Curiosity.Core.Client.Managers
                 if (!player.Character.Exists()) continue; // if they don't exist, ignore
 
                 Ped playerPed = player.Character;
-                CanRevivePlayer(playerPosition, playerPed, player.ServerId);
+
+                CanRevivePlayer(playerPosition, playerPed, player.ServerId, myPlayer);
             }
         }
 
-        private async void CanRevivePlayer(Vector3 playerPosition, Ped playerPed, int serverId)
+        private async void CanRevivePlayer(Vector3 playerPosition, Ped playerPed, int serverId, Player myPlayer)
         {
+            if (myPlayer.Character.IsInVehicle()) return;
+            if (myPlayer.Character.IsDead) return;
+
             if (!playerPed.Exists()) return;
             if (!playerPed.IsDead) return;
             if (!playerPed.IsInRangeOf(playerPosition, 2f)) return;
