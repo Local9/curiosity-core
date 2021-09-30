@@ -28,7 +28,7 @@ namespace Curiosity.Systems.Library.Data
         {
             { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN } },
             { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS } },
-            { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.NEUTRAL, WeatherType.CLEAR, WeatherType.FOGGY } },
+            { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.CLEAR, WeatherType.FOGGY } },
             { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD } },
         };
 
