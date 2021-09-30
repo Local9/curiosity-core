@@ -51,6 +51,9 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUserSender = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityUser curiosityUserOther = PluginManager.ActiveUsers[otherId];
 
+                if (curiosityUserSender is null) goto USER_MISSING;
+                if (curiosityUserOther is null) goto USER_MISSING;
+
                 CuriosityShopItem curiosityItem = await Database.Store.CharacterDatabase.GetItem(curiosityUserSender.Character.CharacterId, MEDICAL_KIT_ITEM_ID);
 
                 if (curiosityItem is null)
