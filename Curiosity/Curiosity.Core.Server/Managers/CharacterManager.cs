@@ -17,6 +17,7 @@ namespace Curiosity.Core.Server.Managers
     public class CharacterManager : Manager<CharacterManager>
     {
         DateTime lastSave = DateTime.Now;
+        const int MEDICAL_KIT_ITEM_ID = 495;
 
         public override void Begin()
         {
@@ -33,6 +34,53 @@ namespace Curiosity.Core.Server.Managers
                 API.SetPlayerRoutingBucket(player.Handle, routingId);
 
                 return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:revive:other", new AsyncEventCallback(async metadata =>
+            {
+                int otherId = metadata.Find<int>(0);
+                ExportMessage exportMessage = new ExportMessage();
+
+
+                Player sender = PluginManager.PlayersList[metadata.Sender];
+                Player other = PluginManager.PlayersList[otherId];
+
+                if (sender is null) goto USER_MISSING;
+                if (other is null) goto USER_MISSING;
+
+                CuriosityUser curiosityUserSender = PluginManager.ActiveUsers[metadata.Sender];
+                CuriosityUser curiosityUserOther = PluginManager.ActiveUsers[otherId];
+
+                CuriosityShopItem curiosityItem = await Database.Store.CharacterDatabase.GetItem(curiosityUserSender.Character.CharacterId, MEDICAL_KIT_ITEM_ID);
+
+                if (curiosityItem is null)
+                {
+                    exportMessage.Error = "You currently have no medical kits.";
+                    goto SENDBACK;
+                }
+
+                if (curiosityItem.NumberOwned == 0)
+                {
+                    exportMessage.Error = "You currently have no medical kits.";
+                    goto SENDBACK;
+                }
+
+                bool success = await Database.Store.CharacterDatabase.UseItem(curiosityUserSender.Character.CharacterId, MEDICAL_KIT_ITEM_ID);
+
+                if (!success)
+                {
+                    exportMessage.Error = "Issue when updating items.";
+                    goto SENDBACK;
+                }
+
+                curiosityUserOther.Send("character:respawnNow");
+                goto SENDBACK;
+
+            USER_MISSING:
+                exportMessage.Error = "User not found";
+
+            SENDBACK:
+                return exportMessage;
             }));
 
             EventSystem.GetModule().Attach("character:inventory:items:all", new AsyncEventCallback(async metadata =>

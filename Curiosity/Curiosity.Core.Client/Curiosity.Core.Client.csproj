@@ -77,6 +77,7 @@
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
+    <Compile Include="Managers\WorldPlayerManager.cs" />
     <Compile Include="Utils\Utility.cs" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
