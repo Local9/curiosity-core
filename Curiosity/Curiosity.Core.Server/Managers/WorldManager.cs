@@ -97,6 +97,10 @@ namespace Curiosity.Core.Server.Managers
                 {
                     regionWeatherType[kvp.Key] = WeatherType.XMAS;
                 }
+                else if (isHalloween)
+                {
+                    regionWeatherType[kvp.Key] = WeatherType.HALLOWEEN;
+                }
                 else
                 {
                     WeatherSeason season = WeatherData.GetCurrentSeason();
