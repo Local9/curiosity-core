@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Data;
@@ -88,6 +87,7 @@ namespace Curiosity.Core.Server.Managers
         void RandomiseWeather()
         {
             bool isSnowDay = WeatherData.IsSnowDay();
+            bool isHalloween = WeatherData.IsHalloween();
 
             Dictionary<Region, WeatherType> RegionWeatherTypeCopy = new Dictionary<Region, WeatherType>(regionWeatherType);
 
