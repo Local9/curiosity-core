@@ -65,6 +65,9 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 WasOfficer = true;
 
+                API.SetMaxWantedLevel(0);
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
+
                 Instance.DiscordRichPresence.Status = "On Duty";
                 Instance.DiscordRichPresence.SmallAsset = "police";
                 Instance.DiscordRichPresence.SmallAssetText = "Police Officer";
@@ -87,6 +90,9 @@ namespace Curiosity.MissionManager.Client.Managers
             else if (!IsOfficer && WasOfficer)
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+
+                API.SetMaxWantedLevel(5);
+                Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
 
                 WasOfficer = false;
                 Instance.DiscordRichPresence.Status = "Roaming around";
