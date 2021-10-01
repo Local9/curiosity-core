@@ -76,13 +76,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
-                Game.PlayerPed.Armor = 100;
-
-                //await EquipWeapon(WeaponHash.Nightstick);
-                //await EquipWeapon(WeaponHash.StunGun);
-                //await EquipWeapon(WeaponHash.Flashlight);
-                //await EquipWeapon(WeaponHash.Pistol, 250, true, true);
-
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
                 Notify.Info($"Welcome to the force");
