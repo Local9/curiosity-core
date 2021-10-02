@@ -108,17 +108,9 @@ namespace Curiosity.Core.Client.Managers
         {
             await Session.Loading();
 
-            string fileData = LoadResourceFile(GetCurrentResourceName(), "config/scenarios.json");
-
-            if (string.IsNullOrEmpty(fileData))
-            {
-                Logger.Error($"Error loading scenario file, playing with default settings.");
-                return;
-            }
-
             try
             {
-                List<ScenarioItem> scenarios = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScenarioItem>>(fileData);
+                List<ScenarioItem> scenarios = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScenarioItem>>(Properties.Resources.scenarios);
                 foreach(ScenarioItem scenario in scenarios)
                 {
                     if (scenario.Enabled)

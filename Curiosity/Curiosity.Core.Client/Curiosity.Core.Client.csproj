@@ -185,11 +185,13 @@
     <Compile Include="Managers\PlayerOptionsManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\scenarios.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="data\scenarios.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\overlays.txt" />
-    <None Include="config\interiors.json" />
+    <None Include="data\interiors.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

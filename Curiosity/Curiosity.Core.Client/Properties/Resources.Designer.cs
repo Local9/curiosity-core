@@ -63,6 +63,40 @@ namespace Curiosity.Core.Client.Properties {
         /// <summary>
         ///   Looks up a localized string similar to [
         ///  {
+        ///    &quot;name&quot;: &quot;prologue01&quot;,
+        ///    &quot;dlcName&quot;: &quot;basegame&quot;,
+        ///    &quot;position&quot;: {
+        ///      &quot;X&quot;: 4729.80859,
+        ///      &quot;Y&quot;: -4553.80469,
+        ///      &quot;Z&quot;: 119.623032
+        ///    },
+        ///    &quot;dimensionMin&quot;: {
+        ///      &quot;X&quot;: 3301.531,
+        ///      &quot;Y&quot;: -5483.857,
+        ///      &quot;Z&quot;: 75.60556
+        ///    },
+        ///    &quot;dimensionMax&quot;: {
+        ///      &quot;X&quot;: 6158.08643,
+        ///      &quot;Y&quot;: -3623.75269,
+        ///      &quot;Z&quot;: 163.6405
+        ///    },
+        ///    &quot;entities&quot;: 716,
+        ///    &quot;contentFlags&quot;: 1,
+        ///    &quot;foundByScripted&quot;: true,
+        ///    &quot;interiors&quot;: [],
+        ///    &quot;extraData&quot;: {
+        ///      &quot;name&quot;: &quot;&quot;,
+        ///      &quot;groupNam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string interiors {
+            get {
+                return ResourceManager.GetString("interiors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
         ///    &quot;gender&quot;: 0,
         ///    &quot;name&quot;: &quot;MP_Airraces_Tattoo_000_M&quot;,
         ///    &quot;collectionName&quot;: &quot;mpAirraces_overlays&quot;,
@@ -87,6 +121,46 @@ namespace Curiosity.Core.Client.Properties {
         internal static string overlays {
             get {
                 return ResourceManager.GetString("overlays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;scenario&quot;: &quot;Agency_Heist_Peds&quot;,
+        ///    &quot;enabled&quot;: false
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;ALAMO_PLANES&quot;,
+        ///    &quot;enabled&quot;: false
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;AMMUNATION&quot;,
+        ///    &quot;enabled&quot;: true
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;ARMENIAN_CATS&quot;,
+        ///    &quot;enabled&quot;: true
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;ARMY_GUARD&quot;,
+        ///    &quot;enabled&quot;: true
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;ATTRACT_PAP&quot;,
+        ///    &quot;enabled&quot;: true
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;BLIMP&quot;,
+        ///    &quot;enabled&quot;: true
+        ///  },
+        ///  {
+        ///    &quot;scenario&quot;: &quot;CanyonCliffs&quot;,
+        ///    &quot;enabled&quot;: false [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string scenarios {
+            get {
+                return ResourceManager.GetString("scenarios", resourceCulture);
             }
         }
     }
