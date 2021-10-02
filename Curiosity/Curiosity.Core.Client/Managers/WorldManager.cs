@@ -301,7 +301,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else if (!serverSpawned && vehicle.IsVisible)
                 { 
-                        vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+                    vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
                 }
                 
             });
@@ -332,12 +332,6 @@ namespace Curiosity.Core.Client.Managers
                         NotificationManager.GetModule().Warn($"This is a blacklisted vehicle.");
                         veh.RemoveFromWorld();
                     }
-
-                    if (!serverSpawned)
-                        veh.RemoveFromWorld();
-
-                    if (shouldBeDeleted)
-                        veh.RemoveFromWorld();
                 });
 
                 vehicles = null;

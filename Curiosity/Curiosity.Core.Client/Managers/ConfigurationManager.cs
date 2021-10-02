@@ -20,22 +20,13 @@ namespace Curiosity.Core.Client.Managers
         {
             ClientConfig config = new();
 
-            string jsonFile = LoadResourceFile(GetCurrentResourceName(), "config/config.json"); // Fuck you VS2019 UTF8 BOM
-
             try
             {
-                if (string.IsNullOrEmpty(jsonFile))
-                {
-                    Logger.Error($"config.json file is empty or does not exist, please fix this");
-                }
-                else
-                {
-                    if (_configCache is not null)
-                        return _configCache;
-
-                    _configCache = JsonConvert.DeserializeObject<ClientConfig>(jsonFile);
+                if (_configCache is not null)
                     return _configCache;
-                }
+
+                _configCache = JsonConvert.DeserializeObject<ClientConfig>(Properties.Resources.config);
+                return _configCache;
             }
             catch (Exception ex)
             {

@@ -61,6 +61,45 @@ namespace Curiosity.Core.Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;jobs&quot;: [
+        ///    {
+        ///      &quot;label&quot;: &quot;Police Officer&quot;,
+        ///      &quot;jobEvent&quot;: &quot;job:police:duty&quot;,
+        ///      &quot;legacyEvent&quot;: false
+        ///    }
+        ///  ],
+        ///  &quot;suppressedVehicles&quot;: [
+        ///    &quot;Lazer&quot;,
+        ///    &quot;Titan&quot;,
+        ///    &quot;Barracks&quot;,
+        ///    &quot;Barracks2&quot;,
+        ///    &quot;Barracks3&quot;,
+        ///    &quot;Crusader&quot;,
+        ///    &quot;Rhino&quot;,
+        ///    &quot;Airtug&quot;,
+        ///    &quot;Ripley&quot;,
+        ///    &quot;Asea2&quot;,
+        ///    &quot;Burrito5&quot;,
+        ///    &quot;Emperor3&quot;,
+        ///    &quot;Mesa2&quot;,
+        ///    &quot;PoliceOld1&quot;,
+        ///    &quot;PoliceOld2&quot;,
+        ///    &quot;RancherXL2&quot;,
+        ///    &quot;Sadler2&quot;,
+        ///    &quot;Stockade3&quot;,
+        ///    &quot;Tractor3&quot;,
+        ///    &quot;Buzzard&quot;,
+        ///    &quot;Buzzard2&quot;,
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string config {
+            get {
+                return ResourceManager.GetString("config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [
         ///  {
         ///    &quot;name&quot;: &quot;prologue01&quot;,
