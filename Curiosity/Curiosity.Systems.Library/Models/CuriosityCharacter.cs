@@ -26,9 +26,12 @@ namespace Curiosity.Systems.Library.Models
         public CharacterHeritage Heritage { get; set; } = new CharacterHeritage();
         public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
         public CharacterInfo CharacterInfo { get; set; } = new CharacterInfo();
+        public CharacterTattoos Tattoos { get; set; } = new CharacterTattoos();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();
         public bool AllowHelmet { get; set; }
         public bool IsOnIsland { get; set; }
+
+        public bool IsMale => Gender == 0;
 
         public void ChangeFeature(int feature, float value)
         {

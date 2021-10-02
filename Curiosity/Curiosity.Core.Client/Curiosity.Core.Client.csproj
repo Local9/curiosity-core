@@ -67,6 +67,8 @@
     <Compile Include="Environment\Entities\TrackedPed.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
+    <Compile Include="Interface\Menus\Creator\CharacterTattoos.cs" />
+    <Compile Include="Interface\Menus\Data\TattoosData.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
@@ -78,6 +80,11 @@
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\WorldPlayerManager.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Utility.cs" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
@@ -181,6 +188,7 @@
     <Content Include="config\scenarios.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\overlays.txt" />
     <None Include="config\interiors.json" />
     <Content Include="config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -188,6 +196,9 @@
     <Content Include="config\sirens.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="data\overlays.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +213,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\Supporter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

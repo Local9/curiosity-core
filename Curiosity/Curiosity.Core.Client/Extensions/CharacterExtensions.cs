@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
@@ -152,12 +153,6 @@ namespace Curiosity.Core.Client.Extensions
                 }
             }
 
-            //CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
-            //CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
-            //CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
-            //CharacterClothing.SetPedHat(Cache.PlayerPed, character.Appearance.Hat);
-            //CharacterClothing.SetPedGlasses(Cache.PlayerPed, character.Appearance.Glasses);
-
             foreach (KeyValuePair<int, float> keyValuePair in character.Features)
             {
                 API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
@@ -199,6 +194,44 @@ namespace Curiosity.Core.Client.Extensions
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
+
+            // remove all decorations, and then manually re-add them all. what a retarded way of doing this R*....
+            ClearPedDecorations(Game.PlayerPed.Handle);
+
+            foreach (var tattoo in character.Tattoos.HeadTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.TorsoTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.LeftArmTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.RightArmTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.LeftLegTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.RightLegTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+            foreach (var tattoo in character.Tattoos.BadgeTattoos)
+            {
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+            }
+
+            if (!string.IsNullOrEmpty(character.Appearance.HairOverlay.Key) && !string.IsNullOrEmpty(character.Appearance.HairOverlay.Value))
+            {
+                // reset hair value
+                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(character.Appearance.HairOverlay.Key), (uint)GetHashKey(character.Appearance.HairOverlay.Value));
+            }
 
             if (character.IsDead)
             {

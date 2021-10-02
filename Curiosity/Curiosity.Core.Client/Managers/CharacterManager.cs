@@ -224,10 +224,6 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Debug($"Character Registered: {player.Character.MarkedAsRegistered}");
 
-            if (!player.Character.MarkedAsRegistered)
-            {
-            }
-
             if (player.Character.MarkedAsRegistered)
             {
                 await BaseScript.Delay(1000);
@@ -339,7 +335,7 @@ namespace Curiosity.Core.Client.Managers
             if (Instance.ExportDictionary["pma-voice"] is not null)
                 Instance.ExportDictionary["pma-voice"].toggleMute();
 
-            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(player.Character.IsPassive);
+            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 

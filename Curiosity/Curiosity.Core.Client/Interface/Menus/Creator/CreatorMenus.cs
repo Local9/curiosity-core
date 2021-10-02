@@ -23,6 +23,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         // private UIMenu menuPlayerLifeStyle; // 
         private UIMenu menuCharacterFeatures; // eyes, hair?
         private UIMenu menuCharacterAppearance; // clothes
+        private UIMenu menuCharacterTattoos; // Tattoos
         private UIMenu menuCharacterCustomisation; // clothing
         private UIMenu menuCharacterProps; // clothing
         private UIMenu menuCharacterStats; // stats
@@ -44,6 +45,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private CharacterFeatures _CharacterFeatures = new CharacterFeatures();
         private CharacterCustomisation _CharacterCustomisation = new CharacterCustomisation();
         private CharacterAppearance _CharacterAppearance = new CharacterAppearance();
+        private CharacterTattoos _CharacterTattoos = new CharacterTattoos();
         private CharacterProps _CharacterProps = new CharacterProps();
 
         internal async void CreateMenu(bool open = false, bool canChangeParents = true)
@@ -87,6 +89,9 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             menuCharacterAppearance = _MenuPool.AddSubMenu(menuMain, "Appearance");
             _CharacterAppearance.CreateMenu(menuCharacterAppearance);
+
+            menuCharacterTattoos = _MenuPool.AddSubMenu(menuMain, "Tattoos");
+            _CharacterTattoos.CreateMenu(menuCharacterTattoos);
 
             menuCharacterCustomisation = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterCustomisation.CreateMenu(menuCharacterCustomisation);
