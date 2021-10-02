@@ -193,9 +193,6 @@
     <Content Include="config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="config\sirens.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="data\overlays.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
