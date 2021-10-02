@@ -118,14 +118,14 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnWeatherSyncTick()
         {
-            if (DateTime.Now.Subtract(lastRunWeatherUpdate).TotalSeconds >= 60)
+            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 30)
             {
                 UpdateWeather();
             }
             await BaseScript.Delay(1000);
         }
 
-        public async void UpdateWeather(bool instant = false)
+        public async void UpdateWeather(bool instant = false, SubRegion subRegion = SubRegion.UNKNOWN)
         {
             await Session.Loading();
 
@@ -135,20 +135,26 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            lastRunWeatherUpdate = DateTime.Now;
+            lastRunWeatherUpdate = DateTime.UtcNow;
 
             Vector3 pos = Cache.PlayerPed.Position;
 
-            string zoneStr = GetNameOfZone(pos.X, pos.Y, pos.Z);
-            Enum.TryParse(zoneStr, out SubRegion subRegion);
+            if (subRegion.Equals(SubRegion.UNKNOWN))
+            {
+                string zoneStr = GetNameOfZone(pos.X, pos.Y, pos.Z);
+                Enum.TryParse(zoneStr, out subRegion);
+            }
 
             CuriosityWeather = await EventSystem.Request<CuriosityWeather>("weather:sync", (int)subRegion);
             WeatherType weatherType = CuriosityWeather.WeatherType;
+
+            Logger.Debug($"wt: {weatherType}, sr: {subRegion}");
 
             if (!weatherType.Equals(lastWeather))
             {
                 if (instant)
                 {
+                    SetWeatherTypeNow($"{weatherType}");
                     SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
                     Logger.Debug($"Force weather change: {weatherType}");
 

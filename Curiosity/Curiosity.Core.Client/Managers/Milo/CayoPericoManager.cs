@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Extensions.Native;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Drawing;
@@ -222,6 +223,8 @@ namespace Curiosity.Core.Client.Managers.Milo
                 await Cache.PlayerPed.FadeIn();
             }
 
+            SubRegion subRegion = SubRegion.UNKNOWN;
+
             Logger.Debug($"Teleport to: Los Santos");
             if (teleportToLosSantos)
             {
@@ -233,6 +236,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             if (!teleportToLosSantos)
             {
                 SetupCayoPerico();
+                subRegion = SubRegion.ISHeist;
                 Instance.DiscordRichPresence.Status = $"Roaming Cayo Perico...";
             }
             Instance.DiscordRichPresence.Commit();
@@ -261,7 +265,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 }
             }
 
-            WorldManager.GetModule().UpdateWeather(true);
+            WorldManager.GetModule().UpdateWeather(true, subRegion);
 
             await BaseScript.Delay(2000);
 

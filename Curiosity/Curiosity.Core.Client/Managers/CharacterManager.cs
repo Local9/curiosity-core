@@ -304,6 +304,8 @@ namespace Curiosity.Core.Client.Managers
 
                 }
 
+                WorldManager.GetModule().UpdateWeather(true);
+
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);

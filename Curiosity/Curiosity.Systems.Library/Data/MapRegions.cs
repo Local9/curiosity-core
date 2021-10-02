@@ -193,7 +193,8 @@ namespace Curiosity.Systems.Library.Data
         PALETO,
         PROCOB,
         PROL,
-        ISHeist
+        ISHeist,
+        UNKNOWN
     }
 
     public enum SouthLosSantos
