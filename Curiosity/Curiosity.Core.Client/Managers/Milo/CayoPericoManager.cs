@@ -222,8 +222,6 @@ namespace Curiosity.Core.Client.Managers.Milo
                 await Cache.PlayerPed.FadeIn();
             }
 
-            WorldManager.GetModule().UpdateWeather(true);
-
             Logger.Debug($"Teleport to: Los Santos");
             if (teleportToLosSantos)
             {
@@ -262,6 +260,8 @@ namespace Curiosity.Core.Client.Managers.Milo
                     Cache.PlayerPed.Heading = pos.H;
                 }
             }
+
+            WorldManager.GetModule().UpdateWeather(true);
 
             await BaseScript.Delay(2000);
 
