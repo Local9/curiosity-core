@@ -125,7 +125,7 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(1000);
         }
 
-        async void UpdateWeather(bool instant = false)
+        public async void UpdateWeather(bool instant = false)
         {
             await Session.Loading();
 

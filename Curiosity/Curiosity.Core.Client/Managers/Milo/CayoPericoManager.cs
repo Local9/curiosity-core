@@ -222,6 +222,8 @@ namespace Curiosity.Core.Client.Managers.Milo
                 await Cache.PlayerPed.FadeIn();
             }
 
+            WorldManager.GetModule().UpdateWeather(true);
+
             Logger.Debug($"Teleport to: Los Santos");
             if (teleportToLosSantos)
             {

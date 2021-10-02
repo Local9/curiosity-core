@@ -97,6 +97,8 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             int interiorId = GetInteriorAtCoords(-2000.0f, 1113.211f, -25.36243f);
 
+            WorldManager.GetModule().UpdateWeather(true);
+
             if (enterTrack)
             {
                 Instance.DiscordRichPresence.Status = $"Drifting on the Tuner Track...";
