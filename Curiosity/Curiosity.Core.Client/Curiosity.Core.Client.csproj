@@ -188,7 +188,6 @@
     <Content Include="data\scenarios.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\overlays.txt" />
     <Content Include="data\interiors.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
