@@ -33,6 +33,8 @@ namespace Curiosity.Core.Server.Managers
             { Region.Paleto, WeatherType.CLEAR },
             { Region.SouthLosSantos, WeatherType.CLEAR },
             { Region.Zancudo, WeatherType.CLEAR },
+            { Region.NorthYankton, WeatherType.XMAS },
+            { Region.CayoPericoIsland, WeatherType.CLEAR },
         };
 
         // TIME
@@ -93,7 +95,12 @@ namespace Curiosity.Core.Server.Managers
 
             foreach (KeyValuePair<Region, WeatherType> kvp in RegionWeatherTypeCopy)
             {
-                if (isSnowDay)
+                if (kvp.Key == Region.CayoPericoIsland || kvp.Key == Region.NorthYankton)
+                {
+                    List<WeatherType> weatherTypes = WeatherData.RegionWeather[kvp.Key];
+                    regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
+                }
+                else if (isSnowDay)
                 {
                     regionWeatherType[kvp.Key] = WeatherType.XMAS;
                 }

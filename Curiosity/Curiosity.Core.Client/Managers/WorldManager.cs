@@ -258,15 +258,6 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            //int interior = GetInteriorFromEntity(Cache.PlayerPed.Handle);
-
-            //if (interior > 0) // If they are indoors, lock the timer
-            //{
-            //    NetworkOverrideClockTime(0, 0, 0);
-            //    SetClockTime(0, 0, 0);
-            //    return;
-            //}
-
             double newBaseTime = clientBaseTime;
             if ((GetGameTimer() - 500) > clientTimer)
             {

@@ -87,6 +87,8 @@ namespace Curiosity.Systems.Library.Data
             { SubRegion.WINDF, Region.GrandSenoraDesert },
             { SubRegion.WVINE, Region.NorthLosSantos },
             { SubRegion.ZQ_UAR, Region.GrandSenoraDesert },
+            { SubRegion.PROL, Region.NorthYankton },
+            { SubRegion.ISHeist, Region.CayoPericoIsland }
         };
     }
 
@@ -102,7 +104,9 @@ namespace Curiosity.Systems.Library.Data
         GrandSenoraDesert,
         NorthernMoutains,
         Zancudo,
-        Paleto
+        Paleto,
+        NorthYankton,
+        CayoPericoIsland
     }
 
     public enum SubRegion
@@ -187,7 +191,9 @@ namespace Curiosity.Systems.Library.Data
         OCEANA,
         PALFOR,
         PALETO,
-        PROCOB
+        PROCOB,
+        PROL,
+        ISHeist
     }
 
     public enum SouthLosSantos
@@ -313,5 +319,15 @@ namespace Curiosity.Systems.Library.Data
         PALFOR,
         PALETO,
         PROCOB
+    }
+
+    public enum NorthYankton
+    {
+        PROL
+    }
+
+    public enum CayoPericoIsland
+    {
+        ISHeist
     }
 }

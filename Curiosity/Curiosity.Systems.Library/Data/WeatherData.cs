@@ -33,6 +33,12 @@ namespace Curiosity.Systems.Library.Data
             { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD } },
         };
 
+        public readonly static Dictionary<Region, List<WeatherType>> RegionWeather = new Dictionary<Region, List<WeatherType>>()
+        {
+            { Region.NorthYankton, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.SNOW, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD, WeatherType.XMAS } },
+            { Region.CayoPericoIsland, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN } },
+        };
+
         public static WeatherSeason GetCurrentSeason()
         {
             return SeasonalMonth[(WeatherMonth)DateTime.UtcNow.Month];
