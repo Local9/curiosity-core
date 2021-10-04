@@ -12,6 +12,7 @@ using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -78,65 +79,82 @@ namespace Curiosity.Core.Client
             DiscordRichPresence.Commit();
 
             Logger.Info("[Curiosity]: Loading managers, please wait...");
-            Logger.Info("[Curiosity]: Version: 2.0.1.3267");
+            Logger.Info("[Curiosity]: Version: 2.0.1.3986");
+            Logger.Info($"[Curiosity]: Client Time {DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm")}");
 
-            Assembly.GetExecutingAssembly().GetExportedTypes()
-                .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-                .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
-                .ForEach(self =>
-                {
-                    var type = self.DeclaringType;
+            try
+            {
 
-                    if (type == null) return;
-
-                    if (!TickHandlers.ContainsKey(type))
+                Assembly.GetExecutingAssembly().GetExportedTypes()
+                    .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                    .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
+                    .ForEach(self =>
                     {
-                        TickHandlers.Add(type, new List<MethodInfo>());
-                    }
+                        var type = self.DeclaringType;
 
-                    Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
+                        if (type == null) return;
 
-                    TickHandlers[type].Add(self);
-                });
+                        if (!TickHandlers.ContainsKey(type))
+                        {
+                            TickHandlers.Add(type, new List<MethodInfo>());
+                        }
 
-            var loaded = 0;
+                        Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
 
-            // Load event system first
-            LoadManager(typeof(EventSystem));
+                        TickHandlers[type].Add(self);
+                    });
 
-            foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
-            {
-                if (type.BaseType == null) continue;
-                if (!type.BaseType.IsGenericType) continue;
+                var loaded = 0;
 
-                var generic = type.BaseType.GetGenericTypeDefinition();
+                // Load event system first
+                LoadManager(typeof(EventSystem));
 
-                if (generic != typeof(Manager<>) || type == typeof(Manager<>)) continue;
+                foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
+                {
+                    if (type.BaseType == null) continue;
+                    if (!type.BaseType.IsGenericType) continue;
 
-                LoadManager(type);
+                    var generic = type.BaseType.GetGenericTypeDefinition();
 
-                loaded++;
+                    if (generic != typeof(Manager<>) || type == typeof(Manager<>)) continue;
+
+                    LoadManager(type);
+
+                    loaded++;
+                }
+
+                foreach (var manager in Managers)
+                {
+                    var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
+                    method?.Invoke(manager.Value, null);
+                }
+
+                Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+
+                var commands = new CommandFramework();
+
+                commands.Bind(typeof(DeveloperTools));
+                commands.Bind(typeof(PlayerCommands));
+                commands.Bind(typeof(StaffCommands));
+
+                AttachTickHandlers(this);
+
+                API.DecorRegister(DECOR_PED_OWNER, 3);
+
+                Logger.Info("Load method has been completed.");
             }
-
-            foreach (var manager in Managers)
+            catch(Exception ex)
             {
-                var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
-                method?.Invoke(manager.Value, null);
+                var st = new StackTrace(ex, true);
+                var frame = st.GetFrame(0);
+                var line = frame.GetFileLineNumber();
+
+                Logger.Error($"[Curiosity]: .NET Framework {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}");
+                Logger.Error($"[Curiosity]: Message: {ex.Message}");
+                Logger.Error($"[Curiosity]: File: {frame.GetFileName()}");
+                Logger.Error($"[Curiosity]: Method: {frame.GetMethod()}");
+                Logger.Error($"[Curiosity]: Line Number: {line}");
             }
-
-            Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
-
-            var commands = new CommandFramework();
-
-            commands.Bind(typeof(DeveloperTools));
-            commands.Bind(typeof(PlayerCommands));
-            commands.Bind(typeof(StaffCommands));
-
-            AttachTickHandlers(this);
-
-            API.DecorRegister(DECOR_PED_OWNER, 3);
-
-            Logger.Info("Load method has been completed.");
         }
 
         //[TickHandler]
