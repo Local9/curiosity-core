@@ -189,6 +189,8 @@ namespace Curiosity.Core.Server.Managers
                             API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
                         }
                     }
+
+                    API.SetPlayerInvincible(player.Handle, false);
                 }
                 catch (Exception ex)
                 {
