@@ -12,7 +12,6 @@ using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -145,15 +144,7 @@ namespace Curiosity.Core.Client
             }
             catch(Exception ex)
             {
-                var st = new StackTrace(ex, true);
-                var frame = st.GetFrame(0);
-                var line = frame.GetFileLineNumber();
-
-                Logger.Error($"[Curiosity]: .NET Framework {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}");
-                Logger.Error($"[Curiosity]: Message: {ex.Message}");
-                Logger.Error($"[Curiosity]: File: {frame.GetFileName()}");
-                Logger.Error($"[Curiosity]: Method: {frame.GetMethod()}");
-                Logger.Error($"[Curiosity]: Line Number: {line}");
+                Logger.Error($"{ex}");
             }
         }
 
