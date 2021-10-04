@@ -84,10 +84,11 @@ namespace Curiosity.Core.Client
             try
             {
 
-                Assembly.GetExecutingAssembly().GetExportedTypes()
+                List<MethodInfo> managers = Assembly.GetExecutingAssembly().GetExportedTypes()
                     .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-                    .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
-                    .ForEach(self =>
+                    .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList();
+
+                managers.ForEach(self =>
                     {
                         var type = self.DeclaringType;
 
