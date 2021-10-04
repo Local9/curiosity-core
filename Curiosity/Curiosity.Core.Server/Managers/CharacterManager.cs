@@ -274,7 +274,14 @@ namespace Curiosity.Core.Server.Managers
                     {
                         bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
                         if (godModeEnabled)
+                        {
                             Web.DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' has God Mode Enabled, Does job '{user.CurrentJob}' allow God Mode?");
+                            if (user.CurrentJob != "FireFighter")
+                            {
+                                API.SetPlayerInvincible(player.Handle, false);
+                                Web.DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' God Mode removed as the job is not FireFighter.");
+                            }
+                        }
                     }
                 }
 
