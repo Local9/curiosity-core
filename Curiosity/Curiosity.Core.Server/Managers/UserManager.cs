@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -152,8 +153,18 @@ namespace Curiosity.Core.Server.Managers
                 Logger.Debug($"StackTrace:");
                 Logger.Debug($"{metadata.Find<string>(1)}");
 
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append($"Client Exception: {DateTime.UtcNow}\n");
+                stringBuilder.Append($"Player Name: {player.Name}\n");
+                stringBuilder.Append($"Message: {metadata.Find<string>(0)}\n");
+                stringBuilder.Append($"Stack:\n{metadata.Find<string>(1)}");
+
+                DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
+
                 return null;
             }));
+
+            Instance.EventRegistry.Add("user:log:exception", new Action<Player, string, string>(OnUserLogException));
 
             // TODO: Character
             EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
@@ -331,6 +342,17 @@ namespace Curiosity.Core.Server.Managers
 
                 return $"{exportMessage}";
             }));
+        }
+
+        private void OnUserLogException([FromSource]Player player, string message, string stack)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append($"Client Exception: {DateTime.UtcNow}\n");
+            stringBuilder.Append($"Player Name: {player.Name}\n");
+            stringBuilder.Append($"Message: {message}\n");
+            stringBuilder.Append($"Stack:\n{stack}");
+
+            DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
         }
 
         private static bool SetUserJobText(int playerServerId, string jobText)

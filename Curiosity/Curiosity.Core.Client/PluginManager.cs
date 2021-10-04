@@ -145,6 +145,7 @@ namespace Curiosity.Core.Client
             catch(Exception ex)
             {
                 Logger.Error($"{ex}");
+                BaseScript.TriggerServerEvent("user:log:exception", ex.Message, ex);
             }
         }
 
