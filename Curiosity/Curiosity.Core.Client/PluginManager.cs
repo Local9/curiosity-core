@@ -90,18 +90,25 @@ namespace Curiosity.Core.Client
 
                 managers.ForEach(self =>
                     {
-                        var type = self.DeclaringType;
-
-                        if (type == null) return;
-
-                        if (!TickHandlers.ContainsKey(type))
+                        try
                         {
-                            TickHandlers.Add(type, new List<MethodInfo>());
+                            var type = self.DeclaringType;
+                            if (type == null) return;
+
+                            Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
+
+                            if (!TickHandlers.ContainsKey(type))
+                            {
+                                TickHandlers.Add(type, new List<MethodInfo>());
+                            }
+
+                            TickHandlers[type].Add(self);
                         }
-
-                        Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
-
-                        TickHandlers[type].Add(self);
+                        catch (Exception ex)
+                        {
+                            Logger.Error($"{ex}");
+                            BaseScript.TriggerServerEvent("user:log:exception", $"Error with Tick; {ex.Message}", ex);
+                        }
                     });
 
                 var loaded = 0;
