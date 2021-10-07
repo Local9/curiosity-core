@@ -3,6 +3,7 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
+using Curiosity.Systems.Library.Data;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuCheckboxItem miDevEnableDebugLog;
         UIMenuCheckboxItem miDevEnableDebugTimeLog;
 
+        UIMenuListItem miLstMusic;
+
         UIMenu dispatchSettingsMenu;
         PoliceSettingsMenu _policeSettingsMenu = new PoliceSettingsMenu();
 
         PlayerNameManager PlayerNameManager = PlayerNameManager.GetModule();
+        List<dynamic> musicEvents = new List<dynamic>();
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -35,6 +39,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnListChange += Menu_OnListChange;
+            menu.OnListSelect += Menu_OnListSelect;
 
             List<dynamic> effects = DamageEffectManager.GetModule().Effects.Select(x => x.Label).ToList();
 
@@ -71,6 +76,20 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
 
             return menu;
+        }
+
+        private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
+        {
+            if (listItem == miLstMusic)
+            {
+                string musicEvent = $"{listItem.Items[newIndex]}";
+
+                CancelMusicEvent(musicEvent);
+                PrepareMusicEvent(musicEvent);
+                TriggerMusicEvent(musicEvent);
+
+                NotificationManager.GetModule().Info($"Playing: {musicEvent}");
+            }
         }
 
         private void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
@@ -148,6 +167,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 {
                     miDevEnableDebugTimeLog = new UIMenuCheckboxItem("Enable Time Debug", Logger.IsDebugTimeEnabled);
                     menu.AddItem(miDevEnableDebugTimeLog);
+                }
+
+                if (Cache.Player.User.IsSeniorDeveloper && miLstMusic is null)
+                {
+                    MusicEvents.eMusicEvents.ForEach(e =>
+                    {
+                        musicEvents.Add($"{e}");
+                    });
+
+                    miLstMusic = new UIMenuListItem("Music Events", musicEvents, 0);
+                    menu.AddItem(miLstMusic);
                 }
             }
         }

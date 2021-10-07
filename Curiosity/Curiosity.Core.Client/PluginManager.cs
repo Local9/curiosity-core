@@ -9,6 +9,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,8 @@ namespace Curiosity.Core.Client
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
         public bool AfkCheckRunning { get; private set; }
 
+        public MusicEvent ClientMusicEvent = new MusicEvent(eMusicEvents.AH1_START, eMusicEvents.AH1_STOP);
+
         DateTime lastTimePlayerStayedStill;
         Vector3 lastPosition;
 
@@ -62,6 +65,15 @@ namespace Curiosity.Core.Client
             Instance = this;
 
             API.DoScreenFadeOut(0);
+            ClientMusicEvent = MusicEvents.LoadingEvents[Curiosity.Systems.Library.Utils.Utility.RANDOM.Next(MusicEvents.LoadingEvents.Count)];
+
+            string mes = $"{ClientMusicEvent.Start}";
+
+            API.PrepareMusicEvent(mes);
+            API.PrepareMusicEvent($"{ClientMusicEvent.Stop}");
+            API.PrepareMusicEvent($"{MusicEvents.DEFAULT_STOP}");
+
+            API.TriggerMusicEvent(mes);
 
             Load();
         }

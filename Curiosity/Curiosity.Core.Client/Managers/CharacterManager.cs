@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers.Milo;
+using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Text;
@@ -320,10 +321,16 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Info("[Character] Complete Loading...");
 
+            TriggerMusicEvent($"{Instance.ClientMusicEvent.Stop}");
+
             if (Screen.Fading.IsFadedOut && !Screen.Fading.IsFadingOut)
             {
                 Screen.Fading.FadeIn(5000);
             }
+
+            CancelMusicEvent($"{Instance.ClientMusicEvent.Start}");
+            CancelMusicEvent($"{Instance.ClientMusicEvent.Stop}");
+
             Instance.DiscordRichPresence.Status = $"Roaming around...";
             Instance.DiscordRichPresence.Commit();
 
@@ -346,6 +353,9 @@ namespace Curiosity.Core.Client.Managers
 
             // CreatePlayerGroup();
             Cache.UpdatePedId(true);
+
+            TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
+            CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
         }
 
         private static void CreatePlayerGroup()

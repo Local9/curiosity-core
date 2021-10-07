@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
+    <Compile Include="Data\MusicEvents.cs" />
     <Compile Include="Enums\CombatAttributes.cs" />
     <Compile Include="Enums\DispatchType.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
