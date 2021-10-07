@@ -148,14 +148,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     await BaseScript.Delay(0);
 
-                    bool requestLogged = await EventSystem.GetModule().Request<bool>("onesync:request");
-
-                    if (!requestLogged)
-                    {
-                        NotificationManager.GetModule().Error("Request to spawn the vehicle has failed.");
-                        return new { success = false };
-                    }
-
                     if (vehicleItem is null)
                     {
                         NotificationManager.GetModule().Error("Vehicle failed to be created. Please try again.");
@@ -225,6 +217,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     postionSpawn.Z = postionSpawn.Z - 50f;
                     vehicle = await World.CreateVehicle(vehModel, postionSpawn, vehicleItem.Heading);
 
+                    SetEntityAlpha(vehicle.Handle, 0, 0);
+
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
 
@@ -232,8 +226,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle.IsPersistent = true;
                     vehicle.PreviouslyOwnedByPlayer = true;
-
-                    await vehicle.FadeOut();
 
                     ApplyVehicleModsDelayed(vehicle, vehicleItem.VehicleInfo, 1000);
 
@@ -325,6 +317,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
 
                     await vehicle.FadeIn();
+                    ResetEntityAlpha(vehicle.Handle);
 
                     await BaseScript.Delay(100);
 
