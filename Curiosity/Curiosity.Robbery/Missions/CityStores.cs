@@ -49,7 +49,7 @@ namespace Curiosity.StolenVehicle.Missions
 
                 var randomStore = storeClerkSpawns.ToList()[Utility.RANDOM.Next(storeClerkSpawns.Count)];
 
-                DiscordStatus("Traveling to the scene");
+                DiscordStatus("Traveling to scene");
 
                 if (randomStore.Value == null)
                 {
