@@ -83,12 +83,14 @@ namespace Curiosity.Core.Client.Managers
             timeLockHour = hour;
             timeLockMins = minute;
             isTimeLocked = true;
+            PauseClock(true);
             Logger.Debug($"LockAndSetTime: {hour:00}:{minute:00}");
         }
 
         public void UnlockTime()
         {
             isTimeLocked = false;
+            PauseClock(false);
             Logger.Debug($"UnlockTime");
         }
 
