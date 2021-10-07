@@ -560,7 +560,8 @@ namespace Curiosity.MissionManager.Client
             }
             await BaseScript.Delay(0);
 
-            fxPed.FadeIn();
+            await fxPed.FadeIn();
+            ResetEntityAlpha(fxPed.Handle);
 
             Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);
@@ -626,7 +627,8 @@ namespace Curiosity.MissionManager.Client
             }
             await BaseScript.Delay(0);
 
-            fxPed.FadeIn();
+            await fxPed.FadeIn();
+            ResetEntityAlpha(fxPed.Handle);
 
             Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);
@@ -692,7 +694,8 @@ namespace Curiosity.MissionManager.Client
             }
             await BaseScript.Delay(0);
 
-            fxPed.FadeIn();
+            await fxPed.FadeIn();
+            ResetEntityAlpha(fxPed.Handle);
 
             Logger.Debug(fxPed.ToString());
             var ped = new GangMember(fxPed);
@@ -745,7 +748,8 @@ namespace Curiosity.MissionManager.Client
 
             Logger.Debug(fxVehicle.ToString());
 
-            fxVehicle.FadeIn();
+            await fxVehicle.FadeIn();
+            ResetEntityAlpha(fxVehicle.Handle);
 
             return new Vehicle(fxVehicle);
         }
