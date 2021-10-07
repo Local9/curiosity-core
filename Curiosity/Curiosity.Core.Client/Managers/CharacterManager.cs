@@ -310,12 +310,10 @@ namespace Curiosity.Core.Client.Managers
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
                 Game.PlayerPed.IsInvincible = false;
-                Cache.PlayerPed.FadeIn();
             }
             else
             {
                 EventSystem.Send("user:job", "Character Creation");
-                Cache.PlayerPed.FadeIn();
                 Cache.Character.IsPassive = true;
                 await player.Character.PostLoad();
             }
