@@ -52,6 +52,7 @@ namespace Curiosity.Core.Client
         {
             Logger.Info("[Curiosity]: Constructor Call from CitizenFX - BaseScript");
 
+            EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
             PlayerList = Players;
@@ -63,6 +64,12 @@ namespace Curiosity.Core.Client
             API.DoScreenFadeOut(0);
 
             Load();
+        }
+
+        private void OnResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
         }
 
         private async void OnResourceStop(string resourceName)

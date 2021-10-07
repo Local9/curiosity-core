@@ -32,7 +32,24 @@ namespace Curiosity.Core.Client.Commands.Impl
         static List<Ped> companions = new List<Ped>();
         static Scaleform testScaleform;
 
+        static string musicEvent = string.Empty;
+
         #region Player
+
+        [CommandInfo(new[] { "me" })]
+        public class MusicEvent : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (!string.IsNullOrEmpty(musicEvent))
+                    CancelMusicEvent(musicEvent);
+
+                musicEvent = arguments.ElementAt<string>(0);
+                PrepareMusicEvent(musicEvent);
+                await BaseScript.Delay(1000);
+                TriggerMusicEvent(musicEvent);
+            }
+        }
 
         [CommandInfo(new[] { "scaleform" })]
         public class ScalefromTest : ICommand
