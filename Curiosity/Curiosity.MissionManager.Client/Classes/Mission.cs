@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Classes;
 using Curiosity.MissionManager.Client.Diagnostics;
@@ -533,6 +534,8 @@ namespace Curiosity.MissionManager.Client
 
             CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
 
+            SetEntityAlpha(fxPed.Handle, 0, 0);
+
             API.SetNetworkIdExistsOnAllMachines(fxPed.NetworkId, true);
             API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
             API.SetVehicleHasBeenOwnedByPlayer(fxPed.Handle, true);
@@ -596,6 +599,8 @@ namespace Curiosity.MissionManager.Client
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
+
+            SetEntityAlpha(fxPed.Handle, 0, 0);
 
             API.SetNetworkIdExistsOnAllMachines(fxPed.NetworkId, true);
             API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
@@ -661,6 +666,8 @@ namespace Curiosity.MissionManager.Client
 
             CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition, heading);
 
+            SetEntityAlpha(fxPed.Handle, 0, 0);
+
             API.SetNetworkIdExistsOnAllMachines(fxPed.NetworkId, true);
             API.SetNetworkIdCanMigrate(fxPed.NetworkId, true);
 
@@ -706,7 +713,8 @@ namespace Curiosity.MissionManager.Client
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
-            // await fxVehicle.FadeOut();
+
+            SetEntityAlpha(fxVehicle.Handle, 0, 0);
 
             int vehNetworkId = fxVehicle.NetworkId;
             await BaseScript.Delay(100);
