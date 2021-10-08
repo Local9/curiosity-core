@@ -204,6 +204,15 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
+                if (weatherType == WeatherType.HALLOWEEN)
+                {
+                    this.LockAndSetTime(0, 1);
+                }
+                else if (weatherType != WeatherType.HALLOWEEN && lastWeather == WeatherType.HALLOWEEN)
+                {
+                    this.UnlockTime();
+                }
+
                 lastWeather = weatherType;
             }
         }
