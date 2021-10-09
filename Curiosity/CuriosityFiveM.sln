@@ -225,6 +225,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "..\thirdparty\N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Racing.Client", "Curiosity.Racing.Client\Curiosity.Racing.Client.csproj", "{43C94E2B-A17F-421D-89D0-47F1EB6197D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Quest", "Curiosity.Quest\Curiosity.Quest.csproj", "{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -515,6 +517,10 @@ Global
 		{43C94E2B-A17F-421D-89D0-47F1EB6197D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43C94E2B-A17F-421D-89D0-47F1EB6197D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43C94E2B-A17F-421D-89D0-47F1EB6197D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -610,6 +616,7 @@ Global
 		{8340F37A-ABDC-4104-BBBE-F52EF0C24EDE} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{43C94E2B-A17F-421D-89D0-47F1EB6197D9} = {CD4C2E62-C897-47F2-A14A-CA60F08A42ED}
+		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4}</ProjectGuid>
+    <ProjectGuid>{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.ParkingMeters</RootNamespace>
-    <AssemblyName>Curiosity.ParkingMeters.net</AssemblyName>
+    <RootNamespace>Curiosity.Quest</RootNamespace>
+    <AssemblyName>Curiosity.Quest.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,13 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.3960\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.4752\lib\net45\CitizenFX.Core.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,10 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ParkingMeterData.cs" />
     <Compile Include="MissionManager.cs" />
-    <Compile Include="Missions\ParkingMeterTickets.cs" />
-    <Compile Include="Models\ParkingMeter.cs" />
+    <Compile Include="Missions\Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +58,6 @@
     <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
       <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
       <Name>Curiosity.Systems.Library</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
