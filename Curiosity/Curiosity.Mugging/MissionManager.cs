@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.Mugging.Missions;
-using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -40,7 +40,7 @@ namespace Curiosity.Mugging
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Curiosity.Mugging
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
     }

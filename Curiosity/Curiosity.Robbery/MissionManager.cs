@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
-using Curiosity.Shared.Client.net;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.StolenVehicle.Missions;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace Curiosity.StolenVehicle
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Curiosity.StolenVehicle
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
     }

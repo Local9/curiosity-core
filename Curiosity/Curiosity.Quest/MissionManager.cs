@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.Quest.Missions;
-using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace Curiosity.Quest
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            Functions.RegisterMission(typeof(Template));
+            Functions.RegisterMission(typeof(Quest1));
         }
 
         private void OnClientResourceStop(string resourceName)
@@ -40,7 +40,7 @@ namespace Curiosity.Quest
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Curiosity.Quest
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
     }

@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MissionManager.cs" />
-    <Compile Include="Missions\Template.cs" />
+    <Compile Include="Missions\Quest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.MissionManager.Client;
-using Curiosity.Shared.Client.net;
-using Curiosity.StolenVehicle.Missions;
+using Curiosity.MissionManager.Client.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,13 +35,13 @@ namespace Curiosity.StolenVehicle
         {
             try
             {
-                Log.Verbose("Register Tick Handler");
+                Logger.Verbose("Register Tick Handler");
 
                 Tick += action;
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
 
@@ -51,13 +49,13 @@ namespace Curiosity.StolenVehicle
         {
             try
             {
-                Log.Verbose("Deregister Tick Handler");
+                Logger.Verbose("Deregister Tick Handler");
 
                 Tick -= action;
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Logger.Error(ex.Message);
             }
         }
     }

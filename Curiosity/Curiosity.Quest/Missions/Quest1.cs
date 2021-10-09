@@ -8,7 +8,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 namespace Curiosity.Quest.Missions
 {
     [MissionInfo("Template", "Template", 0f, 0f, 0f, MissionType.Mission, true, "None")]
-    public class Template : Mission
+    public class Quest1 : Mission
     {
         public override void Start()
         {
