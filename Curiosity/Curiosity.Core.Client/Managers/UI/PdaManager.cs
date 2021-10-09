@@ -13,7 +13,6 @@ namespace Curiosity.Core.Client.Managers
 {
     public class PdaManager : Manager<PdaManager>
     {
-        private const string COMMAND_OPEN_PDA_LEGACY = "open_pda_legacy";
         private const string COMMAND_OPEN_PDA_HOME = "open_pda_new";
         public static PdaManager PdaInstance;
         WeaponHash currentWeapon;
@@ -23,7 +22,7 @@ namespace Curiosity.Core.Client.Managers
             public bool Main;
         }
 
-        private Prop TabletProp;
+        private Prop TabletProp = null;
 
         public bool IsCoreOpen = false;
 
@@ -120,16 +119,24 @@ namespace Curiosity.Core.Client.Managers
 
         private void OpenTablet()
         {
-            PhoneAnimation("text", false, false);
             currentWeapon = Game.PlayerPed.Weapons.Current.Hash;
             Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+
+            //AddProp();
+            //string animationDict = "amb@world_human_tourist_map@male@base";
+            //string animationBase = "base";
+
+            //Game.PlayerPed.Task.PlayAnimation(animationDict, animationBase, -8f, -1, AnimationFlags.Loop);
+
             API.SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
         }
 
         public void CloseTablet()
         {
-            PhoneAnimation("out", false, false);
             Game.PlayerPed.Task.ClearAll();
+
+            //RemoveProp();
+
             API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
             Game.PlayerPed.Weapons.Select(currentWeapon);
         }
@@ -145,16 +152,7 @@ namespace Curiosity.Core.Client.Managers
             Vector3 pos = Game.PlayerPed.Position;
             pos.Z += .2f;
 
-            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", (uint)model.Hash, pos.X, pos.Y, pos.Z, true, true, true);
-
-            if (propNetworkId == 0) return;
-
-            int entityId = API.NetworkGetEntityFromNetworkId(propNetworkId);
-            API.NetworkRequestControlOfEntity(propNetworkId);
-
-            if (entityId == 0) return;
-
-            Prop TabletProp = new Prop(entityId);
+            Prop TabletProp = await World.CreateProp(model, pos, true, false);
 
             if (TabletProp == null) return;
 
@@ -172,108 +170,15 @@ namespace Curiosity.Core.Client.Managers
         {
             if (TabletProp is null) return;
 
+            if (!TabletProp.Exists()) return;
+         
+            TabletProp.Detach();
+            TabletProp.MarkAsNoLongerNeeded();
+
             if (TabletProp.Exists())
-            {
-                EventSystem.Send("delete:entity", TabletProp.NetworkId);
                 TabletProp.Delete();
-                TabletProp = null;
-            }
-        }
 
-        string currentPhoneStatus = string.Empty;
-        string lastDict = string.Empty;
-        string lastAnim = string.Empty;
-        const string PHONE_DICT_NORM = "cellphone@";
-        const string PHONE_DICT_CAR = "anim@cellphone@in_car@ps";
-
-        private async void PhoneAnimation(string status, bool freeze, bool force)
-        {
-            if (currentPhoneStatus == status && !force) return;
-            string dict = PHONE_DICT_NORM;
-
-            if (Game.PlayerPed.IsInVehicle())
-                dict = PHONE_DICT_CAR;
-
-            await LoadAnimationDict(dict);
-
-            string animation = GetAnimation(dict, currentPhoneStatus, status);
-
-            if (currentPhoneStatus == "out")
-                Game.PlayerPed.Task.ClearAnimation(lastDict, lastAnim);
-
-            int flag = freeze ? 14 : 50;
-
-            Game.PlayerPed.Task.PlayAnimation(dict, animation, 3.0f, -1, (AnimationFlags)flag);
-
-            if (status != "out" && currentPhoneStatus == "out")
-            {
-                await BaseScript.Delay(300);
-                // phone prop.....
-            }
-
-            lastDict = dict;
-            lastAnim = animation;
-            currentPhoneStatus = status;
-
-            if (status == "out")
-            {
-                await BaseScript.Delay(300);
-                // delete the prop....
-                Game.PlayerPed.Task.ClearAnimation(lastDict, lastAnim);
-            }
-        }
-
-        async Task LoadAnimationDict(string dict)
-        {
-            API.RequestAnimDict(dict);
-            while (!API.HasAnimDictLoaded(dict)) await BaseScript.Delay(1);
-        }
-
-        string GetAnimation(string dict, string currentStatus, string status)
-        {
-            if (dict == PHONE_DICT_NORM)
-            {
-                if (currentStatus == "out")
-                {
-                    if (status == "text") return "cellphone_text_in";
-                    if (status == "call") return "cellphone_call_listen_base";
-                }
-                if (currentStatus == "text")
-                {
-                    if (status == "out") return "cellphone_text_out";
-                    if (status == "text") return "cellphone_text_in";
-                    if (status == "call") return "cellphone_text_to_call";
-                }
-                if (currentStatus == "call")
-                {
-                    if (status == "out") return "cellphone_call_out";
-                    if (status == "text") return "cellphone_call_to_text";
-                    if (status == "call") return "cellphone_text_to_call";
-                }
-            }
-
-            if (dict == PHONE_DICT_CAR)
-            {
-                if (currentStatus == "out")
-                {
-                    if (status == "text") return "cellphone_text_in";
-                    if (status == "call") return "cellphone_call_listen_base";
-                }
-                if (currentStatus == "text")
-                {
-                    if (status == "out") return "cellphone_text_out";
-                    if (status == "text") return "cellphone_text_in";
-                    if (status == "call") return "cellphone_text_to_call";
-                }
-                if (currentStatus == "call")
-                {
-                    if (status == "out") return "cellphone_horizontal_exit";
-                    if (status == "text") return "cellphone_call_to_text";
-                    if (status == "call") return "cellphone_text_to_call";
-                }
-            }
-
-            return string.Empty;
+            TabletProp = null;
         }
     }
 }
