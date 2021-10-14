@@ -1,13 +1,20 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Events;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Drawing;
+using System.Threading.Tasks;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -15,24 +22,118 @@ namespace Curiosity.MissionManager.Client
     {
         static PluginManager Instance => PluginManager.Instance;
 
+        static NUIMarker questMarker1;
+        static int _soundId = -1;
+        static Vector3 _start = new Vector3(-543.9988f, -157.8393f, 38.54123f);
+        static Vector3 _scale = new Vector3(1.2f, 1.2f, 1f);
+        static Type HalloweenMission;
+
         /// <summary>
         /// Registers a mission so it can be seen and used in-game
         /// </summary>
         /// <param name="mission">The mission to register</param>
-        public static void RegisterMission(Type mission)
+        public static async void RegisterMission(Type mission)
         {
             if (mission.GetCustomAttributes(false).FirstOrDefault(x => x.GetType() == typeof(MissionInfo)) == null)
                 throw new Exception("Mission must have the MissionInfo attribute!");
 
-            Logger.Info($"[MissionManager] Registered: {mission.Name}");
-
             MissionInfo missionInfo = GetMissionInfo(mission);
-            if (missionInfo.startPoint.X > 0f && missionInfo.startPoint.Y > 0f)
+
+            // Logger.Info($"[MissionManager] Registered: {mission.Name} | {missionInfo.missionType} ({missionInfo.xPos}, {missionInfo.yPos}, {missionInfo.zPos}) {missionInfo.startPoint != Vector3.Zero}");
+
+            if (missionInfo.startPoint != Vector3.Zero)
             {
+                bool isHalloween = await EventSystem.EventSystem.Request<bool>("weather:is:halloween");
+                bool hasCompletedQuest = false; //await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
+
+#if DEBUG
+                isHalloween = true;
+                hasCompletedQuest = false;
+#endif
+
+                if (missionInfo.missionType == MissionType.Halloween && isHalloween && !hasCompletedQuest)
+                {
+                    questMarker1 = new NUIMarker(MarkerType.VerticalCylinder, _start, _scale, 2f, Color.FromArgb(255, 120, 0, 0), placeOnGround: true);
+                    Mission.AddMarker("start", questMarker1);
+                    HalloweenMission = mission;
+                    Instance.AttachTickHandler(OnCustomMissionStart);
+                    Notify.Info($"There is a phone booth thats ringing, maybe you should answer it?", "top-right");
+                }
                 // world blips for set mission locations
             }
 
-            Mission.missions.Add(mission);
+            if (missionInfo.missionType != MissionType.Halloween)
+                Mission.missions.Add(mission);
+        }
+
+        private static async Task OnCustomMissionStart()
+        {
+            if (questMarker1 is null)
+            {
+                Instance.DetachTickHandler(OnCustomMissionStart);
+                return;
+            }
+
+            if (Game.PlayerPed.Position.Distance(_start) > 50f)
+            {
+                if (_soundId != -1)
+                {
+                    StopSound(_soundId);
+                    ReleaseSoundId(_soundId);
+                    _soundId = -1;
+                }
+
+                await BaseScript.Delay(500);
+                return;
+            }
+
+            if (Game.PlayerPed.Position.Distance(_start) < 4f)
+            {
+                if (_soundId == -1)
+                {
+                    _soundId = GetSoundId();
+                    PlaySoundFrontend(_soundId, "Remote_Ring", "Phone_SoundSet_Michael", true);
+                    Logger.Info($"_soundId: {_soundId}");
+                }
+            }
+
+            if (Game.PlayerPed.Position.Distance(_start) > 4f && _soundId != -1)
+            {
+                StopSound(_soundId);
+                ReleaseSoundId(_soundId);
+                _soundId = -1;
+            }
+
+            if (questMarker1.IsInMarker && !Mission.isOnMission && !Game.PlayerPed.IsInVehicle())
+            {
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to answer the phone.");
+                if (Game.IsControlJustPressed(0, Control.Context))
+                {
+                    StartMission(HalloweenMission, "Answering a phone call....");
+                    
+                    StopSound(_soundId);
+                    ReleaseSoundId(_soundId);
+                    _soundId = -1;
+
+                    await BaseScript.Delay(1000);
+
+                    _soundId = GetSoundId();
+                    PlaySoundFrontend(_soundId, "Hang_Up", "Phone_SoundSet_Michael", true);
+                    await BaseScript.Delay(1000);
+                    StopSound(_soundId);
+                    ReleaseSoundId(_soundId);
+                    _soundId = -1;
+
+                }
+            }
+            else if (questMarker1.IsInRange && Mission.isOnMission)
+            {
+                Screen.DisplayHelpTextThisFrame($"Cannot answer the phone while on a callout.");
+            }
+            else if (questMarker1.IsInRange && Game.PlayerPed.IsInVehicle())
+            {
+                Screen.DisplayHelpTextThisFrame($"Must leave your vehicle to answer the phone.");
+            }
         }
 
         /// <summary>
@@ -63,7 +164,7 @@ namespace Curiosity.MissionManager.Client
             Mission.currentMission = mis;
             Mission.missionType = mission;
             Mission.AddPlayer(Game.Player);
-            Mission.currentMissionType = missionInfo.type;
+            Mission.currentMissionType = missionInfo.missionType;
             Mission.NumberPedsArrested = 0;
             
             Mission.PatrolZone = JobManager.PatrolZone; // Always get the current zone from the player at this point

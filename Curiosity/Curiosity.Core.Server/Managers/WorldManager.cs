@@ -61,6 +61,11 @@ namespace Curiosity.Core.Server.Managers
                 return weather;
             }));
 
+            EventSystem.GetModule().Attach("weather:is:halloween", new EventCallback(metadata =>
+            {
+                return WeatherData.IsHalloween();
+            }));
+
             RandomiseWeather();
             WeatherDebugOutput();
         }

@@ -48,6 +48,8 @@ namespace Curiosity.MissionManager.Client
         public static int NumberPedsArrested { get; internal set; } = 0;
         public static int NumberTransportArrested { get; internal set; } = 0;
 
+        public static Dictionary<string, NUIMarker> Markers = new Dictionary<string, NUIMarker>();
+
         public static void AddPlayer(Player player)
         {
             if (Players == null)
@@ -62,6 +64,52 @@ namespace Curiosity.MissionManager.Client
         public static void RemovePlayer(Player player)
         {
             Players.Remove(player);
+        }
+
+        public static void AddMarker(string name, NUIMarker marker)
+        {
+            Markers.Add(name, marker);
+            MarkersHandler.AddMarker(marker);
+        }
+
+        public static void AddMarker(string name, int markerType, Vector3 pos, Vector3 scale, float distance, System.Drawing.Color color, dynamic data, bool placeOnGround = false, bool bobUpAndDown = false, bool rotate = false, bool faceCamera = false)
+        {
+            NUIMarker marker = new NUIMarker((MarkerType)markerType, pos, scale, distance, color, placeOnGround, bobUpAndDown, rotate, faceCamera);
+            marker.Data = data;
+            Markers.Add(name, marker);
+            MarkersHandler.AddMarker(marker);
+        }
+
+        public static void RemoveMarker(string name)
+        {
+            if (!Markers.ContainsKey(name)) return;
+            NUIMarker marker = Markers[name];
+            MarkersHandler.RemoveMarker(marker);
+            Markers.Remove(name);
+        }
+
+        public static bool IsMarkerActive(string name)
+        {
+            if (!Markers.ContainsKey(name)) return false;
+
+            NUIMarker marker = Markers[name];
+            return marker.IsInMarker;
+        }
+
+        public static bool IsMarkerInRange(string name)
+        {
+            if (!Markers.ContainsKey(name)) return false;
+
+            NUIMarker marker = Markers[name];
+            return marker.IsInRange;
+        }
+
+        public static dynamic GetMarkerData(string name)
+        {
+            if (!Markers.ContainsKey(name)) return false;
+
+            NUIMarker marker = Markers[name];
+            return marker.Data;
         }
 
         /// <summary>
@@ -239,8 +287,8 @@ namespace Curiosity.MissionManager.Client
 
             while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
 
-            if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Failed", failReason);
-            else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Setup Failed", failReason);
+            if (info.missionType == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Failed", failReason);
+            else if (info.missionType == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Setup Failed", failReason);
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Mission Failed", failReason);
 
             Stop(endState);
@@ -259,8 +307,8 @@ namespace Curiosity.MissionManager.Client
 
             while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
 
-            if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Cleared", $"{info.displayName} - {reason}");
-            else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Cleared", $"{info.displayName} - {reason}");
+            if (info.missionType == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Cleared", $"{info.displayName} - {reason}");
+            else if (info.missionType == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Cleared", $"{info.displayName} - {reason}");
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Cleared", $"{info.displayName} - {reason}");
 
             Stop(EndState.Cleared) ;
@@ -279,8 +327,8 @@ namespace Curiosity.MissionManager.Client
 
             while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
 
-            if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Passed", info.displayName);
-            else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Passed", info.displayName);
+            if (info.missionType == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Passed", info.displayName);
+            else if (info.missionType == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Passed", info.displayName);
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Passed", info.displayName);
 
             Stop(EndState.Pass);

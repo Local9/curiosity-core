@@ -13,7 +13,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         public bool canBeReplayed;
         public float xPos, yPos, zPos;
         public Vector3 startPoint;
-        public MissionType type;
+        public MissionType missionType;
         public PatrolZone patrolZone;
         public double chanceOfSpawn;
         public bool unique;
@@ -46,7 +46,7 @@ namespace Curiosity.MissionManager.Client.Attributes
             this.xPos = xPos;
             this.yPos = yPos;
             this.zPos = zPos;
-            this.type = type;
+            this.missionType = type;
             this.patrolZone = patrolZone;
             this.chanceOfSpawn = chanceOfSpawn;
             this.unique = unique;

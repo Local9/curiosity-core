@@ -14,6 +14,8 @@
         StolenVehicle,
         Store,
         StoreUnique,
-        TrafficStop
+        TrafficStop,
+        Quest,
+        Halloween
     }
 }
