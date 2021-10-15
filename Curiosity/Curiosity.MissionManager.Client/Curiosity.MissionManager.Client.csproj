@@ -71,6 +71,7 @@
     <Compile Include="Environment\Entities\CuriosityEntity.cs" />
     <Compile Include="Environment\Entities\CuriosityPlayer.cs" />
     <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
+    <Compile Include="Environment\Entities\Models\BlipMissionInfo.cs" />
     <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
     <Compile Include="Environment\Entities\Models\Marker.cs" />
     <Compile Include="Environment\Entities\Models\SoundMessage.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\HowlerHandler.cs" />
     <Compile Include="Managers\ArrestManager.cs" />
+    <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />

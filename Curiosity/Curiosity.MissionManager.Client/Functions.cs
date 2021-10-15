@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Drawing;
 using System.Threading.Tasks;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Environment.Entities.Models;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -58,6 +59,20 @@ namespace Curiosity.MissionManager.Client
                     HalloweenMission = mission;
                     Instance.AttachTickHandler(OnCustomMissionStart);
                     Notify.Info($"There is a phone booth thats ringing, maybe you should answer it?", "top-right");
+
+                    string textureDictionary = "halloween";
+                    long textureDict = CreateRuntimeTxd(textureDictionary);
+                    string textureName = "phoneBooth";
+
+                    CreateRuntimeTextureFromImage(textureDict, textureName, "assets/images/phoneBoothHalloween.png");
+
+                    BlipMissionInfo blipMissionInfo = new BlipMissionInfo();
+                    blipMissionInfo.Title = "Happy Halloween!";
+                    blipMissionInfo.TextureDictionary = textureDictionary;
+                    blipMissionInfo.TextureName = textureName;
+
+                    BlipManager.GetModule().AddBlip("Halloween Phone Call", (BlipSprite)437, BlipColor.Red, _start, blipMissionInfo);
+
                 }
                 // world blips for set mission locations
             }
