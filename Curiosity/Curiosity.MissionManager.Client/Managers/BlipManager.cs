@@ -31,7 +31,7 @@ namespace Curiosity.MissionManager.Client.Managers
             blipHandles.Add(blip.Handle);
         }
 
-        public void AddBlip(string blipName, BlipSprite blipSprite, BlipColor blipColor, Vector3 position, BlipMissionInfo missionInfo)
+        public Blip AddBlip(string blipName, BlipSprite blipSprite, BlipColor blipColor, Vector3 position, BlipMissionInfo missionInfo)
         {
             Blip blip = World.CreateBlip(position);
             blip.Name = blipName;
@@ -49,6 +49,22 @@ namespace Curiosity.MissionManager.Client.Managers
             BlipMissionData.Add(blip.Handle, missionInfo);
 
             SetBlipAsMissionCreatorBlip(blip.Handle, true);
+
+            return blip;
+        }
+
+        public void RemoveBlip(Blip blip)
+        {
+            if (BlipMissionData.ContainsKey(blip.Handle))
+            {
+                BlipMissionData.Remove(blip.Handle);
+            }
+
+            if (!blip.Exists()) return;
+
+            blipHandles.Remove(blip.Handle);
+
+            blip.Delete();
         }
 
         [TickHandler]

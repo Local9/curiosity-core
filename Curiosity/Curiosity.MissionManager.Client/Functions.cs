@@ -28,6 +28,7 @@ namespace Curiosity.MissionManager.Client
         static Vector3 _start = new Vector3(-543.9988f, -157.8393f, 38.54123f);
         static Vector3 _scale = new Vector3(1.2f, 1.2f, 1f);
         static Type HalloweenMission;
+        static Blip HalloweenBlip;
 
         /// <summary>
         /// Registers a mission so it can be seen and used in-game
@@ -71,7 +72,7 @@ namespace Curiosity.MissionManager.Client
                     blipMissionInfo.TextureDictionary = textureDictionary;
                     blipMissionInfo.TextureName = textureName;
 
-                    BlipManager.GetModule().AddBlip("Halloween Phone Call", (BlipSprite)437, BlipColor.Red, _start, blipMissionInfo);
+                    HalloweenBlip = BlipManager.GetModule().AddBlip("Halloween Phone Call", (BlipSprite)437, BlipColor.Red, _start, blipMissionInfo);
 
                 }
                 // world blips for set mission locations
@@ -139,6 +140,7 @@ namespace Curiosity.MissionManager.Client
                     ReleaseSoundId(_soundId);
                     _soundId = -1;
 
+                    BlipManager.GetModule().RemoveBlip(HalloweenBlip);
                 }
             }
             else if (questMarker1.IsInRange && Mission.isOnMission)

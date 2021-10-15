@@ -46,7 +46,12 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     int weapon = API.GetHashKey(arguments.ElementAt(0));
                     if (weapon > 0)
-                        Cache.PlayerPed.Weapons.Give((WeaponHash)weapon, 999, true, true);
+                    {
+                        API.GiveWeaponToPed(Game.PlayerPed.Handle, (uint)weapon, 999, false, true);
+                    } else
+                    {
+                        Cache.PlayerPed.Weapons.Give((WeaponHash)weapon, 999, false, true);
+                    }
                 }
             }
         }
