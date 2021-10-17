@@ -49,13 +49,9 @@ namespace Curiosity.MissionManager.Client
             if (missionInfo.startPoint != Vector3.Zero)
             {
                 bool isHalloween = await EventSystem.EventSystem.Request<bool>("weather:is:halloween");
-                hasCompletedQuest = false; //await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
-
-#if DEBUG
-                isHalloween = true;
-                hasCompletedQuest = false;
-#endif
-
+                await BaseScript.Delay(100);
+                hasCompletedQuest = await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
+                await BaseScript.Delay(100);
                 if (missionInfo.missionType == MissionType.Halloween && isHalloween && !hasCompletedQuest)
                 {
                     await BaseScript.Delay(0);
@@ -108,7 +104,7 @@ namespace Curiosity.MissionManager.Client
                     _soundId = -1;
                 }
 
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(5000);
                 return;
             }
 
@@ -134,7 +130,29 @@ namespace Curiosity.MissionManager.Client
                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to answer the phone.");
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
-                    StartMission(HalloweenMission, "Answering a phone call....");
+
+                    hasCompletedQuest = await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
+
+                    if (hasCompletedQuest)
+                    {
+                        Screen.ShowSubtitle($"Sorry, wrong number...");
+
+                        _soundId = GetSoundId();
+                        PlaySoundFrontend(_soundId, "Hang_Up", "Phone_SoundSet_Michael", true);
+                        await BaseScript.Delay(1000);
+                        StopSound(_soundId);
+                        ReleaseSoundId(_soundId);
+                        _soundId = -1;
+
+                        BlipManager.GetModule().RemoveBlip(HalloweenBlip);
+                        Mission.RemoveMarker("start");
+                        return;
+                    }
+
+
+                    await EventSystem.EventSystem.Request<bool>("mission:activate", "quest1", true, "Halloween Treasure Hunt");
+
+                    StartMission(HalloweenMission, "Halloween Treasure Hunt");
                     
                     StopSound(_soundId);
                     ReleaseSoundId(_soundId);
@@ -153,14 +171,17 @@ namespace Curiosity.MissionManager.Client
                     Mission.RemoveMarker("start");
                     questMarker1 = null;
                 }
+                return;
             }
             else if (questMarker1.IsInRange && Mission.isOnMission)
             {
                 Screen.DisplayHelpTextThisFrame($"Cannot answer the phone while on a callout.");
+                return;
             }
             else if (questMarker1.IsInRange && Game.PlayerPed.IsInVehicle())
             {
                 Screen.DisplayHelpTextThisFrame($"Must leave your vehicle to answer the phone.");
+                return;
             }
         }
 

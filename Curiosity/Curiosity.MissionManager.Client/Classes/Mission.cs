@@ -191,7 +191,7 @@ namespace Curiosity.MissionManager.Client
         /// Stops a mission
         /// </summary>
         /// <param name="reason">The reason the mission was stopped</param>
-        public void Stop(EndState reason)
+        public void Stop(EndState reason, MissionType misType = MissionType.Mission)
         {
             if (isMessagingServer) return;
             isMessagingServer = true;
@@ -203,12 +203,12 @@ namespace Curiosity.MissionManager.Client
                     case EndState.Pass:
                     case EndState.Cleared:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
-                        EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested, reason == EndState.Cleared);
+                        EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested, reason == EndState.Cleared, (int)misType);
                         break;
                     case EndState.Fail:
                     case EndState.FailPlayersDead:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
-                        EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested, false);
+                        EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested, false, (int)misType);
                         break;
                     case EndState.ForceEnd:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 10));
@@ -338,7 +338,7 @@ namespace Curiosity.MissionManager.Client
             else if (info.missionType == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Passed", info.displayName);
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Passed", info.displayName);
 
-            Stop(EndState.Pass);
+            Stop(EndState.Pass, info.missionType);
         }
 
         static async Task OnControlsPressedTick()

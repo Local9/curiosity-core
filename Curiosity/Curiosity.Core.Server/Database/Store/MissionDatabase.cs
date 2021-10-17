@@ -49,5 +49,56 @@ namespace Curiosity.Core.Server.Database.Store
         {
             throw new NotImplementedException();
         }
+
+        internal async static Task<bool> CompleteQuest(int characterId, int questId)
+        {
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@questId", questId },
+                };
+
+                string myQuery = "call insCharacterQuest(@characterId, @questId);";
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet keyValuePairs = await result;
+
+                    if (keyValuePairs.Count == 0)
+                        return false;
+
+                    Dictionary<string, object> kv = keyValuePairs[0];
+
+                    return kv["Result"].ToBoolean();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        internal async static Task<bool> HasCompletedQuest(int characterId, int questId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@questId", questId },
+                };
+
+            string myQuery = "call selCharcterQuest(@characterId, @questId);";
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    return false;
+
+                Dictionary<string, object> kv = keyValuePairs[0];
+
+                return kv["Result"].ToBoolean();
+            }
+        }
     }
 }

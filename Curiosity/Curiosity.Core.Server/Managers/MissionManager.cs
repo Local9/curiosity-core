@@ -65,6 +65,26 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Events
 
+            EventSystem.GetModule().Attach("mission:quest:completed", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    int senderHandle = metadata.Sender;
+                    int questId = metadata.Find<int>(0);
+
+                    CuriosityUser curUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                    bool hasCompletedQuest = await Database.Store.MissionDatabase.HasCompletedQuest(curUser.Character.CharacterId, questId);
+
+                    return hasCompletedQuest;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Error: mission:quest:completed");
+                    return false;
+                }
+            }));
+
             EventSystem.GetModule().Attach("mission:isActive", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
@@ -155,6 +175,34 @@ namespace Curiosity.Core.Server.Managers
                 bool passed = metadata.Find<bool>(0);
                 int numberTransportArrested = metadata.Find<int>(1);
                 bool passButFailed = metadata.Find<bool>(2);
+                MissionType missionType = (MissionType)metadata.Find<int>(3);
+
+                if (missionType.Equals(MissionType.Halloween) && missionId == "quest1")
+                {
+                    Mission resHalloween = await MissionCompleted(metadata.Sender, missionId, true, 0, 0, false);
+                    CuriosityUser curUser = PluginManager.ActiveUsers[metadata.Sender];
+                    bool questSaved = await Database.Store.MissionDatabase.CompleteQuest(curUser.Character.CharacterId, 1);
+                    await BaseScript.Delay(100);
+                    if (questSaved)
+                    {
+                        Logger.Debug($"Completed Halloween Quest: Quest Saved");
+
+                        int DOUBLE_ACTION_REVOLVER = 340;
+                        bool itemAdded = await Database.Store.CharacterDatabase.GiveItem(curUser.Character.CharacterId, DOUBLE_ACTION_REVOLVER);
+                        await BaseScript.Delay(100);
+                        int hash = API.GetHashKey("weapon_doubleaction");
+                        await BaseScript.Delay(0);
+                        API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
+                        await Database.Store.CharacterDatabase.InsertInventoryItem(curUser.Character.CharacterId, DOUBLE_ACTION_REVOLVER, 1);
+                        Logger.Debug($"Completed Halloween Quest: Given Weapon");
+
+                        EventSystem.GetModule().Send("mission:notification:success", metadata.Sender, "<b>Congratulations</b><br />You have been given the Double Action Revolver for your efforts.", "bottom-right");
+                    }
+
+                    Logger.Debug($"Completed Halloween Quest: Finish");
+
+                    return resHalloween;
+                }
 
                 int numberOfFailures = 0;
 

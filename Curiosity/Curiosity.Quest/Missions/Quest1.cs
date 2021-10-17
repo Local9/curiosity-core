@@ -25,7 +25,7 @@ namespace Curiosity.Quest.Missions
         const int ZOMBIE_MAX_ARMOR = 500;
         const string ZOMBIE_DECOR = "_ZOMBIE_HALLOWEEN";
 
-        const float SPAWN_MIN_DISTANCE = 5f;
+        const float SPAWN_MIN_DISTANCE = 10f;
         const float SPAWN_DESPAWN_DISTANCE = 50f;
         const double SPAWN_EVENT_CHANCE = 0.005;
         const int SPAWN_TICK_RATE = 100;
@@ -230,7 +230,7 @@ namespace Curiosity.Quest.Missions
                 SetPedCombatAttributes(zombieHandle, 1, false);
                 SetPedCombatAttributes(zombieHandle, 0, false);
                 SetPedCombatAbility(zombieHandle, 0);
-                SetAiMeleeWeaponDamageModifier(float.MaxValue);
+                // SetAiMeleeWeaponDamageModifier(float.MaxValue);
                 SetPedRagdollBlockingFlags(zombieHandle, 4);
                 SetPedCanPlayAmbientAnims(zombieHandle, false);
 

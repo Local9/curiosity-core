@@ -182,6 +182,20 @@ namespace Curiosity.Core.Server.Database.Store
             return i;
         }
 
+        internal async static Task<bool> GiveItem(int characterId, int itemId, int numberOfItems = 1)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterId", characterId },
+                { "@ItemId", itemId },
+                { "@NumberOfItems", numberOfItems }
+            };
+
+            string myQuery = "CALL insCharacterItem(@CharacterId, @ItemId, @NumberOfItems);";
+
+            return (await MySqlDatabase.mySQL.Query(myQuery, myParams)) > 0;
+        }
+
         // Should write an extension
         public static async Task<List<CuriosityShopItem>> GetInventoryEquipped(int characterId)
         {
