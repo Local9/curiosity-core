@@ -135,7 +135,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_ONE:
-                    if (CanMoveToNextPhase("pos1"))
+                    if ((await CanMoveToNextPhase("pos1")))
                     {
                         missionPhase = MissionPhase.MARKER_TWO_SETUP;
                     }
@@ -148,7 +148,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_TWO:
-                    if (CanMoveToNextPhase("pos2"))
+                    if ((await CanMoveToNextPhase("pos2")))
                     {
                         missionPhase = MissionPhase.MARKER_THREE_SETUP;
                     }
@@ -161,7 +161,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_THREE:
-                    if (CanMoveToNextPhase("pos3"))
+                    if ((await CanMoveToNextPhase("pos3")))
                     {
                         missionPhase = MissionPhase.MARKER_FOUR_SETUP;
                     }
@@ -174,7 +174,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_FOUR:
-                    if (CanMoveToNextPhase("pos4"))
+                    if ((await CanMoveToNextPhase("pos4")))
                     {
                         missionPhase = MissionPhase.MARKER_FIVE_SETUP;
                     }
@@ -187,7 +187,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_FIVE:
-                    if (CanMoveToNextPhase("pos5"))
+                    if ((await CanMoveToNextPhase("pos5")))
                     {
                         missionPhase = MissionPhase.MARKER_SIX_SETUP;
                     }
@@ -200,7 +200,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_SIX:
-                    if (CanMoveToNextPhase("pos6"))
+                    if ((await CanMoveToNextPhase("pos6")))
                     {
                         missionPhase = MissionPhase.MARKER_SEVEN_SETUP;
                     }
@@ -213,7 +213,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_SEVEN:
-                    if (CanMoveToNextPhase("pos7"))
+                    if ((await CanMoveToNextPhase("pos7")))
                     {
                         missionPhase = MissionPhase.MARKER_EIGHT_SETUP;
                     }
@@ -226,7 +226,7 @@ namespace Curiosity.Quest.Missions
                     ShowClueNow();
                     break;
                 case MissionPhase.MARKER_EIGHT:
-                    if (CanMoveToNextPhase("pos8"))
+                    if ((await CanMoveToNextPhase("pos8")))
                     {
                         missionPhase = MissionPhase.SPAWN_ZOMBIES_SETUP;
                     }
@@ -293,13 +293,19 @@ namespace Curiosity.Quest.Missions
             Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to find the next clue.");
         }
 
-        bool CanMoveToNextPhase(string marker)
+        async Task<bool> CanMoveToNextPhase(string marker)
         {
             if (Mission.IsMarkerActive(marker))
             {
                 ShowClueMessage();
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
+                    int mySoundId = -1;
+                    PlaySoundFrontend(mySoundId, "Bus_Schedule_Pickup", "DLC_PRISON_BREAK_HEIST_SOUNDS", true);
+                    await BaseScript.Delay(500);
+                    StopSound(_soundId);
+                    ReleaseSoundId(_soundId);
+                    _soundId = -1;
                     return true;
                 }
                 return false;
