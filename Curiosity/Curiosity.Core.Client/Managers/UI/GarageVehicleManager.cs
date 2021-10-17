@@ -139,6 +139,11 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
 
+                    //if (IsPositionOccupied(vehicleItem.X, vehicleItem.Y, vehicleItem.Z, distance, false, true, false, false, false, Game.PlayerPed.CurrentVehicle.Handle, false))
+                    //{
+
+                    //}
+
                     if (API.IsAnyVehicleNearPoint(vehicleItem.X, vehicleItem.Y, vehicleItem.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
                         NotificationManager.GetModule().Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
