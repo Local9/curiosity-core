@@ -361,6 +361,7 @@ namespace Curiosity.Quest.Missions
                 case MissionPhase.SPAWN_ZOMBIES_SETUP:
                     missionPhase = MissionPhase.SPAWN_ZOMBIES;
                     Notify.Warning($"Some strange sounds are coming from nearby!", "top-right");
+                    ForceLightningFlash();
                     MissionManager.Instance.RegisterTickHandler(OnZombieTick);
                     break;
                 case MissionPhase.SPAWN_ZOMBIES: // Monitor kills
