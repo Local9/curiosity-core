@@ -1,4 +1,6 @@
-﻿namespace Curiosity.MissionManager.Client.Environment.Entities.Models
+﻿using Newtonsoft.Json;
+
+namespace Curiosity.MissionManager.Client.Environment.Entities.Models
 {
     public class BlipMissionInfo
     {
@@ -9,6 +11,11 @@
         public string Rp;
         public string TextureDictionary;
         public string TextureName;
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     public class BlipMissionDetails
@@ -19,5 +26,9 @@
         public int Icon;
         public int IconColor;
         public bool Completed;
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

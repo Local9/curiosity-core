@@ -68,12 +68,16 @@ namespace Curiosity.MissionManager.Client
 
         public static void AddMarker(string name, NUIMarker marker)
         {
+            if (Markers.ContainsKey(name)) return;
+
             Markers.Add(name, marker);
             MarkersHandler.AddMarker(marker);
         }
 
         public static void AddMarker(string name, int markerType, Vector3 pos, Vector3 scale, float distance, System.Drawing.Color color, dynamic data, bool placeOnGround = false, bool bobUpAndDown = false, bool rotate = false, bool faceCamera = false)
         {
+            if (Markers.ContainsKey(name)) return;
+
             NUIMarker marker = new NUIMarker((MarkerType)markerType, pos, scale, distance, color, placeOnGround, bobUpAndDown, rotate, faceCamera);
             marker.Data = data;
             Markers.Add(name, marker);
@@ -83,6 +87,7 @@ namespace Curiosity.MissionManager.Client
         public static void RemoveMarker(string name)
         {
             if (!Markers.ContainsKey(name)) return;
+
             NUIMarker marker = Markers[name];
             MarkersHandler.RemoveMarker(marker);
             Markers.Remove(name);

@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
+using Curiosity.MissionManager.Client.Utils;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -29,6 +30,8 @@ namespace Curiosity.MissionManager.Client
         static Vector3 _scale = new Vector3(1.2f, 1.2f, 1f);
         static Type HalloweenMission;
         static Blip HalloweenBlip;
+        static bool hasCompletedQuest;
+        static string texture;
 
         /// <summary>
         /// Registers a mission so it can be seen and used in-game
@@ -46,7 +49,7 @@ namespace Curiosity.MissionManager.Client
             if (missionInfo.startPoint != Vector3.Zero)
             {
                 bool isHalloween = await EventSystem.EventSystem.Request<bool>("weather:is:halloween");
-                bool hasCompletedQuest = false; //await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
+                hasCompletedQuest = false; //await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
 
 #if DEBUG
                 isHalloween = true;
@@ -55,25 +58,25 @@ namespace Curiosity.MissionManager.Client
 
                 if (missionInfo.missionType == MissionType.Halloween && isHalloween && !hasCompletedQuest)
                 {
+                    await BaseScript.Delay(0);
                     questMarker1 = new NUIMarker(MarkerType.VerticalCylinder, _start, _scale, 2f, Color.FromArgb(255, 120, 0, 0), placeOnGround: true);
                     Mission.AddMarker("start", questMarker1);
                     HalloweenMission = mission;
-                    Instance.AttachTickHandler(OnCustomMissionStart);
                     Notify.Info($"There is a phone booth thats ringing, maybe you should answer it?", "top-right");
 
-                    string textureDictionary = "halloween";
-                    long textureDict = CreateRuntimeTxd(textureDictionary);
-                    string textureName = "phoneBooth";
-
-                    CreateRuntimeTextureFromImage(textureDict, textureName, "assets/images/phoneBoothHalloween.png");
-
+                    texture = "TXD_HALLOWEEN_BLIP";
+                    long textureDict = CreateRuntimeTxd(texture);
+                    await BaseScript.Delay(0);
+                    CreateRuntimeTextureFromImage(textureDict, texture, "assets/images/phoneBoothHalloween.png");
+                    await BaseScript.Delay(0);
                     BlipMissionInfo blipMissionInfo = new BlipMissionInfo();
                     blipMissionInfo.Title = "Happy Halloween!";
-                    blipMissionInfo.TextureDictionary = textureDictionary;
-                    blipMissionInfo.TextureName = textureName;
+                    blipMissionInfo.TextureDictionary = texture;
+                    blipMissionInfo.TextureName = texture;
 
                     HalloweenBlip = BlipManager.GetModule().AddBlip("Halloween Phone Call", (BlipSprite)437, BlipColor.Red, _start, blipMissionInfo);
 
+                    Instance.AttachTickHandler(OnCustomMissionStart);
                 }
                 // world blips for set mission locations
             }
@@ -84,6 +87,12 @@ namespace Curiosity.MissionManager.Client
 
         private static async Task OnCustomMissionStart()
         {
+            //if (ControlHelper.IsControlPressed(Control.ReplayStartStopRecording, modifier: ControlModifier.Alt))
+            //{
+            //    DrawSprite(textureDictionary, textureName, 0.2f, 0.2f, 0.3f, 0.275f, 0f, 255, 255, 255, 255);
+            //    return;
+            //}
+
             if (questMarker1 is null)
             {
                 Instance.DetachTickHandler(OnCustomMissionStart);
@@ -103,7 +112,7 @@ namespace Curiosity.MissionManager.Client
                 return;
             }
 
-            if (Game.PlayerPed.Position.Distance(_start) < 4f)
+            if (Game.PlayerPed.Position.Distance(_start) < 4f && !Mission.isOnMission && !hasCompletedQuest)
             {
                 if (_soundId == -1)
                 {
@@ -141,6 +150,8 @@ namespace Curiosity.MissionManager.Client
                     _soundId = -1;
 
                     BlipManager.GetModule().RemoveBlip(HalloweenBlip);
+                    Mission.RemoveMarker("start");
+                    questMarker1 = null;
                 }
             }
             else if (questMarker1.IsInRange && Mission.isOnMission)

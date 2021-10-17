@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -109,6 +110,9 @@ namespace Curiosity.MissionManager.Client.Managers
         void SetMissionData(BlipMissionInfo blipMissionInfo)
         {
             if (PushScaleformMovieFunctionN("SET_COLUMN_TITLE")) {
+
+                Logger.Debug($"{blipMissionInfo}");
+
                 PushScaleformMovieFunctionParameterInt(columnDisplayed);
                 SetString("");
                 SetString(CreateLabel(blipMissionInfo.Title));
