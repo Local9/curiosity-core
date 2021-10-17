@@ -131,6 +131,7 @@
     <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\DebugDisplay.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\Helpers.cs" />
     <Compile Include="Utils\NativeWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

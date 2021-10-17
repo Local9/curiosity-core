@@ -6,22 +6,39 @@ using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
 using System.Drawing;
 using System.Threading.Tasks;
-using Ped = Curiosity.MissionManager.Client.Classes.Ped;
-using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 using Curiosity.MissionManager.Client.Diagnostics;
 using System.Collections.Generic;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.MissionManager.Client.Interface;
 using System;
+using Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Quest.Missions
 {
     [MissionInfo("Halloween Quest", "quest1", -543.9988f, -157.8393f, 38.54123f, MissionType.Halloween, true, "None")]
     public class Quest1 : Mission
     {
+        const int ZOMBIE_AMOUNT = 5;
+        const float ZOMBIE_ATTR_CHANCE = 0.6f;
+        const int ZOMBIE_MAX_HEALTH = 500;
+        const int ZOMBIE_MAX_ARMOR = 500;
+        const string ZOMBIE_DECOR = "_ZOMBIE_HALLOWEEN";
+
+        const float SPAWN_MIN_DISTANCE = 5f;
+        const float SPAWN_DESPAWN_DISTANCE = 50f;
+        const double SPAWN_EVENT_CHANCE = 0.005;
+        const int SPAWN_TICK_RATE = 100;
+        const string SPAWN_DESPAWN_DECOR = "_MARKED_FOR_DESPAWN";
+        const float SPAWN_HOST_DECIDE_DISTANCE = 300f;
+
+        List<Ped> zombies;
+        public static RelationshipGroup ZombieGroup { get; private set; }
+
         Vector3 _start = new Vector3(-543.9988f, -157.8393f, 38.54123f);
         Vector3 _scale = new Vector3(1f, 1f, 1f);
+
+        List<Ped> peds = new List<Ped>();
 
         const string BASE_FOLDER = "assets/images/";
 
@@ -64,9 +81,13 @@ namespace Curiosity.Quest.Missions
         NUIMarker activeMarker;
         string currentClueText = string.Empty;
         string currentClueTexture = string.Empty;
+        int NumberKilled = 0;
 
         public override async void Start()
         {
+            zombies = new List<Ped>();
+            ZombieGroup = World.AddRelationshipGroup("zombies");
+
             textureDict = CreateRuntimeTxd(q1shrimp);
             CreateRuntimeTextureFromImage(textureDict, q1shrimp, $"assets/images/{q1shrimp}.png");
             textureDict = CreateRuntimeTxd(q1bird);
@@ -102,7 +123,7 @@ namespace Curiosity.Quest.Missions
             markerPositions.Add("pos7", questMarker7);
             markerPositions.Add("pos8", questMarker8);
 
-            missionPhase = MissionPhase.MARKER_ONE_SETUP;
+            missionPhase = MissionPhase.MARKER_EIGHT_SETUP;
 
             await BaseScript.Delay(1000);
 
@@ -119,6 +140,112 @@ namespace Curiosity.Quest.Missions
         public override void End()
         {
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
+        }
+        private async Task OnZombieTick()
+        {
+            await BaseScript.Delay(SPAWN_TICK_RATE);
+
+            if (zombies.Count < ZOMBIE_AMOUNT)
+                SpawnRandomZombie();
+            else if (zombies.Count > 0)
+                foreach (Ped zombie in zombies.ToArray())
+                    if (!Helpers.IsPosShitSpawn(Mission.PlayerList, zombie.Position, SPAWN_DESPAWN_DISTANCE)
+                        || zombie.IsDead)
+                    {
+                        if (zombie.IsDead) NumberKilled++;
+
+                        Decorators.Set(zombie.Handle, SPAWN_DESPAWN_DECOR, true);
+                        zombie.MarkAsNoLongerNeeded();
+
+                        zombies.Remove(zombie);
+                    }
+
+            HandleZombies();
+        }
+
+        private void OnCleanUp()
+        {
+            Ped[] worldPeds = World.GetAllPeds();
+            foreach (Ped ped in worldPeds)
+            {
+                if (!ped.Exists()) continue;
+
+                if (Decorators.GetBoolean(ped.Handle, SPAWN_DESPAWN_DECOR))
+                {
+                    if (ped.IsDead) NumberKilled++;
+
+                    ped.MarkAsNoLongerNeeded();
+                }
+            }
+        }
+
+        private void HandleZombies()
+        {
+            Ped[] worldPeds = World.GetAllPeds();
+            foreach (Ped ped in worldPeds)
+            {
+                if (!ped.Exists()) continue;
+
+                if (Decorators.GetBoolean(ped.Handle, ZOMBIE_DECOR))
+                {
+                    ped.Voice = "ALIENS";
+                    ped.IsPainAudioEnabled = false;
+                    ped.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
+
+                    RequestAnimSet("move_m@drunk@verydrunk");
+                    SetPedMovementClipset(ped.Handle, "move_m@drunk@verydrunk", 1f);
+                }
+            }
+        }
+
+        private void ZombieAttrChances(Ped zombie)
+        {
+            if (AttrChance())
+                SetPedRagdollOnCollision(zombie.Handle, true);
+            if (AttrChance())
+                SetPedHelmet(zombie.Handle, true);
+            if (AttrChance())
+                SetPedRagdollBlockingFlags(zombie.Handle, 1);
+        }
+
+        private bool AttrChance()
+        {
+            return Utility.RANDOM.Bool(ZOMBIE_ATTR_CHANCE);
+        }
+
+        private async void SpawnRandomZombie()
+        {
+            Vector3 spawnPos = Helpers.GetRandomSpawnPosFromPlayer(Game.Player, SPAWN_MIN_DISTANCE, SPAWN_DESPAWN_DISTANCE);
+
+            
+
+            if (!Helpers.IsPosShitSpawn(Mission.PlayerList, spawnPos, SPAWN_MIN_DISTANCE))
+            {
+                Ped zombie = await World.CreatePed(PedHash.Zombie01, spawnPos);
+                int zombieHandle = zombie.Handle;
+                SetPedCombatRange(zombieHandle, 2);
+                SetPedHearingRange(zombieHandle, float.MaxValue);
+                SetPedCombatAttributes(zombieHandle, 46, true);
+                SetPedCombatAttributes(zombieHandle, 5, true);
+                SetPedCombatAttributes(zombieHandle, 1, false);
+                SetPedCombatAttributes(zombieHandle, 0, false);
+                SetPedCombatAbility(zombieHandle, 0);
+                SetAiMeleeWeaponDamageModifier(float.MaxValue);
+                SetPedRagdollBlockingFlags(zombieHandle, 4);
+                SetPedCanPlayAmbientAnims(zombieHandle, false);
+
+                int randHealth = Utility.RANDOM.Next(1, ZOMBIE_MAX_HEALTH);
+                zombie.MaxHealth = randHealth;
+                zombie.Health = randHealth;
+                zombie.Armor = Utility.RANDOM.Next(ZOMBIE_MAX_ARMOR);
+                zombie.RelationshipGroup = ZombieGroup;
+                ZombieAttrChances(zombie);
+
+                zombie.Task.WanderAround();
+                Decorators.Set(zombieHandle, ZOMBIE_DECOR, true);
+
+                zombies.Add(zombie);
+            }
         }
 
         async Task OnMissionTick()
@@ -233,9 +360,27 @@ namespace Curiosity.Quest.Missions
                     break;
                 case MissionPhase.SPAWN_ZOMBIES_SETUP:
                     missionPhase = MissionPhase.SPAWN_ZOMBIES;
+                    Notify.Warning($"Some strange sounds are coming from nearby!", "top-right");
+                    MissionManager.Instance.RegisterTickHandler(OnZombieTick);
                     break;
                 case MissionPhase.SPAWN_ZOMBIES: // Monitor kills
-                    Pass();
+                    if (NumberKilled >= 5)
+                    {
+                        Pass();
+                        MissionManager.Instance.DeregisterTickHandler(OnZombieTick);
+
+                        if (zombies.Count > 0)
+                        {
+                            foreach(Ped ped in zombies.ToArray())
+                            {
+                                ped.Kill();
+                                ped.MarkAsNoLongerNeeded();
+
+                                zombies.Remove(ped);
+                            }
+                            zombies.Clear();
+                        }
+                    }
                     break;
             }
         }
@@ -312,6 +457,8 @@ namespace Curiosity.Quest.Missions
             }
             return false;
         }
+
+
     }
 
     enum MissionPhase

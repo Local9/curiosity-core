@@ -25,6 +25,8 @@ namespace Curiosity.MissionManager.Client
     {
         public static EventSystem EventSystem => EventSystem.GetModule();
 
+        public static PlayerList PlayerList => PluginManager.PlayerList;
+
         internal static List<Type> missions = new List<Type>();
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;

@@ -168,7 +168,7 @@ namespace Curiosity.Core.Server.Managers
 
                 _baseTime = IsTimeFrozen ? _baseTime : newBaseTime;
 
-                lastTimeTick = DateTime.UtcNow.AddMilliseconds(500);
+                lastTimeTick = DateTime.UtcNow.AddMilliseconds(1000);
             }
 
             await BaseScript.Delay(250);
