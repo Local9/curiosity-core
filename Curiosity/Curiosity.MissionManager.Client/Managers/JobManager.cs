@@ -43,6 +43,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
+            bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? true;
+
             if (isCurrentlyProcessing)
             {
                 Logger.Debug($"Fuck off {job}, I'm processing");
@@ -79,12 +81,19 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
                 Notify.Info($"Welcome to the force");
+                Instance.AttachTickHandler(OnDisablePolice);
             }
             else if (!IsOfficer && WasOfficer)
             {
+                Instance.DetachTickHandler(OnDisablePolice);
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
 
-                API.SetMaxWantedLevel(5);
+                if (!isPassive)
+                    API.SetMaxWantedLevel(5);
+
+                if (isPassive)
+                    API.SetMaxWantedLevel(0);
+
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
 
                 WasOfficer = false;
@@ -106,25 +115,10 @@ namespace Curiosity.MissionManager.Client.Managers
             isCurrentlyProcessing = false;
         }
 
-        async Task EquipWeapon(WeaponHash weapon, int ammo = 1, bool equip = false, bool forceInHand = false)
+        async Task OnDisablePolice()
         {
-            await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
-
-            bool hasWeapon = Game.PlayerPed.Weapons.HasWeapon(weapon);
-
-            int failRate = 0;
-
-            while (!hasWeapon)
-            {
-                await BaseScript.Delay(250);
-                await EventSystem.Request<bool>("character:weapons:equip", (uint)weapon, ammo, equip, forceInHand);
-
-                hasWeapon = Game.PlayerPed.Weapons.HasWeapon(weapon);
-
-                if (!hasWeapon && failRate >= 5) break;
-
-                failRate++;
-            }
+            API.SetMaxWantedLevel(0);
+            await BaseScript.Delay(500);
         }
 
         static async void ShowScaleformRules()
