@@ -11,6 +11,7 @@ using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Curiosity.Core.Server.Web;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -661,6 +662,8 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.NewNumberValue = newSkillValue;
 
+                    DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' skill '{skillId}' changed by '{amt}' (new value: {newSkillValue})");
+
                 SendMessage:
                     return $"{exportMessage}";
                 }));
@@ -722,6 +725,8 @@ namespace Curiosity.Core.Server.Managers
 
                     int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
 
+                    DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' stat '{stat}' changed by '{amt}' (new value: {newSkillValue})");
+
                     exportMessage.NewNumberValue = newSkillValue;
 
                 SendMessage:
@@ -778,12 +783,16 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
+                    long originalValue = user.Character.Cash;
+
                     int newCashValue = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
 
                     user.Character.Cash = newCashValue;
 
                     exportMessage.NewNumberValue = newCashValue;
-                
+
+                    DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt}' (change '{originalValue}' to '{newCashValue}')");
+
                 SendMessage:
                     return $"{exportMessage}";
                 }));
