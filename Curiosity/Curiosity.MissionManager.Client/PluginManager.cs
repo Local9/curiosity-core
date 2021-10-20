@@ -259,20 +259,5 @@ namespace Curiosity.MissionManager.Client
                 }
             });
         }
-
-        [TickHandler]
-        private async Task OnDiscordPresenceUpdateTick()
-        {
-            await Session.Loading();
-
-            if (DateTime.Now.Subtract(LastDiscordPresenceUpdate).TotalSeconds >= 90)
-            {
-                DiscordRichPresence.Commit();
-
-                LastDiscordPresenceUpdate = DateTime.Now;
-            }
-
-            await BaseScript.Delay(1500);
-        }
     }
 }
