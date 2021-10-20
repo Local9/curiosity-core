@@ -17,6 +17,8 @@ namespace Curiosity.MissionManager.Client.Managers
         int labels = 0;
         int entries = 0;
 
+        bool _originalState = false;
+
         public override void Begin()
         {
             
@@ -68,7 +70,7 @@ namespace Curiosity.MissionManager.Client.Managers
             blip.Delete();
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task OnMissionBlipHandler()
         {
             Blip currentBlip = null;
@@ -181,7 +183,11 @@ namespace Curiosity.MissionManager.Client.Managers
 
         void ShowMissionBlipInformation(bool show)
         {
-            SetColumnState(columnDisplayed, show);
+            if (show != _originalState)
+            {
+                _originalState = show;
+                SetColumnState(columnDisplayed, show);
+            }
         }
     }
 }
