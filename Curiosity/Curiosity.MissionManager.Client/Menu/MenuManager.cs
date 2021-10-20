@@ -115,7 +115,7 @@ namespace Curiosity.MissionManager.Client.Menu
             BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", isOpen);
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Change this to an activation on starting job
         private async Task OnShowHelperMessage()
         {
             if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer

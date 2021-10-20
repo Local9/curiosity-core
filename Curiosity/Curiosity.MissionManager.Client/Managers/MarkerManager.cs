@@ -21,7 +21,7 @@ namespace Curiosity.MissionManager.Client.Managers
             Logger.Info($"- [MarkerManager] Begin --------------------------");
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task OnTickMarkerHandler()
         {
             try
@@ -40,7 +40,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task PeriodicUpdate()
         {
             while (true)

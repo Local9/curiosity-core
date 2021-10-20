@@ -22,7 +22,7 @@ namespace Curiosity.MissionManager.Client.Managers
             Logger.Info($"- [WorldPedManager] Begin ------------------------");
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task OnWorldPedList()
         {
             try
@@ -57,7 +57,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
         }
 
-        [TickHandler]
+        [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task OnPedStunnedProtectionTick()
         {
             try
