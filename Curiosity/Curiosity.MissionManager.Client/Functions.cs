@@ -51,6 +51,10 @@ namespace Curiosity.MissionManager.Client
                 bool isHalloween = await EventSystem.EventSystem.Request<bool>("weather:is:halloween");
                 await BaseScript.Delay(100);
                 hasCompletedQuest = await EventSystem.EventSystem.Request<bool>("mission:quest:completed", 1);
+
+                //hasCompletedQuest = false;
+                //isHalloween = true;
+
                 await BaseScript.Delay(100);
                 if (missionInfo.missionType == MissionType.Halloween && isHalloween && !hasCompletedQuest)
                 {
