@@ -30,6 +30,7 @@ namespace Curiosity.CasinoSystems.Client.Scripts
             RequestIpl("vw_casino_carpark");
             RequestIpl("vw_casino_garage");
             RequestIpl("vw_casino_penthouse");
+
             RequestIpl("hei_dlc_casino_aircon");
             RequestIpl("hei_dlc_casino_aircon_lod");
             RequestIpl("hei_dlc_casino_door");
@@ -37,9 +38,11 @@ namespace Curiosity.CasinoSystems.Client.Scripts
             RequestIpl("hei_dlc_vw_roofdoors_locked");
             RequestIpl("hei_dlc_windows_casino");
             RequestIpl("hei_dlc_windows_casino_lod");
+
             RequestIpl("vw_ch3_additions");
             RequestIpl("vw_ch3_additions_long_0");
             RequestIpl("vw_ch3_additions_strm_0");
+
             RequestIpl("vw_dlc_casino_door");
             RequestIpl("vw_dlc_casino_door_lod");
             RequestIpl("vw_casino_billboard");

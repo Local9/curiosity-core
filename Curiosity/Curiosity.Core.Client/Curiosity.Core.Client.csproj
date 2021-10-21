@@ -75,6 +75,8 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\SettingsSubMenu\PoliceSettingsMenu.cs" />
     <Compile Include="Managers\DispatchManager.cs" />
+    <Compile Include="Managers\Milo\Casino\CasinoManager.cs" />
+    <Compile Include="Managers\Milo\Casino\CasinoTurnTable.cs" />
     <Compile Include="Managers\Milo\CayoPericoManager.cs" />
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />

@@ -133,7 +133,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (isWeatherLocked)
             {
-                Logger.Debug($"Weather State: Locked | {lastWeather}");
+                // Logger.Debug($"Weather State: Locked | {lastWeather}");
                 return;
             }
 
