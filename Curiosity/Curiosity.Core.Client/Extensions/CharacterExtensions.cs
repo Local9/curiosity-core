@@ -128,20 +128,22 @@ namespace Curiosity.Core.Client.Extensions
             float remBlend = character.Heritage.BlendApperance;
             float skinBlend = character.Heritage.BlendSkin;
 
-            API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
+            int playerPedId = Game.PlayerPed.Handle;
+
+            API.SetPedHeadBlendData(playerPedId, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
             if (character.CharacterInfo.DrawableVariations.Count == 0)
             {
-                API.SetPedComponentVariation(Game.PlayerPed.Handle, 3, 15, 0, 0);
-                API.SetPedComponentVariation(Game.PlayerPed.Handle, 8, 15, 0, 0);
-                API.SetPedComponentVariation(Game.PlayerPed.Handle, 11, 15, 0, 0);
-                API.SetFacialIdleAnimOverride(Game.PlayerPed.Handle, "mood_Normal_1", null);
+                API.SetPedComponentVariation(playerPedId, 3, 15, 0, 0);
+                API.SetPedComponentVariation(playerPedId, 8, 15, 0, 0);
+                API.SetPedComponentVariation(playerPedId, 11, 15, 0, 0);
+                API.SetFacialIdleAnimOverride(playerPedId, "mood_Normal_1", null);
             }
             else
             {
                 foreach(KeyValuePair<int, KeyValuePair<int, int>> kvp in character.CharacterInfo.DrawableVariations)
                 {
-                    API.SetPedComponentVariation(Cache.PlayerPed.Handle, kvp.Key, kvp.Value.Key, kvp.Value.Value, 0);
+                    API.SetPedComponentVariation(playerPedId, kvp.Key, kvp.Value.Key, kvp.Value.Value, 0);
                 }
             }
 
@@ -149,7 +151,7 @@ namespace Curiosity.Core.Client.Extensions
             {
                 foreach (KeyValuePair<int, KeyValuePair<int, int>> kvp in character.CharacterInfo.Props)
                 {
-                    API.SetPedPropIndex(Cache.PlayerPed.Handle, kvp.Key, kvp.Value.Key, kvp.Value.Value, true);
+                    API.SetPedPropIndex(playerPedId, kvp.Key, kvp.Value.Key, kvp.Value.Value, true);
                 }
             }
 
@@ -158,79 +160,79 @@ namespace Curiosity.Core.Client.Extensions
                 API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
             }
 
-            API.ClearPedFacialDecorations(Cache.PlayerPed.Handle);
+            API.ClearPedFacialDecorations(playerPedId);
 
             if (character.Appearance.HairStyle == 0)
             {
-                API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, 0, 0, 0);
+                API.SetPedComponentVariation(playerPedId, 2, 0, 0, 0);
             }
             else
             {
-                API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, character.Appearance.HairStyle, 0, 0);
+                API.SetPedComponentVariation(playerPedId, 2, character.Appearance.HairStyle, 0, 0);
                 if (!character.Appearance.HairOverlay.Equals(new KeyValuePair<string, string>()))
                 {
                     KeyValuePair<string, string> overlay = character.Appearance.HairOverlay;
-                    API.SetPedFacialDecoration(Cache.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
+                    API.SetPedFacialDecoration(playerPedId, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
                 }
 
-                API.SetPedHairColor(Cache.PlayerPed.Handle, character.Appearance.HairPrimaryColor, character.Appearance.HairSecondaryColor);
+                API.SetPedHairColor(playerPedId, character.Appearance.HairPrimaryColor, character.Appearance.HairSecondaryColor);
             }
 
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 1, character.Appearance.FacialHair, character.Appearance.FacialHairOpacity);
-            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 1, 1, character.Appearance.FacialHairColor, character.Appearance.FacialHairColor);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 2, character.Appearance.Eyebrow, character.Appearance.EyebrowOpacity);
-            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 2, 1, character.Appearance.EyebrowColor, character.Appearance.EyebrowColor);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 4, character.Appearance.EyeMakeup, character.Appearance.EyeMakeupOpacity);
-            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 4, 2, character.Appearance.EyeMakeupColor, character.Appearance.EyeMakeupColor);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 5, character.Appearance.Blusher, character.Appearance.BlusherOpacity);
-            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 5, 2, character.Appearance.BlusherColor, character.Appearance.BlusherColor);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 8, character.Appearance.Lipstick, character.Appearance.LipstickOpacity);
-            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 8, 2, character.Appearance.LipstickColor, character.Appearance.LipstickColor);
+            API.SetPedHeadOverlay(playerPedId, 1, character.Appearance.FacialHair, character.Appearance.FacialHairOpacity);
+            API.SetPedHeadOverlayColor(playerPedId, 1, 1, character.Appearance.FacialHairColor, character.Appearance.FacialHairColor);
+            API.SetPedHeadOverlay(playerPedId, 2, character.Appearance.Eyebrow, character.Appearance.EyebrowOpacity);
+            API.SetPedHeadOverlayColor(playerPedId, 2, 1, character.Appearance.EyebrowColor, character.Appearance.EyebrowColor);
+            API.SetPedHeadOverlay(playerPedId, 4, character.Appearance.EyeMakeup, character.Appearance.EyeMakeupOpacity);
+            API.SetPedHeadOverlayColor(playerPedId, 4, 2, character.Appearance.EyeMakeupColor, character.Appearance.EyeMakeupColor);
+            API.SetPedHeadOverlay(playerPedId, 5, character.Appearance.Blusher, character.Appearance.BlusherOpacity);
+            API.SetPedHeadOverlayColor(playerPedId, 5, 2, character.Appearance.BlusherColor, character.Appearance.BlusherColor);
+            API.SetPedHeadOverlay(playerPedId, 8, character.Appearance.Lipstick, character.Appearance.LipstickOpacity);
+            API.SetPedHeadOverlayColor(playerPedId, 8, 2, character.Appearance.LipstickColor, character.Appearance.LipstickColor);
 
-            API.SetPedEyeColor(Cache.PlayerPed.Handle, character.Appearance.EyeColor);
+            API.SetPedEyeColor(playerPedId, character.Appearance.EyeColor);
 
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 0, character.Appearance.SkinBlemish, character.Appearance.SkinBlemishOpacity);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 3, character.Appearance.SkinAging, character.Appearance.SkinAgingOpacity);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
-            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
+            API.SetPedHeadOverlay(playerPedId, 0, character.Appearance.SkinBlemish, character.Appearance.SkinBlemishOpacity);
+            API.SetPedHeadOverlay(playerPedId, 3, character.Appearance.SkinAging, character.Appearance.SkinAgingOpacity);
+            API.SetPedHeadOverlay(playerPedId, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
+            API.SetPedHeadOverlay(playerPedId, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
+            API.SetPedHeadOverlay(playerPedId, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
             // remove all decorations, and then manually re-add them all. what a retarded way of doing this R*....
-            ClearPedDecorations(Game.PlayerPed.Handle);
+            ClearPedDecorations(playerPedId);
 
             foreach (var tattoo in character.Tattoos.HeadTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.TorsoTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.LeftArmTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.RightArmTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.LeftLegTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.RightLegTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
             foreach (var tattoo in character.Tattoos.BadgeTattoos)
             {
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(tattoo.Key), (uint)GetHashKey(tattoo.Value));
             }
 
             if (!string.IsNullOrEmpty(character.Appearance.HairOverlay.Key) && !string.IsNullOrEmpty(character.Appearance.HairOverlay.Value))
             {
                 // reset hair value
-                SetPedDecoration(Game.PlayerPed.Handle, (uint)GetHashKey(character.Appearance.HairOverlay.Key), (uint)GetHashKey(character.Appearance.HairOverlay.Value));
+                SetPedDecoration(playerPedId, (uint)GetHashKey(character.Appearance.HairOverlay.Key), (uint)GetHashKey(character.Appearance.HairOverlay.Value));
             }
 
             if (character.IsDead)
