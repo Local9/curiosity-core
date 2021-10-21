@@ -70,7 +70,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 notificationPosition = markerExit.Position;
 
                 if (markerExit.IsInMarker)
-                    NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to left the {message}");
+                    NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to leave the {message}");
 
                 if (markerExit.IsInMarker && Game.IsControlPressed(0, Control.Context))
                 {
