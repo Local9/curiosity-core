@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             await Session.Loading();
 
             markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
-            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 3f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
+            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 2f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
@@ -97,11 +97,12 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
                 RequestIpl("vw_casino_main");
                 CasinoTurnTable.Init();
+                CasinoLuckyWheel.Init();
             }
             else
             {
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos";
-                // worldManager.UnlockTime();
+                worldManager.UnlockTime();
                 worldManager.UnlockAndUpdateWeather();
 
                 if (IsAudioSceneActive("DLC_VW_Casino_General"))
@@ -111,6 +112,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
                 RemoveIpl("vw_casino_main");
                 CasinoTurnTable.Dispose();
+                CasinoLuckyWheel.Dispose();
             }
             Instance.DiscordRichPresence.Commit();
 
