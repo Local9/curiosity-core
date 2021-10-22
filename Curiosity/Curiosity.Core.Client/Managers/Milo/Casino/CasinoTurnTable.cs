@@ -50,6 +50,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         static async Task CreateVehicleForDisplay()
         {
             RemoveVehicle();
+            await BaseScript.Delay(100);
+            // update if the server changed it
+            vehicleModel = await EventSystem.GetModule().Request<int>("casino:vehicle");
+
             int veh;
             int loadChecks = 0;
             Model model = vehicleModel;
@@ -159,6 +163,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             {
                 if (vehicle.Exists())
                     vehicle.Delete();
+
+                vehicle = null;
             }
         }
     }
