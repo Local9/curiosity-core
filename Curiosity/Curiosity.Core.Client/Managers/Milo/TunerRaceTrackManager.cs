@@ -133,7 +133,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 BlipData blip = kvp.Value;
                 foreach (Blip b in blip.Blips)
                 {
-                    SetBlipHiddenOnLegend(b.Handle, !enterTrack);
+                    SetBlipHiddenOnLegend(b.Handle, enterTrack);
                 }
             }
 

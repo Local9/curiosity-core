@@ -124,7 +124,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 BlipData blip = kvp.Value;
                 foreach (Blip b in blip.Blips)
                 {
-                    SetBlipHiddenOnLegend(b.Handle, !enterCasino);
+                    SetBlipHiddenOnLegend(b.Handle, enterCasino);
                 }
             }
 
