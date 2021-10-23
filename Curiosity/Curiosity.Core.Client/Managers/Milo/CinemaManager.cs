@@ -1,10 +1,12 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -20,8 +22,13 @@ namespace Curiosity.Core.Client.Managers.Milo
         Position posExit = new Position(-1437.539f, -245.3138f, 16.80255f, 279.8171f);
         Vector3 scale = new Vector3(1.5f, 1.5f, 0.5f);
 
+        private const float MinY = -89f, MaxY = 89f;
+
         NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
+
+        Camera movieCamera;
+        Vector3 cameraPos = new Vector3(-1426.849f, -251.2769f, 17.96699f);
 
         public async override void Begin()
         {
@@ -77,6 +84,92 @@ namespace Curiosity.Core.Client.Managers.Milo
             }
         }
 
+        async Task OnToggleMovieCamera()
+        {
+            bool isCameraActive = movieCamera is not null;
+
+            string msg = $"Press ~INPUT_CONTEXT~ to use the set camera.";
+            if (isCameraActive)
+                msg = $"Press ~INPUT_CONTEXT~ to exit the camera.";
+
+            if (!markerExit.IsInMarker)
+                Screen.DisplayHelpTextThisFrame(msg);
+
+            if (Game.IsControlJustPressed(0, Control.Context))
+            {
+                if (movieCamera is null)
+                {
+                    CreateCamera();
+                    return;
+                }
+
+                if (movieCamera is not null)
+                {
+                    DestroyCamera();
+                }
+            }
+        }
+
+        async Task OnNoClipCheckRotationTick()
+        {
+            try
+            {
+                if (movieCamera == null)
+                {
+                    await BaseScript.Delay(100);
+                    return;
+                }
+
+                var rightAxisX = Game.GetDisabledControlNormal(0, (Control)220);
+                var rightAxisY = Game.GetDisabledControlNormal(0, (Control)221);
+
+                if (!(Math.Abs(rightAxisX) > 0) && !(Math.Abs(rightAxisY) > 0)) return;
+                var rotation = movieCamera.Rotation;
+                rotation.Z += rightAxisX * -10f;
+
+                var yValue = rightAxisY * -5f;
+                if (rotation.X + yValue > MinY && rotation.X + yValue < MaxY)
+                    rotation.X += yValue;
+                movieCamera.Rotation = rotation;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        private void DestroyCamera()
+        {
+            movieCamera.Delete();
+            movieCamera = null;
+            World.RenderingCamera = null;
+
+            World.RenderingCamera = null;
+            Cache.PlayerPed.IsPositionFrozen = false;
+            Cache.PlayerPed.IsCollisionEnabled = true;
+            Cache.PlayerPed.CanRagdoll = true;
+            Cache.PlayerPed.IsVisible = true;
+            Cache.PlayerPed.Opacity = 255;
+            Cache.PlayerPed.Task.ClearAllImmediately();
+
+            Instance.DetachTickHandler(OnNoClipCheckRotationTick);
+        }
+
+        void CreateCamera()
+        {
+            movieCamera = World.CreateCamera(cameraPos, GameplayCamera.Rotation, 75f);
+            World.RenderingCamera = movieCamera;
+
+            Cache.PlayerPed.IsPositionFrozen = true;
+            Cache.PlayerPed.IsCollisionEnabled = false;
+            Cache.PlayerPed.Opacity = 0;
+            Cache.PlayerPed.CanRagdoll = false;
+            Cache.PlayerPed.IsVisible = false;
+            Cache.PlayerPed.Task.ClearAllImmediately();
+
+            Instance.AttachTickHandler(OnNoClipCheckRotationTick);
+        }
+
         private async Task MovePlayer(bool enterCinema = false)
         {
             await Cache.PlayerPed.FadeOut();
@@ -91,14 +184,16 @@ namespace Curiosity.Core.Client.Managers.Milo
             if (enterCinema)
             {
                 Instance.DiscordRichPresence.Status = $"Watching movies...";
-                worldManager.LockAndSetTime(12, 1);
-                worldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
+                worldManager.LockAndSetTime(9, 0);
+                worldManager.LockAndSetWeather(WeatherType.CLEAR);
+                Instance.AttachTickHandler(OnToggleMovieCamera);
             }
             else
             {
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
                 worldManager.UnlockTime();
                 worldManager.UnlockAndUpdateWeather();
+                Instance.DetachTickHandler(OnToggleMovieCamera);
             }
             Instance.DiscordRichPresence.Commit();
 
