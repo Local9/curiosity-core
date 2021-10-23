@@ -90,12 +90,13 @@ namespace Curiosity.Core.Client.Managers.Milo
 
             string msg = $"Press ~INPUT_CONTEXT~ to use the set camera.";
             if (isCameraActive)
-                msg = $"Press ~INPUT_CONTEXT~ to exit the camera.";
+                msg = $"Press ~INPUT_CONTEXT~ to exit the camera.~n~" +
+                    $"Cameras ~INPUT_SELECT_WEAPON_UNARMED~ ~INPUT_SELECT_WEAPON_MELEE~ ~INPUT_SELECT_WEAPON_SHOTGUN~";
 
-            if (!markerExit.IsInMarker)
+            if (!markerExit.IsInRange)
                 Screen.DisplayHelpTextThisFrame(msg);
 
-            if (Game.IsControlJustPressed(0, Control.Context))
+            if (Game.IsControlJustPressed(0, Control.Context) && !markerExit.IsInRange)
             {
                 if (movieCamera is null)
                 {
@@ -107,6 +108,21 @@ namespace Curiosity.Core.Client.Managers.Milo
                 {
                     DestroyCamera();
                 }
+            }
+
+            if (Game.IsControlJustPressed(0, Control.SelectWeaponUnarmed) && movieCamera is not null)
+            {
+                movieCamera.Position = new Vector3(-1426.849f, -251.2769f, 17.96699f);
+            }
+
+            if (Game.IsControlJustPressed(0, Control.SelectWeaponMelee) && movieCamera is not null)
+            {
+                movieCamera.Position = new Vector3(-1426.573f, -252.7998f, 19.66913f);
+            }
+
+            if (Game.IsControlJustPressed(0, Control.SelectWeaponShotgun) && movieCamera is not null)
+            {
+                movieCamera.Position = new Vector3(-1426.642f, -242.0524f, 19.60905f);
             }
         }
 
