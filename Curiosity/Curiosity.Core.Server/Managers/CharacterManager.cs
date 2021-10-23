@@ -212,6 +212,9 @@ namespace Curiosity.Core.Server.Managers
 
                 curiosityUser.Character = await Database.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
 
+                if (!curiosityUser.Character.MarkedAsRegistered)
+                    curiosityUser.Character.IsPassive = true;
+
                 return curiosityUser.Character;
             }));
 
