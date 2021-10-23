@@ -262,7 +262,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
                 SetClockTime(timeLockHour, timeLockMins, 0);
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(0);
                 return;
             }
 
