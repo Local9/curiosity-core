@@ -37,28 +37,29 @@
   "supporter": {
     "companions": [
       {
-        "label": "Husky",
-        "hash": "A_C_Husky"
+        "label": "Bigfoot",
+        "hash": "ig_orleans",
+        "human": true
       },
       {
-        "label": "Poodle",
-        "hash": "A_C_Poodle"
+        "label": "Priest",
+        "hash": "ig_priest",
+        "human": true
       },
       {
-        "label": "Pug",
-        "hash": "A_C_Pug"
+        "label": "Vincent",
+        "hash": "ig_vincent",
+        "human": true
       },
       {
-        "label": "Retriever",
-        "hash": "A_C_Retriever"
+        "label": "Sheriff (F)",
+        "hash": "s_f_y_sheriff_01",
+        "human": true
       },
       {
-        "label": "Rottweiler",
-        "hash": "A_C_Rottweiler"
-      },
-      {
-        "label": "Shepherd",
-        "hash": "A_C_shepherd"
+        "label": "Sheriff (M)",
+        "hash": "s_m_y_sheriff_01",
+        "human": true
       }
     ],
     "models": [

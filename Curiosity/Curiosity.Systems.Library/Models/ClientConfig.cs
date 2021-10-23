@@ -38,6 +38,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "hash")]
         public string Hash;
+
+        [DataMember(Name = "human")]
+        public bool Human;
     }
 
 

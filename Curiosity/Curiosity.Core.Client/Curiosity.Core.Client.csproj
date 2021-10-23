@@ -74,6 +74,7 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\SettingsSubMenu\PoliceSettingsMenu.cs" />
+    <Compile Include="Managers\CompanionManager.cs" />
     <Compile Include="Managers\DispatchManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoLuckyWheel.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoManager.cs" />
@@ -88,6 +89,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Common.cs" />
+    <Compile Include="Utils\Peds.cs" />
     <Compile Include="Utils\Utility.cs" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
@@ -186,6 +189,8 @@
     <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\DebugDisplay.cs" />
     <Compile Include="Managers\PlayerOptionsManager.cs" />
+    <Compile Include="Utils\Vehicles.cs" />
+    <Compile Include="Utils\Weapons.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\scenarios.json">
