@@ -9,6 +9,7 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
+using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using System;
@@ -35,6 +36,55 @@ namespace Curiosity.Core.Client.Commands.Impl
         static string musicEvent = string.Empty;
 
         #region Player
+
+        [CommandInfo(new[] { "party" })]
+        public class PartyEvent : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                float radius = API.GetRandomFloatInRange(5f, 10f);
+                int speakers = API.GetRandomIntInRange(2, 7);
+                int peds = API.GetRandomIntInRange(10, 20);
+                int booze = API.GetRandomIntInRange(10, 20);
+
+                var center = API.GetEntityCoords(API.GetPlayerPed(-1), true);
+                var station = API.GetPlayerRadioStationIndex();
+
+                if (station == 255) // OFF
+                    station = 19; // RADIO_19_USER
+
+                for (int i = 0; i < speakers; ++i)
+                {
+                    var model = Props.SpeakerList[API.GetRandomIntInRange(0, Props.SpeakerList.Length)];
+                    var prop = await Props.SpawnInRange(center, model, 1f, radius, false);
+                    Props.SetSpeaker(prop, station);
+                }
+
+                for (int i = 0; i < peds; ++i)
+                {
+                    List<string> cPeds = ConfigurationManager.GetModule().PartyPeds();
+
+                    uint[] partyPeds = new uint[cPeds.Count];
+
+                    for(int x = 0; x < cPeds.Count; x++)
+                    {
+                        int hash = API.GetHashKey(cPeds[i]);
+                        partyPeds[x] = (uint)hash;
+                    }
+
+                    var ped = await Peds.SpawnInRange(partyPeds, center, 1f, radius);
+                    API.TaskStartScenarioInPlace(ped, "WORLD_HUMAN_PARTYING", 0, true);
+                    API.SetPedAsNoLongerNeeded(ref ped);
+                }
+
+                for (int i = 0; i < booze; ++i)
+                {
+                    var model = Props.BoozeList[API.GetRandomIntInRange(0, Props.BoozeList.Length)];
+                    var prop = await Props.SpawnInRange(center, model, 1f, radius, false);
+                    API.SetEntityAsNoLongerNeeded(ref prop);
+                }
+            }
+        }
 
         [CommandInfo(new[] { "me" })]
         public class MusicEvent : ICommand
@@ -203,7 +253,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                             pedHash = "u_m_y_juggernaut_01";
                         }
 
-                        Model companionModel = await Utils.Utility.LoadModel(pedHash);
+                        Model companionModel = await Utilities.LoadModel(pedHash);
 
                         Vector3 offset = new Vector3(2f, 0f, 0f);
                         Vector3 spawn = Cache.PlayerPed.GetOffsetPosition(offset);

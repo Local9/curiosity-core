@@ -91,7 +91,8 @@
     </Compile>
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\Peds.cs" />
-    <Compile Include="Utils\Utility.cs" />
+    <Compile Include="Utils\Props.cs" />
+    <Compile Include="Utils\Utilities.cs" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />

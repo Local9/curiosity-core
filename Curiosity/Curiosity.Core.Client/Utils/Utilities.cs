@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Utils
 {
-    static class Utility
+    static class Utilities
     {
         public static async Task<Model> LoadModel(string modelHash)
         {

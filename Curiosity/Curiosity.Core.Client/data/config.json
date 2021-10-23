@@ -34,6 +34,23 @@
     "Cargobob4",
     "Besra"
   ],
+  "partyPeds": [
+    "s_f_y_bartender_01",
+    "a_f_m_beach_01",
+    "a_f_y_beach_01",
+    "a_f_y_bevhills_01",
+    "s_f_y_hooker_01",
+    "s_f_y_ranger_01",
+    "a_f_y_topless_01",
+    "a_f_m_bevhills_01",
+    "a_f_y_juggalo_01",
+    "g_f_y_vagos_01",
+    "a_f_y_runner_01",
+    "a_f_y_bevhills_02",
+    "a_f_y_bevhills_03",
+    "s_f_y_baywatch_01",
+    "a_f_y_hipster_04"
+  ],
   "supporter": {
     "companions": [
       {

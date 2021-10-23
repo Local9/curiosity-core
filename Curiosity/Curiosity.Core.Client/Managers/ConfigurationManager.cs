@@ -3,7 +3,6 @@ using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -44,6 +43,11 @@ namespace Curiosity.Core.Client.Managers
         public List<string> VehiclesToSuppress()
         {
             return GetConfig().VehiclesToSuppress;
+        }
+
+        public List<string> PartyPeds()
+        {
+            return GetConfig().PartyPeds;
         }
 
         public List<Companion> SupporterCompanions()

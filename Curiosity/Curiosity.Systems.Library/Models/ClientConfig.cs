@@ -12,6 +12,9 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "suppressedVehicles")]
         public List<string> VehiclesToSuppress;
 
+        [DataMember(Name = "partyPeds")]
+        public List<string> PartyPeds;
+
         [DataMember(Name = "supporter")]
         public Supporter Supporter;
 
