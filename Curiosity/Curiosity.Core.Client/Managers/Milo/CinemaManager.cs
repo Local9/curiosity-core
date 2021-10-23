@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Managers.Milo
         [TickHandler(SessionWait = true)]
         private async Task OnCinemaTeleportTick()
         {
-            string message = $"Cinema.";
+            string message = $"Movie Theatre.";
             Vector3 notificationPosition = Vector3.Zero;
 
             if (markerEnter.IsInRange)
