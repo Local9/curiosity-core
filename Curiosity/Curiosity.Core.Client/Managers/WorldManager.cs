@@ -260,8 +260,8 @@ namespace Curiosity.Core.Client.Managers
 
             if (isTimeLocked)
             {
-                // NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
-                // SetClockTime(timeLockHour, timeLockMins, 0);
+                NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
+                SetClockTime(timeLockHour, timeLockMins, 0);
                 await BaseScript.Delay(500);
                 return;
             }
