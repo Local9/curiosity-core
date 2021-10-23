@@ -170,6 +170,22 @@
       ]
     },
     {
+      "name": "Moive Theatre",
+      "sprite": 135,
+      "color": 0,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -1423.533,
+          "Y": -214.2786,
+          "Z": 46.50037
+        }
+      ]
+    },
+    {
       "name": "Cayo Perico Island",
       "sprite": 798,
       "color": 0,
