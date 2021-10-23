@@ -9,35 +9,37 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Core.Client.Managers.Milo.Casino
+
+namespace Curiosity.Core.Client.Managers.Milo
 {
-    public class CasinoManager : Manager<CasinoManager>
+    public class CinemaManager : Manager<CinemaManager>
     {
-        private const string AUDIO_SCENE = "DLC_VW_Casino_General";
-        Position posEnter = new Position(924.4668f, 46.7468f, 81.10635f);
-        Position posExit = new Position(1089.974f, 206.0144f, -48.99975f);
-        Vector3 scale = new Vector3(1.25f, 1.25f, 0.5f);
+        // Movie Theatre 	new Vector3(-1427.299, -245.1012, 16.8039);
+
+        Position posEnter = new Position(-1423.533f, -214.2786f, 46.50037f, 357.6964f);
+        Position posExit = new Position(-1437.539f, -245.3138f, 16.80255f, 279.8171f);
+        Vector3 scale = new Vector3(1.5f, 1.5f, 0.5f);
 
         NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
 
         public async override void Begin()
         {
-            Logger.Info($"Started Casino Manager");
+            Logger.Info($"Started Cinema Manager");
 
             await Session.Loading();
 
-            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
-            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 2f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
+            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
+            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnCasinoTeleporterTick()
+        private async Task OnCinemaTeleportTick()
         {
-            string message = $"Casino.";
+            string message = $"Cinema.";
             Vector3 notificationPosition = Vector3.Zero;
 
             if (markerEnter.IsInRange)
@@ -75,7 +77,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             }
         }
 
-        private async Task MovePlayer(bool enterCasino = false)
+        private async Task MovePlayer(bool enterCinema = false)
         {
             await Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut(1000);
@@ -84,39 +86,23 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
             Cache.PlayerPed.IsCollisionEnabled = false;
 
-            Position pos = enterCasino ? posExit : posEnter;
+            Position pos = enterCinema ? posExit : posEnter;
 
-            int interiorId = GetInteriorAtCoords(1089.974f, 206.0144f, -48.99975f);
-
-            if (enterCasino)
+            if (enterCinema)
             {
-                Instance.DiscordRichPresence.Status = $"Betting at the Casino";
+                Instance.DiscordRichPresence.Status = $"Watching movies...";
                 worldManager.LockAndSetTime(12, 1);
                 worldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
-                AudioSettings();
-
-                RequestIpl("vw_casino_main");
-                CasinoTurnTable.Init();
-                CasinoLuckyWheel.Init();
             }
             else
             {
-                Instance.DiscordRichPresence.Status = $"Roaming Los Santos";
+                Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
                 worldManager.UnlockTime();
                 worldManager.UnlockAndUpdateWeather();
-
-                if (IsAudioSceneActive("DLC_VW_Casino_General"))
-                {
-                    StopAudioScene(AUDIO_SCENE);
-                }
-
-                RemoveIpl("vw_casino_main");
-                CasinoTurnTable.Dispose();
-                CasinoLuckyWheel.Dispose();
             }
             Instance.DiscordRichPresence.Commit();
 
-            PlayerOptionsManager.GetModule().DisableWeapons(enterCasino);
+            PlayerOptionsManager.GetModule().DisableWeapons(enterCinema);
 
             Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
             foreach (KeyValuePair<string, BlipData> kvp in blips)
@@ -124,52 +110,20 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 BlipData blip = kvp.Value;
                 foreach (Blip b in blip.Blips)
                 {
-                    SetBlipHiddenOnLegend(b.Handle, enterCasino);
-                    SetBlipAlpha(b.Handle, enterCasino ? 0 : 255);
+                    SetBlipHiddenOnLegend(b.Handle, enterCinema);
+                    SetBlipAlpha(b.Handle, enterCinema ? 0 : 255);
                 }
             }
-
-            if (IsValidInterior(interiorId))
-                RefreshInterior(interiorId);
 
             WorldManager.GetModule().UpdateWeather(true);
 
             Cache.PlayerPed.IsCollisionEnabled = true;
 
-            SetEntityCoords(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z, true, false, false, true);
+            SetPedCoordsKeepVehicle(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z);
 
             await BaseScript.Delay(1500);
             await ScreenInterface.FadeIn(1000);
             await Cache.PlayerPed.FadeIn();
-        }
-
-        static async void AudioSettings()
-        {
-            bool hasRequestedAudio = false;
-            int numberOfPasses = 0;
-
-            if (!IsAudioSceneActive("DLC_VW_Casino_General"))
-            {
-                StartAudioScene("DLC_VW_Casino_General");
-            }
-
-            while (!hasRequestedAudio)
-            {
-                await BaseScript.Delay(100);
-
-                if ((((RequestScriptAudioBank("DLC_VINEWOOD/CASINO_GENERAL", false)
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_01", false))
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_02", false))
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_03", false))
-                    && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
-                {
-                    hasRequestedAudio = true;
-                }
-
-                if (numberOfPasses > 5) break;
-
-                numberOfPasses++;
-            }
         }
     }
 }

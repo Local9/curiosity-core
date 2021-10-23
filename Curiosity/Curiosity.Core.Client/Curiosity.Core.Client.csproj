@@ -80,6 +80,7 @@
     <Compile Include="Managers\Milo\Casino\CasinoManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoTurnTable.cs" />
     <Compile Include="Managers\Milo\CayoPericoManager.cs" />
+    <Compile Include="Managers\Milo\CinemaManager.cs" />
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />

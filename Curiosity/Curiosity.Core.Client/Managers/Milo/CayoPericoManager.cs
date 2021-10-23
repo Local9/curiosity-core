@@ -290,6 +290,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 foreach (Blip b in blip.Blips)
                 {
                     SetBlipHiddenOnLegend(b.Handle, false);
+                    SetBlipAlpha(b.Handle, 255);
                 }
             }
 
@@ -326,6 +327,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 foreach(Blip b in blip.Blips)
                 {
                     SetBlipHiddenOnLegend(b.Handle, true);
+                    SetBlipAlpha(b.Handle, 0);
                 }
             }
 
