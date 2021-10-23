@@ -230,6 +230,8 @@ namespace Curiosity.Core.Client.Managers.Milo
             {
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
                 SetupLosSantos();
+                // Change world to City
+                EventSystem.Send($"world:routing:city");
             }
 
             Logger.Debug($"Teleport to: Cayo Perico");
@@ -238,6 +240,8 @@ namespace Curiosity.Core.Client.Managers.Milo
                 SetupCayoPerico();
                 subRegion = SubRegion.ISHeist;
                 Instance.DiscordRichPresence.Status = $"Roaming Cayo Perico...";
+                // Change world to Island
+                EventSystem.Send($"world:routing:island");
             }
             Instance.DiscordRichPresence.Commit();
 

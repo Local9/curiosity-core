@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Data;
@@ -64,6 +65,20 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("weather:is:halloween", new EventCallback(metadata =>
             {
                 return WeatherData.IsHalloween();
+            }));
+
+            EventSystem.GetModule().Attach("world:routing:island", new EventCallback(metadata =>
+            {
+                string playerId = $"{metadata.Sender}";
+                SetPlayerRoutingBucket(playerId, 3);
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("world:routing:city", new EventCallback(metadata =>
+            {
+                string playerId = $"{metadata.Sender}";
+                SetPlayerRoutingBucket(playerId, 2);
+                return null;
             }));
 
             RandomiseWeather();
