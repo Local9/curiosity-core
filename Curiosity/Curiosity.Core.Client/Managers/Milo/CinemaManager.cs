@@ -30,7 +30,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             await Session.Loading();
 
             markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
-            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
+            markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 2f, System.Drawing.Color.FromArgb(255, 135, 206, 235));
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
