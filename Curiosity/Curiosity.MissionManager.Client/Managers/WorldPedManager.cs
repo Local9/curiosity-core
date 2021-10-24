@@ -1,14 +1,11 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
-using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client.Managers
@@ -39,9 +36,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                ConcurrentDictionary<int, Ped> WorldPedsCopy = WorldPeds;
-
-                foreach (KeyValuePair<int, Ped> kvp in WorldPedsCopy)
+                foreach (KeyValuePair<int, Ped> kvp in WorldPeds.ToArray())
                 {
                     Ped ped = kvp.Value;
 
@@ -74,7 +69,7 @@ namespace Curiosity.MissionManager.Client.Managers
             try
             {
                 SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0f);
-                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 30f)).ToList();
+                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 10f)).ToList();
 
                 if (peds.Count == 0)
                 {
@@ -82,8 +77,10 @@ namespace Curiosity.MissionManager.Client.Managers
                     return;
                 }
 
-                peds.ForEach(ped =>
+                foreach(CitizenFX.Core.Ped ped in peds)
                 {
+                    if (ped.IsInVehicle()) continue;
+
                     if (!IsEntityStatic(ped.Handle))
                     {
                         ped.CanWrithe = false;
@@ -102,9 +99,7 @@ namespace Curiosity.MissionManager.Client.Managers
                             ReviveInjuredPed(ped.Handle);
                         }
                     }
-
-                    // NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
-                });
+                }
             }
             catch (Exception ex)
             {
