@@ -24,6 +24,8 @@ namespace Curiosity.MissionManager.Client.Managers
         private static bool HasShownScaleform;
         private static Scaleform scaleform;
 
+        WorldPedManager WorldPedManager => WorldPedManager.GetModule();
+
         public override void Begin()
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
@@ -82,6 +84,9 @@ namespace Curiosity.MissionManager.Client.Managers
                 WorldVehicleManager.VehicleManager.Start();
                 Notify.Info($"Welcome to the force");
                 Instance.AttachTickHandler(OnDisablePolice);
+
+                WorldPedManager.Init();
+
             }
             else if (!IsOfficer && WasOfficer)
             {
@@ -105,6 +110,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 MissionDirectorManager.Director.TurnOffMissionDirector();
                 WorldVehicleManager.VehicleManager.Stop();
                 Notify.Info($"No longer a police officer");
+
+                WorldPedManager.Dispose();
 
                 await BaseScript.Delay(100);
             }
