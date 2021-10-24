@@ -84,13 +84,13 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClubCasino
 
         public override void Begin()
         {
-            markerEnter = new NUIMarker(MarkerType.VerticalCylinder, posEntrance.AsVector(), markerScale, 10f, markerColor);
+            markerEnter = new NUIMarker(MarkerType.VerticalCylinder, posEntrance.AsVector(), markerScale, 5f, markerColor);
             markerEnter.TeleportPosition = posExit;
             markerEnter.PlaceOnGround = true;
             markerEnter.Data = new { enterNightClub = true };
             markerEnter.Add();
 
-            markerExit = new NUIMarker(MarkerType.VerticalCylinder, posExit.AsVector(), markerScale, 10f, markerColor);
+            markerExit = new NUIMarker(MarkerType.VerticalCylinder, posExit.AsVector(), markerScale, 3f, markerColor);
             markerExit.TeleportPosition = posEntrance;
             markerExit.PlaceOnGround = true;
             markerExit.Data = new { enterNightClub = false };
