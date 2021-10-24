@@ -147,7 +147,9 @@ namespace Curiosity.Core.Server.Managers
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
                 if (currentBucket != 0)
+                {
                     API.SetPlayerRoutingBucket(player.Handle, 0);
+                }
 
                 player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, -1, true);
@@ -160,7 +162,7 @@ namespace Curiosity.Core.Server.Managers
 
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, u.Character.IsPassive, true);
 
-                API.SetPlayerCullingRadius($"{metadata.Sender}", 250.0f);
+                API.SetPlayerCullingRadius($"{metadata.Sender}", 400.0f);
                 
                 u.RoutingBucket = 0;
 
