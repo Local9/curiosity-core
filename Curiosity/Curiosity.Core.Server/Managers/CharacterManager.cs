@@ -33,6 +33,8 @@ namespace Curiosity.Core.Server.Managers
                 int routingId = initRouting + playerHandle;
 
                 API.SetPlayerRoutingBucket(player.Handle, routingId);
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[player.Handle.ToInt()];
+                curiosityUser.RoutingBucket = routingId;
 
                 return null;
             }));
@@ -149,6 +151,7 @@ namespace Curiosity.Core.Server.Managers
                 if (currentBucket != 0)
                 {
                     API.SetPlayerRoutingBucket(player.Handle, 0);
+                    u.RoutingBucket = 0;
                 }
 
                 player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, -1, true);

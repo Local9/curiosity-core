@@ -71,6 +71,9 @@ namespace Curiosity.Core.Server.Managers
             {
                 string playerId = $"{metadata.Sender}";
                 SetPlayerRoutingBucket(playerId, 3);
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.RoutingBucket = 3;
                 return null;
             }));
 
@@ -78,6 +81,9 @@ namespace Curiosity.Core.Server.Managers
             {
                 string playerId = $"{metadata.Sender}";
                 SetPlayerRoutingBucket(playerId, 0);
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.RoutingBucket = 0;
                 return null;
             }));
 
