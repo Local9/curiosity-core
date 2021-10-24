@@ -77,7 +77,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("world:routing:city", new EventCallback(metadata =>
             {
                 string playerId = $"{metadata.Sender}";
-                SetPlayerRoutingBucket(playerId, 2);
+                SetPlayerRoutingBucket(playerId, 0);
                 return null;
             }));
 
