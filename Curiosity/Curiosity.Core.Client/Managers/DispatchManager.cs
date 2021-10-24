@@ -331,6 +331,16 @@ namespace Curiosity.Core.Client.Managers
             Logger.Info($"Dispatch Manager INIT - Original: Finite Cops by Silver Finish");
         }
 
+        public void Init()
+        {
+            Instance.AttachTickHandler(OnDispatchManagerTick);
+        }
+
+        public void Dispose()
+        {
+            Instance.DetachTickHandler(OnDispatchManagerTick);
+        }
+
         private bool IsPedType(Ped ped, PedType[] types)
         {
             int pedType = GetPedType(ped.Handle);
@@ -369,9 +379,13 @@ namespace Curiosity.Core.Client.Managers
             API.DrawRect(x, y, width, height, col.r, col.g, col.b, alpha);
         }
 
-        [TickHandler(SessionWait = true)]
         private async Task OnDispatchManagerTick()
         {
+            if (PlayerOptionsManager.GetModule().IsPassive)
+            {
+                Instance.DetachTickHandler(OnDispatchManagerTick);
+            }
+
             int playerHandle = Game.Player.Handle;
 
             int tickInitTime = GetGameTimer();
