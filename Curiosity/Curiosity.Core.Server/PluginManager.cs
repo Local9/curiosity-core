@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Commands;
 using Curiosity.Core.Server.Commands.Impl;
 using Curiosity.Core.Server.Database;
@@ -240,6 +241,13 @@ namespace Curiosity.Core.Server
                 // CreateObject fails, CreateObjectNoOffset is fine
 
                 // API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
+
+                SetRoutingBucketPopulationEnabled(0, true);
+                SetRoutingBucketPopulationEnabled(1, true);
+                SetRoutingBucketPopulationEnabled(2, true);
+                SetRoutingBucketPopulationEnabled(3, true);
+                SetRoutingBucketPopulationEnabled(4, true);
+                SetRoutingBucketPopulationEnabled(5, true);
             }
             catch (Exception ex)
             {
