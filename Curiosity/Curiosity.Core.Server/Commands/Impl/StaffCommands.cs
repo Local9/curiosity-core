@@ -70,7 +70,6 @@ namespace Curiosity.Core.Server.Commands.Impl
                 curiosityUser.RoutingBucket = worldId;
 
                 API.SetPlayerRoutingBucket(player.Handle, worldId);
-                API.SetPlayerCullingRadius(player.Handle, 5000.0f);
 
                 ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' changed world #{worldId}.");
             }
