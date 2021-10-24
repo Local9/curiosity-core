@@ -207,7 +207,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
-            PluginManager.Instance.AttachTickHandler(OnVehicleIsTowing);
+            // PluginManager.Instance.AttachTickHandler(OnVehicleIsTowing);
         }
 
         private async Task OnManageVehicleBlip()
