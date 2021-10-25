@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client.Managers
                 RemoveIpl(iplName);
         }
 
-        private async Task OnSetupWorld()
+        private async Task OnSetupWorld() // TODO: Move into IPL Manager
         {
             await Session.Loading();
 
