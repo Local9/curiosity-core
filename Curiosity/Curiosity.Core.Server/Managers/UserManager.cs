@@ -14,12 +14,16 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
     public class UserManager : Manager<UserManager>
     {
+        const int CALL_SIGN_LENGTH = 4;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("user:get:playerlist", new AsyncEventCallback(async metadata =>
@@ -34,6 +38,10 @@ namespace Curiosity.Core.Server.Managers
                     cpl.UserId = curiosityUser.UserId;
                     cpl.ServerHandle = kv.Key;
                     cpl.Name = curiosityUser.LatestName;
+
+                    if (!string.IsNullOrEmpty(curiosityUser.JobCallSign))
+                        cpl.Name = $"[{curiosityUser.JobCallSign}] {curiosityUser.LatestName}";
+
                     cpl.Ping = PluginManager.PlayersList[kv.Key].Ping;
                     cpl.Job = curiosityUser.CurrentJob;
                     cpl.Role = curiosityUser.Role.GetStringValue();
@@ -299,12 +307,13 @@ namespace Curiosity.Core.Server.Managers
                 return JsonConvert.SerializeObject(curiosityUser);
             }));
 
-            Instance.ExportDictionary.Add("SetJob", new Func<string, string, bool>((playerHandle, jobText) =>
-            {
-                int handle = int.Parse(playerHandle);
+            Instance.ExportDictionary.Add("SetJob", new Func<string, string, Task<bool>>(
+                async (playerHandle, jobText) =>
+                {
+                    int handle = int.Parse(playerHandle);
 
-                return SetUserJobText(handle, jobText);
-            }));
+                    return (await SetUserJobText(handle, jobText));
+                }));
 
             Instance.ExportDictionary.Add("SetPlayerBucket", new Func<string, int, string>((playerHandle, bucket) =>
             {
@@ -355,13 +364,65 @@ namespace Curiosity.Core.Server.Managers
             DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
         }
 
-        private static bool SetUserJobText(int playerServerId, string jobText)
+        private async Task<bool> SetUserJobText(int playerServerId, string jobText)
         {
             if (!PluginManager.ActiveUsers.ContainsKey(playerServerId)) return false;
 
-            PluginManager.ActiveUsers[playerServerId].CurrentJob = jobText;
+            CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerServerId];
+
+            switch (jobText)
+            {
+                case "Unemployed":
+                case "unemployed":
+                    curiosityUser.JobCallSign = string.Empty;
+                    break;
+                default:
+                    string concatJob = string.Concat(jobText.Where(c => char.IsUpper(c)));
+                    string randomStr = await CreateUniqueCallSign();
+                    curiosityUser.JobCallSign = $"{concatJob}-{randomStr}";
+                    break;
+            }
+
+            curiosityUser.CurrentJob = jobText;
 
             return true;
+        }
+
+        async Task<string> CreateUniqueCallSign()
+        {
+            List<string> currentCallSigns = new List<string>();
+
+            foreach(KeyValuePair<int, CuriosityUser> u in PluginManager.ActiveUsers)
+            {
+                currentCallSigns.Add(u.Value.JobCallSign);
+            }
+
+            string callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
+
+            bool IsUnique = false;
+
+            while (!IsUnique)
+            {
+                await BaseScript.Delay(0);
+
+                if (!currentCallSigns.Contains(callsign))
+                    IsUnique = true;
+
+                callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
+            }
+
+            return callsign;
+        }
+
+        string GenerateRandomAlphanumericString(int length = 10)
+        {
+            // const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "0123456789";
+
+            var random = new Random();
+            var randomString = new string(Enumerable.Repeat(chars, length)
+                                                    .Select(s => s[random.Next(s.Length)]).ToArray());
+            return randomString;
         }
 
         private void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
