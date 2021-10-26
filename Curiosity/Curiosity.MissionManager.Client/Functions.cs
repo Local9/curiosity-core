@@ -44,6 +44,9 @@ namespace Curiosity.MissionManager.Client
 
             MissionInfo missionInfo = GetMissionInfo(mission);
 
+            if (missionInfo.missionType == MissionType.Developer)
+                return;
+
             // Logger.Info($"[MissionManager] Registered: {mission.Name} | {missionInfo.missionType} ({missionInfo.xPos}, {missionInfo.yPos}, {missionInfo.zPos}) {missionInfo.startPoint != Vector3.Zero}");
 
             if (missionInfo.startPoint != Vector3.Zero)

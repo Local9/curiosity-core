@@ -12,7 +12,7 @@ using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.Mugging.Missions
 {
-    [MissionInfo("Gang Fight", "misGf", 0f, 0f, 0f, MissionType.Mission, true, "None", PatrolZone.Anywhere)]
+    [MissionInfo("Gang Fight", "misGf", 0f, 0f, 0f, MissionType.Developer, true, "None", PatrolZone.Anywhere)]
     public class GangFight : Mission
     {
         MissionState missionState;
