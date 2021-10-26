@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,34 +22,53 @@ namespace Curiosity.Core.Client.Managers.UI
 
         }
 
-        //[TickHandler(SessionWait = true)]
-        //private async Task OnDebugColor()
-        //{
-        //    if (Utils.ControlHelper.IsControlJustPressed(Control.Context))
-        //    {
-        //        debugColor++;
+        [TickHandler(SessionWait = true)]
+        private async Task OnDebugColor()
+        {
+            if (Utils.ControlHelper.IsControlJustPressed(Control.PhoneUp))
+            {
+                NameTagColor++;
 
-        //        if (debugColor >= 255)
-        //            debugColor = 0;
+                if (NameTagColor >= 255)
+                    NameTagColor = 0;
 
-        //        await BaseScript.Delay(100);
-        //    }
-        //    Screen.ShowSubtitle($"Debug Color: {debugColor}");
-        //}
+                await BaseScript.Delay(100);
+            }
+
+            if (Utils.ControlHelper.IsControlJustPressed(Control.PhoneDown))
+            {
+                NameTagColor--;
+
+                if (NameTagColor < 0)
+                    NameTagColor = 255;
+
+                await BaseScript.Delay(100);
+            }
+
+            Screen.ShowSubtitle($"Debug Color: {NameTagColor}");
+        }
 
         [TickHandler(SessionWait = true)]
         private async Task OnWorldPlayerNames()
         {
             foreach (Player player in Instance.PlayerList)
             {
-                if (player == Game.Player && !ShowMyName) continue;
-
                 int playerHandle = player.Handle;
                 int pedHandle = player.Character.Handle;
 
-                if (NetworkIsPlayerActive(playerHandle))
+                if (player == Game.Player && !ShowMyName)
                 {
-                    if (!currentPlayerNameTags.ContainsKey(playerHandle) && ShowPlayerNames)
+                    if (currentPlayerNameTags.ContainsKey(playerHandle))
+                    {
+                        RemoveMpGamerTag(currentPlayerNameTags[playerHandle].TagHandle);
+                        currentPlayerNameTags.Remove(playerHandle);
+                    }
+                    continue;
+                }
+
+                if (NetworkIsPlayerActive(playerHandle) && ShowPlayerNames)
+                {
+                    if (!currentPlayerNameTags.ContainsKey(playerHandle))
                     {
                         string playerName = $"{GetPlayerName(playerHandle)}";
                         if (ShowServerHandle)
@@ -118,6 +138,10 @@ namespace Curiosity.Core.Client.Managers.UI
                         SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, StaffStarColor);
                         //SetMpGamerTagBigText(playerNameTag.TagHandle, "BIG TEXT");
                         //SetMpGamerTagChatting(playerNameTag.TagHandle, "typing...");
+
+                        NameTagColor = 0;
+                        if (player.WantedLevel > 0)
+                            NameTagColor = 6;
 
                         SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.GamerName, NameTagColor);
 

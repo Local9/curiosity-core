@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenu dispatchSettingsMenu;
         PoliceSettingsMenu _policeSettingsMenu = new PoliceSettingsMenu();
 
-        PlayerNameManager PlayerNameManager = PlayerNameManager.GetModule();
+        PlayerNameManager PlayerNameManager => PlayerNameManager.GetModule();
         List<dynamic> musicEvents = new List<dynamic>();
 
         public UIMenu CreateMenu(UIMenu menu)
@@ -65,13 +65,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             //miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
             //miShowServerId.Enabled = false;
             //menu.AddItem(miShowServerId);
-            //miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
+            miShowPlayerNames = new UIMenuCheckboxItem("Show Player Names", PlayerNameManager.ShowPlayerNames);
             //miShowPlayerNames.Enabled = false;
-            //menu.AddItem(miShowPlayerNames);
+            menu.AddItem(miShowPlayerNames);
 
-            //miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
+            miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
             //miShowMyName.Enabled = false;
-            //menu.AddItem(miShowMyName);
+            menu.AddItem(miShowMyName);
 
 
 
