@@ -54,7 +54,7 @@
       "markers": [
         {
           "control": 51,
-          "jobRequirement": "policeOfficer",
+          "jobRequirement": "Police Officer",
           "message": "Book Suspect",
           "helpText": "Press ~INPUT_CONTEXT~ to book ~b~Suspect",
           "event": "job:police:arrest",

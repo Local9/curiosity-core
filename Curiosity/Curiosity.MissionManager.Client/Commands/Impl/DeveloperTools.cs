@@ -75,7 +75,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
             public void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 bool dutyActive = false;
-                string job = "policeOfficer";
+                string job = "Police Officer";
 
                 if (arguments.Count >= 1)
                 {

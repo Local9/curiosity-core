@@ -13,7 +13,7 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class JobManager : Manager<JobManager>
     {
-        private const string JOB_POLICE = "policeOfficer";
+        private const string JOB_POLICE = "Police Officer";
         internal static PatrolZone PatrolZone = PatrolZone.City;
         internal static bool IsOnDuty;
         internal static bool IsOfficer;

@@ -372,14 +372,13 @@ namespace Curiosity.Core.Server.Managers
 
             switch (jobText)
             {
-                case "Unemployed":
-                case "unemployed":
-                    curiosityUser.JobCallSign = string.Empty;
-                    break;
-                default:
+                case "Police Officer":
                     string concatJob = string.Concat(jobText.Where(c => char.IsUpper(c)));
                     string randomStr = await CreateUniqueCallSign();
                     curiosityUser.JobCallSign = $"{concatJob}-{randomStr}";
+                    break;
+                default:
+                    curiosityUser.JobCallSign = string.Empty;
                     break;
             }
 
@@ -399,17 +398,18 @@ namespace Curiosity.Core.Server.Managers
 
             string callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
 
-            bool IsUnique = false;
+            //while (true)
+            //{
+            //    await BaseScript.Delay(0);
 
-            while (!IsUnique)
-            {
-                await BaseScript.Delay(0);
+            //    if (currentCallSigns.Count == 0)
+            //        break;
 
-                if (!currentCallSigns.Contains(callsign))
-                    IsUnique = true;
+            //    if (!currentCallSigns.Contains(callsign))
+            //        break;
 
-                callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
-            }
+            //    callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
+            //}
 
             return callsign;
         }
@@ -419,9 +419,8 @@ namespace Curiosity.Core.Server.Managers
             // const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             const string chars = "0123456789";
 
-            var random = new Random();
             var randomString = new string(Enumerable.Repeat(chars, length)
-                                                    .Select(s => s[random.Next(s.Length)]).ToArray());
+                                                    .Select(s => s[Utility.RANDOM.Next(s.Length)]).ToArray());
             return randomString;
         }
 
