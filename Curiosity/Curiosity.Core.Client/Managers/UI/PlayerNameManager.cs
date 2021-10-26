@@ -88,12 +88,12 @@ namespace Curiosity.Core.Client.Managers.UI
                         }
                         else
                         {
-                            gamerTags[player] = CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, "", 0);
+                            gamerTags[player] = CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, string.Empty, 0);
                         }
                     }
                     else if (closeEnough)
                     {
-                        gamerTags.Add(player, CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, "", 0));
+                        gamerTags.Add(player, CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, string.Empty, 0));
                     }
 
                     if (closeEnough && gamerTags.ContainsKey(player))
@@ -105,6 +105,8 @@ namespace Curiosity.Core.Client.Managers.UI
                         SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.AudioIcon, NetworkIsPlayerTalking(player.Handle));
                         SetMpGamerTagColour(tagHandle, (int)GamerTagComponent.AudioIcon, 208);
                         SetMpGamerTagAlpha(tagHandle, (int)GamerTagComponent.AudioIcon, 255);
+
+                        SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.CrewTag, isStaff);
 
                         bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
                         SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.MpPassiveMode, isPassive);
