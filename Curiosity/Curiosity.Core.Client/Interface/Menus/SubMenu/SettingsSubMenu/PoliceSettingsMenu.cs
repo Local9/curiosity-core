@@ -50,6 +50,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             new DurationItem(180),
         };
 
+        UIMenuCheckboxItem chkFiniteCopsEnabled = new UIMenuCheckboxItem("Finite Cops", false);
         UIMenuCheckboxItem chkDisplayDispatchUI = new UIMenuCheckboxItem("Show UI", true);
         UIMenuCheckboxItem chkDisplayNumberOfRemainingPolice = new UIMenuCheckboxItem("Show Remaining Police", false);
         UIMenuCheckboxItem chkResetCopsWhenCleared = new UIMenuCheckboxItem("Reset to base on Clear", false);
@@ -68,6 +69,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             chkResetCopsWhenCleared.Description = "Currently disabled.";
             menu.AddItem(chkResetCopsWhenCleared);
 
+            menu.AddItem(chkFiniteCopsEnabled);
             menu.AddItem(chkDisplayDispatchUI);
             menu.AddItem(chkDisplayNumberOfRemainingPolice);
             menu.AddItem(chkRemoveCopsWhenFarAway);
@@ -105,6 +107,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
         {
             DispatchManager dispatchManager = DispatchManager.GetModule();
 
+            if (checkboxItem == chkFiniteCopsEnabled)
+            {
+                dispatchManager.EnableFiniteCops = Checked;
+                if (Checked)
+                    dispatchManager.Init();
+                if (!Checked)
+                    dispatchManager.Dispose();
+            }
+
             if (checkboxItem == chkDisplayDispatchUI)
                 dispatchManager.DisplayDispatchUI = Checked;
 
@@ -133,6 +144,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             {
                 bool isPassive = PlayerOptionsManager.GetModule().IsPassive;
                 DispatchManager dispatchManager = DispatchManager.GetModule();
+
+                chkFiniteCopsEnabled.Checked = dispatchManager.EnableFiniteCops;
+                chkFiniteCopsEnabled.Enabled = !isPassive;
+                chkFiniteCopsEnabled.Description = !isPassive ? "Enable Finite Cops." : PASSIVE_MODE_ENABLED;
 
                 chkDisplayDispatchUI.Checked = dispatchManager.DisplayDispatchUI;
                 chkDisplayDispatchUI.Enabled = !isPassive;

@@ -57,6 +57,8 @@ namespace Curiosity.Core.Client.Managers
         private int copsMinimum = 0; // Minimum cop number (Use negative values for longer grace periods)
         private int DecreaseLevel = 0; // Wanted level stars to decrease when there are no cops remaining - This overrides WantedClear (0 = Disable)
 
+        PlayerOptionsManager PlayerOptionsManager => PlayerOptionsManager.GetModule();
+
         public bool ResetCopsWhenCleared // Reset cop number to base when wanted level is cleared/decreased
         {
             get
@@ -256,6 +258,26 @@ namespace Curiosity.Core.Client.Managers
                 SetResourceKvpInt("curiosity:dispatch:DisplayDispatchUI", val);
             }
         }
+        public bool EnableFiniteCops // Enables the system
+        {
+            get
+            {
+                int? val = GetResourceKvpInt("curiosity:dispatch:enabled");
+
+                if (val is null)
+                    EnableFiniteCops = true;
+
+                return GetResourceKvpInt("curiosity:dispatch:enabled") == 1;
+            }
+            set
+            {
+                int val = 0;
+                if (value)
+                    val = 1;
+
+                SetResourceKvpInt("curiosity:dispatch:enabled", val);
+            }
+        }
 
         private float _displayPosX = 0.0f; // X screen coordinate (From right side)
         private float _displayPosY = 0.0335f; // Y screen coordinate (From top side)
@@ -286,7 +308,7 @@ namespace Curiosity.Core.Client.Managers
         // SOUND
         private bool soundEnabled = true; // Enables sounds
 
-        public override void Begin()
+        public async override void Begin()
         {
             string init = GetResourceKvpString("curiosity:dispatch:setup");
 
@@ -327,6 +349,12 @@ namespace Curiosity.Core.Client.Managers
 
             currentCops = maxCops[4];
             ToggleDispatch(true);
+
+            if (EnableFiniteCops)
+            {
+                await Session.Loading();
+                Instance.AttachTickHandler(OnDispatchManagerTick);
+            }
 
             Logger.Info($"Dispatch Manager INIT - Original: Finite Cops by Silver Finish");
         }
@@ -381,7 +409,7 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnDispatchManagerTick()
         {
-            if (PlayerOptionsManager.GetModule().IsPassive)
+            if (PlayerOptionsManager.IsPassive)
             {
                 Instance.DetachTickHandler(OnDispatchManagerTick);
             }

@@ -67,7 +67,6 @@ namespace Curiosity.Core.Client.Managers
                 API.NetworkSetFriendlyFireOption(true);
                 API.SetMaxWantedLevel(5);
                 Logger.Debug($"Passive Mode Disabled");
-                DispatchManager.Init();
             }
 
             if (isPassive)
@@ -77,7 +76,6 @@ namespace Curiosity.Core.Client.Managers
                 API.NetworkSetFriendlyFireOption(false);
                 API.SetMaxWantedLevel(0);
                 Logger.Debug($"Passive Mode Enabled");
-                DispatchManager.Dispose();
             }
 
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
