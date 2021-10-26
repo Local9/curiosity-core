@@ -75,6 +75,7 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public bool AllowPublicStats { get; set; }
         [JsonIgnore] public bool Purchasing { get; set; }
         [JsonIgnore] public int StaffVehicle { get; set; }
+        [JsonIgnore] public string JobCallSign { get; set; }
         public string DiscordAvatar { get; set; }
     }
 }

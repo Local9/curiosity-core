@@ -36,17 +36,22 @@ namespace Curiosity.Core.Server.Managers
                     string filteredMessage = filter.CensorString(message);
                     message = filteredMessage.Replace(@"\", "");
 
+                    string latestName = curiosityUser.LatestName;
+
+                    if (!string.IsNullOrEmpty(curiosityUser.JobCallSign))
+                        latestName = $"[{curiosityUser.JobCallSign}] {curiosityUser.LatestName}";
+
                     switch (channel)
                     {
                         case "universe":
                         case "help":
-                            EventSystem.GetModule().SendAll("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                            EventSystem.GetModule().SendAll("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
                             break;
                         case "global":
                         case "international":
                             playersInSameWorld.ForEach(u =>
                             {
-                                u.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                                u.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
                             });
                             break;
                         case "local":
@@ -62,7 +67,7 @@ namespace Curiosity.Core.Server.Managers
 
                             playersInSameWorld.Select(x => x).Where(x => Vector3.Distance(players[x.Handle].Character.Position, currentPlayer.Character.Position) < 100f).ToList().ForEach(p =>
                             {
-                                p.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                                p.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
                             });
 
                             players.Clear();
