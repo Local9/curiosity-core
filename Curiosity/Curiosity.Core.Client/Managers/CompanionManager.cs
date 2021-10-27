@@ -84,6 +84,7 @@ namespace Curiosity.Core.Client.Managers
             SetPedRelationshipGroupHash(ped, (uint)GetPedRelationshipGroupHash(PlayerPedId()));
             TaskSetBlockingOfNonTemporaryEvents(ped, true);
             SetPedKeepTask(ped, true);
+            SetPedDropsWeaponsWhenDead(ped, false);
 
             var blip = AddBlipForEntity(ped);
             SetBlipAsFriendly(blip, true);
