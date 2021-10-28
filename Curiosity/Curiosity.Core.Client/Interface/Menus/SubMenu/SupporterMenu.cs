@@ -25,6 +25,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companions", "This will remove all companions.");
         UIMenuItem uiItemResetCharacter = new UIMenuItem("Reset Character");
+        UIMenuItem uiStartAutoDrive = new UIMenuItem("Start Auto Drive", "Vehicle will drive to the waypoint you have set.");
 
         List<Companion> companions;
         List<SupporterModel> playerModels;
@@ -50,6 +51,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 baseMenu.AddItem(uiLstCompanions);
                 baseMenu.AddItem(uiItemRemoveCompanion);
             }
+
+            baseMenu.AddItem(uiStartAutoDrive);
 
             baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
             baseMenu.OnListSelect += BaseMenu_OnListSelect;
@@ -86,6 +89,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             else if (selectedItem == uiItemRemoveCompanion)
             {
                 CompanionManager.GetModule().RemoveCompanions();
+            }
+            else if (selectedItem == uiStartAutoDrive)
+            {
+                VehicleManager.GetModule().EnableAutodrive();
             }
 
             selectedItem.Enabled = true;

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
@@ -22,7 +23,6 @@ namespace Curiosity.Core.Client.Managers
     {
         private const string DECOR_VEH_FUEL = "Vehicle.Fuel";
         private const float FUEL_PUMP_RANGE = 6f;
-
         private uint GAS_STATION_TESLA = 2140883938;
 
         VehicleState currentVehicle;
@@ -665,6 +665,183 @@ namespace Curiosity.Core.Client.Managers
                 }
             }
         }
+        #endregion
+
+        #region AUTODRIVE
+
+        private int tickCount = 1;
+        private int autoDriveTickCount = 1;
+        private long lastVehicleControlTime;
+        private DrivingStyle driveStyle = (DrivingStyle)786603;
+
+        private const string VEHICLE_AUTO_DRIVE = "curiosity:vehicle:autodrive";
+
+        bool WANDER_ALWAYS = false;
+        bool WANDER_TO_WAYPOINT = false;
+
+        long WAIT_TIME = 5;
+        int START_SPEED = 100;
+
+        bool ALLOW_CROSSING_MEDIAN = true;
+        bool STOP_AT_DESTINATION = true;
+        bool STOP_AT_TRAFFIC_LIGHTS = true;
+        bool FOLLOW_TRAFFIC = true;
+        bool YIELD_TO_PEDESTRIANS = true;
+        bool AVOID_PEDESTRIANS = true;
+        bool AVOID_VEHICLES = true;
+        bool AVOID_OBJECTS = true;
+        bool USE_BLINKERS = true;
+
+        bool MANUAL_OVERRIDE_BRAKES = false;
+        bool MANUAL_OVERRIDE_GAS = true;
+        bool MANUAL_OVERRIDE_STEERING = true;
+
+        bool AUTO_DRIVE_ENABLED = false;
+        static Blip WaypointBlip => World.GetWaypointBlip();
+
+        bool IsPlayerDriving => Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed;
+        NotificationManager NotificationManager => NotificationManager.GetModule();
+
+        public void EnableAutodrive()
+        {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                NotificationManager.Error($"Must be in a vehicle to enable Auto Drive.");
+                return;
+            }
+
+            if (Game.PlayerPed.CurrentVehicle.Driver != Game.PlayerPed)
+            {
+                NotificationManager.Error($"Must the driver of the vehicle enable Auto Drive.");
+                return;
+            }
+
+            if (World.GetWaypointBlip() == null)
+            {
+                NotificationManager.Error($"Must set a way point.");
+                return;
+            }
+
+            DriveToWaypoint();
+
+            Instance.AttachTickHandler(OnVehicleAutoDrive);
+        }
+
+        private void DriveToWaypoint()
+        {
+            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+            Vector3 position = WaypointBlip.Position;
+
+            VehicleDrivingFlags vehicleDrivingFlags = SetupFlags();
+
+            Game.PlayerPed.Task.DriveTo(vehicle, position, 5f, 30f, (int)vehicleDrivingFlags);
+        }
+
+        public void DisableAutodrive()
+        {
+            Instance.DetachTickHandler(OnVehicleAutoDrive);
+            Game.PlayerPed.Task.ClearAll();
+        }
+
+        private VehicleDrivingFlags SetupFlags()
+        {
+            VehicleDrivingFlags vehicleDrivingFlags = (VehicleDrivingFlags)0;
+            if (this.ALLOW_CROSSING_MEDIAN)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AllowMedianCrossing);
+            if (this.STOP_AT_DESTINATION)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.StopAtDestination);
+            if (this.STOP_AT_TRAFFIC_LIGHTS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.StopAtTrafficLights);
+            if (this.FOLLOW_TRAFFIC)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.FollowTraffic);
+            if (this.YIELD_TO_PEDESTRIANS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.YieldToPeds);
+            if (this.AVOID_PEDESTRIANS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidPeds);
+            if (this.AVOID_VEHICLES)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidVehicles);
+            if (this.AVOID_OBJECTS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidObjects);
+
+            Game.Player.Character.VehicleDrivingFlags = vehicleDrivingFlags;
+            return vehicleDrivingFlags;
+        }
+
+        public static Vector3 WaypointPosition
+        {
+            get
+            {
+                Blip waypointBlip = WaypointBlip;
+                if (Blip.Equals(waypointBlip, (Blip)null))
+                    return Vector3.Zero;
+
+                Vector3 position = waypointBlip.Position;
+                position.Z = World.GetGroundHeight(position);
+                return position;
+            }
+            set => SetNewWaypoint(value.X, value.Y);
+        }
+
+        private bool IsControlPressed(Control control)
+        {
+            if (Game.IsControlPressed(0, control))
+                return true;
+            if (Game.IsControlJustPressed(0, control))
+                return true;
+            if (Game.IsDisabledControlPressed(0, control))
+                return true;
+            return Game.IsDisabledControlPressed(0, control);
+        }
+
+        private bool IsPlayerPressingVehicleControls()
+        {
+            if (Game.Player.Character.IsInVehicle())
+            {
+                List<Control> controls = new List<Control>();
+                if (this.MANUAL_OVERRIDE_BRAKES)
+                    controls.Add(Control.VehicleBrake);
+                if (this.MANUAL_OVERRIDE_GAS)
+                    controls.Add(Control.VehicleAccelerate);
+                if (this.MANUAL_OVERRIDE_STEERING)
+                {
+                    controls.Add(Control.VehicleMoveLeft);
+                    controls.Add(Control.VehicleMoveRight);
+                    controls.Add(Control.VehicleMoveUp);
+                    controls.Add(Control.VehicleMoveDown);
+                }
+                controls.Add(Control.VehicleExit);
+                foreach (Control control in controls)
+                {
+                    if (IsControlPressed((Control)control))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private async Task OnVehicleAutoDrive()
+        {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                Instance.DetachTickHandler(OnVehicleAutoDrive);
+                return;
+            }
+
+            if (IsPlayerPressingVehicleControls())
+            {
+                Game.PlayerPed.Task.ClearAll();
+                Instance.DetachTickHandler(OnVehicleAutoDrive);
+            }
+
+            ++tickCount;
+
+            if (this.tickCount % 25 == 0)
+            {
+                DriveToWaypoint();
+                tickCount = 0;
+            }
+        }
+
         #endregion
     }
 }
