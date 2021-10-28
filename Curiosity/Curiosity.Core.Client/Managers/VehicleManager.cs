@@ -763,7 +763,7 @@ namespace Curiosity.Core.Client.Managers
             if (this.AVOID_OBJECTS)
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidObjects);
 
-            Game.Player.Character.VehicleDrivingFlags = vehicleDrivingFlags;
+            Game.PlayerPed.VehicleDrivingFlags = vehicleDrivingFlags;
             return vehicleDrivingFlags;
         }
 
