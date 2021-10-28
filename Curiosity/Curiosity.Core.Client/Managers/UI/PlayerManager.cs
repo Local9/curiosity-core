@@ -283,7 +283,7 @@ namespace Curiosity.Core.Client.Managers
         {
             if (!string.IsNullOrEmpty(CurrentPedHeadshot)) return;
 
-            int handle = API.RegisterPedheadshot(Game.PlayerPed.Handle);
+            int handle = API.RegisterPedheadshot(API.PlayerPedId());
             int failCount = 0;
             while (!API.IsPedheadshotReady(handle) || !API.IsPedheadshotValid(handle))
             {
