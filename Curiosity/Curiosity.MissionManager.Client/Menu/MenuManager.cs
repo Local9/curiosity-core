@@ -188,7 +188,7 @@ namespace Curiosity.MissionManager.Client.Menu
         {
             Logger.Debug($"Open Police Menu: {Cache.PlayerPed.IsAlive}, {JobManager.IsOfficer}, {!_MenuPool.IsAnyMenuOpen()}");
 
-            if (Cache.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
+            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
                 //if (menuMain.Visible)
                 //{
