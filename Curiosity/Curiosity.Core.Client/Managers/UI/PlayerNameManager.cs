@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         continue;
                     }
 
-                    var dist = player.Character.Position.DistanceToSquared(Game.PlayerPed.Position);
+                    var dist = player.Character.Position.Distance(Game.PlayerPed.Position);
                     bool closeEnough = dist < playerNamesDistance;
 
                     bool isStaff = player.State.Get(StateBagKey.STAFF_MEMBER) == null ? false : player.State.Get(StateBagKey.STAFF_MEMBER);
