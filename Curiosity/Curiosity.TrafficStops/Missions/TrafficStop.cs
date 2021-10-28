@@ -130,7 +130,7 @@ namespace Curiosity.TrafficStops.Missions
                     }
                     break;
                 case MissionState.VehicleIsFleeing:
-                    if (veh.Position.Distance(Game.PlayerPed.Position) > 300f)
+                    if (veh.Position.Distance(Game.PlayerPed.Position) > 250f || !veh.Exists())
                     {
                         Fail("They got away.", EndState.Fail);
                         missionState = MissionState.End;
