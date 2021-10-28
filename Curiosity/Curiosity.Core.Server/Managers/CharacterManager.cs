@@ -176,7 +176,7 @@ namespace Curiosity.Core.Server.Managers
 
                 await BaseScript.Delay(100);
 
-                player.Character.Position = u.Character.LastPosition.AsVector();
+                // player.Character.Position = u.Character.LastPosition.AsVector();
 
                 try
                 {
