@@ -33,8 +33,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         List<Companion> companions;
         List<SupporterModel> playerModels;
 
-        public void CreateMenu(UIMenu menu)
+        public async void CreateMenu(UIMenu menu)
         {
+            await Session.Loading();
+
             baseMenu = menu;
             ConfigurationManager configuration = ConfigurationManager.GetModule();
 
@@ -50,7 +52,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             if (companions is not null)
             {
-                if (Cache.Player.User.IsSeniorDeveloper)
+                if (Cache.Player.User.IsTrustedAdmin)
                 {
                     Companion juggernaut = new Companion();
                     juggernaut.Human = true;
@@ -180,7 +182,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private static void AdditionalPedConfiguration(string modelHash, int ped)
         {
-            if (modelHash == "u_m_y_juggernaut_01" && Cache.Player.User.IsSeniorDeveloper)
+            if (modelHash == "u_m_y_juggernaut_01" && Cache.Player.User.IsTrustedAdmin)
             {
                 Ped companionPed = new Ped(ped);
                 companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
@@ -228,11 +230,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
                 }
 
+                companionPed.Weapons.RemoveAll();
                 companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
                 companionPed.Health = 5000;
                 companionPed.CanRagdoll = false;
                 companionPed.IsMeleeProof = true;
                 companionPed.FiringPattern = FiringPattern.FullAuto;
+                companionPed.MovementAnimationSet = "move_m@bag";
             }
         }
     }
