@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
@@ -7,6 +8,8 @@ using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
@@ -47,6 +50,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             if (companions is not null)
             {
+                if (Cache.Player.User.IsSeniorDeveloper)
+                {
+                    Companion juggernaut = new Companion();
+                    juggernaut.Human = true;
+                    juggernaut.Label = "Juggernaut";
+                    juggernaut.Hash = "u_m_y_juggernaut_01";
+                    companions.Add(juggernaut);
+                }
+
                 uiLstCompanions = new UIMenuListItem("Companion", companions.Select(x => x.Label).ToList<dynamic>(), 0);
                 baseMenu.AddItem(uiLstCompanions);
                 baseMenu.AddItem(uiItemRemoveCompanion);
@@ -149,10 +161,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
                 if (!isHuman)
                     NotificationManager.GetModule().Error($"Currently unable to handle animals.");
-                    // CompanionManager.GetModule().SpawnNonHuman((uint)model);
+                // CompanionManager.GetModule().SpawnNonHuman((uint)model);
 
                 if (isHuman)
-                    CompanionManager.GetModule().SpawnHuman((uint)model);
+                {
+                    int ped = await CompanionManager.GetModule().SpawnHuman((uint)model);
+                    AdditionalPedConfiguration(modelHash, ped);
+                }
 
                 goto Exit;
             }
@@ -161,6 +176,64 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             await Cache.PlayerPed.FadeIn();
         Exit:
             listItem.Enabled = true;
+        }
+
+        private static void AdditionalPedConfiguration(string modelHash, int ped)
+        {
+            if (modelHash == "u_m_y_juggernaut_01" && Cache.Player.User.IsSeniorDeveloper)
+            {
+                Ped companionPed = new Ped(ped);
+                companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+                companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableHurt, true);
+                companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableShockingEvents, true);
+                companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreBeingOnFire, true);
+                companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreSeenMelee, true);
+                companionPed.CanSufferCriticalHits = false;
+
+                companionPed.Health = companionPed.MaxHealth;
+                companionPed.Armor = 200;
+                companionPed.DropsWeaponsOnDeath = false;
+
+                companionPed.Accuracy = Utility.RANDOM.Next(20, 100);
+
+                int type = Utility.RANDOM.Next(3);
+                if (type == 0)
+                {
+                    SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                    SetPedComponentVariation(companionPed.Handle, 0, 0, 1, 0);
+                    SetPedComponentVariation(companionPed.Handle, 3, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 8, 0, 1, 0);
+                    SetPedComponentVariation(companionPed.Handle, 10, 0, 1, 0);
+                }
+                else if (type == 1)
+                {
+                    SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                    SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                }
+                else
+                {
+                    ClearPedProp(companionPed.Handle, 0);
+                    SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                    SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                }
+
+                companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
+                companionPed.Health = 5000;
+                companionPed.CanRagdoll = false;
+                companionPed.IsMeleeProof = true;
+                companionPed.FiringPattern = FiringPattern.FullAuto;
+            }
         }
     }
 }
