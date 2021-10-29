@@ -456,6 +456,7 @@ namespace Curiosity.Core.Client.Extensions
             await BaseScript.Delay(1000);
 
             Notify.Info($"~w~Welcome ~y~{Game.Player.Name}~w~, press ~b~HOME~w~ key to get started.");
+            PlayerOptionsManager.GetModule().TogglePlayerPassive(true);
 
             Session.CreatingCharacter = false;
         }
