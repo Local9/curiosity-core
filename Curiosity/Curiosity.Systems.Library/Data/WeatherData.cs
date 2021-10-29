@@ -23,7 +23,7 @@ namespace Curiosity.Systems.Library.Data
         };
 
         public readonly static List<int> SnowDays = new List<int>() { 6, 9, 12, 15, 18, 21, 22, 23, 24, 25, 26, 27 };
-        public readonly static List<int> HalloweenDays = new List<int>() { 31 };
+        public readonly static List<int> HalloweenDays = new List<int>() { 30, 31 };
 
         public readonly static Dictionary<WeatherSeason, List<WeatherType>> SeasonalWeather = new Dictionary<WeatherSeason, List<WeatherType>>()
         {
