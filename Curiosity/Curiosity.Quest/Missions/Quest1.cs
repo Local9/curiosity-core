@@ -20,6 +20,7 @@ namespace Curiosity.Quest.Missions
     public class Quest1 : Mission
     {
         const int ZOMBIE_AMOUNT = 5;
+        private const int NUMBER_OF_ZOMBIES_TO_KILL = 10;
         const float ZOMBIE_ATTR_CHANCE = 0.6f;
         const int ZOMBIE_MAX_HEALTH = 500;
         const int ZOMBIE_MAX_ARMOR = 500;
@@ -41,7 +42,7 @@ namespace Curiosity.Quest.Missions
         List<Ped> peds = new List<Ped>();
 
         const string BASE_FOLDER = "assets/images/";
-
+        
         NUIMarker questMarker1; // -1646.346f, -1118.321f, 13.0319f | q1shrimp
         NUIMarker questMarker2; // -1030.282f, -2751.631f, 21.1143f | q1bird
         NUIMarker questMarker3; // -1617.125f, -3013.02f, -75.20506f | q1trophy
@@ -367,7 +368,7 @@ namespace Curiosity.Quest.Missions
                     MissionManager.Instance.RegisterTickHandler(OnZombieTick);
                     break;
                 case MissionPhase.SPAWN_ZOMBIES: // Monitor kills
-                    if (NumberKilled >= 8)
+                    if (NumberKilled >= NUMBER_OF_ZOMBIES_TO_KILL)
                     {
                         Pass();
                         MissionManager.Instance.DeregisterTickHandler(OnZombieTick);
