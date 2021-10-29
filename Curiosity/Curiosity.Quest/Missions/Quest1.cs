@@ -240,6 +240,7 @@ namespace Curiosity.Quest.Missions
                 zombie.Armor = Utility.RANDOM.Next(ZOMBIE_MAX_ARMOR);
                 zombie.RelationshipGroup = ZombieGroup;
                 ZombieAttrChances(zombie);
+                zombie.CanSufferCriticalHits = false;
 
                 zombie.Task.WanderAround();
                 Decorators.Set(zombieHandle, ZOMBIE_DECOR, true);
