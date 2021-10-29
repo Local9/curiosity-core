@@ -366,7 +366,7 @@ namespace Curiosity.Quest.Missions
                     MissionManager.Instance.RegisterTickHandler(OnZombieTick);
                     break;
                 case MissionPhase.SPAWN_ZOMBIES: // Monitor kills
-                    if (NumberKilled >= 10)
+                    if (NumberKilled >= 8)
                     {
                         Pass();
                         MissionManager.Instance.DeregisterTickHandler(OnZombieTick);
