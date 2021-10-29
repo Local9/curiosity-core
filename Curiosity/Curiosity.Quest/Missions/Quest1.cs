@@ -330,6 +330,7 @@ namespace Curiosity.Quest.Missions
                 case MissionPhase.MARKER_SIX:
                     if ((await CanMoveToNextPhase("pos6")))
                     {
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Parachute, 1, true, true);
                         missionPhase = MissionPhase.MARKER_SEVEN_SETUP;
                     }
                     break;
