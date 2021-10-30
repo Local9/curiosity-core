@@ -37,7 +37,7 @@ namespace Curiosity.Quest.Missions
         public static RelationshipGroup ZombieGroup { get; private set; }
 
         Vector3 _start = new Vector3(-543.9988f, -157.8393f, 38.54123f);
-        Vector3 _scale = new Vector3(1f, 1f, 1f);
+        Vector3 _scale = new Vector3(2.5f, 2.5f, 1f);
 
         List<Ped> peds = new List<Ped>();
 
