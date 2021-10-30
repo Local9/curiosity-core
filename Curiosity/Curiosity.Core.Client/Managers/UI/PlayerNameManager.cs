@@ -274,6 +274,13 @@ namespace Curiosity.Core.Client.Managers.UI
                     ShowHeadingIndicatorOnBlip(blip.Handle, true);
                     SetBlipNameToPlayerName(blip.Handle, player.Handle);
 
+                    string key = $"playerBlip{player.ServerId}";
+                    AddTextEntry(key, player.Name);
+
+                    AddTextComponentSubstringBlipName(blip.Handle);
+                    BeginTextCommandSetBlipName(key);
+                    EndTextCommandSetBlipName(blip.Handle);
+
                     blip.Name = player.Name;
                 }
                 else
