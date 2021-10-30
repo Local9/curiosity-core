@@ -271,7 +271,7 @@ namespace Curiosity.Quest.Missions
                     break;
                 case MissionPhase.MARKER_TWO_SETUP:
                     ChangeActiveMarker("pos1", "pos2");
-                    currentClueText = "Who saw her when you started, her birds will take you any where or maybe you want wider coverage.";
+                    currentClueText = "You saw her when you started, her birds will take you any where or maybe you want wider coverage.";
                     currentClueTexture = q1bird;
                     missionPhase = MissionPhase.MARKER_TWO;
                     ShowClueNow();
