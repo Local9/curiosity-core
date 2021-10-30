@@ -124,7 +124,7 @@ namespace Curiosity.Quest.Missions
             markerPositions.Add("pos7", questMarker7);
             markerPositions.Add("pos8", questMarker8);
 
-            missionPhase = MissionPhase.MARKER_EIGHT_SETUP;
+            missionPhase = MissionPhase.MARKER_ONE_SETUP;
 
             await BaseScript.Delay(1000);
 
