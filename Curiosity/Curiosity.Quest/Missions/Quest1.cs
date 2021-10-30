@@ -33,6 +33,8 @@ namespace Curiosity.Quest.Missions
         const string SPAWN_DESPAWN_DECOR = "_MARKED_FOR_DESPAWN";
         const float SPAWN_HOST_DECIDE_DISTANCE = 300f;
 
+        RelationshipGroup zombieGroup;
+
         List<Ped> zombies;
         public static RelationshipGroup ZombieGroup { get; private set; }
 
@@ -86,6 +88,8 @@ namespace Curiosity.Quest.Missions
 
         public override async void Start()
         {
+            zombieGroup = World.AddRelationshipGroup("zombies");
+
             zombies = new List<Ped>();
             ZombieGroup = World.AddRelationshipGroup("zombies");
 
@@ -191,6 +195,7 @@ namespace Curiosity.Quest.Missions
                 {
                     ped.Voice = "ALIENS";
                     ped.IsPainAudioEnabled = false;
+                    ped.RelationshipGroup = zombieGroup;
                     ped.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
 
                     RequestAnimSet("move_m@drunk@verydrunk");
