@@ -72,6 +72,8 @@ namespace Curiosity.Core.Server.Managers
                     int senderHandle = metadata.Sender;
                     int questId = metadata.Find<int>(0);
 
+                    if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return false;
+
                     CuriosityUser curUser = PluginManager.ActiveUsers[metadata.Sender];
 
                     bool hasCompletedQuest = await Database.Store.MissionDatabase.HasCompletedQuest(curUser.Character.CharacterId, questId);
@@ -80,7 +82,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Error: mission:quest:completed");
+                    Logger.Error($"Error: mission:quest:completed {ex.Message}");
                     return false;
                 }
             }));
