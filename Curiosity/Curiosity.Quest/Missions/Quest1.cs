@@ -350,7 +350,7 @@ namespace Curiosity.Quest.Missions
                     break;
                 case MissionPhase.MARKER_EIGHT_SETUP:
                     ChangeActiveMarker("pos7", "pos8");
-                    currentClueText = "Mans best friend always visits this place.";
+                    currentClueText = "Mans best friend always visits this place, the flowers always smell nice.";
                     currentClueTexture = q1flowers;
                     missionPhase = MissionPhase.MARKER_EIGHT;
                     ShowClueNow();
