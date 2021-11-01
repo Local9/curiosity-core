@@ -202,5 +202,15 @@ namespace Curiosity.Core.Client.Properties {
                 return ResourceManager.GetString("scenarios", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] speedCameras {
+            get {
+                object obj = ResourceManager.GetObject("speedCameras", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
