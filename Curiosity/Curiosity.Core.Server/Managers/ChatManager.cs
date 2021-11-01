@@ -45,13 +45,13 @@ namespace Curiosity.Core.Server.Managers
                     {
                         case "universe":
                         case "help":
-                            EventSystem.GetModule().SendAll("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                            EventSystem.GetModule().SendAll("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
                             break;
                         case "global":
                         case "international":
                             playersInSameWorld.ForEach(u =>
                             {
-                                u.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                                u.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
                             });
                             break;
                         case "local":
@@ -67,7 +67,7 @@ namespace Curiosity.Core.Server.Managers
 
                             playersInSameWorld.Select(x => x).Where(x => Vector3.Distance(players[x.Handle].Character.Position, currentPlayer.Character.Position) < 100f).ToList().ForEach(p =>
                             {
-                                p.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket, curiosityUser.DiscordAvatar);
+                                p.Send("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
                             });
 
                             players.Clear();

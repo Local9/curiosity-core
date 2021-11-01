@@ -48,8 +48,6 @@ namespace Curiosity.Core.Server.Managers
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
                     cpl.DiscordId = curiosityUser.DiscordId;
 
-                    cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
-
                     lst.Add(cpl);
                 }
 
