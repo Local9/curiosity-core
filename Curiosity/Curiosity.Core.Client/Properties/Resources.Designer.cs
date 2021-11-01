@@ -204,12 +204,36 @@ namespace Curiosity.Core.Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to {
+        ///  &quot;Objects&quot;: {
+        ///    &quot;MapObject&quot;: [
+        ///      {
+        ///        &quot;Type&quot;: &quot;Prop&quot;,
+        ///        &quot;Position&quot;: {
+        ///          &quot;X&quot;: -898.862549,
+        ///          &quot;Y&quot;: -708.4136,
+        ///          &quot;Z&quot;: 31.2379112
+        ///        },
+        ///        &quot;Rotation&quot;: {
+        ///          &quot;X&quot;: 0,
+        ///          &quot;Y&quot;: -0,
+        ///          &quot;Z&quot;: 92.99932
+        ///        },
+        ///        &quot;Hash&quot;: &quot;1919058329&quot;,
+        ///        &quot;Dynamic&quot;: false,
+        ///        &quot;Quaternion&quot;: {
+        ///          &quot;X&quot;: 0,
+        ///          &quot;Y&quot;: 0,
+        ///          &quot;Z&quot;: 0.725370347,
+        ///          &quot;W&quot;: 0.6883587
+        ///        },
+        ///        &quot;Door&quot;: false
+        ///      },
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static byte[] speedCameras {
+        internal static string speedCameras {
             get {
-                object obj = ResourceManager.GetObject("speedCameras", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("speedCameras", resourceCulture);
             }
         }
     }

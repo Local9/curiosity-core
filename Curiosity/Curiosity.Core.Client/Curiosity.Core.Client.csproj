@@ -210,7 +210,9 @@
     <Content Include="data\overlays.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="data\speedCameras.json" />
+    <None Include="data\speedCameras.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

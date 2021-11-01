@@ -23,6 +23,7 @@ namespace Curiosity.Core.Client.Managers
             try
             {
                 await Session.Loading();
+
                 foreach (MapObject mapObj in Get().Objects.MapObject)
                 {
                     if (mapObj.Type == "Prop")
@@ -30,10 +31,15 @@ namespace Curiosity.Core.Client.Managers
                         sets.Add(mapObj);
                     }
                 }
+
+                Logger.Info($"{sets.Count} Speed Cameras Loaded");
+
+                Instance.AttachTickHandler(OnSpeedCameraPropLoader);
+                Instance.AttachTickHandler(OnSpeedCameraProps);
             }
             catch (Exception ex)
             {
-
+                Logger.Error($"{ex}");
             }
         }
 
@@ -46,7 +52,7 @@ namespace Curiosity.Core.Client.Managers
                 if (_speedCameraMap is not null)
                     return _speedCameraMap;
 
-                _speedCameraMap = JsonConvert.DeserializeObject<Map>(Properties.Resources.config);
+                _speedCameraMap = JsonConvert.DeserializeObject<Map>(Properties.Resources.speedCameras);
                 return _speedCameraMap;
             }
             catch (Exception ex)
@@ -59,9 +65,13 @@ namespace Curiosity.Core.Client.Managers
 
         // https://github.com/blattersturm/cfx-object-loader/blob/master/object-loader/object_loader.lua
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnSpeedCameraPropLoader()
+        public async Task OnSpeedCameraPropLoader()
         {
+            if (sets.Count == 0)
+            {
+                Instance.DetachTickHandler(OnSpeedCameraPropLoader);
+            }
+
             foreach (MapObject mapObject in sets)
             {
                 int hash = GetHashKey(mapObject.Hash);
@@ -86,9 +96,13 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnSpeedCameraProps()
+        public async Task OnSpeedCameraProps()
         {
+            if (sets.Count == 0)
+            {
+                Instance.DetachTickHandler(OnSpeedCameraProps);
+            }
+
             await BaseScript.Delay(100);
             Vector3 currentPosition = GetEntityCoords(PlayerPedId(), false);
 
