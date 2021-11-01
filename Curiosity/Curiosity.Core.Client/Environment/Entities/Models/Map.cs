@@ -37,7 +37,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
         public bool Dynamic;
         public Quaternion Quaternion;
         public bool Door;
-        public int PropHandle = -1;
+        public int PropHandle = 0;
         public int PropHash;
     }
 

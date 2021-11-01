@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -20,27 +21,29 @@ namespace Curiosity.Core.Client.Managers
 
         public async override void Begin()
         {
-            try
-            {
-                await Session.Loading();
+            //try
+            //{
+            //    await Session.Loading();
 
-                foreach (MapObject mapObj in Get().Objects.MapObject)
-                {
-                    if (mapObj.Type == "Prop")
-                    {
-                        sets.Add(mapObj);
-                    }
-                }
+            //    foreach (MapObject mapObj in Get().Objects.MapObject)
+            //    {
+            //        if (mapObj.Type == "Prop")
+            //        {
+            //            int hash = GetHashKey(mapObj.Hash);
+            //            mapObj.PropHash = hash;
+            //            sets.Add(mapObj);
+            //        }
+            //    }
 
-                Logger.Info($"{sets.Count} Speed Cameras Loaded");
+            //    Logger.Info($"-> {sets.Count} Speed Cameras Loaded");
 
-                Instance.AttachTickHandler(OnSpeedCameraPropLoader);
-                Instance.AttachTickHandler(OnSpeedCameraProps);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{ex}");
-            }
+            //    Instance.AttachTickHandler(OnSpeedCameraPropLoader);
+            //    Instance.AttachTickHandler(OnSpeedCameraProps);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error($"{ex}");
+            //}
         }
 
         private Map Get()
@@ -69,14 +72,14 @@ namespace Curiosity.Core.Client.Managers
         {
             if (sets.Count == 0)
             {
-                Instance.DetachTickHandler(OnSpeedCameraPropLoader);
+                // Instance.DetachTickHandler(OnSpeedCameraPropLoader);
             }
 
             foreach (MapObject mapObject in sets)
             {
                 int hash = GetHashKey(mapObject.Hash);
                 mapObject.PropHash = hash;
-                RequestModel((uint)hash);
+                RequestModel((uint)mapObject.PropHash);
             }
 
             while (true)
@@ -85,8 +88,7 @@ namespace Curiosity.Core.Client.Managers
                 await BaseScript.Delay(0);
                 foreach (MapObject mapObject in sets)
                 {
-                    int hash = GetHashKey(mapObject.Hash);
-                    if (!HasModelLoaded((uint)hash))
+                    if (!HasModelLoaded((uint)mapObject.PropHash))
                     {
                         loaded = false;
                         break;
@@ -98,52 +100,61 @@ namespace Curiosity.Core.Client.Managers
 
         public async Task OnSpeedCameraProps()
         {
-            if (sets.Count == 0)
+            try
             {
-                Instance.DetachTickHandler(OnSpeedCameraProps);
-            }
-
-            await BaseScript.Delay(100);
-            Vector3 currentPosition = GetEntityCoords(PlayerPedId(), false);
-
-            int count = 0;
-
-            foreach (MapObject obj in sets)
-            {
-                bool isNear = IsNearObject(obj, currentPosition);
-                if (isNear && obj.PropHandle == -1)
+                if (sets.Count == 0)
                 {
-                    Vector3 propPos = obj.Position.Vector3;
-                    int propHandle = CreateObjectNoOffset((uint)obj.PropHash, propPos.X, propPos.Y, propPos.Z, false, false, false);
-                    if (DoesEntityExist(propHandle))
+                    // Instance.DetachTickHandler(OnSpeedCameraProps);
+                }
+
+                await BaseScript.Delay(100);
+                Vector3 currentPosition = GetEntityCoords(PlayerPedId(), false);
+
+                int count = 0;
+
+                foreach (MapObject obj in sets)
+                {
+                    bool isNear = IsNearObject(obj, currentPosition);
+                    if (isNear && obj.PropHandle == 0)
                     {
-                        Vector3 propRot = obj.Rotation.Vector3;
-                        SetEntityRotation(propHandle, propRot.X, propRot.Y, propRot.Z, 2, false);
-                        FreezeEntityPosition(propHandle, true);
-                        obj.PropHandle = propHandle;
+                        Vector3 propPos = obj.Position.Vector3;
+                        int propHandle = CreateObjectNoOffset((uint)obj.PropHash, propPos.X, propPos.Y, propPos.Z, false, false, false);
+
+                        if (propHandle != 0)
+                        {
+                            Vector3 propRot = obj.Rotation.Vector3;
+                            SetEntityRotation(propHandle, propRot.X, propRot.Y, propRot.Z, 2, false);
+                            SetEntityQuaternion(propHandle, obj.Quaternion.X, obj.Quaternion.Y, obj.Quaternion.Z, obj.Quaternion.W);
+                            SetEntityDynamic(propHandle, obj.Dynamic);
+                            FreezeEntityPosition(propHandle, !obj.Dynamic);
+                            obj.PropHandle = propHandle;
+                        }
                     }
-                }
-                else if (!isNear && obj.PropHandle != -1)
-                {
-                    DeleteObject(ref obj.PropHandle);
-                    obj.PropHandle = -1;
-                }
+                    else if (!isNear && obj.PropHandle != 0)
+                    {
+                        DeleteObject(ref obj.PropHandle);
+                        obj.PropHandle = 0;
+                    }
 
-                if (count % 75 == 0)
-                {
-                    await BaseScript.Delay(15);
-                }
+                    if (count % 75 == 0)
+                    {
+                        await BaseScript.Delay(15);
+                    }
 
-                count++;
+                    count++;
+                }
             }
-
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+            }
         }
 
         bool IsNearObject(MapObject mapObject, Vector3 position)
         {
             Vector3 diff = mapObject.Position.Vector3 - position;
             float dist = (diff.X * diff.X) + (diff.Y * diff.Y);
-            return (dist < (400 * 400));
+            return (dist < (200 * 200));
         }
     }
 }
