@@ -47,7 +47,16 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Role = curiosityUser.Role.GetStringValue();
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
                     cpl.DiscordId = curiosityUser.DiscordId;
-                    cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+
+                    //if (string.IsNullOrEmpty(curiosityUser.DiscordAvatar) && curiosityUser.DiscordId > 0)
+                    //{
+                        PluginManager.ActiveUsers[kv.Key].DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
+                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+                    //}
+                    //else
+                    //{
+                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+                    //}
 
                     lst.Add(cpl);
                 }
@@ -99,13 +108,13 @@ namespace Curiosity.Core.Server.Managers
                     {
                         curiosityUser.DiscordId = discordId;
 
-                        string resourceName = API.GetCurrentResourceName();
+                        //string resourceName = API.GetCurrentResourceName();
 
-                        if (!string.IsNullOrEmpty(resourceName)) {
-
-                            curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(discordId);
-                            Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Set Discord Avatar URL");
-                        }
+                        //if (!string.IsNullOrEmpty(resourceName))
+                        //{
+                        //    curiosityUser.DiscordAvatar = await DiscordClient.GetModule().Avatar(discordId);
+                        //    Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Set Discord Avatar URL");
+                        //}
                     }
                 }
 
