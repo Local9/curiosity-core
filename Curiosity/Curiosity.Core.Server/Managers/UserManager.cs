@@ -47,16 +47,7 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Role = curiosityUser.Role.GetStringValue();
                     cpl.RoutingBucket = (int)curiosityUser.RoutingBucket;
                     cpl.DiscordId = curiosityUser.DiscordId;
-
-                    if (string.IsNullOrEmpty(curiosityUser.DiscordAvatar) && curiosityUser.DiscordId > 0)
-                    {
-                        PluginManager.ActiveUsers[kv.Key].DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
-                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
-                    }
-                    else
-                    {
-                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
-                    }
+                    cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
 
                     lst.Add(cpl);
                 }
