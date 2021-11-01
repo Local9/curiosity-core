@@ -50,8 +50,8 @@ namespace Curiosity.Core.Server.Managers
 
                     //if (string.IsNullOrEmpty(curiosityUser.DiscordAvatar) && curiosityUser.DiscordId > 0)
                     //{
-                        PluginManager.ActiveUsers[kv.Key].DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
-                        cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
+                    //PluginManager.ActiveUsers[kv.Key].DiscordAvatar = await DiscordClient.GetModule().Avatar(curiosityUser.DiscordId);
+                    //cpl.DiscordAvatar = curiosityUser.DiscordAvatar;
                     //}
                     //else
                     //{
