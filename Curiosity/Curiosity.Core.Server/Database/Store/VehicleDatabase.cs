@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Extensions;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
@@ -24,6 +25,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     return lst;
@@ -61,6 +64,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     return null;

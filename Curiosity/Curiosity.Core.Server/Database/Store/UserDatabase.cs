@@ -48,6 +48,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet keyValuePairs = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (keyValuePairs.Count == 0)
                         return null;
 
@@ -99,6 +101,8 @@ namespace Curiosity.Core.Server.Database.Store
 
                 await MySqlDatabase.mySQL.Query(myQuery, myParams);
 
+                await BaseScript.Delay(0);
+
                 return true;
             }
             catch (Exception ex)
@@ -125,6 +129,8 @@ namespace Curiosity.Core.Server.Database.Store
                 string myQuery = "call spLogBannedUser(@userId, @loggedById, @logTypeId, @characterId, @permBan, @bannedUntil);";
 
                 await MySqlDatabase.mySQL.Query(myQuery, myParams);
+
+                await BaseScript.Delay(0);
 
                 return true;
             }

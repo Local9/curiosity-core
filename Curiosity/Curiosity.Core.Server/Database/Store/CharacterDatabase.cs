@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
@@ -30,6 +31,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     return null;
@@ -68,6 +71,8 @@ namespace Curiosity.Core.Server.Database.Store
             {
                 ResultSet keyValuePairs = await result;
 
+                await BaseScript.Delay(0);
+
                 if (keyValuePairs.Count == 0)
                     return characterKits;
 
@@ -105,6 +110,9 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<List<CuriosityShopItem>> GetItems(int characterId)
         {
             ResultSet kvp = await GetCharacterItems(characterId);
+
+            await BaseScript.Delay(0);
+
             List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
 
             if (kvp.Count == 0)
@@ -147,6 +155,8 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<CuriosityShopItem> GetItem(int characterId, int itemId)
         {
             ResultSet kvp = await GetCharacterItems(characterId, itemId);
+
+            await BaseScript.Delay(0);
 
             if (kvp.Count == 0)
                 return null;
@@ -200,6 +210,9 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<List<CuriosityShopItem>> GetInventoryEquipped(int characterId)
         {
             ResultSet kvp = await GetCharacterEquippedItems(characterId, inventoryOnly: true);
+
+            await BaseScript.Delay(0);
+
             List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
 
             if (kvp.Count == 0)
@@ -232,6 +245,9 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<List<CuriosityShopItem>> GetInventoryItems(int characterId)
         {
             ResultSet kvp = await GetCharacterItems(characterId, inventoryOnly: true);
+
+            await BaseScript.Delay(0);
+
             List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
 
             if (kvp.Count == 0)
@@ -309,6 +325,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet kvp = await result;
+
+                await BaseScript.Delay(0);
 
                 if (kvp.Count == 0)
                     return lst;

@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Extensions;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Extensions;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     throw new Exception("Character cash value not changed");
@@ -50,6 +53,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     throw new Exception("Character cash value not changed");

@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
@@ -28,6 +29,8 @@ namespace Curiosity.Core.Server.Database.Store
             {
                 ResultSet keyValuePairs = await result;
 
+                await BaseScript.Delay(0);
+
                 if (keyValuePairs.Count == 0)
                     throw new Exception("Skill was not changed");
 
@@ -54,6 +57,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                     return lst;
@@ -87,6 +92,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                         return characterSkill;

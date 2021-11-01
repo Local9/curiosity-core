@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Core.Server.Web.Discord.Entity;
@@ -28,6 +29,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet keyValuePairs = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (keyValuePairs.Count == 0)
                         return false;
 
@@ -56,6 +59,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                         return wh;
@@ -99,6 +104,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                         return lst;

@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
@@ -25,6 +26,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                     {
@@ -83,6 +86,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet keyValuePairs = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (keyValuePairs.Count == 0)
                     {
                         return lst;
@@ -124,6 +129,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                     {
@@ -168,6 +175,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet keyValuePairs = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (keyValuePairs.Count == 0)
                     {
                         return lst;
@@ -211,6 +220,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet kv = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (kv.Count == 0)
                     {
                         return rtValue;
@@ -247,6 +258,8 @@ namespace Curiosity.Core.Server.Database.Store
                 {
                     ResultSet kv = await result;
 
+                    await BaseScript.Delay(0);
+
                     if (kv.Count == 0)
                     {
                         return rtValue;
@@ -281,6 +294,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet kv = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (kv.Count == 0)
                     {
@@ -333,6 +348,8 @@ namespace Curiosity.Core.Server.Database.Store
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
+
+                    await BaseScript.Delay(0);
 
                     if (keyValuePairs.Count == 0)
                     {
@@ -407,6 +424,8 @@ namespace Curiosity.Core.Server.Database.Store
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery))
             {
                 ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
                 {
