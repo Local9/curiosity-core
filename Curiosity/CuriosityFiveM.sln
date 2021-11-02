@@ -227,6 +227,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Racing.Client", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Quest", "Curiosity.Quest\Curiosity.Quest.csproj", "{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Police.Client", "Curiosity.Police.Client\Curiosity.Police.Client.csproj", "{3C739044-41BB-4E04-B695-B941D345784E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -521,6 +523,10 @@ Global
 		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C739044-41BB-4E04-B695-B941D345784E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C739044-41BB-4E04-B695-B941D345784E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C739044-41BB-4E04-B695-B941D345784E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C739044-41BB-4E04-B695-B941D345784E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -617,6 +623,7 @@ Global
 		{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{43C94E2B-A17F-421D-89D0-47F1EB6197D9} = {CD4C2E62-C897-47F2-A14A-CA60F08A42ED}
 		{F8C67105-BBED-4D10-BFFB-D1C9B8D84D2B} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
+		{3C739044-41BB-4E04-B695-B941D345784E} = {CD4C2E62-C897-47F2-A14A-CA60F08A42ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
