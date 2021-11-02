@@ -173,7 +173,7 @@ namespace Curiosity.Core.Client.Managers
                     Screen.DisplayHelpTextThisFrame("Hold ~INPUT_CONTEXT~ to refuel your vehicle");
                     if (Game.IsControlPressed(0, Control.Context) && currentVehicle.Vehicle.FuelLevel < 100)
                     {
-                        float adjustedFuelLevel = currentVehicle.Vehicle.FuelLevel += 0.25f;
+                        float adjustedFuelLevel = currentVehicle.Vehicle.FuelLevel += 0.20f;
                         currentVehicle.Vehicle.FuelLevel = adjustedFuelLevel;
                         currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, adjustedFuelLevel, true);
                         API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, adjustedFuelLevel); // LEGACY
