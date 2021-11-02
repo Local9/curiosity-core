@@ -75,13 +75,15 @@ namespace Curiosity.Police.Client.Managers
 
                 await BaseScript.Delay(100);
                 Notify.Info($"Welcome to the force");
-                Instance.AttachTickHandler(OnDisablePolice);
+                Instance.AttachTickHandler(OnDisablePoliceAndDispatch);
 
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
+                
+                ToggleDispatch(false);
             }
             else if (!IsOfficer && WasOfficer)
             {
-                Instance.DetachTickHandler(OnDisablePolice);
+                Instance.DetachTickHandler(OnDisablePoliceAndDispatch);
 
                 Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
 
@@ -94,6 +96,8 @@ namespace Curiosity.Police.Client.Managers
                 Notify.Info($"No longer a police officer");
 
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
+                
+                ToggleDispatch(true);
 
                 await BaseScript.Delay(100);
             }
@@ -102,10 +106,18 @@ namespace Curiosity.Police.Client.Managers
             EventSystem.Request<object>("user:job", job);
         }
 
-        async Task OnDisablePolice()
+        async Task OnDisablePoliceAndDispatch()
         {
             SetMaxWantedLevel(0);
             await BaseScript.Delay(500);
+        }
+
+        void ToggleDispatch(bool toggle)
+        {
+            for (int i = 0; i < Dispatch.PoliceForces.Length; i++)
+            {
+                EnableDispatchService((int)Dispatch.PoliceForces[i], toggle);
+            }
         }
     }
 }
