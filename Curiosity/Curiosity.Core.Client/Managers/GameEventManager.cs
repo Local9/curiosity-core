@@ -105,7 +105,6 @@ namespace Curiosity.Core.Client.Managers
             if (ent is Vehicle)
             {
                 VehicleManager vehicleManager = VehicleManager.GetModule();
-                // EmergencyVehicleSirenManager emergencyVehicleSirenManager = EmergencyVehicleSirenManager.GetModule();
                 Vehicle vehicle = (Vehicle)ent;
 
                 VehicleState currentVehicle;

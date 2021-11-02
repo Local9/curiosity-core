@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using System;
 
 namespace Curiosity.Core.Client.Extensions
 {
@@ -52,6 +53,13 @@ namespace Curiosity.Core.Client.Extensions
         public static float ToFloat(this object o)
         {
             return float.Parse($"{o}");
+        }
+
+        public static float ToHeading(this Vector3 v)
+        {
+            float X = v.X;
+            float Y = v.Y;
+            return (float)((System.Math.Atan2(X, -Y) + System.Math.PI) * (180.0 / System.Math.PI));
         }
     }
 }

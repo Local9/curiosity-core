@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
@@ -16,6 +17,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using LibUtils = Curiosity.Systems.Library.Utils;
+using System.Drawing;
+using NativeUI;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -153,6 +156,55 @@ namespace Curiosity.Core.Client.Managers
             // edit
         }
 
+        [TickHandler(SessionWait = true)]
+        private async Task OnRefuelWithJerryCan()
+        {
+            CitizenFX.Core.Weapon currentWeapon = Cache.PlayerPed.Weapons.Current;
+            int currentAmmo = currentWeapon.Ammo;
+            Ped playerPed = Cache.PlayerPed;
+
+            if (currentWeapon.Hash == WeaponHash.PetrolCan && currentAmmo > 0 && currentVehicle is not null)
+            {
+                Vector3 boneCoord1 = currentVehicle.Vehicle.Bones["wheel_lr"].Position;
+                Vector3 boneCoord2 = currentVehicle.Vehicle.Bones["petroltank_l"].Position;
+
+                if (playerPed.IsInRangeOf(boneCoord1, 1.7f) || playerPed.IsInRangeOf(boneCoord2, 1.7f))
+                {
+                    Screen.DisplayHelpTextThisFrame("Hold ~INPUT_CONTEXT~ to refuel your vehicle");
+                    if (Game.IsControlPressed(0, Control.Context) && currentVehicle.Vehicle.FuelLevel < 100)
+                    {
+                        float adjustedFuelLevel = currentVehicle.Vehicle.FuelLevel += 0.25f;
+                        currentVehicle.Vehicle.FuelLevel = adjustedFuelLevel;
+                        currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, adjustedFuelLevel, true);
+                        API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, adjustedFuelLevel); // LEGACY
+
+                        currentWeapon.Ammo -= 1;
+
+                        Vector3 pos = Vector3.Subtract(currentVehicle.Vehicle.Position, playerPed.Position);
+                        float heading = pos.ToHeading();
+                        playerPed.Heading = heading;
+                        playerPed.Task.PlayAnimation("weapon@w_sp_jerrycan", "fire", 1f, 600, AnimationFlags.UpperBodyOnly);
+                    }
+                }
+            }
+        }
+
+        private int barX = 64;
+        private int barY = 542;
+        private int safezoneSize = 8;
+        private Color barColor = Color.FromArgb(200, 250, 150, 0);
+        private Color barLowColor = Color.FromArgb(200, 250, 0, 0);
+        private void DisplayFuelbar()
+        {
+            UIResRectangle uiRectangle = new UIResRectangle(new Point(this.barX - this.safezoneSize * 6, this.barY + this.safezoneSize * 4 - 2), new Size(178, 10), Color.FromArgb(120, 0, 0, 0));
+            int num = (int)System.Math.Floor((double)currentVehicle.Vehicle.FuelLevel);
+            uiRectangle.Draw();
+            if ((double)currentVehicle.Vehicle.FuelLevel > 25.0)
+                new UIResRectangle(new Point(this.barX - this.safezoneSize * 6, this.barY + this.safezoneSize * 4), new Size((int)System.Math.Floor((double)num * 1.77999997138977), 6), this.barColor).Draw();
+            else
+                new UIResRectangle(new Point(this.barX - this.safezoneSize * 6, this.barY + this.safezoneSize * 4), new Size((int)System.Math.Floor((double)num * 1.77999997138977), 6), this.barLowColor).Draw();
+        }
+
         private int AddVehicle(string vehicle, float fuelMultiplier)
         {
             int handle = API.GetHashKey(vehicle);
@@ -207,6 +259,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
+
             // PluginManager.Instance.AttachTickHandler(OnVehicleIsTowing);
         }
 
@@ -363,7 +416,6 @@ namespace Curiosity.Core.Client.Managers
                 PluginManager.Instance.DetachTickHandler(OnVehicleIsTowing);
                 IsNearFuelPump = false;
                 IsRefueling = false;
-                currentVehicle = null;
 
                 EventSystem.Send("culling:reset");
 
@@ -434,7 +486,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 fuel = Math.Max(0f, fuel - (float)(deltaTime * multi * vehicleSpeed));
                 currentVehicle.Vehicle.FuelLevel = fuel;
-                currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", fuel, true);
+                currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, fuel, true);
 
                 API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
             }
