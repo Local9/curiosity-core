@@ -15,6 +15,8 @@ namespace Curiosity.Core.Server.Extensions
         {
             if (character == null) return;
 
+            character.Cash = await BankDatabase.Get(character.CharacterId);
+
             await CharacterDatabase.Save(character);
         }
     }

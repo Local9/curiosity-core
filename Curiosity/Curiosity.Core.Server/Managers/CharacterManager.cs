@@ -270,8 +270,6 @@ namespace Curiosity.Core.Server.Managers
 
                 user.Character = curiosityCharacter;
 
-                curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
-
                 if (player.Character != null)
                 {
                     Vector3 pos = player.Character.Position;
