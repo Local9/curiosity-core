@@ -142,6 +142,7 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
 
                 float vehicleFuel = metadata.Find<float>(0);
+
                 float cost = (100.0f - vehicleFuel) * 1.35f;
 
                 bool canPay = (curiosityUser.Character.Cash - cost) >= 0;
@@ -149,6 +150,39 @@ namespace Curiosity.Core.Server.Managers
                 if (!canPay)
                 {
                     genericMessage.Message = "Cannot afford to refuel";
+                    return genericMessage;
+                }
+
+                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (int)cost * -1);
+
+                genericMessage.Success = true;
+                genericMessage.Cost = (int)cost;
+
+                return genericMessage;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:refuel:jerry", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                GenericMessage genericMessage = new GenericMessage();
+
+                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle))
+                {
+                    genericMessage.Message = "Player not found.";
+                    return genericMessage;
+                }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
+
+                int amount = metadata.Find<int>(0);
+
+                float cost = amount * 0.05f;
+
+                bool canPay = (curiosityUser.Character.Cash - cost) >= 0;
+
+                if (!canPay)
+                {
+                    genericMessage.Message = "Cannot afford to refill jerry can.";
                     return genericMessage;
                 }
 

@@ -19,6 +19,8 @@ namespace Curiosity.Core.Server.Managers
     {
         DateTime lastSave = DateTime.Now;
         const int MEDICAL_KIT_ITEM_ID = 495;
+        const int JERRY_CAN_MAX = 4500;
+        const int JERRY_CAN_START = 1485;
 
         public override void Begin()
         {
@@ -192,8 +194,9 @@ namespace Curiosity.Core.Server.Managers
                         if (item.SpawnTypeId == SpawnType.Weapon)
                         {
                             int hash = API.GetHashKey(item.HashKey);
+                            bool isJerryCan = item.HashKey == "weapon_petrolcan";
                             await BaseScript.Delay(0);
-                            API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, false);
+                            API.GiveWeaponToPed(player.Character.Handle, (uint)hash, isJerryCan ? JERRY_CAN_START : 999, false, false);
                         }
                     }
 
@@ -561,8 +564,9 @@ namespace Curiosity.Core.Server.Managers
                 if (item.SpawnTypeId == SpawnType.Weapon)
                 {
                     int hash = API.GetHashKey(item.HashKey);
+                    bool isJerryCan = item.HashKey == "weapon_petrolcan";
                     await BaseScript.Delay(0);
-                    API.GiveWeaponToPed(player.Character.Handle, (uint)hash, 999, false, true);
+                    API.GiveWeaponToPed(player.Character.Handle, (uint)hash, isJerryCan ? 100 : 999, false, false);
 
                     Logger.Debug($"Equipping {item.HashKey}:{hash} to {curiosityUser.LatestName}");
                 }
