@@ -1,12 +1,10 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using System;
+using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Core.Client.Utils;
-using Curiosity.Core.Client.Extensions;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {

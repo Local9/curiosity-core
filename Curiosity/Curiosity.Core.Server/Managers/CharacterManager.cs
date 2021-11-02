@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -11,7 +11,7 @@ using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Core.Server.Web;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
 {

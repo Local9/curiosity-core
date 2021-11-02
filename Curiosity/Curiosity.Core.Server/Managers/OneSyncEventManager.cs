@@ -1,12 +1,11 @@
-﻿using Curiosity.Core.Server.Diagnostics;
-using Curiosity.Systems.Library.Events;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
-using System;
-using static CitizenFX.Core.Native.API;
-using System.Collections.Generic;
-using CitizenFX.Core;
 using Curiosity.Systems.Library.Enums;
-using System.Threading.Tasks;
+using Curiosity.Systems.Library.Events;
+using System;
+using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
 {

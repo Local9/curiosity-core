@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
-using System.Threading.Tasks;
 using Curiosity.Systems.Library.Models;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {

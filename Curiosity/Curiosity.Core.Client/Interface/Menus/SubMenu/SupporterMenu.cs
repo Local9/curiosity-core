@@ -1,15 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Utils;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

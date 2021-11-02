@@ -1,5 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.Data
 {
