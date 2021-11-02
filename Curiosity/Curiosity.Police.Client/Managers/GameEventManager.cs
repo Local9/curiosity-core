@@ -29,7 +29,7 @@ namespace Curiosity.Police.Client.Managers
 
         public override void Begin()
         {
-            Curiosity.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered);
+            Instance.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered);
         }
 
         private void OnGameEventTriggered(string name, List<dynamic> args)

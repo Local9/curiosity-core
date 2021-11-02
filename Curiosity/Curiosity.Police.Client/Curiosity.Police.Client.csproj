@@ -55,6 +55,7 @@
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
+    <Compile Include="Managers\JobManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />

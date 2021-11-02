@@ -11,12 +11,12 @@ namespace Curiosity.Police.Client.Managers
                        : null);
         }
 
-        public PluginManager Curiosity { get; set; }
+        public PluginManager Instance { get; set; }
         public EventSystem EventSystem => EventSystem.GetModule();
 
         protected Manager()
         {
-            Curiosity = PluginManager.Instance;
+            Instance = PluginManager.Instance;
         }
 
         public virtual void Begin()

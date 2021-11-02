@@ -56,7 +56,7 @@ namespace Curiosity.Police.Client
         {
             DiscordRichPresence.Commit();
 
-            Logger.Info("[Curiosity]: Loading managers, please wait...");
+            Logger.Info("[Curiosity-Police]: Loading managers, please wait...");
 
             Assembly.GetExecutingAssembly().GetExportedTypes()
                 .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))

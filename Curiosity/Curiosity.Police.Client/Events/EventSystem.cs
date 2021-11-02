@@ -2,6 +2,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Police.Client.Diagnostics;
 using Curiosity.Police.Client.Managers;
+using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Newtonsoft.Json;
 using System;
@@ -13,14 +14,14 @@ namespace Curiosity.Police.Client.Events
 {
     public class EventSystem : Manager<EventSystem>
     {
-        private const string EVENT_KEY = "XeBQ2h65KTeeW5uQdWdax3EP";
+        private const string EVENT_KEY = DataKeys.SERVER_EVENT_KEY;
 
         public List<EventAttachment> Attachments { get; } = new List<EventAttachment>();
         public List<EventRequest> PendingRequests { get; } = new List<EventRequest>();
 
         public EventSystem()
         {
-            Curiosity.EventRegistry[EVENT_KEY] += new Action<string>(payload =>
+            Instance.EventRegistry[EVENT_KEY] += new Action<string>(payload =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 

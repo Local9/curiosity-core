@@ -51,7 +51,7 @@ namespace Curiosity.Core.Client
 
             if (export)
             {
-                PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
+                // PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
             }
         }
     }
