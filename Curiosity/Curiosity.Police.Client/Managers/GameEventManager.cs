@@ -43,16 +43,24 @@ namespace Curiosity.Police.Client.Managers
                 {
                     Entity victim = Entity.FromHandle((int)args[0]);
                     Entity attacker = Entity.FromHandle((int)args[1]);
-                    bool isDamageFatal = Convert.ToBoolean((int)args[3]);
-                    uint weaponInfoHash = (uint)args[4];
-                    bool isMeleeDamage = Convert.ToBoolean((int)args[9]);
-                    int damageTypeFlag = (int)args[10];
+                    bool isDamageFatal = Convert.ToBoolean((int)args[5]);
+                    uint weaponInfoHash = (uint)args[6];
+                    bool isMeleeDamage = Convert.ToBoolean((int)args[11]);
+                    int damageTypeFlag = (int)args[12];
+
+                    //Logger.Debug($"CEventNetworkEntityDamage;\n" +
+                    //    $"victim: {victim}\n" +
+                    //    $"attacker: {attacker}\n" +
+                    //    $"isDamageFatal: {isDamageFatal}\n" +
+                    //    $"weaponInfoHash: {weaponInfoHash}\n" +
+                    //    $"isMeleeDamage: {isMeleeDamage}\n" +
+                    //    $"damageTypeFlag: {damageTypeFlag}\n" +
+                    //    $"");
 
                     HandleCEventNetworkEntityDamaged(
-                        victim, attacker, (int)args[2], isDamageFatal, weaponInfoHash,
-                        (int)args[5], (int)args[6], args[7], args[8], isMeleeDamage,
+                        victim, attacker, (int)args[2], (int)args[3], (int)args[4], isDamageFatal, weaponInfoHash,
+                        (int)args[7], (int)args[8], args[9], args[10], isMeleeDamage,
                         damageTypeFlag);
-
                 }
 
             }
@@ -69,6 +77,8 @@ namespace Curiosity.Police.Client.Managers
         /// <param name="victim">victim</param>
         /// <param name="attacker">attacker</param>
         /// <param name="arg2">Unknown</param>
+        /// <param name="arg3">Unknown</param>
+        /// <param name="arg4">Unknown</param>
         /// <param name="isDamageFatal">Is damage fatal to entity. or victim died/destroyed.</param>
         /// <param name="weaponInfoHash">Probably related to common.rpf/data/ai => Item type = "CWeaponInfo"</param>
         /// <param name="arg5">Unknown</param>
@@ -78,9 +88,9 @@ namespace Curiosity.Police.Client.Managers
         /// <param name="isMeleeDamage">Is melee damage</param>
         /// <param name="damageTypeFlag">0 for peds, 116 for the body of a vehicle, 93 for a tire, 120 for a side window, 121 for a rear window, 122 for a windscreen, etc</param>
         private void HandleCEventNetworkEntityDamaged(
-            Entity victim, Entity attacker, int arg2, bool isDamageFatal, uint weaponInfoHash,
-            int arg5, int arg6, object arg7, object arg8, bool isMeleeDamage,
-            int damageTypeFlag)
+                Entity victim, Entity attacker, int arg2, int arg3, int arg4, bool isDamageFatal, uint weaponInfoHash,
+                int arg5, int arg6, object arg7, object arg8, bool isMeleeDamage,
+                int damageTypeFlag)
         {
             if (isDamageFatal)
             {
