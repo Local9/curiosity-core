@@ -566,7 +566,7 @@ namespace Curiosity.Core.Server.Managers
                     int hash = API.GetHashKey(item.HashKey);
                     bool isJerryCan = item.HashKey == "weapon_petrolcan";
                     await BaseScript.Delay(0);
-                    API.GiveWeaponToPed(player.Character.Handle, (uint)hash, isJerryCan ? 100 : 999, false, false);
+                    API.GiveWeaponToPed(player.Character.Handle, (uint)hash, isJerryCan ? 10 : 999, false, false);
 
                     Logger.Debug($"Equipping {item.HashKey}:{hash} to {curiosityUser.LatestName}");
                 }
