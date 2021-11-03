@@ -76,6 +76,8 @@ namespace Curiosity.Core.Client
             API.TriggerMusicEvent(mes);
             API.SetAudioFlag("LoadMPData", true);
 
+            API.DisplayPlayerNameTagsOnBlips(true);
+
             Load();
         }
 

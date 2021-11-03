@@ -35,7 +35,42 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         static string musicEvent = string.Empty;
 
+        static NotificationManager notification => NotificationManager.GetModule();
+
         #region Player
+
+        [CommandInfo(new[] { "eui" })]
+        public class EntityOverlay : ICommand
+        {
+            bool toggle = false;
+
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                toggle = !toggle;
+
+                if (toggle)
+                    PluginManager.Instance.AttachTickHandler(OnDrawObjectData);
+
+                if (!toggle)
+                    PluginManager.Instance.DetachTickHandler(OnDrawObjectData);
+
+                string msg = toggle ? "ENABLED" : "DISABLED";
+                notification.Info($"EUI: {msg}");
+            }
+
+            private async Task OnDrawObjectData()
+            {
+                Prop[] entities = World.GetAllProps();
+
+                foreach(Prop prop in entities)
+                {
+                    if (!prop.IsInRangeOf(Cache.PlayerPed.Position, 3f)) continue;
+
+                    NativeUI.Notifications.ShowFloatingHelpNotification("This Prop", prop.Position);
+                    DebugDisplay.DrawData(prop);
+                }
+            }
+        }
 
         [CommandInfo(new[] { "party" })]
         public class PartyEvent : ICommand

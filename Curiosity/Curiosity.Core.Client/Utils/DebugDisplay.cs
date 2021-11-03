@@ -59,6 +59,7 @@ namespace Curiosity.Core.Client.Utils
                 list["Model Name"] = GetModelName(entity.Model);
                 list["Model Hash"] = $"{entity.Model.Hash}";
                 list["Model Hash (Hex)"] = $"0x{entity.Model.Hash:X}";
+                list["Created By"] = $"{entity.State.Get(StateBagKey.CURIOSITY_CREATED) ?? "Unknown"}";
                 list[""] = "";
 
                 if (entity is Vehicle veh)
