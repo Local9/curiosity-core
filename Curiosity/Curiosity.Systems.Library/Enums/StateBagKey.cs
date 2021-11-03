@@ -15,6 +15,7 @@
         public const string PLAYER_ASSISTING = "player::npc::assisting";
         public const string PLAYER_OWNER = "player::owner";
         public const string PLAYER_PASSIVE = "PLAYER_PASSIVE";
+        public static string PLAYER_WANTED = "player::wanted";
 
         public const string PLAYER_NAME = "PLAYER_NAME";
         public const string SERVER_HANDLE = "SERVER_HANDLE";
