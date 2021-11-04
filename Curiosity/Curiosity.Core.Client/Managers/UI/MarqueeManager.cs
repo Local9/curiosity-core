@@ -24,11 +24,12 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
 
-        private void SendNui(string message)
+        private void SendNui(string message, int duration = 5000)
         {
             string json = new JsonBuilder()
                 .Add("operation", "MARQUEE")
                 .Add("message", message)
+                .Add("duration", duration)
                 .Build();
 
             API.SendNuiMessage(json);

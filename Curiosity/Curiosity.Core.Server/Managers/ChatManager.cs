@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Managers
         {
             Instance.EventRegistry.Add("txaLogger:internalChatMessage", new Action<string, string, string>((source, user, msg) =>
             {
-                EventSystem.GetModule().SendAll("ui:notification", Notification.NOTIFICATION_SHOW, $"Announcement: {msg}", "top-center", "snackbar");
+                EventSystem.GetModule().SendAll("ui:notification", Notification.NOTIFICATION_ANNOUNCEMENT, $"<b>Announcement</b><br />{msg}", "top-center", "snackbar");
             }));
 
             // may need to make this so its :local, :world, :universe, :help, and yes, it would make it easier!

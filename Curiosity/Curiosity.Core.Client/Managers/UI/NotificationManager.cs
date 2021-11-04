@@ -24,7 +24,14 @@ namespace Curiosity.Core.Client.Managers
                 string position = metadata.Find<string>(2);
                 string theme = metadata.Find<string>(3);
 
-                SendNui(notification, message, position, theme);
+                int duration = 10000;
+                if (notification == Notification.NOTIFICATION_ANNOUNCEMENT)
+                {
+                    notification = Notification.NOTIFICATION_SHOW;
+                    duration = 30000;
+                }
+
+                SendNui(notification, message, position, theme, duration);
 
                 return true;
             }));
