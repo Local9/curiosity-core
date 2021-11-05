@@ -17,9 +17,22 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            Instance.EventRegistry.Add("txaLogger:internalChatMessage", new Action<string, string, string>((source, user, msg) =>
+            Instance.EventRegistry.Add("txaLogger:internalChatMessage", new Action<string, string, string>(async (source, user, msg) =>
             {
-                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"<b>Announcement</b><br />{msg}", "top-center", "snackbar");
+                string header = $"<center><h3>📣 Announcement 📣</h3></center>";
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "top-center", "snackbar");
+                await BaseScript.Delay(500);
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "top-left", "snackbar");
+                await BaseScript.Delay(500);
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "top-right", "snackbar");
+                await BaseScript.Delay(500);
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "bottom-center", "snackbar");
+                await BaseScript.Delay(500);
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "bottom-right", "snackbar");
+                await BaseScript.Delay(500);
+                EventSystem.GetModule().SendAll("ui:notification", eNotification.NOTIFICATION_ANNOUNCEMENT, $"{header}{msg}<br /> - {user}", "bottom-left", "snackbar");
+
+                Logger.Debug($"{user} Announcement: {header}{msg}");
             }));
 
             // may need to make this so its :local, :world, :universe, :help, and yes, it would make it easier!
