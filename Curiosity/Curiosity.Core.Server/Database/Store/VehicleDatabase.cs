@@ -83,7 +83,7 @@ namespace Curiosity.Core.Server.Database.Store
                 if (!string.IsNullOrEmpty(vehicleData))
                     item.VehicleInfo = JsonConvert.DeserializeObject<VehicleInfo>(vehicleData);
 
-                if (DateTime.TryParse($"{keyValuePairs[0]["DatePurchased"]}", out DateTime dateDeleted))
+                if (DateTime.TryParse($"{keyValuePairs[0]["DateDeleted"]}", out DateTime dateDeleted))
                     item.DateDeleted = dateDeleted;
             }
 
