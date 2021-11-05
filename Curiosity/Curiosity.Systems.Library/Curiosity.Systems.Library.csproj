@@ -70,7 +70,7 @@
     <Compile Include="Enums\GamerTagComponent.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\MissionType.cs" />
-    <Compile Include="Enums\Notification.cs" />
+    <Compile Include="Enums\eNotification.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\RoutingBucket.cs" />
     <Compile Include="Enums\Skill.cs" />

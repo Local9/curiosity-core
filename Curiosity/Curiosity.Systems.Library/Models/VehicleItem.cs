@@ -11,6 +11,7 @@ namespace Curiosity.Systems.Library.Models
         public string Label;
         public string Hash;
         public DateTime DatePurchased;
+        public DateTime? DateDeleted;
         public SpawnType SpawnTypeId;
         public VehicleInfo VehicleInfo = new VehicleInfo();
 
@@ -19,5 +20,7 @@ namespace Curiosity.Systems.Library.Models
         public float X;
         public float Y;
         public float Z;
+
+        public long BuyBackValue;
     }
 }

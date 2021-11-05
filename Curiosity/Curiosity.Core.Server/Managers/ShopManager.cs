@@ -404,7 +404,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!success)
                     {
-                        exportMessage.Error = "No rows affected";
+                        exportMessage.error = "No rows affected";
                     }
 
                     return $"{exportMessage}";
@@ -417,10 +417,10 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
@@ -428,11 +428,11 @@ namespace Curiosity.Core.Server.Managers
 
                     if (item is null)
                     {
-                        exportMessage.Error = "No item found";
+                        exportMessage.error = "No item found";
                     }
                     else
                     {
-                        exportMessage.NewNumberValue = item.NumberInStock;
+                        exportMessage.newNumberValue = item.NumberInStock;
                     }
 
                     return $"{exportMessage}";

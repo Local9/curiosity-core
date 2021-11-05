@@ -12,7 +12,7 @@ namespace Curiosity.Core.Server.Managers
         {
             Instance.EventRegistry.Add("txAdmin:events:scheduledRestart", new Action<dynamic>(async data =>
             {
-                Util.Notify.Send(notification: Notification.NOTIFICATION_WARNING, message: $"Server restart: {data.secondsRemaining / 60} minute(s)", position: "top-middle");
+                Util.Notify.Send(notification: eNotification.NOTIFICATION_WARNING, message: $"Server restart: {data.secondsRemaining / 60} minute(s)", position: "top-middle");
 
                 if (data.secondsRemaining == 60)
                 {

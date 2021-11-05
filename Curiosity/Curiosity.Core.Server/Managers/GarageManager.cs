@@ -27,7 +27,7 @@ namespace Curiosity.Core.Server.Managers
              * 
              */
 
-            EventSystem.GetModule().Attach("garage:get:list", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("garage:get:list", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -46,7 +46,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("garage:save", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("garage:save", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (curiosityUser.Character.Cash < 5000)
                     {
-                        exportMessage.Error = "Not enough cash, $5,000 required to save";
+                        exportMessage.error = "Not enough cash, $5,000 required to save";
                         return exportMessage;
                     }
 
@@ -84,7 +84,7 @@ namespace Curiosity.Core.Server.Managers
                     }
                     else
                     {
-                        exportMessage.Error = "Vehicle settings were not saved.";
+                        exportMessage.error = "Vehicle settings were not saved.";
                         return exportMessage;
                     }
                 }
@@ -95,7 +95,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("garage:get:vehicle", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("garage:get:vehicle", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -117,6 +117,12 @@ namespace Curiosity.Core.Server.Managers
                     {
                         Logger.Error($"Vehicle {characterVehicleId} returned null");
                         vehicleItem.Message = "No Vehicle Found";
+                        return vehicleItem;
+                    }
+
+                    if (vehicleItem.DateDeleted is not null)
+                    {
+                        vehicleItem.Message = "Vehicle has been removed, cannot be spawned.";
                         return vehicleItem;
                     }
 
@@ -183,7 +189,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("garage:set:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("garage:set:vehicle", new EventCallback(metadata =>
             {
                 try
                 {
@@ -279,6 +285,48 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Logger.Error(ex, "garage:set:vehicle");
                     return false;
+                }
+            }));
+
+            EventSystem.Attach("garage:sell:vehicle", new AsyncEventCallback(async metadata => {
+                ExportMessage exportMessage = new ExportMessage();
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    int characterVehicleId = metadata.Find<int>(0);
+
+                    VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
+
+                    if (vehicleItem is null)
+                    {
+                        Logger.Debug($"Vehicle wasn't returned, unable to sell.");
+                        exportMessage.error = "Vehicle doesn't exist or is already sold.";
+                        goto EXIT;
+                    }
+
+                    bool success = await Database.Store.VehicleDatabase.MarkVehicleDeleted(characterVehicleId);
+
+                    if (!success)
+                    {
+                        Logger.Debug($"Vehicle failed to update DateDeleted.");
+                        exportMessage.error = "Vehicle failed to be removed, please contact support.";
+                        goto EXIT;
+                    }
+
+                    int newCash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, vehicleItem.BuyBackValue);
+                    curiosityUser.Character.Cash = newCash;
+
+                    curiosityUser.NotificationSuccess($"Vehicle Sold ({vehicleItem.BuyBackValue:C0})");
+                    Logger.Debug($"Vehicle sold for {vehicleItem.BuyBackValue}");
+
+                EXIT:
+                    return exportMessage;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"garage:sell:vehicle");
+                    exportMessage.error = "There was an issue when trying to sell the vehicle.";
+                    return exportMessage;
                 }
             }));
 

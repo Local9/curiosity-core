@@ -35,7 +35,7 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 string vehicleLabel = metadata.Find<string>(0);
 
-                NotificationManager.GetModule().Info($"Your new '{vehicleLabel}', is now ready.");
+                Notify.Info($"Your new '{vehicleLabel}', is now ready.");
 
                 return null;
             }));
@@ -50,13 +50,13 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (srvVeh.Count == 0)
                     {
-                        NotificationManager.GetModule().Info("No vehicles returned from the Garage");
+                        Notify.Info("No vehicles returned from the Garage");
                         return vehicles;
                     }
 
                     if (srvVeh is null)
                     {
-                        NotificationManager.GetModule().Info("No vehicles returned from the Garage");
+                        Notify.Info("No vehicles returned from the Garage");
                         return vehicles;
                     }
 
@@ -82,6 +82,41 @@ namespace Curiosity.Core.Client.Managers.UI
                 }
             }));
 
+            Instance.AttachNuiHandler("GarageSell", new AsyncEventCallback(async metadata =>
+            {
+                ExportMessage exportMessage = new ExportMessage();
+                try
+                {
+                    string characterVehicleIdString = metadata.Find<string>(0);
+                    int characterVehicleId = 0;
+
+                    if (!int.TryParse(characterVehicleIdString, out characterVehicleId))
+                    {
+                        Logger.Debug("Vehicle information is invalid, if it happens again write up what you were doing on the forums.");
+                        Notify.Error("Vehicle information is invalid, if it happens again write up what you were doing on the forums.");
+                        return new { success = false };
+                    }
+
+                    Logger.Debug($"Attempting to sell Vehicle with ID {characterVehicleId}");
+
+                    exportMessage = await EventSystem.Request<ExportMessage>("garage:sell:vehicle", characterVehicleId);
+                    Logger.Debug($"Response: {exportMessage}");
+
+                    if (!exportMessage.success)
+                    {
+                        Logger.Debug(exportMessage.error);
+                        Notify.Error(exportMessage.error);
+                    }
+
+                    return exportMessage;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "GarageSell");
+                    return exportMessage;
+                }
+            }));
+
             Instance.AttachNuiHandler("GarageVehicleRequest", new AsyncEventCallback(async metadata =>
             {
                 try
@@ -91,7 +126,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (!int.TryParse(characterVehicleIdString, out characterVehicleId))
                     {
-                        NotificationManager.GetModule().Error("Vehicle information is invalid, if it happens again write up what you were doing on the forums.");
+                        Notify.Error("Vehicle information is invalid, if it happens again write up what you were doing on the forums.");
                         return new { success = false };
                     }
 
@@ -100,7 +135,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (!API.IsModelInCdimage(modelHash))
                     {
-                        NotificationManager.GetModule().Error($"Model '{hash}' is not loaded.");
+                        Notify.Error($"Model '{hash}' is not loaded.");
                         return new { success = false };
                     }
 
@@ -108,7 +143,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (!vehModel.IsValid)
                     {
-                        NotificationManager.GetModule().Error($"Model '{hash}' is not valid.");
+                        Notify.Error($"Model '{hash}' is not valid.");
                         return new { success = false };
                     }
 
@@ -146,7 +181,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (API.IsAnyVehicleNearPoint(vehicleItem.X, vehicleItem.Y, vehicleItem.Z, distance) && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
-                        NotificationManager.GetModule().Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
+                        Notify.Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
                         vehModel.MarkAsNoLongerNeeded();
                         return new { success = false };
                     }
@@ -155,13 +190,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (vehicleItem is null)
                     {
-                        NotificationManager.GetModule().Error("Vehicle failed to be created. Please try again.");
+                        Notify.Error("Vehicle failed to be created. Please try again.");
+                        vehModel.MarkAsNoLongerNeeded();
                         return new { success = false };
                     }
 
                     if (!string.IsNullOrEmpty(vehicleItem.Message))
                     {
-                        NotificationManager.GetModule().Error(vehicleItem.Message);
+                        Notify.Error(vehicleItem.Message);
+                        vehModel.MarkAsNoLongerNeeded();
                         return new { success = false };
                     }
 
@@ -253,7 +290,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (!setupCompleted)
                     {
-                        NotificationManager.GetModule().Error("Vehicle setup failed.");
+                        Notify.Error("Vehicle setup failed.");
                         EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
                         vehicle.Delete();
                         return new { success = false };
@@ -317,7 +354,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 
-                    NotificationManager.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
+                    Notify.Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
 
                     // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
 
@@ -333,7 +370,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 catch (Exception ex)
                 {
                     Logger.Error(ex, $"Oh well....");
-                    NotificationManager.GetModule().Error("FiveM fucked something up");
+                    Notify.Error("FiveM fucked something up");
                     return new { success = false };
                 }
             }));

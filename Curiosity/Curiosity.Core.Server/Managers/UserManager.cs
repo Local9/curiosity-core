@@ -305,7 +305,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!PluginManager.ActiveUsers.ContainsKey(handle))
                 {
-                    exportMessage.Error = "Player not found";
+                    exportMessage.error = "Player not found";
                 }
                 else
                 {
@@ -324,11 +324,11 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!PluginManager.ActiveUsers.ContainsKey(handle))
                 {
-                    exportMessage.Error = "Player not found";
+                    exportMessage.error = "Player not found";
                 }
                 else
                 {
-                    exportMessage.RoleId = (int)PluginManager.ActiveUsers[handle].Role;
+                    exportMessage.roleId = (int)PluginManager.ActiveUsers[handle].Role;
                 }
 
                 return $"{exportMessage}";

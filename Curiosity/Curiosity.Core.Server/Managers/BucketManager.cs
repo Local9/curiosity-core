@@ -14,7 +14,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (bucketId == 0 || bucketId >= 5000)
                 {
-                    exportMessage.Error = "Lobby and spawn range is is protected";
+                    exportMessage.error = "Lobby and spawn range is is protected";
                 }
                 else
                 {
@@ -24,7 +24,7 @@ namespace Curiosity.Core.Server.Managers
                     }
                     else
                     {
-                        exportMessage.Error = $"Unknown mode '{mode}', can only accept strict, relaxed, or inactive";
+                        exportMessage.error = $"Unknown mode '{mode}', can only accept strict, relaxed, or inactive";
                     }
                 }
 
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (bucketId == 0 || bucketId >= 5000)
                 {
-                    exportMessage.Error = "Lobby and spawn range is is protected";
+                    exportMessage.error = "Lobby and spawn range is is protected";
                 }
                 else
                 {

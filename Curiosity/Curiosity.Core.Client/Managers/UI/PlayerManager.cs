@@ -199,11 +199,11 @@ namespace Curiosity.Core.Client.Managers
 
                 if (reportSuccess)
                 {
-                    notification.SendNui(Systems.Library.Enums.Notification.NOTIFICATION_SUCCESS, "Report received.");
+                    notification.SendNui(Systems.Library.Enums.eNotification.NOTIFICATION_SUCCESS, "Report received.");
                 }
                 else
                 {
-                    notification.SendNui(Systems.Library.Enums.Notification.NOTIFICATION_ERROR, "Issue when creating report, please inform a member of staff.");
+                    notification.SendNui(Systems.Library.Enums.eNotification.NOTIFICATION_ERROR, "Issue when creating report, please inform a member of staff.");
                 }
 
                 return null;

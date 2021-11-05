@@ -13,6 +13,7 @@ namespace Curiosity.Core.Client.Managers
 
         public PluginManager Instance { get; set; }
         public EventSystem EventSystem => EventSystem.GetModule();
+        public NotificationManager Notify => NotificationManager.GetModule();
 
         protected Manager()
         {

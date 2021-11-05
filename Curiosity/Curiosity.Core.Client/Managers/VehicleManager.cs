@@ -122,7 +122,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (!canRepair)
                 {
-                    Notify.Info($"To not have enough cash to repair the vehicle.");
+                    Interface.Notify.Info($"To not have enough cash to repair the vehicle.");
                     return null;
                 }
 
@@ -564,7 +564,7 @@ namespace Curiosity.Core.Client.Managers
 
                         if (vehicles.Count > 1)
                         {
-                            Notify.Alert($"Too many vehicles nearby.");
+                            Interface.Notify.Alert($"Too many vehicles nearby.");
                         }
                         else
                         {
@@ -572,7 +572,7 @@ namespace Curiosity.Core.Client.Managers
 
                             if (closestVehicle.Driver.Exists())
                             {
-                                Notify.Alert($"Vehicle has a driver.");
+                                Interface.Notify.Alert($"Vehicle has a driver.");
                                 return;
                             }
 
@@ -646,7 +646,7 @@ namespace Curiosity.Core.Client.Managers
                             currentVehicle.AttachedVehicle = new VehicleState(closestVehicle);
                         }
 
-                        Notify.Info($"Magnet On");
+                        Interface.Notify.Info($"Magnet On");
 
                         await BaseScript.Delay(1000);
                     }
@@ -697,7 +697,7 @@ namespace Curiosity.Core.Client.Managers
                             currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
                         }
 
-                        Notify.Info($"Magnet Off");
+                        Interface.Notify.Info($"Magnet Off");
 
                         await BaseScript.Delay(1000);
 

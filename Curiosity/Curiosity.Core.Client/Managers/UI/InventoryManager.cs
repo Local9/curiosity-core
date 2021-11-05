@@ -51,9 +51,9 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:equip", itemId, numberOfItems);
 
-                if (!result.Success)
+                if (!result.success)
                 {
-                    NotificationManager.GetModule().Error($"{result.Error}");
+                    NotificationManager.GetModule().Error($"{result.error}");
                     return $"{result}";
                 }
 
@@ -92,9 +92,9 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 ExportMessage result = await EventSystem.Request<ExportMessage>("character:inventory:remove", itemId, numberOfItems);
 
-                if (!result.Success)
+                if (!result.success)
                 {
-                    NotificationManager.GetModule().Error($"{result.Error}");
+                    NotificationManager.GetModule().Error($"{result.error}");
                     return $"{result}";
                 }
 
@@ -125,7 +125,7 @@ namespace Curiosity.Core.Client.Managers.UI
             if (isProcessing)
             {
                 notificationManager.Error($"Currently processing request.");
-                result.Error = $"Currently processing request.";
+                result.error = $"Currently processing request.";
                 return result;
             }
             isProcessing = true;
@@ -142,31 +142,31 @@ namespace Curiosity.Core.Client.Managers.UI
 
             result = await EventSystem.Request<ExportMessage>("character:inventory:use", itemId, networkId);
 
-            if (!result.Success)
+            if (!result.success)
             {
-                notificationManager.Error($"{result.Error}");
+                notificationManager.Error($"{result.error}");
                 return result;
             }
 
-            if (result.Item is not null)
+            if (result.item is not null)
             {
-                if (result.Item.CategoryId == 19)
+                if (result.item.CategoryId == 19)
                 {
                     int playerHealth = Cache.PlayerPed.Health;
-                    Cache.PlayerPed.Health = (playerHealth + result.Item.HealingAmount);
-                    notificationManager.Success($"Healed {result.Item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                    Cache.PlayerPed.Health = (playerHealth + result.item.HealingAmount);
+                    notificationManager.Success($"Healed {result.item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
                     await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
-                if (result.Item.CategoryId == 21)
+                if (result.item.CategoryId == 21)
                 {
                     int playerArmor = Cache.PlayerPed.Armor;
-                    Cache.PlayerPed.Armor = (playerArmor + result.Item.HealingAmount);
-                    notificationManager.Success($"Armor increased {result.Item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
+                    Cache.PlayerPed.Armor = (playerArmor + result.item.HealingAmount);
+                    notificationManager.Success($"Armor increased {result.item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
                     await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
-                if (result.Item.CategoryId == 24)
+                if (result.item.CategoryId == 24)
                 {
                     if (veh is null)
                     {

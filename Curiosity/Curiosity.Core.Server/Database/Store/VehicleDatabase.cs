@@ -4,6 +4,7 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -75,13 +76,15 @@ namespace Curiosity.Core.Server.Database.Store
                 item.Hash = $"{keyValuePairs[0]["HashKey"]}";
                 item.DatePurchased = keyValuePairs[0]["DatePurchased"];
                 item.SpawnTypeId = (SpawnType)keyValuePairs[0]["SpawnTypeId"];
+                item.BuyBackValue = keyValuePairs[0]["BuyBackValue"];
 
                 string vehicleData = $"{keyValuePairs[0]["VehicleData"]}";
                 
                 if (!string.IsNullOrEmpty(vehicleData))
-                {
                     item.VehicleInfo = JsonConvert.DeserializeObject<VehicleInfo>(vehicleData);
-                }
+
+                if (DateTime.TryParse($"{keyValuePairs[0]["DatePurchased"]}", out DateTime dateDeleted))
+                    item.DateDeleted = dateDeleted;
             }
 
             return item;
@@ -97,6 +100,18 @@ namespace Curiosity.Core.Server.Database.Store
             };
 
             string myQuery = "CALL upVehicle(@CharacterID, @VehicleId, @JSON);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
+        }
+
+        internal static async Task<bool> MarkVehicleDeleted(int characterVehicleId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@inCharacterVehicleId", characterVehicleId },
+            };
+
+            string myQuery = "CALL delCharacterVehicle(@inCharacterVehicleId);";
 
             return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }

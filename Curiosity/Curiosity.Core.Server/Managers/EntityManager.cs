@@ -263,14 +263,14 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
 
                     int propNetworkId = await CreateEntity(playerId, model, x, y, z, isDynamic);
 
-                    exportMessage.NetworkId = propNetworkId;
+                    exportMessage.networkId = propNetworkId;
 
                     return $"{exportMessage}";
                 }));

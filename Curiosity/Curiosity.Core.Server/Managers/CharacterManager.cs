@@ -63,13 +63,13 @@ namespace Curiosity.Core.Server.Managers
 
                 if (curiosityItem is null)
                 {
-                    exportMessage.Error = "You currently have no medical kits.";
+                    exportMessage.error = "You currently have no medical kits.";
                     goto SENDBACK;
                 }
 
                 if (curiosityItem.NumberOwned == 0)
                 {
-                    exportMessage.Error = "You currently have no medical kits.";
+                    exportMessage.error = "You currently have no medical kits.";
                     goto SENDBACK;
                 }
 
@@ -77,7 +77,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!success)
                 {
-                    exportMessage.Error = "Issue when updating items.";
+                    exportMessage.error = "Issue when updating items.";
                     goto SENDBACK;
                 }
 
@@ -85,7 +85,7 @@ namespace Curiosity.Core.Server.Managers
                 goto SENDBACK;
 
             USER_MISSING:
-                exportMessage.Error = "User not found";
+                exportMessage.error = "User not found";
 
             SENDBACK:
                 return exportMessage;
@@ -494,13 +494,13 @@ namespace Curiosity.Core.Server.Managers
                 await BaseScript.Delay(0);
                 if (!item.IsUsable)
                 {
-                    exportMessage.Error = "Item is not usable.";
+                    exportMessage.error = "Item is not usable.";
                     goto ReturnResult;
                 }
 
                 if (item.NumberOwned == 0)
                 {
-                    exportMessage.Error = "You do not have any left.";
+                    exportMessage.error = "You do not have any left.";
                     goto ReturnResult;
                 }
 
@@ -530,7 +530,7 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
 
-                exportMessage.Item = item;
+                exportMessage.item = item;
             ReturnResult:
                 return exportMessage;
             }));
@@ -549,7 +549,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (item.CarringMaxed)
                 {
-                    exportMessage.Error = "Carrying Maximum Allowed.";
+                    exportMessage.error = "Carrying Maximum Allowed.";
                     goto ReturnResult;
                 }
 
@@ -557,7 +557,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!inserted)
                 {
-                    exportMessage.Error = "Was unable to equip the item.";
+                    exportMessage.error = "Was unable to equip the item.";
                     goto ReturnResult;
                 }
 
@@ -591,7 +591,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!updated)
                 {
-                    exportMessage.Error = "Was unable to remove the item.";
+                    exportMessage.error = "Was unable to remove the item.";
                     goto ReturnResult;
                 }
 
@@ -620,14 +620,14 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -637,11 +637,11 @@ namespace Curiosity.Core.Server.Managers
 
                     if (skill == null)
                     {
-                        exportMessage.Error = "Error; no rows returned.";
+                        exportMessage.error = "Error; no rows returned.";
                     }
                     else
                     {
-                        exportMessage.Skill = skill;
+                        exportMessage.skill = skill;
                     }
                 
                 SendMessage:
@@ -657,13 +657,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -671,7 +671,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int newSkillValue = await Database.Store.SkillDatabase.Adjust(user.Character.CharacterId, skillId, amt);
 
-                    exportMessage.NewNumberValue = newSkillValue;
+                    exportMessage.newNumberValue = newSkillValue;
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' skill '{skillId}' changed by '{amt}' (new value: {newSkillValue})");
 
@@ -688,13 +688,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -702,7 +702,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int statValue = await Database.Store.StatDatabase.Get(user.Character.CharacterId, (Stat)statId);
 
-                    exportMessage.Value = statValue;
+                    exportMessage.value = statValue;
 
                 SendMessage:
                     return $"{exportMessage}";
@@ -716,13 +716,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -730,7 +730,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!Enum.TryParse($"{statId}", out Stat stat))
                     {
-                        exportMessage.Error = "StatID failed parse";
+                        exportMessage.error = "StatID failed parse";
                         goto SendMessage;
                     }
 
@@ -738,7 +738,7 @@ namespace Curiosity.Core.Server.Managers
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' stat '{stat}' changed by '{amt}' (new value: {newSkillValue})");
 
-                    exportMessage.NewNumberValue = newSkillValue;
+                    exportMessage.newNumberValue = newSkillValue;
 
                 SendMessage:
                     return $"{exportMessage}";
@@ -752,13 +752,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -768,7 +768,7 @@ namespace Curiosity.Core.Server.Managers
 
                     user.Character.Cash = cashValue;
 
-                    exportMessage.Value = cashValue;
+                    exportMessage.value = cashValue;
 
                 SendMessage:
                     return $"{exportMessage}";
@@ -782,13 +782,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -800,7 +800,7 @@ namespace Curiosity.Core.Server.Managers
 
                     user.Character.Cash = newCashValue;
 
-                    exportMessage.NewNumberValue = newCashValue;
+                    exportMessage.newNumberValue = newCashValue;
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt}' (change '{originalValue}' to '{newCashValue}')");
 
@@ -816,13 +816,13 @@ namespace Curiosity.Core.Server.Managers
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
                     {
-                        exportMessage.Error = "First parameter is not a number";
+                        exportMessage.error = "First parameter is not a number";
                         goto SendMessage;
                     }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                     {
-                        exportMessage.Error = "Player was not found";
+                        exportMessage.error = "Player was not found";
                         goto SendMessage;
                     }
 
@@ -830,7 +830,7 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(user.Character.CharacterId, itemId);
 
-                    exportMessage.Item = item;
+                    exportMessage.item = item;
 
                 SendMessage:
                     return $"{exportMessage}";

@@ -47,9 +47,9 @@ namespace Curiosity.Core.Client.Managers
             {
                 ExportMessage exportMessage = await EventSystem.Request<ExportMessage>("character:revive:other", serverId);
 
-                if (!exportMessage.Success)
+                if (!exportMessage.success)
                 {
-                    NotificationManager.GetModule().Error(exportMessage.Error);
+                    NotificationManager.GetModule().Error(exportMessage.error);
                 }
             }
         }

@@ -9,7 +9,7 @@
     /// 4 Info
     /// 5 No Style
     /// </summary>
-    public enum Notification
+    public enum eNotification
     {
         NOTIFICATION_CLEAR, // 0 - Remove all notifications
         NOTIFICATION_SUCCESS, // 1 - Successful Notification

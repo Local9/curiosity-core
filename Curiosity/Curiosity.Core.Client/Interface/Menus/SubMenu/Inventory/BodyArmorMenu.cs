@@ -53,7 +53,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
 
             ExportMessage result = await InventoryManager.GetModule().UseItem(data.id);
 
-            if (result.Success)
+            if (result.success)
             {
                 selectedItem.SetRightLabel($"{data.amt - 1}");
                 selectedItem.Enabled = true;
@@ -61,7 +61,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
             }
 
             selectedItem.Enabled = true;
-            NotificationManager.GetModule().Error(result.Error);
+            NotificationManager.GetModule().Error(result.error);
         }
 
         private void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)

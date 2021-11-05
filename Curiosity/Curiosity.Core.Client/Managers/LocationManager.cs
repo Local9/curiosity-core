@@ -251,7 +251,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (markerCooldown)
                 {
-                    Notify.Alert("Cooldown Active, please wait...");
+                    Interface.Notify.Alert("Cooldown Active, please wait...");
                     return;
                 }
 

@@ -93,7 +93,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (Game.Player.WantedLevel > 0)
             {
-                Notify.Info($"Passive Mode: Cannot enable when wanted.");
+                Interface.Notify.Info($"Passive Mode: Cannot enable when wanted.");
                 return;
             }
 
@@ -133,7 +133,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 Instance.DetachTickHandler(PassiveCooldownTick);
                 IsPassiveModeEnabledCooldown = false;
-                Notify.Info($"Passive Mode can now be changed.");
+                Interface.Notify.Info($"Passive Mode can now be changed.");
             }
             else
             {

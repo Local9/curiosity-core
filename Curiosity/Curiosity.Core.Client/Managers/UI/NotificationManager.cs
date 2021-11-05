@@ -13,21 +13,21 @@ namespace Curiosity.Core.Client.Managers
             Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, int, bool, bool, bool>(
                 (notification, message, position, theme, duration, autoClose, dismissible) =>
                 {
-                    SendNui((Notification)notification, message, position, theme, duration, autoClose, dismissible);
+                    SendNui((eNotification)notification, message, position, theme, duration, autoClose, dismissible);
                     return true;
                 }));
 
             EventSystem.Attach("ui:notification", new EventCallback(metadata =>
             {
-                Notification notification = (Notification)metadata.Find<int>(0);
+                eNotification notification = (eNotification)metadata.Find<int>(0);
                 string message = metadata.Find<string>(1);
                 string position = metadata.Find<string>(2);
                 string theme = metadata.Find<string>(3);
 
                 int duration = 10000;
-                if (notification == Notification.NOTIFICATION_ANNOUNCEMENT)
+                if (notification == eNotification.NOTIFICATION_ANNOUNCEMENT)
                 {
-                    notification = Notification.NOTIFICATION_SHOW;
+                    notification = eNotification.NOTIFICATION_SHOW;
                     duration = 30000;
                 }
 
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
 
-        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false)
+        public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")
@@ -56,27 +56,27 @@ namespace Curiosity.Core.Client.Managers
 
         internal void Loader(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_LOADER, message, position);
+            SendNui(eNotification.NOTIFICATION_LOADER, message, position);
         }
 
         internal void Success(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_SUCCESS, message, position);
+            SendNui(eNotification.NOTIFICATION_SUCCESS, message, position);
         }
 
         internal void Warn(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_WARNING, message, position);
+            SendNui(eNotification.NOTIFICATION_WARNING, message, position);
         }
 
         internal void Info(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_INFO, message, position);
+            SendNui(eNotification.NOTIFICATION_INFO, message, position);
         }
 
         internal void Error(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_ERROR, message, position);
+            SendNui(eNotification.NOTIFICATION_ERROR, message, position);
         }
     }
 }

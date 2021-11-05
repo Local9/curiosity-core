@@ -13,34 +13,34 @@ namespace Curiosity.Systems.Library.Models
         }
 
         [DataMember(Name = "success", Order = 0)]
-        public bool Success
+        public bool success
         {
             get
             {
-                return string.IsNullOrEmpty(Error);
+                return string.IsNullOrEmpty(error);
             }
         }
 
         [DataMember(Name = "error", Order = 1, EmitDefaultValue = false)]
-        public string Error;
+        public string error;
 
         [DataMember(Name = "newNumberValue", Order = 2, EmitDefaultValue = false)]
-        public int NewNumberValue;
+        public int newNumberValue;
 
         [DataMember(Name = "skill", Order = 2, EmitDefaultValue = false)]
-        public CharacterSkillExport Skill;
+        public CharacterSkillExport skill;
 
         [DataMember(Name = "value", Order = 2, EmitDefaultValue = false)]
-        public int Value { get; set; }
+        public int value { get; set; }
 
         [DataMember(Name = "item", Order = 2, EmitDefaultValue = false)]
-        public CuriosityShopItem Item { get; set; }
+        public CuriosityShopItem item { get; set; }
 
 
         [DataMember(Name = "networkId", Order = 2, EmitDefaultValue = false)]
-        public int NetworkId { get; set; }
+        public int networkId { get; set; }
 
         [DataMember(Name = "roleId", Order = 2, EmitDefaultValue = false)]
-        public int RoleId { get; set; }
+        public int roleId { get; set; }
     }
 }

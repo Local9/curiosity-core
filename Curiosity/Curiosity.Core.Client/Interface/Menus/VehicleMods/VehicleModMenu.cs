@@ -352,14 +352,14 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
                     ExportMessage exportMessage = await EventSystem.Request<ExportMessage>("garage:save", veh.NetworkId, vi);
 
-                    if (exportMessage.Success)
+                    if (exportMessage.success)
                     {
                         NotificationManager.GetModule().Success($"Vehicle has been saved: $5,000");
                         CloseModMenu();
                     }
                     else
                     {
-                        NotificationManager.GetModule().Error($"{exportMessage.Error}");
+                        NotificationManager.GetModule().Error($"{exportMessage.error}");
                     }
                 };
             }

@@ -5,7 +5,7 @@ namespace Curiosity.Core.Server.Util
 {
     public static class Notify
     {
-        public static void Send(int handle = -1, Notification notification = Notification.NOTIFICATION_INFO, string message = "", string position = "bottom-right", string theme = "toast")
+        public static void Send(int handle = -1, eNotification notification = eNotification.NOTIFICATION_INFO, string message = "", string position = "bottom-right", string theme = "toast")
         {
             if (handle == -1)
             {
