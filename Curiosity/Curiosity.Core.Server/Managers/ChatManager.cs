@@ -57,10 +57,10 @@ namespace Curiosity.Core.Server.Managers
                     switch (channel)
                     {
                         case "universe":
+                        case "global":
                         case "help":
                             EventSystem.GetModule().SendAll("chat:receive", latestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
                             break;
-                        case "global":
                         case "international":
                             playersInSameWorld.ForEach(u =>
                             {
