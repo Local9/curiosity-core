@@ -39,7 +39,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                SetPlayerCullingRadius(player.Handle, 250.0f);
+                SetPlayerCullingRadius(player.Handle, 150.0f);
 
                 return null;
             }));
