@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
@@ -289,7 +290,9 @@ namespace Curiosity.Core.Client.Managers
                 if (victim == attacker) return;
                 if (attacker != Game.Player) return;
 
-                EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId);
+                string causeOfDeath = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+
+                EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId, causeOfDeath);
             }
             catch (Exception ex)
             {
