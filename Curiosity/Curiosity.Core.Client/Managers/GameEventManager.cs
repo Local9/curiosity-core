@@ -290,7 +290,11 @@ namespace Curiosity.Core.Client.Managers
                 if (victim == attacker) return;
                 if (attacker != Game.Player) return;
 
-                string causeOfDeath = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+                int hash = (int)weaponInfoHash;
+
+                string causeOfDeath = "Unknown";
+                if (DeathHash.CauseOfDeath.ContainsKey(hash))
+                    causeOfDeath = DeathHash.CauseOfDeath[(int)weaponInfoHash];
 
                 EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId, causeOfDeath);
             }
