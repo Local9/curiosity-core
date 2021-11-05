@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using CitizenFX.Core;
+using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Environment.Data
 {
-    class DeathHash
+    public class DeathHash : BaseScript
     {
         public static Dictionary<int, string> CauseOfDeath = new Dictionary<int, string>()
         {
@@ -28,7 +29,6 @@ namespace Curiosity.Core.Client.Environment.Data
             { GetHashKey("WEAPON_COMPACTRIFLE"), "Compact Rifle" },
             { GetHashKey("WEAPON_DBSHOTGUN"), "Double Barrel Shotgun" },
             { GetHashKey("WEAPON_DOUBLEACTION"), "Double Action Revolver" },
-            { GetHashKey("WEAPON_FLAREGUN"), "Flare gun" },
             { GetHashKey("WEAPON_GUSENBERG"), "Gusenberg" },
             { GetHashKey("WEAPON_HEAVYPISTOL"), "Heavy Pistol" },
             { GetHashKey("WEAPON_HEAVYSHOTGUN"), "Heavy Shotgun" },
@@ -119,5 +119,10 @@ namespace Curiosity.Core.Client.Environment.Data
             { GetHashKey("WEAPON_EXHAUSTION"), "Exhaustion" },
             { GetHashKey("WEAPON_FALL"), "Falling" },
         };
+
+        public DeathHash()
+        {
+
+        }
     }
 }
