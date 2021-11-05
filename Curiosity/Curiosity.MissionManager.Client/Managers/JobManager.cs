@@ -32,9 +32,13 @@ namespace Curiosity.MissionManager.Client.Managers
 
             EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
             {
+                if (Game.Player.WantedLevel > 0)
+                {
+                    Notify.Info($"You have a wanted level, please clear this first.");
+                    return null;
+                }
+
                 string job = IsOfficer ? "unemployed" : JOB_POLICE;
-                OnJobDutyEvent(true, false, job);
-                await BaseScript.Delay(100);
                 BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job); // for legacy resources
                 return null;
             }));
