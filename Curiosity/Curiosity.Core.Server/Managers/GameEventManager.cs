@@ -32,7 +32,7 @@ namespace Curiosity.Core.Server.Managers
                 Player attacker = PluginManager.PlayersList[attackerHandle];
                 Player victim = PluginManager.PlayersList[victimHandle];
 
-                string msg = $"~o~{curiosityUserVictim.LatestName} ~s~killed by ~y~{curiosityUserKiller.LatestName} with a ~b~{weapon}";
+                string msg = $"~o~{curiosityUserVictim.LatestName} ~s~killed by ~y~{curiosityUserKiller.LatestName} ~s~(~b~{weapon}~s~)";
 
                 DiscordClient.GetModule().SendDiscordPlayerLogMessage($"[Player Kill] {msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "")}");
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
