@@ -91,6 +91,7 @@
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
     <Compile Include="Managers\WorldPlayerManager.cs" />
+    <Compile Include="Managers\GameWorld\WorldPlayerPassiveManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
