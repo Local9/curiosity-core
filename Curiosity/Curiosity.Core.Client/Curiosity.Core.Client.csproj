@@ -67,6 +67,7 @@
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Map.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
+    <Compile Include="Environment\Entities\WorldPlayer.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
