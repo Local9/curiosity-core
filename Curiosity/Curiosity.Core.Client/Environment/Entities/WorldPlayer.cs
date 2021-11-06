@@ -15,7 +15,6 @@ namespace Curiosity.Core.Client.Environment.Entities
         PluginManager PluginManager => PluginManager.Instance;
         PlayerOptionsManager PlayerOptions => PlayerOptionsManager.GetModule();
 
-        public int GameTagHandle;
         public Player Player;
         private Ped PlayerPed => Player.Character;
         public bool IsPassive;
