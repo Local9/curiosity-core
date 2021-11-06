@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Environment.Entities;
@@ -384,6 +385,8 @@ namespace Curiosity.Core.Client.Managers
 
             ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)",
                 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
+
+            Screen.DisplayHelpTextThisFrame($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)");
 
             if (Game.IsControlPressed(0, Control.Context))
             {
