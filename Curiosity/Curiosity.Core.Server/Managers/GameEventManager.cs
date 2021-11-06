@@ -34,7 +34,8 @@ namespace Curiosity.Core.Server.Managers
 
                 string msg = $"~o~{curiosityUserVictim.LatestName} ~s~killed by ~y~{curiosityUserKiller.LatestName} ~s~(~b~{weapon}~s~)";
 
-                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"[Player Kill] {msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "")}");
+                string cleanMessage = msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "");
+                DiscordClient.GetModule().SendDiscordPlayerDeathLogMessage($"[Player Kill] {cleanMessage}");
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;

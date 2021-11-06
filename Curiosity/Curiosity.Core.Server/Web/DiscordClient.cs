@@ -21,7 +21,8 @@ namespace Curiosity.Core.Server.Web
         ServerLog,
         ServerErrors,
         PlayerLog,
-        ServerEventLog
+        ServerEventLog,
+        PlayerDeathLog
     }
 
     public enum DiscordColor : int
@@ -231,6 +232,37 @@ namespace Curiosity.Core.Server.Web
             catch (Exception ex)
             {
                 Logger.Error($"SendDiscordPlayerLogMessage() -> {ex.Message}");
+            }
+
+        }
+
+        public async void SendDiscordPlayerDeathLogMessage(string message)
+        {
+            if (!Webhooks.ContainsKey(WebhookChannel.PlayerDeathLog))
+            {
+                Logger.Warn($"SendDiscordChatMessage() -> Discord Player Death Log Webhook Missing");
+                return;
+            }
+
+            try
+            {
+                DiscordWebhook discordWebhook = Webhooks[WebhookChannel.PlayerDeathLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
+
+                await BaseScript.Delay(0);
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordPlayerDeathLogMessage() -> {ex.Message}");
             }
 
         }
