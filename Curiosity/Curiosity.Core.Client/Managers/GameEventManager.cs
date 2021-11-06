@@ -383,10 +383,10 @@ namespace Curiosity.Core.Client.Managers
             if (!Game.PlayerPed.IsDead)
                 Game.PlayerPed.Kill();
 
-            ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)",
+            ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)~n~Or wait for another player to resurrect you.",
                 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
 
-            Screen.DisplayHelpTextThisFrame($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)");
+            Screen.DisplayHelpTextThisFrame($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press ~INPUT_CONTEXT~ to respawn at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)");
 
             if (Game.IsControlPressed(0, Control.Context))
             {

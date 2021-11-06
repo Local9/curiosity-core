@@ -78,7 +78,7 @@ namespace Curiosity.Core.Client.Interface
 
             BeginTextCommandDisplayText("STRING"); // 2736978246810207435L
             AddTextComponentSubstringPlayerName(text); // 7789129354908300458L
-            EndTextCommandDisplayText(position.X, position.Y);
+            EndTextCommandDisplayText(position.Y, position.X);
         }
 
         public static async void Draw3DTextTimeout(float x, float y, float z, string message, int timeout = 2500, float scaleMod = 20.0f, float distanceToHide = 20f)
