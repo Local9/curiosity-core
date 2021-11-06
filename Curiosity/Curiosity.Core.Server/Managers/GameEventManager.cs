@@ -4,8 +4,6 @@ using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -40,25 +38,6 @@ namespace Curiosity.Core.Server.Managers
                 
                 return null;
             }));
-        }
-
-        [Tick]
-        private async Task OnPlayerKillDecreaseTick()
-        {
-            if (DateTime.Now.Subtract(lastRun).TotalMinutes >= 2)
-            {
-                lastRun = DateTime.Now;
-
-                foreach(KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
-                {
-                    if (kvp.Value.TotalNumberOfPlayerKills > 0)
-                    {
-                        kvp.Value.LowerPlayerKills();
-                    }
-                }
-            }
-
-            await BaseScript.Delay(10000);
         }
     }
 }
