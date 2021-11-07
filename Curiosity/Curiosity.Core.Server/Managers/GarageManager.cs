@@ -217,7 +217,7 @@ namespace Curiosity.Core.Server.Managers
                             if (curiosityUser.PersonalPlane > 0)
                                 EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
 
-                            cullingRange = 5000f;
+                            cullingRange = 1000f;
                             player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
