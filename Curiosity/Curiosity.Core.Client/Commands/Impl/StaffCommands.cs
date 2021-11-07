@@ -101,7 +101,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (arguments[0] == "ped")
                     {
                         Ped[] peds = World.GetAllPeds();
-
+                        int deleted = 0;
                         foreach(Ped ped in peds)
                         {
                             if (ped.Exists())
@@ -109,47 +109,27 @@ namespace Curiosity.Core.Client.Commands.Impl
                                 if (ped.IsDead && !ped.IsPlayer)
                                 {
                                     DeleteEntity(ped);
+                                    deleted++;
                                 }
                             }
                         }
+                        NotificationManager.GetModule().Info($"Processed all dead peds in area.<br />Count: {peds.Length} / Deleted: {deleted}");
                     }
 
                     if (arguments[0] == "prop")
                     {
-                        int objectHandle = -1;
-                        int handle = FindFirstObject(ref objectHandle);
-                        bool finished = false;
-                        while (!finished)
+                        Prop[] props = World.GetAllProps();
+                        int deleted = 0;
+                        foreach (Prop prop in props)
                         {
-                            await BaseScript.Delay(1);
-                            int model = GetEntityModel(objectHandle);
-                            if (config.PropsToDelete().Contains(model))
+                            if (prop.Exists())
                             {
-                                DeleteModel(objectHandle);
+                                DeleteEntity(prop);
+                                deleted++;
                             }
-                            finished = FindNextObject(handle, ref objectHandle);
                         }
-                        EndFindObject(handle);
-                        NotificationManager.GetModule().Info($"Processed all props in area and removed any that matched.");
+                        NotificationManager.GetModule().Info($"Processed all props in area.<br />Count: {props.Length} / Deleted: {deleted}");
                     }
-                }
-            }
-
-            private async void DeleteModel(int entity)
-            {
-                if (DoesEntityExist(entity))
-                {
-                    NetworkRequestControlOfEntity(entity);
-                    while (!NetworkHasControlOfEntity(entity))
-                    {
-                        await BaseScript.Delay(1);
-                    }
-                    DetachEntity(entity, false, false);
-                    SetEntityCollision(entity, false, false);
-                    SetEntityAlpha(entity, 0, 0);
-                    SetEntityAsMissionEntity(entity, true, true);
-                    SetEntityAsNoLongerNeeded(ref entity);
-                    API.DeleteEntity(ref entity);
                 }
             }
 
