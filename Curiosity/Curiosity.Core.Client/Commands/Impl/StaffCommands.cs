@@ -118,14 +118,25 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     if (arguments[0] == "prop")
                     {
+                        bool force = arguments.Count > 1;
                         Prop[] props = World.GetAllProps();
                         int deleted = 0;
                         foreach (Prop prop in props)
                         {
                             if (prop.Exists())
                             {
-                                DeleteEntity(prop);
-                                deleted++;
+                                int model = prop.Model.Hash;
+
+                                if (config.PropsToDelete().Contains(model) && !force)
+                                {
+                                    DeleteEntity(prop);
+                                    deleted++;
+                                }
+                                else if (force)
+                                {
+                                    DeleteEntity(prop);
+                                    deleted++;
+                                }
                             }
                         }
                         NotificationManager.GetModule().Info($"Processed all props in area.<br />Count: {props.Length} / Deleted: {deleted}");
