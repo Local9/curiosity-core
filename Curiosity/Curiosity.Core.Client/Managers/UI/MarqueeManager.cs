@@ -29,6 +29,7 @@ namespace Curiosity.Core.Client.Managers
             string json = new JsonBuilder()
                 .Add("operation", "MARQUEE")
                 .Add("message", message)
+                .Add("position", "top-center")
                 .Add("duration", duration)
                 .Build();
 
