@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
@@ -23,6 +24,9 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.ADMINISTRATOR, Role.COMMUNITY_MANAGER, Role.DEVELOPER, Role.HEAD_ADMIN, Role.HELPER, Role.MODERATOR, Role.PROJECT_MANAGER, Role.SENIOR_ADMIN };
+
+
+        static ConfigurationManager config => ConfigurationManager.GetModule();
 
         #region Weapons
         [CommandInfo(new[] { "weapons" })]
@@ -109,6 +113,43 @@ namespace Curiosity.Core.Client.Commands.Impl
                             }
                         }
                     }
+
+                    if (arguments[0] == "prop")
+                    {
+                        int objectHandle = -1;
+                        int handle = FindFirstObject(ref objectHandle);
+                        bool finished = false;
+                        while (!finished)
+                        {
+                            await BaseScript.Delay(1);
+                            int model = GetEntityModel(objectHandle);
+                            if (config.PropsToDelete().Contains(model))
+                            {
+                                DeleteModel(objectHandle);
+                            }
+                            finished = FindNextObject(handle, ref objectHandle);
+                        }
+                        EndFindObject(handle);
+                        NotificationManager.GetModule().Info($"Processed all props in area and removed any that matched.");
+                    }
+                }
+            }
+
+            private async void DeleteModel(int entity)
+            {
+                if (DoesEntityExist(entity))
+                {
+                    NetworkRequestControlOfEntity(entity);
+                    while (!NetworkHasControlOfEntity(entity))
+                    {
+                        await BaseScript.Delay(1);
+                    }
+                    DetachEntity(entity, false, false);
+                    SetEntityCollision(entity, false, false);
+                    SetEntityAlpha(entity, 0, 0);
+                    SetEntityAsMissionEntity(entity, true, true);
+                    SetEntityAsNoLongerNeeded(ref entity);
+                    API.DeleteEntity(ref entity);
                 }
             }
 

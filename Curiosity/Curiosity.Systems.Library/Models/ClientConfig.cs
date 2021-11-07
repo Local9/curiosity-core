@@ -20,6 +20,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "milos")]
         public Milos Milos;
+
+        [DataMember(Name = "propsToDelete")]
+        public List<string> PropsToDelete;
     }
 
     [DataContract]

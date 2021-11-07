@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
+﻿using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
@@ -9,6 +10,7 @@ namespace Curiosity.Core.Client.Managers
     public class ConfigurationManager : Manager<ConfigurationManager>
     {
         ClientConfig _configCache;
+        List<int> PropsToDeleteHash = new List<int>();
 
         public override void Begin()
         {
@@ -88,6 +90,26 @@ namespace Curiosity.Core.Client.Managers
                 return new List<string>();
 
             return GetConfig().Milos.LosSantosLOD;
+        }
+
+        public List<int> PropsToDelete()
+        {
+            if (GetConfig().PropsToDelete is null)
+                return new List<int>();
+
+            if (PropsToDeleteHash.Count == 0)
+            {
+                foreach(string prop in GetConfig().PropsToDelete)
+                {
+                    int hash = API.GetHashKey(prop);
+                    if (!PropsToDeleteHash.Contains(hash))
+                    {
+                        PropsToDeleteHash.Add(hash);
+                    }
+                }
+            }
+
+            return PropsToDeleteHash;
         }
     }
 }
