@@ -25,6 +25,8 @@ namespace Curiosity.Core.Client.Managers
 
         List<Vehicle> vehiclesToLock = new List<Vehicle>();
 
+        Dictionary<Region, WeatherType> regionalWeather = new Dictionary<Region, WeatherType>();
+
         // Time
         double clientBaseTime = 0;
         double clientTimeOffset = 0;
@@ -112,15 +114,26 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(100);
 
             lastWeather = WeatherType.UNKNOWN; // force changes
+            regionalWeather = await EventSystem.Request<Dictionary<Region, WeatherType>>("weather:sync:regions");
 
             UpdateWeather(true);
             Logger.Debug($"UnlockAndUpdateWeather");
         }
 
+        [TickHandler]
+        private async Task OnWeatherRegionSyncTick()
+        {
+            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 30)
+            {
+                regionalWeather = await EventSystem.Request<Dictionary<Region, WeatherType>>("weather:sync:regions");
+            }
+            await BaseScript.Delay(1000);
+        }
+
         [TickHandler(SessionWait = true)]
         private async Task OnWeatherSyncTick()
         {
-            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 30)
+            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 5)
             {
                 UpdateWeather();
             }
@@ -129,8 +142,6 @@ namespace Curiosity.Core.Client.Managers
 
         public async void UpdateWeather(bool instant = false, SubRegion subRegion = SubRegion.UNKNOWN)
         {
-            await Session.Loading();
-
             if (isWeatherLocked)
             {
                 // Logger.Debug($"Weather State: Locked | {lastWeather}");
@@ -147,8 +158,9 @@ namespace Curiosity.Core.Client.Managers
                 Enum.TryParse(zoneStr, out subRegion);
             }
 
-            CuriosityWeather = await EventSystem.Request<CuriosityWeather>("weather:sync", (int)subRegion);
-            WeatherType weatherType = CuriosityWeather.WeatherType;
+            Region region = MapRegions.RegionBySubRegion[subRegion];
+
+            WeatherType weatherType = regionalWeather[region];
 
             Logger.Debug($"wt: {weatherType}, sr: {subRegion}");
 
@@ -171,7 +183,7 @@ namespace Curiosity.Core.Client.Managers
                 if (interiorId == 0)
                     NotificationManager.GetModule().Info($"<b>Weather Update</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
                 
-                await BaseScript.Delay(15000);
+                await BaseScript.Delay(5000);
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();

@@ -50,6 +50,11 @@ namespace Curiosity.Core.Server.Managers
         {
             WorldInstance = this;
 
+            EventSystem.GetModule().Attach("weather:sync:regions", new EventCallback(metadata =>
+            {
+                return regionWeatherType;
+            }));
+
             EventSystem.GetModule().Attach("weather:sync", new EventCallback(metadata =>
             {
                 SubRegion subRegion = (SubRegion)metadata.Find<int>(0);
