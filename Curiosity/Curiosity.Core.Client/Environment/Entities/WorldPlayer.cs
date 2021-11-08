@@ -23,7 +23,9 @@ namespace Curiosity.Core.Client.Environment.Entities
         NotificationManager notificationManager => NotificationManager.GetModule();
 
         public Player Player;
+        private Player GamePlayer => Game.Player;
         private Ped PlayerPed => Player.Character;
+        private Ped GamePlayerPed => GamePlayer.Character;
 
         public bool IsPassive;
         int isPassiveStateBagHandler = -1;
@@ -33,14 +35,14 @@ namespace Curiosity.Core.Client.Environment.Entities
             Player = player;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             pluginManager.AttachTickHandler(OnPlayerPassive);
-            pluginManager.AttachTickHandler(OnPlayerRevive);
+            // pluginManager.AttachTickHandler(OnPlayerRevive);
             isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
         }
 
         public void Dispose()
         {
             pluginManager.DetachTickHandler(OnPlayerPassive);
-            pluginManager.DetachTickHandler(OnPlayerRevive);
+            // pluginManager.DetachTickHandler(OnPlayerRevive);
             RemoveStateBagChangeHandler(isPassiveStateBagHandler);
 
             bool playerInVehicle = PlayerPed.IsInVehicle();
@@ -54,13 +56,13 @@ namespace Curiosity.Core.Client.Environment.Entities
 
             if (currentPlayerInVehicle)
             {
-                Game.PlayerPed.CurrentVehicle.ResetOpacity();
-                Game.PlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
+                GamePlayerPed.CurrentVehicle.ResetOpacity();
+                GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
             }
 
             if (playerInVehicle && currentPlayerInVehicle)
             {
-                Game.PlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
+                GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
                 PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
             }
         }
@@ -89,13 +91,13 @@ namespace Curiosity.Core.Client.Environment.Entities
 
                         if (currentPlayerInVehicle)
                         {
-                            Game.PlayerPed.CurrentVehicle.Opacity = 200;
-                            Game.PlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, false);
+                            GamePlayerPed.CurrentVehicle.Opacity = 200;
+                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, false);
                         }
 
                         if (playerInVehicle && currentPlayerInVehicle)
                         {
-                            Game.PlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, false);
+                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, false);
                             PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
                         }
                     }
@@ -107,46 +109,51 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
-        private async Task OnPlayerRevive()
+        private async Task OnPlayerRevive() // disabled for now, some performance issues
         {
-            if (!NetworkIsPlayerActive(Player.Handle)) goto WAIT_2500;
-            if (!PlayerPed.Exists()) goto WAIT_2500;
-            if (!PlayerPed.IsDead) goto WAIT_2500;
-            if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) > 2f) goto WAIT_2500;
-
-            if (Game.PlayerPed.IsInVehicle())
+            try
             {
-                Screen.DisplayHelpTextThisFrame($"Cannot be in a vehicle when trying to revive.");
+                if (!NetworkIsPlayerActive(Player.Handle)) goto WAIT_2500;
+                if (!PlayerPed.Exists()) goto WAIT_2500;
+                if (!PlayerPed.IsDead) goto WAIT_2500;
+                if (Vector3.Distance(GamePlayerPed.Position, PlayerPed.Position) > 2f) goto WAIT_2500;
+
+                if (GamePlayerPed.IsInVehicle())
+                {
+                    Screen.DisplayHelpTextThisFrame($"Cannot be in a vehicle when trying to revive.");
+                    goto WAIT_ZERO;
+                }
+
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to attempt revive.");
+
+                if (Game.IsControlJustPressed(0, Control.Context))
+                {
+                    Screen.DisplayHelpTextThisFrame($"Attempting to revive player.");
+                    ExportMessage exportMessage = await eventSystem.Request<ExportMessage>("character:revive:other", Player.ServerId);
+
+                    if (!exportMessage.success)
+                    {
+                        notificationManager.Error(exportMessage.error);
+                    }
+
+                    if (exportMessage.success)
+                    {
+                        Screen.DisplayHelpTextThisFrame($"Player has been revived.");
+                    }
+                    goto WAIT_2500;
+                }
                 goto WAIT_ZERO;
+
+            WAIT_2500:
+                await BaseScript.Delay(2500);
+
+            WAIT_ZERO:
+                await BaseScript.Delay(0);
             }
-
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to attempt revive.");
-
-            if (Game.IsControlJustPressed(0, Control.Context))
+            catch (Exception ex)
             {
-                Screen.DisplayHelpTextThisFrame($"Attempting to revive player.");
-                ExportMessage exportMessage = await eventSystem.Request<ExportMessage>("character:revive:other", Player.ServerId);
-
-                if (!exportMessage.success)
-                {
-                    notificationManager.Error(exportMessage.error);
-                }
-
-                if (exportMessage.success)
-                {
-                    Screen.DisplayHelpTextThisFrame($"Player has been revived.");
-                }
-                goto WAIT_2500;
+                Logger.Debug(ex, $"OnPlayerRevive");
             }
-            goto WAIT_ZERO;
-
-        WAIT_2500:
-            await BaseScript.Delay(2500);
-            return;
-
-        WAIT_ZERO:
-            await BaseScript.Delay(0);
-            return;
         }
     }
 }
