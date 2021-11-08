@@ -64,6 +64,20 @@ namespace Curiosity.Core.Client.Interface
             DrawText(text, scale, new Vector2(x, y), Color.FromArgb(alpha, r, g, b), centered, (Font)font, Alignment.Right);
         }
 
+        public static void DrawTextLegacy(string text, float scale, Vector2 position, Color color, bool centered = false, Font font = Font.ChaletLondon, Alignment alignment = Alignment.Left)
+        {
+            SetTextFont(0);
+            SetTextScale(scale, scale);
+            SetTextColour(color.R, color.G, color.B, color.A);
+            SetTextDropshadow(0, 0, 0, 0, 255);
+            SetTextOutline();
+            SetTextCentre(centered);
+
+            BeginTextCommandDisplayText("STRING");
+            AddTextComponentSubstringPlayerName(text);
+            EndTextCommandDisplayText(position.X, position.Y);
+        }
+
         public static void DrawText(string text, float scale, Vector2 position, Color color, bool centered = false, Font font = Font.ChaletLondon, Alignment alignment = Alignment.Left)
         {
             SetTextFont((int)font); // 7412968334783068634L
