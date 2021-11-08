@@ -209,13 +209,8 @@ namespace Curiosity.Core.Client.Managers
                         }
                         else if (weatherType.Equals(WeatherType.RAIN))
                         {
-                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .75f);
+                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .20f);
                         }
-                        else if (weatherType.Equals(WeatherType.EXTRASUNNY))
-                        {
-                            SetPlaneTurbulenceMultiplier(vehicle.Handle, .25f);
-                        }
-                        else
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, .5f);
                         }
