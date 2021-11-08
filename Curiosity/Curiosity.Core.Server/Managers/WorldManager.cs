@@ -146,10 +146,10 @@ namespace Curiosity.Core.Server.Managers
 
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
                     {
-                        if (Utility.RANDOM.Bool(.25f))
+                        if (Utility.RANDOM.Bool(.15f))
                             weatherTypes.Add(WeatherType.RAIN);
 
-                        if(Utility.RANDOM.Bool(.1f))
+                        if(Utility.RANDOM.Bool(.05f))
                             weatherTypes.Add(WeatherType.THUNDER);
                     }
 
