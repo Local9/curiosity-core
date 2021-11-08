@@ -124,11 +124,17 @@ namespace Curiosity.Core.Client.Environment.Entities
 
             if (Game.IsControlJustPressed(0, Control.Context))
             {
+                Screen.DisplayHelpTextThisFrame($"Attempting to revive player.");
                 ExportMessage exportMessage = await eventSystem.Request<ExportMessage>("character:revive:other", Player.ServerId);
 
                 if (!exportMessage.success)
                 {
                     notificationManager.Error(exportMessage.error);
+                }
+
+                if (exportMessage.success)
+                {
+                    Screen.DisplayHelpTextThisFrame($"Player has been revived.");
                 }
                 goto WAIT_2500;
             }
