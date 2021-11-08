@@ -51,7 +51,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                         }
                     }
 
-                    if (Game.PlayerPed.Position.Distance(player.Player.Character.Position) > 30)
+                    if (Vector3.Distance(Game.PlayerPed.Position, player.Player.Character.Position) > 30)
                     {
                         goto REMOVE_PLAYER;
                     }

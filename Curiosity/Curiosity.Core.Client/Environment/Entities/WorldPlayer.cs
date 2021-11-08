@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
@@ -67,7 +68,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 if (IsPassive || PlayerOptions.IsPassive)
                 {
-                    if (Game.PlayerPed.IsInRangeOf(PlayerPed.Position, 15))
+                    if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15)
                     {
                         bool playerInVehicle = PlayerPed.IsInVehicle();
                         bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
