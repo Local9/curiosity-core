@@ -84,7 +84,11 @@ namespace Curiosity.Core.Client.Managers
                                 {
                                     foreach(Ped p in vehicle.Passengers)
                                     {
-                                        p.Task.WarpOutOfVehicle(vehicle);
+                                        if (p.IsPlayer)
+                                            p.Task.WarpOutOfVehicle(vehicle);
+
+                                        if (!p.IsPlayer)
+                                            p.MarkAsNoLongerNeeded();
                                     }
                                     
                                     while (vehicle.PassengerCount > 0)
