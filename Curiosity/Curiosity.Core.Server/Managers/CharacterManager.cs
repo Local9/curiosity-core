@@ -316,6 +316,10 @@ namespace Curiosity.Core.Server.Managers
 
                 int costOfRespawn = curiosityUser.Character.RespawnCharge();
 
+                long totalSum = curiosityUser.Character.Cash - costOfRespawn;
+                if (totalSum < 0)
+                    costOfRespawn = 0;
+
                 if (curiosityUser.Character.Cash >= costOfRespawn)
                 {
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn * -1);
