@@ -115,6 +115,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 regionWeatherType[keyValuePair.Key] = weatherType;
             }
+            EventSystem.SendAll("world:server:weather:sync", regionWeatherType);
         }
 
         void RandomiseWeather()
