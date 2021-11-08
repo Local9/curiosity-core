@@ -1,16 +1,14 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
-using Curiosity.Core.Client.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.GameWorld
 {
-    public class WorldPlayerPassiveManager : Manager<WorldPlayerPassiveManager>
+    public class WorldPlayerManager : Manager<WorldPlayerManager>
     {
         Dictionary<int, WorldPlayer> players = new Dictionary<int, WorldPlayer>();
 
@@ -20,7 +18,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnWorldPlayerPassiveTick()
+        private async Task OnWorldPlayerManagerTick()
         {
             try
             {

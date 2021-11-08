@@ -90,7 +90,7 @@
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
-    <Compile Include="Managers\GameWorld\WorldPlayerPassiveManager.cs" />
+    <Compile Include="Managers\GameWorld\WorldPlayerManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
