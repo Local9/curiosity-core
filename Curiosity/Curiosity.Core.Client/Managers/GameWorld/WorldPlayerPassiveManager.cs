@@ -43,15 +43,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                         goto REMOVE_PLAYER;
                     }
 
-                    if (player.Player.Character.Exists())
+                    if (!player.Player.Character.Exists())
                     {
-                        if (player.Player.Character.IsDead)
-                        {
-                            goto REMOVE_PLAYER;
-                        }
+                        goto REMOVE_PLAYER;
                     }
 
-                    if (Vector3.Distance(Game.PlayerPed.Position, player.Player.Character.Position) > 30)
+                    if (Vector3.Distance(Game.PlayerPed.Position, player.Player.Character.Position) > 30f)
                     {
                         goto REMOVE_PLAYER;
                     }

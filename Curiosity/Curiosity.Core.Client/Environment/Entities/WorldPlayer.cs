@@ -9,16 +9,22 @@ using System.Threading.Tasks;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
+using CitizenFX.Core.UI;
+using Curiosity.Systems.Library.Models;
+using Curiosity.Core.Client.Events;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
     class WorldPlayer
     {
-        PluginManager PluginManager => PluginManager.Instance;
-        PlayerOptionsManager PlayerOptions => PlayerOptionsManager.GetModule();
+        PluginManager pluginManager => PluginManager.Instance;
+        PlayerOptionsManager playerOptions => PlayerOptionsManager.GetModule();
+        EventSystem eventSystem => EventSystem.GetModule();
+        NotificationManager notificationManager => NotificationManager.GetModule();
 
         public Player Player;
         private Ped PlayerPed => Player.Character;
+
         public bool IsPassive;
         int isPassiveStateBagHandler = -1;
 
@@ -26,13 +32,15 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             Player = player;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
-            PluginManager.AttachTickHandler(OnPlayerPassive);
+            pluginManager.AttachTickHandler(OnPlayerPassive);
+            pluginManager.AttachTickHandler(OnPlayerRevive);
             isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
         }
 
         public void Dispose()
         {
-            PluginManager.DetachTickHandler(OnPlayerPassive);
+            pluginManager.DetachTickHandler(OnPlayerPassive);
+            pluginManager.DetachTickHandler(OnPlayerRevive);
             RemoveStateBagChangeHandler(isPassiveStateBagHandler);
 
             bool playerInVehicle = PlayerPed.IsInVehicle();
@@ -66,9 +74,9 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             try
             {
-                if (IsPassive || PlayerOptions.IsPassive)
+                if (IsPassive || playerOptions.IsPassive)
                 {
-                    if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15)
+                    if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15f)
                     {
                         bool playerInVehicle = PlayerPed.IsInVehicle();
                         bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -97,6 +105,42 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 Logger.Debug(ex, $"OnPlayerPassive");
             }
+        }
+
+        private async Task OnPlayerRevive()
+        {
+            if (!NetworkIsPlayerActive(Player.Handle)) goto WAIT_2500;
+            if (!PlayerPed.Exists()) goto WAIT_2500;
+            if (!PlayerPed.IsDead) goto WAIT_2500;
+            if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) > 2f) goto WAIT_2500;
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Screen.DisplayHelpTextThisFrame($"Cannot be in a vehicle when trying to revive.");
+                goto WAIT_ZERO;
+            }
+
+            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to attempt revive.");
+
+            if (Game.IsControlJustPressed(0, Control.Context))
+            {
+                ExportMessage exportMessage = await eventSystem.Request<ExportMessage>("character:revive:other", Player.ServerId);
+
+                if (!exportMessage.success)
+                {
+                    notificationManager.Error(exportMessage.error);
+                }
+                goto WAIT_2500;
+            }
+            goto WAIT_ZERO;
+
+        WAIT_2500:
+            await BaseScript.Delay(2500);
+            return;
+
+        WAIT_ZERO:
+            await BaseScript.Delay(0);
+            return;
         }
     }
 }
