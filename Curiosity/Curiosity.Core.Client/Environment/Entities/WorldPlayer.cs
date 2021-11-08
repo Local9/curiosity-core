@@ -1,17 +1,13 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Systems.Library.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Extensions;
 using CitizenFX.Core.UI;
-using Curiosity.Systems.Library.Models;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Models;
+using System;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
