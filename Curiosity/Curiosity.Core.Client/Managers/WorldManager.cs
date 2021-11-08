@@ -52,19 +52,25 @@ namespace Curiosity.Core.Client.Managers
                 return null;
             }));
 
+            EventSystem.Attach("world:server:weather:sync", new EventCallback(metadata =>
+            {
+                regionalWeather = metadata.Find<Dictionary<Region, WeatherType>>(0);
+
+                return null;
+            }));
+
             Instance.ExportDictionary.Add("GetWeather", new Func<int>(
                 () =>
                 {
                     return (int)CuriosityWeather.WeatherType;
                 }));
 
-            UpdateWeather();
+            UnlockAndUpdateWeather();
 
             API.SetWeatherOwnedByNetwork(false);
 
             await Session.Loading();
 
-            UnlockAndUpdateWeather();
             UnlockTime();
 
             List<string> vehicles = ConfigurationManager.GetModule().VehiclesToSuppress();
@@ -120,20 +126,20 @@ namespace Curiosity.Core.Client.Managers
             Logger.Debug($"UnlockAndUpdateWeather");
         }
 
-        [TickHandler]
-        private async Task OnWeatherRegionSyncTick()
-        {
-            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 30)
-            {
-                regionalWeather = await EventSystem.Request<Dictionary<Region, WeatherType>>("weather:sync:regions");
-            }
-            await BaseScript.Delay(1000);
-        }
+        //[TickHandler]
+        //private async Task OnWeatherRegionSyncTick()
+        //{
+        //    if (DateTime.UtcNow > lastRunWeatherUpdate)
+        //    {
+        //        regionalWeather = await EventSystem.Request<Dictionary<Region, WeatherType>>("weather:sync:regions");
+        //    }
+        //    await BaseScript.Delay(1000);
+        //}
 
         [TickHandler(SessionWait = true)]
         private async Task OnWeatherSyncTick()
         {
-            if (DateTime.UtcNow.Subtract(lastRunWeatherUpdate).TotalSeconds >= 5)
+            if (DateTime.UtcNow > lastRunWeatherUpdate)
             {
                 UpdateWeather();
             }
@@ -148,7 +154,7 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            lastRunWeatherUpdate = DateTime.UtcNow;
+            lastRunWeatherUpdate = DateTime.UtcNow.AddSeconds(15);
 
             Vector3 pos = Cache.PlayerPed.Position;
 

@@ -165,6 +165,8 @@ namespace Curiosity.Core.Server.Managers
 
             if (numberOfWeatherCyclesProcessed > 7)
                 numberOfWeatherCyclesProcessed = 0;
+
+            EventSystem.SendAll("world:server:weather:sync", regionWeatherType);
         }
 
         [TickHandler]
