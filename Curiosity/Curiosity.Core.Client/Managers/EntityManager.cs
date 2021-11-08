@@ -34,6 +34,22 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
+                Ped[] peds = World.GetAllPeds();
+
+                for (int i = 0; i < peds.Length; i++)
+                {
+                    Ped ped = peds[i];
+
+                    if (ped is not null)
+                    {
+                        if (ped.Exists())
+                        {
+                            if (ped.IsDead)
+                                ped.Delete();
+                        }
+                    }
+                }
+
 
                 return null;
             }));
