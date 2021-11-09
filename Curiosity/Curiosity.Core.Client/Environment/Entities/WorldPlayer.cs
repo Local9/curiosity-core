@@ -23,6 +23,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         private Ped PlayerPed => Player.Character;
         private Ped GamePlayerPed => GamePlayer.Character;
         public int PedHandle;
+        public int PlayerHandle;
 
         public bool Exists => DoesEntityExist(PedHandle);
         public Vector3 Position => GetEntityCoords(PedHandle, false);
@@ -33,6 +34,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         public WorldPlayer(Player player)
         {
             Player = player;
+            PlayerHandle = player.Handle;
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             pluginManager.AttachTickHandler(OnPlayerPassive);
@@ -121,14 +123,13 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
-        private async Task OnPlayerRevive() // disabled for now, some performance issues
+        private async Task OnPlayerRevive()
         {
             try
             {
-                int handle = Player.Handle;
-                if (!NetworkIsPlayerActive(handle)) goto WAIT_2500;
-                if (!DoesEntityExist(handle)) goto WAIT_2500;
-                if (!IsEntityDead(handle)) goto WAIT_2500;
+                if (!NetworkIsPlayerActive(PlayerHandle)) goto WAIT_2500;
+                if (!DoesEntityExist(PedHandle)) goto WAIT_2500;
+                if (!IsEntityDead(PedHandle)) goto WAIT_2500;
                 if (Vector3.Distance(GamePlayerPed.Position, PlayerPed.Position) > 2f) goto WAIT_2500;
 
                 if (GamePlayerPed.IsInVehicle())
@@ -153,7 +154,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                     {
                         Screen.DisplayHelpTextThisFrame($"Player has been revived.");
                     }
-                    goto WAIT_2500;
+                    await BaseScript.Delay(5000);
                 }
                 goto WAIT_ZERO;
 
