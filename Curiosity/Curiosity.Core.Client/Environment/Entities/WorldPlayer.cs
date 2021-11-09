@@ -122,71 +122,75 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle);
                 UpdateBlipString();
+                UpdatePlayerPassiveStates();
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, $"OnPlayerPassive");
+            }
+        }
 
-                bool playerInVehicle = PlayerPed.IsInVehicle();
-                bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
+        private void UpdatePlayerPassiveStates()
+        {
+            bool playerInVehicle = PlayerPed.IsInVehicle();
+            bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
 
-                if (IsPassive || playerOptions.IsPassive)
+            if (IsPassive || playerOptions.IsPassive)
+            {
+                if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15f)
                 {
-                    if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15f)
+                    if (playerInVehicle)
                     {
-                        if (playerInVehicle)
-                        {
-                            PlayerPed.CurrentVehicle.Opacity = 200;
-                            PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, false);
-                        }
-
-                        if (currentPlayerInVehicle)
-                        {
-                            GamePlayerPed.CurrentVehicle.Opacity = 200;
-                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, false);
-                        }
-
-                        if (playerInVehicle && currentPlayerInVehicle)
-                        {
-                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, false);
-                            PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
-                        }
+                        PlayerPed.CurrentVehicle.Opacity = 200;
+                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, false);
                     }
-                    else 
+
+                    if (currentPlayerInVehicle)
                     {
-                        if (playerInVehicle)
-                        {
-                            PlayerPed.CurrentVehicle.ResetOpacity();
-                            PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
-                        }
+                        GamePlayerPed.CurrentVehicle.Opacity = 200;
+                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, false);
+                    }
 
-                        if (currentPlayerInVehicle)
-                        {
-                            GamePlayerPed.CurrentVehicle.ResetOpacity();
-                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
-                        }
-
-                        if (playerInVehicle && currentPlayerInVehicle)
-                        {
-                            GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
-                            PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
-                        }
+                    if (playerInVehicle && currentPlayerInVehicle)
+                    {
+                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, false);
+                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
                     }
                 }
                 else
                 {
-                    if (playerInVehicle && PlayerPed.CurrentVehicle.Opacity < 230)
+                    if (playerInVehicle)
                     {
                         PlayerPed.CurrentVehicle.ResetOpacity();
                         PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
                     }
 
-                    if (currentPlayerInVehicle && GamePlayerPed.CurrentVehicle.Opacity < 230)
+                    if (currentPlayerInVehicle)
                     {
                         GamePlayerPed.CurrentVehicle.ResetOpacity();
                         GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
                     }
+
+                    if (playerInVehicle && currentPlayerInVehicle)
+                    {
+                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
+                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
+                    }
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Logger.Debug(ex, $"OnPlayerPassive");
+                if (playerInVehicle && PlayerPed.CurrentVehicle.Opacity < 230)
+                {
+                    PlayerPed.CurrentVehicle.ResetOpacity();
+                    PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
+                }
+
+                if (currentPlayerInVehicle && GamePlayerPed.CurrentVehicle.Opacity < 230)
+                {
+                    GamePlayerPed.CurrentVehicle.ResetOpacity();
+                    GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
+                }
             }
         }
 
