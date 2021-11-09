@@ -239,7 +239,7 @@ namespace Curiosity.Core.Server.Managers
                             player.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
-                    API.SetEntityDistanceCullingRadius(entityHandle, cullingRange);
+                    //API.SetEntityDistanceCullingRadius(entityHandle, cullingRange);
 
                     vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
                     vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);

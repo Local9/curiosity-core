@@ -234,10 +234,10 @@ namespace Curiosity.Core.Client.Managers
 
             currentVehicle = veh;
 
-            if(currentVehicle.Vehicle.Model.IsPlane)
-            {
-                EventSystem.Send("culling:set", 2000f);
-            }
+            //if(currentVehicle.Vehicle.Model.IsPlane)
+            //{
+            //    EventSystem.Send("culling:set", 2000f);
+            //}
 
             bool setup = false;
 
@@ -427,7 +427,7 @@ namespace Curiosity.Core.Client.Managers
                 IsNearFuelPump = false;
                 IsRefueling = false;
 
-                EventSystem.Send("culling:reset");
+                //EventSystem.Send("culling:reset");
 
                 List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
 
