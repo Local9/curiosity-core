@@ -8,6 +8,8 @@ namespace Curiosity.Core.Client.Managers
 {
     public class WorldPlayerReviveManager : Manager<WorldPlayerReviveManager>
     {
+        bool processing = false;
+
         public override void Begin()
         {
 
@@ -41,22 +43,30 @@ namespace Curiosity.Core.Client.Managers
             if (!playerPed.IsDead) return;
             if (!playerPed.IsInRangeOf(playerPosition, 2f)) return;
 
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to attempt revive.");
+            if (!processing)
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to attempt revive.");
 
             if (Game.IsControlJustPressed(0, Control.Context))
             {
                 Screen.DisplayHelpTextThisFrame($"Attempting to revive player.");
+                if (processing) return;
+                processing = true;
+
                 ExportMessage exportMessage = await EventSystem.Request<ExportMessage>("character:revive:other", serverId);
 
                 if (!exportMessage.success)
                 {
                     NotificationManager.GetModule().Error(exportMessage.error);
+                    await BaseScript.Delay(1000);
                 }
 
                 if (exportMessage.success)
                 {
                     Screen.DisplayHelpTextThisFrame($"Player has been revived.");
+                    await BaseScript.Delay(1000);
                 }
+
+                processing = false;
             }
         }
     }

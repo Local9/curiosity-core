@@ -22,6 +22,10 @@ namespace Curiosity.Core.Client.Environment.Entities
         private Player GamePlayer => Game.Player;
         private Ped PlayerPed => Player.Character;
         private Ped GamePlayerPed => GamePlayer.Character;
+        public int PedHandle;
+
+        public bool Exists => DoesEntityExist(PedHandle);
+        public Vector3 Position => GetEntityCoords(PedHandle, false);
 
         public bool IsPassive;
         int isPassiveStateBagHandler = -1;
@@ -29,6 +33,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         public WorldPlayer(Player player)
         {
             Player = player;
+            PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             pluginManager.AttachTickHandler(OnPlayerPassive);
             // pluginManager.AttachTickHandler(OnPlayerRevive);
@@ -37,29 +42,36 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         public void Dispose()
         {
-            pluginManager.DetachTickHandler(OnPlayerPassive);
-            // pluginManager.DetachTickHandler(OnPlayerRevive);
-            RemoveStateBagChangeHandler(isPassiveStateBagHandler);
-
-            bool playerInVehicle = PlayerPed.IsInVehicle();
-            bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
-
-            if (playerInVehicle)
+            try
             {
-                PlayerPed.CurrentVehicle.ResetOpacity();
-                PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
+                pluginManager.DetachTickHandler(OnPlayerPassive);
+                // pluginManager.DetachTickHandler(OnPlayerRevive);
+                RemoveStateBagChangeHandler(isPassiveStateBagHandler);
+
+                bool playerInVehicle = PlayerPed.IsInVehicle();
+                bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
+
+                if (playerInVehicle)
+                {
+                    PlayerPed.CurrentVehicle.ResetOpacity();
+                    PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
+                }
+
+                if (currentPlayerInVehicle)
+                {
+                    GamePlayerPed.CurrentVehicle.ResetOpacity();
+                    GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
+                }
+
+                if (playerInVehicle && currentPlayerInVehicle)
+                {
+                    GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
+                    PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
+                }
             }
-
-            if (currentPlayerInVehicle)
+            catch(Exception ex)
             {
-                GamePlayerPed.CurrentVehicle.ResetOpacity();
-                GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
-            }
-
-            if (playerInVehicle && currentPlayerInVehicle)
-            {
-                GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
-                PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
+                Logger.Debug(ex, $"Dispose");
             }
         }
 
@@ -109,9 +121,10 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             try
             {
-                if (!NetworkIsPlayerActive(Player.Handle)) goto WAIT_2500;
-                if (!PlayerPed.Exists()) goto WAIT_2500;
-                if (!PlayerPed.IsDead) goto WAIT_2500;
+                int handle = Player.Handle;
+                if (!NetworkIsPlayerActive(handle)) goto WAIT_2500;
+                if (!DoesEntityExist(handle)) goto WAIT_2500;
+                if (!IsEntityDead(handle)) goto WAIT_2500;
                 if (Vector3.Distance(GamePlayerPed.Position, PlayerPed.Position) > 2f) goto WAIT_2500;
 
                 if (GamePlayerPed.IsInVehicle())
