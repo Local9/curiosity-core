@@ -36,8 +36,10 @@ namespace Curiosity.Core.Client.Environment.Entities
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             pluginManager.AttachTickHandler(OnPlayerPassive);
-            // pluginManager.AttachTickHandler(OnPlayerRevive);
+            pluginManager.AttachTickHandler(OnPlayerRevive);
             isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
+
+            Logger.Debug($"Player '{Player.Name}' Created");
         }
 
         public void Dispose()
@@ -45,7 +47,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             try
             {
                 pluginManager.DetachTickHandler(OnPlayerPassive);
-                // pluginManager.DetachTickHandler(OnPlayerRevive);
+                pluginManager.DetachTickHandler(OnPlayerRevive);
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
@@ -68,6 +70,8 @@ namespace Curiosity.Core.Client.Environment.Entities
                     GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
                     PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
                 }
+
+                Logger.Debug($"Player '{Player.Name}' Disposed");
             }
             catch(Exception ex)
             {

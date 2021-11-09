@@ -26,6 +26,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 {
                     if (player == Game.Player) continue;
 
+                    if (Vector3.Distance(Game.PlayerPed.Position, player.Character.Position) > 30f) continue;
+
                     if (!players.ContainsKey(player.ServerId))
                     {
                         players.Add(player.ServerId, new WorldPlayer(player));
