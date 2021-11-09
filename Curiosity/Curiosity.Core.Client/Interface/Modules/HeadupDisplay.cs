@@ -15,7 +15,7 @@ namespace Curiosity.Core.Client.Interface.Modules
         private async Task OnHideRadarOutOfVehicleTick()
         {
             bool isPlayerInVehicle = API.IsPedInAnyVehicle(API.PlayerPedId(), true);
-            // DisplayRadar(isPlayerInVehicle);
+            DisplayRadar(isPlayerInVehicle);
         }
 
         public MinimapAnchor GetMinimapAnchor()
