@@ -26,8 +26,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 {
                     if (player == Game.Player) continue;
 
-                    if (Vector3.Distance(Game.PlayerPed.Position, player.Character.Position) > 30f) continue;
-
                     if (!players.ContainsKey(player.ServerId))
                     {
                         players.Add(player.ServerId, new WorldPlayer(player));
@@ -50,12 +48,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 int serverHandle = keyValuePair.Key;
                 WorldPlayer player = keyValuePair.Value;
 
-                if (!player.Exists)
-                {
-                    goto REMOVE_PLAYER;
-                }
+                if (!player.IsReady) continue;
 
-                if (Vector3.Distance(Game.PlayerPed.Position, player.Position) > 30f)
+                if (!player.Exists)
                 {
                     goto REMOVE_PLAYER;
                 }

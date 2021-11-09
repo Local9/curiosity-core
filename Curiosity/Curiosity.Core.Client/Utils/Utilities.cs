@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Exceptions;
 using System;
 using System.Threading.Tasks;
+using Curiosity.Core.Client.Environment.Data;
 
 namespace Curiosity.Core.Client.Utils
 {
@@ -29,6 +31,34 @@ namespace Curiosity.Core.Client.Utils
             if (!model.IsValid) throw new CitizenFxException("Model is invalid, please open a support ticket.");
 
             return model;
+        }
+
+        public static void SetCorrectBlipSprite(int ped, int blip)
+        {
+            if (IsPedInAnyVehicle(ped, false))
+            {
+                ShowHeadingIndicatorOnBlip(blip, false);
+
+                int vehicle = GetVehiclePedIsIn(ped, false);
+                int blipSprite = BlipInfo.GetBlipSpriteForVehicle(vehicle);
+                if (GetBlipSprite(blip) != blipSprite)
+                {
+                    SetBlipSprite(blip, blipSprite);
+                }
+            }
+            else
+            {
+                if (IsEntityDead(ped))
+                {
+                    ShowHeadingIndicatorOnBlip(blip, false);
+                    SetBlipSprite(blip, (int)BlipSprite.Dead);
+                }
+                else
+                {
+                    ShowHeadingIndicatorOnBlip(blip, true);
+                    SetBlipSprite(blip, 1);
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -117,95 +118,93 @@ namespace Curiosity.Core.Client.Managers.UI
             gamerTags.Remove(player);
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnWorldPlayerBlips()
-        {
-            foreach (Player player in Instance.PlayerList)
-            {
-                if (Game.Player == player) continue;
-                Blip blip;
+        //[TickHandler(SessionWait = true)]
+        //private async Task OnWorldPlayerBlips()
+        //{
+        //    foreach (Player player in Instance.PlayerList)
+        //    {
+        //        if (Game.Player == player) continue;
+        //        Blip blip;
 
-                if (player.Character.AttachedBlip == null)
-                {
-                    blip = player.Character.AttachBlip();
-                    blip.Sprite = BlipSprite.Standard;
-                    blip.Scale = 0.85f;
+        //        if (player.Character.AttachedBlip == null)
+        //        {
+        //            blip = player.Character.AttachBlip();
+        //            blip.Sprite = BlipSprite.Standard;
+        //            blip.Scale = 0.85f;
 
-                    string key = $"playerBlip{player.ServerId}";
-                    AddTextEntry(key, player.Name);
+        //            string key = $"playerBlip{player.ServerId}";
+        //            AddTextEntry(key, player.Name);
 
-                    AddTextComponentSubstringBlipName(blip.Handle);
-                    BeginTextCommandSetBlipName(key);
-                    EndTextCommandSetBlipName(blip.Handle);
+        //            AddTextComponentSubstringBlipName(blip.Handle);
+        //            BeginTextCommandSetBlipName(key);
+        //            EndTextCommandSetBlipName(blip.Handle);
 
-                    SetBlipCategory(blip.Handle, 7);
-                    SetBlipPriority(blip.Handle, 11);
-                    ShowHeadingIndicatorOnBlip(blip.Handle, true);
-                    SetBlipNameToPlayerName(blip.Handle, player.Handle);
+        //            SetBlipCategory(blip.Handle, 7);
+        //            SetBlipPriority(blip.Handle, 11);
+        //            ShowHeadingIndicatorOnBlip(blip.Handle, true);
+        //            SetBlipNameToPlayerName(blip.Handle, player.Handle);
 
-                    blip.Name = player.Name;
-                }
-                else
-                {
-                    blip = player.Character.AttachedBlip;
+        //            Utilities.SetCorrectBlipSprite(player.Character.Handle, blip.Handle);
+        //        }
+        //        else
+        //        {
+        //            blip = player.Character.AttachedBlip;
 
-                    string key = $"playerBlip{player.ServerId}";
-                    AddTextEntry(key, player.Name);
+        //            string key = $"playerBlip{player.ServerId}";
+        //            AddTextEntry(key, player.Name);
 
-                    AddTextComponentSubstringBlipName(blip.Handle);
-                    BeginTextCommandSetBlipName(key);
-                    EndTextCommandSetBlipName(blip.Handle);
+        //            AddTextComponentSubstringBlipName(blip.Handle);
+        //            BeginTextCommandSetBlipName(key);
+        //            EndTextCommandSetBlipName(blip.Handle);
 
-                    SetBlipCategory(blip.Handle, 7);
-                    SetBlipPriority(blip.Handle, 11);
-                    ShowHeadingIndicatorOnBlip(blip.Handle, true);
-                    SetBlipNameToPlayerName(blip.Handle, player.Handle);
+        //            SetBlipCategory(blip.Handle, 7);
+        //            SetBlipPriority(blip.Handle, 11);
+        //            ShowHeadingIndicatorOnBlip(blip.Handle, true);
+        //            SetBlipNameToPlayerName(blip.Handle, player.Handle);
 
-                    blip.Name = player.Name;
+        //            if (player.Character.IsDead)
+        //            {
+        //                blip.Sprite = BlipSprite.Dead;
+        //                ShowHeadingIndicatorOnBlip(blip.Handle, false);
+        //            }
+        //            else
+        //            {
+        //                Utilities.SetCorrectBlipSprite(player.Character.Handle, blip.Handle);
+        //                ShowHeadingIndicatorOnBlip(blip.Handle, true);
+        //            }
 
-                    if (player.Character.IsDead)
-                    {
-                        blip.Sprite = BlipSprite.Dead;
-                        ShowHeadingIndicatorOnBlip(blip.Handle, false);
-                    }
-                    else
-                    {
-                        blip.Sprite = BlipSprite.Standard;
-                        ShowHeadingIndicatorOnBlip(blip.Handle, true);
-                    }
+        //            if (Game.IsPaused)
+        //            {
+        //                blip.Alpha = 255;
+        //            }
+        //            else
+        //            {
+        //                Vector3 charPos = player.Character.Position;
+        //                Vector3 playerPos = Cache.PlayerPed.Position;
 
-                    if (Game.IsPaused)
-                    {
-                        blip.Alpha = 255;
-                    }
-                    else
-                    {
-                        Vector3 charPos = player.Character.Position;
-                        Vector3 playerPos = Cache.PlayerPed.Position;
+        //                double distance = (Math.Floor(Math.Abs(Math.Sqrt(
+        //                    (charPos.X - playerPos.X) *
+        //                    (charPos.X - playerPos.X) +
+        //                    (charPos.Y - playerPos.Y) *
+        //                    (charPos.Y - playerPos.Y))) / -1)) + 900;
 
-                        double distance = (Math.Floor(Math.Abs(Math.Sqrt(
-                            (charPos.X - playerPos.X) *
-                            (charPos.X - playerPos.X) +
-                            (charPos.Y - playerPos.Y) *
-                            (charPos.Y - playerPos.Y))) / -1)) + 900;
+        //                if (distance < 0)
+        //                    distance = 0;
 
-                        if (distance < 0)
-                            distance = 0;
+        //                if (distance > 255)
+        //                    distance = 255;
 
-                        if (distance > 255)
-                            distance = 255;
-
-                        if (player.Character.IsVisible)
-                        {
-                            blip.Alpha = (int)distance;
-                        }
-                        else
-                        {
-                            blip.Alpha = 0;
-                        }
-                    }
-                }
-            }
-        }
+        //                if (player.Character.IsVisible)
+        //                {
+        //                    blip.Alpha = (int)distance;
+        //                }
+        //                else
+        //                {
+        //                    blip.Alpha = 0;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
