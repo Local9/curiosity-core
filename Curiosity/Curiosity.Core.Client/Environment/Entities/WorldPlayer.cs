@@ -56,12 +56,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
 
-                string key = $"PB_{player.Name}";
-                AddTextEntry(key, player.Name);
-
-                BeginTextCommandSetBlipName(key);
-                AddTextComponentSubstringPlayerName(key);
-                EndTextCommandSetBlipName(_blipHandle);
+                UpdateBlipString();
             }
 
             Logger.Debug($"Player '{Player.Name}' Created");
@@ -105,6 +100,16 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
+        public void UpdateBlipString()
+        {
+            string key = $"PB_{Player.Name}";
+            AddTextEntry(key, Player.Name);
+
+            BeginTextCommandSetBlipName(key);
+            AddTextComponentSubstringPlayerName(key);
+            EndTextCommandSetBlipName(_blipHandle);
+        }
+
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
         {
             IsPassive = isPassive;
@@ -116,6 +121,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             try
             {
                 Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle);
+                UpdateBlipString();
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
