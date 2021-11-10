@@ -1,7 +1,7 @@
 {
   "jobs": [
     {
-      "label": "Police Officer",
+      "label": "Police Officer (buggy)",
       "jobEvent": "job:police:duty",
       "legacyEvent": false
     }
