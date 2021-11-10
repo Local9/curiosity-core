@@ -93,7 +93,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 Logger.Debug("delete vehicle");
 
-                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+                Vehicle vehicle = Cache.PersonalVehicle is not null ? Cache.PersonalVehicle.Vehicle : Game.PlayerPed.CurrentVehicle;
 
                 if (Cache.PlayerPed.IsInVehicle())
                     vehicle = Cache.PlayerPed.CurrentVehicle;
