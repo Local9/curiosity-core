@@ -92,6 +92,14 @@ namespace Curiosity.Core.Client.Managers
             return GetConfig().Milos.LosSantosLOD;
         }
 
+        public List<string> EletricVehicles()
+        {
+            if (GetConfig().EletricVehicles is null)
+                return new List<string>();
+
+            return GetConfig().EletricVehicles;
+        }
+
         public List<int> PropsToDelete()
         {
             if (GetConfig().PropsToDelete is null)
