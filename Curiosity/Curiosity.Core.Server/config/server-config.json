@@ -1,0 +1,22 @@
+{
+  "tips": [
+    {
+      "header": "<span class=\"text-yellow-300 uppercase\">Welcome to LifeV</span>",
+      "content": "<span class=\"text-xl text-red-300\"><b>We do not tolerate any form of racism​ or hate speech, users found doing so will be banned.</b></span><ul><li><span class=\"text-green-300\">RESPECT ALL</span> members of the server, this is a community that will welcome you.</li><li><span class=\"text-red-300\">DO NOT</span> Force people to RP. It is not an RP Server it is a PVE simulator server.​</li><li><span class=\"text-red-300\">DO NOT</span> Troll other players​, excessive harassment of other players will be dealt with via a kick or ban.</li><li><span class=\"text-red-300\">DO NOT</span> Spam chat​ or voice, doing so will get you kicked or banned.</li><li><span class=\"text-red-300\">DO NOT</span> Drive recklessly or speed around the Police stations, Fire Stations and Hospitals​.</li><li><span class=\"text-blue-300\">USE ONLY</span> English in the Global chat, please use the International Channel.</li><li><span class=\"text-blue-300\">USE</span> Common sense​, and don't make us add another rule.</li></ul>"
+    },
+    {
+      "header": "<span class=\"text-yellow-300\">How to get started</span>",
+      "content": ""
+    },
+    {
+      "header": "<span class=\"text-yellow-300\">Come join the fun</span>",
+      "content": ""
+    }
+  ],
+  "loadingImages": [
+    "load1",
+    "load2",
+    "load3",
+    "load4"
+  ]
+}
