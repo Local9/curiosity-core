@@ -12,11 +12,11 @@ namespace Curiosity.Core.Server.Managers
     {
         private const string JOB_POLICE_DUTY = "job:police:duty";
         private const string JOB_POLICE_ARREST = "job:police:arrest";
-        private ConfigManager config;
+        private LocationsConfigManager config;
 
         public override void Begin()
         {
-            config = ConfigManager.GetModule();
+            config = LocationsConfigManager.GetModule();
 
             EventSystem.GetModule().Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
             {

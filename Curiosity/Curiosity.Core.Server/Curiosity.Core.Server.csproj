@@ -90,7 +90,7 @@
     <Compile Include="Managers\BucketManager.cs" />
     <Compile Include="Managers\CasinoManager.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
-    <Compile Include="Managers\ConfigManager.cs" />
+    <Compile Include="Managers\LocationsConfigManager.cs" />
     <Compile Include="Managers\DeveloperManager.cs" />
     <Compile Include="Managers\EntityDamageManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />

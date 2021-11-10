@@ -147,7 +147,7 @@ namespace Curiosity.Core.Server.Managers
                     // get spawn loacation if not a car
                     if (!isVehicle)
                     {
-                        List<Position> spawnPositions = ConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, SPAWN_DISTANCE_CHECK);
+                        List<Position> spawnPositions = LocationsConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, SPAWN_DISTANCE_CHECK);
 
                         for (int i = 0; i < spawnPositions.Count; i++)
                         {

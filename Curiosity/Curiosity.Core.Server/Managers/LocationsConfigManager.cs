@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Curiosity.Core.Server.Managers
 {
-    public class ConfigManager : Manager<ConfigManager>
+    public class LocationsConfigManager : Manager<LocationsConfigManager>
     {
         public LocationConfig configCache = new();
         // public Dictionary<string, List<Position>> eventCache = new();

@@ -20,7 +20,7 @@ namespace Curiosity.Core.Server.Managers
         const int VEHICLE_TOW_REP = 1000;
         const int VEHICLE_TOW_COST = 1000;
 
-        private ConfigManager config;
+        private LocationsConfigManager config;
 
         // Move these to a config file
         List<string> ALLOWED_TRAILERS = new List<string>()
@@ -48,7 +48,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            config = ConfigManager.GetModule();
+            config = LocationsConfigManager.GetModule();
 
             foreach (string trailer in ALLOWED_TRAILERS)
             {
