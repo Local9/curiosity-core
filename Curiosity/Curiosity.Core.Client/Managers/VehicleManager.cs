@@ -55,6 +55,8 @@ namespace Curiosity.Core.Client.Managers
         private bool IsNearFuelPump = false;
         private bool IsAwaitingServerResponse = false;
 
+        const float ELECTRIC_VEHICLE_FUEL_MODIFIER = .5f;
+
         List<ObjectHash> FuelPumpModelHashes = new List<ObjectHash>()
         {
             ObjectHash.prop_gas_pump_1a,
@@ -71,17 +73,10 @@ namespace Curiosity.Core.Client.Managers
             // spawn
             // delete
 
-            int veh1 = AddVehicle("p90d", .5f);
-            if (veh1 > 0)
-                EletricVehicles.Add((VehicleHash)veh1);
-
-            int veh2 = AddVehicle("teslasemi", .5f);
-            if (veh2 > 0)
-                EletricVehicles.Add((VehicleHash)veh2);
-
-            int veh3 = AddVehicle("tezeract", .5f);
-            if (veh3 > 0)
-                EletricVehicles.Add((VehicleHash)veh3);
+            foreach(string vehicle in ConfigurationManager.GetModule().EletricVehicles())
+            {
+                AddVehicle(vehicle, ELECTRIC_VEHICLE_FUEL_MODIFIER);
+            }
 
             int stationHash = API.GetHashKey("teslasupercharger");
             if (stationHash > 0)
@@ -221,7 +216,12 @@ namespace Curiosity.Core.Client.Managers
 
             if (handle > 0)
             {
-                FuelConsumptionModelMultiplier.Add((VehicleHash)handle, fuelMultiplier);
+                VehicleHash vehicleHash = (VehicleHash)handle;
+
+                FuelConsumptionModelMultiplier.Add(vehicleHash, fuelMultiplier);
+                if (!EletricVehicles.Contains(vehicleHash))
+                    EletricVehicles.Add(vehicleHash);
+
                 return handle;
             }
             return 0;
