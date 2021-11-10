@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Exceptions;
@@ -702,17 +703,43 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (waypoint == null) return;
 
-                var position = waypoint.Position;
+                await ScreenInterface.FadeOut();
+                player.Entity.CitizenPed.IsInvincible = true;
+                var wp = waypoint.Position;
 
-                position.Z = World.GetGroundHeight(position) + 2;
+                Vector3 position = new Vector3(wp.X, wp.Y, wp.Z);
+
+                float ground = 0f;
+                if (API.GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref ground, false))
+                    position.Z = ground;
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     API.SetPedCoordsKeepVehicle(Game.PlayerPed.Handle, position.X, position.Y, position.Z);
-                    return;
+                    goto FADEIN;
                 }
 
                 await player.Entity.Teleport(position.ToPosition());
+
+                await BaseScript.Delay(2000);
+
+                ground = 0f;
+                position.Z = World.GetGroundHeight(new Vector2(position.X, position.Y));
+
+                if (API.GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref ground, false))
+                    position.Z = ground;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    API.SetPedCoordsKeepVehicle(Game.PlayerPed.Handle, position.X, position.Y, position.Z);
+                    goto FADEIN;
+                }
+
+                await player.Entity.Teleport(position.ToPosition());
+
+            FADEIN:
+                player.Entity.CitizenPed.IsInvincible = false;
+                await ScreenInterface.FadeIn();
             }
         }
 
