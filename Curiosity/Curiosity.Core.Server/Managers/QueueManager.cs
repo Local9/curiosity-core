@@ -135,6 +135,8 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                 player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
 
+                deferrals.handover(new { config = ServerConfigManager.GetModule().GetLoadingConfig() });
+
                 string license = player.Identifiers["license"];
 
                 while (!PluginManager.ServerReady)

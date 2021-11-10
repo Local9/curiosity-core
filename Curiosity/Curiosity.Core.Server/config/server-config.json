@@ -5,12 +5,13 @@
       "content": "<span class=\"text-xl text-red-300\"><b>We do not tolerate any form of racism​ or hate speech, users found doing so will be banned.</b></span><ul><li><span class=\"text-green-300\">RESPECT ALL</span> members of the server, this is a community that will welcome you.</li><li><span class=\"text-red-300\">DO NOT</span> Force people to RP. It is not an RP Server it is a PVE simulator server.​</li><li><span class=\"text-red-300\">DO NOT</span> Troll other players​, excessive harassment of other players will be dealt with via a kick or ban.</li><li><span class=\"text-red-300\">DO NOT</span> Spam chat​ or voice, doing so will get you kicked or banned.</li><li><span class=\"text-red-300\">DO NOT</span> Drive recklessly or speed around the Police stations, Fire Stations and Hospitals​.</li><li><span class=\"text-blue-300\">USE ONLY</span> English in the Global chat, please use the International Channel.</li><li><span class=\"text-blue-300\">USE</span> Common sense​, and don't make us add another rule.</li></ul>"
     },
     {
-      "header": "<span class=\"text-yellow-300\">How to get started</span>",
-      "content": ""
+      "header": "<span class=\"text-yellow-300 uppercase\">How to get started</span>",
+      "content": "After creating your character, here are some helpful tips;<ul><li>All vehicles in the world are <span class=\"text-red-300\">locked</span>, you will not be able to access them. You can buy a <span class=\"text-blue-300\">free vehicle</span> from the store to get started.</li><li>Pressing the [<span class=\"text-blue-300\">F5</span>] key will open a menu which will give you access to the <span class=\"text-blue-300\">jobs</span> on the server.</li><li>Pressing the [<span class=\"text-blue-300\">HOME</span>] key will open a the <span class=\"text-blue-300\">PDA</span>, here you'll find the <span class=\"text-blue-300\">store for guns and cars</span>.</li><li>Pressing the [<span class=\"text-blue-300\">M</span>] key will open a the <span class=\"text-blue-300\">interactive menu</span>, this will allow you to change your style and some additional options.</li><li>You can change any of the binds via the Key Bindings in the games settings, under \"<span class=\"text-blue-300\">FiveM</span>\".</ul>"
+
     },
     {
-      "header": "<span class=\"text-yellow-300\">Come join the fun</span>",
-      "content": ""
+      "header": "<span class=\"text-yellow-300 uppercase\">Current Activities</span>",
+      "content": "<ul><li>Trucking</li><li>Piloting</li><li>Drifting</li><li>Drug Dealing</li><li>Fishing</li><li>Fire Fighting</li><li>EMT</li><li>Police (<span class=\"text-blue-300\">has issues</span>)</li></ul>"
     }
   ],
   "loadingImages": [

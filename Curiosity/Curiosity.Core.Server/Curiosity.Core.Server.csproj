@@ -103,6 +103,7 @@
     <Compile Include="Managers\OneSyncEventManager.cs" />
     <Compile Include="Managers\ParticleManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
+    <Compile Include="Managers\ServerConfigManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\SpecialDayManager.cs" />
     <Compile Include="Managers\ThirdPartyManager.cs" />
