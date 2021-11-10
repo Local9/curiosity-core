@@ -6,6 +6,26 @@
       "legacyEvent": false
     }
   ],
+  "eletricVehicles": [
+    "imorgon",
+    "p90d",
+    "teslasemi",
+    "tezeract",
+    "neon",
+    "raiden",
+    "cyclone",
+    "caddy3",
+    "voltic2",
+    "khamelion",
+    "dilettante2",
+    "caddy2",
+    "forklift",
+    "caddy",
+    "airtug",
+    "voltic",
+    "surge",
+    "dilettante"
+  ],
   "suppressedVehicles": [
     "Lazer",
     "Titan",
