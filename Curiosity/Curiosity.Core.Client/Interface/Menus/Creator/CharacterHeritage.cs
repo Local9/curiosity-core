@@ -285,7 +285,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
 
             Cache.Character.Heritage.UpdateBlendData(FatherId, MotherId, ResembalanceBlend, SkinToneBlend);
-            API.SetPedHeadBlendData(Cache.Entity.Id, FatherId, MotherId, 0, FatherId, MotherId, 0, ResembalanceBlend, SkinToneBlend, 0f, false);
+            API.SetPedHeadBlendData(Cache.Entity.Id, MotherId, FatherId, 0, MotherId, FatherId, 0, ResembalanceBlend, SkinToneBlend, 0f, false);
         }
     }
 }
