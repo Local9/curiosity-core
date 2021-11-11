@@ -150,6 +150,7 @@ namespace Curiosity.Core.Server.Managers
                 stringBuilder.Append($"Stack:\n{metadata.Find<string>(1)}");
 
                 DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
+                await BaseScript.Delay(0);
 
                 return null;
             }));
@@ -344,6 +345,7 @@ namespace Curiosity.Core.Server.Managers
             stringBuilder.Append($"Stack:\n{stack}");
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
+            await BaseScript.Delay(0);
         }
 
         private async Task<bool> SetUserJobText(int playerServerId, string jobText)

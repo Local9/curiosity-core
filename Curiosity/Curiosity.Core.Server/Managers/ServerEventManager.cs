@@ -14,7 +14,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.EventRegistry["giveWeaponEvent"] += new Action<int, int, bool, int, bool>(OnGiveWeaponEvent);
         }
 
-        private void OnGiveWeaponEvent(int source, int weaponType, bool unk1, int ammo, bool givenAsPickup)
+        private async void OnGiveWeaponEvent(int source, int weaponType, bool unk1, int ammo, bool givenAsPickup)
         {
             API.CancelEvent();
 
@@ -35,9 +35,10 @@ namespace Curiosity.Core.Server.Managers
             }
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
+            await BaseScript.Delay(0);
         }
 
-        private void OnClearPedTasksEvent(int source, bool immediately)
+        private async void OnClearPedTasksEvent(int source, bool immediately)
         {
             API.CancelEvent();
 
@@ -49,6 +50,7 @@ namespace Curiosity.Core.Server.Managers
             }
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
+            await BaseScript.Delay(0);
         }
     }
 }

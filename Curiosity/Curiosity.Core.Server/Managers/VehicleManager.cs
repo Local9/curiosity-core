@@ -638,10 +638,12 @@ namespace Curiosity.Core.Server.Managers
 
                 FailedDiscordMessageOwn:
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' tried to drive a vehicle they do not own"); // MOVE TO DB LOG
+                    await BaseScript.Delay(0);
                     goto ReturnResult;
 
                 FailedDiscordMessage:
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' vehicle check '{sqlResult.Message}'"); // MOVE TO DB LOG
+                    await BaseScript.Delay(0);
                     goto ReturnResult;
 
                 ReturnResult:
@@ -652,6 +654,7 @@ namespace Curiosity.Core.Server.Managers
                 catch (Exception ex)
                 {
                     DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[ERROR] vehicle:drive:check\r{ex}");
+                    await BaseScript.Delay(0);
 
                     Logger.Error(ex, "vehicle:drive:check");
                     curiosityUser.Purchasing = false;

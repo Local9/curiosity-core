@@ -151,6 +151,7 @@ namespace Curiosity.Core.Server.Web
             }
 
             RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{PluginManager.DiscordGuildId}/members/{discordId}");
+            await BaseScript.Delay(0);
 
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {
@@ -204,6 +205,7 @@ namespace Curiosity.Core.Server.Web
             }
 
             await SendDiscordSimpleMessage(WebhookChannel.Chat, PluginManager.Hostname, name, message);
+            await BaseScript.Delay(0);
         }
 
         public async void SendDiscordServerEventLogMessage(string message)

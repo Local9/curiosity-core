@@ -94,6 +94,7 @@ namespace Curiosity.Core.Server.Managers
                 catch (Exception ex)
                 {
                     DiscordClient.GetModule().SendDiscordServerEventLogMessage($"shop:get:item: itemId {itemId}, characterId {curiosityUser.Character.CharacterId}\r{ex}");
+                    await BaseScript.Delay(0);
                     Logger.Error(ex, "shop:get:items");
                     return null;
                 }
@@ -246,6 +247,7 @@ namespace Curiosity.Core.Server.Managers
 
                     Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' purchased '{item.Label}' for ${item.BuyValue}"); // MOVE TO DB LOG
+                    await BaseScript.Delay(0);
 
                     if (item.IsVehicle)
                     {
@@ -294,6 +296,7 @@ namespace Curiosity.Core.Server.Managers
                 catch (Exception ex)
                 {
                     DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[ERROR] shop:purchase:item\r{ex}");
+                    await BaseScript.Delay(0);
 
                     Logger.Error(ex, "shop:purchase:item");
                     curiosityUser.Purchasing = false;

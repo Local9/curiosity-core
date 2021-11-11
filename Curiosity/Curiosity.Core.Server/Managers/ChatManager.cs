@@ -93,6 +93,7 @@ namespace Curiosity.Core.Server.Managers
                     string discordMessage = filteredMessage.Trim('"');
 
                     DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);
+                    await BaseScript.Delay(0);
 
                     playersInSameWorld.Clear();
 
@@ -108,6 +109,7 @@ namespace Curiosity.Core.Server.Managers
                     message += $"{ex}";
 
                     DiscordClient.GetModule().SendDiscordServerEventLogMessage(message);
+                    await BaseScript.Delay(0);
 
                     return null;
                 }

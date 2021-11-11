@@ -13,7 +13,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new EventCallback(metadata => {
+            EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new AsyncEventCallback(async metadata => {
 
                 int attackerHandle = metadata.Find<int>(0);
                 int victimHandle = metadata.Find<int>(1);
@@ -34,6 +34,7 @@ namespace Curiosity.Core.Server.Managers
 
                 string cleanMessage = msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "");
                 DiscordClient.GetModule().SendDiscordPlayerDeathLogMessage($"[Player Kill] {cleanMessage}");
+                await BaseScript.Delay(0);
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;

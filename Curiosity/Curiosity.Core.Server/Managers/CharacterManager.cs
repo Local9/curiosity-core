@@ -289,10 +289,12 @@ namespace Curiosity.Core.Server.Managers
                         if (godModeEnabled)
                         {
                             Web.DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' has God Mode Enabled, Does job '{user.CurrentJob}' allow God Mode?");
+                            await BaseScript.Delay(0);
                             if (user.CurrentJob != "FireFighter")
                             {
                                 API.SetPlayerInvincible(player.Handle, false);
                                 Web.DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' God Mode removed as the job is not FireFighter.");
+                                await BaseScript.Delay(0);
                             }
                         }
                     }
@@ -678,6 +680,7 @@ namespace Curiosity.Core.Server.Managers
                     exportMessage.newNumberValue = newSkillValue;
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' skill '{skillId}' changed by '{amt}' (new value: {newSkillValue})");
+                    await BaseScript.Delay(0);
 
                 SendMessage:
                     return $"{exportMessage}";
@@ -741,6 +744,7 @@ namespace Curiosity.Core.Server.Managers
                     int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' stat '{stat}' changed by '{amt}' (new value: {newSkillValue})");
+                    await BaseScript.Delay(0);
 
                     exportMessage.newNumberValue = newSkillValue;
 
@@ -807,6 +811,7 @@ namespace Curiosity.Core.Server.Managers
                     exportMessage.newNumberValue = newCashValue;
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt}' (change '{originalValue}' to '{newCashValue}')");
+                    await BaseScript.Delay(0);
 
                 SendMessage:
                     return $"{exportMessage}";

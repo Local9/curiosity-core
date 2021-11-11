@@ -328,6 +328,7 @@ namespace Curiosity.Core.Server.Database.Store
             catch (Exception ex)
             {
                 DiscordClient.GetModule().SendDiscordServerEventLogMessage($"selShopItem: itemId {itemId}, characterId {characterId}\r{ex}");
+                await BaseScript.Delay(0);
                 Logger.Error($"{ex}");
                 return null;
             }
@@ -389,6 +390,7 @@ namespace Curiosity.Core.Server.Database.Store
             catch (Exception ex)
             {
                 DiscordClient.GetModule().SendDiscordServerEventLogMessage($"GetCategoryItems: categoryId {categoryId}, characterId {characterId}\r{ex}");
+                await BaseScript.Delay(0);
                 Logger.Error($"{ex}");
                 return null;
             }

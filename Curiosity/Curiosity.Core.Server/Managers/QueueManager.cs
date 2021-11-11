@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.AttachTickHandler(SetupTimer);
             Instance.AttachTickHandler(QueueUpdate);
 
-            EventSystem.GetModule().Attach("user:queue:active", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:queue:active", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -93,6 +93,7 @@ namespace Curiosity.Core.Server.Managers
                     // Custom Changes
                     string msg = $"Player '{player.Name}#{metadata.Sender}': Successfully Connected. Ping: {player.Ping}ms";
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage(msg);
+                    await BaseScript.Delay(0);
                     ChatManager.OnLogMessage(msg);
 
                     int initRouting = 5000;
@@ -152,6 +153,7 @@ namespace Curiosity.Core.Server.Managers
                 string msg = $"Player '{player.Name}' is connecting. Ping: {player.Ping}ms";
                 DiscordClient discordClient = DiscordClient.GetModule();
                 discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' is connecting. Ping: {player.Ping}ms");
+                await BaseScript.Delay(0);
                 ChatManager.OnLogMessage(msg);
 
                 deferrals.update($"{messages[Messages.Gathering]}");
@@ -159,6 +161,7 @@ namespace Curiosity.Core.Server.Managers
                 if (string.IsNullOrEmpty(license)) // No License, No Gameplay
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': No License, No Game.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"{messages[Messages.License]}");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -167,6 +170,7 @@ namespace Curiosity.Core.Server.Managers
                 if (string.IsNullOrEmpty(player.Name))
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player name could not be found.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"{string.Format(messages[Messages.NoName], player.Name)}");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -175,6 +179,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!regex.IsMatch(player.Name))
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name contains symbols.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -183,6 +188,7 @@ namespace Curiosity.Core.Server.Managers
                 if (blacklistedNames.IsMatch(player.Name.ToLower()))
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name is blacklisted.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -193,6 +199,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!isVerified)
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Not verified on Discord.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -207,6 +214,7 @@ namespace Curiosity.Core.Server.Managers
                 if (curiosityUser == null)
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Error loading Account.");
+                    await BaseScript.Delay(0);
                     deferrals.done($"Sorry, there was an error when trying to load your account.");
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
@@ -224,6 +232,7 @@ namespace Curiosity.Core.Server.Managers
                             time = "Permanently";
 
                         discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
+                        await BaseScript.Delay(0);
                         deferrals.done(string.Format("{0} {1}", banMessage, time));
                     }
                     catch (Exception ex)
@@ -251,6 +260,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Logger.Debug($"Queue Player not allowed access: {player.Name}#{curiosityUser.UserId} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': user is not a supporter, current role '{curiosityUser.Role}' [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}].");
+                    await BaseScript.Delay(0);
                     deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
                     return;
                 }
@@ -373,6 +383,7 @@ namespace Curiosity.Core.Server.Managers
                     msg += $"\n Removed Active: {countRemoved}";
 
                     DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
+                    await BaseScript.Delay(0);
                 }
             }
             int timeToWait = 60 * 1000;
