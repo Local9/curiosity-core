@@ -120,8 +120,8 @@ namespace Curiosity.Core.Client.Managers
         {
             Screen.Fading.FadeIn(0);
 
-            if (Instance.ExportDictionary["pma-voice"] is not null)
-                Instance.ExportDictionary["pma-voice"].toggleMute();
+            //if (Instance.ExportDictionary["pma-voice"] is not null)
+            //    Instance.ExportDictionary["pma-voice"].toggleMute();
 
             API.SetTimecycleModifier("default");
             API.SetTimecycleModifierStrength(1f);
