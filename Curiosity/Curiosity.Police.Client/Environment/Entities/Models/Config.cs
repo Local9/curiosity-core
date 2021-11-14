@@ -8,5 +8,8 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
     {
         [DataMember(Name = "speedLimits")]
         public Dictionary<string, int> SpeedLimits;
+
+        [DataMember(Name = "ignoredVehicles")]
+        public List<string> IgnoredVehicles;
     }
 }

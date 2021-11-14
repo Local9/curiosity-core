@@ -1,4 +1,8 @@
 {
+  "ignoredVehicles": [
+    "police",
+    "police2"
+  ],
   "speedLimits": {
     "Joshua Rd": 50,
     "East Joshua Road": 50,

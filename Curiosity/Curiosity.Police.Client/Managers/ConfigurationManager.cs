@@ -2,6 +2,7 @@
 using Curiosity.Police.Client.Environment.Entities.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.Managers
 {
@@ -33,5 +34,8 @@ namespace Curiosity.Police.Client.Managers
 
             return config;
         }
+
+        public Dictionary<string, int> SpeedCameras => GetPoliceConfig().SpeedLimits;
+        public List<string> IgnoredVehicles => GetPoliceConfig().IgnoredVehicles;
     }
 }
