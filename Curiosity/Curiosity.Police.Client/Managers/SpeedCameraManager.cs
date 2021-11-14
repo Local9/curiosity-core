@@ -15,6 +15,8 @@ namespace Curiosity.Police.Client.Managers
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
 
+        float currentAreaLimit = 0;
+
         public override void Begin()
         {
             GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
@@ -38,12 +40,12 @@ namespace Curiosity.Police.Client.Managers
             Instance.DetachTickHandler(OnSpeedTest);
         }
 
-        private Task OnSpeedTest()
+        private Task OnSpeedTest() // limiter to show, but not report
         {
             if (!Game.PlayerPed.IsInVehicle())
             {
                 Dispose();
-                goto DELAY_RETURN;
+                return BaseScript.Delay(0);
             }
 
             Vector3 playerPos = Game.PlayerPed.Position;
@@ -51,30 +53,28 @@ namespace Curiosity.Police.Client.Managers
             uint crossingRoad = 0;
             GetStreetNameAtCoord(playerPos.X, playerPos.Y, playerPos.Z, ref streetHash, ref crossingRoad);
 
-            if (streetHash == 0) goto DELAY_RETURN;
+            if (streetHash == 0)
+            {
+                goto DELAY_RETURN;
+            }
 
             string street = GetStreetNameFromHashKey(streetHash);
 
             if (_configurationManager.SpeedCameras.ContainsKey(street))
             {
-                int speedLimit = _configurationManager.SpeedCameras[street];
-                float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
-                float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
+                //int speedLimit = _configurationManager.SpeedCameras[street];
+                //float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
+                //float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
-                if (speedLimit <= 0) goto DELAY_RETURN; // no limit
-
-                if (speedInMph > speedLimit)
-                {
-                    Screen.ShowNotification($"Speeding: {street} {speedLimit}mph");
-                }
+                currentAreaLimit = _configurationManager.SpeedCameras[street];
             }
             else
             {
-                Screen.ShowNotification($"{street} is Unknown");
+                Screen.ShowNotification($"{street} is unknown, please inform the dev team.");
             }
 
         DELAY_RETURN:
-            return BaseScript.Delay(2000);
+            return BaseScript.Delay(5000);
         }
     }
 }
