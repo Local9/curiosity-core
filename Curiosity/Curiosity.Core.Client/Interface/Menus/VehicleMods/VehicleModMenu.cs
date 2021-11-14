@@ -120,7 +120,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             mainMenu.AddItem(uiChkTireSmoke);
             mainMenu.AddItem(uiLstTireSmoke);
 
-            miSaveVehicle = new UIMenuItem("Save");
+            miSaveVehicle = new UIMenuItem("Save", "~s~This will cost you ~g~$5000~s~ to save.");
             mainMenu.AddItem(miSaveVehicle);
 
             miCloseMenu = new UIMenuItem("Close");
