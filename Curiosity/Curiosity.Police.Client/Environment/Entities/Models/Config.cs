@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Police.Client.Environment.Entities.Models
 {
@@ -11,6 +7,6 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
     public class PoliceConfig
     {
         [DataMember(Name = "speedLimits")]
-        public List<SpeedCamera> SpeedLimits;
+        public Dictionary<string, int> SpeedLimits;
     }
 }
