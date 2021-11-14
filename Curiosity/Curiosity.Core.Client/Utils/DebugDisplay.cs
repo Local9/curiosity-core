@@ -14,6 +14,8 @@ namespace Curiosity.Core.Client.Utils
     {
         private static readonly Vector2 DefaultPos = new Vector2(0.6f, 0.5f);
         public static readonly Color DefaultColor = Color.FromArgb(255, 255, 255);
+        const float CONVERT_SPEED_MPH = 2.236936f;
+        const float CONVERT_SPEED_KPH = 3.6f;
 
         public static void DrawData(this Entity entity)
         {
@@ -67,6 +69,8 @@ namespace Curiosity.Core.Client.Utils
                     bool hasState = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
                     if (hasState)
                     {
+                        float spd = Game.PlayerPed.CurrentVehicle.Speed;
+
                         list["Server Spawned"] = $"{veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false}";
                         list["Owner"] = $"[{veh.State.Get(StateBagKey.VEH_OWNER_ID)}] {veh.State.Get($"{StateBagKey.VEH_OWNER}")}";
                         list["Spawn Type"] = $"{veh.State.Get(StateBagKey.VEH_SPAWN_TYPE) ?? "Unknown"}";
@@ -75,6 +79,8 @@ namespace Curiosity.Core.Client.Utils
                         list["Personal Trailer"] = $"{veh.State.Get(StateBagKey.VEH_PERSONAL_TRAILER) ?? false}";
                         list["Lock State"] = $"{veh.LockStatus}";
                         list["Exclusive"] = $"{API.IsPedExclusiveDriverOfVehicle(Game.PlayerPed.Handle, veh.Handle, 0)}";
+                        list["Speed (MPH)"] = $"{spd * CONVERT_SPEED_MPH}";
+                        list["Speed (KPH)"] = $"{spd * CONVERT_SPEED_KPH}";
 
                         list["-"] = "";
                         
