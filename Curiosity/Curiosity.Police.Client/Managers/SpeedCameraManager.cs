@@ -26,9 +26,11 @@ namespace Curiosity.Police.Client.Managers
 
             string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
 
+            Screen.ShowNotification(vehicleDisplayName);
+
             if (_configurationManager.IgnoredVehicles.Contains(vehicleDisplayName)) return;
 
-            Instance.AttachTickHandler(OnSpeedTest);
+            PluginManager.Instance.AttachTickHandler(OnSpeedTest);
         }
 
         public void Dispose()
@@ -38,12 +40,18 @@ namespace Curiosity.Police.Client.Managers
 
         private Task OnSpeedTest()
         {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                Dispose();
+                goto DELAY_RETURN;
+            }
+
             Vector3 playerPos = Game.PlayerPed.Position;
             uint streetHash = 0;
             uint crossingRoad = 0;
             GetStreetNameAtCoord(playerPos.X, playerPos.Y, playerPos.Z, ref streetHash, ref crossingRoad);
 
-            if (streetHash == 0) return Task.Delay(2000);
+            if (streetHash == 0) goto DELAY_RETURN;
 
             string street = GetStreetNameFromHashKey(streetHash);
 
@@ -53,13 +61,20 @@ namespace Curiosity.Police.Client.Managers
                 float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
+                if (speedLimit <= 0) goto DELAY_RETURN; // no limit
+
                 if (speedInMph > speedLimit)
                 {
                     Screen.ShowNotification($"Speeding: {street} {speedLimit}mph");
                 }
             }
+            else
+            {
+                Screen.ShowNotification($"{street} is Unknown");
+            }
 
-            return Task.Delay(2000);
+        DELAY_RETURN:
+            return BaseScript.Delay(2000);
         }
     }
 }
