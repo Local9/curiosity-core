@@ -1,0 +1,872 @@
+{
+  "speedLimits": [
+    {
+      "street": "Joshua Rd",
+      "limit": 50
+    },
+    {
+      "street": "East Joshua Road",
+      "limit": 50
+    },
+    {
+      "street": "Marina Dr",
+      "limit": 35
+    },
+    {
+      "street": "Alhambra Dr",
+      "limit": 35
+    },
+    {
+      "street": "Niland Ave",
+      "limit": 35
+    },
+    {
+      "street": "Zancudo Ave",
+      "limit": 35
+    },
+    {
+      "street": "Armadillo Ave",
+      "limit": 35
+    },
+    {
+      "street": "Algonquin Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Mountain View Dr",
+      "limit": 35
+    },
+    {
+      "street": "Cholla Springs Ave",
+      "limit": 35
+    },
+    {
+      "street": "Panorama Dr",
+      "limit": 40
+    },
+    {
+      "street": "Lesbos Ln",
+      "limit": 35
+    },
+    {
+      "street": "Calafia Rd",
+      "limit": 30
+    },
+    {
+      "street": "North Calafia Way",
+      "limit": 30
+    },
+    {
+      "street": "Cassidy Trail",
+      "limit": 25
+    },
+    {
+      "street": "Seaview Rd",
+      "limit": 35
+    },
+    {
+      "street": "Grapeseed Main St",
+      "limit": 35
+    },
+    {
+      "street": "Grapeseed Ave",
+      "limit": 35
+    },
+    {
+      "street": "Joad Ln",
+      "limit": 35
+    },
+    {
+      "street": "Union Rd",
+      "limit": 40
+    },
+    {
+      "street": "O'Neil Way",
+      "limit": 25
+    },
+    {
+      "street": "Senora Fwy",
+      "limit": 65
+    },
+    {
+      "street": "Catfish View",
+      "limit": 35
+    },
+    {
+      "street": "Great Ocean Hwy",
+      "limit": 60
+    },
+    {
+      "street": "Paleto Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Duluoz Ave",
+      "limit": 35
+    },
+    {
+      "street": "Procopio Dr",
+      "limit": 35
+    },
+    {
+      "street": "Cascabel Ave",
+      "limit": 30
+    },
+    {
+      "street": "Procopio Promenade",
+      "limit": 25
+    },
+    {
+      "street": "Pyrite Ave",
+      "limit": 30
+    },
+    {
+      "street": "Fort Zancudo Approach Rd",
+      "limit": 25
+    },
+    {
+      "street": "Barbareno Rd",
+      "limit": 30
+    },
+    {
+      "street": "Ineseno Road",
+      "limit": 30
+    },
+    {
+      "street": "West Eclipse Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Playa Vista",
+      "limit": 30
+    },
+    {
+      "street": "Bay City Ave",
+      "limit": 30
+    },
+    {
+      "street": "Del Perro Fwy",
+      "limit": 65
+    },
+    {
+      "street": "Equality Way",
+      "limit": 30
+    },
+    {
+      "street": "Red Desert Ave",
+      "limit": 30
+    },
+    {
+      "street": "Magellan Ave",
+      "limit": 25
+    },
+    {
+      "street": "Sandcastle Way",
+      "limit": 30
+    },
+    {
+      "street": "Vespucci Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Prosperity St",
+      "limit": 30
+    },
+    {
+      "street": "San Andreas Ave",
+      "limit": 40
+    },
+    {
+      "street": "North Rockford Dr",
+      "limit": 35
+    },
+    {
+      "street": "South Rockford Dr",
+      "limit": 35
+    },
+    {
+      "street": "Marathon Ave",
+      "limit": 30
+    },
+    {
+      "street": "Boulevard Del Perro",
+      "limit": 35
+    },
+    {
+      "street": "Cougar Ave",
+      "limit": 30
+    },
+    {
+      "street": "Liberty St",
+      "limit": 30
+    },
+    {
+      "street": "Bay City Incline",
+      "limit": 40
+    },
+    {
+      "street": "Conquistador St",
+      "limit": 25
+    },
+    {
+      "street": "Cortes St",
+      "limit": 25
+    },
+    {
+      "street": "Vitus St",
+      "limit": 25
+    },
+    {
+      "street": "Aguja St",
+      "limit": 25
+    },
+    {
+      "street": "Goma St",
+      "limit": 25
+    },
+    {
+      "street": "Melanoma St",
+      "limit": 25
+    },
+    {
+      "street": "Palomino Ave",
+      "limit": 35
+    },
+    {
+      "street": "Invention Ct",
+      "limit": 25
+    },
+    {
+      "street": "Imagination Ct",
+      "limit": 25
+    },
+    {
+      "street": "Rub St",
+      "limit": 25
+    },
+    {
+      "street": "Tug St",
+      "limit": 25
+    },
+    {
+      "street": "Ginger St",
+      "limit": 30
+    },
+    {
+      "street": "Lindsay Circus",
+      "limit": 30
+    },
+    {
+      "street": "Calais Ave",
+      "limit": 35
+    },
+    {
+      "street": "Adam's Apple Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Alta St",
+      "limit": 40
+    },
+    {
+      "street": "Integrity Way",
+      "limit": 30
+    },
+    {
+      "street": "Swiss St",
+      "limit": 30
+    },
+    {
+      "street": "Strawberry Ave",
+      "limit": 40
+    },
+    {
+      "street": "Capital Blvd",
+      "limit": 30
+    },
+    {
+      "street": "Crusade Rd",
+      "limit": 30
+    },
+    {
+      "street": "Innocence Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Davis Ave",
+      "limit": 40
+    },
+    {
+      "street": "Little Bighorn Ave",
+      "limit": 35
+    },
+    {
+      "street": "Roy Lowenstein Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Jamestown St",
+      "limit": 30
+    },
+    {
+      "street": "Carson Ave",
+      "limit": 35
+    },
+    {
+      "street": "Grove St",
+      "limit": 30
+    },
+    {
+      "street": "Brouge Ave",
+      "limit": 30
+    },
+    {
+      "street": "Covenant Ave",
+      "limit": 30
+    },
+    {
+      "street": "Dutch London St",
+      "limit": 40
+    },
+    {
+      "street": "Signal St",
+      "limit": 30
+    },
+    {
+      "street": "Elysian Fields Fwy",
+      "limit": 50
+    },
+    {
+      "street": "Plaice Pl",
+      "limit": 30
+    },
+    {
+      "street": "Chum St",
+      "limit": 40
+    },
+    {
+      "street": "Chupacabra St",
+      "limit": 30
+    },
+    {
+      "street": "Miriam Turner Overpass",
+      "limit": 30
+    },
+    {
+      "street": "Autopia Pkwy",
+      "limit": 35
+    },
+    {
+      "street": "Exceptionalists Way",
+      "limit": 35
+    },
+    {
+      "street": "La Puerta Fwy",
+      "limit": 60
+    },
+    {
+      "street": "New Empire Way",
+      "limit": 30
+    },
+    {
+      "street": "Runway1",
+      "limit": "--"
+    },
+    {
+      "street": "Greenwich Pkwy",
+      "limit": 35
+    },
+    {
+      "street": "Kortz Dr",
+      "limit": 30
+    },
+    {
+      "street": "Banham Canyon Dr",
+      "limit": 40
+    },
+    {
+      "street": "Buen Vino Rd",
+      "limit": 40
+    },
+    {
+      "street": "Route 68",
+      "limit": 55
+    },
+    {
+      "street": "Zancudo Grande Valley",
+      "limit": 40
+    },
+    {
+      "street": "Zancudo Barranca",
+      "limit": 40
+    },
+    {
+      "street": "Galileo Rd",
+      "limit": 40
+    },
+    {
+      "street": "Mt Vinewood Dr",
+      "limit": 40
+    },
+    {
+      "street": "Marlowe Dr",
+      "limit": 40
+    },
+    {
+      "street": "Milton Rd",
+      "limit": 35
+    },
+    {
+      "street": "Kimble Hill Dr",
+      "limit": 35
+    },
+    {
+      "street": "Normandy Dr",
+      "limit": 35
+    },
+    {
+      "street": "Hillcrest Ave",
+      "limit": 35
+    },
+    {
+      "street": "Hillcrest Ridge Access Rd",
+      "limit": 35
+    },
+    {
+      "street": "North Sheldon Ave",
+      "limit": 35
+    },
+    {
+      "street": "Lake Vinewood Dr",
+      "limit": 35
+    },
+    {
+      "street": "Lake Vinewood Est",
+      "limit": 35
+    },
+    {
+      "street": "Baytree Canyon Rd",
+      "limit": 40
+    },
+    {
+      "street": "North Conker Ave",
+      "limit": 35
+    },
+    {
+      "street": "Wild Oats Dr",
+      "limit": 35
+    },
+    {
+      "street": "Whispymound Dr",
+      "limit": 35
+    },
+    {
+      "street": "Didion Dr",
+      "limit": 35
+    },
+    {
+      "street": "Cox Way",
+      "limit": 35
+    },
+    {
+      "street": "Picture Perfect Drive",
+      "limit": 35
+    },
+    {
+      "street": "South Mo Milton Dr",
+      "limit": 35
+    },
+    {
+      "street": "Cockingend Dr",
+      "limit": 35
+    },
+    {
+      "street": "Mad Wayne Thunder Dr",
+      "limit": 35
+    },
+    {
+      "street": "Hangman Ave",
+      "limit": 35
+    },
+    {
+      "street": "Dunstable Ln",
+      "limit": 35
+    },
+    {
+      "street": "Dunstable Dr",
+      "limit": 35
+    },
+    {
+      "street": "Greenwich Way",
+      "limit": 35
+    },
+    {
+      "street": "Greenwich Pl",
+      "limit": 35
+    },
+    {
+      "street": "Hardy Way",
+      "limit": 35
+    },
+    {
+      "street": "Richman St",
+      "limit": 35
+    },
+    {
+      "street": "Ace Jones Dr",
+      "limit": 35
+    },
+    {
+      "street": "Los Santos Freeway",
+      "limit": 65
+    },
+    {
+      "street": "Senora Rd",
+      "limit": 40
+    },
+    {
+      "street": "Nowhere Rd",
+      "limit": 25
+    },
+    {
+      "street": "Smoke Tree Rd",
+      "limit": 35
+    },
+    {
+      "street": "Cholla Rd",
+      "limit": 35
+    },
+    {
+      "street": "Cat-Claw Ave",
+      "limit": 35
+    },
+    {
+      "street": "Senora Way",
+      "limit": 40
+    },
+    {
+      "street": "Palomino Fwy",
+      "limit": 60
+    },
+    {
+      "street": "Shank St",
+      "limit": 25
+    },
+    {
+      "street": "Macdonald St",
+      "limit": 35
+    },
+    {
+      "street": "Route 68 Approach",
+      "limit": 55
+    },
+    {
+      "street": "Vinewood Park Dr",
+      "limit": 35
+    },
+    {
+      "street": "Vinewood Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Mirror Park Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Glory Way",
+      "limit": 35
+    },
+    {
+      "street": "Bridge St",
+      "limit": 35
+    },
+    {
+      "street": "West Mirror Drive",
+      "limit": 35
+    },
+    {
+      "street": "Nikola Ave",
+      "limit": 35
+    },
+    {
+      "street": "East Mirror Dr",
+      "limit": 35
+    },
+    {
+      "street": "Nikola Pl",
+      "limit": 25
+    },
+    {
+      "street": "Mirror Pl",
+      "limit": 35
+    },
+    {
+      "street": "El Rancho Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Olympic Fwy",
+      "limit": 60
+    },
+    {
+      "street": "Fudge Ln",
+      "limit": 25
+    },
+    {
+      "street": "Amarillo Vista",
+      "limit": 25
+    },
+    {
+      "street": "Labor Pl",
+      "limit": 35
+    },
+    {
+      "street": "El Burro Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Sustancia Rd",
+      "limit": 45
+    },
+    {
+      "street": "South Shambles St",
+      "limit": 30
+    },
+    {
+      "street": "Hanger Way",
+      "limit": 30
+    },
+    {
+      "street": "Orchardville Ave",
+      "limit": 30
+    },
+    {
+      "street": "Popular St",
+      "limit": 40
+    },
+    {
+      "street": "Buccaneer Way",
+      "limit": 45
+    },
+    {
+      "street": "Abattoir Ave",
+      "limit": 35
+    },
+    {
+      "street": "Voodoo Place",
+      "limit": 30
+    },
+    {
+      "street": "Mutiny Rd",
+      "limit": 35
+    },
+    {
+      "street": "South Arsenal St",
+      "limit": 35
+    },
+    {
+      "street": "Forum Dr",
+      "limit": 35
+    },
+    {
+      "street": "Morningwood Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Dorset Dr",
+      "limit": 40
+    },
+    {
+      "street": "Caesars Place",
+      "limit": 25
+    },
+    {
+      "street": "Spanish Ave",
+      "limit": 30
+    },
+    {
+      "street": "Portola Dr",
+      "limit": 30
+    },
+    {
+      "street": "Edwood Way",
+      "limit": 25
+    },
+    {
+      "street": "San Vitus Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Eclipse Blvd",
+      "limit": 35
+    },
+    {
+      "street": "Gentry Lane",
+      "limit": 30
+    },
+    {
+      "street": "Las Lagunas Blvd",
+      "limit": 40
+    },
+    {
+      "street": "Power St",
+      "limit": 40
+    },
+    {
+      "street": "Mt Haan Rd",
+      "limit": 40
+    },
+    {
+      "street": "Elgin Ave",
+      "limit": 40
+    },
+    {
+      "street": "Hawick Ave",
+      "limit": 35
+    },
+    {
+      "street": "Meteor St",
+      "limit": 30
+    },
+    {
+      "street": "Alta Pl",
+      "limit": 30
+    },
+    {
+      "street": "Occupation Ave",
+      "limit": 35
+    },
+    {
+      "street": "Carcer Way",
+      "limit": 40
+    },
+    {
+      "street": "Eastbourne Way",
+      "limit": 30
+    },
+    {
+      "street": "Rockford Dr",
+      "limit": 35
+    },
+    {
+      "street": "Abe Milton Pkwy",
+      "limit": 35
+    },
+    {
+      "street": "Laguna Pl",
+      "limit": 30
+    },
+    {
+      "street": "Sinners Passage",
+      "limit": 30
+    },
+    {
+      "street": "Atlee St",
+      "limit": 30
+    },
+    {
+      "street": "Sinner St",
+      "limit": 30
+    },
+    {
+      "street": "Supply St",
+      "limit": 30
+    },
+    {
+      "street": "Amarillo Way",
+      "limit": 35
+    },
+    {
+      "street": "Tower Way",
+      "limit": 35
+    },
+    {
+      "street": "Decker St",
+      "limit": 35
+    },
+    {
+      "street": "Tackle St",
+      "limit": 25
+    },
+    {
+      "street": "Low Power St",
+      "limit": 35
+    },
+    {
+      "street": "Clinton Ave",
+      "limit": 35
+    },
+    {
+      "street": "Fenwell Pl",
+      "limit": 35
+    },
+    {
+      "street": "Utopia Gardens",
+      "limit": 25
+    },
+    {
+      "street": "Cavalry Blvd",
+      "limit": 35
+    },
+    {
+      "street": "South Boulevard Del Perro",
+      "limit": 35
+    },
+    {
+      "street": "Americano Way",
+      "limit": 25
+    },
+    {
+      "street": "Sam Austin Dr",
+      "limit": 25
+    },
+    {
+      "street": "East Galileo Ave",
+      "limit": 35
+    },
+    {
+      "street": "Galileo Park",
+      "limit": 35
+    },
+    {
+      "street": "West Galileo Ave",
+      "limit": 35
+    },
+    {
+      "street": "Tongva Dr",
+      "limit": 40
+    },
+    {
+      "street": "Zancudo Rd",
+      "limit": 35
+    },
+    {
+      "street": "Movie Star Way",
+      "limit": 35
+    },
+    {
+      "street": "Heritage Way",
+      "limit": 35
+    },
+    {
+      "street": "Perth St",
+      "limit": 25
+    },
+    {
+      "street": "Chianski Passage",
+      "limit": 30
+    },
+    {
+      "street": "Lolita Ave",
+      "limit": 35
+    },
+    {
+      "street": "Meringue Ln",
+      "limit": 35
+    },
+    {
+      "street": "Strangeways Dr",
+      "limit": 30
+    }
+  ]
+}

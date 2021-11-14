@@ -13,6 +13,7 @@ namespace Curiosity.Police.Client.Managers.Events
     public delegate void PedKillPedEvent(Ped attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void EntityKillEntityEvent(Entity attacker, Entity victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void DeadEvent(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag);
+    public delegate void EnteredVehicle(Player player, Vehicle vehicle);
 }
 
 namespace Curiosity.Police.Client.Managers
@@ -26,6 +27,7 @@ namespace Curiosity.Police.Client.Managers
         public static event PedKillPedEvent OnPedKillPed;
         public static event EntityKillEntityEvent OnEntityKillEntity;
         public static event DeadEvent OnDeath;
+        public static event EnteredVehicle OnEnteredVehicle;
 
         public override void Begin()
         {
@@ -38,6 +40,19 @@ namespace Curiosity.Police.Client.Managers
 
             try
             {
+                if (name == "CEventNetworkPlayerEnteredVehicle")
+                {
+                    Player player = new Player((int)args[0]);
+
+                    if (player.ServerId != Game.Player.ServerId) return;
+
+                    int entityId = (int)args[1];
+                    if (!API.IsEntityAVehicle(entityId)) return;
+
+                    Vehicle vehicle = new Vehicle(entityId);
+
+                    HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
+                }
 
                 if (name == "CEventNetworkEntityDamage")
                 {
@@ -68,6 +83,11 @@ namespace Curiosity.Police.Client.Managers
             {
                 Logger.Debug($"{ex}");
             }
+        }
+
+        private void HandleCEventNetworkPlayerEnteredVehicle(Player player, Vehicle vehicle)
+        {
+            OnEnteredVehicle?.Invoke(player, vehicle);
         }
 
         /// <summary>
