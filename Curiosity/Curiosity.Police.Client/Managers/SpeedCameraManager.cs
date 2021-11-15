@@ -17,10 +17,7 @@ namespace Curiosity.Police.Client.Managers
 
         float currentAreaLimit = 0;
 
-        public override void Begin()
-        {
-            GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
-        }
+        public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
         private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
         {
