@@ -221,5 +221,13 @@
     "Lolita Ave": 35,
     "Meringue Ln": 35,
     "Strangeways Dr": 30
-  }
+  },
+  "speedCameras": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "direction": "W"
+    }
+  ]
 }

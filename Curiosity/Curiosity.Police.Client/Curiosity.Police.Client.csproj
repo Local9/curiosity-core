@@ -110,6 +110,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Environment\Enums\" />
     <Folder Include="Interface\Menus\" />
   </ItemGroup>
   <ItemGroup>

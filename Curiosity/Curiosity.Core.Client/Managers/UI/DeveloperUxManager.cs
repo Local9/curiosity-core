@@ -41,8 +41,9 @@ namespace Curiosity.Core.Client.Managers.UI
             Color color = Color.FromArgb(255, 255, 255, 255);
 
             Vector3 playerPos = Cache.PlayerPed.Position;
+            string direction = Common.GetHeadingDirection();
 
-            ScreenInterface.DrawText($"X: {playerPos.X}, Y: {playerPos.Y}, Z: {playerPos.Z}, H: {Cache.PlayerPed.Heading}", Scale, pos, color);
+            ScreenInterface.DrawText($"X: {playerPos.X}, Y: {playerPos.Y}, Z: {playerPos.Z}, H: {Cache.PlayerPed.Heading}, DIR: {direction}", Scale, pos, color);
         }
 
         private async Task DeveloperEntityOverlay()

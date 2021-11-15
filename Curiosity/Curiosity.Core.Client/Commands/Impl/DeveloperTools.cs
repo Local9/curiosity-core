@@ -875,15 +875,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     if (arguments[0] == "scale" || arguments[0] == "s")
                         developerUxManager.Scale = float.Parse(arguments[1]);
-
-                    if (arguments[0] == "ped")
-                    {
-                        if (arguments.Count < 2)
-                        {
-                            NotificationManager.GetModule().Error($"Missing arguments");
-                            return;
-                        }
-                    }
                 }
 
                 if (arguments.Count == 0)

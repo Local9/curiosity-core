@@ -3,6 +3,7 @@ using static CitizenFX.Core.Native.API;
 using System.Threading.Tasks;
 using CitizenFX.Core.UI;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.Managers
 {
@@ -15,7 +16,20 @@ namespace Curiosity.Police.Client.Managers
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
 
-        float currentAreaLimit = 0;
+        Dictionary<int, string> _cameraDirection = new()
+        {
+            { 0, "N" },
+            { 45, "NW" },
+            { 90, "W" },
+            { 135, "SW" },
+            { 180, "S" },
+            { 225, "SE" },
+            { 270, "E" },
+            { 315, "NE" },
+            { 360, "N" }
+        };
+
+        float _currentAreaLimit = 0;
 
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
@@ -63,7 +77,7 @@ namespace Curiosity.Police.Client.Managers
                 //float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 //float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
-                currentAreaLimit = _configurationManager.SpeedCameras[street];
+                _currentAreaLimit = _configurationManager.SpeedCameras[street];
             }
             else
             {
@@ -72,6 +86,22 @@ namespace Curiosity.Police.Client.Managers
 
         DELAY_RETURN:
             return BaseScript.Delay(5000);
+        }
+
+        public string GetVehicleHeadingDirection()
+        {
+            if (!Game.PlayerPed.IsInVehicle()) return "U";
+
+            foreach(KeyValuePair<int, string> kvp in _cameraDirection)
+            {
+                float vehDirection = Game.PlayerPed.CurrentVehicle.Heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return "U";
         }
     }
 }

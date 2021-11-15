@@ -8,16 +8,31 @@ namespace Curiosity.Core.Client.Utils
 {
     public static class Common
     {
-        private static int? _playerID;
-        public static int PlayerID
+        static Dictionary<int, string> _worldDirection = new()
         {
-            get
-            {
-                if (_playerID == null)
-                    _playerID = API.GetPlayerServerId(API.PlayerId());
+            { 0, "N" },
+            { 45, "NW" },
+            { 90, "W" },
+            { 135, "SW" },
+            { 180, "S" },
+            { 225, "SE" },
+            { 270, "E" },
+            { 315, "NE" },
+            { 360, "N" }
+        };
 
-                return (int)_playerID;
+        public static string GetHeadingDirection()
+        {
+            foreach (KeyValuePair<int, string> kvp in _worldDirection)
+            {
+                float vehDirection = Game.PlayerPed.Heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
+                {
+                    return kvp.Value;
+                }
             }
+
+            return "U";
         }
 
         public static void Notification(string message, bool blink = false, bool saveToBrief = false)
