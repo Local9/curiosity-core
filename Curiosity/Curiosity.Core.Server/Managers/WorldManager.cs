@@ -50,12 +50,12 @@ namespace Curiosity.Core.Server.Managers
         {
             WorldInstance = this;
 
-            EventSystem.GetModule().Attach("weather:sync:regions", new EventCallback(metadata =>
+            EventSystem.Attach("weather:sync:regions", new EventCallback(metadata =>
             {
                 return regionWeatherType;
             }));
 
-            EventSystem.GetModule().Attach("weather:sync", new EventCallback(metadata =>
+            EventSystem.Attach("weather:sync", new EventCallback(metadata =>
             {
                 SubRegion subRegion = (SubRegion)metadata.Find<int>(0);
                 Region region = MapRegions.RegionBySubRegion[subRegion];
@@ -67,12 +67,12 @@ namespace Curiosity.Core.Server.Managers
                 return weather;
             }));
 
-            EventSystem.GetModule().Attach("weather:is:halloween", new EventCallback(metadata =>
+            EventSystem.Attach("weather:is:halloween", new EventCallback(metadata =>
             {
                 return WeatherData.IsHalloween();
             }));
 
-            EventSystem.GetModule().Attach("world:routing:island", new EventCallback(metadata =>
+            EventSystem.Attach("world:routing:island", new EventCallback(metadata =>
             {
                 string playerId = $"{metadata.Sender}";
                 SetPlayerRoutingBucket(playerId, 3);
@@ -82,7 +82,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("world:routing:city", new EventCallback(metadata =>
+            EventSystem.Attach("world:routing:city", new EventCallback(metadata =>
             {
                 string playerId = $"{metadata.Sender}";
                 SetPlayerRoutingBucket(playerId, 0);
@@ -207,7 +207,7 @@ namespace Curiosity.Core.Server.Managers
         private async Task OnWorldTimeSyncTick()
         {
             if (DateTime.UtcNow > lastTimeSyncTick) {
-                EventSystem.GetModule().SendAll("world:time:sync", _baseTime, _timeOffset);
+                EventSystem.SendAll("world:time:sync", _baseTime, _timeOffset);
                 lastTimeSyncTick = DateTime.UtcNow.AddSeconds(5);
             }
 

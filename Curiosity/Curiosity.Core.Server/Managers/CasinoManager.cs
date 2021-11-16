@@ -48,7 +48,7 @@ namespace Curiosity.Core.Server.Managers
         {
             vehicleForToday = randomVehicle[Utility.RANDOM.Next(randomVehicle.Count)];
 
-            EventSystem.GetModule().Attach("casino:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("casino:vehicle", new EventCallback(metadata =>
             {
                 return API.GetHashKey(vehicleForToday);
             }));

@@ -13,7 +13,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("developer:savePos", new EventCallback(metadata =>
+            EventSystem.Attach("developer:savePos", new EventCallback(metadata =>
                 {
                     try
                     {

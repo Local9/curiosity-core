@@ -65,7 +65,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Events
 
-            EventSystem.GetModule().Attach("mission:quest:completed", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("mission:quest:completed", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -87,7 +87,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:isActive", new EventCallback(metadata =>
+            EventSystem.Attach("mission:isActive", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
                 string missionId = metadata.Find<string>(0);
@@ -103,7 +103,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("mission:activate", new EventCallback(metadata =>
+            EventSystem.Attach("mission:activate", new EventCallback(metadata =>
             {
 
                 int senderHandle = metadata.Sender;
@@ -135,7 +135,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:deactivate", new EventCallback(metadata =>
+            EventSystem.Attach("mission:deactivate", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
 
@@ -154,13 +154,13 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:get:data", new EventCallback(metadata =>
+            EventSystem.Attach("mission:get:data", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Find<int>(0);
                 return GetMissionData(metadata.Sender);
             }));
 
-            EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("mission:completed", new AsyncEventCallback(async metadata =>
             {
                 if (!ActiveMissions.ContainsKey(metadata.Sender)) return null;
 
@@ -198,7 +198,7 @@ namespace Curiosity.Core.Server.Managers
                         await Database.Store.CharacterDatabase.InsertInventoryItem(curUser.Character.CharacterId, DOUBLE_ACTION_REVOLVER, 1);
                         Logger.Debug($"Completed Halloween Quest: Given Weapon");
 
-                        EventSystem.GetModule().Send("mission:notification:success", metadata.Sender, "<b>Congratulations</b><br />You have been given the Double Action Revolver for your efforts.", "bottom-right");
+                        EventSystem.Send("mission:notification:success", metadata.Sender, "<b>Congratulations</b><br />You have been given the Double Action Revolver for your efforts.", "bottom-right");
                     }
 
                     Logger.Debug($"Completed Halloween Quest: Finish");
@@ -229,7 +229,7 @@ namespace Curiosity.Core.Server.Managers
                     await BaseScript.Delay(500);
                     if (numberOfFailures >= 3)
                     {
-                        EventSystem.GetModule().Send("mission:notification:warning", serverHandle, "No earnings<br />The player you've assisted has failed too many times.", "bottom-right");
+                        EventSystem.Send("mission:notification:warning", serverHandle, "No earnings<br />The player you've assisted has failed too many times.", "bottom-right");
                     }
                     else
                     {
@@ -237,7 +237,7 @@ namespace Curiosity.Core.Server.Managers
                         await BaseScript.Delay(10);
                         await MissionCompleted(serverHandle, missionId, passed, 1, 0, passButFailed);
                     }
-                    EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
+                    EventSystem.Send("mission:backup:completed", serverHandle);
 
                     if (!passed)
                     {
@@ -256,7 +256,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Ped Events
 
-            EventSystem.GetModule().Attach("mission:add:ped", new EventCallback(metadata =>
+            EventSystem.Attach("mission:add:ped", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -311,7 +311,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:remove:ped", new EventCallback(metadata =>
+            EventSystem.Attach("mission:remove:ped", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
@@ -322,7 +322,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionData.RemoveNetworkPed(networkId);
             }));
 
-            EventSystem.GetModule().Attach("mission:ped:identification", new EventCallback(metadata =>
+            EventSystem.Attach("mission:ped:identification", new EventCallback(metadata =>
             {
 
                 int senderHandle = metadata.Sender;
@@ -360,7 +360,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
             {
                 int networkId = metadata.Find<int>(0);
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, networkId);
@@ -428,7 +428,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Ped Updates
 
-            EventSystem.GetModule().Attach("mission:update:ped:mission", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:mission", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -439,7 +439,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:handcuffed", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:handcuffed", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -450,7 +450,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:suspect", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:suspect", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -461,7 +461,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:blip", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:blip", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -472,7 +472,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:driver", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:driver", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -483,7 +483,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:breathlyser", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:breathlyser", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -494,7 +494,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:search", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:ped:search", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -540,7 +540,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Vehicle Events
 
-            EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("mission:add:vehicle", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -576,7 +576,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionData.AddNetworkVehicle(networkId);
             }));
 
-            EventSystem.GetModule().Attach("mission:remove:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("mission:remove:vehicle", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
@@ -587,7 +587,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionData.RemoveNetworkVehicle(networkId);
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("mission:update:vehicle:towed", new AsyncEventCallback(async metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
@@ -621,7 +621,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Vehicle Update
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:mission", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:vehicle:mission", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
@@ -632,7 +632,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataVehicle;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:blip", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:vehicle:blip", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
@@ -643,7 +643,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataVehicle;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:towable", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:vehicle:towable", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
@@ -654,7 +654,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataVehicle;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:license", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:vehicle:license", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
@@ -709,7 +709,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataVehicle;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:search", new EventCallback(metadata =>
+            EventSystem.Attach("mission:update:vehicle:search", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
                 
@@ -761,7 +761,7 @@ namespace Curiosity.Core.Server.Managers
 
             #region Mission Back Up Events
 
-            EventSystem.GetModule().Attach("mission:assistance:request", new EventCallback(metadata =>
+            EventSystem.Attach("mission:assistance:request", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
@@ -778,12 +778,12 @@ namespace Curiosity.Core.Server.Managers
 
                     users.ForEach(u =>
                     {
-                        EventSystem.GetModule().Send("mission:notification:info", u.Handle, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "bottom-right");
+                        EventSystem.Send("mission:notification:info", u.Handle, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "bottom-right");
                     });
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification:warning", metadata.Sender, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right");
+                    EventSystem.Send("mission:notification:warning", metadata.Sender, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right");
                 }
 
                 missionData.AssistanceRequested = true;
@@ -791,7 +791,7 @@ namespace Curiosity.Core.Server.Managers
                 return true;
             }));
 
-            EventSystem.GetModule().Attach("mission:assistance:accept", new EventCallback(metadata =>
+            EventSystem.Attach("mission:assistance:accept", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 player.State.Set(StateBagKey.PLAYER_ASSISTING, true, true);
@@ -806,7 +806,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionData;
             }));
 
-            EventSystem.GetModule().Attach("mission:assistance:list", new EventCallback(metadata =>
+            EventSystem.Attach("mission:assistance:list", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -816,7 +816,7 @@ namespace Curiosity.Core.Server.Managers
                 return ActiveMissions.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender).Select(x => x.Value).ToList();
             }));
 
-            EventSystem.GetModule().Attach("mission:assistance:leave", new EventCallback(metadata =>
+            EventSystem.Attach("mission:assistance:leave", new EventCallback(metadata =>
             {
                 int missionOwnerId = metadata.Find<int>(0);
 
@@ -833,7 +833,7 @@ namespace Curiosity.Core.Server.Managers
             //    {
             //        CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
 
-            //        EventSystem.GetModule().Send(eventName, playerHandle);
+            //        EventSystem.Send(eventName, playerHandle);
 
             //        return true;
             //    }
@@ -903,7 +903,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10);
             await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, 5);
             await BaseScript.Delay(100);
-            EventSystem.GetModule().Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:N0}");
+            EventSystem.Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:N0}");
 
             return true;
         }
@@ -943,7 +943,7 @@ namespace Curiosity.Core.Server.Managers
             string message = $"Dispatch A.I.<br />XP Gained: {xpEarned:d0}<br />Cash: ${100:N0}";
             string position = "right";
 
-            EventSystem.GetModule().Send("mission:notification:success", serverHandle, message, position);
+            EventSystem.Send("mission:notification:success", serverHandle, message, position);
 
             return true;
         }
@@ -1018,13 +1018,13 @@ namespace Curiosity.Core.Server.Managers
 
                 if (numberOfFailures >= 3)
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
+                    EventSystem.Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />Lowered Rewards<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
                     await BaseScript.Delay(500);
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"You require {numberOfFailures - 3:d0} or more successful callout(s) to earn full rewards.", "bottom-right");
+                    EventSystem.Send("mission:notification:success", serverHandle, $"You require {numberOfFailures - 3:d0} or more successful callout(s) to earn full rewards.", "bottom-right");
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
+                    EventSystem.Send("mission:notification:success", serverHandle, $"Dispatch A.I.<br />XP Gained: {xpReward:d0}<br />Rep Gained: {repReward:d0}<br />Cash: ${money:N0}", "bottom-right");
                 }
             }
             else
@@ -1045,13 +1045,13 @@ namespace Curiosity.Core.Server.Managers
                 string position = "right";
 
                 // send failure notification
-                EventSystem.GetModule().Send("mission:notification:fail", serverHandle, message, position);
+                EventSystem.Send("mission:notification:fail", serverHandle, message, position);
 
                 if (numberOfFailures >= 3)
                 {
                     await BaseScript.Delay(500);
 
-                    EventSystem.GetModule().Send("mission:notification:fail", serverHandle, "Dispatch A.I.<br />You have failed too many missions in a row and will now get lower rewards.", "bottom-right");
+                    EventSystem.Send("mission:notification:fail", serverHandle, "Dispatch A.I.<br />You have failed too many missions in a row and will now get lower rewards.", "bottom-right");
                 }
             }
 

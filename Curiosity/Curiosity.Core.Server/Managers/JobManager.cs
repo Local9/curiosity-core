@@ -18,7 +18,7 @@ namespace Curiosity.Core.Server.Managers
         {
             config = LocationsConfigManager.GetModule();
 
-            EventSystem.GetModule().Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
+            EventSystem.Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;
@@ -35,7 +35,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
             
-            EventSystem.GetModule().Attach(JOB_POLICE_ARREST, new AsyncEventCallback(async metadata =>
+            EventSystem.Attach(JOB_POLICE_ARREST, new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;

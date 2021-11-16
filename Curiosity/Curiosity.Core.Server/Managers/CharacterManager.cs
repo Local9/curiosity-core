@@ -24,7 +24,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("character:routing:creator", new EventCallback(metadata =>
+            EventSystem.Attach("character:routing:creator", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -41,7 +41,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:revive:other", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:revive:other", new AsyncEventCallback(async metadata =>
             {
                 int otherId = metadata.Find<int>(0);
                 ExportMessage exportMessage = new ExportMessage();
@@ -91,7 +91,7 @@ namespace Curiosity.Core.Server.Managers
                 return exportMessage;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:items:all", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:items:all", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -104,7 +104,7 @@ namespace Curiosity.Core.Server.Managers
                 return items;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:armor", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:armor", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -117,7 +117,7 @@ namespace Curiosity.Core.Server.Managers
                 return kits;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:health", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:health", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -130,7 +130,7 @@ namespace Curiosity.Core.Server.Managers
                 return kits;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:repair", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:repair", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -143,7 +143,7 @@ namespace Curiosity.Core.Server.Managers
                 return kits;
             }));
 
-            EventSystem.GetModule().Attach("character:routing:base", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:routing:base", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
@@ -212,7 +212,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:load", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:load", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -225,7 +225,7 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser.Character;
             }));
 
-            EventSystem.GetModule().Attach("character:weapons:equip", new EventCallback(metadata =>
+            EventSystem.Attach("character:weapons:equip", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -246,7 +246,7 @@ namespace Curiosity.Core.Server.Managers
                 return true;
             }));
 
-            EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -304,7 +304,7 @@ namespace Curiosity.Core.Server.Managers
                 return true;
             }));
 
-            EventSystem.GetModule().Attach("character:respawn", new EventCallback(metadata =>
+            EventSystem.Attach("character:respawn", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 curiosityUser.Send("character:respawn:hospital");
@@ -312,7 +312,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:respawn:charge", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:respawn:charge", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -331,7 +331,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:killedSelf", new EventCallback(metadata =>
+            EventSystem.Attach("character:killedSelf", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -340,7 +340,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:death", new EventCallback(metadata =>
+            EventSystem.Attach("character:death", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -349,7 +349,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:get:profile", new EventCallback(metadata =>
+            EventSystem.Attach("character:get:profile", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;
@@ -357,7 +357,7 @@ namespace Curiosity.Core.Server.Managers
                 return PluginManager.ActiveUsers[metadata.Sender];
             }));
 
-            EventSystem.GetModule().Attach("character:get:profile:enhanced", new EventCallback(metadata =>
+            EventSystem.Attach("character:get:profile:enhanced", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Find<int>(0)))
                     return null;
@@ -365,14 +365,14 @@ namespace Curiosity.Core.Server.Managers
                 return PluginManager.ActiveUsers[metadata.Find<int>(0)];
             }));
 
-            EventSystem.GetModule().Attach("character:get:skills", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:get:skills", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
                 return returnVal;
             }));
 
-            EventSystem.GetModule().Attach("character:get:skills:enhanced", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:get:skills:enhanced", new AsyncEventCallback(async metadata =>
             {
                 bool isSamePlayer = metadata.Sender == metadata.Find<int>(0);
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Find<int>(0)];
@@ -383,14 +383,14 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
-            EventSystem.GetModule().Attach("character:get:stats", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:get:stats", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
                 return returnVal;
             }));
 
-            EventSystem.GetModule().Attach("character:get:stats:enhanced", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:get:stats:enhanced", new AsyncEventCallback(async metadata =>
             {
                 bool isSamePlayer = metadata.Sender == metadata.Find<int>(0);
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Find<int>(0)];
@@ -401,7 +401,7 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
-            EventSystem.GetModule().Attach("character:update:stat:timed", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:update:stat:timed", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -421,7 +421,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("character:killed:self", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:killed:self", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -444,7 +444,7 @@ namespace Curiosity.Core.Server.Managers
                 return player.Character.Cash;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:items", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:items", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -453,7 +453,7 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:hasItem", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:hasItem", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -467,7 +467,7 @@ namespace Curiosity.Core.Server.Managers
                 return item.NumberOwned > 0;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:equipped", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:equipped", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -476,7 +476,7 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:success", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:success", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
@@ -487,7 +487,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:use", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:use", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -541,7 +541,7 @@ namespace Curiosity.Core.Server.Managers
                 return exportMessage;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:equip", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:equip", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -581,7 +581,7 @@ namespace Curiosity.Core.Server.Managers
                 return exportMessage;
             }));
 
-            EventSystem.GetModule().Attach("character:inventory:remove", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("character:inventory:remove", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[metadata.Sender];

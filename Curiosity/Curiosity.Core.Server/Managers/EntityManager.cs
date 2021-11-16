@@ -22,7 +22,7 @@ namespace Curiosity.Core.Server.Managers
         {
             EntityInstance = this;
 
-            EventSystem.GetModule().Attach("culling:set", new EventCallback(metadata =>
+            EventSystem.Attach("culling:set", new EventCallback(metadata =>
             {
                 float culling = metadata.Find<float>(0);
 
@@ -34,7 +34,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("culling:reset", new EventCallback(metadata =>
+            EventSystem.Attach("culling:reset", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -44,13 +44,13 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("entity:nuke", new EventCallback(metadata =>
+            EventSystem.Attach("entity:nuke", new EventCallback(metadata =>
             {
                 EventSystem.SendAll("entity:nuke");
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("delete:entity", new EventCallback(metadata =>
+            EventSystem.Attach("delete:entity", new EventCallback(metadata =>
             {
                 int networkId = metadata.Find<int>(0);
 
@@ -59,7 +59,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("entity:setup:vehicle", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("entity:setup:vehicle", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -117,7 +117,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("entity:setup:ped", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("entity:setup:ped", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -186,14 +186,14 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("entity:spawn:prop", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("entity:spawn:prop", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
                 return await CreateEntity(metadata);
             }));
 
-            EventSystem.GetModule().Attach("entity:damage", new EventCallback(metadata =>
+            EventSystem.Attach("entity:damage", new EventCallback(metadata =>
             {
                 //BaseScript.TriggerClientEvent("c:mm:damage", networkId, x, y, z, force, radius, fromEntity, numberOfHits);
 
@@ -209,7 +209,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach(ENTITY_VEHICLE_DELETE, new EventCallback(metadata =>
+            EventSystem.Attach(ENTITY_VEHICLE_DELETE, new EventCallback(metadata =>
             {
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -228,7 +228,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach(ENTITY_VEHICLE_REPAIR, new AsyncEventCallback(async metadata =>
+            EventSystem.Attach(ENTITY_VEHICLE_REPAIR, new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
 

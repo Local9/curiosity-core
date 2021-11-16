@@ -55,7 +55,7 @@ namespace Curiosity.Core.Server.Managers
                 trailerHashes.Add(API.GetHashKey(trailer));
             }
 
-            EventSystem.GetModule().Attach("vehicle:log:player", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:player", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
                 
@@ -69,7 +69,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
             
-            EventSystem.GetModule().Attach("vehicle:log:staff", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:staff", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
 
@@ -83,7 +83,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalTrailer = netId;
@@ -91,7 +91,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:log:player:plane", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:player:plane", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalPlane = netId;
@@ -99,7 +99,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:log:player:boat", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:player:boat", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalBoat = netId;
@@ -107,7 +107,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:log:player:helicopter", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:log:player:helicopter", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalHelicopter = netId;
@@ -115,7 +115,7 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            //EventSystem.GetModule().Attach("vehicle:spawn", new EventCallback(metadata =>
+            //EventSystem.Attach("vehicle:spawn", new EventCallback(metadata =>
             //{
             //    if (arguments.Count <= 0) return;
             //    var model = API.GetHashKey(arguments.ElementAt(0));
@@ -128,7 +128,7 @@ namespace Curiosity.Core.Server.Managers
             //    return null
             //}));
 
-            EventSystem.GetModule().Attach("vehicle:refuel:charge", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:refuel:charge", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 GenericMessage genericMessage = new GenericMessage();
@@ -161,7 +161,7 @@ namespace Curiosity.Core.Server.Managers
                 return genericMessage;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:refuel:jerry", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:refuel:jerry", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 GenericMessage genericMessage = new GenericMessage();
@@ -194,7 +194,7 @@ namespace Curiosity.Core.Server.Managers
                 return genericMessage;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>
+            EventSystem.Attach("vehicle:owner", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
                 int networkId = metadata.Find<int>(0);
@@ -213,7 +213,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:tow", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:tow", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 int networkId = metadata.Find<int>(0);
@@ -257,7 +257,7 @@ namespace Curiosity.Core.Server.Managers
                 return CommonErrors.NotEnoughPoliceRep1000;
             }));
 
-            EventSystem.GetModule().Attach("vehicle:spawn", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:spawn", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
 
@@ -326,7 +326,7 @@ namespace Curiosity.Core.Server.Managers
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
-            EventSystem.GetModule().Attach("vehicle:spawn:position", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:spawn:position", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
 
@@ -400,7 +400,7 @@ namespace Curiosity.Core.Server.Managers
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
-            EventSystem.GetModule().Attach("vehicle:trailer:spawn:position", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:trailer:spawn:position", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
 
@@ -456,7 +456,7 @@ namespace Curiosity.Core.Server.Managers
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
-            EventSystem.GetModule().Attach("vehicle:repair", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:repair", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 var player = PluginManager.PlayersList[metadata.Sender];
@@ -478,7 +478,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("vehicle:spawn:menu", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:spawn:menu", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 var player = PluginManager.PlayersList[metadata.Sender];
@@ -501,7 +501,7 @@ namespace Curiosity.Core.Server.Managers
 
             }));
 
-            EventSystem.GetModule().Attach("vehicle:drive:check", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("vehicle:drive:check", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
 

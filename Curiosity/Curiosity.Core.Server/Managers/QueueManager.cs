@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.AttachTickHandler(SetupTimer);
             Instance.AttachTickHandler(QueueUpdate);
 
-            EventSystem.GetModule().Attach("user:queue:active", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:queue:active", new AsyncEventCallback(async metadata =>
             {
                 try
                 {

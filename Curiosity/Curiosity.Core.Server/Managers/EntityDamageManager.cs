@@ -7,7 +7,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("s:mm:damage", new EventCallback(metadata =>
+            EventSystem.Attach("s:mm:damage", new EventCallback(metadata =>
             {
                 int networkId = metadata.Find<int>(0);
                 float x = metadata.Find<float>(1);

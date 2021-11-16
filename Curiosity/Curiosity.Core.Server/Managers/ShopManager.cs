@@ -24,7 +24,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("shop:get:stock", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:get:stock", new AsyncEventCallback(async metadata =>
             {
                 List<ShopStock> shopStocks = new List<ShopStock>();
                 try
@@ -39,7 +39,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:get:categories", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:get:categories", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -53,7 +53,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:get:items", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:get:items", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -70,7 +70,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:get:item", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:get:item", new AsyncEventCallback(async metadata =>
             {
                 int itemId = -1;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -100,7 +100,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:purchase:item", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:purchase:item", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
                 SqlResult purchaseResult = new SqlResult();
@@ -304,7 +304,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:sell:item", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("shop:sell:item", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];

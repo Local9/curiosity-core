@@ -9,7 +9,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("event:special", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("event:special", new AsyncEventCallback(async metadata =>
             {
                 try
                 {

@@ -26,7 +26,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("user:get:playerlist", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:get:playerlist", new AsyncEventCallback(async metadata =>
             {
                 List<CuriosityPlayerListItem> lst = new List<CuriosityPlayerListItem>();
 
@@ -54,7 +54,7 @@ namespace Curiosity.Core.Server.Managers
                 return lst;
             }));
 
-            EventSystem.GetModule().Attach("user:login", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:login", new AsyncEventCallback(async metadata =>
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
 
@@ -105,7 +105,7 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser;
             }));
             
-            EventSystem.GetModule().Attach("user:login:module", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:login:module", new AsyncEventCallback(async metadata =>
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
 
@@ -124,7 +124,7 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser;
             }));
 
-            EventSystem.GetModule().Attach("user:kick:afk", new EventCallback(metadata =>
+            EventSystem.Attach("user:kick:afk", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -133,7 +133,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("user:log:exception", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:log:exception", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -158,14 +158,14 @@ namespace Curiosity.Core.Server.Managers
             Instance.EventRegistry.Add("user:log:exception", new Action<Player, string, string>(OnUserLogException));
 
             // TODO: Character
-            EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
+            EventSystem.Attach("user:job", new EventCallback(metadata =>
             {
                 return SetUserJobText(metadata.Sender, metadata.Find<string>(0));
             }));
 
 
             // TODO: Character
-            EventSystem.GetModule().Attach("user:personal:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("user:personal:vehicle", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
@@ -175,7 +175,7 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             // TODO: Character
-            EventSystem.GetModule().Attach("user:job:notification:backup", new EventCallback(metadata =>
+            EventSystem.Attach("user:job:notification:backup", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
@@ -187,14 +187,14 @@ namespace Curiosity.Core.Server.Managers
 
             #region PDA Lists and methods
 
-            EventSystem.GetModule().Attach("user:report:list", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:report:list", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Report);
                 return lst;
             }));
 
-            EventSystem.GetModule().Attach("user:report:submit", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:report:submit", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
@@ -459,7 +459,7 @@ namespace Curiosity.Core.Server.Managers
                     MissionData mission = MissionManager.ActiveMissions[playerHandle];
                     foreach (int partyMember in mission.PartyMembers)
                     {
-                        EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                        EventSystem.Send("mission:backup:completed", partyMember);
                     }
                 }
 

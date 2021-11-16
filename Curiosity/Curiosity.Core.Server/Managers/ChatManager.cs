@@ -36,7 +36,7 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             // may need to make this so its :local, :world, :universe, :help, and yes, it would make it easier!
-            EventSystem.GetModule().Attach("chat:message", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("chat:message", new AsyncEventCallback(async metadata => {
                 try
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];

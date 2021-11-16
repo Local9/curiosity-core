@@ -29,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
             // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
             Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
-            EventSystem.GetModule().Attach("onesync:request", new EventCallback(metadata => {
+            EventSystem.Attach("onesync:request", new EventCallback(metadata => {
                 return true;
 
                 //if (requestedRightsToSpawn.Contains(metadata.Sender))

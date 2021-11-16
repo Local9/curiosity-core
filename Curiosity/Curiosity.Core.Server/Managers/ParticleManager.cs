@@ -7,7 +7,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("s:mm:particle:location", new EventCallback(metadata =>
+            EventSystem.Attach("s:mm:particle:location", new EventCallback(metadata =>
             {
                 string dict = metadata.Find<string>(0);
                 string fx = metadata.Find<string>(1);
@@ -21,7 +21,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("s:mm:particle:entity", new EventCallback(metadata =>
+            EventSystem.Attach("s:mm:particle:entity", new EventCallback(metadata =>
             {
                 int networkId = metadata.Find<int>(0);
                 string dict = metadata.Find<string>(1);
