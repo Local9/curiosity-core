@@ -182,7 +182,7 @@ namespace Curiosity.Core.Server.Managers
                 lastTimeWeatherUpdated = DateTime.UtcNow.AddMinutes(60);
             }
 
-            await BaseScript.Delay(1000);
+            await BaseScript.Delay(10000);
         }
 
         [TickHandler]
