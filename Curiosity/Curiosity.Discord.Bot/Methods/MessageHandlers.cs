@@ -102,6 +102,7 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("steam/gifts")
                 || message.Content.Contains("Get Discord Nitro")
                 || message.Content.Contains("offer is valid")
+                || message.Content.Contains("nitro")
                 )
             {
                 await message.DeleteAsync();
@@ -113,15 +114,6 @@ namespace Curiosity.LifeV.Bot.Methods
                 await msg.DeleteAsync();
 
                 _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[SCAM LINK] User: {message.Author.Mention} posted a possible scam link and it has been removed.\nRemoved Content;\n```{message.Content}```");
-            }
-
-            if (message.Content.Contains("!ip"))
-            {
-                var msg = await context.Channel.SendMessageAsync("Wish people would just stop joining random Discord Guilds to just type !ip, honestly, do you think we're all the same?! I envy everyone you have never met.");
-                
-                await Task.Delay(5000);
-
-                await msg.DeleteAsync();
             }
         }
 
