@@ -15,7 +15,7 @@ namespace Curiosity.Core.Server.Managers
 {
     public class GarageManager : Manager<GarageManager>
     {
-        private const float SPAWN_DISTANCE_CHECK = 600.0f;
+        private const float SPAWN_DISTANCE_CHECK = 200.0f;
 
         public override void Begin()
         {
@@ -148,6 +148,8 @@ namespace Curiosity.Core.Server.Managers
                     if (!isVehicle)
                     {
                         List<Position> spawnPositions = LocationsConfigManager.GetModule().NearestSpawnPositions(pos, vehicleItem.SpawnTypeId, SPAWN_DISTANCE_CHECK);
+
+                        Logger.Debug($"Spawn Position Type: {vehicleItem.SpawnTypeId}, found {spawnPositions.Count}.");
 
                         for (int i = 0; i < spawnPositions.Count; i++)
                         {

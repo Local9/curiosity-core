@@ -133,7 +133,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("user:log:exception", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:log:exception", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
@@ -336,7 +336,7 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        private void OnUserLogException([FromSource]Player player, string message, string stack)
+        private async void OnUserLogException([FromSource]Player player, string message, string stack)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append($"Client Exception: {DateTime.UtcNow}\n");

@@ -195,6 +195,9 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
+                if (spawnCache is null)
+                    GetLocationConfig();
+
                 if (!spawnCache.ContainsKey(spawnType))
                 {
                     Logger.Error($"Key '{spawnType}' not found");
