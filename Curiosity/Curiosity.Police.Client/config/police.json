@@ -1,4 +1,5 @@
 {
+  "speedCameraDistance":  20,
   "ignoredVehicles": [
     "police",
     "police2"
@@ -224,10 +225,10 @@
   },
   "speedCameras": [
     {
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "direction": "W"
+      "X": 1123.567,
+      "Y": 405.3883,
+      "Z": 83.24485,
+      "direction": "NE"
     }
   ]
 }
