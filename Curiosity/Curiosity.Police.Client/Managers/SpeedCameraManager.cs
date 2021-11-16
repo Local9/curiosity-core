@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using CitizenFX.Core.UI;
 using System;
 using System.Collections.Generic;
+using Curiosity.Police.Client.Environment.Entities.Models;
+using System.Linq;
 
 namespace Curiosity.Police.Client.Managers
 {
@@ -29,7 +31,9 @@ namespace Curiosity.Police.Client.Managers
             { 360, "N" }
         };
 
-        float _currentAreaLimit = 0;
+        float _speedCameraDistance;
+        float _currentStreetLimit = 0;
+        string _currentStreet;
 
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
@@ -44,11 +48,15 @@ namespace Curiosity.Police.Client.Managers
             if (_configurationManager.IgnoredVehicles.Contains(vehicleDisplayName)) return;
 
             PluginManager.Instance.AttachTickHandler(OnSpeedTest);
+            PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
+
+            _speedCameraDistance = _configurationManager.SpeedCameraDistance;
         }
 
         public void Dispose()
         {
             Instance.DetachTickHandler(OnSpeedTest);
+            Instance.DetachTickHandler(OnSpeedCameraCheck);
         }
 
         private Task OnSpeedTest() // limiter to show, but not report
@@ -71,13 +79,13 @@ namespace Curiosity.Police.Client.Managers
 
             string street = GetStreetNameFromHashKey(streetHash);
 
-            if (_configurationManager.SpeedCameras.ContainsKey(street))
+            if (_configurationManager.SpeedLimits.ContainsKey(street))
             {
                 //int speedLimit = _configurationManager.SpeedCameras[street];
                 //float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 //float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
-
-                _currentAreaLimit = _configurationManager.SpeedCameras[street];
+                _currentStreet = street;
+                _currentStreetLimit = _configurationManager.SpeedLimits[street];
             }
             else
             {
@@ -85,7 +93,7 @@ namespace Curiosity.Police.Client.Managers
             }
 
         DELAY_RETURN:
-            return BaseScript.Delay(5000);
+            return BaseScript.Delay(2000);
         }
 
         public string GetVehicleHeadingDirection()
@@ -102,6 +110,38 @@ namespace Curiosity.Police.Client.Managers
             }
 
             return "U";
+        }
+
+        public List<SpeedCamera> GetClosestCamera(Vector3 position, float distance)
+        {
+            return _configurationManager.SpeedCameras
+                    .Where(x => Vector3.Distance(position, x.Position) < distance)
+                    .OrderBy(x => Vector3.Distance(position, x.Position)).ToList();
+        }
+
+        private async Task OnSpeedCameraCheck()
+        {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                Dispose();
+                return;
+            }
+
+            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+            string direction = GetVehicleHeadingDirection();
+            List<SpeedCamera> closestCameras = GetClosestCamera(vehicle.Position, _speedCameraDistance);
+            if (closestCameras.Count == 0) return;
+            foreach(SpeedCamera camera in closestCameras)
+            {
+                if (camera.Direction != direction) continue;
+                float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
+                float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
+
+                if (speedInMph > _currentStreetLimit)
+                {
+                    Screen.ShowNotification($"Speeding!~n~{_currentStreet}~n~{_currentStreetLimit}mph");
+                }
+            }
         }
     }
 }

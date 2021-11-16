@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CitizenFX.Core;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Police.Client.Environment.Entities.Models
@@ -14,6 +15,9 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
 
         [DataMember(Name = "ignoredVehicles")]
         public List<string> IgnoredVehicles;
+
+        [DataMember(Name = "speedCameras")]
+        public List<SpeedCamera> SpeedCameras;
     }
 
     [DataContract]
@@ -30,5 +34,7 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
 
         [DataMember(Name = "direction")]
         public string Direction;
+
+        public Vector3 Position => new Vector3(X, Y, Z);
     }
 }
