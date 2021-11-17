@@ -137,8 +137,10 @@ namespace Curiosity.Police.Client.Managers
                 float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
+                World.DrawMarker(MarkerType.DebugSphere, camera.Position, Vector3.Zero, Vector3.Zero, new Vector3(5f), System.Drawing.Color.FromArgb(200, 255, 255, 255));
+
                 if (speedInMph > _currentStreetLimit)
-                {
+                {    
                     Screen.ShowNotification($"Speeding!~n~{_currentStreet}~n~{_currentStreetLimit}mph");
                 }
             }

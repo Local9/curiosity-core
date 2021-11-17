@@ -1,5 +1,5 @@
 {
-  "speedCameraDistance":  40,
+  "speedCameraDistance":  15,
   "ignoredVehicles": [
     "police",
     "police2"
