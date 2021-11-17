@@ -167,7 +167,7 @@ namespace Curiosity.Core.Server.Managers
 
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, u.Character.IsPassive, true);
 
-                API.SetPlayerCullingRadius($"{metadata.Sender}", 0.0f); // let the server decide
+                player.State.Set(StateBagKey.PLAYER_ROLE, (int)u.Role, true);
                 
                 u.RoutingBucket = 0;
 

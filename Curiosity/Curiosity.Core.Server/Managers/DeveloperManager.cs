@@ -1,9 +1,11 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -13,6 +15,45 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            EventSystem.Attach("debug:camera:save", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                    if (!curiosityUser.IsDeveloper) return null;
+
+                    string name = Regex.Replace(curiosityUser.LatestName, "[^a-zA-Z0-9]", String.Empty);
+
+                    string filePath = $@"{API.GetResourcePath(API.GetCurrentResourceName())}\data\{name}-CameraPositions.txt";
+                    EvaluatePath(filePath);
+
+                    if (!File.Exists(filePath))
+                    {
+                        File.Create(filePath).Dispose();
+                    }
+
+                    using (TextWriter tw = new StreamWriter(filePath, true))
+                    {
+                        SpeedCameraMetadata speedCameras = metadata.Find<SpeedCameraMetadata>(0);
+
+                        foreach (SpeedCamera speedCamera in speedCameras.cameras)
+                        {
+                            Logger.Debug($"Saving Position: {speedCamera}");
+                            await BaseScript.Delay(100);
+                            tw.WriteLine($"{speedCamera}");
+                        }
+                    }
+
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    Logger.Error($"debug:camera:save -> {ex}");
+                    return false;
+                }
+            }));
+
             EventSystem.Attach("developer:savePos", new EventCallback(metadata =>
                 {
                     try

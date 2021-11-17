@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Police.Client.Commands;
+using Curiosity.Police.Client.Commands.Impl;
 using Curiosity.Police.Client.Diagnostics;
 using Curiosity.Police.Client.Discord;
 using Curiosity.Police.Client.Environment.Entities;
@@ -103,6 +105,10 @@ namespace Curiosity.Police.Client
             }
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+
+            var commands = new CommandFramework();
+
+            commands.Bind(typeof(DeveloperTools));
 
             AttachTickHandlers(this);
 

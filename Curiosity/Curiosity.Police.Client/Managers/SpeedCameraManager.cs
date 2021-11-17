@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Curiosity.Police.Client.Environment.Entities.Models;
 using System.Linq;
+using Curiosity.Police.Client.Environment.Data;
 
 namespace Curiosity.Police.Client.Managers
 {
@@ -17,19 +18,6 @@ namespace Curiosity.Police.Client.Managers
         ConfigurationManager _configurationManager => ConfigurationManager.GetModule();
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
-
-        Dictionary<int, string> _cameraDirection = new()
-        {
-            { 0, "N" },
-            { 45, "NW" },
-            { 90, "W" },
-            { 135, "SW" },
-            { 180, "S" },
-            { 225, "SE" },
-            { 270, "E" },
-            { 315, "NE" },
-            { 360, "N" }
-        };
 
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
@@ -67,10 +55,10 @@ namespace Curiosity.Police.Client.Managers
                 return BaseScript.Delay(0);
             }
 
-            Vector3 playerPos = Game.PlayerPed.Position;
+            Vector3 pos = Game.PlayerPed.CurrentVehicle.Position;
             uint streetHash = 0;
             uint crossingRoad = 0;
-            GetStreetNameAtCoord(playerPos.X, playerPos.Y, playerPos.Z, ref streetHash, ref crossingRoad);
+            GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
 
             if (streetHash == 0)
             {
@@ -81,11 +69,20 @@ namespace Curiosity.Police.Client.Managers
 
             if (_configurationManager.SpeedLimits.ContainsKey(street))
             {
-                //int speedLimit = _configurationManager.SpeedCameras[street];
-                //float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
-                //float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
                 _currentStreet = street;
-                _currentStreetLimit = _configurationManager.SpeedLimits[street];
+                string direction = GetVehicleHeadingDirection();
+
+                List<PoliceCamera> closestCameras = GetClosestCamera(pos, _speedCameraDistance);
+                float? cameraOverride = 0;
+                foreach (PoliceCamera camera in closestCameras)
+                {
+                    if (camera.Direction != direction) continue;
+                    if (camera.Limit is null) continue;
+                    if (camera.Limit == 0) continue;
+                    cameraOverride = camera.Limit;
+                }
+
+                _currentStreetLimit = cameraOverride is not null ? (float)cameraOverride : _configurationManager.SpeedLimits[street];
             }
             else
             {
@@ -100,7 +97,7 @@ namespace Curiosity.Police.Client.Managers
         {
             if (!Game.PlayerPed.IsInVehicle()) return "U";
 
-            foreach(KeyValuePair<int, string> kvp in _cameraDirection)
+            foreach(KeyValuePair<int, string> kvp in CompassDirections.Direction)
             {
                 float vehDirection = Game.PlayerPed.CurrentVehicle.Heading;
                 if (Math.Abs(vehDirection - kvp.Key) < 22.5)
@@ -112,7 +109,7 @@ namespace Curiosity.Police.Client.Managers
             return "U";
         }
 
-        public List<SpeedCamera> GetClosestCamera(Vector3 position, float distance)
+        public List<PoliceCamera> GetClosestCamera(Vector3 position, float distance)
         {
             return _configurationManager.SpeedCameras
                     .Where(x => Vector3.Distance(position, x.Position) < distance)
@@ -129,15 +126,15 @@ namespace Curiosity.Police.Client.Managers
 
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
             string direction = GetVehicleHeadingDirection();
-            List<SpeedCamera> closestCameras = GetClosestCamera(vehicle.Position, _speedCameraDistance);
+            List<PoliceCamera> closestCameras = GetClosestCamera(vehicle.Position, _speedCameraDistance);
             if (closestCameras.Count == 0) return;
-            foreach(SpeedCamera camera in closestCameras)
+            foreach(PoliceCamera camera in closestCameras)
             {
                 if (camera.Direction != direction) continue;
                 float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
-                World.DrawMarker(MarkerType.DebugSphere, camera.Position, Vector3.Zero, Vector3.Zero, new Vector3(5f), System.Drawing.Color.FromArgb(200, 255, 255, 255));
+                if (_currentStreetLimit == 0) continue;
 
                 if (speedInMph > _currentStreetLimit)
                 {    

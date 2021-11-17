@@ -53,7 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="Commands\CommandContext.cs" />
+    <Compile Include="Commands\CommandFramework.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Environment\Data\CompassDirections.cs" />
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Config.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />

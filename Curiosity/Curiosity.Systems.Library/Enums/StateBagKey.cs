@@ -24,6 +24,7 @@
         public const string PLAYER_CASH = "PLAYER_CASH";
         public const string PLAYER_VEHICLE = "PLAYER_VEHICLE";
         public const string PLAYER_FREEZE = "PLAYER_FREEZE";
+        public const string PLAYER_ROLE = "player:role";
 
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
@@ -95,6 +96,8 @@
         public const string VEH_SIREN_SOUNDID = "v::siren::soundId";
 
         public static string CURIOSITY_CREATED = "c::created";
+
+        
 
         #endregion
     }
