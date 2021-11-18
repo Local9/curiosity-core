@@ -752,9 +752,17 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 try
                 {
-                    float x = float.Parse(arguments[0]);
-                    float y = float.Parse(arguments[1]);
-                    float z = float.Parse(arguments[2]);
+                    string xStr = arguments[0];
+                    string yStr = arguments[1];
+                    string zStr = arguments[2];
+
+                    xStr = xStr.Replace(",", "").Replace("f", "");
+                    yStr = yStr.Replace(",", "").Replace("f", "");
+                    zStr = zStr.Replace(",", "").Replace("f", "");
+
+                    float x = float.Parse(xStr);
+                    float y = float.Parse(yStr);
+                    float z = float.Parse(zStr);
 
                     var position = new Vector3(x, y, z);
 
