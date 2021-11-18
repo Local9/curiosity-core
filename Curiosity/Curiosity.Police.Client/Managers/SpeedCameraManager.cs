@@ -133,6 +133,8 @@ namespace Curiosity.Police.Client.Managers
                 float low = p.Z - 0.5f;
                 float high = p.Z + 1f;
 
+                int exampleCost = 0;
+
                 if (!Between(vehicle.Position.Z, low, high)) continue;
 
                 camera.Active = true;
@@ -141,7 +143,8 @@ namespace Curiosity.Police.Client.Managers
                 {
                     if (speedInMph > camera.Limit)
                     {
-                        ShowNotification($"Speeding!~n~{_currentStreet}~n~{camera.Limit}mph");
+                        exampleCost = (int)((speedInMph - camera.Limit) * 50);
+                        ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {camera.Limit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
                         await BaseScript.Delay(5000);
                         camera.Active = false;
                     }
@@ -150,7 +153,8 @@ namespace Curiosity.Police.Client.Managers
                 {
                     if (speedInMph > _currentStreetLimit)
                     {
-                        ShowNotification($"Speeding!~n~{_currentStreet}~n~{_currentStreetLimit}mph");
+                        exampleCost = (int)((speedInMph - _currentStreetLimit) * 50);
+                        ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {_currentStreetLimit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
                         await BaseScript.Delay(5000);
                         camera.Active = false;
                     }
