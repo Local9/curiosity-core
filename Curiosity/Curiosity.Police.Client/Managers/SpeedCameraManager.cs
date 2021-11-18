@@ -22,7 +22,6 @@ namespace Curiosity.Police.Client.Managers
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
-
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
         private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
@@ -30,10 +29,8 @@ namespace Curiosity.Police.Client.Managers
             if (player.Character != vehicle.Driver) return;
 
             string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
-
-            Screen.ShowNotification(vehicleDisplayName);
-
             if (_configurationManager.IgnoredVehicles.Contains(vehicleDisplayName)) return;
+            if (IsInvalidVehicle(vehicle)) return;
 
             PluginManager.Instance.AttachTickHandler(OnSpeedTest);
             PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
@@ -47,12 +44,24 @@ namespace Curiosity.Police.Client.Managers
             Instance.DetachTickHandler(OnSpeedCameraCheck);
         }
 
-        private Task OnSpeedTest() // limiter to show, but not report
+        private bool IsInvalidVehicle(Vehicle vehicle)
+        {
+            VehicleClass vehicleClass = vehicle.ClassType;
+            return
+                vehicleClass != VehicleClass.Planes
+                || vehicleClass != VehicleClass.Boats
+                || vehicleClass != VehicleClass.Helicopters
+                || vehicleClass != VehicleClass.Cycles
+                || vehicleClass != VehicleClass.Trains
+                || vehicleClass != VehicleClass.Emergency;
+        }
+
+        private async Task OnSpeedTest() // limiter to show, but not report
         {
             if (!Game.PlayerPed.IsInVehicle())
             {
                 Dispose();
-                return BaseScript.Delay(0);
+                return;
             }
 
             Vector3 pos = Game.PlayerPed.CurrentVehicle.Position;
@@ -60,37 +69,20 @@ namespace Curiosity.Police.Client.Managers
             uint crossingRoad = 0;
             GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
 
-            if (streetHash == 0)
-            {
-                goto DELAY_RETURN;
-            }
+            if (streetHash == 0) return;
 
             string street = GetStreetNameFromHashKey(streetHash);
 
             if (_configurationManager.SpeedLimits.ContainsKey(street))
             {
                 _currentStreet = street;
-                string direction = GetVehicleHeadingDirection();
-
-                List<PoliceCamera> closestCameras = GetClosestCamera(pos, _speedCameraDistance);
-                float? cameraOverride = 0;
-                foreach (PoliceCamera camera in closestCameras)
-                {
-                    if (camera.Direction != direction) continue;
-                    if (camera.Limit is null) continue;
-                    if (camera.Limit == 0) continue;
-                    cameraOverride = camera.Limit;
-                }
-
-                _currentStreetLimit = cameraOverride is not null ? (float)cameraOverride : _configurationManager.SpeedLimits[street];
+                _currentStreetLimit = _configurationManager.SpeedLimits[street];
+                Screen.ShowSubtitle($"Speed Limit: {_currentStreetLimit}");
             }
             else
             {
                 Screen.ShowNotification($"{street} is unknown, please inform the dev team.");
             }
-
-        DELAY_RETURN:
-            return BaseScript.Delay(2000);
         }
 
         public string GetVehicleHeadingDirection()
@@ -130,17 +122,50 @@ namespace Curiosity.Police.Client.Managers
             if (closestCameras.Count == 0) return;
             foreach(PoliceCamera camera in closestCameras)
             {
+                camera.Active = false;
+
                 if (camera.Direction != direction) continue;
                 float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
                 if (_currentStreetLimit == 0) continue;
+                Vector3 p = camera.Position;
+                float low = p.Z - 0.5f;
+                float high = p.Z + 1f;
 
-                if (speedInMph > _currentStreetLimit)
-                {    
-                    Screen.ShowNotification($"Speeding!~n~{_currentStreet}~n~{_currentStreetLimit}mph");
+                if (!Between(vehicle.Position.Z, low, high)) continue;
+
+                camera.Active = true;
+
+                if (camera.Limit is not null)
+                {
+                    if (speedInMph > camera.Limit)
+                    {
+                        ShowNotification($"Speeding!~n~{_currentStreet}~n~{camera.Limit}mph");
+                        await BaseScript.Delay(5000);
+                        camera.Active = false;
+                    }
+                }
+                else
+                {
+                    if (speedInMph > _currentStreetLimit)
+                    {
+                        ShowNotification($"Speeding!~n~{_currentStreet}~n~{_currentStreetLimit}mph");
+                        await BaseScript.Delay(5000);
+                        camera.Active = false;
+                    }
                 }
             }
+        }
+
+        private void ShowNotification(string msg)
+        {
+            Screen.ShowNotification($"{msg}~n~{DateTime.UtcNow.Millisecond}");
+        }
+
+        public bool Between(float number, float min, float max)
+        {
+            return number >= min && number <= max;
         }
     }
 }

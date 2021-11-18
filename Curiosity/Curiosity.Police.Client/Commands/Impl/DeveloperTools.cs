@@ -39,13 +39,9 @@ namespace Curiosity.Police.Client.Commands.Impl
                     {
                         foreach (PoliceCamera policeCamera in _newSpeedCameras)
                         {
-                            if (speedCameraMetadata.cameras.Contains(policeCamera))
-                            {
-                                speedCameraMetadata.cameras.Remove(policeCamera);
-                                continue;
-                            }
                             policeCamera.Saved = true;
                             speedCameraMetadata.cameras.Add(policeCamera);
+                            _currentSpeedCameras.Add(policeCamera);
                         }
 
                         bool res = await EventSystem.GetModule().Request<bool>("debug:camera:save", speedCameraMetadata);
@@ -53,6 +49,9 @@ namespace Curiosity.Police.Client.Commands.Impl
                             Screen.ShowNotification($"~g~Saved Cameras");
                         if (!res)
                             Screen.ShowNotification($"~r~Failed saving Cameras");
+
+                        speedCameraMetadata.cameras.Clear();
+                        _newSpeedCameras.Clear();
                     }
 
                     return;
@@ -121,8 +120,13 @@ namespace Curiosity.Police.Client.Commands.Impl
             {
                 foreach(PoliceCamera speedCamera in _currentSpeedCameras)
                 {
-                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, Vector3.Zero, new Vector3(configurationManager.SpeedCameraDistance), Color.FromArgb(180, speedCamera.Limit is null ? 255 : 0, speedCamera.Limit is not null ? 255 : 0, 0));
-                    ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera.Direction}");
+                    Color color = Color.FromArgb(120, speedCamera.Limit is null ? 255 : 0, speedCamera.Limit is not null ? 255 : 0, 0);
+
+                    if (speedCamera.Active)
+                        color = Color.FromArgb(120, 0, 0, 255);
+
+                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, Vector3.Zero, new Vector3(configurationManager.SpeedCameraDistance), color);
+                    ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera}");
                 }
             }
 
@@ -130,16 +134,16 @@ namespace Curiosity.Police.Client.Commands.Impl
             {
                 foreach (PoliceCamera speedCamera in _newSpeedCameras)
                 {
-                    Color color = Color.FromArgb(220, speedCamera.Limit is null ? 255 : 0, speedCamera.Limit is not null ? 255 : 0, 0);
+                    Color color = Color.FromArgb(120, speedCamera.Limit is null ? 255 : 0, speedCamera.Limit is not null ? 255 : 0, 0);
 
                     if (!speedCamera.Saved && speedCamera.Limit is null)
-                        color = Color.FromArgb(220, 255, 255, 0);
+                        color = Color.FromArgb(120, 255, 255, 0);
 
                     if (!speedCamera.Saved && speedCamera.Limit is not null)
-                        color = Color.FromArgb(220, 0, 255, 255);
+                        color = Color.FromArgb(120, 0, 255, 255);
 
                     World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, Vector3.Zero, new Vector3(configurationManager.SpeedCameraDistance), color);
-                    ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera.Direction}");
+                    ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera}");
                 }
             }
         }

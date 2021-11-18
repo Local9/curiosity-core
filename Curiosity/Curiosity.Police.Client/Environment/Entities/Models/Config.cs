@@ -26,5 +26,6 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
     {
         public bool Saved;
         public Vector3 Position => new Vector3(X, Y, Z);
+        public bool Active { get; internal set; }
     }
 }
