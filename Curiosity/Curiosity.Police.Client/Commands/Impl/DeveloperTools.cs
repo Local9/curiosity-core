@@ -112,7 +112,7 @@ namespace Curiosity.Police.Client.Commands.Impl
                 GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                PoliceCamera speedCamera = new PoliceCamera() { Street = street, Direction = dir, X = pos.X, Y = pos.Y, Z = pos.Z, Limit = overrideLimit ? 30 : null };
+                PoliceCamera speedCamera = new PoliceCamera() { Street = street, Direction = dir, X = pos.X, Y = pos.Y, Z = pos.Z, Limit = overrideLimit ? 35 : null };
                 _newSpeedCameras.Add(speedCamera);
             }
 
