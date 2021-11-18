@@ -48,12 +48,12 @@ namespace Curiosity.Police.Client.Managers
         {
             VehicleClass vehicleClass = vehicle.ClassType;
             return
-                vehicleClass != VehicleClass.Planes
-                || vehicleClass != VehicleClass.Boats
-                || vehicleClass != VehicleClass.Helicopters
-                || vehicleClass != VehicleClass.Cycles
-                || vehicleClass != VehicleClass.Trains
-                || vehicleClass != VehicleClass.Emergency;
+                vehicleClass == VehicleClass.Planes
+                || vehicleClass == VehicleClass.Boats
+                || vehicleClass == VehicleClass.Helicopters
+                || vehicleClass == VehicleClass.Cycles
+                || vehicleClass == VehicleClass.Trains
+                || vehicleClass == VehicleClass.Emergency;
         }
 
         private async Task OnSpeedTest() // limiter to show, but not report
