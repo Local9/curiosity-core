@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Curiosity.Core.Client.Events;
+using static CitizenFX.Core.Native.API;
+using System;
 
 namespace Curiosity.Core.Client.Diagnostics
 {
@@ -7,6 +9,8 @@ namespace Curiosity.Core.Client.Diagnostics
         public static bool IsDebugEnabled = true;
         public static bool IsDebugTimeEnabled = false;
 
+        static EventSystem _eventSystem => EventSystem.GetModule();
+ 
         public static void Info(string msg)
         {
             WriteLine("INFO", msg, ConsoleColor.White);
@@ -37,20 +41,40 @@ namespace Curiosity.Core.Client.Diagnostics
             WriteLine("VERBOSE", msg, ConsoleColor.DarkGray);
         }
 
-        public static void Debug(string msg)
+        public async static void Debug(string msg)
         {
             if (Cache.Player != null)
             {
+                if(Cache.Player.User.IsDeveloper)
+                {
+                    bool isReallyDeveloper = await _eventSystem.Request<bool>("user:is:developer");
+                    if (!isReallyDeveloper)
+                    {
+                        NetworkSessionEnd(true, true);
+                        return;
+                    }
+                }
+
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
 
                 WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
             }
         }
 
-        public static void Debug(Exception ex, string msg)
+        public async static void Debug(Exception ex, string msg)
         {
             if (Cache.Player != null)
             {
+                if (Cache.Player.User.IsDeveloper)
+                {
+                    bool isReallyDeveloper = await _eventSystem.Request<bool>("user:is:developer");
+                    if (!isReallyDeveloper)
+                    {
+                        NetworkSessionEnd(true, true);
+                        return;
+                    }
+                }
+
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
 
                 WriteLine("DEBUG", $"{msg}\r\n{ex}", ConsoleColor.DarkGray);

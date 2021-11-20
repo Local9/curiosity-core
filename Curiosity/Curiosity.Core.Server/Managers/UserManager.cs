@@ -26,7 +26,13 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.Attach("user:get:playerlist", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("user:is:developer", new EventCallback(metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                return curiosityUser.Role == Role.DEVELOPER || curiosityUser.Role == Role.PROJECT_MANAGER;
+            }));
+
+            EventSystem.Attach("user:get:playerlist", new EventCallback(metadata =>
             {
                 List<CuriosityPlayerListItem> lst = new List<CuriosityPlayerListItem>();
 
