@@ -39,6 +39,17 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("chat:message", new AsyncEventCallback(async metadata => {
                 try
                 {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                    {
+                        Player player = PluginManager.PlayersList[metadata.Sender];
+                        if (player is not null)
+                        {
+                            player.Drop($"There was an issue with your connection");
+                        }
+                        return null;
+                    }
+
+
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     List<CuriosityUser> playersInSameWorld = PluginManager.ActiveUsers.Select(x => x.Value).Where(x => x.RoutingBucket == curiosityUser.RoutingBucket).ToList();
 

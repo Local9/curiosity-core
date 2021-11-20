@@ -6,7 +6,7 @@ namespace Curiosity.Core.Client.Diagnostics
 {
     public static class Logger
     {
-        public static bool IsDebugEnabled = true;
+        public static bool IsDebugEnabled = false;
         public static bool IsDebugTimeEnabled = false;
 
         static DateTime lastChecked = DateTime.UtcNow;
@@ -47,7 +47,7 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (DateTime.UtcNow > lastChecked)
+                if (DateTime.UtcNow < lastChecked)
                 {
                     bool isRoleCorrect = await _eventSystem.Request<bool>("user:is:role", (int)Cache.Player.User.Role);
                     if (!isRoleCorrect)
@@ -68,7 +68,7 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (DateTime.UtcNow > lastChecked)
+                if (DateTime.UtcNow < lastChecked)
                 {
                     bool isRoleCorrect = await _eventSystem.Request<bool>("user:is:role", (int)Cache.Player.User.Role);
                     if (!isRoleCorrect)
