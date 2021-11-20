@@ -9,6 +9,8 @@ namespace Curiosity.Core.Client.Diagnostics
         public static bool IsDebugEnabled = true;
         public static bool IsDebugTimeEnabled = false;
 
+        static DateTime lastChecked = DateTime.UtcNow;
+
         static EventSystem _eventSystem => EventSystem.GetModule();
  
         public static void Info(string msg)
@@ -45,14 +47,15 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if(Cache.Player.User.IsDeveloper)
+                if (DateTime.UtcNow > lastChecked)
                 {
-                    bool isReallyDeveloper = await _eventSystem.Request<bool>("user:is:developer");
-                    if (!isReallyDeveloper)
+                    bool isRoleCorrect = await _eventSystem.Request<bool>("user:is:role", (int)Cache.Player.User.Role);
+                    if (!isRoleCorrect)
                     {
                         NetworkSessionEnd(true, true);
                         return;
                     }
+                    lastChecked.AddMinutes(1);
                 }
 
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
@@ -65,14 +68,15 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             if (Cache.Player != null)
             {
-                if (Cache.Player.User.IsDeveloper)
+                if (DateTime.UtcNow > lastChecked)
                 {
-                    bool isReallyDeveloper = await _eventSystem.Request<bool>("user:is:developer");
-                    if (!isReallyDeveloper)
+                    bool isRoleCorrect = await _eventSystem.Request<bool>("user:is:role", (int)Cache.Player.User.Role);
+                    if (!isRoleCorrect)
                     {
                         NetworkSessionEnd(true, true);
                         return;
                     }
+                    lastChecked.AddMinutes(1);
                 }
 
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
