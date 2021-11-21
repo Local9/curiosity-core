@@ -19,6 +19,9 @@ namespace Curiosity.Police.Client.Environment.Entities.Models
 
         [DataMember(Name = "speedCameras")]
         public List<PoliceCamera> SpeedCameras;
+
+        [DataMember(Name = "warningLimits")]
+        public Dictionary<string, int> WarningLimits;
     }
 
     [DataContract]

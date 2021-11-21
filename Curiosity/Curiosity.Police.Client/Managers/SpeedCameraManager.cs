@@ -18,7 +18,8 @@ namespace Curiosity.Police.Client.Managers
         ConfigurationManager _configurationManager => ConfigurationManager.GetModule();
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
-
+        
+        int _warnPolice = 20;
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
@@ -36,6 +37,7 @@ namespace Curiosity.Police.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
 
             _speedCameraDistance = _configurationManager.SpeedCameraDistance;
+            _warnPolice = _configurationManager.WarningLimits["police"];
         }
 
         public void Dispose()
@@ -139,12 +141,17 @@ namespace Curiosity.Police.Client.Managers
 
                 camera.Active = true;
 
+                bool informPolice = false;
+                bool caughtSpeeding = false;
+
                 if (camera.Limit is not null)
                 {
                     if (speedInMph > camera.Limit)
                     {
-                        exampleCost = (int)((speedInMph - camera.Limit) * 50);
-                        ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {camera.Limit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
+                        informPolice = (speedInMph > (camera.Limit + _warnPolice));
+
+                        //exampleCost = (int)((speedInMph - camera.Limit) * 50);
+                        //ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {camera.Limit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
                         await BaseScript.Delay(5000);
                         camera.Active = false;
                     }
@@ -153,11 +160,18 @@ namespace Curiosity.Police.Client.Managers
                 {
                     if (speedInMph > _currentStreetLimit)
                     {
-                        exampleCost = (int)((speedInMph - _currentStreetLimit) * 50);
-                        ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {_currentStreetLimit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
+                        informPolice = (speedInMph > (_currentStreetLimit + _warnPolice));
+
+                        //exampleCost = (int)((speedInMph - _currentStreetLimit) * 50);
+                        //ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {_currentStreetLimit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
                         await BaseScript.Delay(5000);
                         camera.Active = false;
                     }
+                }
+
+                if (caughtSpeeding)
+                {
+
                 }
             }
         }

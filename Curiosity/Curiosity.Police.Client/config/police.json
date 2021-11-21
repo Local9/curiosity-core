@@ -1,5 +1,8 @@
 {
-  "speedCameraDistance":  12.5,
+  "speedCameraDistance": 12.5,
+  "warningLimits": {
+    "police": 20
+  },
   "ignoredVehicles": [
     "police",
     "police2"

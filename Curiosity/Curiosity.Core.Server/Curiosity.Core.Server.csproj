@@ -102,6 +102,7 @@
     <Compile Include="Managers\MissionManager.cs" />
     <Compile Include="Managers\OneSyncEventManager.cs" />
     <Compile Include="Managers\ParticleManager.cs" />
+    <Compile Include="Managers\PoliceManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ServerConfigManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
