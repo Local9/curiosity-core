@@ -6,7 +6,6 @@
         public const string BLIP_ID = "BLIP_ID";
         public const string BLIP_INFORMATION = "BLIP_INFORMATION";
 
-        #region Mission Keys
         public const string PLAYER_DEBUG_NPC = "player::npc::debug";
         public const string PLAYER_DEBUG_VEH = "player::veh::debug";
         public const string PLAYER_DEBUG_UI = "player::ui::debug";
@@ -15,7 +14,6 @@
         public const string PLAYER_ASSISTING = "player::npc::assisting";
         public const string PLAYER_OWNER = "player::owner";
         public const string PLAYER_PASSIVE = "PLAYER_PASSIVE";
-        public static string PLAYER_WANTED = "player::wanted";
 
         public const string PLAYER_NAME = "PLAYER_NAME";
         public const string SERVER_HANDLE = "SERVER_HANDLE";
@@ -87,18 +85,13 @@
         public const string MENU_TAILGATING = "c::menu::tailgating";
 
         public const string ENTITY_DELETE = "e::delete";
+        public const string CURIOSITY_CREATED = "c::created";
 
-        public const string VEH_SIREN_STATE = "v::siren::state";
-        public const string VEH_SIREN_LIGHTS = "v::siren::light";
-        public const string VEH_SIREN_SOUND = "v::siren::sound";
-        public const string VEH_SIREN_BLIP = "v::siren::blip";
-        public const string VEH_SIREN_AIRHORN = "v::siren::airhorn";
-        public const string VEH_SIREN_SOUNDID = "v::siren::soundId";
+        // Police Wanted Flags
+        public const string VEH_IS_WANTED = "v::police::wanted";
+        public const string PLAYER_IS_WANTED = "p::police::wanted";
 
-        public static string CURIOSITY_CREATED = "c::created";
-
-        
-
-        #endregion
+        // Job Manager Flags
+        public const string PLAYER_JOB = "p::job::current";
     }
 }
