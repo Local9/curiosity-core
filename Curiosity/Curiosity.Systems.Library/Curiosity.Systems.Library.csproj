@@ -51,6 +51,7 @@
     <Compile Include="Data\MusicEvents.cs" />
     <Compile Include="Enums\CombatAttributes.cs" />
     <Compile Include="Enums\DispatchType.cs" />
+    <Compile Include="Enums\ePlayerJobs.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />
