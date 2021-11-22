@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Environment.Entities;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
@@ -112,6 +113,9 @@ namespace Curiosity.Core.Server.Managers
                         curiosityUser.DiscordId = discordId;
                     }
                 }
+
+                CuriosityPlayer cPlayer = new CuriosityPlayer(player);
+                PluginManager.ActivePlayers.TryAdd(metadata.Sender, cPlayer);
 
                 Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
