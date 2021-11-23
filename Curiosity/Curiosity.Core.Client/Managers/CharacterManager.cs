@@ -338,8 +338,8 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Send("character:routing:base");
 
-            if (Instance.ExportDictionary["pma-voice"] is not null)
-                Instance.ExportDictionary["pma-voice"].toggleMute();
+            //if (Instance.ExportDictionary["pma-voice"] is not null)
+            //    Instance.ExportDictionary["pma-voice"].toggleMute();
 
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
