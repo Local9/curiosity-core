@@ -45,7 +45,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
-                    player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+                    player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                     SendNotification(metadata.Sender, $"Welcome to the force.");
 
@@ -55,7 +55,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!activate)
                 {
                     curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
-                    player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+                    player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                     SendNotification(metadata.Sender, $"You have now left the police force.");
 

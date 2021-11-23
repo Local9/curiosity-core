@@ -168,7 +168,7 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_PASSIVE, u.Character.IsPassive, true);
 
                 player.State.Set(StateBagKey.PLAYER_ROLE, (int)u.Role, true);
-                player.State.Set(StateBagKey.PLAYER_JOB, ePlayerJobs.UNEMPLOYED, true);
+                player.State.Set(StateBagKey.PLAYER_JOB, (int)ePlayerJobs.UNEMPLOYED, true);
 
                 SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // default culling range
 
