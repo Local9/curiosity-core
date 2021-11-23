@@ -104,7 +104,7 @@ namespace Curiosity.Core.Server.Managers
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
                         $"Location: {street}<br />Heading: {direction}<br />License Plate: {numberPlate}<br />Speed: {speed} MPH" +
-                        $"</td><td><img src=\"/assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
+                        $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
                         InformPolice(msg, vehicleNetId);
                     }
@@ -131,7 +131,9 @@ namespace Curiosity.Core.Server.Managers
 
         List<int> GetPlayersWhoArePolice()
         {
-            return PluginManager.ActiveUsers.Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER).Select(x => x.Key).ToList();
+            return PluginManager.ActiveUsers
+                //.Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER)
+                .Select(x => x.Key).ToList();
         }
     }
 }

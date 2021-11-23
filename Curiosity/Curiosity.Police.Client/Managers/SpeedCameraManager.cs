@@ -79,7 +79,7 @@ namespace Curiosity.Police.Client.Managers
             {
                 _currentStreet = street;
                 _currentStreetLimit = _configurationManager.SpeedLimits[street];
-                Screen.ShowSubtitle($"Speed Limit: {_currentStreetLimit}");
+                //Screen.ShowSubtitle($"Speed Limit: {_currentStreetLimit}");
             }
             else
             {
@@ -149,6 +149,7 @@ namespace Curiosity.Police.Client.Managers
                     {
                         informPolice = (speedInMph > (camera.Limit + _warnPolice));
                         limitToReport = camera.Limit ?? 0f;
+                        caughtSpeeding = true;
                     }
                 }
                 else
@@ -157,12 +158,13 @@ namespace Curiosity.Police.Client.Managers
                     {
                         informPolice = (speedInMph > (_currentStreetLimit + _warnPolice));
                         limitToReport = _currentStreetLimit;
+                        caughtSpeeding = true;
                     }
                 }
 
                 if (caughtSpeeding)
                 {
-                    EventSystem.Send("police:ticket:speeding", speedInMph, limitToReport, informPolice, vehicle.NetworkId, _currentStreet, direction);
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, informPolice, vehicle.NetworkId, _currentStreet, direction);
                     await BaseScript.Delay(5000);
                     camera.Active = false;
                 }
