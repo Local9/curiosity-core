@@ -35,6 +35,12 @@ namespace Curiosity.Core.Client.Managers
 
                 return true;
             }));
+
+            EventSystem.Attach("system:notification:basic", new EventCallback(metadata =>
+            {
+                CustomNUI(metadata.Find<string>(0));
+                return null;
+            }));
         }
 
         public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false)
@@ -82,6 +88,17 @@ namespace Curiosity.Core.Client.Managers
         {
             API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
             SendNui(eNotification.NOTIFICATION_ERROR, message, position);
+        }
+
+        internal void CustomNUI(string message, bool blink = true, bool saveToBrief = true, int bgColor = 2)
+        {
+            API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~
+            foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
+            {
+                API.AddTextComponentSubstringPlayerName(s);
+            }
+            API.SetNotificationBackgroundColor(bgColor);
+            API.DrawNotification(blink, saveToBrief);
         }
     }
 }
