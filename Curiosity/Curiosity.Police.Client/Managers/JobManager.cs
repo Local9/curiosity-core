@@ -74,7 +74,6 @@ namespace Curiosity.Police.Client.Managers
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
                 await BaseScript.Delay(100);
-                Notify.Info($"Welcome to the force");
                 Instance.AttachTickHandler(OnDisablePoliceAndDispatch);
 
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
@@ -92,18 +91,16 @@ namespace Curiosity.Police.Client.Managers
                 Instance.DiscordRichPresence.SmallAsset = "fivem";
                 Instance.DiscordRichPresence.SmallAssetText = "FiveM";
                 Instance.DiscordRichPresence.Commit();
-
-                Notify.Info($"No longer a police officer");
-
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
                 
                 ToggleDispatch(true);
 
                 await BaseScript.Delay(100);
-            }            
-
+            }
             await BaseScript.Delay(100);
-            EventSystem.Request<object>("user:job", job);
+            EventSystem.Send("police:job:state", IsOfficer);
+            await BaseScript.Delay(100);
+            EventSystem.Send("user:job", job);
         }
 
         async Task OnDisablePoliceAndDispatch()

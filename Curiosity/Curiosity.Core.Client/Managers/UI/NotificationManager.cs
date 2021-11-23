@@ -57,25 +57,30 @@ namespace Curiosity.Core.Client.Managers
         internal void Loader(string message, string position = "bottom-right")
         {
             SendNui(eNotification.NOTIFICATION_LOADER, message, position);
+            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
         }
 
         internal void Success(string message, string position = "bottom-right")
         {
+            API.PlaySoundFrontend(-1, "package_delivered_success", "DLC_GR_Generic_Mission_Sounds", true);
             SendNui(eNotification.NOTIFICATION_SUCCESS, message, position);
         }
 
         internal void Warn(string message, string position = "bottom-right")
         {
+            API.PlaySoundFrontend(-1, "tyre_health_warning", "DLC_sum20_Open_Wheel_Racing_Sounds", true);
             SendNui(eNotification.NOTIFICATION_WARNING, message, position);
         }
 
         internal void Info(string message, string position = "bottom-right")
         {
+            API.PlaySoundFrontend(-1, "INFO", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
             SendNui(eNotification.NOTIFICATION_INFO, message, position);
         }
 
         internal void Error(string message, string position = "bottom-right")
         {
+            API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
             SendNui(eNotification.NOTIFICATION_ERROR, message, position);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Police.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace Curiosity.Police.Client.Managers.GameEvents
             // if I'm an officer, I cannot get punished if the victim is flagged
             if (JobManager.IsOfficer && isVictimWanted)
             {
-                // check server side
+                Logger.Debug($"PK -> Officer killed Suspect");
+                EventSystem.Send("police:suspect:killed", victimServerId, victim.Character.NetworkId);
                 return;
             }
 

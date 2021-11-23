@@ -23,7 +23,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                bool activate = curiosityUser.Job != ePlayerJobs.POLICE_OFFICER;
+                bool activate = metadata.Find<bool>(0);
 
                 if (activate)
                 {
@@ -70,6 +70,15 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             EventSystem.Attach("police:suspect:killed", new AsyncEventCallback(async metadata => {
+
+                int suspectServerId = metadata.Find<int>(0);
+
+                Player player = PluginManager.PlayersList[suspectServerId];
+                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset
+                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true);
+
+                // log kill & reward officers (if kill is near a safe area, its not rewarded)
+
                 return null;
             }));
 
@@ -109,15 +118,12 @@ namespace Curiosity.Core.Server.Managers
 
                     // add ticket to the database against the character/vehicle
                     int characterId = curiosityUser.Character.CharacterId;
-                    int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID);
+                    int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID); // mark in the Database
                     // wanted flag so police are not punished
-                    vehicle.State.Set(StateBagKey.VEH_IS_WANTED, informPolice, true);
                     player.State.Set(StateBagKey.PLAYER_IS_WANTED, informPolice, true);
                     // ticket
                     int costOfTicket = (int)((speed - speedLimit) * 50); // only charge for speed over the limit
                     SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
-                    SetEntityDistanceCullingRadius(vehicle.Handle, 5000f); // make the vehicle visible
-
                     // store in the database
 
                     if (informPolice)
