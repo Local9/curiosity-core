@@ -13,7 +13,30 @@ namespace Curiosity.Core.Client.Managers
             Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, int, bool, bool, bool>(
                 (notification, message, position, theme, duration, autoClose, dismissible) =>
                 {
-                    SendNui((eNotification)notification, message, position, theme, duration, autoClose, dismissible);
+                    eNotification eNotification = (eNotification)notification;
+                    switch(eNotification)
+                    {
+                        case eNotification.NOTIFICATION_SUCCESS:
+                            API.PlaySoundFrontend(-1, "package_delivered_success", "DLC_GR_Generic_Mission_Sounds", true);
+                            break;
+                        case eNotification.NOTIFICATION_INFO:
+                            API.PlaySoundFrontend(-1, "INFO", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
+                            break;
+                        case eNotification.NOTIFICATION_ERROR:
+                            API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
+                            break;
+                        case eNotification.NOTIFICATION_WARNING:
+                            API.PlaySoundFrontend(-1, "tyre_health_warning", "DLC_sum20_Open_Wheel_Racing_Sounds", true);
+                            break;
+                        case eNotification.NOTIFICATION_LOADER:
+                            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
+                            break;
+                        default:
+                            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
+                            break;
+                    }
+
+                    SendNui(eNotification, message, position, theme, duration, autoClose, dismissible);
                     return true;
                 }));
 
