@@ -69,7 +69,7 @@ namespace Curiosity.Core.Client.Utils
                     bool hasState = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
                     if (hasState)
                     {
-                        float spd = Game.PlayerPed.CurrentVehicle.Speed;
+                        float spd = veh.Speed;
 
                         list["Server Spawned"] = $"{veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false}";
                         list["Owner"] = $"[{veh.State.Get(StateBagKey.VEH_OWNER_ID)}] {veh.State.Get($"{StateBagKey.VEH_OWNER}")}";
@@ -110,12 +110,10 @@ namespace Curiosity.Core.Client.Utils
                         list["Player GroupID"] = $"{Cache.PlayerPed.PedGroup.Handle}";
                     }
                 }
-                else
-                {
-                    list["Health"] = $"{entity.Health} / {entity.MaxHealth}";
-                }
-                list[" "] = "";
-                list["Distance"] = $"{Math.Sqrt(Cache.PlayerPed.Position.DistanceToSquared(entity.Position)):n3} Meters";
+
+                list["Health"] = $"{entity.Health} / {entity.MaxHealth}";
+                list["---"] = "";
+                list["Distance"] = $"{Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(entity.Position)):n3} Meters";
                 list["Heading"] = $"{entity.Heading:n3}";
                 list["Position"] = $"{pos.X:n5} {pos.Y:n5} {pos.Z:n5}";
                 list["Rotation"] = $"{rot.X:n5} {rot.Y:n5} {rot.Z:n5}";
