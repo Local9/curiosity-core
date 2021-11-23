@@ -37,15 +37,20 @@ namespace Curiosity.Core.Client.Environment.Entities
         public bool IsPassive;
         int isPassiveStateBagHandler = -1;
 
+        public bool IsWanted;
+        int isWantedStateBagHandler = -1;
+
         public WorldPlayer(Player player)
         {
             Player = player;
             PlayerHandle = player.Handle;
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+            IsWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
             pluginManager.AttachTickHandler(OnPlayerChanges);
             pluginManager.AttachTickHandler(OnPlayerRevive);
             isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
+            isWantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
 
             if (player.Character.AttachedBlip is null)
             {
@@ -70,6 +75,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                 pluginManager.DetachTickHandler(OnPlayerChanges);
                 pluginManager.DetachTickHandler(OnPlayerRevive);
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
+                RemoveStateBagChangeHandler(isWantedStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -115,6 +121,11 @@ namespace Curiosity.Core.Client.Environment.Entities
             IsPassive = isPassive;
         }
 
+        private void OnStatePlayerWantedChange(string bag, string key, dynamic isWanted, int reserved, bool replicated)
+        {
+            IsWanted = isWanted;
+        }
+
         // This is mainly for things that update, blips, passive, etc
         private async Task OnPlayerChanges()
         {
@@ -123,10 +134,35 @@ namespace Curiosity.Core.Client.Environment.Entities
                 Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle);
                 UpdateBlipString();
                 UpdatePlayerPassiveStates();
+                UpdatePlayerWantedState();
             }
             catch (Exception ex)
             {
                 Logger.Debug(ex, $"OnPlayerPassive");
+            }
+        }
+
+        bool wasWanted = false;
+        private void UpdatePlayerWantedState()
+        {
+            if (IsWanted && !wasWanted)
+            {
+                wasWanted = true;
+                Blip playerBlip = PlayerPed.AttachedBlip;
+                if (playerBlip != null)
+                {
+                    playerBlip.Color = BlipColor.Red;
+                }
+            }
+
+            if (!IsWanted && wasWanted)
+            {
+                wasWanted = false;
+                Blip playerBlip = PlayerPed.AttachedBlip;
+                if (playerBlip != null)
+                {
+                    playerBlip.Color = BlipColor.White;
+                }
             }
         }
 
