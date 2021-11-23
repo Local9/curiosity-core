@@ -114,7 +114,6 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Environment\Entites\CuriosityEntity.cs" />
-    <Compile Include="Environment\Entites\CuriosityPlayer.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
