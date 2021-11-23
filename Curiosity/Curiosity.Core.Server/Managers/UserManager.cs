@@ -115,7 +115,6 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 CuriosityPlayer cPlayer = new CuriosityPlayer(player);
-                PluginManager.ActivePlayers.TryAdd(metadata.Sender, cPlayer);
 
                 Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 

@@ -62,7 +62,6 @@ namespace Curiosity.Core.Server
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
         public static ConcurrentDictionary<int, CuriosityUser> ActiveUsers { get; } = new ConcurrentDictionary<int, CuriosityUser>();
-        public static ConcurrentDictionary<int, CuriosityPlayer> ActivePlayers { get; } = new ConcurrentDictionary<int, CuriosityPlayer>();
         public DateTime LastSave { get; set; } = DateTime.Now;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
@@ -527,7 +526,6 @@ namespace Curiosity.Core.Server
                             int playerHelicopter = kvp.Value.PersonalHelicopter;
 
                             ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
-                            ActivePlayers.TryRemove(kvp.Key, out CuriosityPlayer cp);
 
                             bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
 
