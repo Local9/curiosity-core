@@ -13,30 +13,7 @@ namespace Curiosity.Core.Client.Managers
             Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, int, bool, bool, bool>(
                 (notification, message, position, theme, duration, autoClose, dismissible) =>
                 {
-                    eNotification eNotification = (eNotification)notification;
-                    switch(eNotification)
-                    {
-                        case eNotification.NOTIFICATION_SUCCESS:
-                            API.PlaySoundFrontend(-1, "package_delivered_success", "DLC_GR_Generic_Mission_Sounds", true);
-                            break;
-                        case eNotification.NOTIFICATION_INFO:
-                            API.PlaySoundFrontend(-1, "INFO", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
-                            break;
-                        case eNotification.NOTIFICATION_ERROR:
-                            API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
-                            break;
-                        case eNotification.NOTIFICATION_WARNING:
-                            API.PlaySoundFrontend(-1, "tyre_health_warning", "DLC_sum20_Open_Wheel_Racing_Sounds", true);
-                            break;
-                        case eNotification.NOTIFICATION_LOADER:
-                            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
-                            break;
-                        default:
-                            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
-                            break;
-                    }
-
-                    SendNui(eNotification, message, position, theme, duration, autoClose, dismissible);
+                    SendNui((eNotification)notification, message, position, theme, duration, autoClose, dismissible);
                     return true;
                 }));
 
@@ -68,6 +45,28 @@ namespace Curiosity.Core.Client.Managers
 
         public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false)
         {
+            switch (notification)
+            {
+                case eNotification.NOTIFICATION_SUCCESS:
+                    API.PlaySoundFrontend(-1, "package_delivered_success", "DLC_GR_Generic_Mission_Sounds", true);
+                    break;
+                case eNotification.NOTIFICATION_INFO:
+                    API.PlaySoundFrontend(-1, "INFO", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
+                    break;
+                case eNotification.NOTIFICATION_ERROR:
+                    API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
+                    break;
+                case eNotification.NOTIFICATION_WARNING:
+                    API.PlaySoundFrontend(-1, "tyre_health_warning", "DLC_sum20_Open_Wheel_Racing_Sounds", true);
+                    break;
+                case eNotification.NOTIFICATION_LOADER:
+                    API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
+                    break;
+                default:
+                    API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
+                    break;
+            }
+
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")
             .Add("type", $"{notification}")
@@ -86,30 +85,25 @@ namespace Curiosity.Core.Client.Managers
         internal void Loader(string message, string position = "bottom-right")
         {
             SendNui(eNotification.NOTIFICATION_LOADER, message, position);
-            API.PlaySoundFrontend(-1, "SELECT", "HUD_FREEMODE_SOUNDSET", true);
         }
 
         internal void Success(string message, string position = "bottom-right")
         {
-            API.PlaySoundFrontend(-1, "package_delivered_success", "DLC_GR_Generic_Mission_Sounds", true);
             SendNui(eNotification.NOTIFICATION_SUCCESS, message, position);
         }
 
         internal void Warn(string message, string position = "bottom-right")
         {
-            API.PlaySoundFrontend(-1, "tyre_health_warning", "DLC_sum20_Open_Wheel_Racing_Sounds", true);
             SendNui(eNotification.NOTIFICATION_WARNING, message, position);
         }
 
         internal void Info(string message, string position = "bottom-right")
         {
-            API.PlaySoundFrontend(-1, "INFO", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
             SendNui(eNotification.NOTIFICATION_INFO, message, position);
         }
 
         internal void Error(string message, string position = "bottom-right")
         {
-            API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
             SendNui(eNotification.NOTIFICATION_ERROR, message, position);
         }
 
