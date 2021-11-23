@@ -56,7 +56,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 _blip = player.Character.AttachBlip();
                 _blipHandle = _blip.Handle;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted);
                 SetBlipCategory(_blipHandle, 7);
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);

@@ -33,7 +33,7 @@ namespace Curiosity.Core.Client.Utils
             return model;
         }
 
-        public static void SetCorrectBlipSprite(int ped, int blip)
+        public static void SetCorrectBlipSprite(int ped, int blip, bool IsWanted)
         {
             if (IsPedInAnyVehicle(ped, false))
             {
@@ -44,6 +44,16 @@ namespace Curiosity.Core.Client.Utils
                 if (GetBlipSprite(blip) != blipSprite)
                 {
                     SetBlipSprite(blip, blipSprite);
+
+                    if (IsWanted)
+                    {
+                        SetBlipColour(blip, (int)BlipColor.Red);
+                    }
+
+                    if (!IsWanted)
+                    {
+                        SetBlipColour(blip, (int)BlipColor.White);
+                    }
                 }
             }
             else
@@ -53,10 +63,17 @@ namespace Curiosity.Core.Client.Utils
                     ShowHeadingIndicatorOnBlip(blip, false);
                     SetBlipSprite(blip, (int)BlipSprite.Dead);
                 }
+                else if (IsWanted)
+                {
+                    ShowHeadingIndicatorOnBlip(blip, true);
+                    SetBlipSprite(blip, 58);
+                    SetBlipColour(blip, (int)BlipColor.Red);
+                }
                 else
                 {
                     ShowHeadingIndicatorOnBlip(blip, true);
                     SetBlipSprite(blip, 1);
+                    SetBlipColour(blip, (int)BlipColor.White);
                 }
             }
         }
