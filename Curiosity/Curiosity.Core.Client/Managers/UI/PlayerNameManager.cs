@@ -81,7 +81,9 @@ namespace Curiosity.Core.Client.Managers.UI
                         int tagHandle = gamerTags[player];
                         int pedHandle = player.Character.Handle;
 
-                        SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.HealthArmour, true);
+                        SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.HealthArmour, IsPlayerTargettingEntity(PlayerId(), pedHandle));
+                        SetMpGamerTagAlpha(tagHandle, (int)GamerTagComponent.HealthArmour, 255);
+
                         SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.AudioIcon, NetworkIsPlayerTalking(player.Handle));
                         SetMpGamerTagColour(tagHandle, (int)GamerTagComponent.AudioIcon, 208);
                         SetMpGamerTagAlpha(tagHandle, (int)GamerTagComponent.AudioIcon, 255);
