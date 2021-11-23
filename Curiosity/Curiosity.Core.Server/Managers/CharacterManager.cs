@@ -170,6 +170,8 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_ROLE, (int)u.Role, true);
                 player.State.Set(StateBagKey.PLAYER_JOB, ePlayerJobs.UNEMPLOYED, true);
 
+                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // default culling range
+
                 u.RoutingBucket = 0;
 
                 if (u.Character.LastPosition is null)
