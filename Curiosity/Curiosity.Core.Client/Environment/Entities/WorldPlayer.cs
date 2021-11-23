@@ -131,7 +131,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             try
             {
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted);
                 UpdateBlipString();
                 UpdatePlayerPassiveStates();
                 UpdatePlayerWantedState();
