@@ -95,10 +95,9 @@ namespace Curiosity.Core.Server.Managers
 
                     if (informPolice)
                     {
-                        int colourPrimary = 0;
-                        int colourSecondary = 0;
-                        GetVehicleColours(vehicle.Handle, ref colourPrimary, ref colourSecondary);
                         string numberPlate = GetVehicleNumberPlateText(vehicle.Handle);
+                        string msg = $"";
+                        InformPolice(msg, vehicleNetId);
                     }
                 }
                 catch (Exception ex)
@@ -112,12 +111,12 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        void InformPolice(string message)
+        void InformPolice(string message, int vehicleNetworkId)
         {
             foreach(int serverId in GetPlayersWhoArePolice())
             {
                 // Need to inform all of them the vehicle information
-                EventSystem.Send("police:report:notify", serverId, message);
+                EventSystem.Send("police:report:notify", serverId, message, vehicleNetworkId);
             }
         }
 
