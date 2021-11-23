@@ -29,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     // check number of active officers
                     int activeOfficers = GetPlayersWhoArePolice().Count;
-                    if (activeOfficers > 20)
+                    if (activeOfficers > 25)
                     {
                         SendNotification(metadata.Sender, $"We currently have 20 active officers, please try again later.");
                         return false;
