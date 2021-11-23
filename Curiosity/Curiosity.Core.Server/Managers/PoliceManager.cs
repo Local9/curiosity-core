@@ -132,10 +132,10 @@ namespace Curiosity.Core.Server.Managers
                         
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
-                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Speed: {speed} MPH" +
+                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
-                        SendNotification(message: msg);
+                        SendNotification(message: msg, vehicleNetId: vehicle.NetworkId);
                     }
                 }
                 catch (Exception ex)
