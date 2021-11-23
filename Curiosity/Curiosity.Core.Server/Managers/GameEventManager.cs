@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -30,7 +31,33 @@ namespace Curiosity.Core.Server.Managers
                 Player attacker = PluginManager.PlayersList[attackerHandle];
                 Player victim = PluginManager.PlayersList[victimHandle];
 
-                string msg = $"~o~{curiosityUserVictim.LatestName} ~s~killed by ~y~{curiosityUserKiller.LatestName} ~s~(~b~{weapon}~s~)";
+                int currentAttackerJob = attacker.State.Get(StateBagKey.PLAYER_JOB) ?? (int)ePlayerJobs.UNEMPLOYED;
+                ePlayerJobs ePlayerJobCurrentAttacker = (ePlayerJobs)currentAttackerJob;
+                bool isAttackerOfficer = ePlayerJobCurrentAttacker == ePlayerJobs.POLICE_OFFICER;
+
+                int currentVictimJob = victim.State.Get(StateBagKey.PLAYER_JOB) ?? (int)ePlayerJobs.UNEMPLOYED;
+                ePlayerJobs ePlayerJobCurrentVictim = (ePlayerJobs)currentVictimJob;
+                bool isVictimOfficer = ePlayerJobCurrentVictim == ePlayerJobs.POLICE_OFFICER;
+
+                bool isAttackerSuspect = attacker.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool isVictimSuspect = victim.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+
+                string atkPrefix = string.Empty;
+                string vctPrefix = string.Empty;
+                string atkSuffix = string.Empty;
+                string vctSuffix = string.Empty;
+
+                if (isAttackerOfficer)
+                    atkPrefix = "~b~Officer~s~ ";
+                else if (isVictimOfficer)
+                    vctPrefix = "~b~Officer~s~ ";
+
+                if (isAttackerSuspect)
+                    atkSuffix = " ~s~[~o~Criminal~s~]";
+                else if (isVictimSuspect)
+                    vctSuffix = " ~s~[~o~Criminal~s~]";
+
+                string msg = $"~o~{vctPrefix}{curiosityUserVictim.LatestName}{vctSuffix} ~s~killed by ~y~{atkPrefix}{curiosityUserKiller.LatestName}{atkSuffix} ~s~(~b~{weapon}~s~)";
 
                 string cleanMessage = msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "");
                 DiscordClient.GetModule().SendDiscordPlayerDeathLogMessage($"[Player Kill] {cleanMessage}");
