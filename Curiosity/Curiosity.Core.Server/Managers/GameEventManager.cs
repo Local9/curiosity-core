@@ -35,7 +35,7 @@ namespace Curiosity.Core.Server.Managers
                 string cleanMessage = msg.Replace("~o~", "").Replace("~s~", "").Replace("~y~", "").Replace("~b~", "");
                 DiscordClient.GetModule().SendDiscordPlayerDeathLogMessage($"[Player Kill] {cleanMessage}");
                 await BaseScript.Delay(0);
-                EventSystem.Send("system:notification:basic", -1, msg);
+                EventSystem.SendAll("system:notification:basic", msg);
                 
                 return null;
             }));

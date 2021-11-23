@@ -153,7 +153,7 @@ namespace Curiosity.Core.Server.Managers
         {
             if (serverId == -1) // all
             {
-                EventSystem.Send("police:notify", serverId, notification, message, duration, vehicleNetId);
+                EventSystem.SendAll("police:notify", notification, message, duration, vehicleNetId);
             }
 
             if (serverId > 0) // one
