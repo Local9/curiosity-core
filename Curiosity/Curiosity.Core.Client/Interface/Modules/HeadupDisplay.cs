@@ -11,13 +11,6 @@ namespace Curiosity.Core.Client.Interface.Modules
     {
         public bool IsDisabled { get; set; } = false;
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnHideRadarOutOfVehicleTick()
-        {
-            bool isPlayerInVehicle = API.IsPedInAnyVehicle(API.PlayerPedId(), true);
-            DisplayRadar(isPlayerInVehicle);
-        }
-
         public MinimapAnchor GetMinimapAnchor()
         {
             var safezone = API.GetSafeZoneSize();
