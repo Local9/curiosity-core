@@ -27,7 +27,7 @@ namespace Curiosity.Police.Client.Managers
                         Vehicle vehicle = new Vehicle(entityHandle);
                         string name = vehicle.DisplayName;
                         vehicleName = Game.GetGXTEntry(name);
-                        notificationMessage.Replace(REPLACE_MAKE_NAME, vehicleName);
+                        notificationMessage = notificationMessage.Replace(REPLACE_MAKE_NAME, vehicleName);
                     }
                 }
 
