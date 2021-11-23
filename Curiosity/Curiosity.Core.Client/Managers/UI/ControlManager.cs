@@ -1,10 +1,6 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.UI
 {
@@ -20,7 +16,7 @@ namespace Curiosity.Core.Client.Managers.UI
         [TickHandler(SessionWait = true)]
         private async Task OnControlsTick()
         {
-            if (Game.IsControlPressed(0, Control.MultiplayerInfo) && CanScreenInteract)
+            if (Game.IsControlPressed(0, Control.MultiplayerInfo))
             {
                 SetRadarBigmapEnabled(true, false);
                 await BaseScript.Delay(10000);
