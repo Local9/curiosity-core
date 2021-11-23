@@ -27,6 +27,23 @@ namespace Curiosity.Core.Server.Managers
 
                 if (activate)
                 {
+                    // check number of active officers
+                    int activeOfficers = GetPlayersWhoArePolice().Count;
+                    if (activeOfficers > 20)
+                    {
+                        SendNotification(metadata.Sender, $"We currently have 20 active officers, please try again later.");
+                        return false;
+                    }
+
+                    int numberOfPlayers = PluginManager.PlayersList.Count();
+                    float ratioOfCopsToPlayers = (activeOfficers / numberOfPlayers);
+
+                    if (ratioOfCopsToPlayers > 0.5)
+                    {
+                        SendNotification(metadata.Sender, $"We currently have enough active officers, please try again later.");
+                        return false;
+                    }
+
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
                     player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
 
