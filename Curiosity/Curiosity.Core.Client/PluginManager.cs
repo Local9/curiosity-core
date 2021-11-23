@@ -73,8 +73,8 @@ namespace Curiosity.Core.Client
             API.PrepareMusicEvent($"{ClientMusicEvent.Stop}");
             API.PrepareMusicEvent($"{MusicEvents.DEFAULT_STOP}");
 
-            API.TriggerMusicEvent(mes);
             API.SetAudioFlag("LoadMPData", true);
+            API.TriggerMusicEvent(mes);
 
             API.DisplayPlayerNameTagsOnBlips(true);
 

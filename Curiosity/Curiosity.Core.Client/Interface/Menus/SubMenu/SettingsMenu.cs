@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuCheckboxItem miDevEnableDebugTimeLog;
 
         UIMenuListItem miLstMusic;
+        UIMenuItem miStopAllMusic = new UIMenuItem("Stop Random Music");
 
         UIMenu dispatchSettingsMenu;
         PoliceSettingsMenu _policeSettingsMenu = new PoliceSettingsMenu();
@@ -40,6 +41,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnListChange += Menu_OnListChange;
             menu.OnListSelect += Menu_OnListSelect;
+            menu.OnItemSelect += Menu_OnItemSelect;
 
             List<dynamic> effects = DamageEffectManager.GetModule().Effects.Select(x => x.Label).ToList();
 
@@ -72,10 +74,19 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             miShowMyName = new UIMenuCheckboxItem("Show Own Name", PlayerNameManager.ShowMyName);
             //miShowMyName.Enabled = false;
             menu.AddItem(miShowMyName);
-
+            menu.AddItem(miStopAllMusic);
 
 
             return menu;
+        }
+
+        private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == miStopAllMusic)
+            {
+                TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
+                CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
+            }
         }
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)

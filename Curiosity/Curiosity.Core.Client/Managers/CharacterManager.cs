@@ -157,7 +157,6 @@ namespace Curiosity.Core.Client.Managers
             API.SetWeatherTypeNow("EXTRASUNNY");
 
             EventSystem.Send("user:queue:active");
-
             EventSystem.Send("user:job", "Loading...");
 
             API.ShutdownLoadingScreen();
