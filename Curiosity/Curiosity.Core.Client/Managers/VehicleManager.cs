@@ -494,6 +494,14 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentVehicle.Vehicle.IsEngineRunning)
             {
+                if (fuel < 2f && !IsRefueling)
+                {
+                    currentVehicle.Vehicle.IsEngineRunning = false;
+                    currentVehicle.Vehicle.FuelLevel = 0f;
+
+                    API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
+                }
+
                 fuel = Math.Max(0f, fuel - (float)(deltaTime * multi * vehicleSpeed));
                 currentVehicle.Vehicle.FuelLevel = fuel;
                 currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, fuel, true);
