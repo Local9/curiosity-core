@@ -2,7 +2,7 @@
   "jobs": [
     {
       "label": "Police Officer",
-      "jobEvent": "police:job:state",
+      "jobEvent": "job:police:duty",
       "legacyEvent": false
     }
   ],
