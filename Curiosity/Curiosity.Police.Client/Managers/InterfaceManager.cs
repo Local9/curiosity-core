@@ -6,24 +6,34 @@ namespace Curiosity.Police.Client.Managers
 {
     public class InterfaceManager : Manager<InterfaceManager>
     {
+        const string REPLACE_MAKE_NAME = "MAKE_NAME";
+
         public override void Begin()
         {
-            EventSystem.Attach("police:report:notify", new EventCallback(metadata =>
+            EventSystem.Attach("police:notify", new EventCallback(metadata =>
             {
-                string notification = metadata.Find<string>(0);
-                int vehNetId = metadata.Find<int>(1);
+                int notificationType = metadata.Find<int>(0);
+                string notificationMessage = metadata.Find<string>(1);
+                int notificationDuration = metadata.Find<int>(2);
+                int notificationVehicle = metadata.Find<int>(3);
+
+                string vehicleName = "Unknown";
+
+                if (notificationVehicle > 0)
+                {
+                    int entityHandle = NetworkGetEntityFromNetworkId(notificationVehicle);
+                    if (DoesEntityExist(entityHandle))
+                    {
+                        Vehicle vehicle = new Vehicle(entityHandle);
+                        string name = vehicle.DisplayName;
+                        vehicleName = Game.GetGXTEntry(name);
+                        notificationMessage.Replace(REPLACE_MAKE_NAME, vehicleName);
+                    }
+                }
 
                 if (Instance.ExportRegistry["curiosity-client"] is not null)
                 {
-                    Instance.ExportRegistry["curiosity-client"].Notification(4, notification, "bottom-right", "snackbar", 10000, true, false);
-                }
-
-                int entityHandle = NetworkGetEntityFromNetworkId(vehNetId);
-                if (DoesEntityExist(entityHandle))
-                {
-                    Vehicle veh = new Vehicle(entityHandle);
-                    Blip b = veh.AttachedBlip;
-                    b.Color = BlipColor.Red;
+                    Instance.ExportRegistry["curiosity-client"].Notification(notificationType, notificationMessage, "bottom-right", "snackbar", notificationDuration, true, false);
                 }
 
                 return null;

@@ -36,8 +36,6 @@ namespace Curiosity.Police.Client.Managers
 
         private void OnGameEventTriggered(string name, List<dynamic> args)
         {
-            Logger.Debug($"game event {name} ({String.Join(", ", args.ToArray())})");
-
             try
             {
                 if (name == "CEventNetworkPlayerEnteredVehicle")

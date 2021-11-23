@@ -23,12 +23,15 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                bool activate = metadata.Find<bool>(0);
+                bool activate = curiosityUser.Job != ePlayerJobs.POLICE_OFFICER;
 
                 if (activate)
                 {
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
                     player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+
+                    SendNotification(metadata.Sender, $"Welcome to the force.");
+
                     return true;
                 }
 
@@ -36,6 +39,9 @@ namespace Curiosity.Core.Server.Managers
                 {
                     curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
                     player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+
+                    SendNotification(metadata.Sender, $"You have now left the police force.");
+
                     return false;
                 }
 
@@ -103,10 +109,10 @@ namespace Curiosity.Core.Server.Managers
                         
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
-                        $"Location: {street}<br />Heading: {direction}<br />License Plate: {numberPlate}<br />Speed: {speed} MPH" +
+                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
-                        InformPolice(msg, vehicleNetId);
+                        SendNotification(message: msg);
                     }
                 }
                 catch (Exception ex)
@@ -120,19 +126,32 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        void InformPolice(string message, int vehicleNetworkId)
+        void SendNotification(int serverId = 0, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 10000, int vehicleNetId = -1)
         {
-            foreach(int serverId in GetPlayersWhoArePolice())
+            if (serverId == -1) // all
             {
-                // Need to inform all of them the vehicle information
-                EventSystem.Send("police:report:notify", serverId, message, vehicleNetworkId);
+                EventSystem.Send("police:notify", serverId, notification, message, duration, vehicleNetId);
+            }
+
+            if (serverId > 0) // one
+            {
+                EventSystem.Send("police:notify", serverId, notification, message, duration, vehicleNetId);
+            }
+
+            if (serverId == 0) // job
+            {
+                foreach (int activeOfficerId in GetPlayersWhoArePolice())
+                {
+                    // Need to inform all of them the vehicle information
+                    EventSystem.Send("police:notify", activeOfficerId, notification, message, duration, vehicleNetId);
+                }
             }
         }
 
         List<int> GetPlayersWhoArePolice()
         {
             return PluginManager.ActiveUsers
-                //.Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER)
+                .Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER)
                 .Select(x => x.Key).ToList();
         }
     }
