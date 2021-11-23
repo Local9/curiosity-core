@@ -52,6 +52,11 @@ namespace Curiosity.Core.Client.Managers.UI
                     var dist = player.Character.Position.Distance(Game.PlayerPed.Position);
                     bool closeEnough = dist < playerNamesDistance;
 
+                    if (!HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17))
+                    {
+                        closeEnough = false;
+                    }
+
                     bool isStaff = player.State.Get(StateBagKey.STAFF_MEMBER) == null ? false : player.State.Get(StateBagKey.STAFF_MEMBER);
 
                     if (gamerTags.ContainsKey(player))
