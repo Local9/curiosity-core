@@ -114,8 +114,6 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
 
-                CuriosityPlayer cPlayer = new CuriosityPlayer(player);
-
                 Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
                 return curiosityUser;
