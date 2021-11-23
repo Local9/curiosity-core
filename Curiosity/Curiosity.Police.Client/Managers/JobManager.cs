@@ -80,8 +80,6 @@ namespace Curiosity.Police.Client.Managers
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
                 
                 ToggleDispatch(false);
-
-                Game.Player.State.Set(StateBagKey.PLAYER_JOB, ePlayerJobs.POLICE_OFFICER, true);
             }
             else if (!IsOfficer && WasOfficer)
             {
@@ -102,11 +100,7 @@ namespace Curiosity.Police.Client.Managers
                 ToggleDispatch(true);
 
                 await BaseScript.Delay(100);
-
-                Game.Player.State.Set(StateBagKey.PLAYER_JOB, ePlayerJobs.UNEMPLOYED, true);
-            }
-
-            
+            }            
 
             await BaseScript.Delay(100);
             EventSystem.Request<object>("user:job", job);

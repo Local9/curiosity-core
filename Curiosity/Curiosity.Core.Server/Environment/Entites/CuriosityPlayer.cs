@@ -16,20 +16,20 @@ namespace Curiosity.Core.Server.Environment.Entities
         public CuriosityPlayer(Player player)
         {
             Player = player;
-            StateBagHandler = AddStateBagChangeHandler(string.Empty, $"player:{player.Handle}", new Action<string, string, dynamic, int, bool>(OnStateChange));
+            // StateBagHandler = AddStateBagChangeHandler(string.Empty, $"player:{player.Handle}", new Action<string, string, dynamic, int, bool>(OnStateChange));
         }
 
         private void OnStateChange(string key, string bag, dynamic bagValue, int reserved, bool replicated)
         {
             if (PluginManager.IsDebugging)
             {
-                string msg = $"OnStateChange" +
-                    $"key: {key}" +
-                    $"bag: {bag}" +
-                    $"reserved: {reserved}" +
-                    $"replicated: {reserved}" +
-                    $"bagValue: {JsonConvert.SerializeObject(bagValue)}";
-                Logger.Debug(msg);
+                //string msg = $"-- OnStateChange --\n" +
+                //    $"key: {key}\n" +
+                //    $"bag: {bag}\n" +
+                //    $"reserved: {reserved}\n" +
+                //    $"replicated: {reserved}\n" +
+                //    $"bagValue: {bagValue}";
+                //Logger.Debug(msg);
             }
         }
     }

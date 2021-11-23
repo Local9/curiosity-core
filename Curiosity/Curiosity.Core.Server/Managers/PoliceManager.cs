@@ -5,6 +5,8 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
@@ -13,6 +15,33 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            EventSystem.Attach("police:job:state", new EventCallback(metadata => {
+
+                Player player = PluginManager.PlayersList[metadata.Sender];
+                if (player == null) return false;
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                bool activate = metadata.Find<bool>(0);
+
+                if (activate)
+                {
+                    curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
+                    player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+                    return true;
+                }
+
+                if (!activate)
+                {
+                    curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
+                    player.State.Set(StateBagKey.PLAYER_JOB, curiosityUser.Job, true);
+                    return false;
+                }
+
+                return false;
+            }));
+
             EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {
                 return null;
             }));
@@ -66,18 +95,35 @@ namespace Curiosity.Core.Server.Managers
 
                     if (informPolice)
                     {
-
+                        int colourPrimary = 0;
+                        int colourSecondary = 0;
+                        GetVehicleColours(vehicle.Handle, ref colourPrimary, ref colourSecondary);
+                        string numberPlate = GetVehicleNumberPlateText(vehicle.Handle);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, $"cs:police:ticket");
+                    Logger.Error(ex, $"police:ticket:speeding");
                     em.error = $"Error when invoicing speeding ticket.";
                 }
 
             RETURN_MESSAGE:
                 return em;
             }));
+        }
+
+        void InformPolice(string message)
+        {
+            foreach(int serverId in GetPlayersWhoArePolice())
+            {
+                // Need to inform all of them the vehicle information
+                EventSystem.Send("police:report:notify", serverId, message);
+            }
+        }
+
+        List<int> GetPlayersWhoArePolice()
+        {
+            return PluginManager.ActiveUsers.Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER).Select(x => x.Key).ToList();
         }
     }
 }
