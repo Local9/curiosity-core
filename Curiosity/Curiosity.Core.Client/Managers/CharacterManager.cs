@@ -120,8 +120,8 @@ namespace Curiosity.Core.Client.Managers
         {
             Screen.Fading.FadeIn(0);
 
-            //if (Instance.ExportDictionary["pma-voice"] is not null)
-            //    Instance.ExportDictionary["pma-voice"].toggleMute();
+            if (Instance.ExportDictionary["pma-voice"] is not null)
+                Instance.ExportDictionary["pma-voice"].toggleMutePlayer(Game.Player.ServerId);
 
             API.SetTimecycleModifier("default");
             API.SetTimecycleModifierStrength(1f);
@@ -338,8 +338,8 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Send("character:routing:base");
 
-            //if (Instance.ExportDictionary["pma-voice"] is not null)
-            //    Instance.ExportDictionary["pma-voice"].toggleMute();
+            if (Instance.ExportDictionary["pma-voice"] is not null)
+                Instance.ExportDictionary["pma-voice"].toggleMutePlayer(Game.Player.ServerId);
 
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
