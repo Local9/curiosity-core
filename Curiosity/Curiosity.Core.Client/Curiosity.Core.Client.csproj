@@ -92,6 +92,7 @@
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
     <Compile Include="Managers\GameWorld\WorldPlayerManager.cs" />
+    <Compile Include="Managers\UI\ControlManager.cs" />
     <Compile Include="Managers\WorldPlayerReviveManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
