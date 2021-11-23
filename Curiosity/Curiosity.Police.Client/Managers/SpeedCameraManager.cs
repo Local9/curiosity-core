@@ -135,25 +135,20 @@ namespace Curiosity.Police.Client.Managers
                 float low = p.Z - 0.5f;
                 float high = p.Z + 1f;
 
-                int exampleCost = 0;
-
                 if (!Between(vehicle.Position.Z, low, high)) continue;
 
                 camera.Active = true;
 
                 bool informPolice = false;
                 bool caughtSpeeding = false;
+                float limitToReport = 0;
 
                 if (camera.Limit is not null)
                 {
                     if (speedInMph > camera.Limit)
                     {
                         informPolice = (speedInMph > (camera.Limit + _warnPolice));
-
-                        //exampleCost = (int)((speedInMph - camera.Limit) * 50);
-                        //ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {camera.Limit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
-                        await BaseScript.Delay(5000);
-                        camera.Active = false;
+                        limitToReport = camera.Limit ?? 0f;
                     }
                 }
                 else
@@ -161,18 +156,18 @@ namespace Curiosity.Police.Client.Managers
                     if (speedInMph > _currentStreetLimit)
                     {
                         informPolice = (speedInMph > (_currentStreetLimit + _warnPolice));
-
-                        //exampleCost = (int)((speedInMph - _currentStreetLimit) * 50);
-                        //ShowNotification($"Speeding!~n~{_currentStreet}~n~Limit: {_currentStreetLimit}mph~n~Recorded: {speedInMph:0}mph~n~Fine: ${exampleCost}");
-                        await BaseScript.Delay(5000);
-                        camera.Active = false;
+                        limitToReport = _currentStreetLimit;
                     }
                 }
 
                 if (caughtSpeeding)
                 {
-
+                    EventSystem.Send("police:ticket:speeding", speedInMph, limitToReport, informPolice, vehicle.NetworkId, _currentStreet, direction);
+                    await BaseScript.Delay(5000);
+                    camera.Active = false;
                 }
+
+                
             }
         }
 
