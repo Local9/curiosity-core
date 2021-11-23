@@ -67,10 +67,12 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     Player player = PluginManager.PlayersList[metadata.Sender];
 
-                    float speed = metadata.Find<float>(0);
-                    float speedLimit = metadata.Find<float>(1);
+                    int speed = metadata.Find<int>(0);
+                    int speedLimit = metadata.Find<int>(1);
                     bool informPolice = metadata.Find<bool>(2);
                     int vehicleNetId = metadata.Find<int>(3);
+                    string street = metadata.Find<string>(4);
+                    string direction = metadata.Find<string>(5);
                     
                     // get Vehicle
                     int vehicleHandle = NetworkGetEntityFromNetworkId(vehicleNetId);
@@ -93,10 +95,17 @@ namespace Curiosity.Core.Server.Managers
                     SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
                     SetEntityDistanceCullingRadius(vehicle.Handle, 5000f); // make the vehicle visible
 
+                    // store in the database
+
                     if (informPolice)
                     {
                         string numberPlate = GetVehicleNumberPlateText(vehicle.Handle);
-                        string msg = $"";
+                        
+                        string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
+                        $"<tbody><tr><td scope=\"row\" width=\"236\">" +
+                        $"Location: {street}<br />Heading: {direction}<br />License Plate: {numberPlate}<br />Speed: {speed} MPH" +
+                        $"</td><td><img src=\"/assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
+
                         InformPolice(msg, vehicleNetId);
                     }
                 }
