@@ -55,7 +55,7 @@ namespace Curiosity.Core.Client.Diagnostics
                         NetworkSessionEnd(true, true);
                         return;
                     }
-                    lastChecked.AddMinutes(1);
+                    lastChecked.AddMinutes(10);
                 }
 
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
@@ -76,7 +76,7 @@ namespace Curiosity.Core.Client.Diagnostics
                         NetworkSessionEnd(true, true);
                         return;
                     }
-                    lastChecked.AddMinutes(1);
+                    lastChecked.AddMinutes(10);
                 }
 
                 if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
