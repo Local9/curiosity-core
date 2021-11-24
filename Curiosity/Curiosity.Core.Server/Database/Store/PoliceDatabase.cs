@@ -22,8 +22,8 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@pCharacterVehicleId", characterVehicleId },
                     { "@pTicketValue", ticketValue },
                     { "@pTicketPaymentDue", paymentDue },
-                    { "@pVehicleSpeed", paymentDue },
-                    { "@pSpeedLimit", paymentDue },
+                    { "@pVehicleSpeed", vehicleSpeed },
+                    { "@pSpeedLimit", speedLimit },
                 };
 
             string myQuery = "call insCharacterTicket(@pPoliceTicketTypeId, @pCharacterId, @pCharacterVehicleId, @pTicketValue, @pTicketPaymentDue, @pVehicleSpeed, @pSpeedLimit);";

@@ -130,13 +130,26 @@ namespace Curiosity.Core.Server.Managers
                         goto RETURN_MESSAGE;
                     }
 
-                    // wanted flag so police are not punished
-                    player.State.Set(StateBagKey.PLAYER_IS_WANTED, informPolice, true);
-                    SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
+                    string numberPlate = GetVehicleNumberPlateText(vehicle.Handle);
+
+                    string playerMsg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Caught Speeding ({costOfTicket:C0})</th></tr></thead>" +
+                        $"<tbody><tr><td scope=\"row\" width=\"236\">" +
+                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH";
 
                     if (informPolice)
                     {
-                        string numberPlate = GetVehicleNumberPlateText(vehicle.Handle);
+                        playerMsg += $"<br /><b>Police have been informed</b>";
+                    }
+
+                    playerMsg += $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
+
+                    SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
+
+                    if (informPolice)
+                    {
+                        // wanted flag so police are not punished
+                        player.State.Set(StateBagKey.PLAYER_IS_WANTED, informPolice, true);
+                        SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
                         
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
