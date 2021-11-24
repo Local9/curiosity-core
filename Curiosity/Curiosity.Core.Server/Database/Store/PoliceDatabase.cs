@@ -13,18 +13,20 @@ namespace Curiosity.Core.Server.Database.Store
 {
     internal class PoliceDatabase
     {
-        public static async Task<bool> InsertTicket(ePoliceTicketType policeTicketType, int characterId, int characterVehicleId, long ticketValue, DateTime paymentDue)
+        public static async Task<bool> InsertTicket(ePoliceTicketType policeTicketType, int characterId, int characterVehicleId, long ticketValue, DateTime paymentDue, int vehicleSpeed, int speedLimit)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
-                    { "@pPoliceTicketTypeId", policeTicketType },
+                    { "@pPoliceTicketTypeId", (int)policeTicketType },
                     { "@pCharacterId", characterId },
                     { "@pCharacterVehicleId", characterVehicleId },
                     { "@pTicketValue", ticketValue },
                     { "@pTicketPaymentDue", paymentDue },
+                    { "@pVehicleSpeed", paymentDue },
+                    { "@pSpeedLimit", paymentDue },
                 };
 
-            string myQuery = "call insCharacterTicket(@pPoliceTicketTypeId, @pCharacterId, @pCharacterVehicleId, @pTicketValue, @pTicketPaymentDue);";
+            string myQuery = "call insCharacterTicket(@pPoliceTicketTypeId, @pCharacterId, @pCharacterVehicleId, @pTicketValue, @pTicketPaymentDue, @pVehicleSpeed, @pSpeedLimit);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
