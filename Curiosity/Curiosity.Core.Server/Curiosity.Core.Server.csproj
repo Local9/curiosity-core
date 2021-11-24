@@ -77,6 +77,7 @@
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\BankDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\PoliceDatabase.cs" />
     <Compile Include="Database\Store\VehicleDatabase.cs" />
     <Compile Include="Database\Store\MissionDatabase.cs" />
     <Compile Include="Database\Store\ShopDatabase.cs" />

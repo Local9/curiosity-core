@@ -93,7 +93,8 @@ namespace Curiosity.Core.Server.Managers
                 {
                     if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     {
-                        return null;
+                        em.error = "Player not found.";
+                        goto RETURN_MESSAGE;
                     }
 
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -119,12 +120,19 @@ namespace Curiosity.Core.Server.Managers
                     // add ticket to the database against the character/vehicle
                     int characterId = curiosityUser.Character.CharacterId;
                     int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID); // mark in the Database
+                    int costOfTicket = (int)((speed - speedLimit) * 50); // only charge for speed over the limit
+
+                    bool success = await Database.Store.PoliceDatabase.InsertTicket(ePoliceTicketType.SPEEDING, characterId, characterVehicleId, costOfTicket, DateTime.UtcNow.AddDays(7));
+
+                    if (!success)
+                    {
+                        em.error = "Issue when trying to save ticket.";
+                        goto RETURN_MESSAGE;
+                    }
+
                     // wanted flag so police are not punished
                     player.State.Set(StateBagKey.PLAYER_IS_WANTED, informPolice, true);
-                    // ticket
-                    int costOfTicket = (int)((speed - speedLimit) * 50); // only charge for speed over the limit
                     SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
-                    // store in the database
 
                     if (informPolice)
                     {

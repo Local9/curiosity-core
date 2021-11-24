@@ -52,6 +52,7 @@
     <Compile Include="Enums\CombatAttributes.cs" />
     <Compile Include="Enums\DispatchType.cs" />
     <Compile Include="Enums\ePlayerJobs.cs" />
+    <Compile Include="Enums\ePoliceTicketType.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Models\ClientConfig.cs" />
     <Compile Include="Models\Discord\DiscordAvatar.cs" />
     <Compile Include="Models\GenericMessage.cs" />
+    <Compile Include="Models\Police\PoliceTicket.cs" />
     <Compile Include="Models\ScenarioItem.cs" />
     <Compile Include="Models\Shop\CuriosityShopItem.cs" />
     <Compile Include="DataKeys.cs" />
