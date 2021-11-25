@@ -67,7 +67,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuInventory = MenuPool.AddSubMenu(menuMain, "Inventory", "Player inventory, e.g. Health Kits and Repair Kits which can be bought in the store");
             _MenuInventory.CreateMenu(menuInventory);
 
-            menuGarage = MenuPool.AddSubMenu(menuMain, "Garage", "Quick access for your owned vehicles. Buy more in the store by pressing ~INPUT_C633AFF6~");
+            menuGarage = MenuPool.AddSubMenu(menuMain, "Garage", "Quick access for your owned vehicles. Buy more in the store.");
             _vehicleGarageMenu.CreateMenu(menuGarage);
 
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles", "Current vehicle options.");

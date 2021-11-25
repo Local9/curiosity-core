@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class PdaManager : Manager<PdaManager>
     {
-        private const string COMMAND_OPEN_PDA_HOME = "open_pda_new";
+        private const string COMMAND_OPEN_PDA_HOME = "open_pda_new"; // ~INPUT_C633AFF6~
         public static PdaManager PdaInstance;
         WeaponHash currentWeapon;
 
