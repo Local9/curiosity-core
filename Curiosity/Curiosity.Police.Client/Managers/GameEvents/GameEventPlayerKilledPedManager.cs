@@ -19,15 +19,16 @@ namespace Curiosity.Police.Client.Managers.GameEvents
         {
             if (attacker != Game.Player) return; // I don't care for others
 
+            victim.DropsWeaponsOnDeath = false;
+
             if (JobManager.IsOfficer)
             {
-                StateBag pedStateBag = victim.State;
-                bool isMissionPed = pedStateBag.Get(StateBagKey.PED_MISSION) ?? false;
-                if (!isMissionPed)
-                {
-                    // punish player
+                // punish cops
+            }
 
-                }
+            if (!JobManager.IsOfficer)
+            {
+                // punish players
             }
         }
     }
