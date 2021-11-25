@@ -45,6 +45,25 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
             }));
+            
+            EventSystem.Attach("garage:get:list:cars", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                    {
+                        return new List<VehicleItem>();
+                    }
+
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    return await Database.Store.VehicleDatabase.GetAllVehicles(curiosityUser.Character.CharacterId, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "garage:get:list:cars");
+                    return null;
+                }
+            }));
 
             EventSystem.Attach("garage:save", new AsyncEventCallback(async metadata =>
             {
