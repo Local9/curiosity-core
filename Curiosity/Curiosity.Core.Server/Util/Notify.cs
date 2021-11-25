@@ -5,15 +5,15 @@ namespace Curiosity.Core.Server.Util
 {
     public static class Notify
     {
-        public static void Send(int handle = -1, eNotification notification = eNotification.NOTIFICATION_INFO, string message = "", string position = "bottom-right", string theme = "toast")
+        public static void Send(int handle = -1, eNotification notification = eNotification.NOTIFICATION_INFO, string message = "", string position = "bottom-right", string theme = "toast", bool playSound = false)
         {
             if (handle == -1)
             {
-                EventSystem.GetModule().SendAll("ui:notification", (int)notification, message, position, theme);
+                EventSystem.GetModule().SendAll("ui:notification", (int)notification, message, position, theme, playSound);
             }
             else
             {
-                EventSystem.GetModule().Send("ui:notification", handle, (int)notification, message, position, theme);
+                EventSystem.GetModule().Send("ui:notification", handle, (int)notification, message, position, theme, playSound);
             }
         }
     }
