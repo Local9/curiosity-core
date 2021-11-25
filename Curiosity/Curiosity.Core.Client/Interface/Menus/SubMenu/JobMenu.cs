@@ -54,6 +54,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private async void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
             listItem.Enabled = false;
+            menuPolice.ParentItem.Enabled = false;
+
             if (listItem == uiLstJobs)
             {
                 Job job = (Job)listItem.Items[newIndex];
