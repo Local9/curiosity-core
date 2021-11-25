@@ -21,8 +21,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             baseMenu = menu;
 
-            baseMenu.AddItem(loadingItem);
-
             baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
         }
@@ -31,6 +29,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             if (state == MenuState.Opened || state == MenuState.ChangeForward)
             {
+                baseMenu.Clear();
+                baseMenu.AddItem(loadingItem);
+
                 isLoading = true;
                 UpdateLoadingDisplay();
                 LoadVehicles();
