@@ -494,7 +494,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentVehicle.Vehicle.IsEngineRunning)
             {
-                if (fuel < 2f && !IsRefueling)
+                if (fuel < 1f && !IsRefueling)
                 {
                     currentVehicle.Vehicle.IsEngineRunning = false;
                     currentVehicle.Vehicle.FuelLevel = 0f;

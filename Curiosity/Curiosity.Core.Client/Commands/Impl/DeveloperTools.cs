@@ -137,6 +137,18 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "fuel" })]
+        public class VehicleFuelCommand : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (!Game.PlayerPed.IsInVehicle()) return;
+                Vehicle v = Game.PlayerPed.CurrentVehicle;
+                v.FuelLevel = float.Parse(arguments[0]);
+                v.State.Set(StateBagKey.VEH_FUEL, v.FuelLevel, true);
+            }
+        }
+
         [CommandInfo(new[] { "scaleform" })]
         public class ScalefromTest : ICommand
         {
