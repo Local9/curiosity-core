@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Police;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,13 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 return false;
+            }));
+
+            EventSystem.Attach("police:get:suspect:tickets", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                return await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
             }));
 
             EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {

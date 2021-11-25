@@ -1,17 +1,10 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
-using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Interface;
-using Curiosity.Core.Client.Interface.Menus.VehicleMods;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.UI
 {

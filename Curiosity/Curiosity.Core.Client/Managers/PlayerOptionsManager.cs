@@ -189,6 +189,7 @@ namespace Curiosity.Core.Client.Managers
             }
 
             playerKilledSelf = DateTime.Now;
+            NumberOfTimesKillSelf++;
             PluginManager.Instance.AttachTickHandler(PlayerKilledSelfCooldownTick);
 
             EventSystem.GetModule().Send("character:killed:self");
@@ -200,8 +201,6 @@ namespace Curiosity.Core.Client.Managers
             {
                 Instance.DetachTickHandler(PlayerKilledSelfCooldownTick);
                 IsKillSelfEnabled = true;
-
-                NumberOfTimesKillSelf++;
             }
             else
             {
