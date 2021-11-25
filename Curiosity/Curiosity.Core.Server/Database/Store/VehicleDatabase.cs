@@ -12,13 +12,14 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class VehicleDatabase
     {
-        public static async Task<List<VehicleItem>> GetAllVehicles(int characterId)
+        public static async Task<List<VehicleItem>> GetAllVehicles(int characterId, bool carsOnly = false)
         {
             List<VehicleItem> lst = new List<VehicleItem>();
             
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
-                    { "@characterId", characterId }
+                    { "@characterId", characterId },
+                    { "@pCarsOnly", carsOnly }
                 };
 
             string myQuery = "call selCharacterVehicles(@characterId);";
