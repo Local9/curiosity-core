@@ -25,8 +25,6 @@ namespace Curiosity.Core.Client.Managers
         public bool IsScubaGearEnabled = false;
 
         NotificationManager NotificationManager => NotificationManager.GetModule();
-        DispatchManager DispatchManager => DispatchManager.GetModule();
-
         public override void Begin()
         {
 

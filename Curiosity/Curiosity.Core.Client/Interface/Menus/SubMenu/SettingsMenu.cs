@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Data;
@@ -25,9 +24,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         UIMenuListItem miLstMusic;
         UIMenuItem miStopAllMusic = new UIMenuItem("Stop Random Music");
-
-        UIMenu dispatchSettingsMenu;
-        PoliceSettingsMenu _policeSettingsMenu = new PoliceSettingsMenu();
 
         PlayerNameManager PlayerNameManager => PlayerNameManager.GetModule();
         List<dynamic> musicEvents = new List<dynamic>();
@@ -60,9 +56,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             miDamageEffects = new UIMenuListItem("Damage Effect", effects, index);
             menu.AddItem(miDamageEffects);
-
-            dispatchSettingsMenu = InteractionMenu.MenuPool.AddSubMenu(menu, "World Police Settings");
-            _policeSettingsMenu.CreateMenu(dispatchSettingsMenu);
 
             //miShowServerId = new UIMenuCheckboxItem("Show ServerIDs", PlayerNameManager.ShowServerHandle);
             //miShowServerId.Enabled = false;

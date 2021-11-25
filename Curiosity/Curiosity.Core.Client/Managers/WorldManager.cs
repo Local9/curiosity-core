@@ -39,6 +39,21 @@ namespace Curiosity.Core.Client.Managers
         int timeLockHour = 0;
         int timeLockMins = 0;
 
+        private DispatchType[] dispatchTypes = new DispatchType[11] {
+            DispatchType.DT_PoliceAutomobile,
+            DispatchType.DT_PoliceHelicopter,
+            DispatchType.DT_SwatAutomobile,
+            DispatchType.DT_PoliceRiders,
+            DispatchType.DT_PoliceVehicleRequest,
+            DispatchType.DT_PoliceRoadBlock,
+            DispatchType.DT_PoliceAutomobileWaitPulledOver,
+            DispatchType.DT_PoliceAutomobileWaitCruising,
+            DispatchType.DT_SwatHelicopter,
+            DispatchType.DT_PoliceBoat,
+            DispatchType.DT_ArmyVehicle
+        };
+
+
         public override async void Begin()
         {
             EventSystem.Attach("world:time:sync", new EventCallback(metadata =>
@@ -84,6 +99,8 @@ namespace Curiosity.Core.Client.Managers
 
                 vehiclesToSuppress.Add(modelHash);
             }
+
+            ToggleDispatch(false); // turn off all dispatch
         }
 
         public void LockAndSetTime(int hour, int minute)
@@ -349,6 +366,14 @@ namespace Curiosity.Core.Client.Managers
                 vehicles = null;
 
                 lastRunVehicleSuppression = DateTime.Now;
+            }
+        }
+
+        private void ToggleDispatch(bool toggle)
+        {
+            for (int i = 0; i < dispatchTypes.Length; i++)
+            {
+                EnableDispatchService((int)dispatchTypes[i], toggle);
             }
         }
     }
