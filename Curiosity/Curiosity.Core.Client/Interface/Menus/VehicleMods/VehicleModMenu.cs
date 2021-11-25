@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
@@ -220,11 +221,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             {
                 if (newIndex == 13) // default
                 {
-                    _SetHeadlightsColorOnVehicle(vehicle, 255);
+                    vehicle.SetHeadlightsColorOnVehicle(255);
                 }
                 else if (newIndex > -1 && newIndex < 13)
                 {
-                    _SetHeadlightsColorOnVehicle(vehicle, newIndex);
+                    vehicle.SetHeadlightsColorOnVehicle(newIndex);
                 }
             }
             else if (listItem == uiLstTireSmoke)
@@ -346,7 +347,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                         windowTint = (int)veh.Mods.WindowTint,
                         xenonHeadlights = IsToggleModOn(veh.Handle, 22),
                         bulletProofTires = !veh.CanTiresBurst,
-                        headlightColor = _GetHeadlightsColorFromVehicle(veh),
+                        headlightColor = veh.GetHeadlightsColorFromVehicle(),
                         enveffScale = GetVehicleEnveffScale(veh.Handle)
                     };
 
@@ -427,39 +428,6 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 uiChkCustomWheels.Checked = IsToggleModOn(veh.Handle, 23);
                 uiChkTurbo.Checked = IsToggleModOn(veh.Handle, 18);
                 uiChkXenonHeadlights.Checked = IsToggleModOn(veh.Handle, 22);
-            }
-        }
-
-        internal static int _GetHeadlightsColorFromVehicle(Vehicle vehicle)
-        {
-            if (vehicle != null && vehicle.Exists())
-            {
-                if (IsToggleModOn(vehicle.Handle, 22))
-                {
-                    int val = GetVehicleHeadlightsColour(vehicle.Handle);
-                    if (val > -1 && val < 13)
-                    {
-                        return val;
-                    }
-                    return -1;
-                }
-            }
-            return -1;
-        }
-
-        internal static void _SetHeadlightsColorOnVehicle(Vehicle veh, int newIndex)
-        {
-
-            if (veh != null && veh.Exists())
-            {
-                if (newIndex > -1 && newIndex < 13)
-                {
-                    SetVehicleHeadlightsColour(veh.Handle, newIndex);
-                }
-                else
-                {
-                    SetVehicleHeadlightsColour(veh.Handle, -1);
-                }
             }
         }
     }

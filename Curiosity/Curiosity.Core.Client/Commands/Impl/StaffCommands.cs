@@ -370,7 +370,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 if (b)
                 {
 
-                    GarageVehicleManager.GetModule().CreateBlip(vehicle);
+                    vehicle.CreateBlip();
                     Cache.StaffVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);

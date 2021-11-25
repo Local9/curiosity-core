@@ -1,14 +1,17 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class VehicleGarageMenu
     {
+        NotificationManager Notify => NotificationManager.GetModule();
         UIMenu baseMenu;
 
         UIMenuItem loadingItem = new UIMenuItem("🔍 Loading");
@@ -61,9 +64,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
         }
 
-        private void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        private async void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
-            
+            if (selectedItem.ItemData is null) return;
+
+            VehicleItem vehicleItem = (VehicleItem)selectedItem.ItemData;
+
+            var response = await VehicleManager.GetModule().CreateVehicle(vehicleItem.CharacterVehicleId, vehicleItem.Hash);
+            if (!response.success)
+            {
+                Notify.Error($"Error when trying to spawn vehicle.");
+            }
         }
 
         private async void LoadVehicles()
@@ -82,9 +93,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 goto END;
             }
 
-            foreach(VehicleItem vehicle in vehicles)
+            foreach(VehicleItem vehicle in vehicles.OrderBy(x => x.Label))
             {
-                UIMenuItem uIMenuItem = new UIMenuItem($"{vehicle.Label} [{vehicle.VehicleInfo.plateText}]");
+                UIMenuItem uIMenuItem = new UIMenuItem($"{vehicle.Label}");
+                uIMenuItem.SetRightLabel(vehicle.VehicleInfo.plateText);
                 uIMenuItem.ItemData = vehicle;
                 baseMenu.AddItem(uIMenuItem);
             }
