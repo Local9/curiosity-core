@@ -53,7 +53,7 @@
   },
   {
     "scenario": "Chumash_14_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Chumash_14_Hookers",
@@ -97,7 +97,7 @@
   },
   {
     "scenario": "Del_Perro_16_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Del_Perro_16_Hookers",
@@ -113,7 +113,7 @@
   },
   {
     "scenario": "DowntownAlley_33_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "DowntownAlley_33_Hookers",
@@ -129,7 +129,7 @@
   },
   {
     "scenario": "E_Canals_22_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_Canals_22_Hookers",
@@ -145,7 +145,7 @@
   },
   {
     "scenario": "E_Cypress_05_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_Cypress_05_Hookers",
@@ -161,7 +161,7 @@
   },
   {
     "scenario": "E_Hollywood_39_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_Hollywood_39_Hookers",
@@ -177,7 +177,7 @@
   },
   {
     "scenario": "E_PaletoBay_10_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_PaletoBay_10_Hookers",
@@ -193,7 +193,7 @@
   },
   {
     "scenario": "E_Puerto_26_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_Puerto_26_Hookers",
@@ -209,7 +209,7 @@
   },
   {
     "scenario": "E_SandyShores_12_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_SandyShores_12_Hookers",
@@ -225,7 +225,7 @@
   },
   {
     "scenario": "E_Silverlake_40_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "E_Silverlake_40_Hookers",
@@ -245,7 +245,7 @@
   },
   {
     "scenario": "EastLS_Chopshop_35_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "EastLS_Chopshop_35_Vagos",
@@ -257,7 +257,7 @@
   },
   {
     "scenario": "EastLS_Skatepark_36_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "EastLS_Skatepark_36_Hookers",
@@ -273,7 +273,7 @@
   },
   {
     "scenario": "Eclipse_32_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Eclipse_32_Hookers",
@@ -297,7 +297,7 @@
   },
   {
     "scenario": "ElBurro_Shed_38_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "ElBurro_Shed_38_Hookers",
@@ -313,7 +313,7 @@
   },
   {
     "scenario": "ElBurro_Wreck_37_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "ElBurro_Wreck_37_Hookers",
@@ -361,7 +361,7 @@
   },
   {
     "scenario": "Harmony_ChopShop_13_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Harmony_ChopShop_13_Hookers",
@@ -401,7 +401,7 @@
   },
   {
     "scenario": "Mid_Seoul_24_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Mid_Seoul_24_Hookers",
@@ -425,7 +425,7 @@
   },
   {
     "scenario": "MirrorPark_41_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "MirrorPark_41_Hookers",
@@ -441,7 +441,7 @@
   },
   {
     "scenario": "Morningwood_17_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Morningwood_17_Hookers",
@@ -469,7 +469,7 @@
   },
   {
     "scenario": "N_W_Hollywood_31_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "N_W_Hollywood_31_Hookers",
@@ -493,7 +493,7 @@
   },
   {
     "scenario": "OceanHighway_15_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "OceanHighway_15_Hookers",
@@ -509,7 +509,7 @@
   },
   {
     "scenario": "Paleto_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Pershing_04_Bikers",
@@ -517,7 +517,7 @@
   },
   {
     "scenario": "Pershing_04_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Pershing_04_Hookers",
@@ -533,7 +533,7 @@
   },
   {
     "scenario": "Pier_18_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Pier_18_Hookers",
@@ -601,7 +601,7 @@
   },
   {
     "scenario": "Racecourse_06_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "RaceCourse_06_Hookers",
@@ -629,7 +629,7 @@
   },
   {
     "scenario": "S_SanPedro_28_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "S_SanPedro_28_Hookers",
@@ -645,7 +645,7 @@
   },
   {
     "scenario": "S_Seoul_27_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "S_Seoul_27_Hookers",
@@ -657,7 +657,7 @@
   },
   {
     "scenario": "Sandy_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Sandy_Planes",
@@ -669,7 +669,7 @@
   },
   {
     "scenario": "SanPedroGarage_30_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "SanPedroGarage_30_Hookers",
@@ -689,7 +689,7 @@
   },
   {
     "scenario": "Scrapyard_29_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Scrapyard_29_Hookers",
@@ -709,7 +709,7 @@
   },
   {
     "scenario": "SeoulPark_23_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "SeoulPark_23_Hookers",
@@ -733,7 +733,7 @@
   },
   {
     "scenario": "StrawberryClub_34_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "StrawberryClub_34_Hookers",
@@ -789,7 +789,7 @@
   },
   {
     "scenario": "Vespucci_20_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Vespucci_20_Hookers",
@@ -805,7 +805,7 @@
   },
   {
     "scenario": "VespucciBeach_19_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "VespucciBeach_19_Hookers",
@@ -821,7 +821,7 @@
   },
   {
     "scenario": "W_Canals_21_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "W_Canals_21_Hookers",
@@ -837,7 +837,7 @@
   },
   {
     "scenario": "W_PaletoBay_09_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "W_PaletoBay_09_Hookers",
@@ -853,7 +853,7 @@
   },
   {
     "scenario": "W_Puerto_25_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "W_Puerto_25_Hookers",
@@ -869,7 +869,7 @@
   },
   {
     "scenario": "W_SandyShores_11_Cops",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "W_SandyShores_11_Hookers",
