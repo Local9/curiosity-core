@@ -355,7 +355,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 await vehicle.FadeOut();
                 vehicle.Repair();
 
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(100);
 
                 if (vehModel?.IsLoaded ?? false)
                     vehModel.MarkAsNoLongerNeeded();
@@ -367,23 +367,33 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
 
+                await BaseScript.Delay(100);
+
                 if (b)
                 {
-
+                    vehicle.Position = Game.PlayerPed.Position;
                     vehicle.CreateBlip();
                     Cache.StaffVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;
 
-                    vehicle.Position = Game.PlayerPed.Position;
+                    if (vehicle.ClassType == VehicleClass.Helicopters && GetEntityHeightAboveGround(Cache.PlayerPed.Handle) > 10.0f)
+                    {
+                        SetHeliBladesFullSpeed(vehicle.Handle);
+                    }
+                    else
+                    {
+                        vehicle.PlaceOnGround();
+                    }
 
                     await vehicle.FadeIn();
                     vehicle.Opacity = 255;
                     vehicle.ResetOpacity();
                     API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
+
+                    Cache.PlayerPed.SetIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
                     return;
                 }
 

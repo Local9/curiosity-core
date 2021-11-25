@@ -1088,7 +1088,9 @@ namespace Curiosity.Core.Client.Managers
                 if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                 {
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+
+                    Cache.PlayerPed.SetIntoVehicle(vehicle, VehicleSeat.Driver);
+                    // Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                 }
 
@@ -1133,11 +1135,11 @@ namespace Curiosity.Core.Client.Managers
                 vehicle.Position = returnedSpawnPosition;
                 vehicle.Heading = vehicleItem.Heading;
 
+                vehicle.PlaceOnGround();
+
                 API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 
                 Notify.Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
-
-                // VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
 
                 await vehicle.FadeIn();
                 ResetEntityAlpha(vehicle.Handle);
