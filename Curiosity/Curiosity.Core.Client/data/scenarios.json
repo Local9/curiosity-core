@@ -329,11 +329,11 @@
   },
   {
     "scenario": "FIB_GROUP_1",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "FIB_GROUP_2",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Fort_Zancudo_Guards",
