@@ -82,15 +82,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             List<VehicleItem> vehicles = await EventSystem.GetModule().Request<List<VehicleItem>>("garage:get:list:cars");
 
-            if (vehicles == null)
+            if (vehicles == null || vehicles.Count == 0)
             {
                 loadingItem.Text = $"No vehicles owned.";
-                goto END;
-            }
-
-            if (vehicles.Count == 0)
-            {
-                loadingItem.Text = $"No vehicles owned.";
+                loadingItem.Description = $"You can buy vehicles from the Store";
                 goto END;
             }
 
