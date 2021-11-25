@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu menuVehicleDoors;
         private VehicleDoorMenu _VehicleDoorMenu = new VehicleDoorMenu();
         private UIMenu menuVehicleWindows;
-        private VehicleWindowMenu _VehicleWindowMenu = new VehicleWindowMenu();
+        private VehicleGarageMenu _VehicleWindowMenu = new VehicleGarageMenu();
 
         private UIMenu menuVehicleRemote;
         private VehicleRemoteMenu _VehicleRemoteMenu = new VehicleRemoteMenu();

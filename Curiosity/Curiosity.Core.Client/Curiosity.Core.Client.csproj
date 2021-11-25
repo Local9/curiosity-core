@@ -77,6 +77,7 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\VehicleGarageMenu.cs" />
     <Compile Include="Managers\CompanionManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoLuckyWheel.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoManager.cs" />

@@ -34,6 +34,9 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
         private UIMenuItem miEditPed = new UIMenuItem("Customise Ped", "Change your look.");
 
+        private UIMenu menuGarage;
+        private SubMenu.VehicleGarageMenu _vehicleGarageMenu = new SubMenu.VehicleGarageMenu();
+
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
 
@@ -61,19 +64,22 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuMain.AddItem(mlGpsLocations);
 
-            menuInventory = MenuPool.AddSubMenu(menuMain, "Inventory");
+            menuInventory = MenuPool.AddSubMenu(menuMain, "Inventory", "Player inventory, e.g. Health Kits and Repair Kits which can be bought in the store");
             _MenuInventory.CreateMenu(menuInventory);
 
-            menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles");
+            menuGarage = MenuPool.AddSubMenu(menuMain, "Garage", "Not Implemented");
+            _vehicleGarageMenu.CreateMenu(menuGarage);
+
+            menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles", "Current vehicle options.");
             _VehicleMenu.CreateMenu(menuVehicle);
 
-            menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs");
+            menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs", "Curiosity Jobs, all other jobs please press F5.");
             _JobMenu.CreateMenu(menuJobs);
 
-            menuSettings = MenuPool.AddSubMenu(menuMain, "Settings");
+            menuSettings = MenuPool.AddSubMenu(menuMain, "Settings", "User Settings");
             _MenuSettings.CreateMenu(menuSettings);
 
-            menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter");
+            menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter", "Supporter options and settings, more information on patreon.com/lifev");
             _MenuSupporter.CreateMenu(menuSupporter);
 
             menuMain.AddItem(miKillYourself);
