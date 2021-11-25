@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
-using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
@@ -23,11 +22,20 @@ namespace Curiosity.Core.Client.Managers
         public int CostOfKillSelf = 500;
         public int NumberOfTimesKillSelf = 0;
         public bool IsScubaGearEnabled = false;
-
+        public ePlayerJobs CurrentJob = ePlayerJobs.UNEMPLOYED;
         NotificationManager NotificationManager => NotificationManager.GetModule();
+
+        int jobStateBagHandler = 0;
+
         public override void Begin()
         {
+            jobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnPlayerJobStateChange));
+        }
 
+        private void OnPlayerJobStateChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
+        { 
+            Logger.Debug($"CurrentJob: {CurrentJob}");
+            CurrentJob = (ePlayerJobs)jobId;
         }
 
         public void ToggleScubaEquipment()

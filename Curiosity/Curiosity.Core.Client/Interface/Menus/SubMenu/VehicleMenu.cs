@@ -109,6 +109,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private bool IsDriftSupported()
         {
+            if (!Game.PlayerPed.IsInVehicle()) return false;
+
             int vehicleHash = Game.PlayerPed.CurrentVehicle.Model.Hash;
             return driftVehicleHashes.Contains(vehicleHash);
         }

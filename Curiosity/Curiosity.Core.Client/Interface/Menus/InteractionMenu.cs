@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
@@ -19,6 +20,8 @@ namespace Curiosity.Core.Client.Interface.Menus
         private const string PERSONAL_TRAILER = "Personal Trailer";
         private const string PERSONAL_HELICOPTER = "Personal Helicopter";
         public static InteractionMenu MenuInstance;
+
+        PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
         public static MenuPool MenuPool;
         private UIMenu menuMain;
@@ -52,9 +55,6 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuSupporter;
         private SubMenu.SupporterMenu _MenuSupporter = new SubMenu.SupporterMenu();
 
-        private UIMenu menuPolice;
-        private UIMenuItem removeMenu = new UIMenuItem("Remove Police Item");
-
         public override void Begin()
         {
             MenuInstance = this;
@@ -64,43 +64,6 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuMain = new UIMenu("Interaction Menu", "Player Interactions");
             menuMain.MouseControlsEnabled = false;
-
-            menuMain.OnListChange += MenuMain_OnListChange;
-            menuMain.OnListSelect += MenuMain_OnListSelect;
-            menuMain.OnItemSelect += MenuMain_OnItemSelect;
-            menuMain.OnIndexChange += MenuMain_OnIndexChange;
-
-            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
-
-            menuMain.RefreshIndex();
-
-            MenuPool.Add(menuMain);
-        }
-
-        public bool RemovePoliceMenu(UIMenuItem uIMenuItem)
-        {
-            return (uIMenuItem == menuPolice.ParentItem);
-        }
-
-        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
-        {
-            Logger.Debug($"Menu State: {state}");
-
-            if (state == MenuState.Opened || state == MenuState.ChangeBackward || state == MenuState.ChangeForward)
-                OnMenuOpen();
-
-            if (state == MenuState.Closed)
-                menuMain.InstructionalButtons.Clear();
-        }
-
-        private void OnMenuOpen()
-        {
-            menuMain.Clear();
-            menuMain.InstructionalButtons.Clear();
-
-            PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
-
-            Logger.Debug($"Menu Open");
 
             menuMain.AddItem(mlGpsLocations);
 
@@ -124,12 +87,39 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter", "Supporter options and settings, more information on patreon.com/lifev");
             _MenuSupporter.CreateMenu(menuSupporter);
 
-            menuPolice = MenuPool.AddSubMenu(menuMain, "Police Options");
-            _MenuSupporter.CreateMenu(menuPolice);
-
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
             menuMain.AddItem(miEditPed);
+
+            menuMain.OnListChange += MenuMain_OnListChange;
+            menuMain.OnListSelect += MenuMain_OnListSelect;
+            menuMain.OnItemSelect += MenuMain_OnItemSelect;
+            menuMain.OnIndexChange += MenuMain_OnIndexChange;
+
+            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
+
+            menuMain.RefreshIndex();
+
+            MenuPool.Add(menuMain);
+        }
+
+        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            Logger.Debug($"Menu State: {state}");
+
+            if (state == MenuState.Opened || state == MenuState.ChangeBackward || state == MenuState.ChangeForward)
+                OnMenuOpen();
+
+            if (state == MenuState.Closed)
+                menuMain.InstructionalButtons.Clear();
+        }
+
+        private void OnMenuOpen()
+        {
+            // menuMain.Clear();
+            menuMain.InstructionalButtons.Clear();
+
+            Logger.Debug($"Menu Open");
 
             menuMain.RefreshIndex();
             menuMain.CurrentSelection = currentIndex;
@@ -150,12 +140,6 @@ namespace Curiosity.Core.Client.Interface.Menus
             supporterButton.Description = "Please visit our Patreon to see our supporter benefits.";
             if (supporterButton.Enabled)
                 supporterButton.Description = "Supporter Menu";
-
-            //UIMenuItem jobButton = menuJobs.ParentItem;
-            //jobButton.Enabled = Cache.Player.User.IsStaff;
-            //jobButton.Description = "Menu is currently disabled while its in development.";
-            //if (jobButton.Enabled)
-            //    jobButton.Description = "Access to the jobs menu.";
         }
 
         private void MenuMain_OnIndexChange(UIMenu sender, int newIndex)

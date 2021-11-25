@@ -10,6 +10,7 @@ namespace Curiosity.Core.Server.Managers
 {
     public class JobManager : Manager<JobManager>
     {
+        private const string JOB_UNEMPLOYED = "job:unemployed";
         private const string JOB_POLICE_DUTY = "job:police:duty";
         private const string JOB_POLICE_ARREST = "job:police:arrest";
         private LocationsConfigManager config;
@@ -17,6 +18,23 @@ namespace Curiosity.Core.Server.Managers
         public override void Begin()
         {
             config = LocationsConfigManager.GetModule();
+
+            EventSystem.Attach(JOB_UNEMPLOYED, new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                    return null;
+
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+
+                user.CurrentJob = "Unemployed";
+                user.Send(JOB_UNEMPLOYED);
+
+                Logger.Debug($"'{user.LatestName}' is now a {user.CurrentJob}");
+
+                await BaseScript.Delay(5000);
+
+                return null;
+            }));
 
             EventSystem.Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
             {

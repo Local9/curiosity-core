@@ -21,10 +21,17 @@ namespace Curiosity.Police.Client.Managers
 
         public override void Begin()
         {
+            EventSystem.Attach("job:unemployed:duty", new EventCallback(metadata =>
+            {
+                Logger.Debug($"JobManager: job:unemployed:duty");
+                string job = "Unemployed";
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, false, false, job);
+                return null;
+            }));
+
             EventSystem.Attach("job:police:duty", new EventCallback(metadata =>
             {
-                Logger.Info($"OnJobDutyEvent");
-
+                Logger.Debug($"JobManager: job:police:duty");
                 string job = IsOfficer ? "Unemployed" : JOB_POLICE;
                 BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job);
                 return null;
@@ -47,7 +54,7 @@ namespace Curiosity.Police.Client.Managers
         {
             bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? true;
 
-            Logger.Info($"OnJobDutyEvent: {job}:{onDuty}");
+            Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
 
             if (isPassive && job == JOB_POLICE)
             {

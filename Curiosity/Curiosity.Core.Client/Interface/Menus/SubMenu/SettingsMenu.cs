@@ -103,7 +103,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 GameEventManager.GetModule().EnableDebug = Checked;
             }
 
-            if (miDevEnableDebugLog is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableGameEventLogger)
+            if (miDevEnableDebugLog is not null && Cache.Player.User.IsDeveloper && checkboxItem == miDevEnableDebugLog)
             {
                 Logger.IsDebugEnabled = Checked;
             }
