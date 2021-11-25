@@ -22,7 +22,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@pCarsOnly", carsOnly }
                 };
 
-            string myQuery = "call selCharacterVehicles(@characterId);";
+            string myQuery = "call selCharacterVehicles(@characterId, @pCarsOnly);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
