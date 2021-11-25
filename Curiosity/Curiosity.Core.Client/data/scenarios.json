@@ -457,11 +457,11 @@
   },
   {
     "scenario": "MP_Police",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "MP_POLICE2",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "N_W_Hollywood_31_Bikers",
@@ -553,31 +553,31 @@
   },
   {
     "scenario": "Police_At_Court",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_PEDS_CITY",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_POUND1",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_POUND2",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_POUND3",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_POUND4",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "POLICE_POUND5",
-    "enabled": true
+    "enabled": false
   },
   {
     "scenario": "Polo_Goon",
