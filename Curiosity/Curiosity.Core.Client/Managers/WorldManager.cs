@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Managers
         int timeLockHour = 0;
         int timeLockMins = 0;
 
-        private DispatchType[] dispatchTypes = new DispatchType[11] {
+        private DispatchType[] dispatchTypes = new DispatchType[13] {
             DispatchType.DT_PoliceAutomobile,
             DispatchType.DT_PoliceHelicopter,
             DispatchType.DT_SwatAutomobile,
@@ -50,7 +50,9 @@ namespace Curiosity.Core.Client.Managers
             DispatchType.DT_PoliceAutomobileWaitCruising,
             DispatchType.DT_SwatHelicopter,
             DispatchType.DT_PoliceBoat,
-            DispatchType.DT_ArmyVehicle
+            DispatchType.DT_ArmyVehicle,
+            DispatchType.DT_AmbulanceDepartment,
+            DispatchType.DT_FireDepartment
         };
 
 
