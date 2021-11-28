@@ -135,7 +135,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted);
                 UpdateBlipString();
-                UpdatePlayerPassiveStates();
+                UpdatePlayerCollisionStates();
                 UpdatePlayerWantedState();
             }
             catch (Exception ex)
@@ -168,7 +168,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
-        private void UpdatePlayerPassiveStates()
+        private void UpdatePlayerCollisionStates()
         {
             bool playerInVehicle = PlayerPed.IsInVehicle();
             bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
