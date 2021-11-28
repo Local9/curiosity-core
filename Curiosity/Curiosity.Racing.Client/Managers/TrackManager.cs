@@ -9,6 +9,7 @@ using static CitizenFX.Core.Native.API;
 using NativeUI;
 using System.Drawing;
 using CitizenFX.Core.UI;
+using Curiosity.Racing.Client.Diagnostics;
 
 namespace Curiosity.Racing.Client.Managers
 {
@@ -23,7 +24,7 @@ namespace Curiosity.Racing.Client.Managers
 
         public override void Begin()
         {
-            
+
         }
 
         public void Dispose()
