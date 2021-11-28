@@ -89,8 +89,14 @@ namespace Curiosity.LifeV.Bot.Methods
             }
         }
 
-        public async Task HandleAutomatedResponses(SocketUserMessage message, SocketCommandContext context)
+        public async Task DeleteAnythingWithTheWordNitro(SocketUserMessage message, SocketCommandContext context)
         {
+            List<string> msgItems = message.Content.Split(' ').ToList<string>();
+
+            bool deleteMessage = false;
+
+            if (msgItems.Contains("nitro")) deleteMessage = true;
+
             if (message.Content.Contains("bit.ly")
                 || message.Content.Contains(".ru/")
                 || message.Content.Contains(".link/")
@@ -102,8 +108,12 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("steam/gifts")
                 || message.Content.Contains("Get Discord Nitro")
                 || message.Content.Contains("offer is valid")
-                || message.Content.Contains("nitro")
                 )
+            {
+                deleteMessage = true;
+            }
+
+            if (deleteMessage)
             {
                 await message.DeleteAsync();
 
