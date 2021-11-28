@@ -35,10 +35,10 @@ namespace Curiosity.Core.Client.Environment.Entities
         public Vector3 Position => GetEntityCoords(PedHandle, false);
 
         public bool IsPassive;
-        int isPassiveStateBagHandler = -1;
+        int passiveStateBagHandler = -1;
 
         public bool IsWanted;
-        int isWantedStateBagHandler = -1;
+        int wantedStateBagHandler = -1;
 
         public WorldPlayer(Player player)
         {
@@ -49,8 +49,8 @@ namespace Curiosity.Core.Client.Environment.Entities
             IsWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
             pluginManager.AttachTickHandler(OnPlayerChanges);
             pluginManager.AttachTickHandler(OnPlayerRevive);
-            isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
-            isWantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
+            passiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
+            wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
 
             if (player.Character.AttachedBlip is null)
             {
@@ -74,8 +74,8 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 pluginManager.DetachTickHandler(OnPlayerChanges);
                 pluginManager.DetachTickHandler(OnPlayerRevive);
-                RemoveStateBagChangeHandler(isPassiveStateBagHandler);
-                RemoveStateBagChangeHandler(isWantedStateBagHandler);
+                RemoveStateBagChangeHandler(passiveStateBagHandler);
+                RemoveStateBagChangeHandler(wantedStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -118,11 +118,13 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
         {
+            Logger.Debug($"bag: {bag}, key: {key}, isPassive: {isPassive}, replicated: {replicated}");
             IsPassive = isPassive;
         }
 
         private void OnStatePlayerWantedChange(string bag, string key, dynamic isWanted, int reserved, bool replicated)
         {
+            Logger.Debug($"bag: {bag}, key: {key}, isPassive: {isWanted}, replicated: {replicated}");
             IsWanted = isWanted;
         }
 
