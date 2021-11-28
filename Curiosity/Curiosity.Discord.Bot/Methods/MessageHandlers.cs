@@ -107,13 +107,13 @@ namespace Curiosity.LifeV.Bot.Methods
             {
                 await message.DeleteAsync();
 
-                var msg = await context.Channel.SendMessageAsync("Message deleted, possible scam link");
+                var msg = await context.Channel.SendMessageAsync("Message deleted");
 
                 await Task.Delay(5000);
 
                 await msg.DeleteAsync();
 
-                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[SCAM LINK] User: {message.Author.Mention} posted a possible scam link and it has been removed.\nRemoved Content;\n```{message.Content}```");
+                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[POSSIBLE SCAM LINK]\nUser: {message.Author.Mention} posted a possible scam link and it has been removed.\nRemoved Content;\n```{message.Content}```");
             }
         }
 
