@@ -19,5 +19,6 @@
     "load2",
     "load3",
     "load4"
-  ]
+  ],
+  "policeSpeedLimitWarning": 20.0
 }

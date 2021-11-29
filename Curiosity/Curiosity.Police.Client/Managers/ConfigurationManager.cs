@@ -36,7 +36,6 @@ namespace Curiosity.Police.Client.Managers
         }
 
         public Dictionary<string, int> SpeedLimits => GetPoliceConfig().SpeedLimits;
-        public Dictionary<string, int> WarningLimits => GetPoliceConfig().WarningLimits;
         public List<string> IgnoredVehicles => GetPoliceConfig().IgnoredVehicles;
         public List<PoliceCamera> SpeedCameras => GetPoliceConfig().SpeedCameras;
         public float SpeedCameraDistance => GetPoliceConfig().SpeedCameraDistance;

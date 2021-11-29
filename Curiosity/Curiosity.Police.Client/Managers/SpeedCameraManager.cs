@@ -19,7 +19,6 @@ namespace Curiosity.Police.Client.Managers
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
         
-        int _warnPolice = 20;
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
@@ -37,7 +36,6 @@ namespace Curiosity.Police.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
 
             _speedCameraDistance = _configurationManager.SpeedCameraDistance;
-            _warnPolice = _configurationManager.WarningLimits["police"];
         }
 
         public void Dispose()
@@ -139,7 +137,7 @@ namespace Curiosity.Police.Client.Managers
 
                 camera.Active = true;
 
-                bool informPolice = false;
+                bool informPolice = false; // legacy
                 bool caughtSpeeding = false;
                 float limitToReport = 0;
 
@@ -147,7 +145,6 @@ namespace Curiosity.Police.Client.Managers
                 {
                     if (speedInMph > camera.Limit)
                     {
-                        informPolice = (speedInMph > (camera.Limit + _warnPolice));
                         limitToReport = camera.Limit ?? 0f;
                         caughtSpeeding = true;
                     }
@@ -156,7 +153,6 @@ namespace Curiosity.Police.Client.Managers
                 {
                     if (speedInMph > _currentStreetLimit)
                     {
-                        informPolice = (speedInMph > (_currentStreetLimit + _warnPolice));
                         limitToReport = _currentStreetLimit;
                         caughtSpeeding = true;
                     }

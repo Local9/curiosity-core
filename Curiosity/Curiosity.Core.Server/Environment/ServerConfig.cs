@@ -19,5 +19,8 @@ namespace Curiosity.Core.Server.Environment
 
         [DataMember(Name = "loadingImages")]
         public List<string> LoadingImages { get; set; }
+
+        [DataMember(Name = "policeSpeedLimitWarning")]
+        public float PoliceSpeedLimitWarning;
     }
 }

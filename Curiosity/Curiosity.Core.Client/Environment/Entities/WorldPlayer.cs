@@ -40,6 +40,9 @@ namespace Curiosity.Core.Client.Environment.Entities
         public bool IsWanted;
         int wantedStateBagHandler = -1;
 
+        public int WantedLevel = 0;
+        int wantedLevelStateBagHandler = -1;
+
         public WorldPlayer(Player player)
         {
             Player = player;
@@ -51,6 +54,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             pluginManager.AttachTickHandler(OnPlayerRevive);
             passiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
             wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
+            wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
 
             if (player.Character.AttachedBlip is null)
             {
@@ -118,14 +122,17 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
         {
-            Logger.Debug($"bag: {bag}, key: {key}, isPassive: {isPassive}, replicated: {replicated}");
             IsPassive = isPassive;
         }
 
         private void OnStatePlayerWantedChange(string bag, string key, dynamic isWanted, int reserved, bool replicated)
         {
-            Logger.Debug($"bag: {bag}, key: {key}, isPassive: {isWanted}, replicated: {replicated}");
             IsWanted = isWanted;
+        }
+
+        private void OnStatePlayerWantedLevelChange(string bag, string key, dynamic level, int reserved, bool replicated)
+        {
+            WantedLevel = level;
         }
 
         // This is mainly for things that update, blips, passive, etc
@@ -147,7 +154,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         bool wasWanted = false;
         private void UpdatePlayerWantedState()
         {
-            if (IsWanted && !wasWanted)
+            if (IsWanted && !wasWanted && WantedLevel >= 3)
             {
                 wasWanted = true;
                 Blip playerBlip = PlayerPed.AttachedBlip;

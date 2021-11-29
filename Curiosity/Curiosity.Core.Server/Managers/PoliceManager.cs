@@ -8,12 +8,17 @@ using Curiosity.Systems.Library.Models.Police;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
 {
     public class PoliceManager : Manager<PoliceManager>
     {
+        ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
+
+        Dictionary<int, DateTime> playerCullingReset = new();
+
         public override void Begin()
         {
             EventSystem.Attach("police:job:state", new EventCallback(metadata => {
@@ -110,7 +115,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int speed = metadata.Find<int>(0);
                     int speedLimit = metadata.Find<int>(1);
-                    bool informPolice = metadata.Find<bool>(2);
+                    // bool informPolice = metadata.Find<bool>(2);
                     int vehicleNetId = metadata.Find<int>(3);
                     string street = metadata.Find<string>(4);
                     string direction = metadata.Find<string>(5);
@@ -118,6 +123,8 @@ namespace Curiosity.Core.Server.Managers
                     // get Vehicle
                     int vehicleHandle = NetworkGetEntityFromNetworkId(vehicleNetId);
                     Vehicle vehicle = new Vehicle(vehicleHandle);
+
+                    bool informPolice = (speed - speedLimit) > serverConfigManager.PoliceSpeedLimitWarning;
 
                     if (vehicle is null)
                     {
@@ -143,12 +150,6 @@ namespace Curiosity.Core.Server.Managers
                     string playerMsg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Caught Speeding ({costOfTicket:C0})</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
                         $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH";
-
-                    if (informPolice)
-                    {
-                        playerMsg += $"<br /><b>Police have been informed</b>";
-                    }
-
                     playerMsg += $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
                     SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
@@ -156,12 +157,14 @@ namespace Curiosity.Core.Server.Managers
                     if (informPolice)
                     {
                         // wanted flag so police are not punished
-                        player.State.Set(StateBagKey.PLAYER_IS_WANTED, informPolice, true);
+                        player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 1, true);
+
                         SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
+                        playerCullingReset.Add(player.Character.Handle, DateTime.UtcNow.AddSeconds(15));
                         
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
-                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
+                        $"Last Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
                         SendNotification(message: msg, vehicleNetId: vehicle.NetworkId);
@@ -176,6 +179,26 @@ namespace Curiosity.Core.Server.Managers
             RETURN_MESSAGE:
                 return em;
             }));
+        }
+
+        [TickHandler]
+        private async Task OnPlayerCullingReset()
+        {
+            if (playerCullingReset.Count == 0)
+            {
+                await BaseScript.Delay(5000);
+            }
+            else
+            {
+                foreach(KeyValuePair<int, DateTime> kvp in playerCullingReset.ToArray())
+                {
+                    if (kvp.Value < DateTime.UtcNow)
+                    {
+                        SetEntityDistanceCullingRadius(kvp.Key, 0f);
+                        playerCullingReset.Remove(kvp.Key);
+                    }
+                }
+            }
         }
 
         void SendNotification(int serverId = 0, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 10000, int vehicleNetId = -1)

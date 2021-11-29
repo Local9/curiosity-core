@@ -46,6 +46,8 @@ namespace Curiosity.Core.Server.Managers
             return Get().Tips;
         }
 
+        public float PoliceSpeedLimitWarning => Get().PoliceSpeedLimitWarning;
+
         public dynamic GetLoadingConfig()
         {
             if (_loadingConfig is not null)
