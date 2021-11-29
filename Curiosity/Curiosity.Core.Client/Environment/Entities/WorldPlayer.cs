@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         private Player GamePlayer => Game.Player;
         private Ped PlayerPed => Player.Character;
         private Ped GamePlayerPed => GamePlayer.Character;
+        private Vehicle Vehicle;
         public int PedHandle;
         public int PlayerHandle;
         public bool IsReady;
@@ -66,6 +67,12 @@ namespace Curiosity.Core.Client.Environment.Entities
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
 
                 UpdateBlipString();
+            }
+
+            if (PlayerPed.IsInVehicle())
+            {
+                if (PlayerPed.CurrentVehicle.Driver == PlayerPed)
+                    Vehicle = PlayerPed.CurrentVehicle;
             }
 
             Logger.Debug($"Player '{Player.Name}' Created");
@@ -175,7 +182,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
-        private void UpdatePlayerCollisionStates()
+        private void UpdatePlayerCollisionStates() // need to change this to work differently
         {
             bool playerInVehicle = PlayerPed.IsInVehicle();
             bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();

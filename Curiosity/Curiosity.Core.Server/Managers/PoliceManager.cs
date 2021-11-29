@@ -79,6 +79,17 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {
+
+                int suspectServerId = metadata.Find<int>(0);
+
+                Player player = PluginManager.PlayersList[suspectServerId];
+                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
+                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
+                player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
+
+                // log jail & reward officers
+                // cut ticket cost in half
+
                 return null;
             }));
 
@@ -87,8 +98,9 @@ namespace Curiosity.Core.Server.Managers
                 int suspectServerId = metadata.Find<int>(0);
 
                 Player player = PluginManager.PlayersList[suspectServerId];
-                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset
-                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true);
+                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
+                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
+                player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
 
                 // log kill & reward officers (if kill is near a safe area, its not rewarded)
 
