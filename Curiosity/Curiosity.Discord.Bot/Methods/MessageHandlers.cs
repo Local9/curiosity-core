@@ -18,7 +18,6 @@ namespace Curiosity.LifeV.Bot.Methods
 
         static DateTime lastSentTrigger = DateTime.Now.AddMinutes(-10);
         static Dictionary<ulong, DateTime> discordChannel = new Dictionary<ulong, DateTime>();
-
         static Dictionary<ulong, KeyValuePair<ulong, string>> stickyMessages = new Dictionary<ulong, KeyValuePair<ulong, string>>();
 
         private Dictionary<string, string> servers = new Dictionary<string, string>()
@@ -123,7 +122,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
                 await msg.DeleteAsync();
 
-                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[POSSIBLE SCAM LINK]\nUser: {message.Author.Mention} posted a possible scam link and it has been removed.\nRemoved Content;\n```{message.Content}```");
+                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[POSSIBLE SCAM LINK]\nUser: {message.Author.Mention} posted a possible scam link and it has been removed.\nChannel: {message.Channel.Name}\n\nRemoved Content;\n```{message.Content}```");
             }
         }
 
