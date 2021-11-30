@@ -1,10 +1,4 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Police.Client.Managers.GameEvents
 {
@@ -21,15 +15,7 @@ namespace Curiosity.Police.Client.Managers.GameEvents
 
             victim.DropsWeaponsOnDeath = false;
 
-            if (JobManager.IsOfficer)
-            {
-                // punish cops
-            }
-
-            if (!JobManager.IsOfficer)
-            {
-                // punish players
-            }
+            EventSystem.Send("police:playerKilledPed", attacker.ServerId, victim.NetworkId, isMeleeDamage, weaponInfoHash, damageTypeFlag);
         }
     }
 }

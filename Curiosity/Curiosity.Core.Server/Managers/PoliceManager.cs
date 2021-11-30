@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Environment.Data;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -8,6 +9,7 @@ using Curiosity.Systems.Library.Models.Police;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -17,6 +19,7 @@ namespace Curiosity.Core.Server.Managers
     {
         ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
 
+        private const int ALL_SERVER_ID = 0;
         Dictionary<int, DateTime> playerCullingReset = new();
 
         public override void Begin()
@@ -93,14 +96,50 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.Attach("police:suspect:killed", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata => {
 
-                int suspectServerId = metadata.Find<int>(0);
+                int attackerServerId = metadata.Find<int>(0);
+                int victimServerId = metadata.Find<int>(1);
+                bool isMeleeDamage = metadata.Find<bool>(2);
+                uint weaponInfoHash = metadata.Find<uint>(3);
+                int damageTypeFlag = metadata.Find<int>(4);
 
-                Player player = PluginManager.PlayersList[suspectServerId];
-                SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
-                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
-                player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
+                Player attacker = PluginManager.PlayersList[attackerServerId];
+                Player victim = PluginManager.PlayersList[victimServerId];
+
+                bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool attackerIsOfficer = (ePlayerJobs)(attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == ePlayerJobs.POLICE_OFFICER;
+
+                if (attackerIsOfficer)
+                {
+                    if (victimIsWanted)
+                    {
+                        SetEntityDistanceCullingRadius(victim.Character.Handle, 0f); // reset culling
+                        victim.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
+                        victim.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
+                    }
+                }
+
+                Vector3 victimPosition = victim.Character.Position;
+                Vector3 attackerPosition = attacker.Character.Position;
+
+                float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
+                float distanceFeet = distanceTotal * 5280f;
+
+                string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+
+                Dictionary<string, string> tableRows = new Dictionary<string, string>();
+                tableRows.Add("Attacker", attacker.Name);
+                tableRows.Add("Victim", victim.Name);
+                tableRows.Add("Weapon", weaponName);
+
+                if (distanceFeet > 100f)
+                {
+                    tableRows.Add($"Distance", $"{distanceFeet}ft");
+                }
+
+                string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
+                SendNotification(ALL_SERVER_ID, notificationTable);
 
                 // log kill & reward officers (if kill is near a safe area, its not rewarded)
 
@@ -179,7 +218,7 @@ namespace Curiosity.Core.Server.Managers
                         $"Last Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
-                        SendNotification(message: msg, vehicleNetId: vehicle.NetworkId);
+                        SendNotification(serverId: ALL_SERVER_ID, message: msg, vehicleNetId: vehicle.NetworkId);
                     }
                 }
                 catch (Exception ex)
@@ -213,7 +252,7 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        void SendNotification(int serverId = 0, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 10000, int vehicleNetId = -1)
+        void SendNotification(int serverId = -1, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 10000, int vehicleNetId = -1)
         {
             if (serverId == -1) // all
             {
@@ -240,6 +279,21 @@ namespace Curiosity.Core.Server.Managers
             return PluginManager.ActiveUsers
                 .Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER)
                 .Select(x => x.Key).ToList();
+        }
+
+        string CreateBasicNotificationTable(string heading, Dictionary<string, string> rows)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"<table width=\"300\"><thead><tr><th colspan=\"2\">{heading}</th></tr></thead>");
+            sb.Append($"<tbody>");
+
+            foreach (KeyValuePair<string, string> row in rows)
+            {
+                sb.Append($"<tr><td>{row.Key}</td><td>{row.Value}</td></tr>");
+            }
+
+            sb.Append($"</tbody></table>");
+            return sb.ToString();
         }
     }
 }
