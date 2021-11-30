@@ -85,6 +85,7 @@
     <Compile Include="Database\Store\SkillDatabase.cs" />
     <Compile Include="Database\Store\StatDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
+    <Compile Include="Environment\Data\DeathHash.cs" />
     <Compile Include="Environment\ServerConfig.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
