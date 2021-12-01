@@ -187,6 +187,8 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Debug($"wt: {weatherType}, sr: {subRegion}, cw: {World.Weather}");
 
+            ToggleAlamoSea(region);
+
             if (!World.Weather.Equals((Weather)weatherType))
             {
                 string area = World.GetZoneLocalizedName(pos);
@@ -198,6 +200,8 @@ namespace Curiosity.Core.Client.Managers
                     World.TransitionToWeather((Weather)weatherType, 1f);
                     Logger.Debug($"Force weather change: {(Weather)weatherType}");
 
+                    await BaseScript.Delay(5000);
+
                     SetTrails();
 
                     if (interiorId == 0)
@@ -208,12 +212,14 @@ namespace Curiosity.Core.Client.Managers
 
                 if (interiorId == 0)
                     NotificationManager.GetModule().Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
-                
+
                 await BaseScript.Delay(5000);
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();
                 World.TransitionToWeather((Weather)weatherType, 30f);
+
+                await BaseScript.Delay(5000);
 
                 SetTrails();
 
@@ -236,6 +242,18 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
             }
+        }
+
+        void ToggleAlamoSea(Region region)
+        {
+            bool enable = (World.Weather == Weather.Christmas || World.Weather == Weather.Snowing || World.Weather == Weather.Blizzard) && (region == Region.GrandSenoraDesert);
+            bool isIplActive = IsIplActive("alamo_ice");
+
+            if (enable && !isIplActive)
+                RequestIpl("alamo_ice");
+
+            if (!enable && isIplActive)
+                RemoveIpl("alamo_ice");
         }
 
         void SetTrails()

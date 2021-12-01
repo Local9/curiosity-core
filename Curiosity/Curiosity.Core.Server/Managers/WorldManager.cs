@@ -17,6 +17,8 @@ namespace Curiosity.Core.Server.Managers
         public static WorldManager WorldInstance;
         DateTime lastTimeWeatherUpdated = DateTime.UtcNow;
 
+        PlayerList players => PluginManager.PlayersList;
+
         int numberOfWeatherCyclesProcessed = 0;
 
         public bool IsWeatherFrozen = false;
@@ -115,23 +117,6 @@ namespace Curiosity.Core.Server.Managers
             {
                 if (keyValuePair.Key == Region.CayoPericoIsland || keyValuePair.Key == Region.NorthYankton) continue;
                 regionWeatherType[keyValuePair.Key] = weatherType;
-
-                bool isWinter = (weatherType == WeatherType.CHRISTMAS || weatherType == WeatherType.SNOWING || weatherType == WeatherType.BLIZZARD);
-
-                string stateAlamo = GetResourceState("nve_iced_alamo");
-                string stateXmas = GetResourceState("nve_xmas");
-
-                if (stateAlamo == "started" && !isWinter)
-                    StopResource("nve_iced_alamo");
-
-                if (stateXmas == "started" && !isWinter)
-                    StopResource("nve_xmas");
-
-                if (stateAlamo == "stopped" && isWinter)
-                    StartResource("nve_iced_alamo");
-
-                if (stateXmas == "stopped" && isWinter)
-                    StartResource("nve_xmas");
             }
             EventSystem.SendAll("world:server:weather:sync", regionWeatherType);
         }
@@ -179,9 +164,9 @@ namespace Curiosity.Core.Server.Managers
                             weatherTypes.Add(WeatherType.NEUTRAL);
                     }
 
-                    ToggleChristmasResources();
-
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
+
+                    ToggleChristmasResources();
                 }
             }
             numberOfWeatherCyclesProcessed++;
@@ -194,6 +179,8 @@ namespace Curiosity.Core.Server.Managers
 
         void ToggleChristmasResources()
         {
+            if (PluginManager.ActiveUsers.Count > 0) return;
+
             WeatherSeason season = WeatherData.GetCurrentSeason();
             bool isWinter = season == WeatherSeason.WINTER;
 
