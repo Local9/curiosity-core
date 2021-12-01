@@ -34,7 +34,7 @@ namespace Curiosity.Core.Server.Managers
             { Region.Paleto, WeatherType.CLEAR },
             { Region.SouthLosSantos, WeatherType.CLEAR },
             { Region.Zancudo, WeatherType.CLEAR },
-            { Region.NorthYankton, WeatherType.XMAS },
+            { Region.NorthYankton, WeatherType.SNOWLIGHT },
             { Region.CayoPericoIsland, WeatherType.CLEAR },
         };
 
@@ -134,7 +134,9 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else if (isSnowDay)
                 {
-                    regionWeatherType[kvp.Key] = WeatherType.XMAS;
+                    regionWeatherType[kvp.Key] = WeatherType.CHRISTMAS;
+
+                    ToggleChristmasResources();
                 }
                 else if (isHalloween)
                 {
@@ -147,17 +149,19 @@ namespace Curiosity.Core.Server.Managers
 
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
                     {
-                        weatherTypes.Add(WeatherType.RAIN);
+                        weatherTypes.Add(WeatherType.CLEARING);
                     }
 
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
                     {
                         if (Utility.RANDOM.Bool(.15f))
-                            weatherTypes.Add(WeatherType.RAIN);
+                            weatherTypes.Add(WeatherType.CLEARING);
 
                         if(Utility.RANDOM.Bool(.05f))
-                            weatherTypes.Add(WeatherType.THUNDER);
+                            weatherTypes.Add(WeatherType.NEUTRAL);
                     }
+
+                    ToggleChristmasResources();
 
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
                 }
@@ -168,6 +172,27 @@ namespace Curiosity.Core.Server.Managers
                 numberOfWeatherCyclesProcessed = 0;
 
             EventSystem.SendAll("world:server:weather:sync", regionWeatherType);
+        }
+
+        void ToggleChristmasResources()
+        {
+            WeatherSeason season = WeatherData.GetCurrentSeason();
+            bool isWinter = season == WeatherSeason.WINTER;
+
+            string stateAlamo = GetResourceState("nve_iced_alamo");
+            string stateXmas = GetResourceState("nve_xmas");
+
+            if (stateAlamo == "started" && !isWinter)
+                StopResource("nve_iced_alamo");
+
+            if (stateXmas == "started" && !isWinter)
+                StopResource("nve_xmas");
+
+            if (stateAlamo == "stopped" && isWinter)
+                StartResource("nve_iced_alamo");
+
+            if (stateXmas == "stopped" && isWinter)
+                StartResource("nve_xmas");
         }
 
         [TickHandler]

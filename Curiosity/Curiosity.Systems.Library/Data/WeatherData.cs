@@ -27,16 +27,16 @@ namespace Curiosity.Systems.Library.Data
 
         public readonly static Dictionary<WeatherSeason, List<WeatherType>> SeasonalWeather = new Dictionary<WeatherSeason, List<WeatherType>>()
         {
-            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN } },
-            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS } },
-            { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.CLEAR, WeatherType.FOGGY } },
-            { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD } },
+            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CLEARING } },
+            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING } },
+            { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.CLEAR, WeatherType.FOGGY } },
+            { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.BLIZZARD, WeatherType.SNOWING } },
         };
 
         public readonly static Dictionary<Region, List<WeatherType>> RegionWeather = new Dictionary<Region, List<WeatherType>>()
         {
-            { Region.NorthYankton, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.SNOW, WeatherType.SNOWLIGHT, WeatherType.BLIZZARD, WeatherType.XMAS } },
-            { Region.CayoPericoIsland, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.CLOUDS, WeatherType.OVERCAST, WeatherType.RAIN } },
+            { Region.NorthYankton, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CHRISTMAS, WeatherType.BLIZZARD, WeatherType.SNOWING, WeatherType.SNOWLIGHT } },
+            { Region.CayoPericoIsland, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CLEARING } },
         };
 
         public static WeatherSeason GetCurrentSeason()
@@ -85,37 +85,21 @@ namespace Curiosity.Systems.Library.Data
 
     public enum WeatherType
     {
-        [StringValue("Unknown")]
-        UNKNOWN,
-        [StringValue("Sunny")]
+        UNKNOWN = -1,
         EXTRASUNNY,
-        [StringValue("Clear")]
         CLEAR,
-        [StringValue("Clear")]
-        NEUTRAL,
-        [StringValue("Smog")]
-        SMOG,
-        [StringValue("Foggy")]
-        FOGGY,
-        [StringValue("Overcast")]
-        OVERCAST,
-        [StringValue("Cloudy")]
         CLOUDS,
-        [StringValue("Clear")]
+        SMOG,
+        FOGGY,
+        OVERCAST,
+        RAINING,
+        THUNDERSTORM,
         CLEARING,
-        [StringValue("Rain")]
-        RAIN,
-        [StringValue("Storm")]
-        THUNDER,
-        [StringValue("Blizzard")]
+        NEUTRAL,
+        SNOWING,
         BLIZZARD,
-        [StringValue("Light Snow")]
         SNOWLIGHT,
-        [StringValue("X-Mas Snow")]
-        XMAS,
-        [StringValue("Snow")]
-        SNOW,
-        [StringValue("Halloween")]
+        CHRISTMAS,
         HALLOWEEN
     }
 }

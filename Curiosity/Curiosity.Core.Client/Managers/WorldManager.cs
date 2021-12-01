@@ -18,7 +18,6 @@ namespace Curiosity.Core.Client.Managers
     {
         List<int> vehiclesToSuppress = new List<int>();
 
-        WeatherType lastWeather = WeatherType.UNKNOWN;
         CuriosityWeather CuriosityWeather = new CuriosityWeather();
         DateTime lastRunWeatherUpdate = DateTime.Now;
         DateTime lastRunVehicleSuppression = DateTime.Now;
@@ -125,12 +124,11 @@ namespace Curiosity.Core.Client.Managers
         {
             ClearOverrideWeather();
             ClearWeatherTypePersist();
-            SetWeatherTypeOvertimePersist($"{weatherType}", 2f);
-
-            lastWeather = weatherType; // for when we update later
+            World.Weather = (Weather)weatherType;
+            World.TransitionToWeather((Weather)weatherType, 2f);
 
             isWeatherLocked = true;
-            Logger.Debug($"LockAndSetWeather: {weatherType}");
+            Logger.Debug($"LockAndSetWeather: {World.Weather}");
         }
 
         public async void UnlockAndUpdateWeather()
@@ -138,7 +136,7 @@ namespace Curiosity.Core.Client.Managers
             isWeatherLocked = false;
             await BaseScript.Delay(100);
 
-            lastWeather = WeatherType.UNKNOWN; // force changes
+            World.Weather = (Weather)WeatherType.UNKNOWN; // force changes
             regionalWeather = await EventSystem.Request<Dictionary<Region, WeatherType>>("weather:sync:regions");
 
             UpdateWeather(true);
@@ -187,46 +185,48 @@ namespace Curiosity.Core.Client.Managers
 
             WeatherType weatherType = regionalWeather[region];
 
-            Logger.Debug($"wt: {weatherType}, sr: {subRegion}");
+            Logger.Debug($"wt: {weatherType}, sr: {subRegion}, cw: {World.Weather}");
 
-            if (!weatherType.Equals(lastWeather))
+            if (!World.Weather.Equals((Weather)weatherType))
             {
+                string area = World.GetZoneLocalizedName(pos);
+                int interiorId = GetInteriorFromEntity(PlayerPedId());
+
                 if (instant)
                 {
-                    SetWeatherTypeNow($"{weatherType}");
-                    SetWeatherTypeOvertimePersist($"{weatherType}", 1f);
-                    Logger.Debug($"Force weather change: {weatherType}");
+                    World.Weather = (Weather)weatherType;
+                    World.TransitionToWeather((Weather)weatherType, 1f);
+                    Logger.Debug($"Force weather change: {(Weather)weatherType}");
 
-                    lastWeather = weatherType;
+                    SetTrails();
+
+                    if (interiorId == 0)
+                        NotificationManager.GetModule().Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
+
                     return;
                 }
 
-                string area = World.GetZoneLocalizedName(pos);
-
-                int interiorId = GetInteriorFromEntity(PlayerPedId());
-
                 if (interiorId == 0)
-                    NotificationManager.GetModule().Info($"<b>Weather Update</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
+                    NotificationManager.GetModule().Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
                 
                 await BaseScript.Delay(5000);
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();
-                SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
-                // SetWeatherTypePersist($"{weatherType}");
-                // SetWeatherTypeNow($"{weatherType}");
-                // SetWeatherTypeNowPersist($"{weatherType}");
+                World.TransitionToWeather((Weather)weatherType, 30f);
+
+                SetTrails();
 
                 if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
                 {
                     Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
                     if (vehicle is not null && vehicle.Exists() && vehicle.Model.IsPlane)
                     {
-                        if (weatherType.Equals(WeatherType.THUNDER) && weatherType.Equals(WeatherType.BLIZZARD))
+                        if (weatherType.Equals(WeatherType.NEUTRAL) && weatherType.Equals(WeatherType.SNOWING))
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, 1.0f);
                         }
-                        else if (weatherType.Equals(WeatherType.RAIN))
+                        else if (weatherType.Equals(WeatherType.CLEARING))
                         {
                             SetPlaneTurbulenceMultiplier(vehicle.Handle, .20f);
                         }
@@ -235,9 +235,15 @@ namespace Curiosity.Core.Client.Managers
                         }
                     }
                 }
-
-                lastWeather = weatherType;
             }
+        }
+
+        void SetTrails()
+        {
+            bool trails = World.Weather == Weather.Christmas;
+            Logger.Debug($"Trails: {trails}");
+            SetForceVehicleTrails(trails);
+            SetForcePedFootstepsTracks(trails);
         }
 
         private string GetForecastText(WeatherType weather)
@@ -245,35 +251,35 @@ namespace Curiosity.Core.Client.Managers
             switch (weather)
             {
                 case WeatherType.EXTRASUNNY:
-                    return "Skies will be completely clear for a few hours.";
-                case WeatherType.NEUTRAL:
-                    return "Strange shit happening on the skies soon. Beware.";
-                case WeatherType.XMAS:
-                    return "Christmas itself is expected. Ho ho ho!";
-                case WeatherType.FOGGY:
-                    return "Its going to be foggy for a while.";
-                case WeatherType.THUNDER:
-                    return "Heavy rain accompanied by thunder is expected.";
-                case WeatherType.OVERCAST:
-                    return "Its going to be very cloudy for some time.";
-                case WeatherType.SNOW:
-                    return "Copious ammounts of snow for the next hours.";
-                case WeatherType.SMOG:
-                    return "Clear skies accompanied by little fog are expected.";
-                case WeatherType.SNOWLIGHT:
-                    return "Some snow is expected.";
-                case WeatherType.BLIZZARD:
-                    return "A big blizzard is expected.";
+                    return "☀️ Skies will be completely clear for a few hours.";
                 case WeatherType.CLOUDS:
-                    return "Clouds will cover the sky for some hours.";
+                    return "☁️ Clouds will cover the sky for some hours.";
+                case WeatherType.SNOWLIGHT:
+                    return "Copious ammounts of snow for the next hours.";
+                case WeatherType.FOGGY:
+                    return "🌫 Its going to be foggy for a while.";
+                case WeatherType.NEUTRAL:
+                    return "✨ Strange shit happening on the skies soon. Beware.";
+                case WeatherType.OVERCAST:
+                    return "☁️ Its going to be very cloudy for some time.";
+                case WeatherType.CHRISTMAS:
+                    return "🎄 Christmas itself is expected. Ho ho ho!";
+                case WeatherType.SMOG:
+                    return "🌫 Clear skies accompanied by little fog are expected.";
+                case WeatherType.BLIZZARD:
+                    return "❄️ A big blizzard is expected.";
+                case WeatherType.SNOWING:
+                    return "❄️ Some snow is expected.";
+                case WeatherType.RAINING:
+                    return "🌧 Rain is expected to feature the following hours.";
                 case WeatherType.CLEAR:
-                    return "The skies will be clear for the next couple of hours.";
-                case WeatherType.RAIN:
-                    return "Rain is expected to feature the following hours.";
+                    return "☀️ The skies will be clear for the next couple of hours.";
                 case WeatherType.CLEARING:
-                    return "Skies will clear in the next hours.";
+                    return "🌧 Skies will clear in the next hours.";
+                case WeatherType.THUNDERSTORM:
+                    return "🌩 Heavy rain accompanied by thunder is expected.";
                 default:
-                    return "No idea.";
+                    return "😱 No idea. We've lost the plot";
             }
         }
 
