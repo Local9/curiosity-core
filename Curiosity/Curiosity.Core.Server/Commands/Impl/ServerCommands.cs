@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 if (Enum.TryParse(arg, out WeatherType weather))
                 {
                     world.SetWeatherForAllRegions(weather);
-                    ChatManager.OnServerMessage(player, $"Weather: {weather.GetStringValue()}");
+                    ChatManager.OnServerMessage(player, $"Weather: {weather}");
                     return;
                 }
 

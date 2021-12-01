@@ -113,7 +113,25 @@ namespace Curiosity.Core.Server.Managers
             Dictionary<Region, WeatherType> regionWeatherTypeCopy = new Dictionary<Region, WeatherType>(regionWeatherType);
             foreach (KeyValuePair<Region, WeatherType> keyValuePair in regionWeatherTypeCopy)
             {
+                if (keyValuePair.Key == Region.CayoPericoIsland || keyValuePair.Key == Region.NorthYankton) continue;
                 regionWeatherType[keyValuePair.Key] = weatherType;
+
+                bool isWinter = (weatherType == WeatherType.CHRISTMAS || weatherType == WeatherType.SNOWING || weatherType == WeatherType.BLIZZARD);
+
+                string stateAlamo = GetResourceState("nve_iced_alamo");
+                string stateXmas = GetResourceState("nve_xmas");
+
+                if (stateAlamo == "started" && !isWinter)
+                    StopResource("nve_iced_alamo");
+
+                if (stateXmas == "started" && !isWinter)
+                    StopResource("nve_xmas");
+
+                if (stateAlamo == "stopped" && isWinter)
+                    StartResource("nve_iced_alamo");
+
+                if (stateXmas == "stopped" && isWinter)
+                    StartResource("nve_xmas");
             }
             EventSystem.SendAll("world:server:weather:sync", regionWeatherType);
         }
