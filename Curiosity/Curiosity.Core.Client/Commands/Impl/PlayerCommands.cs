@@ -131,6 +131,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     case CommonErrors.PurchaseSuccessful:
                         notificationManger.Success($"<b>Vehicle Impounded</b><br /><b>Charge</b>: $1000<br />Pleasure doing business with ye.");
+                        await vehicle.FadeOut();
+                        vehicle.Delete();
                         break;
                     case CommonErrors.PurchaseUnSuccessful:
                         notificationManger.Info($"<b>Payment Issue</b><br />Looks like ur bank rejected it.");

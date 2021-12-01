@@ -250,7 +250,6 @@ namespace Curiosity.Core.Server.Managers
 
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -VEHICLE_TOW_COST);
 
-                    EntityManager.EntityInstance.NetworkDeleteEntity(networkId);
                     return CommonErrors.PurchaseSuccessful;
                 }
 
