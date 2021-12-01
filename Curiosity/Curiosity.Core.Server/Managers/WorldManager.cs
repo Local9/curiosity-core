@@ -96,6 +96,8 @@ namespace Curiosity.Core.Server.Managers
 
             RandomiseWeather();
             WeatherDebugOutput();
+
+            ToggleChristmasResources();
         }
 
         public void WeatherDebugOutput()
@@ -138,8 +140,6 @@ namespace Curiosity.Core.Server.Managers
                 else if (isSnowDay)
                 {
                     regionWeatherType[kvp.Key] = WeatherType.CHRISTMAS;
-
-                    ToggleChristmasResources();
                 }
                 else if (isHalloween)
                 {
