@@ -82,7 +82,7 @@ namespace Curiosity.Core.Client.Extensions
 
         public static async void Dispose(this Entity entity, bool detatch = false)
         {
-            Logger.Info($"Removing Entity from the World");
+            Logger.Debug($"Removing Entity from the World");
             if (entity == null) return;
             if (!entity.Exists()) return;
 
