@@ -918,6 +918,20 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
+                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+
+                if (Game.Player.WantedLevel > 0)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle when wanted.");
+                    return new { success = false };
+                }
+
+                if (isWantedByPolice)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle when wanted.");
+                    return new { success = false };
+                }
+
                 uint modelHash = (uint)API.GetHashKey(hash);
 
                 if (!API.IsModelInCdimage(modelHash))
