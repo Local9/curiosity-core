@@ -100,6 +100,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Common.cs" />
+    <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
     <Compile Include="Utils\Peds.cs" />
     <Compile Include="Utils\Props.cs" />
     <Compile Include="Utils\Utilities.cs" />

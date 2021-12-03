@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
 using System;
 using System.Threading.Tasks;
@@ -77,6 +78,34 @@ namespace Curiosity.Core.Client.Extensions
                 Logger.Debug($"GetEntityInFront -> {ex}");
             }
             return default(Vehicle);
+        }
+
+        public static async void Dispose(this Entity entity, bool detatch = false)
+        {
+            if (entity == null) return;
+            if (!entity.Exists()) return;
+
+            int handle = entity.Handle;
+
+            NetworkRequestControlOfEntity(handle);
+            entity.IsCollisionEnabled = false;
+            entity.Opacity = 0;
+
+            int attempts = 0;
+
+            while(!NetworkHasControlOfEntity(handle) && attempts < 100)
+            {
+                NetworkRequestControlOfEntity(handle);
+                await BaseScript.Delay(10);
+                attempts++;
+            }
+
+            if (detatch && entity.IsAttached()) DetachEntity(handle, false, false);
+            SetEntityAsMissionEntity(handle, true, true);
+            SetEntityAsNoLongerNeeded(ref handle);
+            entity.Delete();
+
+            if (entity.Exists()) entity.Position = new Vector3(0f, 0f, 0f);
         }
     }
 }
