@@ -10,6 +10,7 @@ using NativeUI;
 using System.Drawing;
 using CitizenFX.Core.UI;
 using Curiosity.Racing.Client.Diagnostics;
+using Curiosity.Racing.Client.Utils;
 
 namespace Curiosity.Racing.Client.Managers
 {
@@ -22,9 +23,24 @@ namespace Curiosity.Racing.Client.Managers
 
         List<Checkpoint> checkpoints = new();
 
+        WorldArea worldArea = new WorldArea();
+        WorldArea worldArea2 = new WorldArea();
+        WorldArea worldArea3 = new WorldArea();
+
         public override void Begin()
         {
+            // worldArea.Pos1 = new Vector3(-2346.975f, 3259.757f, 31.81074f);
+            worldArea.Pos1 = new Vector3(-2157.381f, 3247.418f, 31.80657f);
+            worldArea.Width = 1.05f;
 
+            worldArea2.Pos1 = new Vector3(-2162.328f, 3241.776f, 31.81028f);
+            worldArea2.Pos2 = new Vector3(-2137.868f, 3227.3f, 42.81028f);
+            worldArea2.Width = 1f;
+
+            //worldArea3.Pos1 = new Vector3(-2162.328f, 3241.776f, 31.81028f);
+            //worldArea3.Pos2 = new Vector3(-2137.868f, 3227.3f, 42.81028f);
+            //worldArea3.MarkerScale = new Vector3(2f, 2f, 0.5f);
+            //worldArea3.Width = 40f;
         }
 
         public void Dispose()
@@ -37,16 +53,25 @@ namespace Curiosity.Racing.Client.Managers
             checkpoints.Clear();
         }
 
-        //[TickHandler]
-        //private async Task OnTrackManagerTick()
-        //{
-        //    if (Game.IsControlJustPressed(0, Control.Context))
-        //    {
-        //        Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_portoflsheist");
-        //        particleEffectsAssetNetworked.CreateEffectAtCoord("scr_bio_flare", Game.PlayerPed.Position, startNow: true);
-        //        particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_bio_flare", Game.PlayerPed.Position);
-        //    }
-        //}
+        // [TickHandler]
+        private async Task OnTrackManagerTick()
+        {
+            worldArea.Draw();
+            worldArea2.Draw();
+            // worldArea3.Draw();
+
+            if (worldArea.IsInArea)
+                Screen.ShowNotification("World One");
+            if (worldArea2.IsInArea)
+                Screen.ShowNotification("World Two");
+
+            //if (Game.IsControlJustPressed(0, Control.Context))
+            //{
+            //    Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_portoflsheist");
+            //    particleEffectsAssetNetworked.CreateEffectAtCoord("scr_bio_flare", Game.PlayerPed.Position, startNow: true);
+            //    particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_bio_flare", Game.PlayerPed.Position);
+            //}
+        }
 
         private static void Adversary()
         {

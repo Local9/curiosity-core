@@ -82,6 +82,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="TickHandler.cs" />
     <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
+    <Compile Include="Utils\WorldArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
