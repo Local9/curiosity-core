@@ -1164,12 +1164,12 @@ namespace Curiosity.Core.Client.Managers
         async void VehicleSetupServerSide(Vehicle vehicle, int spawnTypeId, int characterVehicleId)
         {
             _canSpawn = false;
-            Logger.Info($"Check Server Setup");
+            Logger.Debug($"Check Server Setup");
             int networkId = vehicle.NetworkId;
 
             bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", networkId, spawnTypeId, characterVehicleId);
             int attempts = 0;
-            Logger.Info($"IsSetupCompleted: {setupCompleted}");
+            Logger.Debug($"IsSetupCompleted: {setupCompleted}");
 
             if (setupCompleted)
                 vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
@@ -1182,17 +1182,17 @@ namespace Curiosity.Core.Client.Managers
                 await BaseScript.Delay(100);
                 setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", networkId, spawnTypeId, characterVehicleId) && isServerConfirmed;
                 attempts++;
-                Logger.Info($"Check Server Setup ({isServerConfirmed}: Attempt #{attempts}");
+                Logger.Debug($"Check Server Setup ({isServerConfirmed}: Attempt #{attempts}");
             }
 
             if (!setupCompleted)
             {
-                Logger.Info($"DELETE VEHICLE");
+                Logger.Debug($"DELETE VEHICLE");
                 vehicle.Dispose();
             }
 
             bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
-            Logger.Info($"serverSpawned: {serverSpawned}");
+            Logger.Debug($"serverSpawned: {serverSpawned}");
 
             vehicle.State.Set(StateBagKey.VEHICLE_SETUP, true, true);
 
