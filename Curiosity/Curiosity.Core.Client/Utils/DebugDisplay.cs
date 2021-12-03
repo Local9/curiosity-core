@@ -66,13 +66,13 @@ namespace Curiosity.Core.Client.Utils
 
                 if (entity is Vehicle veh)
                 {
-                    bool hasState = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+                    bool hasState = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
                     if (hasState)
                     {
                         float spd = veh.Speed;
 
                         list["Server Spawned"] = $"{veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false}";
-                        list["Owner"] = $"[{veh.State.Get(StateBagKey.VEH_OWNER_ID)}] {veh.State.Get($"{StateBagKey.VEH_OWNER}")}";
+                        list["Owner"] = $"[{veh.State.Get(StateBagKey.VEH_OWNER_ID)}] {veh.State.Get(StateBagKey.VEH_OWNER)}";
                         list["Spawn Type"] = $"{veh.State.Get(StateBagKey.VEH_SPAWN_TYPE) ?? "Unknown"}";
                         list["Class"] = $"{veh.ClassType}";
                         list["Personal"] = $"{veh.State.Get(StateBagKey.VEH_PERSONAL) ?? false}";

@@ -71,13 +71,22 @@ namespace Curiosity.Core.Server.Managers
                         entity = new Ped(handle);
 
                     if (entityType == 2)
+                    {
                         entity = new Vehicle(handle);
+
+                        bool spawnedServer = entity.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+
+                        if (!spawnedServer)
+                            SetVehicleDoorsLocked(handle, 3);
+                    }
 
                     if (entityType == 3)
                         entity = new Prop(handle);
 
-                    if (entity is not null) 
+                    if (entity is not null)
+                    {
                         entity.State.Set(StateBagKey.CURIOSITY_CREATED, player.Name, true);
+                    }
                 }
             }
             catch (Exception ex)

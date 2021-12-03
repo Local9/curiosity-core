@@ -54,11 +54,7 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 if (!vehicle.IsInRangeOf(Cache.PlayerPed.Position, 10f)) continue;
 
-                bool spawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
-                if (spawned)
-                {
-                    DebugDisplay.DrawData(vehicle);
-                }
+                DebugDisplay.DrawData(vehicle);
             }
         }
     }

@@ -77,15 +77,6 @@ namespace Curiosity.Core.Client.Extensions
             }
         }
 
-        internal static async void RemoveFromWorld(this Vehicle vehicle)
-        {
-            if (!vehicle.Exists()) return;
-
-            await vehicle.FadeOut();
-            vehicle.MarkAsNoLongerNeeded();
-            vehicle.Delete();
-        }
-
         internal async static Task FadeOut(this Vehicle veh, bool slow = true)
         {
             await Fade(veh, false, slow);

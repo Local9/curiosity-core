@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client.Managers
         private const string DECOR_VEH_FUEL = "Vehicle.Fuel";
         private const float FUEL_PUMP_RANGE = 6f;
         private uint GAS_STATION_TESLA = 2140883938;
+        bool _canSpawn = true;
         NotificationManager NotificationManager => NotificationManager.GetModule();
 
         VehicleState currentVehicle;
@@ -230,16 +231,32 @@ namespace Curiosity.Core.Client.Managers
         #region Vehicle Fuel
         internal async void InitialiseVehicleFuel(VehicleState veh)
         {
-            if (veh.Vehicle.Driver != Cache.PlayerPed) return;
+            await BaseScript.Delay(500);
 
-            await BaseScript.Delay(100);
+            if (veh.Vehicle.Driver != Cache.PlayerPed) return;
 
             currentVehicle = veh;
 
-            //if(currentVehicle.Vehicle.Model.IsPlane)
-            //{
-            //    EventSystem.Send("culling:set", 2000f);
-            //}
+            bool isSetup = false;
+            int attempts = 0;
+
+            while(!isSetup && attempts < 100)
+            {
+                await BaseScript.Delay(10);
+                isSetup = veh.Vehicle.State.Get(StateBagKey.VEHICLE_SETUP) ?? false;
+                attempts++;
+            }
+
+            if (!isSetup)
+            {
+                Vehicle vehicle = veh.Vehicle;
+                vehicle.IsPositionFrozen = true;
+                vehicle.FuelLevel = 0;
+
+                Notify.Error("Vehicle failed to be setup. Please try again.");
+
+                return;
+            }
 
             bool setup = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL_SETUP) ?? false;
 
@@ -918,6 +935,12 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
+                if (!_canSpawn)
+                {
+                    Notify.Error($"Processing");
+                    return new { success = false };
+                }
+
                 bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
 
                 if (Game.Player.WantedLevel > 0)
@@ -1034,6 +1057,12 @@ namespace Curiosity.Core.Client.Managers
                 if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     previousVehicle = Cache.PersonalTrailer.Vehicle;
 
+                if (velocity > 0f)
+                {
+                    Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
+                    particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", previousVehicle.Position, scale: 4f);
+                }
+
                 if (previousVehicle is not null)
                 {
                     previousVehicle.Dispose();
@@ -1043,20 +1072,10 @@ namespace Curiosity.Core.Client.Managers
                 
                 vehicle = await World.CreateVehicle(vehModel, postionSpawn, heading);
 
-                if (velocity > 0f)
-                {
-                    Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
-                    particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", vehicle.Position, scale: 4f);
-                }
-
                 API.NetworkRequestControlOfEntity(vehicle.Handle);
-
                 vehicle.IsPersistent = true;
-
                 vehicle.ApplyVehicleModsDelayed(vehicleItem.VehicleInfo, 1000);
-
                 vehicle.Repair();
-
                 vehModel.MarkAsNoLongerNeeded();
 
                 // setup vehicle on the server
@@ -1064,14 +1083,7 @@ namespace Curiosity.Core.Client.Managers
                 API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
                 API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
 
-                bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)vehicleItem.SpawnTypeId, vehicleItem.CharacterVehicleId);
-                
-                if (!setupCompleted)
-                {
-                    Notify.Error("Vehicle setup failed.");
-                    vehicle.Dispose();
-                    return new { success = false };
-                }
+                VehicleSetupServerSide(vehicle, (int)vehicleItem.SpawnTypeId, vehicleItem.CharacterVehicleId);
 
                 vehicle.PlaceOnGround();
 
@@ -1118,7 +1130,8 @@ namespace Curiosity.Core.Client.Managers
                 if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
 
-                vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
+                vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, vehicleItem.SpawnTypeId, false);
+                vehicle.State.Set(StateBagKey.BLIP_ID, blip.Handle, false);
 
                 if (Game.PlayerPed.Position.Distance(returnedSpawnPosition) > 50)
                     SetNewWaypoint(returnedSpawnPosition.X, returnedSpawnPosition.Y);
@@ -1137,7 +1150,7 @@ namespace Curiosity.Core.Client.Managers
                 API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 
                 Notify.Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
-
+                _canSpawn = true;
                 return new { success = true };
             }
             catch (Exception ex)
@@ -1146,6 +1159,44 @@ namespace Curiosity.Core.Client.Managers
                 Notify.Error("FiveM fucked something up");
                 return new { success = false };
             }
+        }
+
+        async void VehicleSetupServerSide(Vehicle vehicle, int spawnTypeId, int characterVehicleId)
+        {
+            _canSpawn = false;
+            Logger.Info($"Check Server Setup");
+            int networkId = vehicle.NetworkId;
+
+            bool setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", networkId, spawnTypeId, characterVehicleId);
+            int attempts = 0;
+            Logger.Info($"IsSetupCompleted: {setupCompleted}");
+
+            if (setupCompleted)
+                vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+
+            while (!setupCompleted && attempts < 100)
+            {
+                if (!vehicle.Exists()) break;
+
+                bool isServerConfirmed = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+                await BaseScript.Delay(100);
+                setupCompleted = await EventSystem.Request<bool>("garage:set:vehicle", networkId, spawnTypeId, characterVehicleId) && isServerConfirmed;
+                attempts++;
+                Logger.Info($"Check Server Setup ({isServerConfirmed}: Attempt #{attempts}");
+            }
+
+            if (!setupCompleted)
+            {
+                Logger.Info($"DELETE VEHICLE");
+                vehicle.Dispose();
+            }
+
+            bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+            Logger.Info($"serverSpawned: {serverSpawned}");
+
+            vehicle.State.Set(StateBagKey.VEHICLE_SETUP, true, true);
+
+            _canSpawn = true;
         }
     }
 }

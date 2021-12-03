@@ -210,7 +210,7 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.Attach("garage:set:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("garage:set:vehicle", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
@@ -221,48 +221,43 @@ namespace Curiosity.Core.Server.Managers
                     SpawnType spawnTypeId = (SpawnType)metadata.Find<int>(1);
                     int characterVehicleId = metadata.Find<int>(2);
 
-                    int entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
-                    Vehicle vehicle = new Vehicle(entityHandle);
+                    Logger.Debug($"Setting up vehicle for {player.Name} - NetID: {networkId}, spawnTypeId: {spawnTypeId}, charVehId: {characterVehicleId}");
 
-                    float cullingRange = SPAWN_DISTANCE_CHECK;
+                    int entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
+                    int attempts = 0;
+
+                    curiosityUser.RoutingBucket = API.GetEntityRoutingBucket(player.Character.Handle);
+
+                    while(!API.DoesEntityExist(entityHandle) && attempts < 100)
+                    {
+                        await BaseScript.Delay(5);
+                        entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
+                        attempts++;
+                    }
+
+                    Logger.Debug($"Vehicle: {entityHandle}");
+
+                    Vehicle vehicle = new Vehicle(entityHandle);
 
                     switch (spawnTypeId)
                     {
                         case SpawnType.Boat:
-                            if (curiosityUser.PersonalBoat > 0)
-                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalBoat);
-
                             player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Plane:
-                            if (curiosityUser.PersonalPlane > 0)
-                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalPlane);
-
-                            cullingRange = 1000f;
                             player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
-                            if (curiosityUser.PersonalHelicopter > 0)
-                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalHelicopter);
-
                             player.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Trailer:
-                            if (curiosityUser.PersonalTrailer > 0)
-                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalTrailer);
-
                             player.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         default:
-                            if (curiosityUser.PersonalVehicle > 0)
-                                EntityManager.GetModule().NetworkDeleteEntity(curiosityUser.PersonalVehicle);
-
                             player.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
-                    //API.SetEntityDistanceCullingRadius(entityHandle, cullingRange);
 
-                    vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
                     vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);
                     vehicle.State.Set(StateBagKey.VEH_OWNER, player.Name, true);
                     vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
@@ -290,9 +285,10 @@ namespace Curiosity.Core.Server.Managers
 
                     API.SetEntityRoutingBucket(entityHandle, (int)curiosityUser.RoutingBucket);
 
-                    API.SetVehicleNumberPlateText(vehicle.Handle, player.Name);
+                    Logger.Debug($"Completed setting up vehicle for {player.Name}, Bucket: {(int)curiosityUser.RoutingBucket}");
 
-                    Logger.Debug($"Completed setting up vehicle for {player.Name}");
+                    vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                    vehicle.State.Set(StateBagKey.VEHICLE_SETUP, true, true);
 
                     return true;
                 }
