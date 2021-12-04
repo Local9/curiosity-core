@@ -1150,7 +1150,7 @@ namespace Curiosity.Core.Client.Managers
                 API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 
                 Notify.Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
-                _canSpawn = true;
+                
                 return new { success = true };
             }
             catch (Exception ex)
@@ -1164,6 +1164,7 @@ namespace Curiosity.Core.Client.Managers
         async void VehicleSetupServerSide(Vehicle vehicle, int spawnTypeId, int characterVehicleId)
         {
             _canSpawn = false;
+
             Logger.Debug($"Check Server Setup");
             int networkId = vehicle.NetworkId;
 
