@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Exceptions;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Core.Client.Environment.Data;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Utils
 {

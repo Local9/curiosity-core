@@ -19,7 +19,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
 
         public override void Begin()
         {
-            
+
         }
 
         public void Init()

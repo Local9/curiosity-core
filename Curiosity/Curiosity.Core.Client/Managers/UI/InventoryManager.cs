@@ -41,7 +41,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 int itemId = -1;
                 int numberOfItems = 1;
 
-                if(!int.TryParse(metadata.Find<string>(0), out itemId))
+                if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
                     NotificationManager.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };

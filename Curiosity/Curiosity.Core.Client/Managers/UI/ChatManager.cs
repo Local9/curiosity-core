@@ -23,7 +23,8 @@ namespace Curiosity.Core.Client.Managers
                 JsonBuilder jsonBuilder = new JsonBuilder();
                 jsonBuilder.Add("operation", "CHAT");
                 jsonBuilder.Add("subOperation", "NEW_MESSAGE");
-                jsonBuilder.Add("message", new {
+                jsonBuilder.Add("message", new
+                {
                     role = metadata.Find<string>(1),
                     channel = metadata.Find<string>(3),
                     activeJob = metadata.Find<string>(4),

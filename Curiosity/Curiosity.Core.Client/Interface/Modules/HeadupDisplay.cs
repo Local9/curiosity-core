@@ -2,8 +2,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Managers;
 using System;
 using System.Drawing;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Modules
 {

@@ -1,13 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
-using System.Threading.Tasks;
 using System.Linq;
-using Curiosity.Systems.Library.Enums;
-using Curiosity.Core.Client.Interface;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Extensions
 {

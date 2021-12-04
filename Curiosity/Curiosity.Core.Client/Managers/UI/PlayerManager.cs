@@ -31,7 +31,8 @@ namespace Curiosity.Core.Client.Managers
                 // TODO: Add world information
                 // TODO: Smaller data sets for the request
 
-                var profile = new {
+                var profile = new
+                {
                     userId = curiosityUser.UserId,
                     name = curiosityUser.LatestName,
                     role = curiosityUser.Role.GetStringValue(),
@@ -120,7 +121,7 @@ namespace Curiosity.Core.Client.Managers
 
                 var pl = new List<dynamic>();
 
-                foreach(CuriosityPlayerListItem p in playerList)
+                foreach (CuriosityPlayerListItem p in playerList)
                 {
                     var player = new
                     {

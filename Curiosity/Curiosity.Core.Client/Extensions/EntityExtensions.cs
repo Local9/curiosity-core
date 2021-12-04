@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
 using System;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Extensions
 {
@@ -94,7 +94,7 @@ namespace Curiosity.Core.Client.Extensions
 
             int attempts = 0;
 
-            while(!NetworkHasControlOfEntity(handle) && attempts < 100)
+            while (!NetworkHasControlOfEntity(handle) && attempts < 100)
             {
                 NetworkRequestControlOfEntity(handle);
                 await BaseScript.Delay(10);

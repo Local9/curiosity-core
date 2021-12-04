@@ -83,7 +83,7 @@ namespace Curiosity.Core.Client.Utils
                         list["Speed (KPH)"] = $"{spd * CONVERT_SPEED_KPH}";
 
                         list["-"] = "";
-                        
+
                         if (veh.State.Get($"{StateBagKey.VEH_FUEL}") != null)
                         {
                             list["Fuel"] = $"{veh.State.Get(StateBagKey.VEH_FUEL) ?? 0}";

@@ -5,7 +5,6 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
@@ -112,7 +111,7 @@ namespace Curiosity.Core.Client.Managers
 
                     if (location.SpawnType == SpawnType.Hospital)
                     {
-                        foreach(Position pos in location.Positions)
+                        foreach (Position pos in location.Positions)
                         {
                             HospitalSpawns.Add(pos);
                             HospitalSpawnsVectors.Add(pos.AsVector());
@@ -172,7 +171,7 @@ namespace Curiosity.Core.Client.Managers
 
         void RefreshClose()
         {
-            MarkersClose = MarkersAll.Where(m => 
+            MarkersClose = MarkersAll.Where(m =>
                 Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
                 && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
             ).ToList();

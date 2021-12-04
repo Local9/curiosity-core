@@ -65,14 +65,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                     var allSounds = xsound.getAllAudioInfo();
 
                     string json = JsonConvert.SerializeObject(allSounds);
-                    
+
                     Dictionary<string, dynamic> sounds = new Dictionary<string, dynamic>();
 
                     sounds = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
 
                     List<string> soundsPlaying = new();
 
-                    foreach(KeyValuePair<string, dynamic> keyValuePair in sounds)
+                    foreach (KeyValuePair<string, dynamic> keyValuePair in sounds)
                     {
                         soundsPlaying.Add(keyValuePair.Key);
                     }

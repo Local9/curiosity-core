@@ -14,7 +14,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
         public override void Begin()
         {
-            
+
         }
 
         [TickHandler(SessionWait = true)]
@@ -32,7 +32,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Debug(ex, $"OnWorldPlayerPassiveTick");
             }

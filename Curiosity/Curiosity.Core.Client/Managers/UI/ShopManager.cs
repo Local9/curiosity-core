@@ -25,7 +25,7 @@ namespace Curiosity.Core.Client.Managers
 
                 var categories = new List<dynamic>();
 
-                foreach(ShopCategory shopCategory in result)
+                foreach (ShopCategory shopCategory in result)
                 {
                     var c = new
                     {
@@ -34,7 +34,7 @@ namespace Curiosity.Core.Client.Managers
                         categories = new List<dynamic>()
                     };
 
-                    foreach(ShopCategoryItem shopCategoryItem in shopCategory.Categories)
+                    foreach (ShopCategoryItem shopCategoryItem in shopCategory.Categories)
                     {
                         var i = new
                         {
@@ -60,7 +60,7 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 isProcessing = true;
-                
+
                 int categoryId = 0;
                 if (!int.TryParse(metadata.Find<string>(0), out categoryId))
                 {

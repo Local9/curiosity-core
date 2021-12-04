@@ -14,7 +14,7 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            
+
         }
 
         private ClientConfig GetConfig()
@@ -107,7 +107,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (PropsToDeleteHash.Count == 0)
             {
-                foreach(string prop in GetConfig().PropsToDelete)
+                foreach (string prop in GetConfig().PropsToDelete)
                 {
                     int hash = API.GetHashKey(prop);
                     if (!PropsToDeleteHash.Contains(hash))

@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Utils;
-using Curiosity.Systems.Library.Enums;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
         public override void Begin()
         {
-            
+
         }
 
         public void EnableDeveloperOverlay()
@@ -50,7 +49,7 @@ namespace Curiosity.Core.Client.Managers.UI
         {
             Vehicle[] vehicles = World.GetAllVehicles();
 
-            foreach(Vehicle vehicle in vehicles)
+            foreach (Vehicle vehicle in vehicles)
             {
                 if (!vehicle.IsInRangeOf(Cache.PlayerPed.Position, 10f)) continue;
 

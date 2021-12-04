@@ -26,8 +26,8 @@ namespace Curiosity.Core.Client
                 await BaseScript.Delay(1000);
             }
 
-            DownWait:
-                await new CharacterManager.LoadTransition().DownWait();
+        DownWait:
+            await new CharacterManager.LoadTransition().DownWait();
         }
 
         public static bool IsSpawnHost()

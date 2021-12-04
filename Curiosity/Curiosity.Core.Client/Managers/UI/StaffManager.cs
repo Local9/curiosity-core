@@ -21,7 +21,7 @@ namespace Curiosity.Core.Client.Managers
 
                 var reasons = new List<dynamic>();
 
-                foreach(LogItem item in lst)
+                foreach (LogItem item in lst)
                 {
                     var r = new
                     {

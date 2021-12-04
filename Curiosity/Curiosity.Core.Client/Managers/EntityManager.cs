@@ -66,7 +66,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     int entityType = API.GetEntityType(entityHandle);
 
-                    switch(entityType)
+                    switch (entityType)
                     {
                         case 1:
                             Ped ped = new Ped(entityHandle);
@@ -98,7 +98,7 @@ namespace Curiosity.Core.Client.Managers
 
                                 if (vehicle.PassengerCount > 0)
                                 {
-                                    foreach(Ped p in vehicle.Passengers)
+                                    foreach (Ped p in vehicle.Passengers)
                                     {
                                         if (p.IsPlayer)
                                             p.Task.WarpOutOfVehicle(vehicle);
@@ -106,7 +106,7 @@ namespace Curiosity.Core.Client.Managers
                                         if (!p.IsPlayer)
                                             p.MarkAsNoLongerNeeded();
                                     }
-                                    
+
                                     while (vehicle.PassengerCount > 0)
                                     {
                                         await BaseScript.Delay(100);

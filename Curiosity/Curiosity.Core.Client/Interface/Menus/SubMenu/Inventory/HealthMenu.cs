@@ -69,7 +69,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
             // GET ARMOR COUNTS FROM SERVER
             List<CharacterKit> kits = await EventSystem.Request<List<CharacterKit>>("character:inventory:health");
 
-            foreach(CharacterKit kit in kits)
+            foreach (CharacterKit kit in kits)
             {
                 switch (kit.ItemId)
                 {

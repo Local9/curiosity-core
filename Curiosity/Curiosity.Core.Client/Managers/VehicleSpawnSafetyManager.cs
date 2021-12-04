@@ -21,7 +21,7 @@ namespace Curiosity.Core.Client.Managers
             Instance.AttachTickHandler(SafeSpawnCheck);
 
             DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-            while(true)
+            while (true)
             {
                 await BaseScript.Delay(500);
 
@@ -60,7 +60,7 @@ namespace Curiosity.Core.Client.Managers
                     safeZoneVehicles.Add(vehicle.Handle, new SafeZoneVehicle(vehicle));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

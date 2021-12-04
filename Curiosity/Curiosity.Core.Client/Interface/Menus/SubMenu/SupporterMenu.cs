@@ -123,7 +123,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 string modelHash = playerModels[newIndex].Hash;
 
                 Model model = new Model(modelHash);
-                
+
                 if (!model.IsInCdImage)
                 {
                     NotificationManager.GetModule().Error($"Model is not loaded.");

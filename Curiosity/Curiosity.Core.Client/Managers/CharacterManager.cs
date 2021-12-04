@@ -21,7 +21,7 @@ namespace Curiosity.Core.Client.Managers
         Vector3 CityHallPosition = new Vector3(-542.1675f, -216.1688f, -216.1688f);
         public override void Begin()
         {
-            
+
         }
 
         public class LoadTransition

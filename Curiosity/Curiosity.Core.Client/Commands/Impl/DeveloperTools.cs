@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Exceptions;
@@ -63,7 +62,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
                 Prop[] entities = World.GetAllProps();
 
-                foreach(Prop prop in entities)
+                foreach (Prop prop in entities)
                 {
                     if (!prop.IsInRangeOf(Cache.PlayerPed.Position, 3f)) continue;
 
@@ -102,7 +101,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     uint[] partyPeds = new uint[cPeds.Count];
 
-                    for(int x = 0; x < cPeds.Count; x++)
+                    for (int x = 0; x < cPeds.Count; x++)
                     {
                         int hash = API.GetHashKey(cPeds[i]);
                         partyPeds[x] = (uint)hash;
@@ -237,7 +236,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 while (scaleform.IsLoaded && veh.Exists())
                 {
                     Vector3 vehPos = veh.Position;
-                    
+
                     vehPos.Z = vehPos.Z + size.Z;
 
                     var rotation = GameplayCamera.Rotation;
@@ -276,7 +275,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (cmd == "remove")
                 {
-                    foreach(Ped ped in companions)
+                    foreach (Ped ped in companions)
                     {
                         if (ped.Exists())
                         {
@@ -426,7 +425,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
             List<Ped> copy = new List<Ped>(companions);
 
-            foreach(Ped ped in copy)
+            foreach (Ped ped in copy)
             {
                 if (ped is not null)
                 {
@@ -838,7 +837,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 string argument = arguments[0];
 
-                switch(argument)
+                switch (argument)
                 {
                     case "locations":
                     case "loc":
@@ -989,14 +988,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                         API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, toggle);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Error(ex, "DevCmd: Lock");
                 }
             }
         }
 
-        [CommandInfo(new [] { "car" })]
+        [CommandInfo(new[] { "car" })]
         public class DevCar : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)

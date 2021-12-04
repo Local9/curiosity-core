@@ -16,7 +16,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         UIMenuItem loadingItem = new UIMenuItem("🔍 Loading");
         bool isLoading = false;
-        
+
         internal void CreateMenu(UIMenu menu)
         {
             baseMenu = menu;
@@ -43,7 +43,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             int timerDelay = 500;
             if (loadingItem is not null)
             {
-                while(isLoading)
+                while (isLoading)
                 {
                     await BaseScript.Delay(timerDelay);
 
@@ -89,7 +89,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 goto END;
             }
 
-            foreach(VehicleItem vehicle in vehicles.OrderBy(x => x.Label))
+            foreach (VehicleItem vehicle in vehicles.OrderBy(x => x.Label))
             {
                 UIMenuItem uIMenuItem = new UIMenuItem($"{vehicle.Label}");
                 uIMenuItem.SetRightLabel(vehicle.VehicleInfo.plateText);

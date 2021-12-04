@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
 
         public void Create()
         {
-            foreach(Position position in Positions)
+            foreach (Position position in Positions)
             {
                 Blip blip = World.CreateBlip(new Vector3(position.X, position.Y, position.Z));
 

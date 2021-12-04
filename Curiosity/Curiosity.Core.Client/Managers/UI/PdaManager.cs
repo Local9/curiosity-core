@@ -171,7 +171,7 @@ namespace Curiosity.Core.Client.Managers
             if (TabletProp is null) return;
 
             if (!TabletProp.Exists()) return;
-         
+
             TabletProp.Detach();
             TabletProp.MarkAsNoLongerNeeded();
 

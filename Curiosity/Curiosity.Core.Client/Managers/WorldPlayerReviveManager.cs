@@ -1,10 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using Curiosity.Systems.Library.Models;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
-
-namespace Curiosity.Core.Client.Managers
+﻿namespace Curiosity.Core.Client.Managers
 {
     public class WorldPlayerReviveManager : Manager<WorldPlayerReviveManager>
     {

@@ -33,7 +33,7 @@ namespace Curiosity.Core.Client.Managers
         }
 
         private void OnPlayerJobStateChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
-        { 
+        {
             Logger.Debug($"CurrentJob: {CurrentJob}");
             CurrentJob = (ePlayerJobs)jobId;
         }
@@ -118,7 +118,7 @@ namespace Curiosity.Core.Client.Managers
 
                 Logger.Debug($"Passive Mode Disabled");
             }
-                
+
             if (isPassive)
             {
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;

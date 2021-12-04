@@ -113,7 +113,8 @@ namespace Curiosity.Core.Client.Managers.UI
             Instance.AttachNuiHandler("GarageVehicleRequest", new AsyncEventCallback(async metadata =>
             {
                 string characterVehicleIdString = metadata.Find<string>(0);
-                if (int.TryParse(characterVehicleIdString, out int characterVehicleId)) {
+                if (int.TryParse(characterVehicleIdString, out int characterVehicleId))
+                {
                     string hash = metadata.Find<string>(1);
                     return await VehicleManager.GetModule().CreateVehicle(characterVehicleId, hash);
                 }
@@ -125,8 +126,8 @@ namespace Curiosity.Core.Client.Managers.UI
             }));
         }
 
-        
 
-        
+
+
     }
 }

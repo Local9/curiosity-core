@@ -322,10 +322,10 @@ namespace Curiosity.Core.Client.Managers.Milo
             Init();
 
             Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
-            foreach(KeyValuePair<string, BlipData> kvp in blips)
+            foreach (KeyValuePair<string, BlipData> kvp in blips)
             {
                 BlipData blip = kvp.Value;
-                foreach(Blip b in blip.Blips)
+                foreach (Blip b in blip.Blips)
                 {
                     SetBlipHiddenOnLegend(b.Handle, true);
                     SetBlipAlpha(b.Handle, 0);
@@ -355,7 +355,7 @@ namespace Curiosity.Core.Client.Managers.Milo
 
         private void RemoveIpls(List<string> ipls)
         {
-            foreach(string ipl in ipls)
+            foreach (string ipl in ipls)
             {
                 Logger.Debug($"Remove IPL: {ipl}");
                 if (IsIplActive(ipl)) RemoveIpl(ipl);

@@ -107,7 +107,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                             modSubmenu.AddItem(uIMenuItem);
                         }
 
-                        modSubmenu.OnItemSelect += (sender, item, index) => {
+                        modSubmenu.OnItemSelect += (sender, item, index) =>
+                        {
                             vehicle = Game.PlayerPed.CurrentVehicle;
                             vehicle.Mods.InstallModKit();
 

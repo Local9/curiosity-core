@@ -38,7 +38,7 @@ namespace Curiosity.Core.Client.Interface
             { VehicleClass.Vans, (int)BlipSprite.PersonalVehicleCar },
             { (VehicleClass)22, 531 },
         };
-        
+
         public static Dictionary<VehicleHash, int> VehicleBlips = new Dictionary<VehicleHash, int>()
         {
             { VehicleHash.Rhino, (int)BlipSprite.Tank },
@@ -59,7 +59,7 @@ namespace Curiosity.Core.Client.Interface
 
         public static bool TimeoutStateValue = false;
 
-        public static void DrawText(string text, float x, float y, float scale = 0.4f, bool centered = false, int font = 4, int r  = 255, int g = 255, int b = 244, int alpha = 255)
+        public static void DrawText(string text, float x, float y, float scale = 0.4f, bool centered = false, int font = 4, int r = 255, int g = 255, int b = 244, int alpha = 255)
         {
             DrawText(text, scale, new Vector2(x, y), Color.FromArgb(alpha, r, g, b), centered, (Font)font, Alignment.Right);
         }

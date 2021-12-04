@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
@@ -111,7 +110,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 
                 Logger.Debug($"Player '{Player.Name}' Disposed");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Debug(ex, $"Dispose");
             }

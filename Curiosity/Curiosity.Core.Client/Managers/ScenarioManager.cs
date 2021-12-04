@@ -111,7 +111,7 @@ namespace Curiosity.Core.Client.Managers
             try
             {
                 List<ScenarioItem> scenarios = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScenarioItem>>(Properties.Resources.scenarios);
-                foreach(ScenarioItem scenario in scenarios)
+                foreach (ScenarioItem scenario in scenarios)
                 {
                     if (scenario.Enabled)
                     {

@@ -351,7 +351,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private Task OnCompanionCheck()
         {
-            foreach(KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
+            foreach (KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
             {
                 int pedId = kvp.Key;
                 int netId = kvp.Value;

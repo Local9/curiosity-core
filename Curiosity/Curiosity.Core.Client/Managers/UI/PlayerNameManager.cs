@@ -1,8 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -30,7 +28,7 @@ namespace Curiosity.Core.Client.Managers.UI
         {
             if (!ShowPlayerNames)
             {
-                foreach(KeyValuePair<Player, int> gamerTag in gamerTags)
+                foreach (KeyValuePair<Player, int> gamerTag in gamerTags)
                 {
                     RemoveMpGamerTag(gamerTag.Value);
                 }

@@ -6,7 +6,7 @@ namespace Curiosity.Core.Client.Managers
     {
         public override void Begin()
         {
-            
+
         }
 
         public int ExperienceToNextLevel(int level)

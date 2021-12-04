@@ -102,7 +102,7 @@ namespace Curiosity.Core.Client.Managers.Milo.NightClub
             {
                 notificationMessage = "Exit Nightclub";
                 activeMarker = markerExit;
-                
+
             }
 
             if (activeMarker is null)

@@ -1,6 +1,6 @@
 ﻿using Curiosity.Core.Client.Events;
-using static CitizenFX.Core.Native.API;
 using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Diagnostics
 {
@@ -12,7 +12,7 @@ namespace Curiosity.Core.Client.Diagnostics
         static DateTime lastChecked = DateTime.UtcNow;
 
         static EventSystem _eventSystem => EventSystem.GetModule();
- 
+
         public static void Info(string msg)
         {
             WriteLine("INFO", msg, ConsoleColor.White);

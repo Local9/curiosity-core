@@ -164,7 +164,7 @@ namespace Curiosity.Core.Client.Managers
                         drivingEnd = DEFAULT;
                     }
                 }
-                
+
                 if (vehicle.Driver == Cache.PlayerPed && (vehicle.Model.IsPlane || vehicle.Model.IsHelicopter))
                 {
                     float speed = vehicle.Speed * 3.6f;
@@ -172,7 +172,7 @@ namespace Curiosity.Core.Client.Managers
                     {
                         wasFlying = true;
                         flyingStart = DateTime.UtcNow;
-                        
+
                         while (speed > 10 && vehicle.IsInAir)
                         {
                             speed = vehicle.Speed * 3.6f;
@@ -216,7 +216,7 @@ namespace Curiosity.Core.Client.Managers
 
             int currentStatValue = 0;
             API.StatGetInt(hash, ref currentStatValue, -1);
-            
+
             SetStatValue(newLevel, hash);
 
             int newStatValue = 0;

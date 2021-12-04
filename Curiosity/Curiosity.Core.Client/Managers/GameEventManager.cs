@@ -414,7 +414,7 @@ namespace Curiosity.Core.Client.Managers
         {
             API.ClearFocus();
             API.RenderScriptCams(false, false, 0, true, false);
-            
+
             if (DeathCamera != null)
                 DeathCamera.Delete();
 

@@ -405,7 +405,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             {
                 Logger.Debug(ex, $"OnMenuCreate");
             }
-        } 
+        }
 
         private void MainMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {

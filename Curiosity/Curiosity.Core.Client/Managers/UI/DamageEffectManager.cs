@@ -10,11 +10,11 @@ namespace Curiosity.Core.Client.Managers.UI
     {
         int _updateTick = 0;
         public int Ticks = 10;
-        
+
         public float EffectThreshold = .5f;
         public float SpeedIn = .8f;
         public float SpeedOut = .2f;
-        
+
         string _effect = "rply_saturation_neg";
         string _currentEffect = "rply_saturation_neg";
         public List<dynamic> Effects = new List<dynamic>()
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Client.Managers.UI
         public override void Begin()
         {
             string savedEffect = GetResourceKvpString("cur:damage:effect");
-            foreach(dynamic i in Effects)
+            foreach (dynamic i in Effects)
             {
                 if (i.Label == savedEffect)
                     _effect = i.Effect;
@@ -70,7 +70,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     _fraction = _targetFraction;
                 }
-                                
+
                 if (_targetFraction > _fraction)
                 {
                     _fraction = Math.Min(_fraction + SpeedIn / Ticks, _targetFraction);
@@ -93,7 +93,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     {
                         SetTimecycleModifierStrength(_fraction);
                     }
-                    
+
                     _beforeFraction = _fraction;
                     _currentEffect = _effect;
                 }

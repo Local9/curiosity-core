@@ -10,7 +10,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
         public override void Begin()
         {
-            
+
         }
 
         [TickHandler(SessionWait = true)]

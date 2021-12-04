@@ -240,7 +240,7 @@ namespace Curiosity.Core.Client.Managers
             bool isSetup = false;
             int attempts = 0;
 
-            while(!isSetup && attempts < 100)
+            while (!isSetup && attempts < 100)
             {
                 await BaseScript.Delay(10);
                 isSetup = veh.Vehicle.State.Get(StateBagKey.VEHICLE_SETUP) ?? false;
@@ -1069,7 +1069,7 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 Vehicle vehicle = null;
-                
+
                 vehicle = await World.CreateVehicle(vehModel, postionSpawn, heading);
 
                 API.NetworkRequestControlOfEntity(vehicle.Handle);
@@ -1096,7 +1096,7 @@ namespace Curiosity.Core.Client.Managers
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.SetIntoVehicle(vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-                    
+
                     vehicle.IsEngineRunning = velocity > 0f;
                     vehicle.Speed = velocity;
                 }
@@ -1150,7 +1150,7 @@ namespace Curiosity.Core.Client.Managers
                 API.SetVehicleAutoRepairDisabled(vehicle.Handle, true);
 
                 Notify.Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
-                
+
                 return new { success = true };
             }
             catch (Exception ex)

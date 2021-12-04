@@ -57,7 +57,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             //UIMenu
             menuMain = new UIMenu(Game.Player.Name, "Player Creator");
             _MenuPool.Add(menuMain);
-            
+
             menuMain.Clear();
 
             menuMain.OnListChange += MenuMain_OnListChange;

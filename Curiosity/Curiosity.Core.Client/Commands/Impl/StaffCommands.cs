@@ -1,17 +1,16 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -52,7 +51,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (weapon > 0)
                     {
                         API.GiveWeaponToPed(Game.PlayerPed.Handle, (uint)weapon, 999, false, true);
-                    } else
+                    }
+                    else
                     {
                         Cache.PlayerPed.Weapons.Give((WeaponHash)weapon, 999, false, true);
                     }
@@ -102,7 +102,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     {
                         Ped[] peds = World.GetAllPeds();
                         int deleted = 0;
-                        foreach(Ped ped in peds)
+                        foreach (Ped ped in peds)
                         {
                             if (ped.Exists())
                             {
@@ -250,7 +250,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
 
                 Vehicle vehicle = null;
-                
+
                 if (Cache.StaffVehicle is not null)
                     vehicle = Cache.StaffVehicle.Vehicle;
 
@@ -485,7 +485,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
                 vehicle.Delete();
             }
-        
+
         }
         #endregion
     }

@@ -306,7 +306,7 @@ namespace Curiosity.Core.Client.Managers
         {
             await BaseScript.Delay(0);
 
-            while(!Cache.Player.Character.MarkedAsRegistered)
+            while (!Cache.Player.Character.MarkedAsRegistered)
             {
                 NetworkOverrideClockTime(12, 1, 0);
                 SetClockTime(12, 1, 0);

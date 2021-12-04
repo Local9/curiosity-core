@@ -172,7 +172,7 @@ namespace Curiosity.Core.Client
 
                 Logger.Info("Load method has been completed.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error($"{ex}");
                 BaseScript.TriggerServerEvent("user:log:exception", ex.Message, ex);
@@ -291,7 +291,7 @@ namespace Curiosity.Core.Client
 
                     RegisteredTickHandlers.Add(instance.GetType());
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Error(ex, $"AttachTickHandlers");
                 }
@@ -357,7 +357,7 @@ namespace Curiosity.Core.Client
 
                 if (callback.GetType() == typeof(AsyncEventCallback))
                 {
-                    result(await((AsyncEventCallback)callback).AsyncTask(metadata));
+                    result(await ((AsyncEventCallback)callback).AsyncTask(metadata));
                 }
                 else
                 {
