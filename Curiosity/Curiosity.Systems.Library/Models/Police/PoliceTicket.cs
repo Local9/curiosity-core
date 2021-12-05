@@ -25,10 +25,19 @@ namespace Curiosity.Systems.Library.Models.Police
         [DataMember(Name = "ticketPaymentDue")]
         public DateTime TicketPaymentDue;
 
+        [DataMember(Name = "paymentOverdue")]
+        public bool PaymentOverdue;
+
         [DataMember(Name = "ticketPaid")]
         public DateTime? TicketPaid;
 
         [DataMember(Name = "ticketValue")]
         public long TicketValue;
+
+        [DataMember(Name = "vehicleSpeed")]
+        public int VehicleSpeed;
+
+        [DataMember(Name = "speedLimit")]
+        public int SpeedLimit;
     }
 }
