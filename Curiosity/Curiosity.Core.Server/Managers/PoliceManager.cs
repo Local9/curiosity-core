@@ -74,11 +74,18 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
-            EventSystem.Attach("police:get:suspect:tickets", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("police:suspect:ticket:get", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 return await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
+            }));
+
+            EventSystem.Attach("police:suspect:ticket:pay", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                return await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, metadata.Find<int>(0));
             }));
 
             EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {

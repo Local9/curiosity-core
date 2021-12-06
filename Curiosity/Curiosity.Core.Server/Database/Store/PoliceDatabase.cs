@@ -44,16 +44,17 @@ namespace Curiosity.Core.Server.Database.Store
             return false;
         }
 
-        public static async Task<List<PoliceTicket>> GetTickets(int characterId)
+        public static async Task<List<PoliceTicket>> GetTickets(int characterId, bool unpaid = true)
         {
             List<PoliceTicket> policeTickets = new List<PoliceTicket>();
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
                     { "@pCharacterId", characterId },
+                    { "@pUnpaid", unpaid },
                 };
 
-            string myQuery = "call selCharacterTickets(@pCharacterId);";
+            string myQuery = "call selCharacterTickets(@pCharacterId, @pUnpaid);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -67,11 +68,33 @@ namespace Curiosity.Core.Server.Database.Store
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
                     PoliceTicket pt = new();
+
+                    pt.Id = kv["ID"].ToInt();
+                    pt.PoliceTicketType = (ePoliceTicketType)kv["PoliceTicketTypeId"].ToInt();
+                    pt.CharacterId = kv["CharacterId"].ToInt();
+                    pt.CharacterName = $"{kv["CharacterName"]}";
+                    pt.TicketDate = kv["TicketDate"].ToDateTime();
+                    pt.TicketPaymentDue = kv["TicketPaymentDue"].ToDateTime();
+                    pt.PaymentOverdue = kv["PaymentOverdue"].ToBoolean();
+
+                    if (kv.ContainsValue("TicketPaid"))
+                        pt.TicketPaid = kv["TicketPaid"].ToDateTime();
+
+                    pt.TicketValue = kv["TicketValue"].ToInt();
+                    pt.VehicleSpeed = kv["VehicleSpeed"].ToInt();
+                    pt.SpeedLimit = kv["SpeedLimit"].ToInt();
+
+                    policeTickets.Add(pt);
                 }
             }
 
 
             return policeTickets;
+        }
+
+        internal static async Task<bool> PayTicket(int characterId, int ticketId)
+        {
+            return true;
         }
     }
 }
