@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -73,6 +74,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterTattoos.cs" />
     <Compile Include="Interface\Menus\Data\TattoosData.cs" />
+    <Compile Include="Interface\Menus\PedShopMenu\AppreanceShopMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
     <Compile Include="Managers\GameWorld\WorldPlayerManager.cs" />
+    <Compile Include="Managers\UI\CharacterManager.cs" />
     <Compile Include="Managers\UI\ControlManager.cs" />
     <Compile Include="Managers\UI\PoliceComputerAidedDispatchManager.cs" />
     <Compile Include="Managers\WorldPlayerReviveManager.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
     <Compile Include="Utils\Peds.cs" />
     <Compile Include="Utils\Props.cs" />
+    <Compile Include="Utils\ShopPed.cs" />
     <Compile Include="Utils\Utilities.cs" />
     <Compile Include="Environment\Entities\CuriosityVehicle.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
