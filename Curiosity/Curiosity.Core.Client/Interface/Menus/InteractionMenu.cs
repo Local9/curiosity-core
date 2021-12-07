@@ -35,6 +35,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you.");
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
         private UIMenuItem miEditPed = new UIMenuItem("Customise Ped", "Change your look.");
+        private UIMenuItem miOpenPda = new UIMenuItem("Open PDA", "Open the PDA to access the shop or your garage.");
 
         private UIMenu menuGarage;
         private SubMenu.VehicleGarageMenu _vehicleGarageMenu = new SubMenu.VehicleGarageMenu();
@@ -187,6 +188,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 Creator.CreatorMenus creatorMenus = new Creator.CreatorMenus();
                 creatorMenus.CreateMenu(true, false);
+                MenuPool.CloseAllMenus();
+            }
+
+            if (selectedItem == miOpenPda)
+            {
+                PdaManager.GetModule().OpenPDA();
                 MenuPool.CloseAllMenus();
             }
         }
