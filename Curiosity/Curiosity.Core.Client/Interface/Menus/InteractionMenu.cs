@@ -90,6 +90,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
             menuMain.AddItem(miEditPed);
+            menuMain.AddItem(miOpenPda);
 
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
