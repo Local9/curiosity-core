@@ -101,7 +101,7 @@ namespace Curiosity.Core.Client.Managers
                 vehiclesToSuppress.Add(modelHash);
             }
 
-            ToggleDispatch(false); // turn off all dispatch
+            // ToggleDispatch(false); // turn off all dispatch
         }
 
         public void LockAndSetTime(int hour, int minute)
