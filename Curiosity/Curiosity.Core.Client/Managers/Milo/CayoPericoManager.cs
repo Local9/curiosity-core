@@ -311,7 +311,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             RemoveIpls(losSantosIpls);
             RequestIpls(cayoIpls);
 
-            SwitchTrainTrack(0, true); // Enable main train
+            // SwitchTrainTrack(0, true); // Enable main train
             SwitchTrainTrack(3, true); // Enable Metro
         }
 
@@ -349,7 +349,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             RequestIpls(losSantosIpls);
             RemoveIpls(cayoIpls);
 
-            SwitchTrainTrack(0, false); // Enable main train
+            // SwitchTrainTrack(0, false); // Enable main train
             SwitchTrainTrack(3, false); // Enable Metro
         }
 
