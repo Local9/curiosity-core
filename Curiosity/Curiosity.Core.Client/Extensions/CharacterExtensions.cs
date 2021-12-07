@@ -143,7 +143,7 @@ namespace Curiosity.Core.Client.Extensions
             {
                 foreach (KeyValuePair<int, KeyValuePair<int, int>> kvp in character.CharacterInfo.DrawableVariations)
                 {
-                    API.SetPedComponentVariation(playerPedId, kvp.Key, kvp.Value.Key, kvp.Value.Value, 0);
+                    API.SetPedComponentVariation(playerPedId, kvp.Key, kvp.Value.Key, kvp.Value.Value, 2);
                 }
             }
 

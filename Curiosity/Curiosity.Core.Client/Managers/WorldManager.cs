@@ -185,7 +185,8 @@ namespace Curiosity.Core.Client.Managers
 
             WeatherType weatherType = regionalWeather[region];
 
-            Logger.Debug($"wt: {weatherType}, sr: {subRegion}, cw: {World.Weather}");
+            if (Logger.IsDebugTimeEnabled)
+                Logger.Debug($"wt: {weatherType}, sr: {subRegion}, cw: {World.Weather}");
 
             ToggleAlamoSea(region);
 

@@ -1,6 +1,12 @@
-﻿using NativeUI;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Utils;
+using NativeUI;
+using System;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
+using static Curiosity.Core.Client.Utils.ShopPed;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {
@@ -63,7 +69,19 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             {
                 int textureIndex = GetPedTextureVariation(Cache.PlayerPed.Handle, componentIndex);
                 int newTextureIndex = 0;
-                SetPedComponentVariation(Cache.PlayerPed.Handle, componentIndex, listIndex, newTextureIndex, 0);
+                SetPedComponentVariation(Cache.PlayerPed.Handle, componentIndex, listIndex, newTextureIndex, 2);
+
+                if (componentIndex == 11)
+                {
+                    Tuple<int, int> item = GetProperTorso(listIndex, newTextureIndex);
+                    Logger.Debug($"GetProperTorso: {item.Item1}/{item.Item2}");
+                    if (item.Item1 != -1 && item.Item2 != -1)
+                    {
+                        SetPedComponentVariation(Cache.PlayerPed.Handle, 3, item.Item1, item.Item2, 2);
+                        Cache.Character.CharacterInfo.DrawableVariations[3] = new KeyValuePair<int, int>(item.Item1, item.Item2);
+                    }
+                }
+
                 if (Cache.Character.CharacterInfo.DrawableVariations == null)
                 {
                     Cache.Character.CharacterInfo.DrawableVariations = new Dictionary<int, KeyValuePair<int, int>>();
@@ -94,6 +112,103 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             };
 
             return menu;
+        }
+
+        Tuple<int, int> GetProperTorso(int drawable, int texture)
+        {
+            int pedHandle = Game.PlayerPed.Handle;
+
+            PedHash pedModel = (PedHash)Game.PlayerPed.Model.Hash;
+            if (!pedModel.Equals(PedHash.FreemodeFemale01) && !pedModel.Equals(PedHash.FreemodeMale01))
+            {
+                return Tuple.Create(-1, -1);
+            }
+
+            int topHash = GetHashNameForComponent(pedHandle, 11, drawable, texture);
+            int fcDrawable = -1, fcTexture = -1;
+
+            for (int i = 0; i < GetNumForcedComponents((uint)topHash); i++)
+            {
+                int fcNameHash = -1, fcEnumValue = -1, fcType = -1;
+                GetForcedComponent((uint)topHash, i, ref fcNameHash, ref fcEnumValue, ref fcType);
+
+                if (fcType == 3)
+                {
+                    if (fcNameHash == 0 || fcNameHash == GetHashKey("0"))
+                    {
+                        fcDrawable = fcEnumValue;
+                        fcTexture = 0;
+                    }
+                    else
+                    {
+                        PedComponentData data = ShopPed.GetShopPedComponent((uint)fcNameHash);
+                        fcDrawable = data.drawable;
+                        fcTexture = data.texture;
+                    }
+                }
+            }
+
+            return Tuple.Create(fcDrawable, fcTexture);
+        }
+
+        Tuple<int, int> GetProperLegs(int drawable, int texture)
+        {
+            Tuple<int, int> item = Tuple.Create(-1, -1);
+            int pedHandle = Game.PlayerPed.Handle;
+
+            PedHash pedModel = (PedHash)Game.PlayerPed.Model.Hash;
+            if (!pedModel.Equals(PedHash.FreemodeFemale01) && !pedModel.Equals(PedHash.FreemodeMale01))
+            {
+                return item;
+            }
+
+            int topHash = GetHashNameForComponent(pedHandle, 4, drawable, texture);
+            int fcDrawable = -1, fcTexture = -1;
+
+            for (int i = 0; i < GetNumForcedComponents((uint)topHash); i++)
+            {
+                int fcNameHash = -1, fcEnumValue = -1, fcType = -1;
+                GetForcedComponent((uint)topHash, i, ref fcNameHash, ref fcEnumValue, ref fcType);
+
+                if (fcType == 3)
+                {
+                    if (fcNameHash == 0 || fcNameHash == GetHashKey("0"))
+                    {
+                        fcDrawable = fcEnumValue;
+                        fcTexture = 0;
+                    }
+                    else
+                    {
+                        PedComponentData data = ShopPed.GetShopPedComponent((uint)fcNameHash);
+                        fcDrawable = data.drawable;
+                        fcTexture = data.texture;
+                    }
+                }
+            }
+
+            item = Tuple.Create(fcDrawable, fcTexture);
+
+            return item;
+        }
+
+        void CorrectVariations(int entity)
+        {
+            int modelHash = GetEntityModel(entity);
+            int torsoDrawable = GetPedDrawableVariation(entity, 11);
+            int torsoTexture = GetPedTextureVariation(entity, 11);
+            int maskDrawable = GetPedDrawableVariation(entity, 1);
+            int maskTexture = GetPedTextureVariation(entity, 1);
+            int undershirtDrawable = GetPedDrawableVariation(entity, 8);
+            int undershirtTexture = GetPedTextureVariation(entity, 8);
+            int badgeDrawable = GetPedDrawableVariation(entity, 10);
+            int badgeTexture = GetPedTextureVariation(entity, 10);
+            int torsoHashName = GetHashNameForComponent(entity, 11, torsoDrawable, torsoTexture);
+            int maskHashName = GetHashNameForComponent(entity, 1, maskDrawable, maskTexture);
+            int undershirtHashName = GetHashNameForComponent(entity, 8, undershirtDrawable, undershirtTexture);
+            int badgeHashName = GetHashNameForComponent(entity, 10, badgeDrawable, badgeTexture);
+            int headPropHashName = GetHashNameForProp(entity, 0, GetPedPropIndex(entity, 0), GetPedPropTextureIndex(entity, 0)); // HeadProp
+            bool unknown = false;
+
         }
     }
 }
