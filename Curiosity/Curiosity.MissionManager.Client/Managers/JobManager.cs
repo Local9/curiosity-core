@@ -30,6 +30,14 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
+            EventSystem.Attach("job:unemployed", new EventCallback(metadata =>
+            {
+                Logger.Debug($"JobManager: job:unemployed");
+                string job = "Unemployed";
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, false, false, job);
+                return null;
+            }));
+
             EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
             {
                 if (Game.Player.WantedLevel > 0)
