@@ -70,7 +70,7 @@ namespace Curiosity.Core.Server.Database.Store
                     PoliceTicket pt = new();
 
                     pt.Id = kv["ID"].ToInt();
-                    pt.PoliceTicketType = (ePoliceTicketType)kv["PoliceTicketTypeId"].ToInt();
+                    pt.PoliceTicketTypeId = (ePoliceTicketType)kv["PoliceTicketTypeId"].ToInt();
                     pt.CharacterId = kv["CharacterId"].ToInt();
                     pt.CharacterName = $"{kv["CharacterName"]}";
                     pt.TicketDate = kv["TicketDate"].ToDateTime();
@@ -94,7 +94,30 @@ namespace Curiosity.Core.Server.Database.Store
 
         internal static async Task<bool> PayTicket(int characterId, int ticketId)
         {
-            return true;
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@pPoliceTicketId", ticketId },
+                    { "@pCharacterId", characterId },
+                };
+
+            string myQuery = "call upCharacterTicketPaid(@pPoliceTicketId, @pCharacterId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                    throw new Exception("Unable to update ticket");
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    return kv["Result"].ToBoolean();
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -11,7 +11,10 @@ namespace Curiosity.Systems.Library.Models.Police
         public int Id;
 
         [DataMember(Name = "policeTicketTypeId")]
-        public ePoliceTicketType PoliceTicketType;
+        public ePoliceTicketType PoliceTicketTypeId;
+
+        [DataMember(Name = "policeTicketType")]
+        public string PoliceTicketType => $"{PoliceTicketTypeId}";
 
         [DataMember(Name = "characterId")]
         public int CharacterId;

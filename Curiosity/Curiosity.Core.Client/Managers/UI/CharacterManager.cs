@@ -1,4 +1,5 @@
-﻿using Curiosity.Systems.Library.Events;
+﻿using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Police;
 using Newtonsoft.Json;
@@ -19,17 +20,18 @@ namespace Curiosity.Core.Client.Managers.UI
             Instance.AttachNuiHandler("PayTicket", new AsyncEventCallback(async metadata =>
             {
                 ExportMessage exportMessage = new ExportMessage();
+
                 if (!int.TryParse(metadata.Find<string>(0), out int ticketId))
                 {
-                    exportMessage.error = "Invalid TicketID";
-                    goto RETURN_MESSAGE;
+                    exportMessage.error = "Invalid Ticket ID";
+                    return $"{exportMessage}";
                 }
 
+                exportMessage = await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay", ticketId);
 
-                exportMessage = await EventSystem.Request<ExportMessage>("police:ticket:pay", ticketId);
+                Logger.Debug($"{exportMessage}");
 
-            RETURN_MESSAGE:
-                return JsonConvert.SerializeObject(exportMessage);
+                return $"{exportMessage}";
             }));
         }
     }

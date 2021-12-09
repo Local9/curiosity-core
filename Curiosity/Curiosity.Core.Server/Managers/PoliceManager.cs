@@ -83,9 +83,53 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("police:suspect:ticket:pay", new AsyncEventCallback(async metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                ExportMessage em = new();
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                {
+                    Logger.Error("police:suspect:ticket:pay => Player could not be found");
+                    em.error = "Player not found";
+                    return em;
+                }
+
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                return await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, metadata.Find<int>(0));
+
+                int ticketId = metadata.Find<int>(0);
+
+                List<PoliceTicket> tickets = await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
+                PoliceTicket policeTicket = null;
+
+                foreach (PoliceTicket ticket in tickets)
+                {
+                    if (ticket.Id == ticketId)
+                        policeTicket = ticket;
+                }
+
+                if (policeTicket is null)
+                {
+                    Logger.Error("police:suspect:ticket:pay => Invalid Ticket");
+                    em.error = "Ticket not found";
+                    return em;
+                }
+
+                if (curiosityUser.Character.Cash < policeTicket.TicketValue)
+                {
+                    Logger.Error("police:suspect:ticket:pay => Not enough cash to pay");
+                    em.error = "Not enough cash to pay ticket.";
+                    return em;
+                }
+
+                bool updatedTicket = await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, ticketId);
+
+                if (updatedTicket)
+                {
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, policeTicket.TicketValue * -1);
+                    return em;
+                }
+
+                Logger.Error("police:suspect:ticket:pay => Failed to update ticket");
+                em.error = "Failed to updated ticket.";
+                return em;
             }));
 
             EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {
