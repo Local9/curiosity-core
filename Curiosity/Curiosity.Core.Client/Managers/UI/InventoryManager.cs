@@ -43,7 +43,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManager.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    Notify.Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };
                 }
 
@@ -53,7 +53,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!result.success)
                 {
-                    NotificationManager.GetModule().Error($"{result.error}");
+                    Notify.Error($"{result.error}");
                     return $"{result}";
                 }
 
@@ -62,13 +62,11 @@ namespace Curiosity.Core.Client.Managers.UI
 
             Instance.AttachNuiHandler("UseItem", new AsyncEventCallback(async metadata =>
             {
-                NotificationManager notificationManager = NotificationManager.GetModule();
-
                 int itemId = -1;
 
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    notificationManager.Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    Notify.Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };
                 }
 
@@ -84,7 +82,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!int.TryParse(metadata.Find<string>(0), out itemId))
                 {
-                    NotificationManager.GetModule().Error($"Item was invalid, please submit a ticket if you can replicate it.");
+                    Notify.Error($"Item was invalid, please submit a ticket if you can replicate it.");
                     return new { success = false };
                 }
 
@@ -94,7 +92,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!result.success)
                 {
-                    NotificationManager.GetModule().Error($"{result.error}");
+                    Notify.Error($"{result.error}");
                     return $"{result}";
                 }
 
@@ -113,18 +111,17 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 isProcessing = false;
                 Instance.DetachTickHandler(OnProcessingReset);
-                NotificationManager.GetModule().Info($"Processing has been force completed.");
+                Notify.Info($"Processing has been force completed.");
             }
         }
 
         public async Task<ExportMessage> UseItem(int itemId, Vehicle veh = null)
         {
-            NotificationManager notificationManager = NotificationManager.GetModule();
             ExportMessage result = new ExportMessage();
 
             if (isProcessing)
             {
-                notificationManager.Error($"Currently processing request.");
+                Notify.Error($"Currently processing request.");
                 result.error = $"Currently processing request.";
                 return result;
             }
@@ -144,7 +141,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
             if (!result.success)
             {
-                notificationManager.Error($"{result.error}");
+                Notify.Error($"{result.error}");
                 return result;
             }
 
@@ -154,7 +151,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     int playerHealth = Cache.PlayerPed.Health;
                     Cache.PlayerPed.Health = (playerHealth + result.item.HealingAmount);
-                    notificationManager.Success($"Healed {result.item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
+                    Notify.Success($"Healed {result.item.HealingAmount}hp<br />Health: {Game.PlayerPed.Health}hp");
                     await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
@@ -162,7 +159,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     int playerArmor = Cache.PlayerPed.Armor;
                     Cache.PlayerPed.Armor = (playerArmor + result.item.HealingAmount);
-                    notificationManager.Success($"Armor increased {result.item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
+                    Notify.Success($"Armor increased {result.item.HealingAmount}hp<br />Armor: {Game.PlayerPed.Armor}hp");
                     await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                 }
 
@@ -170,12 +167,12 @@ namespace Curiosity.Core.Client.Managers.UI
                 {
                     if (veh is null)
                     {
-                        notificationManager.Success($"Vehicle Repair Unsuccessful");
+                        Notify.Success($"Vehicle Repair Unsuccessful");
                     }
                     else
                     {
                         veh.Repair();
-                        notificationManager.Success($"Vehicle Repaired");
+                        Notify.Success($"Vehicle Repaired");
                         await EventSystem.Request<ExportMessage>("character:inventory:success", itemId);
                     }
                 }
