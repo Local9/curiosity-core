@@ -21,7 +21,10 @@ namespace Curiosity.Core.Client.Managers.UI
             {
                 ExportMessage exportMessage = new ExportMessage();
 
-                if (!int.TryParse(metadata.Find<string>(0), out int ticketId))
+                int ticketId = -1;
+                int.TryParse(metadata.Find<string>(0), out ticketId);
+
+                if (ticketId == -1)
                 {
                     exportMessage.error = "Invalid Ticket ID";
                     return $"{exportMessage}";
