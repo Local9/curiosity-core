@@ -63,7 +63,7 @@ namespace Curiosity.Core.Server.Database.Store
                 await BaseScript.Delay(0);
 
                 if (keyValuePairs.Count == 0)
-                    throw new Exception("Unable to insert ticket");
+                    return policeTickets;
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
