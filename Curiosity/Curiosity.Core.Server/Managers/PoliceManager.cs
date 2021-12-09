@@ -114,7 +114,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (curiosityUser.Character.Cash < policeTicket.TicketValue)
                 {
-                    SendNotification(metadata.Sender, $"Not enough cash to pay.");
+                    SendNotification(metadata.Sender, $"Not enough cash to pay.", eNotification.NOTIFICATION_WARNING);
                     Logger.Error("police:suspect:ticket:pay => Not enough cash to pay");
                     em.error = "Not enough cash to pay ticket.";
                     return em;
@@ -124,7 +124,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (updatedTicket)
                 {
-                    SendNotification(metadata.Sender, $"Ticket Paid.");
+                    SendNotification(metadata.Sender, $"Ticket Paid.", eNotification.NOTIFICATION_SUCCESS);
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, policeTicket.TicketValue * -1);
                     return em;
                 }
