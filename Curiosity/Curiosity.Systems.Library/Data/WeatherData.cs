@@ -30,12 +30,12 @@ namespace Curiosity.Systems.Library.Data
             { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CLEARING } },
             { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING } },
             { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.CLEAR, WeatherType.FOGGY } },
-            { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.BLIZZARD, WeatherType.SNOWING } },
+            { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWING } },
         };
 
         public readonly static Dictionary<Region, List<WeatherType>> RegionWeather = new Dictionary<Region, List<WeatherType>>()
         {
-            { Region.NorthYankton, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CHRISTMAS, WeatherType.BLIZZARD, WeatherType.SNOWING, WeatherType.SNOWLIGHT } },
+            { Region.NorthYankton, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CHRISTMAS, WeatherType.SNOWING, WeatherType.SNOWLIGHT } },
             { Region.CayoPericoIsland, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CLEARING } },
         };
 
