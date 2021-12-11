@@ -50,7 +50,7 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("casino:vehicle", new EventCallback(metadata =>
             {
-                return API.GetHashKey(vehicleForToday);
+                return vehicleForToday;
             }));
         }
     }

@@ -8,7 +8,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
     class CasinoTurnTable
     {
         static Vehicle vehicle;
-        static int vehicleModel;
+        static string vehicleModel;
         static int platformHandle;
         static float heading;
 
@@ -16,7 +16,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
         internal static async void Init()
         {
-            vehicleModel = await EventSystem.GetModule().Request<int>("casino:vehicle");
+            vehicleModel = await EventSystem.GetModule().Request<dynamic>("casino:vehicle");
             PluginManager.AttachTickHandler(OnTurnTableTask);
         }
 
@@ -52,11 +52,11 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             RemoveVehicle();
             await BaseScript.Delay(100);
             // update if the server changed it
-            vehicleModel = await EventSystem.GetModule().Request<int>("casino:vehicle");
+            vehicleModel = await EventSystem.GetModule().Request<dynamic>("casino:vehicle");
 
             int veh;
             int loadChecks = 0;
-            Model model = vehicleModel;
+            Model model = new Model(vehicleModel);
             model.Request(10000);
 
             while (!model.IsLoaded)
