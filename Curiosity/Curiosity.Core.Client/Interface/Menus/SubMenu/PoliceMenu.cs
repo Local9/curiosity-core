@@ -12,11 +12,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu menu;
         EventSystem EventSystem => EventSystem.GetModule();
 
+        private UIMenu playerListMenu;
+        private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
+
         public UIMenu CreateMenu(UIMenu m)
         {
             menu = m;
 
-
+            playerListMenu = InteractionMenu.MenuPool.AddSubMenu(m, "Nearby Players");
+            _playerListMenu.CreateMenu(playerListMenu);
 
             return menu;
         }

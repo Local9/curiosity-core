@@ -143,6 +143,8 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
                 player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
 
+                EventSystem.Send("police:suspect:jail", suspectServerId); // jail
+
                 // log jail & reward officers
                 // cut ticket cost in half
 
@@ -156,9 +158,12 @@ namespace Curiosity.Core.Server.Managers
                 bool isMeleeDamage = metadata.Find<bool>(2);
                 uint weaponInfoHash = metadata.Find<uint>(3);
                 int damageTypeFlag = metadata.Find<int>(4);
+                int numberOfSurroundingPeds = metadata.Find<int>(5);
 
                 Player attacker = PluginManager.PlayersList[attackerServerId];
                 Player victim = PluginManager.PlayersList[victimServerId];
+
+                bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
                 bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
                 bool attackerIsOfficer = (ePlayerJobs)(attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == ePlayerJobs.POLICE_OFFICER;
@@ -189,6 +194,13 @@ namespace Curiosity.Core.Server.Managers
                 if (distanceFeet > 100f)
                 {
                     tableRows.Add($"Distance", $"{distanceFeet}ft");
+                }
+
+                if (isVictimPassive)
+                {
+                    tableRows.Add("Info", "Wanted by Police");
+                    attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
+                    attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
                 }
 
                 string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);

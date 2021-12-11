@@ -66,6 +66,7 @@
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
+    <Compile Include="Managers\InteractionManager.cs" />
     <Compile Include="Managers\InterfaceManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />

@@ -80,6 +80,8 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerInteractionMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerListMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleGarageMenu.cs" />
     <Compile Include="Managers\CompanionManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoLuckyWheel.cs" />
@@ -96,7 +98,6 @@
     <Compile Include="Managers\UI\CharacterManager.cs" />
     <Compile Include="Managers\UI\ControlManager.cs" />
     <Compile Include="Managers\UI\PoliceComputerAidedDispatchManager.cs" />
-    <Compile Include="Managers\WorldPlayerReviveManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
