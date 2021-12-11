@@ -152,16 +152,16 @@ namespace Curiosity.Core.Server.Managers
 
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
                     {
-                        weatherTypes.Add(WeatherType.CLEARING);
+                        weatherTypes.Add(WeatherType.RAINING);
                     }
 
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
                     {
                         if (Utility.RANDOM.Bool(.15f))
-                            weatherTypes.Add(WeatherType.CLEARING);
+                            weatherTypes.Add(WeatherType.RAINING);
 
                         if(Utility.RANDOM.Bool(.05f))
-                            weatherTypes.Add(WeatherType.NEUTRAL);
+                            weatherTypes.Add(WeatherType.THUNDERSTORM);
                     }
 
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
