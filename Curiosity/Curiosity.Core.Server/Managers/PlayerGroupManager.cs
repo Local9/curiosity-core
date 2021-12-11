@@ -96,12 +96,30 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("group:invite:accept", new EventCallback(metadata =>
             {
-                return false;
+                ExportMessage exportMessage = new ExportMessage();
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                {
+                    exportMessage.error = "Player not found. Cannot create group.";
+                    goto RETURN_MESSAGE;
+                }
+
+            RETURN_MESSAGE:
+                return exportMessage;
             }));
 
             EventSystem.Attach("group:invite:decline", new EventCallback(metadata =>
             {
-                return false;
+                ExportMessage exportMessage = new ExportMessage();
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                {
+                    exportMessage.error = "Player not found. Cannot create group.";
+                    goto RETURN_MESSAGE;
+                }
+
+            RETURN_MESSAGE:
+                return exportMessage;
             }));
         }
 
