@@ -93,7 +93,7 @@
         public const string PLAYER_WANTED_LEVEL = "PLAYER_POLICE_WANTED_LEVEL"; // lua handling required
         // Job Manager Flags
         public const string PLAYER_JOB = "p::job::current";
-
-        
+        // Group
+        public const string PLAYER_GROUP = "p::group";
     }
 }

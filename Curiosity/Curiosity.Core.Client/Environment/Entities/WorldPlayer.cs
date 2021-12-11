@@ -43,6 +43,13 @@ namespace Curiosity.Core.Client.Environment.Entities
         public int WantedLevel = 0;
         int wantedLevelStateBagHandler = -1;
 
+        public int GroupId;
+        int groupStateBagHandler = -1;
+        bool _sameGroup;
+
+        public int ClientGroupId;
+        int clientGroupStateBagHandler = -1;
+
         public WorldPlayer(Player player)
         {
             Player = player;
@@ -50,17 +57,29 @@ namespace Curiosity.Core.Client.Environment.Entities
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             IsWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+            GroupId = player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
+            int myGroupId = Game.Player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
+
+            if (myGroupId > -1 && GroupId > -1)
+            {
+                _sameGroup = myGroupId == GroupId;
+            }
+
             pluginManager.AttachTickHandler(OnPlayerChanges);
             pluginManager.AttachTickHandler(OnPlayerRevive);
+
             passiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
             wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
             wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
+            groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
+            clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
+
 
             if (player.Character.AttachedBlip is null)
             {
                 _blip = player.Character.AttachBlip();
                 _blipHandle = _blip.Handle;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup);
                 SetBlipCategory(_blipHandle, 7);
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
@@ -84,8 +103,12 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 pluginManager.DetachTickHandler(OnPlayerChanges);
                 pluginManager.DetachTickHandler(OnPlayerRevive);
+
                 RemoveStateBagChangeHandler(passiveStateBagHandler);
                 RemoveStateBagChangeHandler(wantedStateBagHandler);
+                RemoveStateBagChangeHandler(wantedLevelStateBagHandler);
+                RemoveStateBagChangeHandler(groupStateBagHandler);
+                RemoveStateBagChangeHandler(clientGroupStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -141,12 +164,23 @@ namespace Curiosity.Core.Client.Environment.Entities
             WantedLevel = level;
         }
 
+        private void OnStatePlayerGroupChange(string bag, string key, dynamic groupId, int reserved, bool replicated)
+        {
+            GroupId = groupId;
+        }
+
+        private void OnStateClientPlayerGroupChange(string bag, string key, dynamic groupId, int reserved, bool replicated)
+        {
+            ClientGroupId = groupId;
+        }
+
         // This is mainly for things that update, blips, passive, etc
         private async Task OnPlayerChanges()
         {
             try
             {
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted);
+                _sameGroup = GroupId == ClientGroupId;
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup);
                 UpdateBlipString();
                 UpdatePlayerCollisionStates();
                 UpdatePlayerWantedState();

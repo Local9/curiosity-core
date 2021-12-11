@@ -77,5 +77,6 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public int StaffVehicle { get; set; }
         [JsonIgnore] public string JobCallSign { get; set; }
         [JsonIgnore] public ePlayerJobs Job { get; set; }
+        [JsonIgnore] public int CurrentGroup = -1;
     }
 }
