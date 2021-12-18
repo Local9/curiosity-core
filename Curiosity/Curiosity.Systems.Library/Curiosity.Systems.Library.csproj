@@ -53,6 +53,7 @@
     <Compile Include="Enums\DispatchType.cs" />
     <Compile Include="Enums\ePlayerJobs.cs" />
     <Compile Include="Enums\ePoliceTicketType.cs" />
+    <Compile Include="Enums\eTaskTypeIndex.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />

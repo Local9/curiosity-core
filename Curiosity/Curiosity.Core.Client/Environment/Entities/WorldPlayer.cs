@@ -211,6 +211,8 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         private void UpdatePlayerCollisionStates() // need to change this to work differently
         {
+            // Updated based on : https://github.com/justalemon/SimplePassive
+
             Vehicle gamePlayerVehicle = Game.PlayerPed.CurrentVehicle;
             Vehicle gamePlayerVehicleHooked = Game.PlayerPed.CurrentVehicle;
 
@@ -219,7 +221,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 
             bool disableCollision = IsPassive || playerOptions.IsPassive;
 
-            int alpha = disableCollision && !GetIsTaskActive(PlayerPed.Handle, 2) && gamePlayerVehicle != otherVehicle ? 180 : 255;
+            int alpha = disableCollision && !GetIsTaskActive(PlayerPed.Handle, (int)eTaskTypeIndex.CTaskExitVehicle) && gamePlayerVehicle != otherVehicle ? 180 : 255;
             PlayerPed.SetAlpha(alpha);
             otherVehicle?.SetAlpha(alpha);
             otherHookedVehicle?.SetAlpha(alpha);
