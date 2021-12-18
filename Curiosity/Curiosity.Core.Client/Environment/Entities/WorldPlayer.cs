@@ -214,7 +214,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             // Updated based on : https://github.com/justalemon/SimplePassive
 
             Vehicle gamePlayerVehicle = Game.PlayerPed.CurrentVehicle;
-            Vehicle gamePlayerVehicleHooked = Game.PlayerPed.CurrentVehicle;
+            Vehicle gamePlayerVehicleHooked = gamePlayerVehicle?.GetHookedVehicle();
 
             Vehicle otherVehicle = PlayerPed.CurrentVehicle;
             Vehicle otherHookedVehicle = otherVehicle?.GetHookedVehicle();
