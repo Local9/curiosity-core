@@ -13,13 +13,15 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 {
     public class CasinoManager : Manager<CasinoManager>
     {
-        private const string AUDIO_SCENE = "DLC_VW_Casino_General";
+        private const string AUDIO_STREAM_CASINO_GENERAL = "DLC_VW_Casino_General";
         Position posEnter = new Position(924.4668f, 46.7468f, 81.10635f);
         Position posExit = new Position(1089.974f, 206.0144f, -48.99975f);
         Vector3 scale = new Vector3(1.25f, 1.25f, 0.5f);
 
         NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
+
+        private bool isInCasino = false;
 
         public async override void Begin()
         {
@@ -93,6 +95,9 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 Instance.DiscordRichPresence.Status = $"Betting at the Casino";
                 worldManager.LockAndSetTime(12, 1);
                 worldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
+
+                isInCasino = true;
+
                 AudioSettings();
 
                 RequestIpl("vw_casino_main");
@@ -105,10 +110,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 worldManager.UnlockTime();
                 worldManager.UnlockAndUpdateWeather();
 
-                if (IsAudioSceneActive("DLC_VW_Casino_General"))
-                {
-                    StopAudioScene(AUDIO_SCENE);
-                }
+                isInCasino = false;
 
                 RemoveIpl("vw_casino_main");
                 CasinoTurnTable.Dispose();
@@ -143,33 +145,46 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             await Cache.PlayerPed.FadeIn();
         }
 
-        static async void AudioSettings()
+        async void AudioSettings()
         {
-            bool hasRequestedAudio = false;
-            int numberOfPasses = 0;
-
-            if (!IsAudioSceneActive("DLC_VW_Casino_General"))
-            {
-                StartAudioScene("DLC_VW_Casino_General");
-            }
-
-            while (!hasRequestedAudio)
-            {
-                await BaseScript.Delay(100);
-
-                if ((((RequestScriptAudioBank("DLC_VINEWOOD/CASINO_GENERAL", false)
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_01", false))
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_02", false))
-                    && RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_03", false))
-                    && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
+            void requestAudio() {
+                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_GENERAL", false))
                 {
-                    hasRequestedAudio = true;
+                    BaseScript.Delay(0);
+                }
+                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_01", false))
+                {
+                    BaseScript.Delay(0);
+                }
+                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_02", false))
+                {
+                    BaseScript.Delay(0);
+                }
+                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_03", false))
+                {
+                    BaseScript.Delay(0);
+                }
+            }
+            requestAudio();
+
+            while (isInCasino)
+            {
+                if (!IsStreamPlaying() && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
+                    PlayStreamFromPosition(945.85f, 41.58f, 75.82f);
+
+                if (IsStreamPlaying() && !IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
+                {
+                    StartAudioScene(AUDIO_STREAM_CASINO_GENERAL);
                 }
 
-                if (numberOfPasses > 5) break;
-
-                numberOfPasses++;
+                BaseScript.Delay(1000);
             }
+
+            if (IsStreamPlaying())
+                StopStream();
+
+            if (IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
+                StopAudioScene(AUDIO_STREAM_CASINO_GENERAL);
         }
     }
 }
