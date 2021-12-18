@@ -54,9 +54,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 if (markerEnter.IsInMarker)
                     NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to enter the {message}");
 
-                if (markerEnter.IsInMarker && Game.IsControlPressed(0, Control.Context))
+                if (markerEnter.IsInMarker && Game.IsControlJustPressed(0, Control.Context))
                 {
                     MovePlayer(true);
+                    await BaseScript.Delay(500);
                 }
             }
 
@@ -68,9 +69,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 if (markerExit.IsInMarker)
                     NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to leave the {message}");
 
-                if (markerExit.IsInMarker && Game.IsControlPressed(0, Control.Context))
+                if (markerExit.IsInMarker && Game.IsControlJustPressed(0, Control.Context))
                 {
                     MovePlayer();
+                    await BaseScript.Delay(500);
                 }
             }
 
@@ -103,6 +105,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 RequestIpl("vw_casino_main");
                 CasinoTurnTable.Init();
                 CasinoLuckyWheel.Init();
+                // CasinoAmbientPeds.Init();
             }
             else
             {
@@ -115,6 +118,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 RemoveIpl("vw_casino_main");
                 CasinoTurnTable.Dispose();
                 CasinoLuckyWheel.Dispose();
+                // CasinoAmbientPeds.Dispose();
             }
             Instance.DiscordRichPresence.Commit();
 
