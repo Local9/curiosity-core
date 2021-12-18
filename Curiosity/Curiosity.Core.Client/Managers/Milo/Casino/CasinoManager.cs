@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -22,6 +23,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         NativeUI.Marker markerExit;
 
         private bool isInCasino = false;
+        private bool showBigWin = false;
+        WorldManager WorldManager = WorldManager.GetModule();
 
         public async override void Begin()
         {
@@ -82,8 +85,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             await Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut(1000);
 
-            WorldManager worldManager = WorldManager.GetModule();
-
             Cache.PlayerPed.IsCollisionEnabled = false;
 
             Position pos = enterCasino ? posExit : posEnter;
@@ -93,12 +94,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             if (enterCasino)
             {
                 Instance.DiscordRichPresence.Status = $"Betting at the Casino";
-                worldManager.LockAndSetTime(12, 1);
-                worldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
+                WorldManager.LockAndSetTime(12, 1);
+                WorldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
 
                 isInCasino = true;
-
-                AudioSettings();
 
                 RequestIpl("vw_casino_main");
                 CasinoTurnTable.Init();
@@ -107,8 +106,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             else
             {
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos";
-                worldManager.UnlockTime();
-                worldManager.UnlockAndUpdateWeather();
+                WorldManager.UnlockTime();
+                WorldManager.UnlockAndUpdateWeather();
 
                 isInCasino = false;
 
@@ -141,50 +140,164 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             SetEntityCoords(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z, true, false, false, true);
 
             await BaseScript.Delay(1500);
+
+            if (isInCasino)
+            {
+                Instance.AttachTickHandler(RenderWalls);
+                Instance.AttachTickHandler(AudioSettings);
+            }
+
             await ScreenInterface.FadeIn(1000);
             await Cache.PlayerPed.FadeIn();
         }
 
-        async void AudioSettings()
+        private async Task AudioSettings()
         {
-            void requestAudio() {
-                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_GENERAL", false))
-                {
-                    BaseScript.Delay(0);
-                }
-                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_01", false))
-                {
-                    BaseScript.Delay(0);
-                }
-                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_02", false))
-                {
-                    BaseScript.Delay(0);
-                }
-                while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_03", false))
-                {
-                    BaseScript.Delay(0);
-                }
-            }
-            requestAudio();
-
-            while (isInCasino)
+            try
             {
-                if (!IsStreamPlaying() && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
-                    PlayStreamFromPosition(945.85f, 41.58f, 75.82f);
-
-                if (IsStreamPlaying() && !IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
+                async void requestAudio()
                 {
-                    StartAudioScene(AUDIO_STREAM_CASINO_GENERAL);
+                    while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_GENERAL", false))
+                    {
+                        await BaseScript.Delay(100);
+                    }
+                    while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_01", false))
+                    {
+                        await BaseScript.Delay(100);
+                    }
+                    while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_02", false))
+                    {
+                        await BaseScript.Delay(100);
+                    }
+                    while (!RequestScriptAudioBank("DLC_VINEWOOD/CASINO_SLOT_MACHINES_03", false))
+                    {
+                        await BaseScript.Delay(100);
+                    }
+                }
+                requestAudio();
+
+                while (isInCasino)
+                {
+                    Logger.Debug($"IsInCasino: {isInCasino}");
+
+                    if (!IsStreamPlaying() && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
+                        PlayStreamFromPosition(945.85f, 41.58f, 75.82f);
+
+                    if (IsStreamPlaying() && !IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
+                    {
+                        StartAudioScene(AUDIO_STREAM_CASINO_GENERAL);
+                    }
+
+                    await BaseScript.Delay(1000);
                 }
 
-                BaseScript.Delay(1000);
+                if (IsStreamPlaying())
+                    StopStream();
+
+                if (IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
+                    StopAudioScene(AUDIO_STREAM_CASINO_GENERAL);
+
+                Instance.DetachTickHandler(AudioSettings);
             }
+            catch(Exception ex)
+            {
+                Logger.Error(ex, "AudioSettings");
+                Instance.DetachTickHandler(AudioSettings);
+            }
+        }
 
-            if (IsStreamPlaying())
-                StopStream();
+        private async Task RenderWalls()
+        {
+            try
+            {
+                RequestStreamedTextureDict("Prop_Screen_Vinewood", false);
+                while (!HasStreamedTextureDictLoaded("Prop_Screen_Vinewood"))
+                {
+                    await BaseScript.Delay(100);
+                }
 
-            if (IsAudioSceneActive(AUDIO_STREAM_CASINO_GENERAL))
-                StopAudioScene(AUDIO_STREAM_CASINO_GENERAL);
+                Logger.Debug($"Prop_Screen_Vinewood: {HasStreamedTextureDictLoaded("Prop_Screen_Vinewood")}");
+
+                RegisterNamedRendertarget("casinoscreen_01", false);
+                LinkNamedRendertarget((uint)GetHashKey("vw_vwint01_video_overlay"));
+                int videoWallRenderTarget = GetNamedRendertargetRenderId("casinoscreen_01");
+                int lastUpdatedTvChannel = 0;
+
+                while (true)
+                {
+                    await BaseScript.Delay(0);
+
+                    if (!isInCasino)
+                    {
+                        ReleaseNamedRendertarget("casinoscreen_01");
+                        videoWallRenderTarget = 0;
+                        showBigWin = false;
+                        break;
+                    }
+
+                    if (videoWallRenderTarget != 0)
+                    {
+                        Logger.Debug($"videoWallRenderTarget: {videoWallRenderTarget}");
+
+                        int currentTime = GetGameTimer();
+                        if (showBigWin)
+                        {
+                            SetVideoWall("CASINO_WIN_PL", true);
+                            lastUpdatedTvChannel = GetGameTimer() - 33666;
+                            showBigWin = false;
+
+                            Instance.DetachTickHandler(RenderWalls);
+                        }
+                        else
+                        {
+                            if ((currentTime - lastUpdatedTvChannel) >= 42666)
+                            {
+                                string casinoVideo = "CASINO_DIA_PL";
+                                bool isWinter = await WorldManager.IsWinter();
+                                bool isHalloween = await WorldManager.IsHalloween();
+
+                                if (isWinter)
+                                    casinoVideo = "CASINO_SNWFLK_PL";
+
+                                if (isHalloween)
+                                    casinoVideo = "CASINO_HLW_PL";
+
+                                SetVideoWall(casinoVideo);
+                                lastUpdatedTvChannel = currentTime;
+                            }
+                        }
+
+                        SetTextRenderId(videoWallRenderTarget);
+                        SetScriptGfxDrawOrder(4);
+                        SetScriptGfxDrawBehindPausemenu(true);
+                        DrawInteractiveSprite("Prop_Screen_Vinewood", "BG_Wall_Colour_4x4", 0.25f, 0.5f, 0.5f, 1.0f, 0.0f, 255, 255, 255, 255);
+                        DrawTvChannel(0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 255, 255, 255, 255);
+                        SetTextRenderId(GetDefaultScriptRendertargetRenderId());
+                    }
+                    else
+                    {
+                        videoWallRenderTarget = GetNamedRendertargetRenderId("casinoscreen_01");
+                        await BaseScript.Delay(100);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "RenderWalls");
+                Instance.DetachTickHandler(RenderWalls);
+            }
+        }
+
+        void SetVideoWall(string playlist, bool forceRefresh = false)
+        {
+            SetTvChannelPlaylist(0, playlist, true);
+            SetTvAudioFrontend(false);
+            SetTvVolume(-100.0f);
+
+            if (forceRefresh)
+                SetTvChannel(-1);
+
+            SetTvChannel(0);
         }
     }
 }

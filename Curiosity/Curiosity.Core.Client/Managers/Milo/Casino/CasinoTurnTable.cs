@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -8,7 +9,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
     class CasinoTurnTable
     {
         static Vehicle vehicle;
-        static string vehicleModel;
+        static string vehicleModel = string.Empty;
         static int platformHandle;
         static float heading;
 
@@ -16,7 +17,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
         internal static async void Init()
         {
-            vehicleModel = await EventSystem.GetModule().Request<dynamic>("casino:vehicle");
             PluginManager.AttachTickHandler(OnTurnTableTask);
         }
 
@@ -52,12 +52,16 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             RemoveVehicle();
             await BaseScript.Delay(100);
             // update if the server changed it
-            vehicleModel = await EventSystem.GetModule().Request<dynamic>("casino:vehicle");
+
+            if (string.IsNullOrEmpty(vehicleModel))
+                vehicleModel = await EventSystem.GetModule().Request<dynamic>("casino:vehicle");
+
+            Logger.Debug($"Vehicle Model: {vehicleModel}");
 
             int veh;
             int loadChecks = 0;
             Model model = new Model(vehicleModel);
-            model.Request(10000);
+            await model.Request(10000);
 
             while (!model.IsLoaded)
             {

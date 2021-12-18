@@ -104,6 +104,18 @@ namespace Curiosity.Core.Client.Managers
             ToggleDispatch(false); // turn off all dispatch
         }
 
+        public async Task<bool> IsWinter()
+        {
+            bool isWinter = await EventSystem.Request<bool>("weather:is:winter");
+            return isWinter;
+        }
+
+        public async Task<bool> IsHalloween()
+        {
+            bool isHalloween = await EventSystem.Request<bool>("weather:is:halloween");
+            return isHalloween;
+        }
+
         public void LockAndSetTime(int hour, int minute)
         {
             timeLockHour = hour;

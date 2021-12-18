@@ -69,6 +69,11 @@ namespace Curiosity.Core.Server.Managers
                 return weather;
             }));
 
+            EventSystem.Attach("weather:is:winter", new EventCallback(metadata =>
+            {
+                return WeatherData.GetCurrentSeason() == WeatherSeason.WINTER;
+            }));
+
             EventSystem.Attach("weather:is:halloween", new EventCallback(metadata =>
             {
                 return WeatherData.IsHalloween();
