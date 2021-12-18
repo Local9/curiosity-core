@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
@@ -178,8 +179,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
                 while (isInCasino)
                 {
-                    Logger.Debug($"IsInCasino: {isInCasino}");
-
                     if (!IsStreamPlaying() && LoadStream("casino_walla", "DLC_VW_Casino_Interior_Sounds"))
                         PlayStreamFromPosition(945.85f, 41.58f, 75.82f);
 
@@ -210,35 +209,31 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         {
             try
             {
+                int attempts = 0;
                 RequestStreamedTextureDict("Prop_Screen_Vinewood", false);
                 while (!HasStreamedTextureDictLoaded("Prop_Screen_Vinewood"))
                 {
                     await BaseScript.Delay(100);
+                    RequestStreamedTextureDict("Prop_Screen_Vinewood", false);
+                    if (attempts > 10) break;
+                    attempts++;
                 }
 
-                Logger.Debug($"Prop_Screen_Vinewood: {HasStreamedTextureDictLoaded("Prop_Screen_Vinewood")}");
-
                 RegisterNamedRendertarget("casinoscreen_01", false);
-                LinkNamedRendertarget((uint)GetHashKey("vw_vwint01_video_overlay"));
+                uint renderTarget = (uint)GetHashKey("vw_vwint01_video_overlay");
+                LinkNamedRendertarget(renderTarget);
                 int videoWallRenderTarget = GetNamedRendertargetRenderId("casinoscreen_01");
                 int lastUpdatedTvChannel = 0;
+                string casinoVideo = "CASINO_SNWFLK_PL";
+                bool isWinter = await WorldManager.IsWinter();
+                bool isHalloween = await WorldManager.IsHalloween();
 
-                while (true)
+                while (isInCasino)
                 {
                     await BaseScript.Delay(0);
 
-                    if (!isInCasino)
-                    {
-                        ReleaseNamedRendertarget("casinoscreen_01");
-                        videoWallRenderTarget = 0;
-                        showBigWin = false;
-                        break;
-                    }
-
                     if (videoWallRenderTarget != 0)
                     {
-                        Logger.Debug($"videoWallRenderTarget: {videoWallRenderTarget}");
-
                         int currentTime = GetGameTimer();
                         if (showBigWin)
                         {
@@ -252,10 +247,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                         {
                             if ((currentTime - lastUpdatedTvChannel) >= 42666)
                             {
-                                string casinoVideo = "CASINO_DIA_PL";
-                                bool isWinter = await WorldManager.IsWinter();
-                                bool isHalloween = await WorldManager.IsHalloween();
-
                                 if (isWinter)
                                     casinoVideo = "CASINO_SNWFLK_PL";
 
@@ -280,6 +271,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                         await BaseScript.Delay(100);
                     }
                 }
+
+                ReleaseNamedRendertarget("casinoscreen_01");
+                videoWallRenderTarget = 0;
+                showBigWin = false;
             }
             catch (Exception ex)
             {
@@ -290,6 +285,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
         void SetVideoWall(string playlist, bool forceRefresh = false)
         {
+            Logger.Debug($"playlist: {playlist}");
             SetTvChannelPlaylist(0, playlist, true);
             SetTvAudioFrontend(false);
             SetTvVolume(-100.0f);

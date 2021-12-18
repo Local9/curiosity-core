@@ -30,8 +30,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         {
             if (!DoesEntityExist(platformHandle))
             {
+                await BaseScript.Delay(500);
                 platformHandle = GetClosestObjectOfType(1100f, 220f, -50f, 1f, (uint)GetHashKey("vw_prop_vw_casino_podium_01a"), false, false, false);
-
                 CreateVehicleForDisplay();
             }
             else

@@ -107,12 +107,18 @@ namespace Curiosity.Core.Client.Managers
         public async Task<bool> IsWinter()
         {
             bool isWinter = await EventSystem.Request<bool>("weather:is:winter");
+
+            Logger.Debug($"isWinter: {isWinter}");
+
             return isWinter;
         }
 
         public async Task<bool> IsHalloween()
         {
             bool isHalloween = await EventSystem.Request<bool>("weather:is:halloween");
+
+            Logger.Debug($"isHalloween: {isHalloween}");
+
             return isHalloween;
         }
 
