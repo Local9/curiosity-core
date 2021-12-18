@@ -2,6 +2,7 @@
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
@@ -23,7 +24,6 @@ namespace Curiosity.Core.Client.Environment.Entities
         private Player GamePlayer => Game.Player;
         private Ped PlayerPed => Player.Character;
         private Ped GamePlayerPed => GamePlayer.Character;
-        private Vehicle Vehicle;
         public int PedHandle;
         public int PlayerHandle;
         public bool IsReady;
@@ -85,12 +85,6 @@ namespace Curiosity.Core.Client.Environment.Entities
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
 
                 UpdateBlipString();
-            }
-
-            if (PlayerPed.IsInVehicle())
-            {
-                if (PlayerPed.CurrentVehicle.Driver == PlayerPed)
-                    Vehicle = PlayerPed.CurrentVehicle;
             }
 
             Logger.Debug($"Player '{Player.Name}' Created");
@@ -217,64 +211,79 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         private void UpdatePlayerCollisionStates() // need to change this to work differently
         {
-            bool playerInVehicle = PlayerPed.IsInVehicle();
-            bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
+            Vehicle gamePlayerVehicle = Game.PlayerPed.CurrentVehicle;
+            Vehicle gamePlayerVehicleHooked = Game.PlayerPed.CurrentVehicle;
 
-            if (IsPassive || playerOptions.IsPassive)
+            Vehicle otherVehicle = PlayerPed.CurrentVehicle;
+            Vehicle otherHookedVehicle = otherVehicle?.GetHookedVehicle();
+
+            bool disableCollision = IsPassive || playerOptions.IsPassive;
+
+            int alpha = disableCollision && !GetIsTaskActive(PlayerPed.Handle, 2) && gamePlayerVehicle != otherVehicle ? 180 : 255;
+            PlayerPed.SetAlpha(alpha);
+            otherVehicle?.SetAlpha(alpha);
+            otherHookedVehicle?.SetAlpha(alpha);
+
+            if (disableCollision)
             {
-                if (Vector3.Distance(Game.PlayerPed.Position, PlayerPed.Position) < 15f)
+                if (otherVehicle != null &&
+                        IsPedInVehicle(otherVehicle.Handle, PlayerPed.Handle, false) &&
+                        otherVehicle.GetPedOnSeat(VehicleSeat.Driver) != PlayerPed)
                 {
-                    if (playerInVehicle)
-                    {
-                        PlayerPed.CurrentVehicle.Opacity = 200;
-                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, false);
-                    }
-
-                    if (currentPlayerInVehicle)
-                    {
-                        GamePlayerPed.CurrentVehicle.Opacity = 200;
-                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, false);
-                    }
-
-                    if (playerInVehicle && currentPlayerInVehicle)
-                    {
-                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, false);
-                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
-                    }
+                    // do nothing
                 }
                 else
                 {
-                    if (playerInVehicle)
-                    {
-                        PlayerPed.CurrentVehicle.ResetOpacity();
-                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
-                    }
+                    // Local Player vs Other Player
+                    GamePlayerPed.DisableCollisionsThisFrame(PlayerPed);
+                    // Local Player vs Other Vehicle (if present)
+                    GamePlayerPed.DisableCollisionsThisFrame(otherVehicle);
+                    // Local Player vs Other Hooked (if present)
+                    GamePlayerPed.DisableCollisionsThisFrame(otherHookedVehicle);
 
-                    if (currentPlayerInVehicle)
-                    {
-                        GamePlayerPed.CurrentVehicle.ResetOpacity();
-                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
-                    }
+                    // Local Vehicle vs Other Player
+                    gamePlayerVehicle?.DisableCollisionsThisFrame(PlayerPed);
+                    // Local Vehicle vs Other Vehicle (if present)
+                    gamePlayerVehicle?.DisableCollisionsThisFrame(otherVehicle);
+                    // Local Vehicle vs Other Hooked (if present)
+                    gamePlayerVehicle?.DisableCollisionsThisFrame(otherHookedVehicle);
 
-                    if (playerInVehicle && currentPlayerInVehicle)
-                    {
-                        GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed.CurrentVehicle, true);
-                        PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
-                    }
-                }
-            }
-            else
-            {
-                if (playerInVehicle && PlayerPed.CurrentVehicle.Opacity < 230)
-                {
-                    PlayerPed.CurrentVehicle.ResetOpacity();
-                    PlayerPed.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
-                }
+                    // Local Hooked vs Other Player
+                    gamePlayerVehicleHooked?.DisableCollisionsThisFrame(PlayerPed);
+                    // Local Hooked vs Other Vehicle (if present)
+                    gamePlayerVehicleHooked?.DisableCollisionsThisFrame(otherVehicle);
+                    // Local Hooked vs Other Hooked (if present)
+                    gamePlayerVehicleHooked?.DisableCollisionsThisFrame(otherHookedVehicle);
 
-                if (currentPlayerInVehicle && GamePlayerPed.CurrentVehicle.Opacity < 230)
-                {
-                    GamePlayerPed.CurrentVehicle.ResetOpacity();
-                    GamePlayerPed.CurrentVehicle.SetNoCollision(PlayerPed, true);
+
+                    // Other Player vs Local Player
+                    PlayerPed.DisableCollisionsThisFrame(GamePlayerPed);
+                    // Other Player vs Local Vehicle (if present)
+                    PlayerPed.DisableCollisionsThisFrame(gamePlayerVehicle);
+                    // Other Player vs Local Hooked (if present)
+                    PlayerPed.DisableCollisionsThisFrame(gamePlayerVehicleHooked);
+                    // Disable cam collision for other ped
+                    DisableCamCollisionForEntity(PlayerPed.Handle);
+
+                    // Other Vehicle vs Local Player
+                    otherVehicle?.DisableCollisionsThisFrame(GamePlayerPed);
+                    // Other Vehicle vs Local Vehicle (if present)
+                    otherVehicle?.DisableCollisionsThisFrame(gamePlayerVehicle);
+                    // Other Vehicle vs Local Hooked (if present)
+                    otherVehicle?.DisableCollisionsThisFrame(gamePlayerVehicleHooked);
+                    // Disable cam collision for other vehicle
+                    if (otherVehicle != null)
+                        DisableCamCollisionForEntity(otherVehicle.Handle);
+
+                    // Other Hooked vs Local Player
+                    otherHookedVehicle?.DisableCollisionsThisFrame(GamePlayerPed);
+                    // Other Hooked vs Local Vehicle (if present)
+                    otherHookedVehicle?.DisableCollisionsThisFrame(gamePlayerVehicle);
+                    // Other Hooked vs Local Hooked (if present)
+                    otherHookedVehicle?.DisableCollisionsThisFrame(gamePlayerVehicleHooked);
+                    // Disable cam collision for other vehicle trailer if hooked
+                    if (otherHookedVehicle != null)
+                        DisableCamCollisionForEntity(otherHookedVehicle.Handle);
                 }
             }
         }

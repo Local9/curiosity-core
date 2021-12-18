@@ -19,6 +19,63 @@ namespace Curiosity.Core.Client.Extensions
         private const string BLIP_PERSONAL_BOAT = "blipPersonalBoat";
         private const string BLIP_PERSONAL_HELICOPTER = "blipPersonalHelicopter";
 
+        /// <summary>
+        /// Gets the vehicle that is being hooked.
+        /// </summary>
+        /// <param name="vehicle">The cargobob, truck or towtruck.</param>
+        /// <returns>The Vehicle that is being hooked, null if there is nothing.</returns>
+        internal static Vehicle GetHookedVehicle(this Vehicle vehicle)
+        {
+            // If the vehicle is invalid, return
+            if (vehicle == null || !vehicle.Exists())
+            {
+                return null;
+            }
+
+            // Start by trying to get the vehicle attached as a trailer
+            int trailer = 0;
+            if (API.GetVehicleTrailerVehicle(vehicle.Handle, ref trailer))
+            {
+                return Entity.FromHandle(trailer) as Vehicle;
+            }
+
+            // Try to get a hooked cargobob vehicle and return it if there is somehing
+            Vehicle cargobobHook = Entity.FromHandle(API.GetVehicleAttachedToCargobob(vehicle.Handle)) as Vehicle;
+            if (cargobobHook != null && cargobobHook.Exists())
+            {
+                return cargobobHook;
+            }
+
+            // Then, try to get it as a tow truck and return it if it does
+            Vehicle towHooked = Entity.FromHandle(API.GetEntityAttachedToTowTruck(vehicle.Handle)) as Vehicle;
+            if (towHooked != null && towHooked.Exists())
+            {
+                return towHooked;
+            }
+
+            // If we got here, just send nothing
+            return null;
+        }
+
+        public static void DisableCollisionsThisFrame(this Entity one, Entity two, bool print = false)
+        {
+            // If one of the entities is null, return
+            if (one == null || two == null)
+            {
+                return;
+            }
+
+            // Otherwise, just disable the collisions
+            API.SetEntityNoCollisionEntity(one.Handle, two.Handle, true);
+            API.SetEntityNoCollisionEntity(two.Handle, one.Handle, true);
+
+            // If we need to print the handles of the entities, do it
+            if (print)
+            {
+                Logger.Debug($"Disabled collisions between {one.Handle} and {two.Handle}");
+            }
+        }
+
         internal static Vehicle GetVehicleInFront(this Vehicle vehicle, float distance = 5f, float radius = 1.5f)
         {
             try
