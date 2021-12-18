@@ -222,7 +222,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             bool disableCollision = IsPassive || playerOptions.IsPassive;
 
             int alpha = disableCollision && !GetIsTaskActive(PlayerPed.Handle, (int)eTaskTypeIndex.CTaskExitVehicle) && gamePlayerVehicle != otherVehicle ? 180 : 255;
-            PlayerPed.SetAlpha(alpha);
+            // PlayerPed.SetAlpha(alpha);
             otherVehicle?.SetAlpha(alpha);
             otherHookedVehicle?.SetAlpha(alpha);
 
