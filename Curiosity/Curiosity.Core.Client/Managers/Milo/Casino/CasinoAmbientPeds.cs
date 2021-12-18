@@ -23,6 +23,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                     isRunning = true;
                     Logger.Info("Init Ambient Peds");
 
+                    // These are all in the wrong location
+
                     Ped ped = await CreateCasinoPed(PedType.PED_TYPE_CIVFEMALE, "U_F_M_CasinoCash_01", new Vector3(950.214f, 33.151f, 70.839f), 57.052f, "WORLD_HUMAN_STAND_IMPATIENT");
                     peds.Add(ped);
                     ped = await CreateCasinoPed(PedType.PED_TYPE_CIVMALE, "S_M_Y_Doorman_01", new Vector3(955.619f, 70.179f, 69.433f), 190.937f, "WORLD_HUMAN_STAND_IMPATIENT");
