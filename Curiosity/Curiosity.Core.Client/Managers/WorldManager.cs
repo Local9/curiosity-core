@@ -365,7 +365,7 @@ namespace Curiosity.Core.Client.Managers
 
             vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 10f)).ToList();
 
-            vehiclesToLock.ForEach(vehicle =>
+            vehiclesToLock.ForEach(async vehicle =>
             {
                 bool serverSpawned = vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
@@ -373,9 +373,22 @@ namespace Curiosity.Core.Client.Managers
                 {
                     vehicle.LockStatus = VehicleLockStatus.Unlocked;
                 }
+
+                if (!serverSpawned && !vehicle.LockStatus.Equals(VehicleLockStatus.LockedForPlayer))
+                {
+                    vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+
+                    if (vehicle.Driver == Game.PlayerPed)
+                    {
+                        Game.PlayerPed.Task.WarpOutOfVehicle(vehicle);
+                        await BaseScript.Delay(100);
+                        vehicle.Dispose();
+                        Notify.Info($"Vehicle was not created via the server and has been removed.");
+                    }
+                }
             });
 
-            await BaseScript.Delay(500);
+            await BaseScript.Delay(1000);
         }
 
         [TickHandler(SessionWait = true)]

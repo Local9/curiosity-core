@@ -76,8 +76,8 @@ namespace Curiosity.Core.Server.Managers
 
                         bool spawnedServer = entity.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
 
-                        if (!spawnedServer)
-                            SetVehicleDoorsLocked(handle, 3);
+                        //if (!spawnedServer)
+                        //    SetVehicleDoorsLocked(handle, 3);
                     }
 
                     if (entityType == 3)
