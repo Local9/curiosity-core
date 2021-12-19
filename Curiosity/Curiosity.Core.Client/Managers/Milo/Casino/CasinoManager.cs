@@ -106,6 +106,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoTurnTable.Init();
                 CasinoLuckyWheel.Init();
                 // CasinoAmbientPeds.Init();
+                Games.CasinoInsideTrackManager.GetModule().Init();
             }
             else
             {
@@ -119,6 +120,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoTurnTable.Dispose();
                 CasinoLuckyWheel.Dispose();
                 // CasinoAmbientPeds.Dispose();
+                Games.CasinoInsideTrackManager.GetModule().Dispose();
             }
             Instance.DiscordRichPresence.Commit();
 
@@ -228,7 +230,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 LinkNamedRendertarget(renderTarget);
                 int videoWallRenderTarget = GetNamedRendertargetRenderId("casinoscreen_01");
                 int lastUpdatedTvChannel = 0;
-                string casinoVideo = "CASINO_SNWFLK_PL";
+                string casinoVideo = "CASINO_DIA_PL";
                 bool isWinter = await WorldManager.IsWinter();
                 bool isHalloween = await WorldManager.IsHalloween();
 

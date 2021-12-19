@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,12 +37,12 @@ namespace Curiosity.Core.Client.Utils
 
         public static void Notification(string message, bool blink = false, bool saveToBrief = false)
         {
-            API.SetNotificationTextEntry("CELL_EMAIL_BCON");
+            SetNotificationTextEntry("CELL_EMAIL_BCON");
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
-                API.AddTextComponentSubstringPlayerName(s);
+                AddTextComponentSubstringPlayerName(s);
             }
-            API.DrawNotification(blink, saveToBrief);
+            DrawNotification(blink, saveToBrief);
         }
 
         // source: https://github.com/TomGrobbe/vMenu/blob/master/vMenu/CommonFunctions.cs
@@ -50,15 +50,15 @@ namespace Curiosity.Core.Client.Utils
         {
             // Create the window title string.
             var spacer = "\t";
-            API.AddTextEntry($"{API.GetCurrentResourceName().ToUpper()}_WINDOW_TITLE", $"{windowTitle ?? "Enter"}:{spacer}(MAX {maxInputLength.ToString()} Characters)");
+            AddTextEntry($"{GetCurrentResourceName().ToUpper()}_WINDOW_TITLE", $"{windowTitle ?? "Enter"}:{spacer}(MAX {maxInputLength.ToString()} Characters)");
 
             // Display the input box.
-            API.DisplayOnscreenKeyboard(1, $"{API.GetCurrentResourceName().ToUpper()}_WINDOW_TITLE", "", defaultText ?? "", "", "", "", maxInputLength);
+            DisplayOnscreenKeyboard(1, $"{GetCurrentResourceName().ToUpper()}_WINDOW_TITLE", "", defaultText ?? "", "", "", "", maxInputLength);
             await BaseScript.Delay(0);
             // Wait for a result.
             while (true)
             {
-                int keyboardStatus = API.UpdateOnscreenKeyboard();
+                int keyboardStatus = UpdateOnscreenKeyboard();
 
                 switch (keyboardStatus)
                 {
@@ -66,7 +66,7 @@ namespace Curiosity.Core.Client.Utils
                     case 2: // cancelled
                         return null;
                     case 1: // finished editing
-                        return API.GetOnscreenKeyboardResult();
+                        return GetOnscreenKeyboardResult();
                     default:
                         await BaseScript.Delay(0);
                         break;
@@ -76,29 +76,29 @@ namespace Curiosity.Core.Client.Utils
 
         public static async Task RequestModel(uint model)
         {
-            if (!API.IsModelValid(model))
+            if (!IsModelValid(model))
                 return;
 
             var start = DateTime.Now;
 
-            while (!API.HasModelLoaded(model))
+            while (!HasModelLoaded(model))
             {
-                API.RequestModel(model);
+                RequestModel(model);
                 await BaseScript.Delay(10);
             }
         }
 
         public static async Task RequestCollision(uint model)
         {
-            if (!API.IsModelValid(model))
+            if (!IsModelValid(model))
                 return;
 
             var start = DateTime.Now;
             var timeout = start + TimeSpan.FromSeconds(0.5);
 
-            while (!API.HasCollisionForModelLoaded(model) && DateTime.Now < timeout)
+            while (!HasCollisionForModelLoaded(model) && DateTime.Now < timeout)
             {
-                API.RequestCollisionForModel(model);
+                RequestCollisionForModel(model);
                 await BaseScript.Delay(10);
             }
         }
@@ -107,37 +107,37 @@ namespace Curiosity.Core.Client.Utils
         {
             var start = DateTime.Now;
 
-            while (!API.HasNamedPtfxAssetLoaded(name))
+            while (!HasNamedPtfxAssetLoaded(name))
             {
-                API.RequestNamedPtfxAsset(name);
+                RequestNamedPtfxAsset(name);
                 await BaseScript.Delay(10);
             }
         }
 
         public static async Task NetworkRequestControl(int entity, int timeoutSeconds = 1)
         {
-            if (!API.DoesEntityExist(entity))
+            if (!DoesEntityExist(entity))
                 return;
 
             var start = DateTime.Now;
             var timeout = start + TimeSpan.FromSeconds(timeoutSeconds);
 
-            while (!API.NetworkHasControlOfEntity(entity) && DateTime.Now < timeout)
+            while (!NetworkHasControlOfEntity(entity) && DateTime.Now < timeout)
             {
-                API.NetworkRequestControlOfEntity(entity);
+                NetworkRequestControlOfEntity(entity);
                 await BaseScript.Delay(100);
             }
         }
 
         public static int GetPlayerPedOrVehicle()
         {
-            var player = API.GetPlayerPed(-1);
-            return API.IsPedInAnyVehicle(player, false) ? API.GetVehiclePedIsIn(player, false) : player;
+            var player = GetPlayerPed(-1);
+            return IsPedInAnyVehicle(player, false) ? GetVehiclePedIsIn(player, false) : player;
         }
 
         public static bool IsPlayerAiming()
         {
-            return API.IsPlayerFreeAiming(API.PlayerId()) || API.IsControlPressed(0, 25); // INPUT_AIM
+            return IsPlayerFreeAiming(PlayerId()) || IsControlPressed(0, 25); // INPUT_AIM
         }
 
         public static bool GetClosestEntity(IEnumerable<int> entities, out int closest)
@@ -145,11 +145,11 @@ namespace Curiosity.Core.Client.Utils
             closest = -1;
             bool found = false;
             float minDist = float.MaxValue;
-            var coords = API.GetEntityCoords(API.GetPlayerPed(-1), false);
+            var coords = GetEntityCoords(GetPlayerPed(-1), false);
 
             foreach (var entity in entities)
             {
-                var pos = API.GetEntityCoords(entity, API.IsEntityAPed(entity));
+                var pos = GetEntityCoords(entity, IsEntityAPed(entity));
                 var dist = coords.DistanceToSquared(pos);
 
                 if (dist < minDist)
@@ -165,10 +165,10 @@ namespace Curiosity.Core.Client.Utils
 
         public static void GetEntityMinMaxZ(int entity, out float minZ, out float maxZ)
         {
-            var model = (uint)API.GetEntityModel(entity);
+            var model = (uint)GetEntityModel(entity);
             var min = Vector3.Zero;
             var max = Vector3.Zero;
-            API.GetModelDimensions(model, ref min, ref max);
+            GetModelDimensions(model, ref min, ref max);
 
             minZ = min.Z;
             maxZ = max.Z;
@@ -182,18 +182,18 @@ namespace Curiosity.Core.Client.Utils
 
         public static float GetEntityHeightAboveGround(int entity)
         {
-            var coords = API.GetEntityCoords(entity, false);
+            var coords = GetEntityCoords(entity, false);
             float wheight = 0f;
 
-            if (API.GetWaterHeightNoWaves(coords.X, coords.Y, coords.Z, ref wheight))
+            if (GetWaterHeightNoWaves(coords.X, coords.Y, coords.Z, ref wheight))
                 return coords.Z - wheight;
             else
-                return API.GetEntityHeightAboveGround(entity);
+                return GetEntityHeightAboveGround(entity);
         }
 
         public static Vector3 GetEntityTopCoords(int entity)
         {
-            var coords = API.GetEntityCoords(entity, API.IsEntityAPed(entity));
+            var coords = GetEntityCoords(entity, IsEntityAPed(entity));
             GetEntityMinMaxZ(entity, out float minZ, out float maxZ);
             coords.Z += maxZ;
             return coords;
@@ -206,35 +206,35 @@ namespace Curiosity.Core.Client.Utils
 
             if (scaleLeverage)
             {
-                var model = (uint)API.GetEntityModel(entity);
-                var isHeli = API.IsThisModelAHeli(model);
-                API.GetModelDimensions(model, ref min, ref max);
+                var model = (uint)GetEntityModel(entity);
+                var isHeli = IsThisModelAHeli(model);
+                GetModelDimensions(model, ref min, ref max);
             }
 
             if (pitch != 0)
             {
-                API.ApplyForceToEntity(entity, 1, 0f, 0f, pitch, 0f, max.Y, 0f, -1, true, true, true, false, false);
-                API.ApplyForceToEntity(entity, 1, 0f, 0f, -pitch, 0f, min.Y, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, 0f, pitch, 0f, max.Y, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, 0f, -pitch, 0f, min.Y, 0f, -1, true, true, true, false, false);
             }
 
             if (roll != 0)
             {
-                API.ApplyForceToEntity(entity, 1, 0f, 0f, roll, max.X, 0f, 0f, -1, true, true, true, false, false);
-                API.ApplyForceToEntity(entity, 1, 0f, 0f, -roll, min.X, 0f, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, 0f, roll, max.X, 0f, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, 0f, -roll, min.X, 0f, 0f, -1, true, true, true, false, false);
             }
 
             if (yaw != 0)
             {
-                API.ApplyForceToEntity(entity, 1, 0f, yaw, 0f, max.X, 0f, 0f, -1, true, true, true, false, false);
-                API.ApplyForceToEntity(entity, 1, 0f, -yaw, 0f, min.X, 0f, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, yaw, 0f, max.X, 0f, 0f, -1, true, true, true, false, false);
+                ApplyForceToEntity(entity, 1, 0f, -yaw, 0f, min.X, 0f, 0f, -1, true, true, true, false, false);
             }
         }
 
         public static bool EnsurePlayerIsInVehicle(out int player, out int vehicle, bool notification = true)
         {
             vehicle = 0;
-            player = API.GetPlayerPed(-1);
-            if (!API.IsPedInAnyVehicle(player, true))
+            player = GetPlayerPed(-1);
+            if (!IsPedInAnyVehicle(player, true))
             {
                 if (notification)
                     Notification("Player is not in a vehicle");
@@ -242,7 +242,7 @@ namespace Curiosity.Core.Client.Utils
                 return false;
             }
 
-            vehicle = API.GetVehiclePedIsIn(player, false);
+            vehicle = GetVehiclePedIsIn(player, false);
             return true;
         }
 
@@ -251,7 +251,7 @@ namespace Curiosity.Core.Client.Utils
             if (!EnsurePlayerIsInVehicle(out player, out vehicle, notification))
                 return false;
 
-            var driver = API.GetPedInVehicleSeat(vehicle, -1);
+            var driver = GetPedInVehicleSeat(vehicle, -1);
 
             if (driver != player)
             {
@@ -268,15 +268,15 @@ namespace Curiosity.Core.Client.Utils
         {
             wp = Vector3.Zero;
 
-            if (!API.IsWaypointActive())
+            if (!IsWaypointActive())
                 return false;
 
-            wp = API.GetBlipInfoIdCoord(API.GetFirstBlipInfoId(8));
+            wp = GetBlipInfoIdCoord(GetFirstBlipInfoId(8));
 
             if (adjust)
             {
                 var adjustedWp = Vector3.Zero;
-                if (API.GetClosestVehicleNode(wp.X, wp.Y, wp.Z, ref adjustedWp, 1, 100f, 2.5f))
+                if (GetClosestVehicleNode(wp.X, wp.Y, wp.Z, ref adjustedWp, 1, 100f, 2.5f))
                     wp = adjustedWp;
             }
 
@@ -287,8 +287,8 @@ namespace Curiosity.Core.Client.Utils
         {
             var objs = new List<int>();
             int obj = 0;
-            int handle = API.FindFirstObject(ref obj);
-            var coords = API.GetEntityCoords(API.GetPlayerPed(-1), true);
+            int handle = FindFirstObject(ref obj);
+            var coords = GetEntityCoords(GetPlayerPed(-1), true);
 
             if (handle == -1)
                 return objs;
@@ -297,23 +297,23 @@ namespace Curiosity.Core.Client.Utils
             {
                 objs.Add(obj);
 
-            } while (API.FindNextObject(handle, ref obj));
+            } while (FindNextObject(handle, ref obj));
 
-            API.EndFindObject(handle);
+            EndFindObject(handle);
             return objs;
         }
 
         public static void GetAimCoords(out Vector3 position, out Vector3 target, float distance)
         {
-            position = API.GetGameplayCamCoords();
-            var rot = API.GetGameplayCamRot(2);
+            position = GetGameplayCamCoords();
+            var rot = GetGameplayCamRot(2);
             var forward = RotationToDirection(rot) * distance;
             target = position + forward;
         }
 
         public static void GetCamHorizontalForwardAndRightVectors(out Vector3 forward, out Vector3 right)
         {
-            var heading = API.GetGameplayCamRot(2).Z;
+            var heading = GetGameplayCamRot(2).Z;
             var headingRad = heading * (Math.PI / 180f);
             forward = new Vector3(-(float)Math.Sin(headingRad), (float)Math.Cos(headingRad), 0f);
             right = new Vector3(forward.Y, -forward.X, 0f);
@@ -351,16 +351,56 @@ namespace Curiosity.Core.Client.Utils
 
         public static Vector3 GetRandomSpawnCoordsInRange(Vector3 center, float minRange, float maxRange, out float heading)
         {
-            heading = API.GetRandomFloatInRange(0f, 360f);
+            heading = GetRandomFloatInRange(0f, 360f);
             var headingRad = heading * (Math.PI / 180f);
-            var distance = API.GetRandomFloatInRange(minRange, maxRange);
+            var distance = GetRandomFloatInRange(minRange, maxRange);
             var offset = new Vector3(-(float)Math.Sin(headingRad), (float)Math.Cos(headingRad), 0) * distance;
 
             float groundZ = 0f;
-            if (API.GetGroundZFor_3dCoord(center.X + offset.X, center.Y + offset.Y, center.Z, ref groundZ, false))
+            if (GetGroundZFor_3dCoord(center.X + offset.X, center.Y + offset.Y, center.Z, ref groundZ, false))
                 offset.Z = groundZ - center.Z;
 
             return center + offset;
+        }
+
+        public static bool IsNamedRenderTargetRegistered(string target)
+        {
+            if (!string.IsNullOrEmpty(target))
+            {
+                if (!IsNamedRendertargetRegistered(target))
+                {
+                    RegisterNamedRendertarget(target, false);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool LinkNamedRenderTarget(uint target)
+        {
+            if (target != 0)
+            {
+                if (!IsNamedRendertargetLinked(target))
+                {
+                    LinkNamedRendertarget(target);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsNamedAndLinkedTargetRegistered(string target, uint hash)
+        {
+            return IsNamedRenderTargetRegistered(target) && LinkNamedRenderTarget(hash);
+        }
+
+        public static int GetNamedRenderTargetRenderId(string target)
+        {
+            if (!string.IsNullOrEmpty(target))
+            {
+                return GetNamedRendertargetRenderId(target);
+            }
+            return -1;
         }
     }
 }
