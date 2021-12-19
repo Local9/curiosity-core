@@ -101,12 +101,8 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains(".link/")
                 || message.Content.Contains("ramlucky.xyz")
                 || message.Content.Contains("discord.shop")
-                || message.Content.Contains("free discord nitro")
-                || message.Content.Contains("Free Discord Nitro")
                 || message.Content.Contains(".com/airdrop")
                 || message.Content.Contains("steam/gifts")
-                || message.Content.Contains("Get Discord Nitro")
-                || message.Content.Contains("offer is valid")
                 )
             {
                 deleteMessage = true;
