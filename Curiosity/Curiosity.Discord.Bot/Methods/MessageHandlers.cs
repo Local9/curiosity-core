@@ -90,7 +90,7 @@ namespace Curiosity.LifeV.Bot.Methods
 
         public async Task DeleteAnythingWithTheWordNitro(SocketUserMessage message, SocketCommandContext context)
         {
-            List<string> msgItems = message.Content.Split(' ').ToList<string>();
+            List<string> msgItems = message.Content.ToLower().Split(' ').ToList<string>();
 
             bool deleteMessage = false;
 
