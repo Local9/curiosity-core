@@ -106,7 +106,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoTurnTable.Init();
                 CasinoLuckyWheel.Init();
                 // CasinoAmbientPeds.Init();
-                Games.CasinoInsideTrackManager.GetModule().Init();
+                // Games.CasinoInsideTrackManager.GetModule().Init();
             }
             else
             {
@@ -120,7 +120,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoTurnTable.Dispose();
                 CasinoLuckyWheel.Dispose();
                 // CasinoAmbientPeds.Dispose();
-                Games.CasinoInsideTrackManager.GetModule().Dispose();
+                // Games.CasinoInsideTrackManager.GetModule().Dispose();
             }
             Instance.DiscordRichPresence.Commit();
 

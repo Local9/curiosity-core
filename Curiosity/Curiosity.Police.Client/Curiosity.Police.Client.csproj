@@ -63,6 +63,7 @@
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Config.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
+    <Compile Include="Managers\CasinoInsideTrackManager.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
@@ -100,6 +101,15 @@
     </Compile>
     <Compile Include="Session.cs" />
     <Compile Include="TickHandler.cs" />
+    <Compile Include="Utils\CameraMath.cs" />
+    <Compile Include="Utils\Common.cs" />
+    <Compile Include="Utils\ControlHelper.cs" />
+    <Compile Include="Utils\DebugDisplay.cs" />
+    <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
+    <Compile Include="Utils\Peds.cs" />
+    <Compile Include="Utils\Props.cs" />
+    <Compile Include="Utils\Vehicles.cs" />
+    <Compile Include="Utils\Weapons.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\police.json">
