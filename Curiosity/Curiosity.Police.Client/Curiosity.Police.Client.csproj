@@ -63,7 +63,6 @@
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Config.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
-    <Compile Include="Managers\CasinoInsideTrackManager.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
