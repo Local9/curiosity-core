@@ -215,6 +215,13 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            EventSystem.Attach("police:player:isJailed", new AsyncEventCallback(async metadata => {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                return false;
+            }));
+
             EventSystem.Attach("police:ticket:speeding", new AsyncEventCallback(async metadata => {
                 ExportMessage em = new ExportMessage();
                 
