@@ -64,7 +64,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
         {
             if (Game.IsControlJustPressed(2, Control.CursorAccept) && isFullscreen)
             {
-                int mouseValue = await GetMouseClickEvent();
+                int mouseValue = await GetInputInt();
 
                 if (casinoDataObject.ConsoleScreenDisplay == 0 && mouseValue == 15) // Show Rules Button
                     SetScreenToBeDisplayed(casinoDataObject, 9, isFullscreen);
@@ -683,11 +683,11 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
             EndScaleformMovieMethod();
         }
 
-        async Task<int> GetMouseClickEvent()
+        async Task<int> GetInputInt(Control control = Control.CursorAccept)
         {
             int returnValue = -1;
 
-            CallScaleformMovieMethodWithNumber(casinoDataObject.ConsoleScaleformHandle, "SET_INPUT_EVENT", 237.0f, -1082130432, -1082130432, -1082130432, -1082130432);
+            CallScaleformMovieMethodWithNumber(casinoDataObject.ConsoleScaleformHandle, "SET_INPUT_EVENT", (float)control, -1f, -1f, -1f, -1f);
             BeginScaleformMovieMethod(casinoDataObject.ConsoleScaleformHandle, "GET_CURRENT_SELECTION");
             returnValue = EndScaleformMovieMethodReturnValue();
 
