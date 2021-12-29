@@ -69,6 +69,7 @@
     <Compile Include="Managers\InteractionManager.cs" />
     <Compile Include="Managers\InterfaceManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
+    <Compile Include="Managers\OfficeManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
