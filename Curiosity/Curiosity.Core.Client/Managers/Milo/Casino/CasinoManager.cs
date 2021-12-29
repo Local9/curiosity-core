@@ -82,12 +82,14 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 notificationPosition = markerEnter.Position;
 
                 if (markerEnter.IsInMarker)
+                {
                     NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to enter the {message}");
 
-                if (markerEnter.IsInMarker && Game.IsControlJustPressed(0, Control.Context))
-                {
-                    MovePlayer(true);
-                    await BaseScript.Delay(500);
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        MovePlayer(true);
+                        await BaseScript.Delay(500);
+                    }
                 }
             }
 
@@ -97,12 +99,14 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 notificationPosition = markerExit.Position;
 
                 if (markerExit.IsInMarker)
+                {
                     NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to leave the {message}");
 
-                if (markerExit.IsInMarker && Game.IsControlJustPressed(0, Control.Context))
-                {
-                    MovePlayer();
-                    await BaseScript.Delay(500);
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        MovePlayer();
+                        await BaseScript.Delay(500);
+                    }
                 }
             }
 
