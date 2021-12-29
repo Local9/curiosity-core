@@ -32,16 +32,16 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
 
         }
 
-        // [TickHandler]
-        private async Task IsPlayerInCasino()
-        {
-            int interior = GetInteriorFromEntity(Game.PlayerPed.Handle);
-            if (interior == CASINO_INTERIOR)
-                Init();
+        //[TickHandler]
+        //private async Task IsPlayerInCasino()
+        //{
+        //    int interior = GetInteriorFromEntity(Game.PlayerPed.Handle);
+        //    if (interior == CASINO_INTERIOR)
+        //        Init();
 
-            if (interior != CASINO_INTERIOR)
-                Dispose();
-        }
+        //    if (interior != CASINO_INTERIOR)
+        //        Dispose();
+        //}
 
         public void Init()
         {
@@ -298,18 +298,18 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
 
         private async Task OnWallAndConsoleScaleform()
         {
-            if (!blockClosingOfFullScreen)
-                Screen.DisplayHelpTextThisFrame($"~INPUT_CONTEXT~ FullScreen");
+            //if (!blockClosingOfFullScreen)
+            //    Screen.DisplayHelpTextThisFrame($"~INPUT_CONTEXT~ FullScreen");
 
-            if (Game.IsControlJustPressed(0, Control.Context))
-            {
-                if (!blockClosingOfFullScreen)
-                {
-                    isFullscreen = !isFullscreen;
-                    await BaseScript.Delay(100);
-                    MainEventInProgress(true);
-                }
-            }
+            //if (Game.IsControlJustPressed(0, Control.Context))
+            //{
+            //    if (!blockClosingOfFullScreen)
+            //    {
+            //        isFullscreen = !isFullscreen;
+            //        await BaseScript.Delay(100);
+            //        MainEventInProgress(true);
+            //    }
+            //}
 
             OnScaleFormProgress(null, null, casinoDataObject, isFullscreen);
         }
@@ -363,9 +363,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
                     SetScriptGfxAlign(73, 73);
                     SetScriptGfxDrawOrder(4);
                     SetScriptGfxDrawBehindPausemenu(true);
-                    DrawInteractiveSprite(TEXTURE_DICTIONARY_INSIDE_TRACK, GetScreenToShow(casinoDataObject.BettingComputerScreenDisplay[screen]), 0.25f, 0.5f, 0.5f, 1.0f, 0.0f, 255, 255, 255, 255);
+                    DrawInteractiveSprite(TEXTURE_DICTIONARY_INSIDE_TRACK, GetScreenToShow(casinoDataObject.BettingComputerScreenDisplay[screen]), 0.5f, 0.5f, 1f, 1f, 0f, 255, 255, 255, 255);
                     ResetScriptGfxAlign();
                     SetTextRenderId(GetDefaultScriptRendertargetRenderId());
+                    // N_0x32f34ff7f617643b(scaleformHandle, 1);
                 }
             }
         }
