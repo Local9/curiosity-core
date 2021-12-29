@@ -8,11 +8,11 @@ namespace Curiosity.Systems.Library.Data
     {
         public readonly static Dictionary<WeatherMonth, WeatherSeason> SeasonalMonth = new Dictionary<WeatherMonth, WeatherSeason>()
         {
-            { WeatherMonth.JANUARY, WeatherSeason.WINTER },
-            { WeatherMonth.FEBRUARY, WeatherSeason.WINTER },
+            { WeatherMonth.JANUARY, WeatherSeason.SPRING },
+            { WeatherMonth.FEBRUARY, WeatherSeason.SPRING },
             { WeatherMonth.MARCH, WeatherSeason.SPRING },
-            { WeatherMonth.APRIL, WeatherSeason.SPRING },
-            { WeatherMonth.MAY, WeatherSeason.SPRING },
+            { WeatherMonth.APRIL, WeatherSeason.SUMMER },
+            { WeatherMonth.MAY, WeatherSeason.SUMMER },
             { WeatherMonth.JUNE, WeatherSeason.SUMMER },
             { WeatherMonth.JULY, WeatherSeason.SUMMER },
             { WeatherMonth.AUGUST, WeatherSeason.SUMMER },
@@ -27,8 +27,8 @@ namespace Curiosity.Systems.Library.Data
 
         public readonly static Dictionary<WeatherSeason, List<WeatherType>> SeasonalWeather = new Dictionary<WeatherSeason, List<WeatherType>>()
         {
-            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.CLEARING } },
-            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.RAINING } },
+            { WeatherSeason.SPRING, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY, WeatherType.OVERCAST, WeatherType.CLEARING } },
+            { WeatherSeason.SUMMER, new List<WeatherType>() { WeatherType.CLEAR, WeatherType.EXTRASUNNY } },
             { WeatherSeason.AUTUMN, new List<WeatherType>() { WeatherType.RAINING, WeatherType.OVERCAST, WeatherType.SMOG, WeatherType.CLEAR, WeatherType.FOGGY } },
             { WeatherSeason.WINTER, new List<WeatherType>() { WeatherType.SMOG, WeatherType.FOGGY, WeatherType.SNOWING } },
         };

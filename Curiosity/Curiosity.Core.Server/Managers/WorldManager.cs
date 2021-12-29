@@ -155,6 +155,11 @@ namespace Curiosity.Core.Server.Managers
                     WeatherSeason season = WeatherData.GetCurrentSeason();
                     List<WeatherType> weatherTypes = WeatherData.SeasonalWeather[season];
 
+                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SPRING && Utility.RANDOM.Bool(.25f))
+                    {
+                        weatherTypes.Add(WeatherType.RAINING);
+                    }
+
                     if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
                     {
                         weatherTypes.Add(WeatherType.RAINING);
