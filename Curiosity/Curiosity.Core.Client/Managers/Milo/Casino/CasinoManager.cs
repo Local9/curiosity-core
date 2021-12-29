@@ -19,6 +19,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         Position posEnter = new Position(924.4668f, 46.7468f, 81.10635f);
         Position posExit = new Position(1089.974f, 206.0144f, -48.99975f);
         Vector3 scale = new Vector3(1.25f, 1.25f, 0.5f);
+        Vector3 valetPropPosition = new Vector3(925.9088f, 51.24203f, 80.095f);
+        bool spawnedValetProp = false;
 
         NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
@@ -38,6 +40,34 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
             NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnPropCheck()
+        {
+            if (Game.PlayerPed.IsInRangeOf(valetPropPosition, 100f) && !spawnedValetProp)
+            {
+                Model model = new Model("vw_prop_vw_valet_01a");
+                await model.Request(10000);
+                if (model.IsLoaded)
+                {
+                    int prop = CreateObject((int)model.Hash, valetPropPosition.X, valetPropPosition.Y, valetPropPosition.Z, false, false, false);
+                    if (DoesEntityExist(prop))
+                    {
+                        SetEntityHeading(prop, 58f);
+                        SetEntityProofs(prop, true, true, true, true, true, true, false, true);
+                        SetEntityInvincible(prop, true);
+                        FreezeEntityPosition(prop, true);
+                        spawnedValetProp = true;
+                    }
+                    model.MarkAsNoLongerNeeded();
+                }
+            }
+
+            if (!Game.PlayerPed.IsInRangeOf(valetPropPosition, 100f) && spawnedValetProp)
+                spawnedValetProp = false;
+
+            await BaseScript.Delay(500);
         }
 
         [TickHandler(SessionWait = true)]
