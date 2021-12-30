@@ -11,6 +11,7 @@ using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -284,6 +285,22 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
 
+        //[TickHandler]
+        //private async Task SafeCoord()
+        //{
+        //    Vector3 entityPos = Game.PlayerPed.Position;
+        //    Vector2 coords = new Vector2(entityPos.X, entityPos.Y);
+        //    Vector3 spawnLocation = World.GetNextPositionOnSidewalk(coords);
+
+        //    Vector3 sidewalk1 = Vector3.Zero;
+        //    API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, true, ref sidewalk1, 0);
+
+        //    Vector3 sidewalk2 = Vector3.Zero;
+        //    API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, false, ref sidewalk2, 0);
+
+        //    Screen.ShowSubtitle($"{spawnLocation} ~n~ {sidewalk1} : {sidewalk2}");
+        //}
+
         private void GameEventManager_OnPlayerKillPlayer(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             try
@@ -322,23 +339,31 @@ namespace Curiosity.Core.Client.Managers
             Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut();
 
-            if (Cache.Character.IsOnIsland)
-            {
-                CayoPericoManager.GetModule().SetupLosSantos();
+            //if (Cache.Character.IsOnIsland)
+            //{
+            //    CayoPericoManager.GetModule().SetupLosSantos();
 
-                NotificationManager.GetModule().Info($"Chartering a flight to the nearest hospital.");
+            //    NotificationManager.GetModule().Info($"Chartering a flight to the nearest hospital.");
 
-                await BaseScript.Delay(3000);
-            }
+            //    await BaseScript.Delay(3000);
+            //}
 
-            Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
+            //Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
 
-            if (spawnLocation.X == 0f)
-            {
-                spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
-            }
+            //if (spawnLocation.X == 0f)
+            //{
+            //    spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
+            //}
 
-            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, spawnLocation.H));
+            Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(Utility.RANDOM.Next(50, 200), Utility.RANDOM.Next(50, 200), 1f);
+            Vector3 sidewalk1 = entityPos;
+            API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, true, ref sidewalk1, 16);
+
+            //Vector3 safeCoord = World.GetSafeCoordForPed(spawnLocation, true, 1);
+            //if (safeCoord != Vector3.Zero)
+            //    spawnLocation = safeCoord;
+
+            curiosityPlayer.Character.Revive(new Position(sidewalk1.X, sidewalk1.Y, sidewalk1.Z + 0.5f, Game.PlayerPed.Heading));
             BaseScript.TriggerEvent("onPlayerResurrected", "hospital");
             Cache.PlayerPed.FadeIn();
             RemoveCamera();
@@ -383,10 +408,10 @@ namespace Curiosity.Core.Client.Managers
             if (!Game.PlayerPed.IsDead)
                 Game.PlayerPed.Kill();
 
-            ScreenInterface.DrawTextLegacy($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~).",
+            ScreenInterface.DrawTextLegacy($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to respawn now ~g~${Cache.Player.Character.RespawnCharge()}~w~).",
                 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
 
-            Screen.DisplayHelpTextThisFrame($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press ~INPUT_CONTEXT~ to respawn at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)");
+            Screen.DisplayHelpTextThisFrame($"~w~You are unconscious, wait for revive. (~y~{timeSpanLeft}~w~)~n~Press ~INPUT_CONTEXT~ to respawn now for ~g~${Cache.Player.Character.RespawnCharge()}~w~");
 
             if (Game.IsControlPressed(0, Control.Context))
             {

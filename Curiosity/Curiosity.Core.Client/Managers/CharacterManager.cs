@@ -281,24 +281,13 @@ namespace Curiosity.Core.Client.Managers
 
                     await BaseScript.Delay(100);
 
-                    Vector3 safeCoord = World.GetSafeCoordForPed(Cache.Character.LastPosition.AsVector(), true, 1);
+                    Vector3 curPosition = Cache.Character.LastPosition.AsVector();
+                    Vector3 newPosition = curPosition;
+                    API.GetSafeCoordForPed(curPosition.X, curPosition.Y, curPosition.Z, true, ref newPosition, 0);
 
                     await BaseScript.Delay(100);
 
-                    DateTime timeToBreak = DateTime.UtcNow.AddSeconds(5);
-
-                    if (safeCoord.Distance(Vector3.One) > 2f)
-                    {
-                        while (safeCoord.Distance(Game.PlayerPed.Position) > 2f)
-                        {
-                            Game.PlayerPed.Position = safeCoord;
-                            safeCoord = World.GetSafeCoordForPed(Game.PlayerPed.Position, true);
-                            await BaseScript.Delay(100);
-
-                            if (DateTime.UtcNow > timeToBreak) break;
-                        }
-                    }
-
+                    Game.PlayerPed.Position = newPosition;
                 }
 
                 WorldManager.GetModule().UpdateWeather(true);
