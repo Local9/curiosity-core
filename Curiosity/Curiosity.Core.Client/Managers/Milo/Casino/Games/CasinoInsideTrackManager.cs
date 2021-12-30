@@ -250,7 +250,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
         {
             for (int i = 1; i < 7; i++)
             {
-                int randomNumber = Utility.RANDOM.Next(99);
+                int randomNumber = Utility.RANDOM.Next(casinoDataObject.HorseStyles.Count);
                 string name = RandomHorseName(randomNumber);
                 if (isFullscreen)
                 {
