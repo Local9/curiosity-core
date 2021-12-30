@@ -274,11 +274,6 @@ namespace Curiosity.Core.Client.Extensions
 
             Cache.Player.Character.IsDead = false;
 
-            position.Z += 100f;
-            float groundZ = position.Z;
-            if (GetGroundZFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, false))
-                position.Z = groundZ;
-
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             Cache.PlayerPed.IsPositionFrozen = true;
             PlaceObjectOnGroundProperly(Cache.PlayerPed.Handle);

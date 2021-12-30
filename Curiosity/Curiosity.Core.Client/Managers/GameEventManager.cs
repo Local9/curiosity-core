@@ -355,15 +355,39 @@ namespace Curiosity.Core.Client.Managers
             //    spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
             //}
 
-            Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(Utility.RANDOM.Next(50, 200), Utility.RANDOM.Next(50, 200), 1f);
-            Vector3 sidewalk1 = entityPos;
-            API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, true, ref sidewalk1, 16);
+
+            float randX = Utility.RANDOM.Next(50, 100);
+            float randY = Utility.RANDOM.Next(50, 100);
+            Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
+
+            if (Game.PlayerPed.IsInWater || Game.PlayerPed.IsInAir)
+            {
+                Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
+
+                if (spawnLocation.X == 0f)
+                {
+                    spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
+                }
+
+                entityPos = spawnLocation.AsVector();
+            }
+            else
+            {
+                Vector3 sidewalk1 = entityPos;
+                API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, true, ref sidewalk1, 16);
+                entityPos = sidewalk1;
+
+                entityPos.Z += 50f;
+                float groundZ = entityPos.Z;
+                if (GetGroundZFor_3dCoord(entityPos.X, entityPos.Y, entityPos.Z, ref groundZ, false))
+                    entityPos.Z = groundZ;
+            }
 
             //Vector3 safeCoord = World.GetSafeCoordForPed(spawnLocation, true, 1);
             //if (safeCoord != Vector3.Zero)
             //    spawnLocation = safeCoord;
 
-            curiosityPlayer.Character.Revive(new Position(sidewalk1.X, sidewalk1.Y, sidewalk1.Z + 0.5f, Game.PlayerPed.Heading));
+            curiosityPlayer.Character.Revive(new Position(entityPos.X, entityPos.Y, entityPos.Z, Game.PlayerPed.Heading));
             BaseScript.TriggerEvent("onPlayerResurrected", "hospital");
             Cache.PlayerPed.FadeIn();
             RemoveCamera();
