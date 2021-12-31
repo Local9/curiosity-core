@@ -983,6 +983,13 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
+                if (!vehModel.IsVehicle)
+                {
+                    vehModel.MarkAsNoLongerNeeded();
+                    Notify.Error($"Model '{hash}' is not a vehicle.");
+                    return new { success = false };
+                }
+
                 Logger.Debug($"Vehicle model is now loaded");
 
                 Vector3 charPos = Game.PlayerPed.Position;
