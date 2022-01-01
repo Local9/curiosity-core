@@ -39,7 +39,7 @@ namespace Curiosity.Police.Client.Managers
                         new Vector2(324.84567260742f, -198.19834899902f)
                     };
 
-                    z.AddNewPoly("test", points, new { }, 51, 62, true, true);
+                    z.AddNewPoly("test", points, new { }, 51, 62, true);
                 }
             }
             catch (Exception ex)

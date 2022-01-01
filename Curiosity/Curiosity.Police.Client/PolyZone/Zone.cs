@@ -297,8 +297,6 @@ namespace Curiosity.Police.Client.PolyZone
             }
         }
 
-        // move all methods above into Poly
-
         public void AddNewPoly(string name, List<Vector2> points, dynamic data, float minZ, float maxZ, bool useGrid = false, bool lazyGrid = false, int gridDivisions = 30)
         {
             if (ActivePolys.ContainsKey(name)) return;

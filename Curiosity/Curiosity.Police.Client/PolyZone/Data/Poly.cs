@@ -89,7 +89,9 @@ namespace Curiosity.Police.Client.PolyZone.Data
                 DrawWall(firstPoint, lastPoint, minZ, maxZ, wR, wG, wB, 48);
             }
 
-            Screen.ShowSubtitle($"{Grid.Count}");
+            DrawGrid();
+
+            Screen.ShowSubtitle($"{Grid.Count} | {Lines.Count}");
         }
 
         void DrawWall(Vector2 p1, Vector2 p2, float minZ, float maxZ, int r, int g, int b, int a)
@@ -103,6 +105,22 @@ namespace Curiosity.Police.Client.PolyZone.Data
             DrawPoly(topLeft.X, topLeft.Y, topLeft.Z, topRight.X, topRight.Y, topRight.Z, bottomRight.X, bottomRight.Y, bottomRight.Z, r, g, b, a);
             DrawPoly(bottomRight.X, bottomRight.Y, bottomRight.Z, topRight.X, topRight.Y, topRight.Z, topLeft.X, topLeft.Y, topLeft.Z, r, g, b, a);
             DrawPoly(bottomRight.X, bottomRight.Y, bottomRight.Z, topLeft.X, topLeft.Y, topLeft.Z, bottomLeft.X, bottomLeft.Y, bottomLeft.Z, r, g, b, a);
+        }
+
+        void DrawGrid()
+        {
+            Vector3 playerPos = Game.PlayerPed.Position;
+            float minZ = MinZ > 0 ? MinZ : playerPos.Z - 46;
+            List<Line> lines = this.Lines;
+
+            int r = DebugColourOutLine.R;
+            int g = DebugColourOutLine.G;
+            int b = DebugColourOutLine.B;
+
+            foreach(Line line in lines)
+            {
+                DrawLine(line.Min.X, line.Min.Y, minZ, line.Max.X, line.Max.Y, minZ, r, g, b, 196);
+            }
         }
     }
 
