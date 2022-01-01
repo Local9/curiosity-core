@@ -46,38 +46,6 @@ namespace Curiosity.Police.Client.PolyZone.Data
         public bool UseGrid;
         public bool IsPolyZone;
 
-        //// methods
-        //bool IsInside(Vector3 point)
-        //{
-        //    float x = point.X;
-        //    float y = point.Y;
-        //    float z = point.Z;
-            
-        //    if (x < Min.X
-        //        || x > Max.X
-        //        || y < Min.X
-        //        || y > Max.Y)
-        //        return false;
-
-        //    if (z < MinZ || z > MaxZ) return false;
-
-        //    Dictionary<float, float> grid = this.Grid;
-        //    if (grid.Count > 0)
-        //    {
-        //        int gridDivisions = this.GridDivisions;
-        //        Vector2 size = this.Size;
-        //        float gridPosX = x - Min.X;
-        //        float gridPosY = y - Min.Y;
-        //        // Lua does some weird shit
-        //        float gridCellX = (gridPosX * gridDivisions);
-        //        float gridCellY = (gridPosY * gridDivisions);
-
-        //        KeyValuePair<float, float> gridCellValue = grid[gridCellY + 1][gridCellX + 1];
-        //    }
-
-        //    return true;
-        //}
-
         void Draw()
         {
 

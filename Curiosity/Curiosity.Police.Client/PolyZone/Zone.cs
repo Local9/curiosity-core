@@ -78,6 +78,39 @@ namespace Curiosity.Police.Client.PolyZone
             return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
         }
 
+        bool IsInside(Poly poly, Vector3 point)
+        {
+            float x = point.X;
+            float y = point.Y;
+            float z = point.Z;
+
+            if (x < poly.Min.X
+                || x > poly.Max.X
+                || y < poly.Min.X
+                || y > poly.Max.Y)
+                return false;
+
+            if (z < poly.MinZ || z > poly.MaxZ) return false;
+
+            // fucking grid
+            //Dictionary<float, float> grid = this.Grid;
+            //if (grid.Count > 0)
+            //{
+            //    int gridDivisions = this.GridDivisions;
+            //    Vector2 size = this.Size;
+            //    float gridPosX = x - Min.X;
+            //    float gridPosY = y - Min.Y;
+            //    // Lua does some weird shit
+            //    float gridCellX = (gridPosX * gridDivisions);
+            //    float gridCellY = (gridPosY * gridDivisions);
+
+            //    KeyValuePair<float, float> gridCellValue = grid[gridCellY + 1][gridCellX + 1];
+            //}
+
+            Vector2 v2Point = new Vector2(x, y);
+            return WindingNumber(v2Point, poly.Points);
+        }
+
         double CalculatePolygonArea(List<Vector2> points)
         {
             float det2(int i, int j)
