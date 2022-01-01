@@ -12,7 +12,7 @@ namespace Curiosity.Police.Client.PolyZone
 {
     internal class Zone
     {
-        Dictionary<string, Poly> ActivePolys = new Dictionary<string, Poly>();
+        public Dictionary<string, Poly> ActivePolys = new Dictionary<string, Poly>();
 
         float IsLeft(Vector2 pos0, Vector2 pos1, Vector2 pos2)
         {
@@ -52,9 +52,11 @@ namespace Curiosity.Police.Client.PolyZone
             int wn = 0;
             for (int i = 0; i < polyPoints.Count; i++)
             {
-                wn = WindingNumberInnerLoop(polyPoints[i], polyPoints[i + 1], point, wn);
+                int next = (i + 1) >= polyPoints.Count ? polyPoints.Count - 1 : i + 1;
+
+                wn = WindingNumberInnerLoop(polyPoints[i], polyPoints[next], point, wn);
             }
-            wn = WindingNumberInnerLoop(polyPoints[polyPoints.Count], polyPoints[0], point, wn);
+            wn = WindingNumberInnerLoop(polyPoints[polyPoints.Count - 1], polyPoints[0], point, wn);
             return wn != 0;
         }
 
@@ -117,25 +119,19 @@ namespace Curiosity.Police.Client.PolyZone
             {
                 return (points[i].X * points[j].Y) - (points[j].X * points[i].Y);
             }
-            float sum = points.Count > 0 ? det2(points.Count, 1) : 0;
+
+            float sum = points.Count > 0 ? det2(points.Count - 1, 0) : 0;
+
             for(int i = 0; i < points.Count; i++)
             {
-                sum += sum + det2(i, i + 1);
+                int next = i + 1;
+
+                if (next >= points.Count)
+                    next = points.Count - 1;
+
+                sum += sum + det2(i, next);
             }
             return Math.Abs(0.5 * sum);
-        }
-
-        void DrawWall(Vector2 p1, Vector2 p2, float minZ, float maxZ, int r, int g, int b, int a)
-        {
-            Vector3 bottomLeft = new Vector3(p1.X, p1.Y, minZ);
-            Vector3 topLeft = new Vector3(p1.X, p1.Y, maxZ);
-            Vector3 bottomRight = new Vector3(p2.X, p2.Y, minZ);
-            Vector3 topRight = new Vector3(p2.X, p2.Y, maxZ);
-
-            DrawPoly(bottomLeft.X, bottomLeft.Y, bottomLeft.Z, topLeft.X, topLeft.Y, topLeft.Z, bottomRight.X, bottomRight.Y, bottomRight.Z, r, g, b, a);
-            DrawPoly(topLeft.X, topLeft.Y, topLeft.Z, topRight.X, topRight.Y, topRight.Z, bottomRight.X, bottomRight.Y, bottomRight.Z, r, g, b, a);
-            DrawPoly(bottomRight.X, bottomRight.Y, bottomRight.Z, topRight.X, topRight.Y, topRight.Z, topLeft.X, topLeft.Y, topLeft.Z, r, g, b, a);
-            DrawPoly(bottomRight.X, bottomRight.Y, bottomRight.Z, topLeft.X, topLeft.Y, topLeft.Z, bottomLeft.X, bottomLeft.Y, bottomLeft.Z, r, g, b, a);
         }
 
         List<Vector2> CalculateGridCellPoints(float cellX, float cellY, Poly poly)
@@ -193,13 +189,18 @@ namespace Curiosity.Police.Client.PolyZone
                 return false;
             }
 
-            for (int i = 0; i < gridCellPoints.Count - 1; i++)
+            for (int i = 0; i < gridCellPoints.Count; i++)
             {
                 Vector2 gridCellPoint1 = gridCellPoints[i];
-                Vector2 gridCellPoint2 = gridCellPoints[i + 1];
-                for (int j = 0; j < polyPoints.Count - 1; j++)
+
+                int next = (i + 1) >= gridCellPoints.Count ? gridCellPoints.Count - 1 : i + 1;
+
+                Vector2 gridCellPoint2 = gridCellPoints[next];
+                for (int j = 0; j < polyPoints.Count; j++)
                 {
-                    if (IsIntersecting(gridCellPoint1, gridCellPoint2, polyPoints[j], polyPoints[j + 1]))
+                    int nextJ = (j + 1) >= gridCellPoints.Count ? gridCellPoints.Count - 1 : j + 1;
+
+                    if (IsIntersecting(gridCellPoint1, gridCellPoint2, polyPoints[j], polyPoints[nextJ]))
                     {
                         return false;
                     }
@@ -298,8 +299,10 @@ namespace Curiosity.Police.Client.PolyZone
 
         // move all methods above into Poly
 
-        void AddNewPoly(string name, List<Vector2> points, dynamic data, float minZ, float maxZ, bool useGrid = false, bool lazyGrid = false, int gridDivisions = 30)
+        public void AddNewPoly(string name, List<Vector2> points, dynamic data, float minZ, float maxZ, bool useGrid = false, bool lazyGrid = false, int gridDivisions = 30)
         {
+            if (ActivePolys.ContainsKey(name)) return;
+
             if (points.Count == 0) return;
             if (points.Count < 3) return;
 
@@ -321,11 +324,6 @@ namespace Curiosity.Police.Client.PolyZone
             CalculatePoly(poly);
 
             ActivePolys.Add(name, poly);
-        }
-
-        void Draw()
-        {
-
         }
     }
 }
