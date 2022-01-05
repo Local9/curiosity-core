@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
@@ -133,7 +132,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 Instance.DiscordRichPresence.Status = $"Betting at the Casino";
                 WorldManager.LockAndSetTime(12, 1);
                 WorldManager.LockAndSetWeather(WeatherType.EXTRASUNNY);
-
                 isInCasino = true;
 
                 RequestIpl("vw_casino_main");
@@ -147,7 +145,6 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos";
                 WorldManager.UnlockTime();
                 WorldManager.UnlockAndUpdateWeather();
-
                 isInCasino = false;
 
                 RemoveIpl("vw_casino_main");
