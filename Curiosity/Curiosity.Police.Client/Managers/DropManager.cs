@@ -22,7 +22,7 @@ namespace Curiosity.Police.Client.Managers
             
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnControl()
         {
             try
@@ -48,7 +48,7 @@ namespace Curiosity.Police.Client.Managers
             }
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnCancel()
         {
             foreach(KeyValuePair<string, Poly> poly in z.ActivePolys)
