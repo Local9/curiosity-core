@@ -39,6 +39,17 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         #region Player
 
+        [CommandInfo(new[] { "e" })]
+        public class ScenarioTesting : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Game.PlayerPed.Task.ClearAllImmediately();
+
+                Game.PlayerPed.Task.PlayAnimation(arguments[0], arguments[1]);
+            }
+        }
+
         [CommandInfo(new[] { "eui" })]
         public class EntityOverlay : ICommand
         {
@@ -275,15 +286,16 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (cmd == "remove")
                 {
-                    foreach (Ped ped in companions)
+                    List<Ped> peds = new List<Ped>(companions);
+                    foreach (Ped ped in peds)
                     {
                         if (ped.Exists())
                         {
-                            await ped.FadeOut();
+                            ped.FadeOut();
                             ped.Delete();
+                            companions.Remove(ped);
                         }
                     }
-                    companions.Clear();
                     return;
                 }
 
@@ -291,7 +303,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     if (cmd == "add")
                     {
-                        if (companions.Count > 4) return;
+                        // if (companions.Count > 4) return;
 
                         string pedHash = arguments.ElementAt(1);
 
@@ -432,13 +444,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (ped.Exists())
                     {
                         if (ped.IsDead)
-                        {
-                            await ped.FadeOut();
-                            ped.Delete();
-                            companions.Remove(ped);
-                        }
-
-                        if (!ped.IsInGroup)
                         {
                             await ped.FadeOut();
                             ped.Delete();
