@@ -21,7 +21,16 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         Vector3 valetPropPosition = new Vector3(925.9088f, 51.24203f, 80.095f);
         bool spawnedValetProp = false;
 
-        NativeUI.Marker markerEnter;
+        Vector3 enterAreaStart = new Vector3(924.5f, 60.41f, 80.89f);
+        Vector3 enterAreaEnd = new Vector3(912.11f, 40.35f, 82f);
+        float width = 15f;
+
+        Vector3 enterDoorStart = new Vector3(922.6203f, 42.17718f, 80.89f);
+        Vector3 enterDoorEnd = new Vector3(927.9533f, 50.5365f, 82f);
+        float widthDoor = 2f;
+        bool isLeaving = false;
+
+        // NativeUI.Marker markerEnter;
         NativeUI.Marker markerExit;
 
         private bool isInCasino = false;
@@ -34,10 +43,10 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
             await Session.Loading();
 
-            markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
+            // markerEnter = new NativeUI.Marker(MarkerType.VerticalCylinder, posEnter.AsVector(true), scale, 10f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
             markerExit = new NativeUI.Marker(MarkerType.VerticalCylinder, posExit.AsVector(true), scale, 2f, System.Drawing.Color.FromArgb(255, 135, 206, 235), placeOnGround: true);
 
-            NativeUI.MarkersHandler.AddMarker(markerEnter);
+            // NativeUI.MarkersHandler.AddMarker(markerEnter);
             NativeUI.MarkersHandler.AddMarker(markerExit);
         }
 
@@ -74,21 +83,17 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         {
             string message = $"Casino.";
             Vector3 notificationPosition = Vector3.Zero;
+            int playerPedHandle = Game.PlayerPed.Handle;
 
-            if (markerEnter.IsInRange)
+            if (IsEntityInAngledArea(playerPedHandle, enterAreaStart.X, enterAreaStart.Y, enterAreaStart.Z, enterAreaEnd.X, enterAreaEnd.Y, enterAreaEnd.Z, width, true, false, 0) && !isLeaving)
             {
                 message = $"Enter {message}";
-                notificationPosition = markerEnter.Position;
+                notificationPosition = posEnter.AsVector(true);
 
-                if (markerEnter.IsInMarker)
+                if (IsEntityInAngledArea(playerPedHandle, enterDoorStart.X, enterDoorStart.Y, enterDoorStart.Z, enterDoorEnd.X, enterDoorEnd.Y, enterDoorEnd.Z, widthDoor, true, false, 0))
                 {
-                    NativeUI.Notifications.ShowHelpNotification($"Press ~INPUT_CONTEXT~ to enter the {message}");
-
-                    if (Game.IsControlJustPressed(0, Control.Context))
-                    {
-                        MovePlayer(true);
-                        await BaseScript.Delay(500);
-                    }
+                    MovePlayer(true);
+                    await BaseScript.Delay(2000);
                 }
             }
 
@@ -104,7 +109,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                     if (Game.IsControlJustPressed(0, Control.Context))
                     {
                         MovePlayer();
-                        await BaseScript.Delay(500);
+                        await BaseScript.Delay(2000);
                     }
                 }
             }
@@ -127,6 +132,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
             int interiorId = GetInteriorAtCoords(1089.974f, 206.0144f, -48.99975f);
 
+            Vector3 gotoPosition = Cache.PlayerPed.Position + new Vector3(3f, 3f, 0f);
+
             if (enterCasino)
             {
                 Instance.DiscordRichPresence.Status = $"Betting at the Casino";
@@ -139,9 +146,11 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoLuckyWheel.Init();
                 // CasinoAmbientPeds.Init();
                 Games.CasinoInsideTrackManager.GetModule().Init();
+                gotoPosition = new Vector3(1090.816f, 208.4599f, -48.99997f);
             }
             else
             {
+                isLeaving = true;
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos";
                 WorldManager.UnlockTime();
                 WorldManager.UnlockAndUpdateWeather();
@@ -152,6 +161,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
                 CasinoLuckyWheel.Dispose();
                 // CasinoAmbientPeds.Dispose();
                 Games.CasinoInsideTrackManager.GetModule().Dispose();
+                gotoPosition = new Vector3(923.0782f, 47.88419f, 81.10635f);
             }
             Instance.DiscordRichPresence.Commit();
 
@@ -176,6 +186,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
             Cache.PlayerPed.IsCollisionEnabled = true;
 
             SetEntityCoords(Cache.PlayerPed.Handle, pos.X, pos.Y, pos.Z, true, false, false, true);
+            Cache.PlayerPed.Task.GoTo(gotoPosition);
 
             await BaseScript.Delay(1500);
 
@@ -187,6 +198,8 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
             await ScreenInterface.FadeIn(1000);
             await Cache.PlayerPed.FadeIn();
+
+            isLeaving = false;
         }
 
         private async Task AudioSettings()

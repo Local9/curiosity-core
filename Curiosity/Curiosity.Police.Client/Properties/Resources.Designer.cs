@@ -19,7 +19,7 @@ namespace Curiosity.Police.Client.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -62,37 +62,61 @@ namespace Curiosity.Police.Client.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///  &quot;speedLimits&quot;: [
+        ///  &quot;rouletteTables&quot;: [
         ///    {
-        ///      &quot;street&quot;: &quot;Joshua Rd&quot;,
-        ///      &quot;limit&quot;: 50
+        ///      &quot;table&quot;: &quot;vw_prop_casino_roulette_01&quot;,
+        ///      &quot;position&quot;: {
+        ///        &quot;X&quot;: 1144.814,
+        ///        &quot;Y&quot;: 268.2634,
+        ///        &quot;Z&quot;: -52.8409
+        ///      },
+        ///      &quot;heading&quot;: -135,
+        ///      &quot;seating&quot;: []
         ///    },
         ///    {
-        ///      &quot;street&quot;: &quot;East Joshua Road&quot;,
-        ///      &quot;limit&quot;: 50
+        ///      &quot;table&quot;: &quot;vw_prop_casino_roulette_01&quot;,
+        ///      &quot;position&quot;: {
+        ///        &quot;X&quot;: 1150.355,
+        ///        &quot;Y&quot;: 262.7224,
+        ///        &quot;Z&quot;: -52.8409
+        ///      },
+        ///      &quot;heading&quot;: 45,
+        ///      &quot;seating&quot;: []
         ///    },
         ///    {
-        ///      &quot;street&quot;: &quot;Marina Dr&quot;,
-        ///      &quot;limit&quot;: 35
-        ///    },
-        ///    {
-        ///      &quot;street&quot;: &quot;Alhambra Dr&quot;,
-        ///      &quot;limit&quot;: 35
-        ///    },
-        ///    {
-        ///      &quot;street&quot;: &quot;Niland Ave&quot;,
-        ///      &quot;limit&quot;: 35
-        ///    },
-        ///    {
-        ///      &quot;street&quot;: &quot;Zancudo Ave&quot;,
-        ///      &quot;limit&quot;: 35
-        ///    },
-        ///    {
-        ///      &quot;street&quot;: &quot;Armadillo Ave&quot;,
-        ///      &quot;limit&quot;: 35
-        ///    },
-        ///    {
-        ///      &quot;street&quot;: &quot;A [rest of string was truncated]&quot;;.
+        ///      &quot;table&quot;: &quot;vw_prop_casino_roulette_01b&quot;,
+        ///      &quot;position&quot;:  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string casinoInterior {
+            get {
+                return ResourceManager.GetString("casinoInterior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;speedCameraDistance&quot;: 12.5,
+        ///  &quot;ignoredVehicles&quot;: [
+        ///    &quot;police&quot;,
+        ///    &quot;police2&quot;
+        ///  ],
+        ///  &quot;speedLimits&quot;: {
+        ///    &quot;Joshua Rd&quot;: 50,
+        ///    &quot;East Joshua Road&quot;: 50,
+        ///    &quot;Marina Dr&quot;: 35,
+        ///    &quot;York St&quot;: 35,
+        ///    &quot;Alhambra Dr&quot;: 35,
+        ///    &quot;Niland Ave&quot;: 35,
+        ///    &quot;Zancudo Ave&quot;: 35,
+        ///    &quot;Armadillo Ave&quot;: 35,
+        ///    &quot;Algonquin Blvd&quot;: 35,
+        ///    &quot;Mountain View Dr&quot;: 35,
+        ///    &quot;Cholla Springs Ave&quot;: 35,
+        ///    &quot;Panorama Dr&quot;: 40,
+        ///    &quot;Lesbos Ln&quot;: 35,
+        ///    &quot;Calafia Rd&quot;: 30,
+        ///    &quot;North Calafia Way&quot;: 30,
+        ///    &quot;Cassidy Trail&quot;:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string police {
             get {

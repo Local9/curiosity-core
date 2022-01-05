@@ -57,6 +57,8 @@
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />
+    <Compile Include="Models\Casino\CasinoData.cs" />
+    <Compile Include="Models\Casino\RouletteTable.cs" />
     <Compile Include="Models\CharacterInfo.cs" />
     <Compile Include="Models\CharacterItem.cs" />
     <Compile Include="Models\CharacterTattoos.cs" />
