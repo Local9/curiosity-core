@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
@@ -102,7 +103,8 @@ namespace Curiosity.Core.Client.Utils
                 }
                 else if (entity is Ped ped)
                 {
-                    list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
+                    Vector3 p = entity.Position;
+                    list["Interior"] = $"{GetInteriorAtCoords(p.X, p.Y, p.Z)}";
 
                     if (ped.IsInGroup)
                     {
