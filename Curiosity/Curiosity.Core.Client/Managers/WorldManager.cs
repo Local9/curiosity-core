@@ -343,8 +343,6 @@ namespace Curiosity.Core.Client.Managers
             int seconds = 0;
             NetworkGetGlobalMultiplayerClock(ref hours, ref minutes, ref seconds);
 
-            Screen.ShowSubtitle($"{hours:00}:{minutes:00}:{seconds:00}");
-
             //while (!Cache.Player.Character.MarkedAsRegistered)
             //{
             //    NetworkOverrideClockTime(12, 1, 0);

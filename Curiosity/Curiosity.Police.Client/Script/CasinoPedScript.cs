@@ -87,7 +87,6 @@ namespace Curiosity.Police.Client.Managers
                         Dispose();
                         break;
                 }
-                Screen.ShowSubtitle($"INIT");
             }
             catch (Exception ex)
             {
