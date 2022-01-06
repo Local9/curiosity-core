@@ -70,38 +70,36 @@ namespace Curiosity.MissionManager.Client.Managers
             blip.Delete();
         }
 
+        int currentBlipHandle = -1;
+
         [TickHandler] // TODO: Maybe move this also into "Job Start"
         private async Task OnMissionBlipHandler()
         {
-            Blip currentBlip = null;
-
             if (!IsFrontendReadyForControl()) return;
 
             int blipHandle = DisableBlipNameForVar();
-            Blip blip = new Blip(blipHandle);
 
             if (!IsHoveringOverMissionCreatorBlip())
             {
-                currentBlip = null;
                 ShowMissionBlipInformation(false);
                 return;
             }
 
-            if (!blip.Exists()) return;
+            if (!DoesBlipExist(blipHandle)) return;
 
-            if (currentBlip != blip)
+            if (currentBlipHandle != blipHandle)
             {
-                currentBlip = blip;
-                if (!BlipMissionData.ContainsKey(currentBlip.Handle))
+                currentBlipHandle = blipHandle;
+                if (!BlipMissionData.ContainsKey(blipHandle))
                 {
-                    currentBlip = null;
+                    currentBlipHandle = -1;
                     ShowMissionBlipInformation(false);
                     return;
                 }
 
                 TakeControlOfFrontend();
                 ClearCurrentDisplay();
-                BlipMissionInfo blipMissionInfo = BlipMissionData[currentBlip.Handle];
+                BlipMissionInfo blipMissionInfo = BlipMissionData[blipHandle];
                 SetMissionData(blipMissionInfo);
                 ShowMissionBlipInformation(true);
                 UpdateMissionBlipInformation();
