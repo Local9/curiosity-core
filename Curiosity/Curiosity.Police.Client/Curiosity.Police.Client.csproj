@@ -64,7 +64,8 @@
     <Compile Include="Environment\Entities\Models\Config.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Managers\CasinoPedManager.cs" />
+    <Compile Include="Managers\ScriptManager.cs" />
+    <Compile Include="Script\CasinoPedScript.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\DropManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />

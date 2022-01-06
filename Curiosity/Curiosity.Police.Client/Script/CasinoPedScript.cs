@@ -1,23 +1,21 @@
-﻿using CitizenFX.Core.UI;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Police.Client.Diagnostics;
+using Curiosity.Police.Client.Extensions;
 using Curiosity.Systems.Library.Models.Casino;
 using Newtonsoft.Json;
-using Curiosity.Police.Client.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.Managers
 {
-    public class CasinoPedManager : Manager<CasinoPedManager>
+    public class CasinoPedScript : BaseScript
     {
-        const int CASINO_INTERIOR_ID = 275201;
         bool isInsideCasino = false;
         CasinoData _casinoConfig;
+        int _scriptState = 0;
 
         List<PedStruct> peds = new List<PedStruct>()
         {
@@ -38,13 +36,14 @@ namespace Curiosity.Police.Client.Managers
         };
 
         List<RouletteTable> rouletteTables = new List<RouletteTable>();
-        
-        public override void Begin()
+
+        internal CasinoPedScript()
         {
-            
+            _scriptState = 0;
+            Tick += Init;
         }
 
-        private CasinoData GetPoliceConfig()
+        private CasinoData GetConfig()
         {
             if (_casinoConfig is not null)
                 return _casinoConfig;
@@ -64,46 +63,6 @@ namespace Curiosity.Police.Client.Managers
             return config;
         }
 
-        [TickHandler]
-        private async Task OnIsPlayerInsideCasinoTick()
-        {
-            try
-            {
-                int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
-
-                if (interiorId == CASINO_INTERIOR_ID && !isInsideCasino)
-                    Init();
-
-                if (interiorId != CASINO_INTERIOR_ID && isInsideCasino)
-                    Dispose();
-
-                if (Game.IsControlJustPressed(0, Control.Context))
-                {
-                    RemoveAllPeds();
-
-                    //for (int i = 0; i < peds.Count; i++)
-                    //{
-                    //    PedStruct pedStruct = peds[i];
-                    //    pedStruct = SetupPedModel(pedStruct);
-
-                    //    if (pedStruct.Model == -1)
-                    //    {
-                    //        Logger.Error($"Failed to create '{peds[i].CasinoPed}'.");
-                    //        continue;
-                    //    }
-
-                    //    pedStruct.Ped = await World.CreatePed(pedStruct.Model, Game.PlayerPed.Position);
-                    //    SetupPedVariations(pedStruct);
-                    //    peds[i] = pedStruct;
-                    //}
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, $"OnIsPlayerInsideCasinoTick");
-            }
-        }
-
         private void SetupPedVariations(PedStruct pedStruct)
         {
             if (pedStruct.PedComponentVariations.Length == 0) return;
@@ -115,17 +74,20 @@ namespace Curiosity.Police.Client.Managers
             }
         }
 
-        private async void Init()
+        private async Task Init()
         {
             try
             {
-                isInsideCasino = true;
-                CasinoData cd = GetPoliceConfig();
-
-                foreach (RouletteTable rouletteTable in cd.RouletteTables)
+                switch(_scriptState)
                 {
-                    CreateRouletteTable(rouletteTable);
+                    case 0:
+                        Setup();
+                        break;
+                    case 1:
+                        Dispose();
+                        break;
                 }
+                Screen.ShowSubtitle($"INIT");
             }
             catch (Exception ex)
             {
@@ -133,12 +95,30 @@ namespace Curiosity.Police.Client.Managers
             }
         }
 
-        private void Dispose()
+        private async void Setup()
+        {
+            if (isInsideCasino) return;
+
+            isInsideCasino = true;
+            
+            CasinoData cd = GetConfig();
+
+            foreach (RouletteTable rouletteTable in cd.RouletteTables)
+            {
+                CreateRouletteTable(rouletteTable);
+            }
+
+            _scriptState = -1; // do nothing
+        }
+
+        public void Dispose()
         {
             isInsideCasino = false;
 
             RemoveAllPeds();
             RemoveAllProps();
+
+            Tick -= Init;
         }
 
         private void RemoveAllPeds()
