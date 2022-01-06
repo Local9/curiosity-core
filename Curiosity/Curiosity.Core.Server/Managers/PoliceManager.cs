@@ -24,7 +24,8 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.Attach("police:job:state", new EventCallback(metadata => {
+            EventSystem.Attach("police:job:state", new EventCallback(metadata =>
+            {
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 if (player == null) return false;
@@ -134,7 +135,8 @@ namespace Curiosity.Core.Server.Managers
                 return em;
             }));
 
-            EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:suspect:jailed", new AsyncEventCallback(async metadata =>
+            {
 
                 int suspectServerId = metadata.Find<int>(0);
 
@@ -151,7 +153,8 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata =>
+            {
 
                 int attackerServerId = metadata.Find<int>(0);
                 int victimServerId = metadata.Find<int>(1);
@@ -211,20 +214,23 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.Attach("police:report:murder", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:report:murder", new AsyncEventCallback(async metadata =>
+            {
                 return null;
             }));
 
-            EventSystem.Attach("police:player:isJailed", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:player:isJailed", new AsyncEventCallback(async metadata =>
+            {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                 return false;
             }));
 
-            EventSystem.Attach("police:ticket:speeding", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("police:ticket:speeding", new AsyncEventCallback(async metadata =>
+            {
                 ExportMessage em = new ExportMessage();
-                
+
                 try
                 {
                     if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
@@ -242,7 +248,7 @@ namespace Curiosity.Core.Server.Managers
                     int vehicleNetId = metadata.Find<int>(3);
                     string street = metadata.Find<string>(4);
                     string direction = metadata.Find<string>(5);
-                    
+
                     // get Vehicle
                     int vehicleHandle = NetworkGetEntityFromNetworkId(vehicleNetId);
                     Vehicle vehicle = new Vehicle(vehicleHandle);
@@ -284,7 +290,7 @@ namespace Curiosity.Core.Server.Managers
 
                         SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
                         playerCullingReset.Add(player.Character.Handle, DateTime.UtcNow.AddSeconds(15));
-                        
+
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
                         $"Last Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
@@ -313,7 +319,7 @@ namespace Curiosity.Core.Server.Managers
             }
             else
             {
-                foreach(KeyValuePair<int, DateTime> kvp in playerCullingReset.ToArray())
+                foreach (KeyValuePair<int, DateTime> kvp in playerCullingReset.ToArray())
                 {
                     if (kvp.Value < DateTime.UtcNow)
                     {

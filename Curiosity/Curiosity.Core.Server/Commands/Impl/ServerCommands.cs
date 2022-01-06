@@ -3,7 +3,6 @@ using Curiosity.Core.Server.Managers;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +40,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                     return;
                 }
 
-                switch(arg)
+                switch (arg)
                 {
                     case "FREEZE":
                         world.IsWeatherFrozen = !WorldManager.WorldInstance.IsWeatherFrozen;
@@ -133,7 +132,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 {
                     case "morning":
                         newHour = 9;
-                        
+
                         break;
                     case "noon":
                         newHour = 12;

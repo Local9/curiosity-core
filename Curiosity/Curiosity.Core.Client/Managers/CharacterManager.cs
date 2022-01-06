@@ -8,7 +8,6 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;

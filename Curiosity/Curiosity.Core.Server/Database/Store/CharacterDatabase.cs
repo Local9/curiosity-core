@@ -337,7 +337,7 @@ namespace Curiosity.Core.Server.Database.Store
                     i.ItemCategory = $"{kv["ItemCategory"]}";
                     i.Label = $"{kv["Label"]}";
                     i.NumberOwned = kv["NumberOwned"].ToInt();
-                    
+
                     lst.Add(i);
                 }
 

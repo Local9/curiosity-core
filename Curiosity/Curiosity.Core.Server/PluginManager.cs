@@ -4,7 +4,6 @@ using Curiosity.Core.Server.Commands;
 using Curiosity.Core.Server.Commands.Impl;
 using Curiosity.Core.Server.Database;
 using Curiosity.Core.Server.Diagnostics;
-using Curiosity.Core.Server.Environment.Entities;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
@@ -252,7 +251,7 @@ namespace Curiosity.Core.Server
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -337,7 +336,7 @@ namespace Curiosity.Core.Server
 
         private async void OnRconCommand(string commandName, List<object> args)
         {
-            
+
             try
             {
                 API.CancelEvent();

@@ -45,7 +45,7 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
             }));
-            
+
             EventSystem.Attach("garage:get:list:cars", new AsyncEventCallback(async metadata =>
             {
                 try
@@ -228,7 +228,7 @@ namespace Curiosity.Core.Server.Managers
 
                     curiosityUser.RoutingBucket = API.GetEntityRoutingBucket(player.Character.Handle);
 
-                    while(!API.DoesEntityExist(entityHandle) && attempts < 100)
+                    while (!API.DoesEntityExist(entityHandle) && attempts < 100)
                     {
                         await BaseScript.Delay(5);
                         entityHandle = API.NetworkGetEntityFromNetworkId(networkId);
@@ -299,7 +299,8 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.Attach("garage:sell:vehicle", new AsyncEventCallback(async metadata => {
+            EventSystem.Attach("garage:sell:vehicle", new AsyncEventCallback(async metadata =>
+            {
                 ExportMessage exportMessage = new ExportMessage();
                 try
                 {

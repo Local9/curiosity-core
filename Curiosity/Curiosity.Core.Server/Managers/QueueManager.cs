@@ -505,7 +505,7 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
-                
+
 
                 session.Where(k => k.Value == SessionState.Loading || k.Value == SessionState.Grace).ToList().ForEach(j =>
                 {

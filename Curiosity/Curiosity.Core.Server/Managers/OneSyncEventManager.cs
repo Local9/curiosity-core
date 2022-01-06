@@ -29,7 +29,8 @@ namespace Curiosity.Core.Server.Managers
             // Instance.EventRegistry.Add("entityCreating", new Action<int>(OnEntityCreating));
             Instance.EventRegistry.Add("entityCreated", new Action<int>(OnEntityCreated));
 
-            EventSystem.Attach("onesync:request", new EventCallback(metadata => {
+            EventSystem.Attach("onesync:request", new EventCallback(metadata =>
+            {
                 return true;
 
                 //if (requestedRightsToSpawn.Contains(metadata.Sender))
@@ -67,7 +68,7 @@ namespace Curiosity.Core.Server.Managers
 
                     Entity entity = null;
 
-                    if (entityType == 1) 
+                    if (entityType == 1)
                         entity = new Ped(handle);
 
                     if (entityType == 2)

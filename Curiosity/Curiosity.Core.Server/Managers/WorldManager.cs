@@ -170,7 +170,7 @@ namespace Curiosity.Core.Server.Managers
                         if (Utility.RANDOM.Bool(.15f))
                             weatherTypes.Add(WeatherType.RAINING);
 
-                        if(Utility.RANDOM.Bool(.05f))
+                        if (Utility.RANDOM.Bool(.05f))
                             weatherTypes.Add(WeatherType.THUNDERSTORM);
                     }
 
@@ -246,7 +246,8 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWorldTimeSyncTick()
         {
-            if (DateTime.UtcNow > lastTimeSyncTick) {
+            if (DateTime.UtcNow > lastTimeSyncTick)
+            {
                 EventSystem.SendAll("world:time:sync", _baseTime, _timeOffset);
                 lastTimeSyncTick = DateTime.UtcNow.AddSeconds(5);
             }

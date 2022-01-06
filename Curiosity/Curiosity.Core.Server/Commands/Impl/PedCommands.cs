@@ -66,7 +66,7 @@ namespace Curiosity.Core.Server.Commands.Impl
         {
             int pedHash = GetHashKey("u_m_y_zombie_01");
             int pedHandle = CreatePed((int)PedType.PED_TYPE_MISSION, (uint)pedHash, pos.X, pos.Y, pos.Z, 0f, true, true);
-            
+
             if (pedHandle == 0)
             {
                 Logger.Debug($"Possible OneSync is Disabled");
@@ -101,7 +101,7 @@ namespace Curiosity.Core.Server.Commands.Impl
             }
 
             Dictionary<int, DateTime> copyPeds = new Dictionary<int, DateTime>(activePeds);
-            foreach(KeyValuePair<int, DateTime> kvp in copyPeds)
+            foreach (KeyValuePair<int, DateTime> kvp in copyPeds)
             {
                 int ped = kvp.Key;
                 DateTime timeToDelete = kvp.Value;
@@ -109,7 +109,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 if (DateTime.UtcNow > timeToDelete)
                     goto DeletePed;
 
-            DeletePed:
+                DeletePed:
                 if (DoesEntityExist(ped))
                 {
                     DeleteEntity(ped);

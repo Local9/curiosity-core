@@ -357,7 +357,7 @@ namespace Curiosity.Core.Server.Managers
                     if (!itemRemoved)
                         goto Fail;
 
-                PayBackUser:
+                    PayBackUser:
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, (int)ownedItem.BuyBackValue);
 
                     if (item.IsStockManaged)

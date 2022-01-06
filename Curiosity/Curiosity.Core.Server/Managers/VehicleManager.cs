@@ -58,17 +58,17 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("vehicle:log:player", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                
+
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 user.PersonalVehicle = netId;
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 player.State.Set($"{StateBagKey.PLAYER_VEHICLE}", user.PersonalVehicle, true);
-                
+
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
-            
+
             EventSystem.Attach("vehicle:log:staff", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
@@ -402,7 +402,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!trailerHashes.Contains(model))
                 {
-                    
+
                     return null;
                 }
 

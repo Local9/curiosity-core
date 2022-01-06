@@ -5,7 +5,6 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -47,7 +46,7 @@ namespace Curiosity.Core.Server.Managers
 
                     return true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Error($"debug:camera:save -> {ex}");
                     return false;

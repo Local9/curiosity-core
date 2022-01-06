@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.GameWorld
 {
@@ -24,7 +24,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);
             if (interiorId > 0)
             {
-                HideMinimapExteriorMapThisFrame();    
+                HideMinimapExteriorMapThisFrame();
             }
 
             SetInteriorZoomLevelIncreased(interiorId > 0);

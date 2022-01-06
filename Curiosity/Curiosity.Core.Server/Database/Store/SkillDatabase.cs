@@ -33,7 +33,7 @@ namespace Curiosity.Core.Server.Database.Store
                 if (keyValuePairs.Count == 0)
                     throw new Exception("Skill was not changed");
 
-                foreach(Dictionary<string, object> kv in keyValuePairs)
+                foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
                     newValue = kv["return"].ToInt();
                 }

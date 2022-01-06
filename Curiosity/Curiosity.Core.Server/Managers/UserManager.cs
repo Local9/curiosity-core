@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
-using Curiosity.Core.Server.Environment.Entities;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
@@ -44,10 +43,10 @@ namespace Curiosity.Core.Server.Managers
             {
                 List<CuriosityPlayerListItem> lst = new List<CuriosityPlayerListItem>();
 
-                foreach(KeyValuePair<int, CuriosityUser> kv in PluginManager.ActiveUsers)
+                foreach (KeyValuePair<int, CuriosityUser> kv in PluginManager.ActiveUsers)
                 {
                     CuriosityUser curiosityUser = kv.Value;
-                    
+
                     CuriosityPlayerListItem cpl = new CuriosityPlayerListItem();
                     cpl.UserId = curiosityUser.UserId;
                     cpl.ServerHandle = kv.Key;
@@ -118,7 +117,7 @@ namespace Curiosity.Core.Server.Managers
 
                 return curiosityUser;
             }));
-            
+
             EventSystem.Attach("user:login:module", new AsyncEventCallback(async metadata =>
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
@@ -350,7 +349,7 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        private async void OnUserLogException([FromSource]Player player, string message, string stack)
+        private async void OnUserLogException([FromSource] Player player, string message, string stack)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append($"Client Exception: {DateTime.UtcNow}\n");
@@ -389,7 +388,7 @@ namespace Curiosity.Core.Server.Managers
         {
             List<string> currentCallSigns = new List<string>();
 
-            foreach(KeyValuePair<int, CuriosityUser> u in PluginManager.ActiveUsers)
+            foreach (KeyValuePair<int, CuriosityUser> u in PluginManager.ActiveUsers)
             {
                 currentCallSigns.Add(u.Value.JobCallSign);
             }

@@ -189,7 +189,7 @@ namespace Curiosity.Core.Server.Database.Store
                         skill.ExperienceRequired = int.Parse($"{kv["RequiredValue"]}");
                         skill.ExperienceCurrent = int.Parse($"{kv["Experience"]}");
                         skill.RequirementMet = int.Parse($"{kv["RequirementMet"]}") == 1;
-                        
+
                         lst.Add(skill);
                     }
 

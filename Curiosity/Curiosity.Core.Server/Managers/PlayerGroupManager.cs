@@ -132,9 +132,9 @@ namespace Curiosity.Core.Server.Managers
 
         bool IsUserInGroup(int serverId, out int groupId)
         {
-            foreach(var group in _activeGroups)
+            foreach (var group in _activeGroups)
             {
-                foreach(var member in group.Value)
+                foreach (var member in group.Value)
                 {
                     if (member == serverId)
                     {

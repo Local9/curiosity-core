@@ -27,7 +27,8 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             Instance.ExportDictionary.Add("IsCloseToLocation", new Func<string, float, float, float, float, bool>(
-                (eventName, posX, posY, posZ, dist) => {
+                (eventName, posX, posY, posZ, dist) =>
+                {
                     Vector3 vector = new Vector3(posX, posY, posZ);
                     return IsNearEventLocation(vector, eventName, dist);
                 }));
@@ -54,7 +55,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (config.Locations.Count > 0)
                     {
-                        foreach(Location location in config.Locations)
+                        foreach (Location location in config.Locations)
                         {
                             if (location.SpawnType == SpawnType.Unknown
                                 || location.SpawnType == SpawnType.Hospital)
@@ -67,7 +68,7 @@ namespace Curiosity.Core.Server.Managers
                             }
                             else
                             {
-                                foreach(Position position in location.Spawns)
+                                foreach (Position position in location.Spawns)
                                 {
                                     spawnCache[location.SpawnType].Add(position);
                                 }
@@ -76,7 +77,7 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error($"Location JSON File Exception\nDetails: {ex.Message}\nStackTrace:\n{ex.StackTrace}");
             }
@@ -91,16 +92,16 @@ namespace Curiosity.Core.Server.Managers
 
         public bool IsNearEventLocation(Vector3 position, string eventName, float distance = 0f)
         {
-            foreach(Location location in configCache.Locations)
+            foreach (Location location in configCache.Locations)
             {
                 if (location.Markers.Count == 0)
                     continue;
 
-                foreach(Marker marker in location.Markers)
+                foreach (Marker marker in location.Markers)
                 {
                     if (marker.Event == eventName)
                     {
-                        foreach(Position pos in marker.Positions)
+                        foreach (Position pos in marker.Positions)
                         {
                             Vector3 posV = pos.AsVector();
                             float dist = Vector3.Distance(position, posV);

@@ -15,7 +15,7 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<List<VehicleItem>> GetAllVehicles(int characterId, bool carsOnly = false)
         {
             List<VehicleItem> lst = new List<VehicleItem>();
-            
+
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
                     { "@characterId", characterId },
@@ -80,7 +80,7 @@ namespace Curiosity.Core.Server.Database.Store
                 item.BuyBackValue = keyValuePairs[0]["BuyBackValue"];
 
                 string vehicleData = $"{keyValuePairs[0]["VehicleData"]}";
-                
+
                 if (!string.IsNullOrEmpty(vehicleData))
                     item.VehicleInfo = JsonConvert.DeserializeObject<VehicleInfo>(vehicleData);
 

@@ -340,11 +340,11 @@ namespace Curiosity.Core.Server.Managers
                     API.DeleteEntity(entityId);
                 }
             }
-            catch(InvalidOperationException ioEx)
+            catch (InvalidOperationException ioEx)
             {
                 Logger.Error(ioEx, "NetworkDeleteEntity -> Possible entity doesn't exist");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error(ex, "NetworkDeleteEntity");
             }

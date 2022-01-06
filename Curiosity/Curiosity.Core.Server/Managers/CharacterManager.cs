@@ -654,7 +654,7 @@ namespace Curiosity.Core.Server.Managers
                     {
                         exportMessage.skill = skill;
                     }
-                
+
                 SendMessage:
                     return $"{exportMessage}";
                 }));

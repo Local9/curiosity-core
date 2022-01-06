@@ -13,7 +13,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            
+
         }
 
         private ServerConfig Get()
@@ -53,17 +53,18 @@ namespace Curiosity.Core.Server.Managers
             if (_loadingConfig is not null)
                 return _loadingConfig;
 
-            var config = new {
+            var config = new
+            {
                 images = new List<string>(),
                 tips = new List<Tip>()
             };
 
-            foreach(string img in LoadingImages())
+            foreach (string img in LoadingImages())
             {
                 config.images.Add(img);
             }
 
-            foreach(Tip tip in LoadingTips())
+            foreach (Tip tip in LoadingTips())
             {
                 config.tips.Add(tip);
             }

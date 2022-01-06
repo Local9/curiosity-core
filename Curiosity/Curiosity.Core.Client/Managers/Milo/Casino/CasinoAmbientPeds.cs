@@ -162,7 +162,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         public static void Dispose()
         {
             if (peds.Count == 0) return;
-            foreach(Ped ped in peds.ToArray())
+            foreach (Ped ped in peds.ToArray())
             {
                 if (ped.Exists())
                     ped.Dispose();

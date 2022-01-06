@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Managers.Milo.Office
+﻿namespace Curiosity.Core.Client.Managers.Milo.Office
 {
     internal class OfficeManager : Manager<OfficeManager>
     {
@@ -12,7 +6,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Office
 
         public override void Begin()
         {
-            
+
         }
 
 

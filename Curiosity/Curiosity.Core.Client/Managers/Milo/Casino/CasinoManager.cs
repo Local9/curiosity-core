@@ -248,7 +248,7 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
 
                 Instance.DetachTickHandler(AudioSettings);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error(ex, "AudioSettings");
                 Instance.DetachTickHandler(AudioSettings);

@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
             {
                 _menu.Clear();
 
-                foreach(Player player in PluginManager.Instance.PlayerList)
+                foreach (Player player in PluginManager.Instance.PlayerList)
                 {
                     if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
 

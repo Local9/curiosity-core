@@ -52,7 +52,7 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
-            
+
             EventSystem.Attach(JOB_POLICE_ARREST, new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
@@ -75,7 +75,8 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             Instance.ExportDictionary.Add("SetUserJob", new Func<string, string, bool>(
-                (playerHandle, job) => {
+                (playerHandle, job) =>
+                {
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))

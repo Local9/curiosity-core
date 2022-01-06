@@ -712,7 +712,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("mission:update:vehicle:search", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
-                
+
                 MissionData missionData = GetMissionData(metadata.Sender);
 
                 MissionDataPed missionDataPed = missionData.NetworkPeds.Where(x => x.Value.IsDriver).Select(x => x.Value).FirstOrDefault();
@@ -846,9 +846,9 @@ namespace Curiosity.Core.Server.Managers
             if (ActiveMissions.ContainsKey(senderHandle))
                 return ActiveMissions[senderHandle];
 
-            foreach(KeyValuePair<int, MissionData> keyValuePair in ActiveMissions)
+            foreach (KeyValuePair<int, MissionData> keyValuePair in ActiveMissions)
             {
-                foreach(int playerId in keyValuePair.Value.PartyMembers)
+                foreach (int playerId in keyValuePair.Value.PartyMembers)
                 {
                     if (playerId == senderHandle)
                         return keyValuePair.Value;

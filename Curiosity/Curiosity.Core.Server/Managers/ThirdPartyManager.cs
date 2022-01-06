@@ -17,7 +17,7 @@ namespace Curiosity.Core.Server.Managers
                 if (data.secondsRemaining == 60)
                 {
                     await BaseScript.Delay(45000);
-                    
+
                     Logger.Warn($"15 seconds before restart, saving all players.");
 
                     foreach (var kvp in PluginManager.ActiveUsers)

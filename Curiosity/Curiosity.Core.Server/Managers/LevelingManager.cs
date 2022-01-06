@@ -4,26 +4,26 @@ namespace Curiosity.Core.Server.Managers
 {
     class LevelingManager : Manager<LevelingManager>
     {
-		// MOVE TO CLIENT
+        // MOVE TO CLIENT
 
-		// check required
-		public int ExperienceToNextLevel(int level)
-		{
-			int firstPass = (int)Math.Floor(level + (300.0f * Math.Pow(2.0f, level / 7.0f)));
-			return firstPass / 4;
-		}
-
-		public int TotalExperienceRequiredForALevel(int level)
+        // check required
+        public int ExperienceToNextLevel(int level)
         {
-			int firstPass = 0;
-			int secondPass = 0;
+            int firstPass = (int)Math.Floor(level + (300.0f * Math.Pow(2.0f, level / 7.0f)));
+            return firstPass / 4;
+        }
 
-			for(int levelCycle = 1; levelCycle < level; levelCycle++)
+        public int TotalExperienceRequiredForALevel(int level)
+        {
+            int firstPass = 0;
+            int secondPass = 0;
+
+            for (int levelCycle = 1; levelCycle < level; levelCycle++)
             {
-				firstPass += (int)Math.Floor(levelCycle + (300.0f * Math.Pow(2.0f, levelCycle / 7.0f)));
-				secondPass = firstPass / 4;
-			}
-			return secondPass;
+                firstPass += (int)Math.Floor(levelCycle + (300.0f * Math.Pow(2.0f, levelCycle / 7.0f)));
+                secondPass = firstPass / 4;
+            }
+            return secondPass;
         }
 
         public int GetXPforLevel(int level, int maxExp, int maxLvl)
