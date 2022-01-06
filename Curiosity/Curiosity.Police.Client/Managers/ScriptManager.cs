@@ -23,7 +23,7 @@ namespace Curiosity.Police.Client.Managers
 
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnIsPlayerInsideCasinoTick()
         {
             try
