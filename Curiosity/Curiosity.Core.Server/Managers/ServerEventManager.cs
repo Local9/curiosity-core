@@ -25,14 +25,14 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            MissionData mission = Instance.ExportDictionary["curiosity-mission"].PlayerMission(source);
+            // MissionData mission = Instance.ExportDictionary["curiosity-mission"].PlayerMission(source);
 
             string msg = $"[{source}] '{player.Name}' tried to give another ped a weapon, or a script is badly written.";
 
-            if (mission != null)
-            {
-                msg += " Player is a mission owner.";
-            }
+            //if (mission != null)
+            //{
+            //    msg += " Player is a mission owner.";
+            //}
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
             await BaseScript.Delay(0);
