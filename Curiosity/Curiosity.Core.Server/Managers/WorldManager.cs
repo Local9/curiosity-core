@@ -225,7 +225,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10000);
         }
 
-        [TickHandler]
+        //[TickHandler]
         private async Task OnWorldTimeTick()
         {
             if (DateTime.UtcNow > lastTimeTick)
@@ -243,7 +243,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(250);
         }
 
-        [TickHandler]
+        //[TickHandler]
         private async Task OnWorldTimeSyncTick()
         {
             if (DateTime.UtcNow > lastTimeSyncTick)

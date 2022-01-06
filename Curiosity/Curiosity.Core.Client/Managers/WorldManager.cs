@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Data;
@@ -27,8 +28,8 @@ namespace Curiosity.Core.Client.Managers
         Dictionary<Region, WeatherType> regionalWeather = new Dictionary<Region, WeatherType>();
 
         // Time
-        double clientBaseTime = 0;
-        double clientTimeOffset = 0;
+        double hours = 0;
+        double minutes = 0;
         double clientTimer = 0;
         int hour;
         int minute;
@@ -59,11 +60,16 @@ namespace Curiosity.Core.Client.Managers
         {
             EventSystem.Attach("world:time:sync", new EventCallback(metadata =>
             {
-                clientBaseTime = metadata.Find<double>(0);
-                clientTimeOffset = metadata.Find<double>(1);
+                int hours = metadata.Find<int>(0);
+                int minutes = metadata.Find<int>(1);
 
-                if (Logger.IsDebugTimeEnabled)
-                    Logger.Debug($"World Time: clientBaseTime: {clientBaseTime}, clientTimeOffset: {clientTimeOffset} | {hour:00}:{minute:00} | Locked Time: {isTimeLocked}-{timeLockHour:00}:{timeLockMins:00}");
+                if (hours > 23)
+                    hours = 0;
+
+                if (minutes > 59)
+                    minutes = 0;
+
+                // NetworkOverrideClockTime(hour, minutes, 0);
 
                 return null;
             }));
@@ -124,17 +130,24 @@ namespace Curiosity.Core.Client.Managers
 
         public void LockAndSetTime(int hour, int minute)
         {
-            timeLockHour = hour;
-            timeLockMins = minute;
+            if (hour > 23)
+                hour = 0;
+
+            if (minute > 59)
+                minute = 0;
+
+            NetworkOverrideClockTime(hour, minute, 0);
+            
             isTimeLocked = true;
-            PauseClock(true);
+
             Logger.Debug($"LockAndSetTime: {hour:00}:{minute:00}");
         }
 
         public void UnlockTime()
         {
+            NetworkClearClockTimeOverride();
             isTimeLocked = false;
-            PauseClock(false);
+            
             Logger.Debug($"UnlockTime");
         }
 
@@ -320,41 +333,48 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        [TickHandler(SessionWait = true)]
+
+        // TRUST IN THE NETWORK
+        //[TickHandler(SessionWait = true)]
         private async Task OnWorldTimeSyncTick()
         {
-            await BaseScript.Delay(0);
+            int hours = 0;
+            int minutes = 0;
+            int seconds = 0;
+            NetworkGetGlobalMultiplayerClock(ref hours, ref minutes, ref seconds);
 
-            while (!Cache.Player.Character.MarkedAsRegistered)
-            {
-                NetworkOverrideClockTime(12, 1, 0);
-                SetClockTime(12, 1, 0);
-                SetWeatherTypeNow("EXTRASUNNY");
-                await BaseScript.Delay(0);
-            }
+            Screen.ShowSubtitle($"{hours:00}:{minutes:00}:{seconds:00}");
 
-            if (isTimeLocked)
-            {
-                NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
-                SetClockTime(timeLockHour, timeLockMins, 0);
-                await BaseScript.Delay(0);
-                return;
-            }
+            //while (!Cache.Player.Character.MarkedAsRegistered)
+            //{
+            //    NetworkOverrideClockTime(12, 1, 0);
+            //    SetClockTime(12, 1, 0);
+            //    SetWeatherTypeNow("EXTRASUNNY");
+            //    await BaseScript.Delay(0);
+            //}
 
-            double newBaseTime = clientBaseTime;
-            if ((GetGameTimer() - 500) > clientTimer)
-            {
-                newBaseTime += 0.25;
-                clientTimer = GetGameTimer();
-            }
+            //if (isTimeLocked)
+            //{
+            //    NetworkOverrideClockTime(timeLockHour, timeLockMins, 0);
+            //    SetClockTime(timeLockHour, timeLockMins, 0);
+            //    await BaseScript.Delay(0);
+            //    return;
+            //}
 
-            clientBaseTime = newBaseTime;
+            //double newBaseTime = clientBaseTime;
+            //if ((GetGameTimer() - 500) > clientTimer)
+            //{
+            //    newBaseTime += 0.25;
+            //    clientTimer = GetGameTimer();
+            //}
 
-            hour = (int)Math.Floor(((clientBaseTime + clientTimeOffset) / 60) % 24);
-            minute = (int)Math.Floor((clientBaseTime + clientTimeOffset) % 60);
+            //clientBaseTime = newBaseTime;
 
-            NetworkOverrideClockTime(hour, minute, 0);
-            SetClockTime(hour, minute, 0);
+            //hour = (int)Math.Floor(((clientBaseTime + clientTimeOffset) / 60) % 24);
+            //minute = (int)Math.Floor((clientBaseTime + clientTimeOffset) % 60);
+
+            //NetworkOverrideClockTime(hour, minute, 0);
+            //SetClockTime(hour, minute, 0);
         }
 
         [TickHandler(SessionWait = true)]
