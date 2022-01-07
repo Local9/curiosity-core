@@ -302,6 +302,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             SetAmbientZoneListStatePersistent("AZL_DLC_Hei4_Island_Disabled_Zones", true, false);
             SetAudioFlag("PlayerOnDLCHeist4Island", false);
             ResetDeepOceanScaler();
+            RemoveIpl("h4_airstrip_hanger");
 
             List<string> activeIpls = configurationManager.ActiveIpls();
             List<string> losSantosIpls = configurationManager.LosSantosIpls();
@@ -340,6 +341,7 @@ namespace Curiosity.Core.Client.Managers.Milo
             SetAmbientZoneListStatePersistent("AZL_DLC_Hei4_Island_Disabled_Zones", false, true);
             SetAudioFlag("PlayerOnDLCHeist4Island", true);
             SetDeepOceanScaler(0.0f);
+            RequestIpl("h4_airstrip_hanger");
 
             List<string> activeIpls = configurationManager.ActiveIpls();
             List<string> losSantosIpls = configurationManager.LosSantosIpls();
