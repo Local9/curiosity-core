@@ -24,12 +24,16 @@ namespace Curiosity.Core.Client.Managers
         string _currentStreet;
 
         public bool isDebugging = false;
+        Vehicle currentVehicle;
 
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
         private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
         {
             if (player.Character != vehicle.Driver) return;
+
+            if (currentVehicle != vehicle)
+                currentVehicle = vehicle;
 
             string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
             if (PoliceConfig.IgnoredVehicles.Contains(vehicleDisplayName)) return;
@@ -67,7 +71,7 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            Vector3 pos = Game.PlayerPed.CurrentVehicle.Position;
+            Vector3 pos = currentVehicle.Position;
             uint streetHash = 0;
             uint crossingRoad = 0;
             GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
@@ -94,7 +98,7 @@ namespace Curiosity.Core.Client.Managers
 
             foreach(KeyValuePair<int, string> kvp in Common.WorldCompassDirection)
             {
-                float vehDirection = Game.PlayerPed.CurrentVehicle.Heading;
+                float vehDirection = currentVehicle.Heading;
                 if (Math.Abs(vehDirection - kvp.Key) < 22.5)
                 {
                     return kvp.Value;
@@ -119,23 +123,22 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
             string direction = GetVehicleHeadingDirection();
-            List<PoliceCamera> closestCameras = GetClosestCamera(vehicle.Position, _speedCameraDistance);
+            List<PoliceCamera> closestCameras = GetClosestCamera(currentVehicle.Position, _speedCameraDistance);
             if (closestCameras.Count == 0) return;
             foreach(PoliceCamera camera in closestCameras)
             {
                 camera.Active = false;
 
                 if (camera.Direction != direction) continue;
-                float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
+                float currentSpeed = currentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
                 if (_currentStreetLimit == 0) continue;
                 Vector3 start = camera.Start.Vector3;
                 Vector3 end = camera.End.Vector3;
 
-                if (!Common.IsEntityInAngledArea(Game.PlayerPed, start, end, PoliceConfig.SpeedCameraWidth, isDebugging)) continue;
+                if (!Common.IsEntityInAngledArea(currentVehicle, start, end, PoliceConfig.SpeedCameraWidth, isDebugging)) continue;
 
                 camera.Active = true;
 
@@ -162,7 +165,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (caughtSpeeding)
                 {
-                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, informPolice, vehicle.NetworkId, _currentStreet, direction);
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, informPolice, currentVehicle.NetworkId, _currentStreet, direction);
                     await BaseScript.Delay(5000);
                     camera.Active = false;
                 }
