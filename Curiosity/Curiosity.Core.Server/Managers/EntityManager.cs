@@ -54,7 +54,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 int networkId = metadata.Find<int>(0);
 
-                // NetworkDeleteEntity(networkId);
+                NetworkDeleteEntity(networkId);
 
                 return null;
             }));
