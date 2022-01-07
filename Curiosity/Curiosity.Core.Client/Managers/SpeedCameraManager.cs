@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Scripts.JobPolice;
 using Curiosity.Core.Client.Utils;
 using System;
@@ -23,7 +25,7 @@ namespace Curiosity.Core.Client.Managers
         float _currentStreetLimit = 0;
         string _currentStreet;
 
-        public bool isDebugging = false;
+        public bool isDebugging = true;
         Vehicle currentVehicle;
 
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
@@ -39,10 +41,12 @@ namespace Curiosity.Core.Client.Managers
             if (PoliceConfig.IgnoredVehicles.Contains(vehicleDisplayName)) return;
             if (IsInvalidVehicle(vehicle)) return;
 
-            PluginManager.Instance.AttachTickHandler(OnSpeedTest);
-            PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
+            Instance.AttachTickHandler(OnSpeedTest);
+            Instance.AttachTickHandler(OnSpeedCameraCheck);
 
             _speedCameraDistance = PoliceConfig.SpeedCameraDistance;
+
+            Logger.Info($"Speed Cameras Active");
         }
 
         public void Dispose()
@@ -111,8 +115,8 @@ namespace Curiosity.Core.Client.Managers
         public List<PoliceCamera> GetClosestCamera(Vector3 position, float distance)
         {
             return PoliceConfig.SpeedCameras
-                    .Where(x => Vector3.Distance(position, x.Start.Vector3) < distance)
-                    .OrderBy(x => Vector3.Distance(position, x.Start.Vector3)).ToList();
+                    .Where(x => position.Distance(x.Center) < distance)
+                    .OrderBy(x => position.Distance(x.Center)).ToList();
         }
 
         private async Task OnSpeedCameraCheck()
@@ -125,10 +129,13 @@ namespace Curiosity.Core.Client.Managers
 
             string direction = GetVehicleHeadingDirection();
             List<PoliceCamera> closestCameras = GetClosestCamera(currentVehicle.Position, _speedCameraDistance);
+
             if (closestCameras.Count == 0) return;
             foreach(PoliceCamera camera in closestCameras)
             {
                 camera.Active = false;
+
+                Screen.ShowSubtitle($"{camera.Direction} / {direction}");
 
                 if (camera.Direction != direction) continue;
                 float currentSpeed = currentVehicle.Speed;
@@ -138,11 +145,10 @@ namespace Curiosity.Core.Client.Managers
                 Vector3 start = camera.Start.Vector3;
                 Vector3 end = camera.End.Vector3;
 
-                if (!Common.IsEntityInAngledArea(currentVehicle, start, end, PoliceConfig.SpeedCameraWidth, isDebugging)) continue;
+                if (!Common.IsEntityInAngledArea(currentVehicle, start, end, PoliceConfig.SpeedCameraWidth, debug: isDebugging)) continue;
 
                 camera.Active = true;
 
-                bool informPolice = false; // legacy
                 bool caughtSpeeding = false;
                 float limitToReport = 0;
 
@@ -165,7 +171,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (caughtSpeeding)
                 {
-                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, informPolice, currentVehicle.NetworkId, _currentStreet, direction);
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, false, currentVehicle.NetworkId, _currentStreet, direction);
                     await BaseScript.Delay(5000);
                     camera.Active = false;
                 }

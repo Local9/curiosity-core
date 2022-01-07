@@ -71,9 +71,7 @@ namespace Curiosity.Core.Client.Utils
 
         public static string GetCompassHeading(Vector3 start, Vector3 end)
         {
-            Vector2 eStart = new Vector2(start.X, start.Y);
-            Vector2 eEnd = new Vector2(end.X, end.Y);
-            float heading = GetHeading(eStart, eEnd);
+            float heading = GetHeading(end, start); // WHY GTA turns this around, I don't know
 
             foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)
             {

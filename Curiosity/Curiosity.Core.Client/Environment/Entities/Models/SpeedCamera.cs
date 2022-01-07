@@ -26,6 +26,8 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
         [DataMember(Name = "end", EmitDefaultValue = false)]
         public Vector End;
 
+        public Vector3 Center => (Start.Vector3 + End.Vector3) / 2;
+
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
