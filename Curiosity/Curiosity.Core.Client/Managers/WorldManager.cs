@@ -406,7 +406,7 @@ namespace Curiosity.Core.Client.Managers
                 }
             });
 
-            await BaseScript.Delay(1000);
+            await BaseScript.Delay(5000);
         }
 
         [TickHandler(SessionWait = true)]
