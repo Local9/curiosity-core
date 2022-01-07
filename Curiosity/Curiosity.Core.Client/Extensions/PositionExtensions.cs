@@ -55,5 +55,20 @@ namespace Curiosity.Core.Client.Extensions
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
+
+        public static Vector3 CenterOfVectors(this List<Vector3> vectors)
+        {
+            Vector3 sum = Vector3.Zero;
+            if (vectors == null || vectors.Count == 0)
+            {
+                return sum;
+            }
+
+            foreach (Vector3 vec in vectors)
+            {
+                sum += vec;
+            }
+            return sum / vectors.Count;
+        }
     }
 }

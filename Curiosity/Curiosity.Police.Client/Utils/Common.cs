@@ -35,13 +35,10 @@ namespace Curiosity.Police.Client.Utils
 
             if (debug)
             {
-                Vector2 eStart = new Vector2(start.X, start.Y);
-                Vector2 eEnd = new Vector2(end.X, end.Y);
-
                 Vector3 center = (start + end) / 2;
                 center.Z = start.Z;
 
-                float rotation = GetHeading(eStart, eEnd);
+                float rotation = GetHeading(start, end);
                 float distance = start.Distance(end);
                 float height = (start.Z > end.Z) ? start.Z - end.Z : end.Z - start.Z;
 

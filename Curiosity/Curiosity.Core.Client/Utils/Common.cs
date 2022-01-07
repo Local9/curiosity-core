@@ -36,19 +36,16 @@ namespace Curiosity.Core.Client.Utils
 
             if (debug)
             {
-                Vector2 eStart = new Vector2(start.X, start.Y);
-                Vector2 eEnd = new Vector2(end.X, end.Y);
-
                 Vector3 center = (start + end) / 2;
                 center.Z = start.Z;
 
-                float rotation = GetHeading(eStart, eEnd);
+                float rotation = GetHeading(start, end);
                 float distance = start.Distance(end);
                 float height = (start.Z > end.Z) ? start.Z - end.Z : end.Z - start.Z;
 
                 Color colorTest = Color.FromArgb(120, !isEntityInAngledArea ? 255 : 0, isEntityInAngledArea ? 255 : 0, 0);
                 Color debugSphere = Color.FromArgb(80, 255, 77, 196);
-                World.DrawMarker((MarkerType)43, center, Vector3.Zero, new Vector3(0f, 0f, rotation), new Vector3(width, distance, height), colorTest);
+                World.DrawMarker((MarkerType)43, center, Vector3.Zero, new Vector3(Vector2.Zero, rotation), new Vector3(width, distance, height), colorTest);
                 World.DrawMarker(MarkerType.DebugSphere, start, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
                 World.DrawMarker(MarkerType.DebugSphere, end, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
                 ScreenInterface.Draw3DText(start, $"START: {start}", 40f, distance + 10f, 0f);
