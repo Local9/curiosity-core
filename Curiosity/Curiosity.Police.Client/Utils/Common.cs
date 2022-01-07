@@ -25,7 +25,7 @@ namespace Curiosity.Police.Client.Utils
             { 360, "N" }
         };
 
-        public static bool IsEntityInAngledArea(Entity entity, Vector3 start, Vector3 end, float width, bool debug = false)
+        public static bool IsEntityInAngledArea(Entity entity, Vector3 start, Vector3 end, float width, bool setZStart = true, bool debug = false)
         {
             if (entity == null) return false;
             if (start == Vector3.Zero) return false;
@@ -36,7 +36,7 @@ namespace Curiosity.Police.Client.Utils
             if (debug)
             {
                 Vector3 center = (start + end) / 2;
-                center.Z = start.Z;
+                if (setZStart) center.Z = start.Z;
 
                 float rotation = GetHeading(start, end);
                 float distance = start.Distance(end);
