@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.Managers
 {
-    public class ConfigurationManager : Manager<ConfigurationManager>
+    class ConfigurationManager : Manager<ConfigurationManager>
     {
         PoliceConfigFile _policeConfig;
 

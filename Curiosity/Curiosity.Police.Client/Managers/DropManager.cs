@@ -13,7 +13,7 @@ using Curiosity.Police.Client.PolyZone.Data;
 
 namespace Curiosity.Police.Client.Managers
 {
-    public class DropManager : Manager<DropManager>
+    class DropManager : Manager<DropManager>
     {
         Zone z = new Zone();
 

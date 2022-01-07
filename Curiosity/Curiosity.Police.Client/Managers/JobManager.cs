@@ -10,7 +10,7 @@ using Curiosity.Police.Client.Interface;
 
 namespace Curiosity.Police.Client.Managers
 {
-    public class JobManager : Manager<JobManager>
+    class JobManager : Manager<JobManager>
     {
         private const string JOB_POLICE = "Police Officer";
         internal static bool IsOnDuty = false;

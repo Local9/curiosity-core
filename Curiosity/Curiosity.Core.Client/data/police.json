@@ -226,6 +226,17 @@
     "Strangeways Dr": 30
   },
   "speedCameras": [
-
+    {
+      "start": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      },
+      "end": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    }
   ]
 }

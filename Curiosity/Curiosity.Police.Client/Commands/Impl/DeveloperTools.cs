@@ -24,7 +24,7 @@ namespace Curiosity.Police.Client.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
-        [CommandInfo(new[] { "cameras" })]
+        // [CommandInfo(new[] { "cameras" })]
         public class SpeedCameraCommand : ICommand
         {
             List<PoliceCamera> _currentSpeedCameras = new();

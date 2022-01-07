@@ -10,7 +10,7 @@ using Curiosity.Police.Client.Environment.Data;
 
 namespace Curiosity.Police.Client.Managers
 {
-    public class SpeedCameraManager : Manager<SpeedCameraManager>
+    class SpeedCameraManager : Manager<SpeedCameraManager>
     {
         // base premise from Big-Yoda
         // https://github.com/Big-Yoda/Posted-Speedlimit
