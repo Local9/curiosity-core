@@ -25,6 +25,7 @@ namespace Curiosity.Core.Client.Managers.Events
     public delegate void PedKillPedEvent(Ped attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void EntityKillEntityEvent(Entity attacker, Entity victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void DeadEvent(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag);
+    public delegate void EnteredVehicle(Player player, Vehicle vehicle);
 }
 
 namespace Curiosity.Core.Client.Managers
@@ -39,6 +40,7 @@ namespace Curiosity.Core.Client.Managers
         public static event PedKillPedEvent OnPedKillPed;
         public static event EntityKillEntityEvent OnEntityKillEntity;
         public static event DeadEvent OnDeath;
+        public static event EnteredVehicle OnEnteredVehicle;
 
         public override void Begin()
         {
@@ -57,7 +59,13 @@ namespace Curiosity.Core.Client.Managers
                     // Arg 0 - Player
                     // arg 1 - Vehicle Entity Handle
                     Player player = new Player((int)args[0]);
-                    Entity vehicle = Entity.FromHandle((int)args[1]);
+
+                    if (player.ServerId != Game.Player.ServerId) return;
+
+                    int entityId = (int)args[1];
+                    if (!API.IsEntityAVehicle(entityId)) return;
+
+                    Vehicle vehicle = new Vehicle(entityId);
 
                     HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
                 }
@@ -98,16 +106,19 @@ namespace Curiosity.Core.Client.Managers
 
         Dictionary<int, VehicleState> previousVehicles = new Dictionary<int, VehicleState>();
 
-        private void HandleCEventNetworkPlayerEnteredVehicle(Player player, Entity ent)
+        private void HandleCEventNetworkPlayerEnteredVehicle(Player player, Vehicle vehicle)
         {
+            OnEnteredVehicle?.Invoke(player, vehicle);
+
+            // MOVE THIS SHIT
+
             Cache.UpdatePedId();
 
             if (player.Character.Handle != Cache.PlayerPed.Handle) return;
 
-            if (ent is Vehicle)
+            if (vehicle is Vehicle)
             {
                 VehicleManager vehicleManager = VehicleManager.GetModule();
-                Vehicle vehicle = (Vehicle)ent;
 
                 VehicleState currentVehicle;
 

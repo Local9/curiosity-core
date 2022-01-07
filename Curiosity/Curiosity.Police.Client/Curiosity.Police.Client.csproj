@@ -61,7 +61,7 @@
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Environment\Data\CompassDirections.cs" />
     <Compile Include="Environment\Entities\Models\Colour.cs" />
-    <Compile Include="Environment\Entities\Models\Config.cs" />
+    <Compile Include="Environment\Entities\Models\PoliceConfigFile.cs" />
     <Compile Include="Environment\Entities\TrackedPed.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Managers\ScriptManager.cs" />

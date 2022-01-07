@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client.Utils
 {
     public static class Common
     {
-        static Dictionary<int, string> _worldDirection = new()
+        public static Dictionary<int, string> WorldCompassDirection = new()
         {
             { 0, "N" },
             { 45, "NW" },
@@ -57,7 +57,7 @@ namespace Curiosity.Core.Client.Utils
 
         public static string GetHeadingDirection()
         {
-            foreach (KeyValuePair<int, string> kvp in _worldDirection)
+            foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)
             {
                 float vehDirection = Game.PlayerPed.Heading;
                 if (Math.Abs(vehDirection - kvp.Key) < 22.5)

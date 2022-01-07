@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment.Entities.Models;
-using Newtonsoft.Json;
+using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Environment.Entities.Models.Config;
+using Curiosity.Core.Client.Scripts.JobPolice;
+using Curiosity.Core.Client.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -11,147 +13,170 @@ namespace Curiosity.Core.Client.Managers
 {
     public class SpeedCameraManager : Manager<SpeedCameraManager>
     {
-        Map _speedCameraMap;
+        // base premise from Big-Yoda
+        // https://github.com/Big-Yoda/Posted-Speedlimit
 
-        List<MapObject> sets = new List<MapObject>();
-        List<MapObject> spawns = new List<MapObject>();
+        const float CONVERT_SPEED_MPH = 2.236936f;
+        const float CONVERT_SPEED_KPH = 3.6f;
+        
+        float _speedCameraDistance;
+        float _currentStreetLimit = 0;
+        string _currentStreet;
+        public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
-        public async override void Begin()
+        private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
         {
-            //try
-            //{
-            //    await Session.Loading();
+            if (player.Character != vehicle.Driver) return;
 
-            //    foreach (MapObject mapObj in Get().Objects.MapObject)
-            //    {
-            //        if (mapObj.Type == "Prop")
-            //        {
-            //            int hash = GetHashKey(mapObj.Hash);
-            //            mapObj.PropHash = hash;
-            //            sets.Add(mapObj);
-            //        }
-            //    }
+            string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
+            if (PoliceConfig.IgnoredVehicles.Contains(vehicleDisplayName)) return;
+            if (IsInvalidVehicle(vehicle)) return;
 
-            //    Logger.Info($"-> {sets.Count} Speed Cameras Loaded");
+            PluginManager.Instance.AttachTickHandler(OnSpeedTest);
+            PluginManager.Instance.AttachTickHandler(OnSpeedCameraCheck);
 
-            //    Instance.AttachTickHandler(OnSpeedCameraPropLoader);
-            //    Instance.AttachTickHandler(OnSpeedCameraProps);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Error($"{ex}");
-            //}
+            _speedCameraDistance = PoliceConfig.SpeedCameraDistance;
         }
 
-        private Map Get()
+        public void Dispose()
         {
-            Map config = new();
-
-            try
-            {
-                if (_speedCameraMap is not null)
-                    return _speedCameraMap;
-
-                _speedCameraMap = JsonConvert.DeserializeObject<Map>(Properties.Resources.speedCameras);
-                return _speedCameraMap;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"Speed Camera JSON File Exception\nDetails: {ex.Message}\nStackTrace:\n{ex.StackTrace}");
-            }
-
-            return config;
+            Instance.DetachTickHandler(OnSpeedTest);
+            Instance.DetachTickHandler(OnSpeedCameraCheck);
         }
 
-        // https://github.com/blattersturm/cfx-object-loader/blob/master/object-loader/object_loader.lua
-
-        public async Task OnSpeedCameraPropLoader()
+        private bool IsInvalidVehicle(Vehicle vehicle)
         {
-            if (sets.Count == 0)
+            VehicleClass vehicleClass = vehicle.ClassType;
+            return
+                vehicleClass == VehicleClass.Planes
+                || vehicleClass == VehicleClass.Boats
+                || vehicleClass == VehicleClass.Helicopters
+                || vehicleClass == VehicleClass.Cycles
+                || vehicleClass == VehicleClass.Trains
+                || vehicleClass == VehicleClass.Emergency;
+        }
+
+        private async Task OnSpeedTest() // limiter to show, but not report
+        {
+            if (!Game.PlayerPed.IsInVehicle())
             {
-                // Instance.DetachTickHandler(OnSpeedCameraPropLoader);
+                Dispose();
+                return;
             }
 
-            foreach (MapObject mapObject in sets)
-            {
-                int hash = GetHashKey(mapObject.Hash);
-                mapObject.PropHash = hash;
-                RequestModel((uint)mapObject.PropHash);
-            }
+            Vector3 pos = Game.PlayerPed.CurrentVehicle.Position;
+            uint streetHash = 0;
+            uint crossingRoad = 0;
+            GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
 
-            while (true)
+            if (streetHash == 0) return;
+
+            string street = GetStreetNameFromHashKey(streetHash);
+
+            if (PoliceConfig.SpeedLimits.ContainsKey(street))
             {
-                bool loaded = true;
-                await BaseScript.Delay(0);
-                foreach (MapObject mapObject in sets)
+                _currentStreet = street;
+                _currentStreetLimit = PoliceConfig.SpeedLimits[street];
+                //Screen.ShowSubtitle($"Speed Limit: {_currentStreetLimit}");
+            }
+            else
+            {
+                Screen.ShowNotification($"{street} is unknown, please inform the dev team.");
+            }
+        }
+
+        public string GetVehicleHeadingDirection()
+        {
+            if (!Game.PlayerPed.IsInVehicle()) return "U";
+
+            foreach(KeyValuePair<int, string> kvp in Common.WorldCompassDirection)
+            {
+                float vehDirection = Game.PlayerPed.CurrentVehicle.Heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
                 {
-                    if (!HasModelLoaded((uint)mapObject.PropHash))
-                    {
-                        loaded = false;
-                        break;
-                    }
-                    if (loaded) break;
+                    return kvp.Value;
                 }
             }
+
+            return "U";
         }
 
-        public async Task OnSpeedCameraProps()
+        public List<PoliceCamera> GetClosestCamera(Vector3 position, float distance)
         {
-            try
+            return PoliceConfig.SpeedCameras
+                    .Where(x => Vector3.Distance(position, x.Position) < distance)
+                    .OrderBy(x => Vector3.Distance(position, x.Position)).ToList();
+        }
+
+        private async Task OnSpeedCameraCheck()
+        {
+            if (!Game.PlayerPed.IsInVehicle())
             {
-                if (sets.Count == 0)
-                {
-                    // Instance.DetachTickHandler(OnSpeedCameraProps);
-                }
-
-                await BaseScript.Delay(100);
-                Vector3 currentPosition = GetEntityCoords(PlayerPedId(), false);
-
-                int count = 0;
-
-                foreach (MapObject obj in sets)
-                {
-                    bool isNear = IsNearObject(obj, currentPosition);
-                    if (isNear && obj.PropHandle == 0)
-                    {
-                        Vector3 propPos = obj.Position.Vector3;
-                        int propHandle = CreateObjectNoOffset((uint)obj.PropHash, propPos.X, propPos.Y, propPos.Z, false, false, false);
-
-                        if (propHandle != 0)
-                        {
-                            Vector3 propRot = obj.Rotation.Vector3;
-                            SetEntityRotation(propHandle, propRot.X, propRot.Y, propRot.Z, 2, false);
-                            SetEntityQuaternion(propHandle, obj.Quaternion.X, obj.Quaternion.Y, obj.Quaternion.Z, obj.Quaternion.W);
-                            SetEntityDynamic(propHandle, obj.Dynamic);
-                            FreezeEntityPosition(propHandle, !obj.Dynamic);
-                            obj.PropHandle = propHandle;
-                        }
-                    }
-                    else if (!isNear && obj.PropHandle != 0)
-                    {
-                        DeleteObject(ref obj.PropHandle);
-                        obj.PropHandle = 0;
-                    }
-
-                    if (count % 75 == 0)
-                    {
-                        await BaseScript.Delay(15);
-                    }
-
-                    count++;
-                }
+                Dispose();
+                return;
             }
-            catch (Exception ex)
+
+            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+            string direction = GetVehicleHeadingDirection();
+            List<PoliceCamera> closestCameras = GetClosestCamera(vehicle.Position, _speedCameraDistance);
+            if (closestCameras.Count == 0) return;
+            foreach(PoliceCamera camera in closestCameras)
             {
-                Logger.Error($"{ex}");
+                camera.Active = false;
+
+                if (camera.Direction != direction) continue;
+                float currentSpeed = Game.PlayerPed.CurrentVehicle.Speed;
+                float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
+
+                if (_currentStreetLimit == 0) continue;
+                Vector3 p = camera.Position;
+                float low = p.Z - 0.5f;
+                float high = p.Z + 1f;
+
+                if (!Between(vehicle.Position.Z, low, high)) continue;
+
+                camera.Active = true;
+
+                bool informPolice = false; // legacy
+                bool caughtSpeeding = false;
+                float limitToReport = 0;
+
+                if (camera.Limit is not null)
+                {
+                    if (speedInMph > camera.Limit)
+                    {
+                        limitToReport = camera.Limit ?? 0f;
+                        caughtSpeeding = true;
+                    }
+                }
+                else
+                {
+                    if (speedInMph > _currentStreetLimit)
+                    {
+                        limitToReport = _currentStreetLimit;
+                        caughtSpeeding = true;
+                    }
+                }
+
+                if (caughtSpeeding)
+                {
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, informPolice, vehicle.NetworkId, _currentStreet, direction);
+                    await BaseScript.Delay(5000);
+                    camera.Active = false;
+                }
+
+                
             }
         }
 
-        bool IsNearObject(MapObject mapObject, Vector3 position)
+        private void ShowNotification(string msg)
         {
-            Vector3 diff = mapObject.Position.Vector3 - position;
-            float dist = (diff.X * diff.X) + (diff.Y * diff.Y);
-            return (dist < (200 * 200));
+            Screen.ShowNotification($"{msg}~n~{DateTime.UtcNow.Millisecond}");
+        }
+
+        public bool Between(float number, float min, float max)
+        {
+            return number >= min && number <= max;
         }
     }
 }
