@@ -86,6 +86,8 @@
     <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerListMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleGarageMenu.cs" />
     <Compile Include="Managers\CompanionManager.cs" />
+    <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
+    <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoAmbientPeds.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoLuckyWheel.cs" />
