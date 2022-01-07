@@ -1,5 +1,6 @@
 {
-  "speedCameraDistance": 12.5,
+  "speedCameraDistance": 100,
+  "speedCameraWidth": 15,
   "ignoredVehicles": [
     "police",
     "police2"
@@ -225,57 +226,6 @@
     "Strangeways Dr": 30
   },
   "speedCameras": [
-    {
-      "X": 1152.64343,
-      "Y": 435.743256,
-      "Z": 82.65383,
-      "direction": "NE"
-    },
-    {
-      "X": 1067.44214,
-      "Y": 370.2827,
-      "Z": 82.6838,
-      "direction": "SW"
-    },
-    {
-      "limit": 35.0,
-      "X": 1064.01172,
-      "Y": 309.487335,
-      "Z": 87.9249039,
-      "direction": "NE"
-    },
-    {
-      "limit": 35.0,
-      "X": 1139.21375,
-      "Y": 478.632843,
-      "Z": 89.51105,
-      "direction": "SW"
-    },
-    {
-      "limit": 35.0,
-      "X": 2380.907,
-      "Y": 2830.49927,
-      "Z": 44.6890755,
-      "direction": "NE"
-    },
-    {
-      "limit": 35.0,
-      "X": 2452.51978,
-      "Y": 2999.56274,
-      "Z": 42.4117,
-      "direction": "SW"
-    },
-    {
-      "X": 2446.40015,
-      "Y": 2921.58569,
-      "Z": 40.0673027,
-      "direction": "NE"
-    },
-    {
-      "X": 2376.24683,
-      "Y": 2898.66187,
-      "Z": 39.85665,
-      "direction": "SW"
-    }
+
   ]
 }

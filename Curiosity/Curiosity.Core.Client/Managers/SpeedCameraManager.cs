@@ -22,6 +22,9 @@ namespace Curiosity.Core.Client.Managers
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
+
+        public bool isDebugging = false;
+
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
 
         private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
@@ -104,8 +107,8 @@ namespace Curiosity.Core.Client.Managers
         public List<PoliceCamera> GetClosestCamera(Vector3 position, float distance)
         {
             return PoliceConfig.SpeedCameras
-                    .Where(x => Vector3.Distance(position, x.Position) < distance)
-                    .OrderBy(x => Vector3.Distance(position, x.Position)).ToList();
+                    .Where(x => Vector3.Distance(position, x.Start.Vector3) < distance)
+                    .OrderBy(x => Vector3.Distance(position, x.Start.Vector3)).ToList();
         }
 
         private async Task OnSpeedCameraCheck()
@@ -129,11 +132,10 @@ namespace Curiosity.Core.Client.Managers
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
 
                 if (_currentStreetLimit == 0) continue;
-                Vector3 p = camera.Position;
-                float low = p.Z - 0.5f;
-                float high = p.Z + 1f;
+                Vector3 start = camera.Start.Vector3;
+                Vector3 end = camera.End.Vector3;
 
-                if (!Between(vehicle.Position.Z, low, high)) continue;
+                if (!Common.IsEntityInAngledArea(Game.PlayerPed, start, end, PoliceConfig.SpeedCameraWidth, isDebugging)) continue;
 
                 camera.Active = true;
 
@@ -167,11 +169,6 @@ namespace Curiosity.Core.Client.Managers
 
                 
             }
-        }
-
-        private void ShowNotification(string msg)
-        {
-            Screen.ShowNotification($"{msg}~n~{DateTime.UtcNow.Millisecond}");
         }
 
         public bool Between(float number, float min, float max)

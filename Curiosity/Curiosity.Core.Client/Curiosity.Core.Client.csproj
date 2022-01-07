@@ -69,6 +69,7 @@
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Map.cs" />
     <Compile Include="Environment\Entities\Models\Config\PoliceConfigFile.cs" />
+    <Compile Include="Environment\Entities\Models\SpeedCamera.cs" />
     <Compile Include="Environment\Entities\WorldPlayer.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />

@@ -69,6 +69,24 @@ namespace Curiosity.Core.Client.Utils
             return "U";
         }
 
+        public static string GetCompassHeading(Vector3 start, Vector3 end)
+        {
+            Vector2 eStart = new Vector2(start.X, start.Y);
+            Vector2 eEnd = new Vector2(end.X, end.Y);
+            float heading = GetHeading(eStart, eEnd);
+
+            foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)
+            {
+                float vehDirection = heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return "U";
+        }
+
         public static float GetHeading(Vector3 start, Vector3 end)
         {
             Vector2 eStart = new Vector2(start.X, start.Y);

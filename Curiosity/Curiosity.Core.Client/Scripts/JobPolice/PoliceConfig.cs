@@ -34,5 +34,6 @@ namespace Curiosity.Core.Client.Scripts.JobPolice
         public static List<string> IgnoredVehicles => GetPoliceConfig().IgnoredVehicles;
         public static List<PoliceCamera> SpeedCameras => GetPoliceConfig().SpeedCameras;
         public static float SpeedCameraDistance => GetPoliceConfig().SpeedCameraDistance;
+        public static float SpeedCameraWidth => GetPoliceConfig().SpeedCameraWidth;
     }
 }
