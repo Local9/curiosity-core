@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Curiosity.Police.Client.Environment.Entities.Models
 {
     [DataContract]
-    public class PoliceConfig
+    public class PoliceConfigFile
     {
         [DataMember(Name = "speedCameraDistance")]
         public float SpeedCameraDistance;

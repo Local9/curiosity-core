@@ -19,7 +19,7 @@ namespace Curiosity.Core.Client.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -64,33 +64,32 @@ namespace Curiosity.Core.Client.Properties {
         ///   Looks up a localized string similar to {
         ///  &quot;jobs&quot;: [
         ///    {
+        ///      &quot;label&quot;: &quot;Unemployed&quot;,
+        ///      &quot;jobEvent&quot;: &quot;job:unemployed&quot;,
+        ///      &quot;legacyEvent&quot;: false
+        ///    },
+        ///    {
         ///      &quot;label&quot;: &quot;Police Officer&quot;,
         ///      &quot;jobEvent&quot;: &quot;job:police:duty&quot;,
         ///      &quot;legacyEvent&quot;: false
         ///    }
         ///  ],
-        ///  &quot;suppressedVehicles&quot;: [
-        ///    &quot;Lazer&quot;,
-        ///    &quot;Titan&quot;,
-        ///    &quot;Barracks&quot;,
-        ///    &quot;Barracks2&quot;,
-        ///    &quot;Barracks3&quot;,
-        ///    &quot;Crusader&quot;,
-        ///    &quot;Rhino&quot;,
-        ///    &quot;Airtug&quot;,
-        ///    &quot;Ripley&quot;,
-        ///    &quot;Asea2&quot;,
-        ///    &quot;Burrito5&quot;,
-        ///    &quot;Emperor3&quot;,
-        ///    &quot;Mesa2&quot;,
-        ///    &quot;PoliceOld1&quot;,
-        ///    &quot;PoliceOld2&quot;,
-        ///    &quot;RancherXL2&quot;,
-        ///    &quot;Sadler2&quot;,
-        ///    &quot;Stockade3&quot;,
-        ///    &quot;Tractor3&quot;,
-        ///    &quot;Buzzard&quot;,
-        ///    &quot;Buzzard2&quot;,
+        ///  &quot;eletricVehicles&quot;: [
+        ///    &quot;imorgon&quot;,
+        ///    &quot;p90d&quot;,
+        ///    &quot;teslasemi&quot;,
+        ///    &quot;tezeract&quot;,
+        ///    &quot;neon&quot;,
+        ///    &quot;raiden&quot;,
+        ///    &quot;cyclone&quot;,
+        ///    &quot;caddy3&quot;,
+        ///    &quot;voltic2&quot;,
+        ///    &quot;khamelion&quot;,
+        ///    &quot;dilettante2&quot;,
+        ///    &quot;caddy2&quot;,
+        ///    &quot;forklift&quot;,
+        ///    &quot;caddy&quot;,
+        ///    &quot;airtug&quot;,
         ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string config {
@@ -160,6 +159,37 @@ namespace Curiosity.Core.Client.Properties {
         internal static string overlays {
             get {
                 return ResourceManager.GetString("overlays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;speedCameraDistance&quot;: 12.5,
+        ///  &quot;ignoredVehicles&quot;: [
+        ///    &quot;police&quot;,
+        ///    &quot;police2&quot;
+        ///  ],
+        ///  &quot;speedLimits&quot;: {
+        ///    &quot;Joshua Rd&quot;: 50,
+        ///    &quot;East Joshua Road&quot;: 50,
+        ///    &quot;Marina Dr&quot;: 35,
+        ///    &quot;York St&quot;: 35,
+        ///    &quot;Alhambra Dr&quot;: 35,
+        ///    &quot;Niland Ave&quot;: 35,
+        ///    &quot;Zancudo Ave&quot;: 35,
+        ///    &quot;Armadillo Ave&quot;: 35,
+        ///    &quot;Algonquin Blvd&quot;: 35,
+        ///    &quot;Mountain View Dr&quot;: 35,
+        ///    &quot;Cholla Springs Ave&quot;: 35,
+        ///    &quot;Panorama Dr&quot;: 40,
+        ///    &quot;Lesbos Ln&quot;: 35,
+        ///    &quot;Calafia Rd&quot;: 30,
+        ///    &quot;North Calafia Way&quot;: 30,
+        ///    &quot;Cassidy Trail&quot;:  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string police {
+            get {
+                return ResourceManager.GetString("police", resourceCulture);
             }
         }
         

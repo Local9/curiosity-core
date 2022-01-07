@@ -68,6 +68,7 @@
     <Compile Include="Environment\Data\DeathHash.cs" />
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Map.cs" />
+    <Compile Include="Environment\Entities\Models\Config\PoliceConfigFile.cs" />
     <Compile Include="Environment\Entities\WorldPlayer.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
@@ -106,6 +107,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\JobPolice\PoliceConfig.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
     <Compile Include="Utils\Peds.cs" />
@@ -224,6 +226,9 @@
     <Content Include="data\overlays.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="data\police.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="data\speedCameras.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -8,23 +8,23 @@ namespace Curiosity.Police.Client.Managers
 {
     public class ConfigurationManager : Manager<ConfigurationManager>
     {
-        PoliceConfig _policeConfig;
+        PoliceConfigFile _policeConfig;
 
         public override void Begin()
         {
             
         }
 
-        private PoliceConfig GetPoliceConfig()
+        private PoliceConfigFile GetPoliceConfig()
         {
             if (_policeConfig is not null)
                 return _policeConfig;
 
-            PoliceConfig config = new();
+            PoliceConfigFile config = new();
 
             try
             {
-                _policeConfig = JsonConvert.DeserializeObject<PoliceConfig>(Properties.Resources.police);
+                _policeConfig = JsonConvert.DeserializeObject<PoliceConfigFile>(Properties.Resources.police);
                 return _policeConfig;
             }
             catch (Exception ex)
