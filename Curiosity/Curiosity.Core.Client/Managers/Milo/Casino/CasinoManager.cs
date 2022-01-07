@@ -3,6 +3,7 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -21,11 +22,11 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         Vector3 valetPropPosition = new Vector3(925.9088f, 51.24203f, 80.095f);
         bool spawnedValetProp = false;
 
-        Vector3 enterAreaStart = new Vector3(924.5f, 60.41f, 80.89f);
+        Vector3 enterAreaStart = new Vector3(924.5f, 60.41f, 79.89f);
         Vector3 enterAreaEnd = new Vector3(912.11f, 40.35f, 82f);
         float width = 15f;
 
-        Vector3 enterDoorStart = new Vector3(922.6203f, 42.17718f, 80.89f);
+        Vector3 enterDoorStart = new Vector3(922.6203f, 42.17718f, 79.89f);
         Vector3 enterDoorEnd = new Vector3(927.9533f, 50.5365f, 82f);
         float widthDoor = 2f;
         bool isLeaving = false;
@@ -83,14 +84,14 @@ namespace Curiosity.Core.Client.Managers.Milo.Casino
         {
             string message = $"Casino.";
             Vector3 notificationPosition = Vector3.Zero;
-            int playerPedHandle = Game.PlayerPed.Handle;
+            Ped playerPed = Game.PlayerPed;
 
-            if (IsEntityInAngledArea(playerPedHandle, enterAreaStart.X, enterAreaStart.Y, enterAreaStart.Z, enterAreaEnd.X, enterAreaEnd.Y, enterAreaEnd.Z, width, true, false, 0) && !isLeaving)
+            if (Common.IsEntityInAngledArea(playerPed, enterAreaStart, enterAreaEnd, width) && !isLeaving)
             {
                 message = $"Enter {message}";
                 notificationPosition = posEnter.AsVector(true);
 
-                if (IsEntityInAngledArea(playerPedHandle, enterDoorStart.X, enterDoorStart.Y, enterDoorStart.Z, enterDoorEnd.X, enterDoorEnd.Y, enterDoorEnd.Z, widthDoor, true, false, 0))
+                if (Common.IsEntityInAngledArea(playerPed, enterDoorStart, enterDoorEnd, widthDoor))
                 {
                     MovePlayer(true);
                     await BaseScript.Delay(2000);

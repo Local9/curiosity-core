@@ -1,6 +1,11 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -21,6 +26,38 @@ namespace Curiosity.Core.Client.Utils
             { 360, "N" }
         };
 
+        public static bool IsEntityInAngledArea(Entity entity, Vector3 start, Vector3 end, float width, bool debug = false)
+        {
+            if (entity == null) return false;
+            if (start == Vector3.Zero) return false;
+            if (end == Vector3.Zero) return false;
+
+            bool isEntityInAngledArea = API.IsEntityInAngledArea(entity.Handle, start.X, start.Y, start.Z, end.X, end.Y, end.Z, width, false, false, 0);
+
+            if (debug)
+            {
+                Vector2 eStart = new Vector2(start.X, start.Y);
+                Vector2 eEnd = new Vector2(end.X, end.Y);
+
+                Vector3 center = (start + end) / 2;
+                center.Z = start.Z;
+
+                float rotation = GetHeading(eStart, eEnd);
+                float distance = start.Distance(end);
+                float height = (start.Z > end.Z) ? start.Z - end.Z : end.Z - start.Z;
+
+                Color colorTest = Color.FromArgb(120, !isEntityInAngledArea ? 255 : 0, isEntityInAngledArea ? 255 : 0, 0);
+                Color debugSphere = Color.FromArgb(80, 255, 77, 196);
+                World.DrawMarker((MarkerType)43, center, Vector3.Zero, new Vector3(0f, 0f, rotation), new Vector3(width, distance, height), colorTest);
+                World.DrawMarker(MarkerType.DebugSphere, start, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
+                World.DrawMarker(MarkerType.DebugSphere, end, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
+                ScreenInterface.Draw3DText(start, $"START: {start}", 40f, distance + 10f, 0f);
+                ScreenInterface.Draw3DText(end, $"END: {end}", 40f, distance + 10f, 0f);
+            }
+
+            return isEntityInAngledArea;
+        }
+
         public static string GetHeadingDirection()
         {
             foreach (KeyValuePair<int, string> kvp in _worldDirection)
@@ -33,6 +70,20 @@ namespace Curiosity.Core.Client.Utils
             }
 
             return "U";
+        }
+
+        public static float GetHeading(Vector3 start, Vector3 end)
+        {
+            Vector2 eStart = new Vector2(start.X, start.Y);
+            Vector2 eEnd = new Vector2(end.X, end.Y);
+            return GetHeading(eStart, eEnd);
+        }
+
+        public static float GetHeading(Vector2 start, Vector2 end)
+        {
+            float dx = start.X - end.X;
+            float dy = start.Y - end.Y;
+            return GetHeadingFromVector_2d(dx, dy);
         }
 
         public static void Notification(string message, bool blink = false, bool saveToBrief = false)

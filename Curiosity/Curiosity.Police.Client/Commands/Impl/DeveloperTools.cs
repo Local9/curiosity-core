@@ -3,8 +3,10 @@ using CitizenFX.Core.UI;
 using Curiosity.Police.Client.Environment.Entities;
 using Curiosity.Police.Client.Environment.Entities.Models;
 using Curiosity.Police.Client.Events;
+using Curiosity.Police.Client.Extensions;
 using Curiosity.Police.Client.Interface;
 using Curiosity.Police.Client.Managers;
+using Curiosity.Police.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
@@ -118,14 +120,14 @@ namespace Curiosity.Police.Client.Commands.Impl
 
             private async Task OnShowCurrentCameras()
             {
-                foreach(PoliceCamera speedCamera in _currentSpeedCameras)
+                foreach (PoliceCamera speedCamera in _currentSpeedCameras)
                 {
                     Color color = Color.FromArgb(120, speedCamera.Limit is null ? 255 : 0, speedCamera.Limit is not null ? 255 : 0, 0);
 
                     if (speedCamera.Active)
                         color = Color.FromArgb(120, 0, 0, 255);
 
-                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, Vector3.Zero, new Vector3(configurationManager.SpeedCameraDistance), color);
+                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, new Vector3(0f, 0f, 45f), new Vector3(configurationManager.SpeedCameraDistance), color);
                     ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera}");
                 }
             }
@@ -142,7 +144,7 @@ namespace Curiosity.Police.Client.Commands.Impl
                     if (!speedCamera.Saved && speedCamera.Limit is not null)
                         color = Color.FromArgb(120, 0, 255, 255);
 
-                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, Vector3.Zero, new Vector3(configurationManager.SpeedCameraDistance), color);
+                    World.DrawMarker(MarkerType.DebugSphere, speedCamera.Position, Vector3.Zero, new Vector3(0f, 0f, 45f), new Vector3(configurationManager.SpeedCameraDistance), color);
                     ScreenInterface.Draw3DText(speedCamera.Position, $"{speedCamera.Street}~n~{speedCamera}");
                 }
             }
