@@ -54,6 +54,13 @@ namespace Curiosity.Core.Client.Managers
 
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
+            bool isEnabled = false;
+            if (!isEnabled)
+            {
+                Notify.Warn($"Sorry, currently this job is disabled. Press F5 for all other jobs.");
+                return;
+            }
+
             bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? true;
 
             Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
@@ -86,7 +93,7 @@ namespace Curiosity.Core.Client.Managers
                 Instance.AttachTickHandler(OnDisablePoliceAndDispatch);
 
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
-                
+
                 ToggleDispatch(false);
             }
             else if (!IsOfficer && WasOfficer)
