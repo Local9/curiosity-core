@@ -84,6 +84,7 @@
     <Compile Include="Interface\Menus\SubMenu\PoliceMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerInteractionMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerListMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\SettingsSubMenu\SpeedCameraMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleGarageMenu.cs" />
     <Compile Include="Managers\CompanionManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Managers\PlayerOptionsManager.cs" />
     <Compile Include="Utils\Vehicles.cs" />
     <Compile Include="Utils\Weapons.cs" />
+    <Compile Include="Utils\WorldProbe.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\scenarios.json">
@@ -249,7 +251,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interface\Menus\SubMenu\SettingsSubMenu\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
   <ItemGroup>

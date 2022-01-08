@@ -235,10 +235,14 @@ namespace Curiosity.Core.Client.Managers
                     Cache.PlayerPed.Heading = 233.31f;
                     Cache.Character.IsOnIsland = false;
                 }
-
-                if (!Cache.Character.IsOnIsland)
+                else if (!Cache.Character.IsOnIsland)
                 {
                     cayoPericoManager.SetupLosSantos();
+
+                    Vector3 pos = Game.PlayerPed.Position;
+                    float groundZ = pos.Z;
+                    if (API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                        Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, groundZ);
 
                     Vector3 currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
                     int interiorId = GetInteriorFromEntity(Game.PlayerPed.Handle);

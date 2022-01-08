@@ -25,7 +25,7 @@ namespace Curiosity.Core.Client.Managers
         float _currentStreetLimit = 0;
         string _currentStreet;
 
-        public bool isDebugging = true;
+        public bool isDebugging = false;
         Vehicle currentVehicle;
 
         public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
@@ -135,7 +135,8 @@ namespace Curiosity.Core.Client.Managers
             {
                 camera.Active = false;
 
-                Screen.ShowSubtitle($"{camera.Direction} / {direction}");
+                if (isDebugging)
+                    Screen.ShowSubtitle($"{camera.Direction} / {direction}");
 
                 if (camera.Direction != direction) continue;
                 float currentSpeed = currentVehicle.Speed;
@@ -145,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
                 Vector3 start = camera.Start.Vector3;
                 Vector3 end = camera.End.Vector3;
 
-                if (!Common.IsEntityInAngledArea(currentVehicle, start, end, PoliceConfig.SpeedCameraWidth, debug: isDebugging)) continue;
+                if (!Common.IsEntityInAngledArea(currentVehicle, start, end, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: isDebugging)) continue;
 
                 camera.Active = true;
 

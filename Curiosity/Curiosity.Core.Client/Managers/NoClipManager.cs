@@ -69,6 +69,12 @@ namespace Curiosity.Core.Client.Managers
                         CurrentCamera.Delete();
                         CurrentCamera = null;
                         World.RenderingCamera = null;
+
+                        Vector3 pos = Game.PlayerPed.Position;
+                        float groundZ = pos.Z;
+                        if (API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                            Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, groundZ);
+
                         Cache.PlayerPed.IsPositionFrozen = false;
                         Cache.PlayerPed.IsCollisionEnabled = true;
                         Cache.PlayerPed.CanRagdoll = true;

@@ -45,15 +45,17 @@ namespace Curiosity.Racing.Client.Utils
 
             // World.DrawMarker(MarkerType.VerticalCylinder, markerPosition, Vector3.Zero, Vector3.Zero, MarkerScale ?? new Vector3(Width), green);
 
-            float rX = Pos1.X - Pos2.X;
-            float rY = Pos1.Y - Pos2.Y;
-            float rZ = Pos1.Z - Pos2.Z;
+            float rX = Pos2.X - Pos1.X;
+            float rY = Pos2.Y - Pos1.Y;
+            float rZ = Pos2.Z - Pos1.Z;
             Vector3 rotation = new Vector3(rX, rY, rZ);
             rotation.Normalize();
 
+            // float r = API.GetHeadingFromVector_2d(rX, rY);
+
             float r = rotation.Z * ((float)Math.PI / 180.0f);
 
-            Matrix3x3 rot = Matrix3x3.RotationZ(rotation.Z);
+            Matrix3x3 rot = Matrix3x3.RotationZ(r);
 
             Vector3 A = Pos1;
             Vector3 B = new Vector3 { X = Pos2.X, Y = Pos1.Y, Z = Pos1.Z };

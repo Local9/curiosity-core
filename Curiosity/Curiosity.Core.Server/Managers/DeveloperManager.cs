@@ -34,14 +34,7 @@ namespace Curiosity.Core.Server.Managers
 
                     using (TextWriter tw = new StreamWriter(filePath, true))
                     {
-                        SpeedCameraMetadata speedCameras = metadata.Find<SpeedCameraMetadata>(0);
-
-                        foreach (SpeedCamera speedCamera in speedCameras.cameras)
-                        {
-                            Logger.Debug($"Saving Position: {speedCamera}");
-                            await BaseScript.Delay(100);
-                            tw.WriteLine($"{speedCamera}");
-                        }
+                            tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")}, {metadata.Find<string>(0)}");
                     }
 
                     return true;

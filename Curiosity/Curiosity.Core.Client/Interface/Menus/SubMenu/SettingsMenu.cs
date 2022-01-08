@@ -12,6 +12,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class SettingsMenu
     {
+        UIMenu _menu;
+
         UIMenuListItem miDamageEffects;
 
         UIMenuCheckboxItem miShowServerId;
@@ -21,6 +23,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuCheckboxItem miDevEnableGameEventLogger;
         UIMenuCheckboxItem miDevEnableDebugLog;
         UIMenuCheckboxItem miDevEnableDebugTimeLog;
+
+        private UIMenu menuSpeedCamera;
+        private SettingsSubMenu.SpeedCameraMenu _MenuSpeedCamera = new SettingsSubMenu.SpeedCameraMenu();
 
         UIMenuListItem miLstMusic;
         UIMenuItem miStopAllMusic = new UIMenuItem("Stop Random Music");
@@ -69,7 +74,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.AddItem(miShowMyName);
             menu.AddItem(miStopAllMusic);
 
-
+            _menu = menu;
             return menu;
         }
 
@@ -173,15 +178,24 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     menu.AddItem(miDevEnableDebugTimeLog);
                 }
 
-                if (Cache.Player.User.IsSeniorDeveloper && miLstMusic is null)
+                if (Cache.Player.User.IsSeniorDeveloper)
                 {
-                    MusicEvents.eMusicEvents.ForEach(e =>
+                    if (menuSpeedCamera is null)
                     {
-                        musicEvents.Add($"{e}");
-                    });
+                        menuSpeedCamera = InteractionMenu.MenuPool.AddSubMenu(_menu, "Speed Camera", "Speed Camera Options");
+                        _MenuSpeedCamera.Create(menuSpeedCamera);
+                    }
 
-                    miLstMusic = new UIMenuListItem("Music Events", musicEvents, 0);
-                    menu.AddItem(miLstMusic);
+                    if (miLstMusic is null)
+                    {
+                        MusicEvents.eMusicEvents.ForEach(e =>
+                        {
+                            musicEvents.Add($"{e}");
+                        });
+
+                        miLstMusic = new UIMenuListItem("Music Events", musicEvents, 0);
+                        menu.AddItem(miLstMusic);
+                    }
                 }
             }
         }
