@@ -7,7 +7,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Utils
 {
-    internal static class WorldProbe
+	internal static class WorldProbe
 	{
 		public static RaycastResult CrossairRaycastResult;
 		public static RaycastResult CrossairRenderingRaycastResult;
@@ -36,7 +36,7 @@ namespace Curiosity.Core.Client.Utils
 		{
 			try
 			{
-				Entity source = Game.PlayerPed.IsInVehicle() ? (Entity)Game.PlayerPed.CurrentVehicle : Game.PlayerPed;
+				Entity source = Cache.PlayerPed.IsInVehicle() ? (Entity)Cache.PlayerPed.CurrentVehicle : Cache.PlayerPed;
 
 				return GetVehicleInFrontOfPlayer(source, source, distance);
 			}
@@ -122,8 +122,9 @@ namespace Curiosity.Core.Client.Utils
 			try
 			{
 				Vector3 position = GameplayCamera.Position;
-				Vector3 direction = position + distance * GameplayCamForwardVector();
-				return await Raycast(position, direction, IntersectOptions.Everything, ignoredEntity);
+				Vector3 direction = distance * GameplayCamForwardVector();
+
+				return await Raycast(position, direction, distance, IntersectOptions.Everything, ignoredEntity);
 			}
 			catch (Exception ex)
 			{
@@ -138,9 +139,9 @@ namespace Curiosity.Core.Client.Utils
 			try
 			{
 				Vector3 position = cam.Position;
-				Vector3 direction = position + distance * cam.CamForwardVector();
+				Vector3 direction = distance * cam.CamForwardVector();
 
-				return await Raycast(position, direction, IntersectOptions.Everything, ignoredEntity);
+				return await Raycast(position, direction, distance, IntersectOptions.Everything, ignoredEntity);
 			}
 			catch (Exception ex)
 			{
@@ -155,9 +156,9 @@ namespace Curiosity.Core.Client.Utils
 			try
 			{
 				Vector3 position = cam.Position;
-				Vector3 direction = position + distance * cam.CamForwardVector();
+				Vector3 direction = distance * cam.CamForwardVector();
 
-				return await Raycast(position, direction, options, ignoredEntity);
+				return await Raycast(position, direction, distance, options, ignoredEntity);
 			}
 			catch (Exception ex)
 			{
@@ -173,9 +174,9 @@ namespace Curiosity.Core.Client.Utils
 			{
 				Camera cam = new(GetRenderingCam());
 				Vector3 position = cam.Position;
-				Vector3 direction = position + distance * cam.CamForwardVector();
+				Vector3 direction = distance * cam.CamForwardVector();
 
-				return await Raycast(position, direction, options, ignoredEntity);
+				return await Raycast(position, direction, distance, options, ignoredEntity);
 			}
 			catch (Exception ex)
 			{
@@ -232,7 +233,8 @@ namespace Curiosity.Core.Client.Utils
 
 		public static async Task<RaycastResult> Raycast(Vector3 source, Vector3 direction, float maxDistance, IntersectOptions options, Entity ignoredEntity = null)
 		{
-			Vector3 target = source + direction * maxDistance; // this doesn't go in the correct direction
+			Vector3 target = source + direction * maxDistance;
+
 			int RayShape = StartShapeTestLosProbe(source.X, source.Y, source.Z, target.X, target.Y, target.Z, (int)options, ignoredEntity == null ? 0 : ignoredEntity.Handle, 7);
 			RaycastResult result = new(0);
 
