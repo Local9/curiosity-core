@@ -36,6 +36,8 @@ namespace Curiosity.Core.Client.Utils
         public static void SetCorrectBlipSprite(int ped, int blip, bool isWanted, bool isFriendly)
         {
             SetBlipCrew(blip, isFriendly);
+            bool visible = IsEntityVisible(ped);
+            SetBlipAlpha(blip, visible ? 255 : 0);
 
             if (IsPedInAnyVehicle(ped, false) && !IsEntityDead(ped))
             {

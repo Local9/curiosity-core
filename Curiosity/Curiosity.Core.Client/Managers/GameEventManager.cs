@@ -11,6 +11,7 @@ using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,6 +46,13 @@ namespace Curiosity.Core.Client.Managers
         public override void Begin()
         {
             Instance.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered);
+            Instance.EventRegistry["CEventDamage"] += new Action<List<int>, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
+            Instance.EventRegistry["CEventShockingGunshotFired"] += new Action<List<int>, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
+        }
+
+        private void OnEventShockingGunshotFired(List<int> entities, dynamic eventEntity, List<dynamic> data)
+        {
+            Logger.Debug($"{JsonConvert.SerializeObject(entities)} / {eventEntity} / {JsonConvert.SerializeObject(data)}");
         }
 
         private void OnGameEventTriggered(string name, List<dynamic> args)

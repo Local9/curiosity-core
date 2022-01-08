@@ -146,6 +146,8 @@ namespace Curiosity.Core.Client.Environment.Entities
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
         {
             IsPassive = isPassive;
+            NetworkSetPlayerIsPassive(IsPassive);
+            SetLocalPlayerAsGhost(IsPassive);
         }
 
         private void OnStatePlayerWantedChange(string bag, string key, dynamic isWanted, int reserved, bool replicated)
