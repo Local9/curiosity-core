@@ -289,7 +289,9 @@ namespace Curiosity.Core.Server.Managers
                         player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 1, true);
 
                         SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
-                        playerCullingReset.Add(player.Character.Handle, DateTime.UtcNow.AddSeconds(15));
+
+                        if (!playerCullingReset.ContainsKey(player.Character.Handle))
+                            playerCullingReset.Add(player.Character.Handle, DateTime.UtcNow.AddSeconds(15));
 
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
