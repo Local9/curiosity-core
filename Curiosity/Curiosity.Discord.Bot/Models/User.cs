@@ -188,6 +188,7 @@ namespace Curiosity.LifeV.Bot.Models
                         DateCreated = reader.GetFieldValue<DateTime>("dateCreated"),
                         LastSeen = reader.GetFieldValue<DateTime>("lastSeen"),
                         BannedPerm = reader.GetFieldValue<bool>("bannedPerm"),
+                        Experience = reader.GetFieldValue<long>("Value"),
                     };
 
                     if (!DBNull.Value.Equals(reader["bannedUntil"]))
@@ -201,7 +202,6 @@ namespace Curiosity.LifeV.Bot.Models
                         int roleId = reader.GetFieldValue<int>("roleId");
                         user.UserRole = (Role)roleId;
                     }
-
 
                     users.Add(user);
                 }

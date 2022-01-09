@@ -202,9 +202,9 @@ namespace Curiosity.LifeV.Bot.Modules
             builder
                 .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
-                "\nlv!server 1/2 - Will display server information" +
+                "\nlv!server - Will display server information" +
                 "\nlv!account - Show your Curiosity Server account" +
-                // "\nlv!top <param> - pilot, trucking, fire, police, knowledge, train, taxi, fishing, hunting, farming, bus, mechanic, ems, freight" +
+                "\nlv!top <param> - pilot, trucking, fire, police, knowledge, train, taxi, fishing, hunting, farming, bus, mechanic, ems, freight" +
                 "\nlv!donate - Update users donation status" +
                 "\nlv!wiki - police, firefighter, emt, trucking, piloting, busdriver, fisher, bitcoin, drifting, drugdealing"
 
@@ -345,61 +345,51 @@ namespace Curiosity.LifeV.Bot.Modules
         {
             try
             {
-                //List<Models.User> dbUsers = new List<Models.User>();
+                List<Models.User> dbUsers = new List<Models.User>();
 
-                //List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic", "ems", "freight" };
-                //string route = string.Empty;
+                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic", "ems", "freight" };
+                string route = string.Empty;
 
-                //if (args.Length == 0)
-                //{
-                //    dbUsers = await new Models.User().GetTopUsers(string.Empty);
-                //}
-                //else
-                //{
-                //    if (!routes.Contains(args[0]))
-                //    {
-                //        string cmds = string.Join(", ", routes);
-                //        await ReplyAsync($"Command not found. Available: {cmds}");
-                //        return;
-                //    }
-                //    else
-                //    {
-                //        route = args[0];
-                //        dbUsers = await new Models.User().GetTopUsers(route);
-                //    }
-                //}
+                if (args.Length == 0)
+                {
+                    dbUsers = await new Models.User().GetTopUsers(string.Empty);
+                }
+                else
+                {
+                    if (!routes.Contains(args[0]))
+                    {
+                        string cmds = string.Join(", ", routes);
+                        await ReplyAsync($"Command not found. Available: {cmds}");
+                        return;
+                    }
+                    else
+                    {
+                        route = args[0];
+                        dbUsers = await new Models.User().GetTopUsers(route);
+                    }
+                }
 
-                //if (dbUsers == null)
-                //{
-                //    await ReplyAsync("No information was returned.");
-                //}
-                //else
-                //{
-                //    string topUsers = "```autohotkey";
-                //    topUsers += "\nRank | Name";
-                //    int count = 1;
+                if (dbUsers == null)
+                {
+                    await ReplyAsync("No information was returned.");
+                }
+                else
+                {
+                    string topUsers = "```autohotkey";
+                    topUsers += "\nRank | Name";
+                    int count = 1;
 
-                //    dbUsers.ForEach(user =>
-                //    {
-                //        topUsers += $"\n[{count:00}]    > {user.Username}";
+                    dbUsers.ForEach(user =>
+                    {
+                        topUsers += $"\n[{count:00}]    > {user.Username}";
+                        topUsers += $"\n              Experience: {user.Experience:#,###,##0}";
+                        count++;
+                    });
 
-                //        if (!string.IsNullOrEmpty(route))
-                //        {
-                //            topUsers += $"\n              Experience: {user.Experience:#,###,##0}";
-                //        }
-                //        else
-                //        {
-                //            topUsers += $"\n        Total Experience: {user.LifeExperience:#,###,##0}";
-                //        }
+                    topUsers += "```";
 
-                //        count++;
-                //    });
-
-                //    topUsers += "```";
-
-                //    await ReplyAsync($"{topUsers}");
-                //}
-                await ReplyAsync($"Offline till more updates have been made");
+                    await ReplyAsync($"{topUsers}");
+                }
             }
             catch (Exception ex)
             {
