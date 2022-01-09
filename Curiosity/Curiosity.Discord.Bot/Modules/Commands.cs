@@ -16,6 +16,50 @@ namespace Curiosity.LifeV.Bot.Modules
     {
         private List<ulong> usedCommandRecently = new List<ulong>();
 
+        [Command("job")]
+        public async Task Job(params string[] args)
+        {
+            if (args.Length == 0)
+            {
+                await ReplyAsync($"Argument missing: police, firefighter, emt, trucking, piloting, busdriver, fisher");
+                return;
+            }
+
+            string url = "https://wiki.lifev.net/index.php?title=Guide:";
+            string job = args[0];
+
+            switch(job.ToLower())
+            {
+                case "police":
+                    url = $"{url}Police";
+                    break;
+                case "firefighter":
+                    url = $"{url}Fire_Fighter";
+                    break;
+                case "emt":
+                    url = $"{url}EMT";
+                    break;
+                case "trucking":
+                case "truck":
+                    url = $"{url}Trucking";
+                    break;
+                case "piloting":
+                case "pilot":
+                    url = $"{url}Piloting";
+                    break;
+                case "bus":
+                case "busdriver":
+                    url = $"{url}Bus_Driver";
+                    break;
+                case "fisher":
+                case "fishing":
+                    url = $"{url}Fisher";
+                    break;
+            }
+
+            await ReplyAsync($"Wiki URL: <{url}>");
+        }
+
         [Command("ping")]
         public async Task Ping(SocketUser user = null)
         {
