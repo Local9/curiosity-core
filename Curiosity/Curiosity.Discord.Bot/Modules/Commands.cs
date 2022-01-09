@@ -16,12 +16,12 @@ namespace Curiosity.LifeV.Bot.Modules
     {
         private List<ulong> usedCommandRecently = new List<ulong>();
 
-        [Command("job")]
-        public async Task Job(params string[] args)
+        [Command("wiki")]
+        public async Task WikiUrl(params string[] args)
         {
             if (args.Length == 0)
             {
-                await ReplyAsync($"Argument missing: police, firefighter, emt, trucking, piloting, busdriver, fisher");
+                await ReplyAsync($"Argument missing:\npolice, firefighter, emt, trucking, piloting, busdriver, fisher, bitcoin, drifting, drugdealing");
                 return;
             }
 
@@ -54,6 +54,15 @@ namespace Curiosity.LifeV.Bot.Modules
                 case "fisher":
                 case "fishing":
                     url = $"{url}Fisher";
+                    break;
+                case "bitcoin":
+                    url = $"{url}Bitcoin";
+                    break;
+                case "drugdealing":
+                    url = $"{url}Drug_Dealing";
+                    break;
+                case "drifting":
+                    url = $"{url}Drifting";
                     break;
             }
 
