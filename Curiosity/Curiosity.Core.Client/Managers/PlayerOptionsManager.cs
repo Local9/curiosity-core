@@ -128,8 +128,8 @@ namespace Curiosity.Core.Client.Managers
                 Logger.Debug($"Passive Mode Enabled");
             }
 
-            NetworkSetPlayerIsPassive(IsPassive);
-            SetLocalPlayerAsGhost(IsPassive);
+            NetworkSetPlayerIsPassive(isPassive);
+            SetLocalPlayerAsGhost(isPassive);
 
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
             Cache.Character.IsPassive = isPassive;
