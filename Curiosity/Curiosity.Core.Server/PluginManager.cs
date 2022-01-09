@@ -61,7 +61,7 @@ namespace Curiosity.Core.Server
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
         public static ConcurrentDictionary<int, CuriosityUser> ActiveUsers { get; } = new ConcurrentDictionary<int, CuriosityUser>();
-        public DateTime LastSave { get; set; } = DateTime.Now;
+        public DateTime LastSave { get; set; } = DateTime.UtcNow;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
@@ -479,7 +479,7 @@ namespace Curiosity.Core.Server
         {
             try
             {
-                if (DateTime.Now.Subtract(LastSave).TotalMinutes >= 5)
+                if (DateTime.UtcNow.Subtract(LastSave).TotalMinutes >= 5)
                 {
                     SavePlayers();
 
@@ -559,7 +559,7 @@ namespace Curiosity.Core.Server
                     }
                 }
 
-                LastSave = DateTime.Now;
+                LastSave = DateTime.UtcNow;
             }
 
             if (command)
