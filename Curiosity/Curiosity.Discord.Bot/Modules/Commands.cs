@@ -177,11 +177,11 @@ namespace Curiosity.LifeV.Bot.Modules
                         .WithColor(Color.Blue)
                         .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                         .WithCurrentTimestamp()
-                        .WithFooter("Forums: https://forums.lifev.net / Wiki: https://wiki.lifev.net", Context.Guild.IconUrl);
+                        .WithFooter("Forums: https://forums.lifev.net\nWiki: https://wiki.lifev.net", Context.Guild.IconUrl);
 
                     // builder.Url = "fivem://connect/5.9.0.85:30120";
 
-                    await ReplyAsync($"`connect server.lifev.net:{serverPort}`", false, builder.Build());
+                    await ReplyAsync($"`connect server.lifev.net:{serverPort}` or <https://connect.lifev.net>", false, builder.Build());
                 }
                 //}
                 //}
