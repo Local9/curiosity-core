@@ -12,6 +12,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
     class VehicleGarageMenu
     {
         NotificationManager Notify => NotificationManager.GetModule();
+        VehicleManager vehicleManager => VehicleManager.GetModule();
         UIMenu baseMenu;
 
         UIMenuItem loadingItem = new UIMenuItem("🔍 Loading");
@@ -27,7 +28,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Opened || state == MenuState.ChangeForward)
+            if (state == MenuState.ChangeForward)
             {
                 baseMenu.Clear();
                 baseMenu.AddItem(loadingItem);
@@ -71,7 +72,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             VehicleItem vehicleItem = (VehicleItem)selectedItem.ItemData;
 
-            var response = await VehicleManager.GetModule().CreateVehicle(vehicleItem.CharacterVehicleId, vehicleItem.Hash);
+            var response = await vehicleManager.CreateVehicle(vehicleItem.CharacterVehicleId, vehicleItem.Hash);
             if (!response.success)
             {
                 Notify.Error($"Error when trying to spawn vehicle.");
