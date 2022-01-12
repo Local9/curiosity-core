@@ -105,18 +105,9 @@ namespace Curiosity.Core.Client.Managers
 
             if (!isPassive)
             {
-                Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
-                API.NetworkSetFriendlyFireOption(true);
-
-                passiveModeDisabled = DateTime.UtcNow.AddMinutes(2);
-                Instance.AttachTickHandler(PassiveCooldownTick);
-                API.SetMaxWantedLevel(5);
+                passiveModeDisabled = DateTime.UtcNow.AddSeconds(30);
                 IsPassiveModeEnabledCooldown = true;
-
-                API.SetMaxWantedLevel(5);
-
-                Logger.Debug($"Passive Mode Disabled");
+                Instance.AttachTickHandler(PassiveCooldownTick);
             }
 
             if (isPassive)
@@ -141,6 +132,17 @@ namespace Curiosity.Core.Client.Managers
             if (passiveModeDisabled < DateTime.UtcNow)
             {
                 Instance.DetachTickHandler(PassiveCooldownTick);
+
+                if (!IsPassive)
+                {
+                    Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                    API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
+                    API.NetworkSetFriendlyFireOption(true);
+                    API.SetMaxWantedLevel(5);
+                    Notify.Info($"Passive Mode Disabled");
+                    Logger.Debug($"Passive Mode Disabled");
+                }
+
                 IsPassiveModeEnabledCooldown = false;
                 Interface.Notify.Info($"Passive Mode can now be changed.");
             }
@@ -151,7 +153,7 @@ namespace Curiosity.Core.Client.Managers
                 DateTime finalDate = passiveModeDisabled;
                 string timeSpanLeft = (finalDate - DateTime.UtcNow).ToString(@"mm\:ss");
 
-                TextTimerBar textTimerBar = new TextTimerBar("Passive Mode Cooldown", timeSpanLeft);
+                TextTimerBar textTimerBar = new TextTimerBar("Disabling Passive Mode", timeSpanLeft);
                 textTimerBar.Draw(interval);
 
                 Screen.Hud.HideComponentThisFrame(HudComponent.AreaName);

@@ -163,9 +163,6 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
                 miPassive.Enabled = !playerOptionsManager.IsPassiveModeEnabledCooldown;
-
-                string notificationText = (Cache.Character.IsPassive) ? "Enabled" : "Disabled";
-                Interface.Notify.Info($"Passive Mode: {notificationText}");
                 return;
             }
 
