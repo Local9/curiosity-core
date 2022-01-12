@@ -89,6 +89,7 @@
     <Compile Include="Managers\CompanionManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPedManager.cs" />
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
+    <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoAmbientPeds.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoLuckyWheel.cs" />
