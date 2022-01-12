@@ -73,7 +73,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         {
             string timeSpanLeft = (jailEndTime - DateTime.UtcNow).ToString(@"mm\:ss");
 
-            TextTimerBar textTimerBar = new TextTimerBar("Passive Mode Cooldown", timeSpanLeft);
+            TextTimerBar textTimerBar = new TextTimerBar("Jail Time Remaining", timeSpanLeft);
             textTimerBar.Draw(45);
 
             Screen.Hud.HideComponentThisFrame(HudComponent.AreaName);
