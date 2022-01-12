@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
@@ -167,21 +168,77 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
         {
             foreach (PoliceCamera camera in PoliceConfig.SpeedCameras)
             {
+                uint streetHash = 0;
+                uint crossingRoad = 0;
+                GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
+                string street = GetStreetNameFromHashKey(streetHash);
+
+                string msg = $"{streetHash} : {street}";
+
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                {
+                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
+                }
+
+                ScreenInterface.Draw3DText(camera.Center, msg);
+
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
             foreach (SpeedCamera camera in currentPoints)
             {
+                uint streetHash = 0;
+                uint crossingRoad = 0;
+                GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
+                string street = GetStreetNameFromHashKey(streetHash);
+
+                string msg = $"{streetHash} : {street}";
+
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                {
+                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
+                }
+
+                ScreenInterface.Draw3DText(camera.Center, msg);
+
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
             foreach (SpeedCamera camera in pointsToSave)
             {
+                uint streetHash = 0;
+                uint crossingRoad = 0;
+                GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
+                string street = GetStreetNameFromHashKey(streetHash);
+
+                string msg = $"{streetHash} : {street}";
+
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                {
+                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
+                }
+
+                ScreenInterface.Draw3DText(camera.Center, msg);
+
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
             foreach (SpeedCamera camera in pointsSaved)
             {
+                uint streetHash = 0;
+                uint crossingRoad = 0;
+                GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
+                string street = GetStreetNameFromHashKey(streetHash);
+
+                string msg = $"{streetHash} : {street}";
+
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                {
+                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
+                }
+
+                ScreenInterface.Draw3DText(camera.Center, msg);
+
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
         }

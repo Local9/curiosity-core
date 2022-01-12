@@ -164,7 +164,8 @@ namespace Curiosity.Core.Client.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///  &quot;speedCameraDistance&quot;: 12.5,
+        ///  &quot;speedCameraDistance&quot;: 100,
+        ///  &quot;speedCameraWidth&quot;: 15,
         ///  &quot;ignoredVehicles&quot;: [
         ///    &quot;police&quot;,
         ///    &quot;police2&quot;
@@ -184,8 +185,7 @@ namespace Curiosity.Core.Client.Properties {
         ///    &quot;Panorama Dr&quot;: 40,
         ///    &quot;Lesbos Ln&quot;: 35,
         ///    &quot;Calafia Rd&quot;: 30,
-        ///    &quot;North Calafia Way&quot;: 30,
-        ///    &quot;Cassidy Trail&quot;:  [rest of string was truncated]&quot;;.
+        ///    &quot;North Calafia Way&quot;:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string police {
             get {
@@ -230,40 +230,6 @@ namespace Curiosity.Core.Client.Properties {
         internal static string scenarios {
             get {
                 return ResourceManager.GetString("scenarios", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {
-        ///  &quot;Objects&quot;: {
-        ///    &quot;MapObject&quot;: [
-        ///      {
-        ///        &quot;Type&quot;: &quot;Prop&quot;,
-        ///        &quot;Position&quot;: {
-        ///          &quot;X&quot;: -898.862549,
-        ///          &quot;Y&quot;: -708.4136,
-        ///          &quot;Z&quot;: 31.2379112
-        ///        },
-        ///        &quot;Rotation&quot;: {
-        ///          &quot;X&quot;: 0,
-        ///          &quot;Y&quot;: -0,
-        ///          &quot;Z&quot;: 92.99932
-        ///        },
-        ///        &quot;Hash&quot;: &quot;1919058329&quot;,
-        ///        &quot;Dynamic&quot;: false,
-        ///        &quot;Quaternion&quot;: {
-        ///          &quot;X&quot;: 0,
-        ///          &quot;Y&quot;: 0,
-        ///          &quot;Z&quot;: 0.725370347,
-        ///          &quot;W&quot;: 0.6883587
-        ///        },
-        ///        &quot;Door&quot;: false
-        ///      },
-        ///  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string speedCameras {
-            get {
-                return ResourceManager.GetString("speedCameras", resourceCulture);
             }
         }
     }

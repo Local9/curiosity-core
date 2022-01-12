@@ -88,11 +88,10 @@ namespace Curiosity.Core.Client.Managers
             {
                 _currentStreet = street;
                 _currentStreetLimit = PoliceConfig.SpeedLimits[street];
-                //Screen.ShowSubtitle($"Speed Limit: {_currentStreetLimit}");
             }
             else
             {
-                Screen.ShowNotification($"{street} is unknown, please inform the dev team.");
+                Screen.ShowNotification($"{street}:{streetHash} is unknown, please inform the dev team.");
             }
         }
 
