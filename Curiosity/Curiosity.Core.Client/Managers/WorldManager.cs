@@ -81,12 +81,16 @@ namespace Curiosity.Core.Client.Managers
                 regionalWeather = metadata.Find<Dictionary<Region, WeatherType>>(0);
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("<b>🌡 Weather Update 🌡</b>");
+                sb.Append("<b>🌡 Weather Update 🌡</b><br />");
+                sb.Append("<table width=\"300\">");
+                sb.Append($"<tr><td>Area</td><td>Weather</td></tr>");
 
-                foreach(KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
+                foreach (KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
                 {
-                    sb.Append($"<br /><b>Area</b>: {kvp.Key}<br />{GetForecastText(kvp.Value)}");
+                    sb.Append($"<tr><td>{kvp.Key}</td><td>{GetForecastText(kvp.Value)}</td></tr>");
                 }
+
+                sb.Append("</table>");
 
                 Notify.Info($"{sb}");
 
