@@ -55,7 +55,7 @@ namespace Curiosity.Core.Client.Managers
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
             bool isEnabled = false;
-            if (!isEnabled)
+            if (!isEnabled && job == JOB_POLICE)
             {
                 Notify.Warn($"Sorry, currently this job is disabled. Press F5 for all other jobs.");
                 return;
