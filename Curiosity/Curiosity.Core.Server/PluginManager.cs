@@ -61,7 +61,7 @@ namespace Curiosity.Core.Server
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
         public static ConcurrentDictionary<int, CuriosityUser> ActiveUsers { get; } = new ConcurrentDictionary<int, CuriosityUser>();
-        public DateTime LastSave { get; set; } = DateTime.UtcNow;
+        public long LastSave { get; set; } = GetGameTimer();
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
@@ -304,7 +304,6 @@ namespace Curiosity.Core.Server
             var commands = new CommandFramework();
             commands.Bind(typeof(ServerCommands));
             commands.Bind(typeof(StaffCommands));
-            commands.Bind(typeof(PedCommands));
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
@@ -479,7 +478,7 @@ namespace Curiosity.Core.Server
         {
             try
             {
-                if (DateTime.UtcNow.Subtract(LastSave).TotalMinutes >= 5)
+                if ((GetGameTimer() - (1000 * 60) * 5) > LastSave)
                 {
                     SavePlayers();
 
@@ -559,7 +558,7 @@ namespace Curiosity.Core.Server
                     }
                 }
 
-                LastSave = DateTime.UtcNow;
+                LastSave = GetGameTimer();
             }
 
             if (command)

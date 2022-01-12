@@ -10,8 +10,6 @@ namespace Curiosity.Core.Server.Managers
 {
     public class GameEventManager : Manager<GameEventManager>
     {
-        DateTime lastRun = DateTime.Now;
-
         public override void Begin()
         {
             EventSystem.Attach("gameEvent:playerKillPlayer", new AsyncEventCallback(async metadata =>

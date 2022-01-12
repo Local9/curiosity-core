@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Events;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ namespace Curiosity.Core.Server.Managers
 {
     public class MarqueeManager : Manager<MarqueeManager>
     {
-        DateTime lastRun = DateTime.Now;
+        long gameTimer = GetGameTimer();
+        int fiveMinutes = (1000 * 60) * 5;
         int marqueeMessageIndex = 0;
 
         List<string> MarqueeMessages = new List<string>()
@@ -28,9 +30,9 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnMarqueeTask()
         {
-            if (DateTime.Now.Subtract(lastRun).TotalMinutes >= 5)
+            if ((GetGameTimer() - fiveMinutes) > gameTimer)
             {
-                lastRun = DateTime.Now;
+                gameTimer = GetGameTimer();
                 string marqueeMessage = MarqueeMessages[marqueeMessageIndex];
                 EventSystem.GetModule().SendAll("ui:marquee", marqueeMessage);
 

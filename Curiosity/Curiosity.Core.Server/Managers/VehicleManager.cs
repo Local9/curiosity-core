@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
@@ -286,13 +287,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-
+                long gameTimer = GetGameTimer();
                 while (!API.DoesEntityExist(vehicleId))
                 {
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(100);
 
-                    if (maxWaitTime < DateTime.UtcNow) break;
+                    if ((GetGameTimer() - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))
@@ -354,13 +354,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-
+                long gameTimer = GetGameTimer();
                 while (!API.DoesEntityExist(vehicleId))
                 {
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(100);
 
-                    if (maxWaitTime < DateTime.UtcNow) break;
+                    if ((GetGameTimer() - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))
@@ -419,13 +418,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-
+                long gameTimer = GetGameTimer();
                 while (!API.DoesEntityExist(vehicleId))
                 {
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(100);
 
-                    if (maxWaitTime < DateTime.UtcNow) break;
+                    if ((GetGameTimer() - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))

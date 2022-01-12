@@ -94,68 +94,6 @@ namespace Curiosity.Core.Server.Commands.Impl
                 pluginManager.ExportDictionary["xsound"].TextToSpeech(-1, "devSpeak", "en-US", text, volume, false);
             }
         }
-
-        [CommandInfo(new[] { "time" })]
-        public class WorldTime : ICommand
-        {
-            public async void On(CuriosityUser user, Player player, List<string> arguments)
-            {
-                if (arguments.Count == 0)
-                {
-                    ChatManager.OnServerMessage(player, $"Missing arguments.");
-                    return;
-                }
-
-                string arg1 = arguments.ElementAt(0);
-
-                WorldManager world = WorldManager.GetModule();
-
-                if (arguments.Count > 1)
-                {
-                    string arg2 = arguments.ElementAt(1);
-
-                    if (int.TryParse(arg1, out int hour))
-                    {
-                        world.ShiftTimeToHour(hour);
-                    }
-
-                    if (int.TryParse(arg2, out int minute))
-                    {
-                        world.ShiftTimeToMinute(minute);
-                    }
-                    return;
-                }
-
-                int newHour;
-                int newMinute = 0;
-                switch (arg1)
-                {
-                    case "morning":
-                        newHour = 9;
-
-                        break;
-                    case "noon":
-                        newHour = 12;
-                        break;
-                    case "evening":
-                        newHour = 18;
-                        break;
-                    case "night":
-                        newHour = 22;
-                        break;
-                    case "freeze":
-                        world.IsTimeFrozen = !world.IsTimeFrozen;
-                        ChatManager.OnServerMessage(player, world.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
-                        return;
-                    default:
-                        ChatManager.OnServerMessage(player, $"Argument '{arg1}' unknown.");
-                        return;
-                }
-                ChatManager.OnServerMessage(player, $"Set Time: {arg1}");
-                world.ShiftTimeToHour(newHour);
-                world.ShiftTimeToMinute(newMinute);
-            }
-        }
         #endregion
     }
 }

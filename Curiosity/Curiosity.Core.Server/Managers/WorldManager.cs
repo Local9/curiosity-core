@@ -15,7 +15,8 @@ namespace Curiosity.Core.Server.Managers
     public class WorldManager : Manager<WorldManager>
     {
         public static WorldManager WorldInstance;
-        DateTime lastTimeWeatherUpdated = DateTime.UtcNow;
+
+        long lastTimeWeatherUpdated = GetGameTimer();
 
         PlayerList players => PluginManager.PlayersList;
 
@@ -41,12 +42,6 @@ namespace Curiosity.Core.Server.Managers
         };
 
         // TIME
-        double _baseTime = 0;
-        double _timeOffset = 0;
-        DateTime lastTimeTick = DateTime.UtcNow;
-        DateTime lastTimeSyncTick = DateTime.UtcNow;
-
-        public bool IsTimeFrozen { get; internal set; }
 
         public override void Begin()
         {
@@ -213,58 +208,16 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWeatherTick()
         {
-            if (DateTime.UtcNow > lastTimeWeatherUpdated)
+            if ((GetGameTimer() - (1000 * 60) * 60) > lastTimeWeatherUpdated)
             {
                 if (IsWeatherFrozen) return;
 
                 RandomiseWeather();
 
-                lastTimeWeatherUpdated = DateTime.UtcNow.AddMinutes(60);
+                lastTimeWeatherUpdated = GetGameTimer();
             }
 
             await BaseScript.Delay(10000);
-        }
-
-        //[TickHandler]
-        private async Task OnWorldTimeTick()
-        {
-            if (DateTime.UtcNow > lastTimeTick)
-            {
-                TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1);
-                int secondsSinceEpoch = (int)timeSpan.TotalSeconds;
-
-                double newBaseTime = (secondsSinceEpoch / 2) + 360;
-
-                _baseTime = IsTimeFrozen ? _baseTime : newBaseTime;
-
-                lastTimeTick = DateTime.UtcNow.AddMilliseconds(1000);
-            }
-
-            await BaseScript.Delay(250);
-        }
-
-        //[TickHandler]
-        private async Task OnWorldTimeSyncTick()
-        {
-            if (DateTime.UtcNow > lastTimeSyncTick)
-            {
-                EventSystem.SendAll("world:time:sync", _baseTime, _timeOffset);
-                lastTimeSyncTick = DateTime.UtcNow.AddSeconds(5);
-            }
-
-            await BaseScript.Delay(1000);
-        }
-
-        public void ShiftTimeToHour(int inHour)
-        {
-            inHour = inHour >= 24 ? 0 : inHour;
-            _timeOffset = _timeOffset - (((((_baseTime + _timeOffset) / 60) % 24) - inHour) * 60);
-        }
-
-        public void ShiftTimeToMinute(int inMins)
-        {
-            inMins = inMins >= 60 ? 0 : inMins;
-            _timeOffset = _timeOffset - (((_baseTime + _timeOffset) % 60) - (inMins * 1000));
         }
     }
 }
