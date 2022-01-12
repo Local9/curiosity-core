@@ -139,7 +139,7 @@ namespace Curiosity.Core.Client.Managers
                     API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
                     API.NetworkSetFriendlyFireOption(true);
                     API.SetMaxWantedLevel(5);
-                    Notify.Info($"Passive Mode Disabled");
+                    Interface.Notify.Info($"Passive Mode Disabled");
                     Logger.Debug($"Passive Mode Disabled");
                 }
 
