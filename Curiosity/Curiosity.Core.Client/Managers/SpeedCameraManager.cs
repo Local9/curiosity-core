@@ -84,7 +84,7 @@ namespace Curiosity.Core.Client.Managers
 
             string street = GetStreetNameFromHashKey(streetHash);
 
-            if (PoliceConfig.SpeedLimits.ContainsKey(street))
+            if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
             {
                 _currentStreet = street;
                 _currentStreetLimit = PoliceConfig.SpeedLimits[street];

@@ -278,6 +278,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
+
+            _menu.Subtitle.Caption = $"No. Cams {pointsSaved.Count + pointsSaved.Count + currentPoints.Count + PoliceConfig.SpeedCameras.Count}";
+            _menu.UpdateDescription();
         }
 
         void AddNewCamera(Vector3? position = null)
