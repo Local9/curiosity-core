@@ -91,7 +91,8 @@ namespace Curiosity.Core.Client.Managers
             }
             else
             {
-                Screen.ShowNotification($"{street}:{streetHash} is unknown, please inform the dev team.");
+                if (Cache.Player.User.IsDeveloper)
+                    Logger.Debug($"{street}:{streetHash} is unknown, please inform the dev team.");
             }
         }
 

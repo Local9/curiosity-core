@@ -38,6 +38,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
         private List<SpeedCamera> pointsSaved = new List<SpeedCamera>();
         SpeedCamera currentCamera;
 
+        float width = 10;
+
         public UIMenu Create(UIMenu menu)
         {
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
@@ -81,15 +83,16 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             }
             else if (listItem == miAdjustWidth)
             {
+                width = (int)listItem.Items[newIndex];
                 foreach (SpeedCamera cam in closestCameras)
                 {
                     if (cam.Start.Vector3.Distance(pos, true) < 5f)
                     {
-                        cam.Width = (int)listItem.Items[newIndex];
+                        cam.Width = width;
                     }
                     else if (cam.End.Vector3.Distance(pos, true) < 5f)
                     {
-                        cam.Width = (int)listItem.Items[newIndex];
+                        cam.Width = width;
                     }
                 }
             }
@@ -183,7 +186,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
         private async Task OnSpeedCameraCreatedDebugDisplay()
         {
-            foreach (PoliceCamera camera in PoliceConfig.SpeedCameras)
+            Vector3 playerPos = Game.PlayerPed.Position;
+            foreach (PoliceCamera camera in PoliceConfig.SpeedCameras.Where(x => x.Center.Distance(playerPos) < 100f))
             {
                 uint streetHash = 0;
                 uint crossingRoad = 0;
@@ -192,7 +196,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
                 string msg = $"{streetHash} : {street}";
 
-                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                if (camera.Limit > 0)
+                {
+                    msg += $" / Custom Limit: {camera.Limit}";
+                }
+                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
                 {
                     msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
                 }
@@ -202,7 +210,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
-            foreach (SpeedCamera camera in currentPoints)
+            foreach (SpeedCamera camera in currentPoints.Where(x => x.Center.Distance(playerPos) < 100f))
             {
                 uint streetHash = 0;
                 uint crossingRoad = 0;
@@ -211,7 +219,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
                 string msg = $"{streetHash} : {street}";
 
-                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                if (camera.Limit > 0)
+                {
+                    msg += $" / Custom Limit: {camera.Limit}";
+                }
+                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
                 {
                     msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
                 }
@@ -221,7 +233,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
-            foreach (SpeedCamera camera in pointsToSave)
+            foreach (SpeedCamera camera in pointsToSave.Where(x => x.Center.Distance(playerPos) < 100f))
             {
                 uint streetHash = 0;
                 uint crossingRoad = 0;
@@ -230,7 +242,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
                 string msg = $"{streetHash} : {street}";
 
-                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                if (camera.Limit > 0)
+                {
+                    msg += $" / Custom Limit: {camera.Limit}";
+                }
+                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
                 {
                     msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
                 }
@@ -240,7 +256,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 Common.IsEntityInAngledArea(Game.PlayerPed, camera.Start.Vector3, camera.End.Vector3, camera.Width ?? PoliceConfig.SpeedCameraWidth, debug: true);
             }
 
-            foreach (SpeedCamera camera in pointsSaved)
+            foreach (SpeedCamera camera in pointsSaved.Where(x => x.Center.Distance(playerPos) < 100f))
             {
                 uint streetHash = 0;
                 uint crossingRoad = 0;
@@ -249,7 +265,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
                 string msg = $"{streetHash} : {street}";
 
-                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                if (camera.Limit > 0)
+                {
+                    msg += $" / Custom Limit: {camera.Limit}";
+                }
+                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
                 {
                     msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
                 }
@@ -272,6 +292,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
             currentCamera = new SpeedCamera();
             currentCamera.AddStart(position ?? Game.PlayerPed.Position);
+            currentCamera.Width = width;
             NotificationManager.Success($"Start point added<br />{currentCamera.Start.Vector3}");
         }
 
