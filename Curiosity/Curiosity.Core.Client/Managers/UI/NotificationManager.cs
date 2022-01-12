@@ -8,6 +8,8 @@ namespace Curiosity.Core.Client.Managers
 {
     public class NotificationManager : Manager<NotificationManager>
     {
+        public bool CanSendNotification = false;
+
         public override void Begin()
         {
             Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, int, bool, bool, bool, bool>(
@@ -46,6 +48,8 @@ namespace Curiosity.Core.Client.Managers
 
         public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false, bool playSound = false)
         {
+            if (!CanSendNotification) return;
+
             if (playSound)
             {
                 switch (notification)

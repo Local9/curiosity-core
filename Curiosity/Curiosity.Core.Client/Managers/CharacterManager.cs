@@ -342,6 +342,9 @@ namespace Curiosity.Core.Client.Managers
             Vector3 p = Game.PlayerPed.Position;
             var spawn = new { x = p.X, y = p.Y, z = p.Z, heading = Game.PlayerPed.Heading, model = Game.PlayerPed.Model.Hash };
             BaseScript.TriggerEvent("playerSpawned", spawn);
+
+            Notify.CanSendNotification = true;
+
             TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
             CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
         }

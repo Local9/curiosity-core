@@ -10,6 +10,7 @@ using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -20,6 +21,7 @@ namespace Curiosity.Core.Client.Managers
         List<int> vehiclesToSuppress = new List<int>();
 
         CuriosityWeather CuriosityWeather = new CuriosityWeather();
+        NotificationManager Notify = NotificationManager.GetModule();
         DateTime lastRunWeatherUpdate = DateTime.Now;
         DateTime lastRunVehicleSuppression = DateTime.Now;
 
@@ -77,6 +79,16 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Attach("world:server:weather:sync", new EventCallback(metadata =>
             {
                 regionalWeather = metadata.Find<Dictionary<Region, WeatherType>>(0);
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<b>🌡 Weather Update 🌡</b>");
+
+                foreach(KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
+                {
+                    sb.Append($"<br /><b>Area</b>: {kvp.Key}<br />{GetForecastText(kvp.Value)}");
+                }
+
+                Notify.Info($"{sb}");
 
                 return null;
             }));
@@ -237,13 +249,13 @@ namespace Curiosity.Core.Client.Managers
                     SetTrails();
 
                     if (interiorId == 0)
-                        NotificationManager.GetModule().Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
+                        Notify.Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
 
                     return;
                 }
 
                 if (interiorId == 0)
-                    NotificationManager.GetModule().Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
+                    Notify.Info($"<b>🌡 Weather Update 🌡</b><br /><b>Area</b>: {area}<br />{GetForecastText(weatherType)}");
 
                 await BaseScript.Delay(5000);
 
@@ -301,33 +313,33 @@ namespace Curiosity.Core.Client.Managers
             switch (weather)
             {
                 case WeatherType.EXTRASUNNY:
-                    return "☀️ Skies will be completely clear for a few hours.";
+                    return "☀️ Extra Sun";
                 case WeatherType.CLOUDS:
-                    return "☁️ Clouds will cover the sky for some hours.";
+                    return "☁️ Cloudy";
                 case WeatherType.SNOWLIGHT:
-                    return "Copious ammounts of snow for the next hours.";
+                    return "❄️ Light Snow";
                 case WeatherType.FOGGY:
-                    return "🌫 Its going to be foggy for a while.";
+                    return "🌫 Foggy";
                 case WeatherType.NEUTRAL:
-                    return "✨ Strange shit happening on the skies soon. Beware.";
+                    return "✨ Weird Weather";
                 case WeatherType.OVERCAST:
-                    return "☁️ Its going to be very cloudy for some time.";
+                    return "☁️ Very Cloudy";
                 case WeatherType.CHRISTMAS:
-                    return "🎄 Christmas itself is expected. Ho ho ho!";
+                    return "🎄 Snow";
                 case WeatherType.SMOG:
-                    return "🌫 Clear skies accompanied by little fog are expected.";
+                    return "🌫 Smoggy";
                 case WeatherType.BLIZZARD:
-                    return "❄️ A big blizzard is expected.";
+                    return "❄️ Blizzard";
                 case WeatherType.SNOWING:
-                    return "❄️ Some snow is expected.";
+                    return "❄️ Snowing";
                 case WeatherType.RAINING:
-                    return "🌧 Rain is expected to feature the following hours.";
+                    return "🌧 Raining";
                 case WeatherType.CLEAR:
-                    return "☀️ The skies will be clear for the next couple of hours.";
+                    return "☀️ Clear Skies";
                 case WeatherType.CLEARING:
-                    return "🌧 Skies will clear in the next hours.";
+                    return "🌧 Clearing";
                 case WeatherType.THUNDERSTORM:
-                    return "🌩 Heavy rain accompanied by thunder is expected.";
+                    return "🌩 Thunderstorm";
                 default:
                     return "😱 No idea. We've lost the plot";
             }
