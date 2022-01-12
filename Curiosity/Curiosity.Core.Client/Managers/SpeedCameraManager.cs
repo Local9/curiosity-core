@@ -127,6 +127,11 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
+            if (currentVehicle.ClassType == VehicleClass.Emergency)
+            {
+                if (currentVehicle.IsSirenActive) return;
+            }
+
             string direction = GetVehicleHeadingDirection();
             List<PoliceCamera> closestCameras = GetClosestCamera(currentVehicle.Position, _speedCameraDistance);
 
