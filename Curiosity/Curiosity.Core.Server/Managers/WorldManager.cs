@@ -208,7 +208,7 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWeatherTick()
         {
-            if ((GetGameTimer() - (1000 * 60) * 60) > lastTimeWeatherUpdated)
+            if ((GetGameTimer() - (1000 * 60) * 48) > lastTimeWeatherUpdated)
             {
                 if (IsWeatherFrozen) return;
 
