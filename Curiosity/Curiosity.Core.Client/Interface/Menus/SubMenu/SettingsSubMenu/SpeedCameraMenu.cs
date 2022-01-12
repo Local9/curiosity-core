@@ -31,6 +31,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
         UIMenuItem miSave = new UIMenuItem("Save Positions");
 
         UIMenuListItem miAdjustClosedPointZ = new UIMenuListItem("Adjust Closest Z", new List<dynamic> { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 }, 5);
+        UIMenuListItem miAdjustWidth = new UIMenuListItem("Adjust Width", new List<dynamic> { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 }, 15);
 
         private List<SpeedCamera> currentPoints = new List<SpeedCamera>();
         private List<SpeedCamera> pointsToSave = new List<SpeedCamera>();
@@ -48,8 +49,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             menu.AddItem(chkEnableSpeedCameraDebugging);
             menu.AddItem(miSetCameraStart);
             menu.AddItem(miSetCameraEnd);
+            menu.AddItem(miAdjustWidth);
             menu.AddItem(miAdjustClosedPointZ);
             menu.AddItem(miSetCameraAdd);
+
             menu.AddItem(miClear);
             menu.AddItem(miSave);
 
@@ -59,11 +62,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
+            Vector3 pos = Game.PlayerPed.Position;
+            List<SpeedCamera> closestCameras = GetClosestCamera(pos, 50f);
+
             if (listItem == miAdjustClosedPointZ)
             {
-                Vector3 pos = Game.PlayerPed.Position;
-
-                List<SpeedCamera> closestCameras = GetClosestCamera(pos, 50f);
                 foreach (SpeedCamera cam in closestCameras)
                 {
                     if (cam.Start.Vector3.Distance(pos, true) < 5f)
@@ -73,6 +76,20 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                     else if (cam.End.Vector3.Distance(pos, true) < 5f)
                     {
                         cam.End.Z += (int)listItem.Items[newIndex];
+                    }
+                }
+            }
+            else if (listItem == miAdjustWidth)
+            {
+                foreach (SpeedCamera cam in closestCameras)
+                {
+                    if (cam.Start.Vector3.Distance(pos, true) < 5f)
+                    {
+                        cam.Width = (int)listItem.Items[newIndex];
+                    }
+                    else if (cam.End.Vector3.Distance(pos, true) < 5f)
+                    {
+                        cam.Width = (int)listItem.Items[newIndex];
                     }
                 }
             }

@@ -1,10 +1,6 @@
 {
   "speedCameraDistance": 100,
   "speedCameraWidth": 15,
-  "ignoredVehicles": [
-    "police",
-    "police2"
-  ],
   "speedLimits": {
     "2896128334": 65,
     "2552845347": 65,
