@@ -11,7 +11,7 @@ namespace Curiosity.Systems.Library.Data
             { SubRegion.ALTA, Region.NorthLosSantos },
             { SubRegion.ARMYB, Region.Zancudo },
             { SubRegion.BANHAMC, Region.BeachCoastal },
-            { SubRegion.BANHAMCA, Region.BeachCoastal },
+            { SubRegion.BHAMCA, Region.BeachCoastal },
             { SubRegion.BANNING, Region.SouthLosSantos },
             { SubRegion.BEACH, Region.BeachLosSantos },
             { SubRegion.BRADP, Region.NorthernMoutains },
@@ -24,6 +24,7 @@ namespace Curiosity.Systems.Library.Data
             { SubRegion.CHU, Region.BeachCoastal },
             { SubRegion.CMSW, Region.Paleto },
             { SubRegion.CYPRE, Region.SouthLosSantos },
+            { SubRegion.DAVIS, Region.SouthLosSantos },
             { SubRegion.DELBE, Region.BeachLosSantos },
             { SubRegion.DELPE, Region.NorthLosSantos },
             { SubRegion.DELSOL, Region.SouthLosSantos },
@@ -76,7 +77,7 @@ namespace Curiosity.Systems.Library.Data
             { SubRegion.SANDY, Region.GrandSenoraDesert },
             { SubRegion.SKID, Region.CentralLosSantos },
             { SubRegion.SLAB, Region.GrandSenoraDesert },
-            { SubRegion.STRAW, Region.SouthLosSantos },
+            { SubRegion.STRAW, Region.CentralLosSantos },
             { SubRegion.TATAMO, Region.EasternValley },
             { SubRegion.TERMINA, Region.SouthLosSantos },
             { SubRegion.TEXTI, Region.CentralLosSantos },
@@ -88,7 +89,12 @@ namespace Curiosity.Systems.Library.Data
             { SubRegion.WVINE, Region.NorthLosSantos },
             { SubRegion.ZQ_UAR, Region.GrandSenoraDesert },
             { SubRegion.PROL, Region.NorthYankton },
-            { SubRegion.ISHeist, Region.CayoPericoIsland }
+            { SubRegion.ISHeist, Region.CayoPericoIsland },
+            { SubRegion.DOWNT, Region.CentralLosSantos },
+            { SubRegion.CHAMH, Region.SouthLosSantos },
+            { SubRegion.STAD, Region.SouthLosSantos },
+            { SubRegion.ZP_ORT, Region.SouthLosSantos },
+            { SubRegion.VINE, Region.NorthLosSantos },
         };
     }
 
@@ -111,6 +117,7 @@ namespace Curiosity.Systems.Library.Data
 
     public enum SubRegion
     {
+        UNKNOWN = -1,
         TERMINA,
         ELYSIAN,
         AIRP,
@@ -153,7 +160,7 @@ namespace Curiosity.Systems.Library.Data
         NOOSE,
         TATAMO,
         BANHAMC,
-        BANHAMCA,
+        BHAMCA,
         CHU,
         TONGVAH,
         CHIL,
@@ -194,84 +201,95 @@ namespace Curiosity.Systems.Library.Data
         PROCOB,
         PROL,
         ISHeist,
-        UNKNOWN
+        DOWNT,
+        CHAMH,
+        DAVIS,
+        STAD,
+        ZP_ORT,
+        VINE
     }
 
     public enum SouthLosSantos
     {
-        TERMINA,
-        ELYSIAN,
-        AIRP,
-        BANNING,
-        DELSOL,
-        RANCHO,
-        STRAW,
-        CYPRE,
-        SANAND
+        TERMINA, // Terminal !
+        ELYSIAN, // Elysian Island !
+        AIRP,    // Los Santos International Airport !
+        BANNING, // Banning !
+        DELSOL,  // La Puerta !
+        RANCHO,  // Rancho !
+        CYPRE,   // Cypress Flats !
+        SANAND,  // San Andreas !
+        DAVIS,   // Davis !
+        CHAMH,   // Chamberlain Hills !
+        STAD,    // Maze Bank Arena !
+        ZP_ORT,  // Port of South Los Santos
     }
 
     public enum CentralLosSantos
     {
-        MURRI,
-        LMESA,
-        SKID,
-        LEGSQU,
-        TEXTI,
-        PBOX,
-        KOREAT
+        MURRI,  // Murrieta Heights !
+        LMESA,  // La Mesa !
+        SKID,   // Mission Row !
+        LEGSQU, // Legion Square !
+        TEXTI,  // Textile City !
+        PBOX,   // Pillbox Hill !
+        KOREAT, // Little Seoul !
+        STRAW,  // Strawberry !
+        DOWNT,  // Downtown !
     }
 
     public enum NorthLosSantos
     {
-        MIRR,
-        EAST_V,
-        DTVINE,
-        ALTA,
-        HAWICK,
-        BURTON,
-        ROCKF,
-        MOVIE,
-        DELPE,
-        MORN,
-        RICHM,
-        GOLF,
-        WVINE,
-        HORS,
-        LACT,
-        LDAM
+        MIRR,    // Mirror Park !
+        EAST_V,  // East Vinewood !
+        DTVINE,  // Downtown Vinewood !
+        ALTA,    // Alta !
+        HAWICK,  // Hawick !
+        BURTON,  // Burton !
+        ROCKF,   // Rockford Hills !
+        MOVIE,   // Richards Majestic !
+        DELPE,   // Del Perro !
+        MORN,    // Morningwood !
+        RICHM,   // Richman !
+        GOLF,    // GWC and Golfing Society !
+        WVINE,   // West Vinewood !
+        HORS,    // Vinewood Racetrack !
+        LACT,    // Land Act Reservoir !
+        LDAM,    // Land Act Dam !
+        VINE,    // Vinewood !
     }
 
     public enum BeachLosSantos
     {
-        BEACH,
-        VESP,
-        VCANA,
-        DELBE,
-        PBLUFF
+        BEACH,  // Vespucci Beach !
+        VESP,   // Vespucci !
+        VCANA,  // Vespucci Canals !
+        DELBE,  // Del Perro Beach !
+        PBLUFF  // Pacific Bluffs !
     }
 
     public enum EasternValley
     {
-        EBURO,
-        PALHIGH,
-        NOOSE,
-        TATAMO
+        EBURO,   // El Burro Heights
+        PALHIGH, // Palomino Highlands
+        NOOSE,   // N.O.O.S.E
+        TATAMO   // Tataviam Mountains
     }
 
     public enum BeachCoastal
     {
-        BANHAMC,
-        BANHAMCA,
-        CHU,
-        TONGVAH
+        BANHAMC, // Banham Canyon Dr
+        BHAMCA,  // Banham Canyon
+        CHU,     // Chumash
+        TONGVAH  // Tongva Hills
     }
 
     public enum NorthLosSantosHills
     {
-        CHIL,
-        GREATC,
-        RGLEN,
-        TONGVAV
+        CHIL,   // Vinewood Hills !
+        GREATC, // Great Chaparral !
+        RGLEN,  // Richman Glen !
+        TONGVAV // Tongva Valley !
     }
 
     public enum GrandSenoraDesert
