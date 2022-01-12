@@ -20,14 +20,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         float width = 400;
 
         public bool IsJailed = false;
-        DateTime jailStartTime;
         DateTime jailEndTime;
 
         public override void Begin()
         {
             EventSystem.Attach("jail:start", new AsyncEventCallback(async metadata =>
             {
-                jailStartTime = DateTime.UtcNow;
                 jailEndTime = DateTime.UtcNow.AddMinutes(3);
 
                 float x = metadata.Find<float>(0);
@@ -68,6 +66,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             Instance.DetachTickHandler(OnJailTimerCheck);
             Instance.DetachTickHandler(OnJailCheck);
             // if they have left, then we need to inform the police
+            EventSystem.Send("jail:player:escape");
         }
 
         private async Task OnJailTimerCheck()
@@ -87,6 +86,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 Instance.DetachTickHandler(OnJailCheck);
 
                 TeleportPlayer(1847.085f, 2585.711f, 45.67204f);
+                EventSystem.Send("jail:player:timeServed");
             }
         }
     }
