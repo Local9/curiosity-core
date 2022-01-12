@@ -34,19 +34,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 float y = metadata.Find<float>(1);
                 float z = metadata.Find<float>(2);
 
-                await ScreenInterface.FadeOut(1000);
-                Game.PlayerPed.IsPositionFrozen = true;
-                Game.PlayerPed.Position = new Vector3(x, y, z + 10f);
-                await BaseScript.Delay(1000);
-                float groundZ = z + 10f;
-                if (GetGroundZFor_3dCoord(x, y, z, ref groundZ, false))
-                    z = groundZ;
-
-                Game.PlayerPed.IsPositionFrozen = false;
-                Game.PlayerPed.Position = new Vector3(x, y, z);
-
-                await BaseScript.Delay(500);
-                await ScreenInterface.FadeIn(2000);
+                await TeleportPlayer(x, y, z);
 
                 Instance.AttachTickHandler(OnJailCheck);
                 Instance.AttachTickHandler(OnJailTimerCheck);
@@ -54,12 +42,31 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 return null;
             }));
         }
-        
+
+        private static async Task TeleportPlayer(float x, float y, float z)
+        {
+            await ScreenInterface.FadeOut(1000);
+            Game.PlayerPed.IsPositionFrozen = true;
+            Game.PlayerPed.Position = new Vector3(x, y, z + 10f);
+            await BaseScript.Delay(1000);
+            float groundZ = z + 10f;
+            if (GetGroundZFor_3dCoord(x, y, z, ref groundZ, false))
+                z = groundZ;
+
+            Game.PlayerPed.IsPositionFrozen = false;
+            Game.PlayerPed.Position = new Vector3(x, y, z);
+
+            await BaseScript.Delay(500);
+            await ScreenInterface.FadeIn(2000);
+        }
+
         private async Task OnJailCheck()
         {
             bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
             if (isInsideJail) return; // if they are jailed and still inside, do nothing
-            
+
+            Instance.DetachTickHandler(OnJailTimerCheck);
+            Instance.DetachTickHandler(OnJailCheck);
             // if they have left, then we need to inform the police
         }
 
@@ -76,7 +83,10 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
             if (jailEndTime < DateTime.UtcNow)
             {
+                Instance.DetachTickHandler(OnJailTimerCheck);
+                Instance.DetachTickHandler(OnJailCheck);
 
+                TeleportPlayer(1847.085f, 2585.711f, 45.67204f);
             }
         }
     }
