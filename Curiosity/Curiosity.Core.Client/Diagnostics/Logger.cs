@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Client.Events;
+using Curiosity.Systems.Library.Enums;
 using System;
 using static CitizenFX.Core.Native.API;
 
@@ -45,6 +46,8 @@ namespace Curiosity.Core.Client.Diagnostics
 
         public async static void Debug(string msg)
         {
+            if (!IsDebugEnabled) return;
+
             if (Cache.Player != null)
             {
                 if (DateTime.UtcNow < lastChecked)
@@ -58,7 +61,7 @@ namespace Curiosity.Core.Client.Diagnostics
                     lastChecked.AddMinutes(10);
                 }
 
-                if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
+                if (Cache.Player.User.Role == Role.DEVELOPER) return;
 
                 WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
             }
@@ -66,6 +69,8 @@ namespace Curiosity.Core.Client.Diagnostics
 
         public async static void Debug(Exception ex, string msg)
         {
+            if (!IsDebugEnabled) return;
+
             if (Cache.Player != null)
             {
                 if (DateTime.UtcNow < lastChecked)
@@ -79,7 +84,7 @@ namespace Curiosity.Core.Client.Diagnostics
                     lastChecked.AddMinutes(10);
                 }
 
-                if (Cache.Player.User.IsDeveloper && !IsDebugEnabled) return;
+                if (Cache.Player.User.Role == Role.DEVELOPER) return;
 
                 WriteLine("DEBUG", $"{msg}\r\n{ex}", ConsoleColor.DarkGray);
             }
