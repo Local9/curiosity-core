@@ -332,11 +332,18 @@ namespace Curiosity.Core.Server.Managers
             {
                 foreach (KeyValuePair<int, DateTime> kvp in playerCullingReset.ToArray())
                 {
-                    if (kvp.Value < DateTime.UtcNow)
+                    try
                     {
-                        if (DoesEntityExist(kvp.Key))
-                            SetEntityDistanceCullingRadius(kvp.Key, 0f);
+                        if (kvp.Value < DateTime.UtcNow)
+                        {
+                            if (DoesEntityExist(kvp.Key))
+                                SetEntityDistanceCullingRadius(kvp.Key, 0f);
 
+                            playerCullingReset.Remove(kvp.Key);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
                         playerCullingReset.Remove(kvp.Key);
                     }
                 }
