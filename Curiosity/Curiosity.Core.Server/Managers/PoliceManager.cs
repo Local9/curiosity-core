@@ -156,6 +156,7 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata =>
             {
+                return null;
 
                 int attackerServerId = metadata.Find<int>(0);
                 int victimServerId = metadata.Find<int>(1);
