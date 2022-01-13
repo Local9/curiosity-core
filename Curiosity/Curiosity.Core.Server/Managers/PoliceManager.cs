@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Managers
 
                 bool activate = metadata.Find<bool>(0);
 
-                if (activate)
+                if (activate && curiosityUser.Job != ePlayerJobs.POLICE_OFFICER)
                 {
                     // check number of active officers
                     int activeOfficers = GetPlayersWhoArePolice().Count;
@@ -64,7 +64,7 @@ namespace Curiosity.Core.Server.Managers
                     return true;
                 }
 
-                if (!activate)
+                if (!activate && curiosityUser.Job == ePlayerJobs.POLICE_OFFICER)
                 {
                     curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
