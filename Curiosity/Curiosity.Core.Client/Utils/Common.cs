@@ -55,6 +55,22 @@ namespace Curiosity.Core.Client.Utils
             return isEntityInAngledArea;
         }
 
+        public static string GetVehicleHeadingDirection()
+        {
+            if (!Game.PlayerPed.IsInVehicle()) return "U";
+
+            foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)
+            {
+                float vehDirection = Game.PlayerPed.CurrentVehicle.Heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return "U";
+        }
+
         public static string GetHeadingDirection()
         {
             foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)

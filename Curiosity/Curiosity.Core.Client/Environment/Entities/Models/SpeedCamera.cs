@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -30,6 +31,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
         public Vector End = new Vector();
 
         public Vector3 Center => (Start.Vector3 + End.Vector3) / 2;
+        public string Direction => Common.GetCompassHeading(Start.Vector3, End.Vector3);
 
         public void AddStart(Vector3 v)
         {

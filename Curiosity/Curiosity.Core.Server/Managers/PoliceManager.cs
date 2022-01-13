@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Managers
     {
         ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
 
-        private const int ALL_SERVER_ID = 0;
+        private const int SEND_JOB_ONLY = 0;
         Dictionary<int, DateTime> playerCullingReset = new();
 
         public override void Begin()
@@ -207,7 +207,7 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
-                SendNotification(ALL_SERVER_ID, notificationTable);
+                SendNotification(SEND_JOB_ONLY, notificationTable);
 
                 // log kill & reward officers (if kill is near a safe area, its not rewarded)
 
@@ -244,10 +244,11 @@ namespace Curiosity.Core.Server.Managers
 
                     int speed = metadata.Find<int>(0);
                     int speedLimit = metadata.Find<int>(1);
-                    // bool informPolice = metadata.Find<bool>(2);
-                    int vehicleNetId = metadata.Find<int>(3);
-                    string street = metadata.Find<string>(4);
-                    string direction = metadata.Find<string>(5);
+                    int vehicleNetId = metadata.Find<int>(2);
+                    string street = metadata.Find<string>(3);
+                    string direction = metadata.Find<string>(4);
+
+                    Logger.Debug($"Speeding Reported: {speed} / {speedLimit} / {vehicleNetId} / {street} / {direction}");
 
                     // get Vehicle
                     int vehicleHandle = NetworkGetEntityFromNetworkId(vehicleNetId);
@@ -257,6 +258,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (vehicle is null)
                     {
+                        Logger.Debug($"Vehicle no found");
                         em.error = "Vehicle not found.";
                         goto RETURN_MESSAGE;
                     }
@@ -270,6 +272,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (!success)
                     {
+                        Logger.Error($"Issue saving ticket");
                         em.error = "Issue when trying to save ticket.";
                         goto RETURN_MESSAGE;
                     }
@@ -298,8 +301,11 @@ namespace Curiosity.Core.Server.Managers
                         $"Last Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
-                        SendNotification(serverId: ALL_SERVER_ID, message: msg, vehicleNetId: vehicle.NetworkId);
+                        SendNotification(serverId: SEND_JOB_ONLY, message: msg, vehicleNetId: vehicle.NetworkId);
+                        Logger.Debug($"Speeding police reported");
                     }
+
+                    Logger.Debug($"Speeding: {speed} / {speedLimit} / {vehicleNetId} / {street} / {direction}");
                 }
                 catch (Exception ex)
                 {

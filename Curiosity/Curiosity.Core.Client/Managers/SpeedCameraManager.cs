@@ -5,6 +5,8 @@ using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Scripts.JobPolice;
 using Curiosity.Core.Client.Utils;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,8 @@ namespace Curiosity.Core.Client.Managers
 
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
-        
+        const string REPLACE_MAKE_NAME = "MAKE_NAME";
+
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
@@ -28,7 +31,36 @@ namespace Curiosity.Core.Client.Managers
         public bool isDebugging = false;
         Vehicle currentVehicle;
 
-        public override void Begin() => GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
+        public override void Begin()
+        {
+            EventSystem.Attach("police:notify", new EventCallback(metadata =>
+            {
+                int notificationType = metadata.Find<int>(0);
+                string notificationMessage = metadata.Find<string>(1);
+                int notificationDuration = metadata.Find<int>(2);
+                int notificationVehicle = metadata.Find<int>(3);
+
+                string vehicleName = "Unknown";
+
+                if (notificationVehicle > 0)
+                {
+                    int entityHandle = NetworkGetEntityFromNetworkId(notificationVehicle);
+                    if (DoesEntityExist(entityHandle))
+                    {
+                        Vehicle vehicle = new Vehicle(entityHandle);
+                        string name = vehicle.DisplayName;
+                        vehicleName = Game.GetGXTEntry(name);
+                        notificationMessage = notificationMessage.Replace(REPLACE_MAKE_NAME, vehicleName);
+                    }
+                }
+
+                    NotificationManager.GetModule().SendNui((eNotification)notificationType, notificationMessage, "bottom-right", "snackbar", notificationDuration, true, false);
+
+                return null;
+            }));
+
+            GameEventManager.OnEnteredVehicle += GameEventManager_OnEnteredVehicle;
+        }
 
         private void GameEventManager_OnEnteredVehicle(Player player, Vehicle vehicle)
         {
@@ -38,7 +70,6 @@ namespace Curiosity.Core.Client.Managers
                 currentVehicle = vehicle;
 
             string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
-            if (PoliceConfig.IgnoredVehicles.Contains(vehicleDisplayName)) return;
             if (IsInvalidVehicle(vehicle)) return;
 
             Instance.AttachTickHandler(OnSpeedTest);
@@ -87,29 +118,12 @@ namespace Curiosity.Core.Client.Managers
             if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
             {
                 _currentStreet = street;
-                _currentStreetLimit = PoliceConfig.SpeedLimits[street];
+                _currentStreetLimit = PoliceConfig.SpeedLimits[$"{streetHash}"];
             }
             else
             {
-                if (Cache.Player.User.IsDeveloper)
-                    Logger.Debug($"{street}:{streetHash} is unknown, please inform the dev team.");
+                Logger.Debug($"{street}:{streetHash} is unknown, please inform the dev team.");
             }
-        }
-
-        public string GetVehicleHeadingDirection()
-        {
-            if (!Game.PlayerPed.IsInVehicle()) return "U";
-
-            foreach(KeyValuePair<int, string> kvp in Common.WorldCompassDirection)
-            {
-                float vehDirection = currentVehicle.Heading;
-                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
-                {
-                    return kvp.Value;
-                }
-            }
-
-            return "U";
         }
 
         public List<PoliceCamera> GetClosestCamera(Vector3 position, float distance)
@@ -132,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
                 if (currentVehicle.IsSirenActive) return;
             }
 
-            string direction = GetVehicleHeadingDirection();
+            string direction = Common.GetVehicleHeadingDirection();
             List<PoliceCamera> closestCameras = GetClosestCamera(currentVehicle.Position, _speedCameraDistance);
 
             if (closestCameras.Count == 0) return;
@@ -140,12 +154,12 @@ namespace Curiosity.Core.Client.Managers
             {
                 camera.Active = false;
 
-                if (isDebugging)
-                    Screen.ShowSubtitle($"{camera.Direction} / {direction}");
-
                 if (camera.Direction != direction) continue;
                 float currentSpeed = currentVehicle.Speed;
                 float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
+
+                if (isDebugging)
+                    Screen.ShowSubtitle($"{camera.Direction} / {direction} : {speedInMph}");
 
                 if (_currentStreetLimit == 0) continue;
                 Vector3 start = camera.Start.Vector3;
@@ -177,7 +191,8 @@ namespace Curiosity.Core.Client.Managers
 
                 if (caughtSpeeding)
                 {
-                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, false, currentVehicle.NetworkId, _currentStreet, direction);
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, currentVehicle.NetworkId, _currentStreet, direction);
+                    Logger.Debug($"Player speeding: {speedInMph} / {limitToReport} / {_currentStreet} / {direction}");
                     await BaseScript.Delay(5000);
                     camera.Active = false;
                 }

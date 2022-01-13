@@ -28,8 +28,6 @@ namespace Curiosity.Core.Client.Environment.Entities.Models.Config
     {
         public bool Saved;
 
-        public string Direction => Common.GetCompassHeading(Start.Vector3, End.Vector3);
-
         public bool Active { get; internal set; }
     }
 }

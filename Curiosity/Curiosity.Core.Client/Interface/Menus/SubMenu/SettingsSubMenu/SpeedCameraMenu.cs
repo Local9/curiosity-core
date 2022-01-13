@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 {
@@ -194,16 +195,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"{streetHash} : {street}";
-
-                if (camera.Limit > 0)
-                {
-                    msg += $" / Custom Limit: {camera.Limit}";
-                }
-                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
-                {
-                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
-                }
+                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -217,16 +209,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"{streetHash} : {street}";
-
-                if (camera.Limit > 0)
-                {
-                    msg += $" / Custom Limit: {camera.Limit}";
-                }
-                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
-                {
-                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
-                }
+                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -240,16 +223,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"{streetHash} : {street}";
-
-                if (camera.Limit > 0)
-                {
-                    msg += $" / Custom Limit: {camera.Limit}";
-                }
-                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
-                {
-                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
-                }
+                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -263,16 +237,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"{streetHash} : {street}";
-
-                if (camera.Limit > 0)
-                {
-                    msg += $" / Custom Limit: {camera.Limit}";
-                }
-                else if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
-                {
-                    msg += $" / Limit: {PoliceConfig.SpeedLimits[$"{streetHash}"]}";
-                }
+                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
