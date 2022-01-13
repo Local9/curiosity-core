@@ -123,7 +123,7 @@ namespace Curiosity.Core.Client.Managers
                 vehiclesToSuppress.Add(modelHash);
             }
 
-            ToggleDispatch(false); // turn off all dispatch
+            ToggleDispatch(true); // turn off all dispatch
         }
 
         public async Task<bool> IsWinter()
