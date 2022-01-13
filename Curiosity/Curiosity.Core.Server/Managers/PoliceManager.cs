@@ -20,6 +20,7 @@ namespace Curiosity.Core.Server.Managers
         ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
 
         private const int SEND_JOB_ONLY = 0;
+        private const int MAX_NUMBER_OFFICERS = 20;
         Dictionary<int, DateTime> playerCullingReset = new();
 
         public override void Begin()
@@ -39,7 +40,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     // check number of active officers
                     int activeOfficers = GetPlayersWhoArePolice().Count;
-                    if (activeOfficers > 25)
+                    if (activeOfficers > MAX_NUMBER_OFFICERS)
                     {
                         SendNotification(metadata.Sender, $"We currently have 20 active officers, please try again later.");
                         return false;
@@ -48,7 +49,7 @@ namespace Curiosity.Core.Server.Managers
                     int numberOfPlayers = PluginManager.PlayersList.Count();
                     float ratioOfCopsToPlayers = (activeOfficers / numberOfPlayers);
 
-                    if (ratioOfCopsToPlayers > 0.5)
+                    if (ratioOfCopsToPlayers > 0.33)
                     {
                         SendNotification(metadata.Sender, $"We currently have enough active officers, please try again later.");
                         return false;
