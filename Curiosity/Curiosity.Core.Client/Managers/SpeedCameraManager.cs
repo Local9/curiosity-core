@@ -156,7 +156,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (camera.Direction != direction) continue;
                 float currentSpeed = currentVehicle.Speed;
-                float speedInMph = currentSpeed * CONVERT_SPEED_MPH;
+                int speedInMph = (int)(currentSpeed * CONVERT_SPEED_MPH);
 
                 if (isDebugging)
                     Screen.ShowSubtitle($"{camera.Direction} / {direction} : {speedInMph}");
