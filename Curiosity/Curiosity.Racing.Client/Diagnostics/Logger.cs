@@ -36,6 +36,7 @@ namespace Curiosity.Racing.Client.Diagnostics
 
         public static void Debug(string msg)
         {
+            return;
 #if DEBUG
             WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
 #endif
