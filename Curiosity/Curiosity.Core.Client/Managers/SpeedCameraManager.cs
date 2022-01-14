@@ -3,12 +3,14 @@ using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Scripts.JobPolice;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -23,10 +25,12 @@ namespace Curiosity.Core.Client.Managers
         const float CONVERT_SPEED_MPH = 2.236936f;
         const float CONVERT_SPEED_KPH = 3.6f;
         const string REPLACE_MAKE_NAME = "MAKE_NAME";
+        const float LIMIT_BUFFER = 5f;
 
         float _speedCameraDistance;
         float _currentStreetLimit = 0;
         string _currentStreet;
+        float _lastSpeedLimit = 0;
 
         public bool isDebugging = false;
         Vehicle currentVehicle;
@@ -74,6 +78,7 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachTickHandler(OnSpeedTest);
             Instance.AttachTickHandler(OnSpeedCameraCheck);
+            Instance.AttachTickHandler(OnShowSpeedLimit);
 
             _speedCameraDistance = PoliceConfig.SpeedCameraDistance;
 
@@ -84,6 +89,36 @@ namespace Curiosity.Core.Client.Managers
         {
             Instance.DetachTickHandler(OnSpeedTest);
             Instance.DetachTickHandler(OnSpeedCameraCheck);
+            Instance.DetachTickHandler(OnShowSpeedLimit);
+        }
+
+        private async Task OnShowSpeedLimit()
+        {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                Dispose();
+                return;
+            }
+
+            Vector3 pos = currentVehicle.Position;
+            uint streetHash = 0;
+            uint crossingRoad = 0;
+            GetStreetNameAtCoord(pos.X, pos.Y, pos.Z, ref streetHash, ref crossingRoad);
+
+            if (streetHash == 0) return;
+
+            if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+            {
+                string street = GetStreetNameFromHashKey(streetHash);
+                _currentStreet = street;
+                _currentStreetLimit = PoliceConfig.SpeedLimits[$"{streetHash}"];
+
+                if (_lastSpeedLimit != _currentStreetLimit)
+                {
+                    _lastSpeedLimit = _currentStreetLimit;
+                    Notify.Info($"<center><b>📸 Speed Limit : {_currentStreetLimit} MPH</b></center>", "bottom-middle");
+                }
+            }
         }
 
         private bool IsInvalidVehicle(Vehicle vehicle)
@@ -174,7 +209,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (camera.Limit is not null)
                 {
-                    if (speedInMph > camera.Limit)
+                    if (speedInMph > (int)(camera.Limit + LIMIT_BUFFER))
                     {
                         limitToReport = camera.Limit ?? 0f;
                         caughtSpeeding = true;
@@ -182,7 +217,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else
                 {
-                    if (speedInMph > _currentStreetLimit)
+                    if (speedInMph > (int)(_currentStreetLimit + LIMIT_BUFFER))
                     {
                         limitToReport = _currentStreetLimit;
                         caughtSpeeding = true;
@@ -191,6 +226,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (caughtSpeeding)
                 {
+                    Game.PlaySound("Camera_Shoot", "Phone_Soundset_Franklin");
                     EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, currentVehicle.NetworkId, _currentStreet, direction);
                     Logger.Debug($"Player speeding: {speedInMph} / {limitToReport} / {_currentStreet} / {direction}");
                     await BaseScript.Delay(5000);
