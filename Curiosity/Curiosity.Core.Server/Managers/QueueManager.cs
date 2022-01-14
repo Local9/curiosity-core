@@ -108,7 +108,7 @@ namespace Curiosity.Core.Server.Managers
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
                     player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
 
-                    if (API.GetResourceState("nwpd") == "started")
+                    if (API.GetResourceState("npwd") == "started")
                     {
                         if (Instance.ExportDictionary["npwd"] is not null)
                         {
