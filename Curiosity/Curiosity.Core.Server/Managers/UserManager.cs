@@ -436,74 +436,81 @@ namespace Curiosity.Core.Server.Managers
 
         async void OnPlayerDropped([FromSource] Player player, string reason)
         {
-            int playerHandle = int.Parse(player.Handle);
-            if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
+            try
             {
-                CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
-
-                int playerPed = API.GetPlayerPed(player.Handle);
-
-                try
+                int playerHandle = int.Parse(player.Handle);
+                if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
                 {
-                    if (API.DoesEntityExist(playerPed))
+                    CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
+
+                    int playerPed = API.GetPlayerPed(player.Handle);
+
+                    try
                     {
-                        Vector3 pos = API.GetEntityCoords(playerPed);
-                        curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
+                        if (API.DoesEntityExist(playerPed))
+                        {
+                            Vector3 pos = API.GetEntityCoords(playerPed);
+                            curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
 
-                        int playerPedHealth = API.GetEntityHealth(playerPed);
-                        curUser.Character.IsDead = playerPedHealth == 0;
-                        curUser.Character.Health = playerPedHealth;
-                        curUser.Character.Armor = API.GetPedArmour(playerPed);
+                            int playerPedHealth = API.GetEntityHealth(playerPed);
+                            curUser.Character.IsDead = playerPedHealth == 0;
+                            curUser.Character.Health = playerPedHealth;
+                            curUser.Character.Armor = API.GetPedArmour(playerPed);
 
-                        await curUser.Character.Save();
-                        Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
+                            await curUser.Character.Save();
+                            Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Player doesn't exist, not saving location or details.");
-                }
-
-                bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
-                bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
-
-                if (userHadMission)
-                {
-                    MissionData mission = MissionManager.ActiveMissions[playerHandle];
-                    foreach (int partyMember in mission.PartyMembers)
+                    catch (Exception ex)
                     {
-                        EventSystem.Send("mission:backup:completed", partyMember);
+                        Logger.Error($"Player doesn't exist, not saving location or details.");
                     }
-                }
 
-                if (curUser.PersonalVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
-                await BaseScript.Delay(100);
-                if (curUser.PersonalBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalBoat);
-                await BaseScript.Delay(100);
-                if (curUser.PersonalPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalPlane);
-                await BaseScript.Delay(100);
-                if (curUser.PersonalTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalTrailer);
-                await BaseScript.Delay(100);
-                if (curUser.PersonalHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalHelicopter);
-                await BaseScript.Delay(100);
-                if (curUser.StaffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.StaffVehicle);
+                    bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
+                    bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
 
-                bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
-                bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
-
-                if (API.GetResourceState("npwd") == "started")
-                {
-                    if (Instance.ExportDictionary["npwd"] is not null)
+                    if (userHadMission)
                     {
-                        var npwd = Instance.ExportDictionary["npwd"];
-                        npwd.unloadPlayer(player.Handle);
+                        MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                        foreach (int partyMember in mission.PartyMembers)
+                        {
+                            EventSystem.Send("mission:backup:completed", partyMember);
+                        }
                     }
+
+                    if (curUser.PersonalVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
+                    await BaseScript.Delay(100);
+                    if (curUser.PersonalBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalBoat);
+                    await BaseScript.Delay(100);
+                    if (curUser.PersonalPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalPlane);
+                    await BaseScript.Delay(100);
+                    if (curUser.PersonalTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalTrailer);
+                    await BaseScript.Delay(100);
+                    if (curUser.PersonalHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalHelicopter);
+                    await BaseScript.Delay(100);
+                    if (curUser.StaffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.StaffVehicle);
+
+                    bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
+                    bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
+
+                    if (API.GetResourceState("npwd") == "started")
+                    {
+                        if (Instance.ExportDictionary["npwd"] is not null)
+                        {
+                            var npwd = Instance.ExportDictionary["npwd"];
+                            npwd.unloadPlayer(playerHandle);
+                        }
+                    }
+
+                    QueueManager.GetModule().OnPlayerDropped(player, reason);
+
+                    ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");
+                    Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
                 }
-
-                QueueManager.GetModule().OnPlayerDropped(player, reason);
-
-                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");
-                Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "OnPlayerDropped");
             }
         }
     }
