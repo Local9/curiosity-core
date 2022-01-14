@@ -105,10 +105,9 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("discord.shop")
                 || message.Content.Contains(".com/airdrop")
                 || message.Content.Contains("steam/gifts")
-                || message.Content.Contains("discbrdapp.com/newyears")
-                || message.Content.Contains("discord-go.com/promo/free")
-                || message.Content.Contains("gife-discorde.com/saye")
-                || message.Content.Contains("discord-go.com/giftsteam")
+                || message.Content.Contains("discbrdapp.com")
+                || message.Content.Contains("gife-discorde.com")
+                || message.Content.Contains("discord-go.com")
                 )
             {
                 deleteMessage = true;
