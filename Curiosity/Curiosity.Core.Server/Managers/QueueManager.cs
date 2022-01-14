@@ -108,11 +108,14 @@ namespace Curiosity.Core.Server.Managers
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
                     player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
 
-                    if (Instance.ExportDictionary["npwd"] is not null)
+                    if (API.GetResourceState("nwpd") == "started")
                     {
-                        var npwd = Instance.ExportDictionary["npwd"];
-                        var newPlayer = new {source = player.Handle, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
-                        npwd.newPlayer(JsonConvert.SerializeObject(newPlayer));
+                        if (Instance.ExportDictionary["npwd"] is not null)
+                        {
+                            var npwd = Instance.ExportDictionary["npwd"];
+                            var newPlayer = new { source = player.Handle, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
+                            npwd.newPlayer(JsonConvert.SerializeObject(newPlayer));
+                        }
                     }
 
                     //if (PluginManager.IsDebugging)

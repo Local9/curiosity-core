@@ -491,10 +491,13 @@ namespace Curiosity.Core.Server.Managers
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 
-                if (Instance.ExportDictionary["npwd"] is not null)
+                if (API.GetResourceState("nwpd") == "started")
                 {
-                    var npwd = Instance.ExportDictionary["npwd"];
-                    npwd.unloadPlayer(player.Handle);
+                    if (Instance.ExportDictionary["npwd"] is not null)
+                    {
+                        var npwd = Instance.ExportDictionary["npwd"];
+                        npwd.unloadPlayer(player.Handle);
+                    }
                 }
 
                 QueueManager.GetModule().OnPlayerDropped(player, reason);
