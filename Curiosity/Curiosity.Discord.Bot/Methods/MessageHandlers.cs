@@ -108,6 +108,7 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("discbrdapp.com")
                 || message.Content.Contains("gife-discorde.com")
                 || message.Content.Contains("discord-go.com")
+                || message.Content.Contains("discqrde.com")
                 )
             {
                 deleteMessage = true;
