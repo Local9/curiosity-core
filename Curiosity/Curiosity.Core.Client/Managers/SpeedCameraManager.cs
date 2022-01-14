@@ -119,6 +119,10 @@ namespace Curiosity.Core.Client.Managers
                     Notify.Info($"<center><b>📸 Speed Limit : {_currentStreetLimit} MPH</b></center>", "bottom-middle");
                 }
             }
+            else
+            {
+                _lastSpeedLimit = 0;
+            }
         }
 
         private bool IsInvalidVehicle(Vehicle vehicle)
