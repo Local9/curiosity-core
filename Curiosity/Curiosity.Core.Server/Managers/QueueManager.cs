@@ -17,6 +17,19 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
+    public class NPWD
+    {
+        public int source;
+        public string firstname;
+        public string identifier;
+        public string phoneNumber;
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
+
     public class QueueManager : Manager<QueueManager>
     {
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
@@ -113,8 +126,8 @@ namespace Curiosity.Core.Server.Managers
                         if (Instance.ExportDictionary["npwd"] is not null)
                         {
                             var npwd = Instance.ExportDictionary["npwd"];
-                            var newPlayer = new { source = player.Handle, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
-                            npwd.newPlayer(JsonConvert.SerializeObject(newPlayer));
+                            NPWD newPlayer = new NPWD() { source = metadata.Sender, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
+                            npwd.newPlayer($"{newPlayer}");
                         }
                     }
 

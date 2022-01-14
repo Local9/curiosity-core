@@ -30,6 +30,16 @@ namespace Curiosity.Core.Client.Managers
         public override void Begin()
         {
             jobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnPlayerJobStateChange));
+            
+            Instance.EventRegistry.Add("npwd:PhotoModeStarted", new Action(() =>
+            {
+                DisplayRadar(false);
+            }));
+            
+            Instance.EventRegistry.Add("npwd:PhotoModeEnded", new Action(() =>
+            {
+                DisplayRadar(true);
+            }));
         }
 
         private void OnPlayerJobStateChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
