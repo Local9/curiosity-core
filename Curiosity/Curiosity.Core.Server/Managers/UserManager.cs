@@ -491,6 +491,12 @@ namespace Curiosity.Core.Server.Managers
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 
+                if (Instance.ExportDictionary["npwd"] is not null)
+                {
+                    var npwd = Instance.ExportDictionary["npwd"];
+                    npwd.unloadPlayer(player.Handle);
+                }
+
                 QueueManager.GetModule().OnPlayerDropped(player, reason);
 
                 ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");

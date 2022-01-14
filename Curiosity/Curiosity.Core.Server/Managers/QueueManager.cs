@@ -6,6 +6,7 @@ using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -106,6 +107,13 @@ namespace Curiosity.Core.Server.Managers
                     player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
                     player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
+
+                    if (Instance.ExportDictionary["npwd"] is not null)
+                    {
+                        var npwd = Instance.ExportDictionary["npwd"];
+                        var newPlayer = new {source = player.Handle, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
+                        npwd.newPlayer(JsonConvert.SerializeObject(newPlayer));
+                    }
 
                     //if (PluginManager.IsDebugging)
                     //    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
