@@ -110,11 +110,12 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("discord-go.com")
                 || message.Content.Contains("discqrde.com")
                 || message.Content.Contains("discord-me.com")
+                || message.Content.Contains("disckord.com")
                 )
             {
                 deleteMessage = true;
                 banUser = true;
-                banMessage = banUser ? ", user has been banned." : "";
+                banMessage = banUser ? ", and user has been banned" : "";
             }
 
             if (deleteMessage)
@@ -127,7 +128,15 @@ namespace Curiosity.LifeV.Bot.Methods
 
                 await msg.DeleteAsync();
 
-                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[POSSIBLE SCAM LINK]\nUser: {message.Author.Mention} posted a possible scam link and it has been removed{banMessage}.\nChannel: {message.Channel.Name}\n\nRemoved Content;\n```{message.Content}```");
+                StringBuilder sb = new StringBuilder();
+                sb.Append("[POSSIBLE SCAM LINK]");
+                sb.Append($"\nUser: {message.Author.Mention}");
+                sb.Append($"\nCreatedAt: {message.Author.CreatedAt} (testing if its date joined)");
+                sb.Append($"\nChannel: {message.Channel.Name} @ {message.CreatedAt}");
+                sb.Append($"\n\nMessage has been removed{banMessage}.");
+                sb.Append($"\n```{message.Content}```");
+
+                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"{sb}");
 
                 if (banUser)
                     _client.GetGuild(_guildId).AddBanAsync(message.Author, 7, "Account Compromised and found sending plishing links, please use our forums to appeal the ban: https://forums.lifev.net");
