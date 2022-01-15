@@ -9,11 +9,18 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            Instance.EventRegistry["clearPedTasksEvent"] += new Action<int, bool>(OnClearPedTasksEvent);
-            Instance.EventRegistry["giveWeaponEvent"] += new Action<int, int, bool, int, bool>(OnGiveWeaponEvent);
+            Instance.EventRegistry["clearPedTasksEvent"] += new Action<int, dynamic>(OnClearPedTasksEvent);
+            Instance.EventRegistry["giveWeaponEvent"] += new Action<int, dynamic>(OnGiveWeaponEvent);
+            Instance.EventRegistry["removeWeaponEvent"] += new Action<int, dynamic>(OnCancelEvent);
+            Instance.EventRegistry["removeAllWeaponsEvent"] += new Action<int, dynamic>(OnCancelEvent);
         }
 
-        private async void OnGiveWeaponEvent(int source, int weaponType, bool unk1, int ammo, bool givenAsPickup)
+        private void OnCancelEvent(int source, dynamic data)
+        {
+            API.CancelEvent();
+        }
+
+        private void OnGiveWeaponEvent(int source, dynamic data)
         {
             API.CancelEvent();
 
@@ -34,10 +41,9 @@ namespace Curiosity.Core.Server.Managers
             //}
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
-            await BaseScript.Delay(0);
         }
 
-        private async void OnClearPedTasksEvent(int source, bool immediately)
+        private void OnClearPedTasksEvent(int source, dynamic data)
         {
             API.CancelEvent();
 
@@ -48,8 +54,8 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
-            await BaseScript.Delay(0);
+            DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.\nDiscordID: {player.Identifiers["discord"]}");
+            API.DropPlayer($"{source}", "An error occurred while processing the previous error.");
         }
     }
 }
