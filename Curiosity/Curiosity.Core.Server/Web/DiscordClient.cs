@@ -157,7 +157,7 @@ namespace Curiosity.Core.Server.Web
             {
                 Logger.Debug($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
                 await BaseScript.Delay(0);
-                player.Drop($"This server requires you to be a member of their Discord and Verified, please check the #help-connecting channel.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"This server requires you to be a member of their Discord and Verified (click the react role in the #verify-me channel), please check the #help-connecting channel, if you're still having issues please open a ticket.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
