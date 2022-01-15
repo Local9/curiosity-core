@@ -27,7 +27,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         [CommandInfo(new[] { "weather", })]
         public class WeatherForecast : ICommand
         {
-            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 WorldManager.GetModule().ShowWeatherForecast();
             }

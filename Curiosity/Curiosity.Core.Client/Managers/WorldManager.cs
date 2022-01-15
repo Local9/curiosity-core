@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -118,11 +119,15 @@ namespace Curiosity.Core.Client.Managers
             StringBuilder sb = new StringBuilder();
             sb.Append("<b>🌡 Weather Update 🌡</b><br />");
             sb.Append("<table width=\"300\">");
-            sb.Append($"<tr><td>Area</td><td>Weather</td></tr>");
+            sb.Append($"<tr><td><center><b>Area</b></center></td><td><b><center>Weather</b></center></td></tr>");
 
             foreach (KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
             {
-                sb.Append($"<tr><td>{kvp.Key}</td><td>{GetForecastText(kvp.Value)}</td></tr>");
+                string region = $"{kvp.Key}";
+                region = region.ToProperCase();
+                //if (!string.IsNullOrEmpty(region))
+                //    region = Regex.Replace(region, "(\\B[A-Z])", " $1");
+                sb.Append($"<tr><td>{region}</td><td>{GetForecastText(kvp.Value)}</td></tr>");
             }
 
             sb.Append("</table>");
