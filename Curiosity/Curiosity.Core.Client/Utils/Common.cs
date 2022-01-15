@@ -32,7 +32,7 @@ namespace Curiosity.Core.Client.Utils
             if (start == Vector3.Zero) return false;
             if (end == Vector3.Zero) return false;
 
-            bool isEntityInAngledArea = API.IsEntityInAngledArea(entity.Handle, start.X, start.Y, start.Z, end.X, end.Y, end.Z, width, false, false, 0);
+            bool isEntityInAngledArea = API.IsEntityInAngledArea(entity.Handle, start.X, start.Y, start.Z, end.X, end.Y, end.Z, width, false, true, 0);
 
             if (debug)
             {
