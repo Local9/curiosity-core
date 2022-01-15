@@ -117,7 +117,7 @@ namespace Curiosity.Core.Client.Managers
         public void ShowWeatherForecast()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("<b>🌡 Weather Update 🌡</b><br />");
+            sb.Append("<center><b>🌡 Weather Update 🌡</b></center><br />");
             sb.Append("<table width=\"300\">");
             sb.Append($"<tr><td><center><b>Area</b></center></td><td><b><center>Weather</b></center></td></tr>");
 
@@ -326,7 +326,7 @@ namespace Curiosity.Core.Client.Managers
             switch (weather)
             {
                 case WeatherType.EXTRASUNNY:
-                    return "☀️ Extra Sun";
+                    return "☀️ Sunny";
                 case WeatherType.CLOUDS:
                     return "☁️ Cloudy";
                 case WeatherType.SNOWLIGHT:
