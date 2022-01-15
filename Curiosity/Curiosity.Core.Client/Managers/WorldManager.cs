@@ -79,20 +79,7 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Attach("world:server:weather:sync", new EventCallback(metadata =>
             {
                 regionalWeather = metadata.Find<Dictionary<Region, WeatherType>>(0);
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("<b>🌡 Weather Update 🌡</b><br />");
-                sb.Append("<table width=\"300\">");
-                sb.Append($"<tr><td>Area</td><td>Weather</td></tr>");
-
-                foreach (KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
-                {
-                    sb.Append($"<tr><td>{kvp.Key}</td><td>{GetForecastText(kvp.Value)}</td></tr>");
-                }
-
-                sb.Append("</table>");
-
-                Notify.Info($"{sb}");
+                ShowWeatherForecast();
 
                 return null;
             }));
@@ -124,6 +111,23 @@ namespace Curiosity.Core.Client.Managers
             }
 
             ToggleDispatch(true); // turn off all dispatch
+        }
+
+        public void ShowWeatherForecast()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<b>🌡 Weather Update 🌡</b><br />");
+            sb.Append("<table width=\"300\">");
+            sb.Append($"<tr><td>Area</td><td>Weather</td></tr>");
+
+            foreach (KeyValuePair<Region, WeatherType> kvp in this.regionalWeather)
+            {
+                sb.Append($"<tr><td>{kvp.Key}</td><td>{GetForecastText(kvp.Value)}</td></tr>");
+            }
+
+            sb.Append("</table>");
+
+            Notify.Info($"{sb}");
         }
 
         public async Task<bool> IsWinter()

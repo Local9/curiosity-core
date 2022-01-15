@@ -24,6 +24,15 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override bool IsRestricted { get; set; }
         public override List<Role> RequiredRoles { get; set; }
 
+        [CommandInfo(new[] { "weather", })]
+        public class WeatherForecast : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                WorldManager.GetModule().ShowWeatherForecast();
+            }
+        }
+
         [CommandInfo(new[] { "unstuck", })]
         public class Unstuck : ICommand
         {
