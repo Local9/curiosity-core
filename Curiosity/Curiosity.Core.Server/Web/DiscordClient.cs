@@ -223,7 +223,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message.Trim('"')}");
+                webhook.Content = StripUnicodeCharactersFromString($"{message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
 
                 await BaseScript.Delay(0);
@@ -253,7 +253,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Content = StripUnicodeCharactersFromString($"{message}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
 
                 await BaseScript.Delay(0);
@@ -284,7 +284,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Content = StripUnicodeCharactersFromString($"{message}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
 
                 await BaseScript.Delay(0);
@@ -317,7 +317,6 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
                 webhook.Username = "Staff";
 
                 Embed embed = new Embed();
@@ -361,7 +360,6 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
                 string cleanName = StripUnicodeCharactersFromString(PluginManager.Hostname);
                 webhook.Username = cleanName;
 
@@ -401,7 +399,6 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
                 webhook.Username = cleanName;
 
                 Embed embed = new Embed();
@@ -432,7 +429,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString("HH:mm")}` {name} > {message.Trim('"')}");
+                webhook.Content = StripUnicodeCharactersFromString($"{name} > {message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(username);
 
                 await BaseScript.Delay(0);
