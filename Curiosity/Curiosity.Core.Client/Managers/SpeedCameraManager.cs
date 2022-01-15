@@ -116,7 +116,8 @@ namespace Curiosity.Core.Client.Managers
                 if (_lastSpeedLimit != _currentStreetLimit)
                 {
                     _lastSpeedLimit = _currentStreetLimit;
-                    Notify.Info($"<center><b>📸 Speed Limit : {_currentStreetLimit} MPH</b></center>", "bottom-middle");
+                    int kph = (int)(_currentStreetLimit * 1.609344f);
+                    Notify.Info($"<center><b>📸 Speed Limit : {_currentStreetLimit} MPH / {kph} KPH</b></center>", "bottom-middle");
                 }
             }
             else
