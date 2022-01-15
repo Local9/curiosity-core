@@ -22,7 +22,7 @@ namespace Curiosity.Core.Server.Diagnostics
 
         public static void Error(string msg)
         {
-            WriteLine("ERROR", msg);
+            WriteLine("ERROR", $"{DateTime.Now:HH:mm:ss.fff} {msg}");
         }
 
         public static void Error(Exception ex, string msg = "")
@@ -38,7 +38,7 @@ namespace Curiosity.Core.Server.Diagnostics
         public static void Debug(string msg)
         {
             if (!PluginManager.IsDebugging) return;
-            WriteLine("DEBUG", msg);
+            WriteLine("DEBUG", $"{DateTime.Now:HH:mm:ss.fff} {msg}");
         }
 
         private static void WriteLine(string title, string msg)
@@ -46,7 +46,7 @@ namespace Curiosity.Core.Server.Diagnostics
             try
             {
                 var m = $"[{title}] {msg}";
-                CitizenFX.Core.Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
+                CitizenFX.Core.Debug.WriteLine($"{m}");
             }
             catch (Exception ex)
             {
