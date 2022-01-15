@@ -272,6 +272,7 @@ namespace Curiosity.Core.Server.Managers
                     int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID); // mark in the Database
                     int costOfTicket = (int)((speed - speedLimit) * 50); // only charge for speed over the limit
 
+                    // TODO: Move the DateTime into the database
                     bool success = await Database.Store.PoliceDatabase.InsertTicket(ePoliceTicketType.SPEEDING, characterId, characterVehicleId, costOfTicket, DateTime.UtcNow.AddDays(7), speed, speedLimit);
 
                     if (!success)
