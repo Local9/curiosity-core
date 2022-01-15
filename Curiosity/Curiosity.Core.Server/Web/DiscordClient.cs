@@ -127,7 +127,7 @@ namespace Curiosity.Core.Server.Web
 
             if (string.IsNullOrEmpty(discordIdStr))
             {
-                Logger.Info($"DiscordClient : {player.Name} not authorised with FiveM.");
+                Logger.Debug($"DiscordClient : {player.Name} not authorised with FiveM.");
                 await BaseScript.Delay(0);
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
@@ -136,7 +136,7 @@ namespace Curiosity.Core.Server.Web
             ulong discordId = 0;
             if (!ulong.TryParse(discordIdStr, out discordId))
             {
-                Logger.Info($"DiscordClient : {player.Name} Discord Information is invalid.");
+                Logger.Debug($"DiscordClient : {player.Name} Discord Information is invalid.");
                 await BaseScript.Delay(0);
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
@@ -144,7 +144,7 @@ namespace Curiosity.Core.Server.Web
 
             if (discordId == 0)
             {
-                Logger.Info($"DiscordClient : {player.Name} Discord ID is invalid, and not found.");
+                Logger.Debug($"DiscordClient : {player.Name} Discord ID is invalid, and not found.");
                 await BaseScript.Delay(0);
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
@@ -155,7 +155,7 @@ namespace Curiosity.Core.Server.Web
 
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {
-                Logger.Info($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
+                Logger.Debug($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
                 await BaseScript.Delay(0);
                 player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
