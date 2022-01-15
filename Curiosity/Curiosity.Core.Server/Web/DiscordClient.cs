@@ -129,7 +129,7 @@ namespace Curiosity.Core.Server.Web
             {
                 Logger.Debug($"DiscordClient : {player.Name} not authorised with FiveM.");
                 await BaseScript.Delay(0);
-                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM, please check the #help-connecting channel for more information.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
@@ -138,7 +138,7 @@ namespace Curiosity.Core.Server.Web
             {
                 Logger.Debug($"DiscordClient : {player.Name} Discord Information is invalid.");
                 await BaseScript.Delay(0);
-                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM, please check the #help-connecting channel for more information.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
@@ -146,7 +146,7 @@ namespace Curiosity.Core.Server.Web
             {
                 Logger.Debug($"DiscordClient : {player.Name} Discord ID is invalid, and not found.");
                 await BaseScript.Delay(0);
-                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. Make sure Discord is running on the same machine as FiveM. After you have opened Discord, then open FiveM, please check the #help-connecting channel for more information.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
@@ -157,7 +157,7 @@ namespace Curiosity.Core.Server.Web
             {
                 Logger.Debug($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
                 await BaseScript.Delay(0);
-                player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"This server requires you to be a member of their Discord and Verified, please check the #help-connecting channel.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
