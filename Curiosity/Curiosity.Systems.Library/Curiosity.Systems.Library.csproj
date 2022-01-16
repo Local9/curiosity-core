@@ -59,6 +59,7 @@
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />
     <Compile Include="Enums\SpawnType.cs" />
+    <Compile Include="Models\CameraClamp.cs" />
     <Compile Include="Models\Casino\CasinoData.cs" />
     <Compile Include="Models\Casino\RouletteTable.cs" />
     <Compile Include="Models\CharacterInfo.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Threading\ThreadLock.cs" />
     <Compile Include="Utils\Encode.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\RealTimer.cs" />
     <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
