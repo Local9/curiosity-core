@@ -54,10 +54,9 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
         private async Task TestHorn()
         {
-            if (Game.IsControlPressed(0, Control.VehicleHorn))
+            if (Game.IsControlJustPressed(0, Control.VehicleHorn))
             {
                 Game.PlayerPed.CurrentVehicle.SoundHorn(3000);
-                await BaseScript.Delay(1000);
             }
         }
 
