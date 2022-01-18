@@ -474,7 +474,12 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            float fuel = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL) ?? 100f;
+            var fuelState = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL);
+
+            float fuel = 100f;
+            if (float.TryParse($"{fuelState}", out float vehFuel))
+                fuel = vehFuel;
+
             float multi = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL_MULTIPLIER) ?? 1f;
 
             if (fuel < 2f && !IsRefueling)
