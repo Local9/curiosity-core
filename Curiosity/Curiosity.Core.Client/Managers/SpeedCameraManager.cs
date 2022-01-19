@@ -194,7 +194,8 @@ namespace Curiosity.Core.Client.Managers
             {
                 camera.Active = false;
 
-                if (camera.Direction != direction) continue;
+                bool isWrongWay = (camera.Direction != direction);
+
                 float currentSpeed = currentVehicle.Speed;
                 int speedInMph = (int)(currentSpeed * CONVERT_SPEED_MPH);
 
@@ -232,7 +233,7 @@ namespace Curiosity.Core.Client.Managers
                 if (caughtSpeeding)
                 {
                     Game.PlaySound("Camera_Shoot", "Phone_Soundset_Franklin");
-                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, currentVehicle.NetworkId, _currentStreet, direction);
+                    EventSystem.Send("police:ticket:speeding", (int)speedInMph, (int)limitToReport, currentVehicle.NetworkId, _currentStreet, direction, isWrongWay);
                     Logger.Debug($"Player speeding: {speedInMph} / {limitToReport} / {_currentStreet} / {direction}");
                     await BaseScript.Delay(5000);
                     camera.Active = false;

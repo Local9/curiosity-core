@@ -251,8 +251,9 @@ namespace Curiosity.Core.Server.Managers
                     int vehicleNetId = metadata.Find<int>(2);
                     string street = metadata.Find<string>(3);
                     string direction = metadata.Find<string>(4);
+                    bool isWrongWay = metadata.Find<bool>(5);
 
-                    Logger.Debug($"Speeding Reported: {speed} / {speedLimit} / {vehicleNetId} / {street} / {direction}");
+                    Logger.Debug($"Speeding Reported: {speed} / {speedLimit} / {vehicleNetId} / {street} / {direction} / {isWrongWay}");
 
                     // get Vehicle
                     int vehicleHandle = NetworkGetEntityFromNetworkId(vehicleNetId);
@@ -270,7 +271,7 @@ namespace Curiosity.Core.Server.Managers
                     // add ticket to the database against the character/vehicle
                     int characterId = curiosityUser.Character.CharacterId;
                     int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID); // mark in the Database
-                    int costOfTicket = (int)((speed - speedLimit) * 50); // only charge for speed over the limit
+                    int costOfTicket = (int)((speed - speedLimit) * (isWrongWay ? 75 : 50)); // only charge for speed over the limit
 
                     // TODO: Move the DateTime into the database
                     bool success = await Database.Store.PoliceDatabase.InsertTicket(ePoliceTicketType.SPEEDING, characterId, characterVehicleId, costOfTicket, DateTime.UtcNow.AddDays(7), speed, speedLimit);
