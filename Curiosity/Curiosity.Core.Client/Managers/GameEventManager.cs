@@ -75,7 +75,8 @@ namespace Curiosity.Core.Client.Managers
 
                     Vehicle vehicle = new Vehicle(entityId);
 
-                    HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
+                    if (!vehicle.Model.IsTrain)
+                        HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
                 }
 
 

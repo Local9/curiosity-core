@@ -421,7 +421,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
 
-                    if (vehicle.Driver == Game.PlayerPed)
+                    if (vehicle.Driver == Game.PlayerPed && !vehicle.Model.IsTrain)
                     {
                         Game.PlayerPed.Task.WarpOutOfVehicle(vehicle);
                         await BaseScript.Delay(100);

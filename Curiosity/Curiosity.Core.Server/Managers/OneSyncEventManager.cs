@@ -59,8 +59,8 @@ namespace Curiosity.Core.Server.Managers
 
                     int entityType = GetEntityType(handle);
 
-                    //int entityPopulation = GetEntityPopulationType(handle);
-                    //PopulationType population = (PopulationType)entityPopulation;
+                    int entityPopulation = GetEntityPopulationType(handle);
+                    PopulationType population = (PopulationType)entityPopulation;
 
                     //bool expectedPopulation = Equals(population, PopulationType.MISSION) || Equals(population, PopulationType.PERMANENT);
 
@@ -79,6 +79,8 @@ namespace Curiosity.Core.Server.Managers
 
                         //if (!spawnedServer)
                         //    SetVehicleDoorsLocked(handle, 3);
+
+                        Logger.Info($"Its a vehicle!");
                     }
 
                     if (entityType == 3)
@@ -88,6 +90,8 @@ namespace Curiosity.Core.Server.Managers
                     {
                         entity.State.Set(StateBagKey.CURIOSITY_CREATED, player.Name, true);
                     }
+
+                    
                 }
             }
             catch (Exception ex)
