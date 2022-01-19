@@ -79,8 +79,6 @@ namespace Curiosity.Core.Server.Managers
 
                         //if (!spawnedServer)
                         //    SetVehicleDoorsLocked(handle, 3);
-
-                        Logger.Info($"Its a vehicle!");
                     }
 
                     if (entityType == 3)
