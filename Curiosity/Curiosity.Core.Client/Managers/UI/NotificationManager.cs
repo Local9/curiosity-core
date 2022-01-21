@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -47,7 +48,7 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.EventRegistry.Add("rcore_races:showHelpNotification", new Action<string>(msg =>
             {
-                Info(msg);
+                Screen.ShowNotification(msg);
             }));
         }
 
