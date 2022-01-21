@@ -77,7 +77,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 }
                 else
                 {
-                    Notify.Alert($"Bet must be between ${item.minimalBet:C0} & ${item.maxBet:C0}.");
+                    Notify.Alert($"Bet must be between~n~$~g~{item.minimalBet:C0} ~s~& $~g~{item.maxBet:C0}");
                 }
             }
         }
