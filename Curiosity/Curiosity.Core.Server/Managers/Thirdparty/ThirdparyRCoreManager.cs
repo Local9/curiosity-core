@@ -1,10 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Diagnostics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers.Thirdparty
 {
