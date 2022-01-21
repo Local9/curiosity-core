@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -7,6 +8,8 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
 {
     public class ThirdparyRCoreManager : Manager<ThirdparyRCoreManager>
     {
+        DiscordClient DiscordClient => DiscordClient.GetModule();
+
         public override void Begin()
         {
             Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
@@ -15,8 +18,11 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
                 Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
-                Player player = PluginManager.PlayersList[source];
+                // Player player = PluginManager.PlayersList[source];
                 // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
+
+                DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just won a race and earned ${amt:C0}");
+
                 cb.Invoke(true);
             }));
 
@@ -35,7 +41,9 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                     return;
                 }
 
-                Player player = PluginManager.PlayersList[source];
+                DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just entered a race for ${amt:C0}");
+
+                // Player player = PluginManager.PlayersList[source];
                 // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
 
                 Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt * -1);
