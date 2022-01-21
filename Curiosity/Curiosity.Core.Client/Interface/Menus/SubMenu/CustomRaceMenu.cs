@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using NativeUI;
 using System.Collections.Generic;
+using System.Linq;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
@@ -21,7 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             menu = m;
 
-            miCreateRace = new UIMenuListItem("Create Normal Race", raceList, 1);
+            miCreateRace = new UIMenuListItem("Create Normal Race", raceList.Select(x => x.label).ToList(), 1);
             menu.AddItem(miCreateRace);
 
             menu.OnListSelect += Menu_OnListSelect;
@@ -31,7 +32,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            string raceType = $"{listItem.Items[newIndex]}";
+            dynamic item = listItem.Items[newIndex];
+            string raceType = $"{item.label}";
             ExecuteCommand($"createrace {raceType}");
         }
     }
