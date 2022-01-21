@@ -36,12 +36,6 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if ((user.Character.Cash - amt) < 0)
                     amt = (int)user.Character.Cash;
 
-                if (amt == 0)
-                {
-                    cb.Invoke(false);
-                    return;
-                }
-
                 DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just entered a race for ${amt:C0}");
 
                 // Player player = PluginManager.PlayersList[source];
