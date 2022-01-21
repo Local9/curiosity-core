@@ -12,13 +12,19 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
         {
             Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
-                Logger.Info($"rcore_races:giveMoney: PSID: {source} / AMT: {amt}");
+                // Logger.Info($"rcore_races:giveMoney: PSID: {source} / AMT: {amt}");
+                if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
+                CuriosityUser user = PluginManager.ActiveUsers[source];
+                Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
                 cb.Invoke(true);
             }));
 
             Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
-                Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
+                // Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
+                if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
+                CuriosityUser user = PluginManager.ActiveUsers[source];
+                Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt * -1);
                 cb.Invoke(true);
             }));
 
@@ -31,13 +37,13 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
 
             Instance.EventRegistry.Add("rcore_races:getPlayerJob", new Action<string, CallbackDelegate>((source, cb) =>
             {
-                Logger.Info($"rcore_races:getPlayerJob invoked");
+                // Logger.Info($"rcore_races:getPlayerJob invoked");
                 cb.Invoke($"homeless");
             }));
 
             Instance.EventRegistry.Add("rcore_races:showNotification", new Action<string>((msg) =>
             {
-                Logger.Info($"rcore_races:notification: {msg}");
+                // Logger.Info($"rcore_races:notification: {msg}");
                 EventSystem.SendAll("ui:notification", eNotification.NOTIFICATION_INFO, msg, "bottom-right", "snackbar", true);
             }));
         }
