@@ -20,7 +20,7 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
 
             Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
-                Logger.Info($"rcore_races:giveMoney: PSID: {source} / AMT: {amt}");
+                Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
                 cb.Invoke(true);
             }));
         }
