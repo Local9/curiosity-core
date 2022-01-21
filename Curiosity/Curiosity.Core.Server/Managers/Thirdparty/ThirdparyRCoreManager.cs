@@ -26,7 +26,6 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
-                Logger.Info($"Player {user.LatestName} has joined a race.");
                 cb.Invoke($"discord:{user.DiscordId}");
             }));
 
