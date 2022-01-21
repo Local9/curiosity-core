@@ -10,24 +10,28 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
     {
         public override void Begin()
         {
-            Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
+            Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<string, string, CallbackDelegate>((source, amt, cb) =>
             {
                 Logger.Info($"rcore_races:giveMoney: PSID: {source} / AMT: {amt}");
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
+            Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<string, string, CallbackDelegate>((source, amt, cb) =>
             {
                 Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<int, CallbackDelegate>((source, cb) =>
+            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<string, CallbackDelegate>((sourceIn, cb) =>
             {
-                if (PluginManager.ActiveUsers.ContainsKey(source)) return;
-                CuriosityUser user = PluginManager.ActiveUsers[source];
-                Logger.Info($"Player {user.LatestName} has joined a race.");
-                cb.Invoke($"discord:{user.DiscordId}");
+                int source = -1;
+                if (int.TryParse(sourceIn, out source))
+                {
+                    if (PluginManager.ActiveUsers.ContainsKey(source)) return;
+                    CuriosityUser user = PluginManager.ActiveUsers[source];
+                    Logger.Info($"Player {user.LatestName} has joined a race.");
+                    cb.Invoke($"discord:{user.DiscordId}");
+                }
             }));
 
             Instance.EventRegistry.Add("rcore_races:showNotification", new Action<string>((msg) =>
