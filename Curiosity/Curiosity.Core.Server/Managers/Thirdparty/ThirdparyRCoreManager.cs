@@ -22,16 +22,26 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<string, CallbackDelegate>((sourceIn, cb) =>
+            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<string, CallbackDelegate>((sourceStr, cb) =>
             {
                 int source = -1;
-                if (int.TryParse(sourceIn, out source))
+                if (int.TryParse(sourceStr, out source))
                 {
-                    if (PluginManager.ActiveUsers.ContainsKey(source)) return;
+                    if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                     CuriosityUser user = PluginManager.ActiveUsers[source];
                     Logger.Info($"Player {user.LatestName} has joined a race.");
                     cb.Invoke($"discord:{user.DiscordId}");
                 }
+                else
+                {
+                    Logger.Error($"rcore_races:getPlayerId: {sourceStr} invoked");
+                }
+            }));
+
+            Instance.EventRegistry.Add("rcore_races:getPlayerJob", new Action<string, CallbackDelegate>((source, cb) =>
+            {
+                Logger.Info($"rcore_races:getPlayerJob invoked");
+                cb.Invoke($"homeless");
             }));
 
             Instance.EventRegistry.Add("rcore_races:showNotification", new Action<string>((msg) =>
