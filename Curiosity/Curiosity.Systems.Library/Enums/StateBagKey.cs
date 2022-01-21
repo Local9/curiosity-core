@@ -95,5 +95,7 @@
         public const string PLAYER_JOB = "p::job::current";
         // Group
         public const string PLAYER_GROUP = "p::group";
+
+        public const string PLAYER_RACE_ACTIVE = "PLAYER_RACE_ACTIVE";
     }
 }

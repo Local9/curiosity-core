@@ -940,6 +940,13 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
+                //bool raceActive = Game.Player.State.Get(StateBagKey.PLAYER_RACE_ACTIVE) ?? false;
+                //if (raceActive)
+                //{
+                //    Notify.Error($"You're currently flagged as taking part in an active race.");
+                //    return new { success = false };
+                //}
+
                 if (!_canSpawn)
                 {
                     Notify.Error($"Processing");

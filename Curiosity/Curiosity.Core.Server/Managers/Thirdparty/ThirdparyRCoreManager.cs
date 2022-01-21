@@ -15,6 +15,8 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
                 Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
+                Player player = PluginManager.PlayersList[source];
+                // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
                 cb.Invoke(true);
             }));
 
@@ -32,6 +34,9 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                     cb.Invoke(false);
                     return;
                 }
+
+                Player player = PluginManager.PlayersList[source];
+                // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
 
                 Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt * -1);
                 cb.Invoke(true);
