@@ -1,4 +1,5 @@
-﻿using NativeUI;
+﻿using CitizenFX.Core.UI;
+using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
 using static CitizenFX.Core.Native.API;
@@ -49,21 +50,16 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu = m;
 
             miRaceBet = new UIMenuListItem("Race Bet ($)", betAmount.Select(x => x).ToList(), 3);
+            miRaceBet.Description = $"Press Enter to set the bet value for the race";
             menu.AddItem(miRaceBet);
 
             miCreateRace = new UIMenuListItem("Create Race", raceList.Select(x => x.label).ToList(), 1);
+            miCreateRace.Description = $"Race for ${betAmountSelected:C0}";
             menu.AddItem(miCreateRace);
 
             menu.OnListSelect += Menu_OnListSelect;
-            menu.OnListChange += Menu_OnListChange;
 
             return menu;
-        }
-
-        private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
-        {
-            if (listItem == miRaceBet)
-                betAmountSelected = betAmount[newIndex];
         }
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -80,6 +76,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 {
                     Notify.Alert($"Bet must be between~n~$~g~{item.minimalBet:C0} ~s~& $~g~{item.maxBet:C0}");
                 }
+            }
+            else if (listItem == miRaceBet)
+            {
+                betAmountSelected = betAmount[newIndex];
+                miCreateRace.Description = $"Race for ${betAmountSelected:C0}";
+                Screen.ShowNotification($"Race Bet ${betAmountSelected:C0}");
             }
         }
     }
