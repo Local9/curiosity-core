@@ -44,6 +44,11 @@ namespace Curiosity.Core.Client.Managers
                 CustomNUI(metadata.Find<string>(0));
                 return null;
             }));
+
+            Instance.EventRegistry.Add("rcore_races:showHelpNotification", new Action<string>(msg =>
+            {
+                Info(msg);
+            }));
         }
 
         public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false, bool playSound = false)

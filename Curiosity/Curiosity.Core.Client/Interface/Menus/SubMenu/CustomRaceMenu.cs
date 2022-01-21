@@ -13,9 +13,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuListItem miCreateRace;
         List<dynamic> raceList = new List<dynamic>()
         {
-            new { label = "Short" },
-            new { label = "Normal" },
-            new { label = "Long" },
+            new { label = "Short", minimalBet = 500 },
+            new { label = "Normal", minimalBet = 1500 },
+            new { label = "Long", minimalBet = 4500 },
         };
 
         public UIMenu CreateMenu(UIMenu m)
@@ -32,7 +32,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            dynamic item = listItem.Items[newIndex];
+            dynamic item = raceList[newIndex];
             string raceType = $"{item.label}";
             ExecuteCommand($"createrace {raceType}");
         }
