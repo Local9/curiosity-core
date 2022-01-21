@@ -10,32 +10,24 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
     {
         public override void Begin()
         {
-            Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<string, string, CallbackDelegate>((source, amt, cb) =>
+            Instance.EventRegistry.Add("rcore_races:giveMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
                 Logger.Info($"rcore_races:giveMoney: PSID: {source} / AMT: {amt}");
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<string, string, CallbackDelegate>((source, amt, cb) =>
+            Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
                 Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<string, CallbackDelegate>((sourceStr, cb) =>
+            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<int, CallbackDelegate>((source, cb) =>
             {
-                int source = -1;
-                if (int.TryParse(sourceStr, out source))
-                {
-                    if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
-                    CuriosityUser user = PluginManager.ActiveUsers[source];
-                    Logger.Info($"Player {user.LatestName} has joined a race.");
-                    cb.Invoke($"discord:{user.DiscordId}");
-                }
-                else
-                {
-                    Logger.Error($"rcore_races:getPlayerId: {sourceStr} invoked");
-                }
+                if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
+                CuriosityUser user = PluginManager.ActiveUsers[source];
+                Logger.Info($"Player {user.LatestName} has joined a race.");
+                cb.Invoke($"discord:{user.DiscordId}");
             }));
 
             Instance.EventRegistry.Add("rcore_races:getPlayerJob", new Action<string, CallbackDelegate>((source, cb) =>
