@@ -55,8 +55,13 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuSupporter;
         private SubMenu.SupporterMenu _MenuSupporter = new SubMenu.SupporterMenu();
 
-        public override void Begin()
+        private UIMenu menuCustomRaces;
+        private SubMenu.CustomRaceMenu _MenuCustomRaces = new SubMenu.CustomRaceMenu();
+
+        public async override void Begin()
         {
+            await Session.Loading();
+
             MenuInstance = this;
 
             MenuPool = new MenuPool();
@@ -86,6 +91,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter", "Supporter options and settings, more information on patreon.com/lifev");
             _MenuSupporter.CreateMenu(menuSupporter);
+
+            if (Cache.Player.User.IsDeveloper)
+            {
+                menuCustomRaces = MenuPool.AddSubMenu(menuMain, "Races", "Initiate a custom race");
+                _MenuCustomRaces.CreateMenu(menuCustomRaces);
+            }
 
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);

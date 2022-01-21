@@ -77,6 +77,7 @@
     <Compile Include="Interface\Menus\Creator\CharacterTattoos.cs" />
     <Compile Include="Interface\Menus\Data\TattoosData.cs" />
     <Compile Include="Interface\Menus\PedShopMenu\AppreanceShopMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\CustomRaceMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\InventoryMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />

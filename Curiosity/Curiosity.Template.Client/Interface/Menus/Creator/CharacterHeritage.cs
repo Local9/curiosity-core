@@ -37,8 +37,7 @@ namespace Curiosity.Template.Client.Interface.Menus.Creator
 
             menu.OnListChange += Menu_OnListChange;
             menu.OnSliderChange += Menu_OnSliderChange;
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             menu.AddInstructionalButton(CreatorMenus.btnRandom);
             menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
@@ -74,26 +73,29 @@ namespace Curiosity.Template.Client.Interface.Menus.Creator
             return menu;
         }
 
-        private async void Menu_OnMenuClose(UIMenu sender)
+        private async void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            Cache.Player.CameraQueue.Reset();
-            await Cache.Player.CameraQueue.View(new CameraBuilder()
-                .SkipTask()
-                .WithMotionBlur(0.5f)
-                .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
-            );
-            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
-        }
+            if (state.Equals(MenuState.ChangeForward))
+            {
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                    .SkipTask()
+                    .WithMotionBlur(0.5f)
+                    .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
+                );
+                CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+            }
 
-        private async void Menu_OnMenuOpen(UIMenu sender)
-        {
-            Cache.Player.CameraQueue.Reset();
-            await Cache.Player.CameraQueue.View(new CameraBuilder()
-                .SkipTask()
-                .WithMotionBlur(0.5f)
-                .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
-            );
-            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+            if (state.Equals(MenuState.ChangeBackward))
+            {
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                    .SkipTask()
+                    .WithMotionBlur(0.5f)
+                    .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
+                );
+                CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
+            }
         }
 
         private async Task OnPlayerControls()
