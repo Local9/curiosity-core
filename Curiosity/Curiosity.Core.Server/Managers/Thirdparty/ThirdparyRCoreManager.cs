@@ -21,8 +21,9 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 // Player player = PluginManager.PlayersList[source];
                 // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
 
-                DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just won a race and earned ${amt:C0}");
-
+                string msg = $"RACE: Player {user.LatestName} just earned ${amt:C0} from a race!";
+                DiscordClient.SendDiscordPlayerLogMessage(msg);
+                EventSystem.SendAll("ui:notification", eNotification.NOTIFICATION_INFO, msg, "bottom-right", "snackbar", true);
                 cb.Invoke(true);
             }));
 
