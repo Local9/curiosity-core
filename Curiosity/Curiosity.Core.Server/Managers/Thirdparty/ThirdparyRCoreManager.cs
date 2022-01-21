@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;

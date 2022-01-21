@@ -74,6 +74,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 if (item.minimalBet >= betAmountSelected && betAmountSelected <= item.maxBet)
                 {
                     ExecuteCommand($"createrace {item.label} {betAmountSelected}");
+                    InteractionMenu.MenuPool.CloseAllMenus();
                 }
                 else
                 {
