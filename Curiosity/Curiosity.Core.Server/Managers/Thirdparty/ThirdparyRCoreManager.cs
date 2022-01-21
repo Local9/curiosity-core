@@ -24,6 +24,16 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 // Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
+
+                if ((user.Character.Cash - amt) < 0)
+                    amt = (int)user.Character.Cash;
+
+                if (amt == 0)
+                {
+                    cb.Invoke(false);
+                    return;
+                }
+
                 Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt * -1);
                 cb.Invoke(true);
             }));
