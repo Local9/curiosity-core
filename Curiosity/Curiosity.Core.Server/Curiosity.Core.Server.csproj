@@ -110,6 +110,7 @@
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\SpecialDayManager.cs" />
     <Compile Include="Managers\ThirdPartyManager.cs" />
+    <Compile Include="Managers\Thirdparty\ThirdparyRCoreManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
