@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.AddItem(miRaceBet);
 
             miCreateRace = new UIMenuListItem("Create Race", raceList.Select(x => x.label).ToList(), 1);
-            miCreateRace.Description = $"Race for ${betAmountSelected:C0}";
+            miCreateRace.Description = $"Race for ${betAmountSelected:N0}";
             menu.AddItem(miCreateRace);
 
             menu.OnListSelect += Menu_OnListSelect;
@@ -67,21 +68,29 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (listItem == miCreateRace) {
                 dynamic item = raceList[newIndex];
 
-                if (item.minimalBet >= betAmountSelected && betAmountSelected <= item.maxBet)
+                int min = item.minimalBet;
+                int max = item.maxBet;
+
+                Logger.Debug($"MIN: {min <= (int)betAmountSelected} / {min} | {(int)betAmountSelected}");
+                Logger.Debug($"MAX: {(int)betAmountSelected <= max} / {max} | {(int)betAmountSelected}");
+
+                if (min <= (int)betAmountSelected && (int)betAmountSelected <= max)
                 {
                     ExecuteCommand($"createrace {item.label} a {betAmountSelected}");
                     InteractionMenu.MenuPool.CloseAllMenus();
                 }
                 else
                 {
-                    Notify.Alert($"Bet must be between~n~$~g~{item.minimalBet:C0} ~s~& $~g~{item.maxBet:C0}");
+                    Notify.Alert($"Current Bet Amount: ~g~${betAmountSelected:N0}");
+                    Notify.Alert($"Bet must be between~n~$~g~{item.minimalBet:N0} ~s~& $~g~{item.maxBet:N0}");
                 }
+                
             }
             else if (listItem == miRaceBet)
             {
-                betAmountSelected = betAmount[newIndex];
-                miCreateRace.Description = $"Race for ${betAmountSelected:C0}";
-                Screen.ShowNotification($"Race Bet ${betAmountSelected:C0}");
+                betAmountSelected = (int)betAmount[newIndex];
+                miCreateRace.Description = $"Race for ~g~${betAmountSelected:N0}";
+                Screen.ShowNotification($"Race Bet ~g~${betAmountSelected:N0}");
             }
         }
     }

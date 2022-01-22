@@ -61,7 +61,7 @@ namespace Curiosity.Core.Client.Diagnostics
                     lastChecked.AddMinutes(10);
                 }
 
-                if (Cache.Player.User.Role == Role.DEVELOPER) return;
+                if (Cache.Player.User.Role != Role.DEVELOPER) return;
 
                 WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
             }

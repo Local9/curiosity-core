@@ -21,7 +21,7 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 // Player player = PluginManager.PlayersList[source];
                 // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
 
-                string msg = $"RACE: Player {user.LatestName} just earned ${amt:C0} from a race!";
+                string msg = $"RACE: Player {user.LatestName} just earned ${amt:N0} from a race!";
                 DiscordClient.SendDiscordPlayerLogMessage(msg);
                 EventSystem.SendAll("ui:notification", eNotification.NOTIFICATION_INFO, msg, "bottom-right", "snackbar", true);
                 cb.Invoke(true);
@@ -36,7 +36,7 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if ((user.Character.Cash - amt) < 0)
                     amt = (int)user.Character.Cash;
 
-                DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just entered a race for ${amt:C0}");
+                DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just entered a race for ${amt:N0}");
 
                 // Player player = PluginManager.PlayersList[source];
                 // player.State.Set(StateBagKey.PLAYER_RACE_ACTIVE, false, true);
