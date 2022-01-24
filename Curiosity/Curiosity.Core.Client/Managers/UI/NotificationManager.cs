@@ -46,6 +46,11 @@ namespace Curiosity.Core.Client.Managers
                 return null;
             }));
 
+            Instance.EventRegistry.Add("rcore_stickers:showNotification", new Action<string>(msg =>
+            {
+                Screen.ShowNotification(msg);
+            }));
+
             Instance.EventRegistry.Add("rcore_races:showHelpNotification", new Action<string>(msg =>
             {
                 Screen.ShowNotification(msg);

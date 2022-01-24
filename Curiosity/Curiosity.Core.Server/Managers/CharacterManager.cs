@@ -183,6 +183,8 @@ namespace Curiosity.Core.Server.Managers
 
                 await BaseScript.Delay(100);
 
+                player.TriggerEvent("rcore_stickers:refreshStickers");
+
                 // player.Character.Position = u.Character.LastPosition.AsVector();
 
                 try

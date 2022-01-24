@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
+using Newtonsoft.Json;
 
 namespace Curiosity.Core.Server.Managers.Thirdparty
 {
@@ -27,6 +29,22 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 cb.Invoke(true);
             }));
 
+            Instance.EventRegistry.Add("rcore_stickers:payAmount", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
+            {
+                // Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
+                if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
+                CuriosityUser user = PluginManager.ActiveUsers[source];
+
+                if ((user.Character.Cash - amt) < 0)
+                {
+                    cb.Invoke(false);
+                    return;
+                }
+
+                Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt * -1);
+                cb.Invoke(true);
+            }));
+
             Instance.EventRegistry.Add("rcore_races:takeMoney", new Action<int, int, CallbackDelegate>((source, amt, cb) =>
             {
                 // Logger.Info($"rcore_races:takeMoney: PSID: {source} / AMT: {amt}");
@@ -45,24 +63,37 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 cb.Invoke(true);
             }));
 
-            Instance.EventRegistry.Add("rcore_races:getPlayerId", new Action<int, CallbackDelegate>((source, cb) =>
+            Instance.EventRegistry.Add("rcore_stickers:getVehicleInfo", new Action<string, string, CallbackDelegate>((plate, vehicleHash, cb) =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
-                CuriosityUser user = PluginManager.ActiveUsers[source];
-                cb.Invoke($"discord:{user.DiscordId}");
+                var data = new { owner = 1, plate = plate, model = vehicleHash };
+                cb.Invoke(JsonConvert.SerializeObject(data));
             }));
 
-            Instance.EventRegistry.Add("rcore_races:getPlayerJob", new Action<string, CallbackDelegate>((source, cb) =>
-            {
-                // Logger.Info($"rcore_races:getPlayerJob invoked");
-                cb.Invoke($"homeless");
-            }));
+            Instance.EventRegistry["rcore_races:getPlayerId"] += new Action<int, CallbackDelegate>(OnGetPlayerIdendifier);
+            Instance.EventRegistry["rcore_stickers:getPlayerId"] += new Action<int, CallbackDelegate>(OnGetPlayerIdendifier);
 
-            Instance.EventRegistry.Add("rcore_races:showNotification", new Action<string>((msg) =>
-            {
-                // Logger.Info($"rcore_races:notification: {msg}");
-                EventSystem.SendAll("ui:notification", eNotification.NOTIFICATION_INFO, msg, "bottom-right", "snackbar", true);
-            }));
+            Instance.EventRegistry["rcore_races:getPlayerJob"] += new Action<int, CallbackDelegate>(OnGetPlayerJob);
+            Instance.EventRegistry["rcore_stickers:getPlayerJob"] += new Action<int, CallbackDelegate>(OnGetPlayerJob);
+
+            Instance.EventRegistry["rcore_races:showNotification"] += new Action<string>(OnShowNotification);
+            Instance.EventRegistry["rcore_stickers:showNotification"] += new Action<string>(OnShowNotification);
+        }
+
+        private void OnGetPlayerJob(int source, CallbackDelegate cb)
+        {
+            cb.Invoke($"homeless");
+        }
+
+        private void OnGetPlayerIdendifier(int source, CallbackDelegate cb)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
+            CuriosityUser user = PluginManager.ActiveUsers[source];
+            cb.Invoke($"discord:{user.DiscordId}");
+        }
+
+        private void OnShowNotification(string msg)
+        {
+            EventSystem.SendAll("ui:notification", eNotification.NOTIFICATION_INFO, msg, "bottom-right", "snackbar", true);
         }
     }
 }
