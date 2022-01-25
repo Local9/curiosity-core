@@ -115,6 +115,9 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("nitrosteamj.com")
                 || message.Content.Contains("dischrdapp.com")
                 || message.Content.Contains("steamcommunites.com")
+                || message.Content.Contains("dlcorcl-me.com")
+                || message.Content.Contains(".ru.com")
+                || message.Content.Contains("dlscord-free.com")
                 )
             {
                 deleteMessage = true;
