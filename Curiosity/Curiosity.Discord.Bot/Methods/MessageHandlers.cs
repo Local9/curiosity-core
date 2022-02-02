@@ -117,7 +117,7 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("steamcommunites.com")
                 || message.Content.Contains("dlcorcl-me.com")
                 || message.Content.Contains(".ru.com")
-                || message.Content.Contains("dlscord-free.com")
+                || message.Content.Contains("dlscrod")
                 )
             {
                 deleteMessage = true;
@@ -138,7 +138,7 @@ namespace Curiosity.LifeV.Bot.Methods
                 StringBuilder sb = new StringBuilder();
                 sb.Append("[POSSIBLE SCAM LINK]");
                 sb.Append($"\nUser: {message.Author.Mention}");
-                sb.Append($"\nCreatedAt: {message.Author.CreatedAt} (testing if its date joined)");
+                sb.Append($"\nJoined: {message.Author.CreatedAt}");
                 sb.Append($"\nChannel: {message.Channel.Name} @ {message.CreatedAt}");
                 sb.Append($"\n\nMessage has been removed{banMessage}.");
                 sb.Append($"\n```{message.Content}```");
