@@ -1,12 +1,11 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Systems.Library.Enums;
-using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Interface;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -16,6 +15,7 @@ namespace Curiosity.Core.Client.Managers
         internal static bool IsOnDuty = false;
         internal static bool IsOfficer = false;
         internal static bool WasOfficer = false;
+        bool isEnabled = true;
 
         internal static int isPassiveStateBagHandler = 0;
 
@@ -54,7 +54,6 @@ namespace Curiosity.Core.Client.Managers
 
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
-            bool isEnabled = false;
             if (!isEnabled && job == JOB_POLICE)
             {
                 Notify.Warn($"Sorry, currently this job is disabled. Press F5 for all other jobs.");

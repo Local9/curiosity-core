@@ -1,22 +1,25 @@
-﻿using static CitizenFX.Core.Native.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Events;
-using Curiosity.Core.Client.Interface;
-using CitizenFX.Core.UI;
 using NativeUI;
+using System;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.GameWorld
 {
     public class JailManager : Manager<JailManager>
     {
+        PlayerOptionsManager PlayerOptionsManager => PlayerOptionsManager.GetModule();
+
+
         Vector3 jailStart = new Vector3(1849.58679f, 2605.6687f, 40.5720177f);
         Vector3 jailEnd = new Vector3(1522.98364f, 2598.043f, 90.95463f);
+
+        Vector3 mainJail = new(1669.652f, 2564.316f, 45.56488f);
+
         float width = 400;
 
         public bool IsJailed = false;
@@ -24,7 +27,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
         public override void Begin()
         {
-            EventSystem.Attach("jail:start", new AsyncEventCallback(async metadata =>
+            EventSystem.Attach("police:suspect:jail", new AsyncEventCallback(async metadata =>
             {
                 jailEndTime = DateTime.UtcNow.AddMinutes(3);
 
@@ -32,7 +35,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 float y = metadata.Find<float>(1);
                 float z = metadata.Find<float>(2);
 
-                await TeleportPlayer(x, y, z);
+                await TeleportPlayer(mainJail.X, mainJail.Y, mainJail.Z);
 
                 Instance.AttachTickHandler(OnJailCheck);
                 Instance.AttachTickHandler(OnJailTimerCheck);
@@ -63,10 +66,10 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
             if (isInsideJail) return; // if they are jailed and still inside, do nothing
 
-            Instance.DetachTickHandler(OnJailTimerCheck);
-            Instance.DetachTickHandler(OnJailCheck);
+            //Instance.DetachTickHandler(OnJailTimerCheck);
+            //Instance.DetachTickHandler(OnJailCheck);
             // if they have left, then we need to inform the police
-            EventSystem.Send("jail:player:escape");
+            await TeleportPlayer(mainJail.X, mainJail.Y, mainJail.Z);
         }
 
         private async Task OnJailTimerCheck()
@@ -80,13 +83,16 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             Screen.Hud.HideComponentThisFrame(HudComponent.StreetName);
             Screen.Hud.HideComponentThisFrame(HudComponent.VehicleName);
 
-            if (jailEndTime < DateTime.UtcNow)
+            PlayerOptionsManager.DisableWeapons(true);
+
+            if (DateTime.UtcNow > jailEndTime)
             {
                 Instance.DetachTickHandler(OnJailTimerCheck);
                 Instance.DetachTickHandler(OnJailCheck);
 
                 TeleportPlayer(1847.085f, 2585.711f, 45.67204f);
-                EventSystem.Send("jail:player:timeServed");
+                PlayerOptionsManager.DisableWeapons(false);
+                EventSystem.Send("police:player:jail:served");
             }
         }
     }

@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Environment.Data;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -19,10 +20,12 @@ namespace Curiosity.Core.Server.Managers
     public class PoliceManager : Manager<PoliceManager>
     {
         ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
+        DiscordClient discordClient => DiscordClient.GetModule();
 
         private const int SEND_JOB_ONLY = 0;
         private const int MAX_NUMBER_OFFICERS = 20;
         private const int TIME_TIL_CULLING_RESET = (1000 * 10);
+        private const int DB_POLICE_SKILL = 5;
         Dictionary<int, long> playerCullingReset = new();
 
         public override void Begin()
@@ -142,18 +145,40 @@ namespace Curiosity.Core.Server.Managers
             {
 
                 int suspectServerId = metadata.Find<int>(0);
-
                 Player player = PluginManager.PlayersList[suspectServerId];
+                if (player == null) return null;
+
+                bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
+                if (isPlayerJailed) return null;
+                
                 SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
                 player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
                 player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
+                player.State.Set(StateBagKey.IS_JAILED, true, true);
 
                 EventSystem.Send("police:suspect:jail", suspectServerId); // jail
 
                 // log jail & reward officers
                 // cut ticket cost in half
 
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                if (curiosityUser != null)
+                {
+                    await Database.Store.SkillDatabase.Adjust(curiosityUser.Character.CharacterId, DB_POLICE_SKILL, 100);
+                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500);
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' jailed by '{curiosityUser.LatestName}'");
+                }
+
                 return null;
+            }));
+
+            EventSystem.Attach("police:player:jail:served", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                Player player = PluginManager.PlayersList[metadata.Sender];
+                player.State.Set(StateBagKey.IS_JAILED, false, true);
+                return false;
             }));
 
             EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata =>
@@ -198,17 +223,14 @@ namespace Curiosity.Core.Server.Managers
                 tableRows.Add("Victim", victim.Name);
                 tableRows.Add("Weapon", weaponName);
 
-                if (distanceFeet > 100f)
-                {
-                    tableRows.Add($"Distance", $"{distanceFeet}ft");
-                }
+                //if (distanceFeet > 100f)
+                //{
+                //    tableRows.Add($"Distance", $"{distanceFeet}ft");
+                //}
 
-                if (isVictimPassive)
-                {
-                    tableRows.Add("Info", "Wanted by Police");
-                    attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
-                    attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
-                }
+                tableRows.Add("Info", "Wanted by Police");
+                attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
+                attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
 
                 string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
                 SendNotification(SEND_JOB_ONLY, notificationTable);

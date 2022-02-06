@@ -97,5 +97,7 @@
         public const string PLAYER_GROUP = "p::group";
 
         public const string PLAYER_RACE_ACTIVE = "PLAYER_RACE_ACTIVE";
+
+        public const string IS_JAILED = "PLAYER_IS_JAILED";
     }
 }

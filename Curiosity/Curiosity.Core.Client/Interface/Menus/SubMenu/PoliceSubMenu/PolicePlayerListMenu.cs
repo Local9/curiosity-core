@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
@@ -24,10 +25,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 
                 foreach (Player player in PluginManager.Instance.PlayerList)
                 {
+                    if (player == Game.Player) continue; // ignore self
+
+                    if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
+
+                    bool isWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                    if (!isWanted) continue; // only show those who are wanted
+
                     if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
 
-                    UIMenu uIMenu = InteractionMenu.MenuPool.AddSubMenu(oldMenu, player.Name);
-                    new PolicePlayerInteractionMenu().CreateMenu(uIMenu);
+                    UIMenu uIMenu = InteractionMenu.MenuPool.AddSubMenu(_menu, player.Name);
+                    new PolicePlayerInteractionMenu().CreateMenu(uIMenu, player.ServerId);
                 }
 
             }

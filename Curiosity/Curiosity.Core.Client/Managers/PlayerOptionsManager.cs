@@ -22,6 +22,7 @@ namespace Curiosity.Core.Client.Managers
         public int CostOfKillSelf = 500;
         public int NumberOfTimesKillSelf = 0;
         public bool IsScubaGearEnabled = false;
+        public bool WeaponsDisabled = false;
         public ePlayerJobs CurrentJob = ePlayerJobs.UNEMPLOYED;
         NotificationManager NotificationManager => NotificationManager.GetModule();
 
@@ -233,38 +234,36 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(1500);
         }
 
-        bool disableWeapons = false;
-
         [TickHandler(SessionWait = true)]
         private async Task OnDisablePlayerWeapons()
         {
-            if (!disableWeapons)
+            if (!WeaponsDisabled)
             {
                 await BaseScript.Delay(500);
                 return;
             }
 
-            DisablePlayerFiring(Game.Player.Handle, disableWeapons);
-            DisableControlAction(0, 22, disableWeapons);
-            DisableControlAction(2, 22, disableWeapons);
-            DisableControlAction(0, 24, disableWeapons);
-            DisableControlAction(2, 24, disableWeapons);
-            DisableControlAction(0, 25, disableWeapons);
-            DisableControlAction(2, 25, disableWeapons);
-            DisableControlAction(0, (int)Control.SelectWeapon, disableWeapons);
-            DisableControlAction(2, (int)Control.SelectWeapon, disableWeapons);
-            DisableControlAction(0, (int)Control.Cover, disableWeapons);
-            DisableControlAction(2, (int)Control.Cover, disableWeapons);
-            DisableControlAction(0, 257, disableWeapons);
-            DisableControlAction(2, 257, disableWeapons);
-            DisableControlAction(0, 263, disableWeapons);
-            DisableControlAction(2, 263, disableWeapons);
-            DisableControlAction(0, 264, disableWeapons);
-            DisableControlAction(2, 264, disableWeapons);
-            DisableControlAction(0, (int)Control.Jump, disableWeapons);
-            DisableControlAction(2, (int)Control.Jump, disableWeapons);
-            DisableControlAction(0, (int)Control.Duck, disableWeapons);
-            DisableControlAction(2, (int)Control.Duck, disableWeapons);
+            DisablePlayerFiring(Game.Player.Handle, WeaponsDisabled);
+            DisableControlAction(0, 22, WeaponsDisabled);
+            DisableControlAction(2, 22, WeaponsDisabled);
+            DisableControlAction(0, 24, WeaponsDisabled);
+            DisableControlAction(2, 24, WeaponsDisabled);
+            DisableControlAction(0, 25, WeaponsDisabled);
+            DisableControlAction(2, 25, WeaponsDisabled);
+            DisableControlAction(0, (int)Control.SelectWeapon, WeaponsDisabled);
+            DisableControlAction(2, (int)Control.SelectWeapon, WeaponsDisabled);
+            DisableControlAction(0, (int)Control.Cover, WeaponsDisabled);
+            DisableControlAction(2, (int)Control.Cover, WeaponsDisabled);
+            DisableControlAction(0, 257, WeaponsDisabled);
+            DisableControlAction(2, 257, WeaponsDisabled);
+            DisableControlAction(0, 263, WeaponsDisabled);
+            DisableControlAction(2, 263, WeaponsDisabled);
+            DisableControlAction(0, 264, WeaponsDisabled);
+            DisableControlAction(2, 264, WeaponsDisabled);
+            DisableControlAction(0, (int)Control.Jump, WeaponsDisabled);
+            DisableControlAction(2, (int)Control.Jump, WeaponsDisabled);
+            DisableControlAction(0, (int)Control.Duck, WeaponsDisabled);
+            DisableControlAction(2, (int)Control.Duck, WeaponsDisabled);
             API.BlockWeaponWheelThisFrame();
 
             if (Cache.PlayerPed.Weapons.Current.Hash != WeaponHash.Unarmed)
@@ -273,7 +272,7 @@ namespace Curiosity.Core.Client.Managers
 
         public void DisableWeapons(bool state)
         {
-            disableWeapons = state;
+            WeaponsDisabled = state;
         }
     }
 }

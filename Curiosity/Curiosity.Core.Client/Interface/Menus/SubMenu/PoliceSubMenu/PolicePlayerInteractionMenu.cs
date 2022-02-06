@@ -1,22 +1,35 @@
-﻿using NativeUI;
+﻿using Curiosity.Core.Client.Events;
+using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 {
     internal class PolicePlayerInteractionMenu
     {
+        EventSystem EventSystem => EventSystem.GetModule();
         UIMenu _menu;
+        int _playerServerId;
 
         UIMenuItem _jail = new UIMenuItem("Jail");
 
-        public UIMenu CreateMenu(UIMenu m)
+        public UIMenu CreateMenu(UIMenu m, int playerServerId)
         {
             _menu = m;
+            _playerServerId = playerServerId;
 
             _menu.AddItem(_jail);
 
             _menu.OnMenuStateChanged += _menu_OnMenuStateChanged;
+            _menu.OnItemSelect += _menu_OnItemSelect;
 
             return _menu;
+        }
+
+        private async void _menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == _jail)
+            {
+                await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
+            }
         }
 
         private void _menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)

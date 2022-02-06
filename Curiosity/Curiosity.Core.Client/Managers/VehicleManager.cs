@@ -953,6 +953,13 @@ namespace Curiosity.Core.Client.Managers
                     return new { success = false };
                 }
 
+                bool weaponsAreDisabled = PlayerOptionsManager.GetModule().WeaponsDisabled;
+                if (weaponsAreDisabled)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle currently, you may have a timer active.");
+                    return new { success = false };
+                }
+
                 bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
 
                 if (Game.Player.WantedLevel > 0)
