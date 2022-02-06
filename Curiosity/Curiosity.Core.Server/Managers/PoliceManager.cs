@@ -210,31 +210,33 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
 
-                Vector3 victimPosition = victim.Character.Position;
-                Vector3 attackerPosition = attacker.Character.Position;
+                if (!attackerIsOfficer)
+                {
+                    Vector3 victimPosition = victim.Character.Position;
+                    Vector3 attackerPosition = attacker.Character.Position;
 
-                float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
-                float distanceFeet = distanceTotal * 5280f;
+                    float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
+                    float distanceFeet = distanceTotal * 5280f;
 
-                string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+                    string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
 
-                Dictionary<string, string> tableRows = new Dictionary<string, string>();
-                tableRows.Add("Attacker", attacker.Name);
-                tableRows.Add("Victim", victim.Name);
-                tableRows.Add("Weapon", weaponName);
+                    Dictionary<string, string> tableRows = new Dictionary<string, string>();
+                    tableRows.Add("Attacker", attacker.Name);
+                    tableRows.Add("Victim", victim.Name);
+                    tableRows.Add("Weapon", weaponName);
 
-                //if (distanceFeet > 100f)
-                //{
-                //    tableRows.Add($"Distance", $"{distanceFeet}ft");
-                //}
+                    //if (distanceFeet > 100f)
+                    //{
+                    //    tableRows.Add($"Distance", $"{distanceFeet}ft");
+                    //}
 
-                tableRows.Add("Info", "Wanted by Police");
-                attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
-                attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+                    tableRows.Add("Info", "Wanted by Police");
+                    attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
+                    attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
 
-                string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
-                SendNotification(SEND_JOB_ONLY, notificationTable);
-
+                    string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
+                    SendNotification(SEND_JOB_ONLY, notificationTable);
+                }
                 // log kill & reward officers (if kill is near a safe area, its not rewarded)
 
                 return null;
