@@ -26,7 +26,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                 foreach (Player player in PluginManager.Instance.PlayerList)
                 {
                     if (player == Game.Player) continue; // ignore self
-                    if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 2f)) continue;
+                    if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
 
                     if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
 
