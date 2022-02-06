@@ -107,6 +107,14 @@ namespace Curiosity.Core.Client.Managers
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
             Game.PlayerPed.IsInvincible = false;
+            
+            bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+
+            if (isWantedByPolice)
+            {
+                Notify.Error($"Cannot spawn/change a vehicle when wanted.");
+                return;
+            }
 
             if (Game.Player.WantedLevel > 0)
             {
