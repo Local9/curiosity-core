@@ -38,6 +38,21 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
+
+                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+
+                if (Game.Player.WantedLevel > 0)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle when wanted.");
+                    return;
+                }
+
+                if (isWantedByPolice)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle when wanted.");
+                    return;
+                }
+
                 Position position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
                 await SafeTeleport.TeleportFadePlayer(position);
             }
