@@ -179,6 +179,27 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.IS_JAILED, true, true);
 
                 EventSystem.Send("police:suspect:jail", suspectServerId); // jail
+                CuriosityUser curiosityUserSuspect = PluginManager.ActiveUsers[suspectServerId];
+
+                int staffVehicle = curiosityUserSuspect.StaffVehicle;
+                int playerVehicle = curiosityUserSuspect.PersonalVehicle;
+                int playerBoat = curiosityUserSuspect.PersonalBoat;
+                int playerTrailer = curiosityUserSuspect.PersonalTrailer;
+                int playerPlane = curiosityUserSuspect.PersonalPlane;
+                int playerHelicopter = curiosityUserSuspect.PersonalHelicopter;
+
+                if (staffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(staffVehicle);
+                await BaseScript.Delay(100);
+                if (playerVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                await BaseScript.Delay(100);
+                if (playerBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                await BaseScript.Delay(100);
+                if (playerTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                await BaseScript.Delay(100);
+                if (playerPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                await BaseScript.Delay(100);
+                if (playerHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
+                await BaseScript.Delay(100);
 
                 // log jail & reward officers
                 // cut ticket cost in half
