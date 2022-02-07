@@ -289,8 +289,22 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
+            PluginManager.Instance.AttachTickHandler(OnTrackVehicleDamage);
 
             SetPlayerCanDoDriveBy(Game.Player.Handle, !jobManager.IsOfficer);
+        }
+
+        private async Task OnTrackVehicleDamage()
+        {
+            Vehicle currentVehicle = Cache.PlayerPed.CurrentVehicle;
+
+            if (currentVehicle.ClassType == VehicleClass.Emergency) return;
+
+            if (currentVehicle.EngineHealth >= 300)
+                currentVehicle.CanTiresBurst = true;
+
+            if (currentVehicle.BodyHealth >= 500)
+                currentVehicle.IsBulletProof = false;
         }
 
         private async Task OnManageVehicleBlip()
@@ -444,6 +458,7 @@ namespace Curiosity.Core.Client.Managers
                 PluginManager.Instance.DetachTickHandler(OnVehicleRefuel);
                 PluginManager.Instance.DetachTickHandler(CheckFuelPumpDistance);
                 PluginManager.Instance.DetachTickHandler(OnVehicleIsTowing);
+                PluginManager.Instance.DetachTickHandler(OnTrackVehicleDamage);
                 IsNearFuelPump = false;
                 IsRefueling = false;
 
