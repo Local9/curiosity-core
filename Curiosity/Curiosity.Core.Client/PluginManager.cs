@@ -227,7 +227,7 @@ namespace Curiosity.Core.Client
             // Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
 
             int vehicleWeapon = -1553120962;
-            API.N_0x4757f00bc6323cfe((uint)vehicleWeapon, 0.0f);
+            API.SetWeaponDamageModifierThisFrame((uint)vehicleWeapon, 0.0f);
 
             Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
             Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
