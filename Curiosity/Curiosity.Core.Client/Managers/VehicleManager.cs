@@ -296,15 +296,13 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnTrackVehicleDamage()
         {
-            Vehicle currentVehicle = Cache.PlayerPed.CurrentVehicle;
+            if (currentVehicle.Vehicle.ClassType == VehicleClass.Emergency) return;
 
-            if (currentVehicle.ClassType == VehicleClass.Emergency) return;
+            if (currentVehicle.Vehicle.EngineHealth <= 300)
+                currentVehicle.Vehicle.CanTiresBurst = true;
 
-            if (currentVehicle.EngineHealth <= 300)
-                currentVehicle.CanTiresBurst = true;
-
-            if (currentVehicle.BodyHealth <= 500)
-                currentVehicle.IsBulletProof = false;
+            if (currentVehicle.Vehicle.BodyHealth <= 500)
+                currentVehicle.Vehicle.IsBulletProof = false;
         }
 
         private async Task OnManageVehicleBlip()
