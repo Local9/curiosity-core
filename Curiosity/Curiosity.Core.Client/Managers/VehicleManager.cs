@@ -300,10 +300,10 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentVehicle.ClassType == VehicleClass.Emergency) return;
 
-            if (currentVehicle.EngineHealth >= 300)
+            if (currentVehicle.EngineHealth <= 300)
                 currentVehicle.CanTiresBurst = true;
 
-            if (currentVehicle.BodyHealth >= 500)
+            if (currentVehicle.BodyHealth <= 500)
                 currentVehicle.IsBulletProof = false;
         }
 
