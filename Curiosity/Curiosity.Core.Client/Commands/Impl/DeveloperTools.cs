@@ -37,6 +37,40 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         static NotificationManager notification => NotificationManager.GetModule();
 
+        #region Weapons
+        [CommandInfo(new[] { "weapons" })]
+        public class Weapons : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
+                    {
+                        Cache.PlayerPed.Weapons.Give(w, 999, false, true);
+                        Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                        Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                    });
+
+                    Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+                }
+
+                if (arguments.Count == 1)
+                {
+                    int weapon = API.GetHashKey(arguments.ElementAt(0));
+                    if (weapon > 0)
+                    {
+                        API.GiveWeaponToPed(Game.PlayerPed.Handle, (uint)weapon, 999, false, true);
+                    }
+                    else
+                    {
+                        Cache.PlayerPed.Weapons.Give((WeaponHash)weapon, 999, false, true);
+                    }
+                }
+            }
+        }
+        #endregion
+
         #region Player
 
         [CommandInfo(new[] { "e" })]
