@@ -218,7 +218,7 @@ namespace Curiosity.Core.Server.Managers
                 bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
                 bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
-                bool attackerIsOfficer = (ePlayerJobs)(attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == ePlayerJobs.POLICE_OFFICER;
+                bool attackerIsOfficer = (attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == (int)ePlayerJobs.POLICE_OFFICER;
 
                 if (attackerIsOfficer)
                 {
