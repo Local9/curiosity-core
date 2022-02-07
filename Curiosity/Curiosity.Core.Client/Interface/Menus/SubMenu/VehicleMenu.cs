@@ -17,7 +17,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private VehicleRemoteMenu _VehicleRemoteMenu = new VehicleRemoteMenu();
 
         static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
-        UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 2);
+        UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
         UIMenuItem uiOpenModMenu = new UIMenuItem("Modify Vehicle");
 
         UIMenuCheckboxItem uiChkDriftTires;
