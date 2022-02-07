@@ -20,6 +20,7 @@ namespace Curiosity.Core.Client.Managers
         internal static int isPassiveStateBagHandler = 0;
 
         internal NotificationManager Notify => NotificationManager.GetModule();
+        internal PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
 
         public override void Begin()
         {
@@ -60,7 +61,13 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? true;
+            if (playerOptionsManager.IsWanted)
+            {
+                Notify.Warn($"You're currently wanted by police.");
+                return;
+            }
+
+            bool isPassive = playerOptionsManager.IsPassive;
 
             Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
 
