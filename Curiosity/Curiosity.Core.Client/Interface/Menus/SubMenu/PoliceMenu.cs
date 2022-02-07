@@ -16,6 +16,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu playerListMenu;
         private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
         JobManager jobManager => JobManager.GetModule();
+        PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
 
         public UIMenu CreateMenu(UIMenu m)
         {
@@ -39,9 +40,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async Task CheckControls()
         {
-            if (!jobManager.IsOfficer)
+            if (!jobManager.IsOfficer || playerOptionsManager.IsWanted)
             {
                 Dispose();
+                return;
             }
 
             if (!Game.IsPaused
