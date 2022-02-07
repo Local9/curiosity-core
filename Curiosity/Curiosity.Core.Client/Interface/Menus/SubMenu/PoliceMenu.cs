@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
 using NativeUI;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private UIMenu playerListMenu;
         private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
+        JobManager jobManager => JobManager.GetModule();
 
         public UIMenu CreateMenu(UIMenu m)
         {
@@ -37,6 +39,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async Task CheckControls()
         {
+            if (!jobManager.IsOfficer)
+            {
+                Dispose();
+            }
+
             if (!Game.IsPaused
                 && !IsPauseMenuRestarting()
                 && IsScreenFadedIn()
