@@ -192,25 +192,25 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (Cache.PersonalVehicle is not null && Cache.PersonalVehicle.Vehicle.Exists())
             {
                 Cache.PersonalVehicle.ToggleLock(false);
-                SetVehicleExclusiveDriver_2(Cache.PersonalVehicle.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+                SetVehicleExclusiveDriver_2(Cache.PersonalVehicle.Vehicle.Handle, Game.PlayerPed.Handle, 0);
             }
 
             if (Cache.PersonalPlane is not null && Cache.PersonalPlane.Vehicle.Exists())
             {
                 Cache.PersonalPlane.ToggleLock(false);
-                SetVehicleExclusiveDriver_2(Cache.PersonalPlane.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+                SetVehicleExclusiveDriver_2(Cache.PersonalPlane.Vehicle.Handle, Game.PlayerPed.Handle, 0);
             }
 
             if (Cache.PersonalHelicopter is not null && Cache.PersonalHelicopter.Vehicle.Exists())
             {
                 Cache.PersonalHelicopter.ToggleLock(false);
-                SetVehicleExclusiveDriver_2(Cache.PersonalHelicopter.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+                SetVehicleExclusiveDriver_2(Cache.PersonalHelicopter.Vehicle.Handle, Game.PlayerPed.Handle, 0);
             }
 
             if (Cache.PersonalBoat is not null && Cache.PersonalBoat.Vehicle.Exists())
             {
                 Cache.PersonalBoat.ToggleLock(false);
-                SetVehicleExclusiveDriver_2(Cache.PersonalBoat.Vehicle.Handle, Game.PlayerPed.Handle, 1);
+                SetVehicleExclusiveDriver_2(Cache.PersonalBoat.Vehicle.Handle, Game.PlayerPed.Handle, 0);
             }
         }
     }

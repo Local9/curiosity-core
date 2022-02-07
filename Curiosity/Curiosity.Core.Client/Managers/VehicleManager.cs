@@ -1153,8 +1153,8 @@ namespace Curiosity.Core.Client.Managers
 
                 Blip blip = vehicle.CreateBlip(vehicleItem.SpawnTypeId);
 
-                if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
-                    API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
+                //if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                //    API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
 
                 vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, vehicleItem.SpawnTypeId, false);
                 vehicle.State.Set(StateBagKey.BLIP_ID, blip.Handle, false);
