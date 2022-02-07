@@ -614,23 +614,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                 Cache.PlayerPed.Task.PlayAnimation(dict, anim, 8f, -1, animationFlag);
             }
         }
-
-        [CommandInfo(new[] { "weapons" })]
-        public class Weapons : ICommand
-        {
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-                Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
-                {
-                    Cache.PlayerPed.Weapons.Give(w, 999, false, true);
-                    Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
-                    Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
-                });
-
-                Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
-                Chat.SendLocalMessage("Weapons: All Equiped");
-            }
-        }
         #endregion
 
         #region Vehicles
