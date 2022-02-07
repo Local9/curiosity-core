@@ -236,6 +236,11 @@ namespace Curiosity.Core.Server.Managers
                         tableRows.Add("Officer", attacker.Name);
                         tableRows.Add("Info", "Wanted by Police");
 
+                        SetEntityDistanceCullingRadius(attacker.Character.Handle, 5000f); // make the player visible
+
+                        if (!playerCullingReset.ContainsKey(attacker.Character.Handle))
+                            playerCullingReset.Add(attacker.Character.Handle, GetGameTimer() + TIME_TIL_CULLING_RESET);
+
                         string notificationTable = CreateBasicNotificationTable("Innocent Killed by Officer!", tableRows);
                         SendNotification(SEND_JOB_ONLY, notificationTable);
                     }
@@ -258,6 +263,11 @@ namespace Curiosity.Core.Server.Managers
                     tableRows.Add("Info", "Wanted by Police");
                     attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                     attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+
+                    SetEntityDistanceCullingRadius(attacker.Character.Handle, 5000f); // make the player visible
+
+                    if (!playerCullingReset.ContainsKey(attacker.Character.Handle))
+                        playerCullingReset.Add(attacker.Character.Handle, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
                     string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
                     SendNotification(SEND_JOB_ONLY, notificationTable);
