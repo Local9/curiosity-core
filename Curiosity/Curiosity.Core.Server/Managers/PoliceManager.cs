@@ -168,10 +168,10 @@ namespace Curiosity.Core.Server.Managers
 
                 int suspectServerId = metadata.Find<int>(0);
                 Player player = PluginManager.PlayersList[suspectServerId];
-                if (player == null) return null;
+                if (player == null) return false;
 
                 bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
-                if (isPlayerJailed) return null;
+                if (isPlayerJailed) return false;
                 
                 SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
                 player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
@@ -191,7 +191,7 @@ namespace Curiosity.Core.Server.Managers
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' jailed by '{curiosityUser.LatestName}'");
                 }
 
-                return null;
+                return true;
             }));
 
             EventSystem.Attach("police:player:jail:served", new AsyncEventCallback(async metadata =>
