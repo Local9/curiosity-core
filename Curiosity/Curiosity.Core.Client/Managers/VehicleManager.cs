@@ -27,6 +27,8 @@ namespace Curiosity.Core.Client.Managers
         bool _canSpawn = true;
         NotificationManager NotificationManager => NotificationManager.GetModule();
 
+        JobManager jobManager => JobManager.GetModule();
+
         VehicleState currentVehicle;
 
         Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
@@ -288,7 +290,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
 
-            // PluginManager.Instance.AttachTickHandler(OnVehicleIsTowing);
+            SetPlayerCanDoDriveBy(Game.Player.Handle, !jobManager.IsOfficer);
         }
 
         private async Task OnManageVehicleBlip()
