@@ -358,10 +358,13 @@ namespace Curiosity.Core.Server.Managers
 
                     SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
 
-                    if (informPolice)
+                    bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+
+                    if (informPolice && !isPassive)
                     {
                         bool isWreckless = (speed - speedLimit) > (serverConfigManager.PoliceSpeedLimitWarning + 20);
                         // wanted flag so police are not punished
+
                         player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 1, true);
                         player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWreckless, true);
 
@@ -377,6 +380,7 @@ namespace Curiosity.Core.Server.Managers
 
                         SendNotification(serverId: SEND_JOB_ONLY, message: msg, vehicleNetId: vehicle.NetworkId);
                         Logger.Debug($"Speeding police reported");
+
                     }
 
                     Logger.Debug($"Speeding: {speed} / {speedLimit} / {vehicleNetId} / {street} / {direction}");
