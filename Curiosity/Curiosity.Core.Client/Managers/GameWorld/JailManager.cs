@@ -61,6 +61,20 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             await ScreenInterface.FadeIn(2000);
         }
 
+
+        bool lastCheck = false;
+        [TickHandler(SessionWait = true)]
+        private async Task OnJailWeaponCheck()
+        {
+            bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
+
+            if (isInsideJail != lastCheck)
+            {
+                lastCheck = isInsideJail;
+                PlayerOptionsManager.DisableWeapons(isInsideJail);
+            }
+        }
+
         private async Task OnJailCheck()
         {
             bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
