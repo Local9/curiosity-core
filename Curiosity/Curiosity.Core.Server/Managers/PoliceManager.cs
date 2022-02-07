@@ -355,7 +355,7 @@ namespace Curiosity.Core.Server.Managers
 
                     string playerMsg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Caught Speeding ({costOfTicket:C0})</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
-                        $"Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH";
+                        $"Location: {street}<br />Heading: {direction}<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH";
                     playerMsg += $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
                     SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
@@ -377,7 +377,7 @@ namespace Curiosity.Core.Server.Managers
 
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
-                        $"Last Location: {street}<br />Heading: {direction}<br />Make: MAKE_NAME<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
+                        $"Last Location: {street}<br />Heading: {direction}<br />License Plate: {numberPlate}<br />Owner: {player.Name}<br />Speed: {speed} MPH" +
                         $"</td><td><img src=\"./assets/img/icons/speedCameraWhite.png\" width=\"64\" /></td></tr></tbody></table>";
 
                         SendNotification(serverId: SEND_JOB_ONLY, message: msg, vehicleNetId: vehicle.NetworkId);
