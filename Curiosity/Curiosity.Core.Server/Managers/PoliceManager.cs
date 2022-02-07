@@ -222,12 +222,6 @@ namespace Curiosity.Core.Server.Managers
                     tableRows.Add("Attacker", attacker.Name);
                     tableRows.Add("Victim", victim.Name);
                     tableRows.Add("Weapon", weaponName);
-
-                    //if (distanceFeet > 100f)
-                    //{
-                    //    tableRows.Add($"Distance", $"{distanceFeet}ft");
-                    //}
-
                     tableRows.Add("Info", "Wanted by Police");
                     attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                     attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
