@@ -11,11 +11,48 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 {
     public class WorldPlayerManager : Manager<WorldPlayerManager>
     {
+        PlayerOptionsManager PlayerOptionsManager => PlayerOptionsManager.GetModule();
+        JobManager _JobManager => JobManager.GetModule();
+
         public Dictionary<int, WorldPlayer> WorldPlayers = new Dictionary<int, WorldPlayer>();
+        const string COMMAND_ARREST = "lv_police_arrest";
 
         public override void Begin()
         {
+            RegisterKeyMapping(COMMAND_ARREST, "POLICE: Arrest Player", "keyboard", "");
+            RegisterCommand(COMMAND_ARREST, new Action(OnArrestNearestPlayer), false);
+        }
 
+        private async void OnArrestNearestPlayer()
+        {
+            if (!_JobManager.IsOfficer)
+            {
+                return;
+            }
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Interface.Notify.Alert($"You must exit the vehicle to arrest the player.");
+                return;
+            }
+
+            foreach (KeyValuePair<int, WorldPlayer> kvp in WorldPlayers)
+            {
+                WorldPlayer worldPlayer = kvp.Value;
+                Player player = kvp.Value.Player;
+
+                if (player == Game.Player) continue; // ignore self
+                if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
+                if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
+                if (!worldPlayer.IsWanted) continue;
+
+                bool hasLos = HasEntityClearLosToEntity(Game.Player.Handle, player.Handle, 17);
+                if (!hasLos) continue;
+
+                bool res = await EventSystem.Request<bool>("police:suspect:jailed", player.ServerId);
+                if (res)
+                    Interface.Notify.Success($"{player.Name} Jailed.");
+            }
         }
 
         [TickHandler(SessionWait = true)]
