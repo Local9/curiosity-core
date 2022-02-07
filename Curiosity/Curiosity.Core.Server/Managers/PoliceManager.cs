@@ -206,6 +206,25 @@ namespace Curiosity.Core.Server.Managers
                         victim.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
                         victim.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
                     }
+
+                    if (!victimIsWanted)
+                    {
+                        attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
+                        attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+
+                        CuriosityUser curiosityUser = PluginManager.ActiveUsers[attackerServerId];
+                        curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
+                        attacker.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
+
+                        SendNotification(attackerServerId, $"You have removed from the force for killing an innocent.");
+
+                        Dictionary<string, string> tableRows = new Dictionary<string, string>();
+                        tableRows.Add("Officer", attacker.Name);
+                        tableRows.Add("Info", "Wanted by Police");
+
+                        string notificationTable = CreateBasicNotificationTable("Innocent Killed by Officer!", tableRows);
+                        SendNotification(SEND_JOB_ONLY, notificationTable);
+                    }
                 }
 
                 if (!attackerIsOfficer)
