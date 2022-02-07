@@ -92,6 +92,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!activate && curiosityUser.Job == ePlayerJobs.POLICE_OFFICER)
                 {
                     curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
+                    curiosityUser.JobCallSign = string.Empty;
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                     SendNotification(metadata.Sender, $"You have now left the police force.");
@@ -235,6 +236,7 @@ namespace Curiosity.Core.Server.Managers
 
                         CuriosityUser curiosityUser = PluginManager.ActiveUsers[attackerServerId];
                         curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
+                        curiosityUser.JobCallSign = string.Empty;
                         attacker.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                         SendNotification(attackerServerId, $"You have removed from the force for killing an innocent.");
