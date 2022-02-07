@@ -60,6 +60,13 @@ namespace Curiosity.Core.Server.Managers
                         return false;
                     }
 
+                    bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                    if (isPassive)
+                    {
+                        SendNotification(metadata.Sender, $"Cannot join the force while passive.");
+                        return false;
+                    }
+
                     bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
                     if (isWanted)
                     {
