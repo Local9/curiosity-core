@@ -60,6 +60,13 @@ namespace Curiosity.Core.Server.Managers
                         return false;
                     }
 
+                    bool isJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
+                    if (isJailed)
+                    {
+                        SendNotification(metadata.Sender, $"Cannot join the force while jailed.");
+                        return false;
+                    }
+
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
