@@ -1,4 +1,6 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Environment.Data;
 using Curiosity.Core.Server.Events;
@@ -12,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
 {

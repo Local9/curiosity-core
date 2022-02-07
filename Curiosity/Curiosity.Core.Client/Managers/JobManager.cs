@@ -12,9 +12,9 @@ namespace Curiosity.Core.Client.Managers
     public class JobManager : Manager<JobManager>
     {
         private const string JOB_POLICE = "Police Officer";
-        internal static bool IsOnDuty = false;
-        internal static bool IsOfficer = false;
-        internal static bool WasOfficer = false;
+        internal bool IsOnDuty = false;
+        internal bool IsOfficer = false;
+        internal bool WasOfficer = false;
         bool isEnabled = true;
 
         internal static int isPassiveStateBagHandler = 0;
