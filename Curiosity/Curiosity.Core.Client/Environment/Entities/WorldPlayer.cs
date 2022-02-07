@@ -60,7 +60,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             PlayerHandle = player.Handle;
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
-            IsWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+            IsWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
             GroupId = player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
             PlayerJob = player.State.Get(StateBagKey.PLAYER_JOB) ?? -1;
             int myGroupId = Game.Player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
@@ -74,7 +74,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             pluginManager.AttachTickHandler(OnPlayerRevive);
 
             passiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
-            wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_IS_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
+            wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_POLICE_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
             wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
             clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));

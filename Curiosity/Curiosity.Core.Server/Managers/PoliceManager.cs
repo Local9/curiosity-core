@@ -152,7 +152,7 @@ namespace Curiosity.Core.Server.Managers
                 if (isPlayerJailed) return null;
                 
                 SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
-                player.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
+                player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
                 player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
                 player.State.Set(StateBagKey.IS_JAILED, true, true);
 
@@ -183,8 +183,6 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("police:playerKilledPlayer", new AsyncEventCallback(async metadata =>
             {
-                return null;
-
                 int attackerServerId = metadata.Find<int>(0);
                 int victimServerId = metadata.Find<int>(1);
                 bool isMeleeDamage = metadata.Find<bool>(2);
@@ -197,7 +195,7 @@ namespace Curiosity.Core.Server.Managers
 
                 bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
-                bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
                 bool attackerIsOfficer = (ePlayerJobs)(attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == ePlayerJobs.POLICE_OFFICER;
 
                 if (attackerIsOfficer)
@@ -205,7 +203,7 @@ namespace Curiosity.Core.Server.Managers
                     if (victimIsWanted)
                     {
                         SetEntityDistanceCullingRadius(victim.Character.Handle, 0f); // reset culling
-                        victim.State.Set(StateBagKey.PLAYER_IS_WANTED, false, true); // cannot want a dead person
+                        victim.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
                         victim.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
                     }
                 }
@@ -231,7 +229,7 @@ namespace Curiosity.Core.Server.Managers
                     //}
 
                     tableRows.Add("Info", "Wanted by Police");
-                    attacker.State.Set(StateBagKey.PLAYER_IS_WANTED, true, true);
+                    attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                     attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
 
                     string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
@@ -318,8 +316,10 @@ namespace Curiosity.Core.Server.Managers
 
                     if (informPolice)
                     {
+                        bool isWreckless = (speed - speedLimit) > (serverConfigManager.PoliceSpeedLimitWarning + 20);
                         // wanted flag so police are not punished
                         player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 1, true);
+                        player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWreckless, true);
 
                         SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
 

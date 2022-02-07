@@ -960,7 +960,7 @@ namespace Curiosity.Core.Client.Managers
                     return new { success = false };
                 }
 
-                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                 if (Game.Player.WantedLevel > 0)
                 {

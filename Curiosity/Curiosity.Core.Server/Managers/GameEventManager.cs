@@ -33,8 +33,8 @@ namespace Curiosity.Core.Server.Managers
                 bool isAttackerOfficer = IsPlayerOfficer(attacker);
                 bool isVictimOfficer = IsPlayerOfficer(victim);
 
-                bool isAttackerSuspect = attacker.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
-                bool isVictimSuspect = victim.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool isAttackerSuspect = attacker.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+                bool isVictimSuspect = victim.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                 string atkPrefix = string.Empty;
                 string vctPrefix = string.Empty;

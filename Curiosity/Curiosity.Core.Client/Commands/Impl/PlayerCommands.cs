@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
 
-                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+                bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                 if (Game.Player.WantedLevel > 0)
                 {

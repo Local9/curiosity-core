@@ -108,7 +108,7 @@ namespace Curiosity.Core.Client.Managers
 
             Game.PlayerPed.IsInvincible = false;
             
-            bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
+            bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
             if (isWantedByPolice)
             {

@@ -89,7 +89,7 @@
 
         // Police Wanted Flags
         public const string VEH_IS_WANTED = "VEHICLE_POLICE_WANTED";
-        public const string PLAYER_IS_WANTED = "PLAYER_POLICE_WANTED";
+        public const string PLAYER_POLICE_WANTED = "PLAYER_POLICE_WANTED";
         public const string PLAYER_WANTED_LEVEL = "PLAYER_POLICE_WANTED_LEVEL"; // lua handling required
         // Job Manager Flags
         public const string PLAYER_JOB = "p::job::current";
