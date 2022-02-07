@@ -48,7 +48,7 @@ namespace Curiosity.Core.Client.Managers
 
         private void OnPlayerWantedStateChange(string bag, string key, dynamic wanted, int reserved, bool replicated)
         {
-            if (wanted)
+            if (wanted == true)
                 Interface.Notify.Alert($"You're wanted by police.");
 
             IsWanted = wanted;
