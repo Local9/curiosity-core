@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Managers.GameWorld;
-using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Collections.Generic;
 
