@@ -27,11 +27,13 @@ namespace Curiosity.Core.Client.Managers
         NotificationManager NotificationManager => NotificationManager.GetModule();
 
         int jobStateBagHandler = 0;
+        int wantedStateBagHandler = 0;
 
         public override void Begin()
         {
             jobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnPlayerJobStateChange));
-            
+            wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_POLICE_WANTED, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnPlayerWantedStateChange));
+
             Instance.EventRegistry.Add("npwd:PhotoModeStarted", new Action(() =>
             {
                 DisplayRadar(false);
@@ -41,6 +43,12 @@ namespace Curiosity.Core.Client.Managers
             {
                 DisplayRadar(true);
             }));
+        }
+
+        private void OnPlayerWantedStateChange(string bag, string key, dynamic wanted, int reserved, bool replicated)
+        {
+            if (wanted)
+                Interface.Notify.Alert($"You're wanted by police.");
         }
 
         private void OnPlayerJobStateChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
