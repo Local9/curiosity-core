@@ -213,8 +213,8 @@ namespace Curiosity.Core.Server.Managers
                     Vector3 victimPosition = victim.Character.Position;
                     Vector3 attackerPosition = attacker.Character.Position;
 
-                    float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
-                    float distanceFeet = distanceTotal * 5280f;
+                    //float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
+                    //float distanceFeet = distanceTotal * 5280f;
 
                     string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
 
