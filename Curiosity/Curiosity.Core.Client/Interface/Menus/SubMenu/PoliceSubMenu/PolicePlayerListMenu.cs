@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Managers.GameWorld;
 using NativeUI;
@@ -37,6 +38,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                     if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
 
                     if (!worldPlayer.IsWanted) continue;
+
+                    bool hasLos = HasEntityClearLosToEntity(Game.Player.Handle, player.Handle, 17);
+                    if (!hasLos) continue;
 
                     UIMenu uIMenu = InteractionMenu.MenuPool.AddSubMenu(_menu, player.Name);
                     new PolicePlayerInteractionMenu().CreateMenu(uIMenu, player.ServerId);
