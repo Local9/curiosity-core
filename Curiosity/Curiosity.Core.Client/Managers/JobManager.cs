@@ -18,6 +18,7 @@ namespace Curiosity.Core.Client.Managers
         bool isEnabled = true;
 
         internal static int isPassiveStateBagHandler = 0;
+        internal static int jobStateBagHandler = 0;
 
         internal NotificationManager Notify => NotificationManager.GetModule();
         internal PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
@@ -42,6 +43,14 @@ namespace Curiosity.Core.Client.Managers
 
             // LEGACY (rather not do this but I have to
             Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnJobDutyEvent);
+        }
+
+        private void OnStatePlayerJobChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
+        {
+            if (IsOfficer && jobId == 0)
+            {
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, false, false, "Unemployed");
+            }
         }
 
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
@@ -99,6 +108,7 @@ namespace Curiosity.Core.Client.Managers
                 Instance.AttachTickHandler(OnDisablePoliceAndDispatch);
 
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
+                jobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerJobChange));
 
                 ToggleDispatch(false);
             }
@@ -114,7 +124,8 @@ namespace Curiosity.Core.Client.Managers
                 Instance.DiscordRichPresence.SmallAssetText = "FiveM";
                 Instance.DiscordRichPresence.Commit();
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
-                
+                RemoveStateBagChangeHandler(jobStateBagHandler);
+
                 ToggleDispatch(false);
 
                 await BaseScript.Delay(100);
