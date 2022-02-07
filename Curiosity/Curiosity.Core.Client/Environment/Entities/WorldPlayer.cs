@@ -50,6 +50,10 @@ namespace Curiosity.Core.Client.Environment.Entities
         public int ClientGroupId;
         int clientGroupStateBagHandler = -1;
 
+        public int PlayerJob;
+        int playerJobStateBagHandler = -1;
+        public bool IsOfficer => PlayerJob == (int)ePlayerJobs.POLICE_OFFICER;
+
         public WorldPlayer(Player player)
         {
             Player = player;
@@ -58,6 +62,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             IsWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
             GroupId = player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
+            PlayerJob = player.State.Get(StateBagKey.PLAYER_JOB) ?? -1;
             int myGroupId = Game.Player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
 
             if (myGroupId > -1 && GroupId > -1)
@@ -73,12 +78,13 @@ namespace Curiosity.Core.Client.Environment.Entities
             wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
             clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
+            playerJobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
 
             if (player.Character.AttachedBlip is null)
             {
                 _blip = player.Character.AttachBlip();
                 _blipHandle = _blip.Handle;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
                 SetBlipCategory(_blipHandle, 7);
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
@@ -102,6 +108,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                 RemoveStateBagChangeHandler(wantedLevelStateBagHandler);
                 RemoveStateBagChangeHandler(groupStateBagHandler);
                 RemoveStateBagChangeHandler(clientGroupStateBagHandler);
+                RemoveStateBagChangeHandler(playerJobStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -167,13 +174,18 @@ namespace Curiosity.Core.Client.Environment.Entities
             ClientGroupId = groupId;
         }
 
+        private void OnStateClientPlayerJobChange(string bag, string key, dynamic job, int reserved, bool replicated)
+        {
+            PlayerJob = job;
+        }
+
         // This is mainly for things that update, blips, passive, etc
         private async Task OnPlayerChanges()
         {
             try
             {
                 _sameGroup = GroupId == ClientGroupId;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
                 UpdateBlipString();
                 UpdatePlayerCollisionStates();
                 UpdatePlayerWantedState();
