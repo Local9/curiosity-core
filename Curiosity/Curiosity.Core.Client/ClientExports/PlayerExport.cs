@@ -12,7 +12,13 @@ namespace Curiosity.Core.Client.ClientExports
             Instance.ExportDictionary.Add("Passive", new Func<bool>(
                 () =>
                 {
-                    return Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                    return PlayerOptionsManager.GetModule().IsPassive;
+                }
+            ));
+            Instance.ExportDictionary.Add("IsWanted", new Func<bool>(
+                () =>
+                {
+                    return PlayerOptionsManager.GetModule().IsWanted;
                 }
             ));
         }
