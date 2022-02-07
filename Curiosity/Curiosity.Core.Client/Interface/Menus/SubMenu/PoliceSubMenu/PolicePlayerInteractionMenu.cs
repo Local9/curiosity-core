@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Events;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Events;
 using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
@@ -28,6 +29,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
         {
             if (selectedItem == _jail)
             {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Notify.Alert($"You must exit the vehicle to arrest the player.");
+                    return;
+                }
+
                 await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
             }
         }
