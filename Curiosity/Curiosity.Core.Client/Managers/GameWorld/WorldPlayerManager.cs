@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 {
     public class WorldPlayerManager : Manager<WorldPlayerManager>
     {
-        Dictionary<int, WorldPlayer> players = new Dictionary<int, WorldPlayer>();
+        public Dictionary<int, WorldPlayer> WorldPlayers = new Dictionary<int, WorldPlayer>();
 
         public override void Begin()
         {
@@ -39,9 +39,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 {
                     if (player == Game.Player) continue;
 
-                    if (!players.ContainsKey(player.ServerId))
+                    if (!WorldPlayers.ContainsKey(player.ServerId))
                     {
-                        players.Add(player.ServerId, new WorldPlayer(player));
+                        WorldPlayers.Add(player.ServerId, new WorldPlayer(player));
                     }
                 }
             }
@@ -54,9 +54,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         [TickHandler(SessionWait = true)]
         private async Task OnWorldPlayersProcess()
         {
-            if (players.Count == 0) return;
+            if (WorldPlayers.Count == 0) return;
 
-            foreach (KeyValuePair<int, WorldPlayer> keyValuePair in players.ToArray())
+            foreach (KeyValuePair<int, WorldPlayer> keyValuePair in WorldPlayers.ToArray())
             {
                 int serverHandle = keyValuePair.Key;
                 WorldPlayer player = keyValuePair.Value;
@@ -72,7 +72,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
             REMOVE_PLAYER:
                 player.Dispose();
-                players.Remove(serverHandle);
+                WorldPlayers.Remove(serverHandle);
             }
         }
     }

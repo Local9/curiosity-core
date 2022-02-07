@@ -1,12 +1,16 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Environment.Entities;
+using Curiosity.Core.Client.Managers.GameWorld;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 {
     internal class PolicePlayerListMenu
     {
         UIMenu _menu;
+        WorldPlayerManager worldPlayerManager => WorldPlayerManager.GetModule();
 
         public UIMenu CreateMenu(UIMenu m)
         {
@@ -23,17 +27,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
             {
                 _menu.Clear();
 
-                foreach (Player player in PluginManager.Instance.PlayerList)
+                foreach (KeyValuePair<int, WorldPlayer> kvp in worldPlayerManager.WorldPlayers)
                 {
+                    WorldPlayer worldPlayer = kvp.Value;
+                    Player player = kvp.Value.Player;
+
                     if (player == Game.Player) continue; // ignore self
                     if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
 
                     if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
 
-                    bool isWanted = player.State.Get(StateBagKey.PLAYER_IS_WANTED) ?? false;
-                    if (!isWanted) continue; // only show those who are wanted
-
-                    if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
+                    if (!worldPlayer.IsWanted) continue;
 
                     UIMenu uIMenu = InteractionMenu.MenuPool.AddSubMenu(_menu, player.Name);
                     new PolicePlayerInteractionMenu().CreateMenu(uIMenu, player.ServerId);

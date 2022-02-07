@@ -13,7 +13,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
-    class WorldPlayer
+    public class WorldPlayer
     {
         PluginManager pluginManager => PluginManager.Instance;
         PlayerOptionsManager playerOptions => PlayerOptionsManager.GetModule();
@@ -73,7 +73,6 @@ namespace Curiosity.Core.Client.Environment.Entities
             wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
             clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
-
 
             if (player.Character.AttachedBlip is null)
             {
