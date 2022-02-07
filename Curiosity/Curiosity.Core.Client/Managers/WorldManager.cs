@@ -111,7 +111,7 @@ namespace Curiosity.Core.Client.Managers
                 vehiclesToSuppress.Add(modelHash);
             }
 
-            ToggleDispatch(true); // turn off all dispatch
+            ToggleDispatch(false); // turn off all dispatch
         }
 
         public void ShowWeatherForecast()
