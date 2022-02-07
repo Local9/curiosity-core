@@ -35,7 +35,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                     return;
                 }
 
-                await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
+                bool res = await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
+                if (res)
+                    InteractionMenu.MenuPool.CloseAllMenus();
             }
         }
 
