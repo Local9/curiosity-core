@@ -46,7 +46,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
                 if (!worldPlayer.IsWanted) continue;
 
-                bool hasLos = HasEntityClearLosToEntity(Game.Player.Handle, player.Handle, 17);
+                bool hasLos = HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17);
                 if (!hasLos) continue;
 
                 bool res = await EventSystem.Request<bool>("police:suspect:jailed", player.ServerId);

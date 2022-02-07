@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 
                     if (!worldPlayer.IsWanted) continue;
 
-                    bool hasLos = HasEntityClearLosToEntity(Game.Player.Handle, player.Handle, 17);
+                    bool hasLos = HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17);
                     if (!hasLos) continue;
 
                     UIMenu uIMenu = InteractionMenu.MenuPool.AddSubMenu(_menu, player.Name);
