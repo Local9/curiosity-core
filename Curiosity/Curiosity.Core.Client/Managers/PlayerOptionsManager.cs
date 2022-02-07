@@ -17,6 +17,7 @@ namespace Curiosity.Core.Client.Managers
         DateTime passiveModeDisabled;
         public bool IsPassiveModeEnabledCooldown = false;
         public bool IsPassive = false;
+        public bool IsWanted = false;
         DateTime playerKilledSelf;
         public bool IsKillSelfEnabled { get; internal set; } = true;
         public int CostOfKillSelf = 500;
@@ -49,6 +50,8 @@ namespace Curiosity.Core.Client.Managers
         {
             if (wanted)
                 Interface.Notify.Alert($"You're wanted by police.");
+
+            IsWanted = wanted;
         }
 
         private void OnPlayerJobStateChange(string bag, string key, dynamic jobId, int reserved, bool replicated)
