@@ -22,7 +22,6 @@ namespace Curiosity.Core.Server.Managers
 {
     public class UserManager : Manager<UserManager>
     {
-        const int CALL_SIGN_LENGTH = 4;
 
         public override void Begin()
         {
@@ -171,10 +170,10 @@ namespace Curiosity.Core.Server.Managers
             Instance.EventRegistry.Add("user:log:exception", new Action<Player, string, string>(OnUserLogException));
 
             // TODO: Character
-            EventSystem.Attach("user:job", new EventCallback(metadata =>
-            {
-                return SetUserJobText(metadata.Sender, metadata.Find<string>(0));
-            }));
+            //EventSystem.Attach("user:job", new EventCallback(metadata =>
+            //{
+            //    return SetUserJobText(metadata.Sender, metadata.Find<string>(0));
+            //}));
 
 
             // TODO: Character
@@ -303,13 +302,13 @@ namespace Curiosity.Core.Server.Managers
                 return JsonConvert.SerializeObject(curiosityUser);
             }));
 
-            Instance.ExportDictionary.Add("SetJob", new Func<string, string, Task<bool>>(
-                async (playerHandle, jobText) =>
-                {
-                    int handle = int.Parse(playerHandle);
+            //Instance.ExportDictionary.Add("SetJob", new Func<string, string, Task<bool>>(
+            //    async (playerHandle, jobText) =>
+            //    {
+            //        int handle = int.Parse(playerHandle);
 
-                    return (await SetUserJobText(handle, jobText));
-                }));
+            //        return (await SetUserJobText(handle, jobText));
+            //    }));
 
             Instance.ExportDictionary.Add("SetPlayerBucket", new Func<string, int, string>((playerHandle, bucket) =>
             {
@@ -359,66 +358,6 @@ namespace Curiosity.Core.Server.Managers
 
             DiscordClient.GetModule().SendDiscordServerEventLogMessage($"{stringBuilder}");
             await BaseScript.Delay(0);
-        }
-
-        private async Task<bool> SetUserJobText(int playerServerId, string jobText)
-        {
-            if (!PluginManager.ActiveUsers.ContainsKey(playerServerId)) return false;
-
-            CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerServerId];
-
-            switch (jobText)
-            {
-                case "Police Officer":
-                    string concatJob = string.Concat(jobText.Where(c => char.IsUpper(c)));
-                    string randomStr = await CreateUniqueCallSign();
-                    curiosityUser.JobCallSign = $"{concatJob}-{randomStr}";
-                    break;
-                default:
-                    curiosityUser.JobCallSign = string.Empty;
-                    break;
-            }
-
-            curiosityUser.CurrentJob = jobText;
-
-            return true;
-        }
-
-        async Task<string> CreateUniqueCallSign()
-        {
-            List<string> currentCallSigns = new List<string>();
-
-            foreach (KeyValuePair<int, CuriosityUser> u in PluginManager.ActiveUsers)
-            {
-                currentCallSigns.Add(u.Value.JobCallSign);
-            }
-
-            string callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
-
-            //while (true)
-            //{
-            //    await BaseScript.Delay(0);
-
-            //    if (currentCallSigns.Count == 0)
-            //        break;
-
-            //    if (!currentCallSigns.Contains(callsign))
-            //        break;
-
-            //    callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
-            //}
-
-            return callsign;
-        }
-
-        string GenerateRandomAlphanumericString(int length = 10)
-        {
-            // const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            const string chars = "0123456789";
-
-            var randomString = new string(Enumerable.Repeat(chars, length)
-                                                    .Select(s => s[Utility.RANDOM.Next(s.Length)]).ToArray());
-            return randomString;
         }
 
         private void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)

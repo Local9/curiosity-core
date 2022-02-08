@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -27,10 +28,11 @@ namespace Curiosity.Core.Server.Managers
         private const int TIME_TIL_CULLING_RESET = (1000 * 10);
         private const int DB_POLICE_SKILL = 5;
         Dictionary<int, long> playerCullingReset = new();
+        const int CALL_SIGN_LENGTH = 4;
 
         public override void Begin()
         {
-            EventSystem.Attach("police:job:state", new EventCallback(metadata =>
+            EventSystem.Attach("police:job:state", new AsyncEventCallback(async metadata =>
             {
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -54,7 +56,22 @@ namespace Curiosity.Core.Server.Managers
                     int numberOfPlayers = PluginManager.PlayersList.Count();
                     float ratioOfCopsToPlayers = (activeOfficers / numberOfPlayers);
 
-                    if (ratioOfCopsToPlayers < 0.33)
+                    float ratio = 0.4f;
+
+                    switch(numberOfPlayers)
+                    {
+                        case int n when n <= 5:
+                            ratio = 0.5f;
+                            break;
+                        case int n when n <= 10:
+                            ratio = 0.4f;
+                            break;
+                        default:
+                            ratio = 0.33f;
+                            break;
+                    }
+
+                    if (ratioOfCopsToPlayers < ratio)
                     {
                         SendNotification(metadata.Sender, $"We currently have enough active officers, please try again later.");
                         return false;
@@ -82,6 +99,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
+                    await SetUserJobText(metadata.Sender, "Police Officer");
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                     SendNotification(metadata.Sender, $"Welcome to the force.");
@@ -490,6 +508,66 @@ namespace Curiosity.Core.Server.Managers
 
             sb.Append($"</tbody></table>");
             return sb.ToString();
+        }
+
+        private async Task<bool> SetUserJobText(int playerServerId, string jobText)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(playerServerId)) return false;
+
+            CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerServerId];
+
+            switch (jobText)
+            {
+                case "Police Officer":
+                    string concatJob = string.Concat(jobText.Where(c => char.IsUpper(c)));
+                    string randomStr = await CreateUniqueCallSign();
+                    curiosityUser.JobCallSign = $"{concatJob}-{randomStr}";
+                    break;
+                default:
+                    curiosityUser.JobCallSign = string.Empty;
+                    break;
+            }
+
+            curiosityUser.CurrentJob = jobText;
+
+            return true;
+        }
+
+        async Task<string> CreateUniqueCallSign()
+        {
+            List<string> currentCallSigns = new List<string>();
+
+            foreach (KeyValuePair<int, CuriosityUser> u in PluginManager.ActiveUsers)
+            {
+                currentCallSigns.Add(u.Value.JobCallSign);
+            }
+
+            string callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
+
+            //while (true)
+            //{
+            //    await BaseScript.Delay(0);
+
+            //    if (currentCallSigns.Count == 0)
+            //        break;
+
+            //    if (!currentCallSigns.Contains(callsign))
+            //        break;
+
+            //    callsign = GenerateRandomAlphanumericString(CALL_SIGN_LENGTH);
+            //}
+
+            return callsign;
+        }
+
+        string GenerateRandomAlphanumericString(int length = 10)
+        {
+            // const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "0123456789";
+
+            var randomString = new string(Enumerable.Repeat(chars, length)
+                                                    .Select(s => s[Utility.RANDOM.Next(s.Length)]).ToArray());
+            return randomString;
         }
     }
 }
