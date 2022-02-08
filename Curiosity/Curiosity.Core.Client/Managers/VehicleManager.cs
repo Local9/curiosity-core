@@ -294,7 +294,7 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnTrackVehicleDamage()
         {
-            if (currentVehicle.Vehicle.ClassType == VehicleClass.Emergency) return;
+            if (jobManager.IsOfficer) return;
 
             if (currentVehicle.Vehicle.EngineHealth <= 300)
                 currentVehicle.Vehicle.CanTiresBurst = true;
