@@ -56,6 +56,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     }
 
                     bool isStaff = player.State.Get(StateBagKey.STAFF_MEMBER) == null ? false : player.State.Get(StateBagKey.STAFF_MEMBER);
+                    bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                     if (gamerTags.ContainsKey(player))
                     {
@@ -100,13 +101,15 @@ namespace Curiosity.Core.Client.Managers.UI
 
                         SetMpGamerTagVisibility(tagHandle, (int)GamerTagComponent.MpDriver, isDriving);
 
-                        if (player.WantedLevel > 0)
+                        if (player.WantedLevel > 0 || isWanted)
                         {
+                            SetMpGamerTagColour(tagHandle, (int)GamerTagComponent.GamerName, 7);
                             SetMpGamerTagVisibility(tagHandle, 7, true); // wantedStars
                             SetMpGamerTagWantedLevel(tagHandle, GetPlayerWantedLevel(player.Handle));
                         }
                         else
                         {
+                            SetMpGamerTagColour(tagHandle, (int)GamerTagComponent.GamerName, 0);
                             SetMpGamerTagVisibility(tagHandle, 7, false); // wantedStars hide
                         }
                     }
