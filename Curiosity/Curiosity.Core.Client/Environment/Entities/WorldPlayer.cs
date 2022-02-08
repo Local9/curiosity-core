@@ -21,6 +21,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         NotificationManager notificationManager => NotificationManager.GetModule();
 
         public Player Player;
+        public string Name;
         private Player GamePlayer => Game.Player;
         private Ped PlayerPed => Player.Character;
         private Ped GamePlayerPed => GamePlayer.Character;
@@ -57,6 +58,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         public WorldPlayer(Player player)
         {
             Player = player;
+            Name = player.Name;
             PlayerHandle = player.Handle;
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;

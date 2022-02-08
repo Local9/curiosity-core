@@ -51,7 +51,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
                 bool res = await EventSystem.Request<bool>("police:suspect:jailed", player.ServerId);
                 if (res)
-                    Interface.Notify.Success($"{player.Name} Jailed.");
+                    Interface.Notify.Success($"{worldPlayer.Name} Jailed.");
             }
         }
 
