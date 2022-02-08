@@ -26,9 +26,6 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
 
-                user.CurrentJob = "Unemployed";
-                user.Send(JOB_UNEMPLOYED);
-
                 Logger.Debug($"'{user.LatestName}' is now a {user.CurrentJob}");
 
                 await BaseScript.Delay(5000);
@@ -42,9 +39,6 @@ namespace Curiosity.Core.Server.Managers
                     return null;
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
-
-                user.CurrentJob = "Police Officer";
-                user.Send(JOB_POLICE_DUTY);
 
                 Logger.Debug($"'{user.LatestName}' is now a {user.CurrentJob}");
 
