@@ -56,7 +56,7 @@ namespace Curiosity.Core.Server.Managers
                     int numberOfPlayers = PluginManager.PlayersList.Count();
                     float ratioOfCopsToPlayers = (activeOfficers / numberOfPlayers);
 
-                    float ratio = 0.4f;
+                    float ratio = 0.33f;
 
                     switch(numberOfPlayers)
                     {
@@ -64,14 +64,14 @@ namespace Curiosity.Core.Server.Managers
                             ratio = 0.5f;
                             break;
                         case int n when n <= 10:
-                            ratio = 0.4f;
+                            ratio = 0.45f;
                             break;
                         default:
                             ratio = 0.33f;
                             break;
                     }
 
-                    if (ratioOfCopsToPlayers < ratio)
+                    if (ratioOfCopsToPlayers < ratio && activeOfficers > 0)
                     {
                         SendNotification(metadata.Sender, $"We currently have enough active officers or there are not enough active players, please try again later.");
                         return false;
