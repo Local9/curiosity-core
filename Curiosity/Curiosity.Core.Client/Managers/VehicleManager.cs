@@ -290,8 +290,6 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
             PluginManager.Instance.AttachTickHandler(OnTrackVehicleDamage);
-
-            SetPlayerCanDoDriveBy(Game.Player.Handle, !jobManager.IsOfficer);
         }
 
         private async Task OnTrackVehicleDamage()
@@ -303,6 +301,17 @@ namespace Curiosity.Core.Client.Managers
 
             if (currentVehicle.Vehicle.BodyHealth <= 500)
                 currentVehicle.Vehicle.IsBulletProof = false;
+
+            double speed = (currentVehicle.Vehicle.Speed * 3.6);
+
+            if (speed >= 1)
+            {
+                SetPlayerCanDoDriveBy(Game.Player.Handle, false);
+            }
+            else
+            {
+                SetPlayerCanDoDriveBy(Game.Player.Handle, true);
+            }
         }
 
         private async Task OnManageVehicleBlip()
