@@ -73,7 +73,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (ratioOfCopsToPlayers < ratio)
                     {
-                        SendNotification(metadata.Sender, $"We currently have enough active officers, please try again later.");
+                        SendNotification(metadata.Sender, $"We currently have enough active officers or there are not enough active players, please try again later.");
                         return false;
                     }
 
