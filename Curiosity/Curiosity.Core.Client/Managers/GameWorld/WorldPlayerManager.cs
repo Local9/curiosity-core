@@ -36,7 +36,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 return;
             }
 
-            foreach (KeyValuePair<int, WorldPlayer> kvp in WorldPlayers)
+            Dictionary<int, WorldPlayer> players = new Dictionary<int, WorldPlayer>(WorldPlayers);
+
+            foreach (KeyValuePair<int, WorldPlayer> kvp in players)
             {
                 WorldPlayer worldPlayer = kvp.Value;
                 Player player = kvp.Value.Player;
