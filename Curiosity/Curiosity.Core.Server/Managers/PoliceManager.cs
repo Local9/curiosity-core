@@ -251,6 +251,8 @@ namespace Curiosity.Core.Server.Managers
                 int damageTypeFlag = metadata.Find<int>(4);
                 int numberOfSurroundingPeds = metadata.Find<int>(5);
 
+                if (attackerServerId == victimServerId) return null;
+
                 Player attacker = PluginManager.PlayersList[attackerServerId];
                 Player victim = PluginManager.PlayersList[victimServerId];
 
