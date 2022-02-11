@@ -118,6 +118,7 @@ namespace Curiosity.LifeV.Bot.Methods
                 || message.Content.Contains("dlcorcl-me")
                 || message.Content.Contains(".ru.com")
                 || message.Content.Contains("dlscrod")
+                || message.Content.Contains("diskord")
                 || message.Content.Contains(".gift/")
                 )
             {
