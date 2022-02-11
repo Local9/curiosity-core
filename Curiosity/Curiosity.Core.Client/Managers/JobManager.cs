@@ -76,6 +76,16 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                if (vehicle.ClassType != VehicleClass.Emergency)
+                {
+                    Notify.Warn($"Cannot activate the Police job while using a non-emergency vehicle. Please leave the vehicle, and activate the job again and then re-enter the vehicle if you want to use a non-emergency vehicle.");
+                    return;
+                }
+            }
+
             bool isPassive = playerOptionsManager.IsPassive;
 
             Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
