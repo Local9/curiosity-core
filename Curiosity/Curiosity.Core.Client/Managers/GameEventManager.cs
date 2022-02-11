@@ -46,8 +46,9 @@ namespace Curiosity.Core.Client.Managers
         public override void Begin()
         {
             Instance.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered);
-            Instance.EventRegistry["CEventDamage"] += new Action<dynamic, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
-            Instance.EventRegistry["CEventShockingGunshotFired"] += new Action<dynamic, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
+            Instance.EventRegistry["CEventPlayerDeath"] += new Action<dynamic, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
+            // Instance.EventRegistry["CEventDamage"] += new Action<dynamic, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
+            // Instance.EventRegistry["CEventShockingGunshotFired"] += new Action<dynamic, dynamic, List<dynamic>>(OnEventShockingGunshotFired);
         }
 
         private void OnEventShockingGunshotFired(dynamic entities, dynamic eventEntity, List<dynamic> data)
