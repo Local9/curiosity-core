@@ -294,7 +294,12 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnTrackVehicleDamage()
         {
-            if (jobManager.IsOfficer) return;
+            if (jobManager.IsOfficer)
+            {
+                SetPlayerCanDoDriveBy(Game.Player.Handle, true);
+                PluginManager.Instance.DetachTickHandler(OnTrackVehicleDamage);
+                return;
+            }
 
             if (currentVehicle.Vehicle.EngineHealth <= 300)
                 currentVehicle.Vehicle.CanTiresBurst = true;
