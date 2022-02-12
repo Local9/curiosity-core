@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Threading.Tasks;
@@ -55,7 +57,13 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 z = groundZ;
 
             Game.PlayerPed.IsPositionFrozen = false;
+            Vector3 pos = new Vector3(x, y, z);
             Game.PlayerPed.Position = new Vector3(x, y, z);
+
+            if (Game.PlayerPed.IsDead)
+            {
+                Cache.Player.Character.Revive(new Position(pos.X, pos.Y, pos.Z, Cache.PlayerPed.Heading));
+            }
 
             await BaseScript.Delay(500);
             await ScreenInterface.FadeIn(2000);
