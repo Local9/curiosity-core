@@ -289,26 +289,11 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
-            PluginManager.Instance.AttachTickHandler(OnTrackVehicleDamage);
+            PluginManager.Instance.AttachTickHandler(OnDisableDriveBy);
         }
 
-        bool damageTrackerEnabled = false;
-        private async Task OnTrackVehicleDamage()
+        private async Task OnDisableDriveBy()
         {
-            if (jobManager.IsOfficer && damageTrackerEnabled)
-            {
-                SetPlayerCanDoDriveBy(Game.Player.Handle, true);
-                PluginManager.Instance.DetachTickHandler(OnTrackVehicleDamage);
-                damageTrackerEnabled = false;
-                return;
-            }
-
-            if (currentVehicle.Vehicle.EngineHealth <= 300)
-                currentVehicle.Vehicle.CanTiresBurst = true;
-
-            if (currentVehicle.Vehicle.BodyHealth <= 500)
-                currentVehicle.Vehicle.IsBulletProof = false;
-
             double speed = (currentVehicle.Vehicle.Speed * 3.6);
 
             if (speed >= 1)
@@ -319,8 +304,6 @@ namespace Curiosity.Core.Client.Managers
             {
                 SetPlayerCanDoDriveBy(Game.Player.Handle, true);
             }
-
-            damageTrackerEnabled = true;
         }
 
         private async Task OnManageVehicleBlip()
@@ -474,7 +457,7 @@ namespace Curiosity.Core.Client.Managers
                 PluginManager.Instance.DetachTickHandler(OnVehicleRefuel);
                 PluginManager.Instance.DetachTickHandler(CheckFuelPumpDistance);
                 PluginManager.Instance.DetachTickHandler(OnVehicleIsTowing);
-                PluginManager.Instance.DetachTickHandler(OnTrackVehicleDamage);
+                PluginManager.Instance.DetachTickHandler(OnDisableDriveBy);
                 IsNearFuelPump = false;
                 IsRefueling = false;
 
@@ -505,11 +488,6 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 return;
-            }
-
-            if (!jobManager.IsOfficer && !damageTrackerEnabled)
-            {
-                PluginManager.Instance.AttachTickHandler(OnTrackVehicleDamage);
             }
 
             var fuelState = currentVehicle.Vehicle.State.Get(StateBagKey.VEH_FUEL);
