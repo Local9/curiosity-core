@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -66,8 +67,8 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            Instance.ExportDictionary.Add("SetUserJob", new Func<string, string, bool>(
-                (playerHandle, job) =>
+            Instance.ExportDictionary.Add("SetUserJob", new Func<string, string, int, bool>(
+                (playerHandle, job, jobHandle) =>
                 {
 
                     int playerId = 0;
@@ -79,6 +80,7 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
                     user.CurrentJob = job;
+                    user.Job = (ePlayerJobs)jobHandle;
 
                     return true;
                 }));
