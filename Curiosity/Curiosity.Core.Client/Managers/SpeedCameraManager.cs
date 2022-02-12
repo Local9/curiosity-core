@@ -134,8 +134,7 @@ namespace Curiosity.Core.Client.Managers
                 || vehicleClass == VehicleClass.Boats
                 || vehicleClass == VehicleClass.Helicopters
                 || vehicleClass == VehicleClass.Cycles
-                || vehicleClass == VehicleClass.Trains
-                || vehicleClass == VehicleClass.Emergency;
+                || vehicleClass == VehicleClass.Trains;
         }
 
         private async Task OnSpeedTest() // limiter to show, but not report
