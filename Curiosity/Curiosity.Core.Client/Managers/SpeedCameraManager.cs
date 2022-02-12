@@ -73,7 +73,6 @@ namespace Curiosity.Core.Client.Managers
             if (currentVehicle != vehicle)
                 currentVehicle = vehicle;
 
-            string vehicleDisplayName = GetDisplayNameFromVehicleModel((uint)vehicle.Model.Hash);
             if (IsInvalidVehicle(vehicle)) return;
 
             Instance.AttachTickHandler(OnSpeedTest);
