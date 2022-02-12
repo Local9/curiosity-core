@@ -402,8 +402,9 @@ namespace Curiosity.Core.Server.Managers
                     SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
 
                     bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                    bool isOfficer = curiosityUser.Job == ePlayerJobs.POLICE_OFFICER;
 
-                    if (informPolice && !isPassive)
+                    if (informPolice && !isPassive && !isOfficer)
                     {
                         bool isWreckless = (speed - speedLimit) > (serverConfigManager.PoliceSpeedLimitWarning + 20);
                         // wanted flag so police are not punished
