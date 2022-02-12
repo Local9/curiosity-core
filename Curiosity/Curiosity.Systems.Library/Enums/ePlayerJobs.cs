@@ -8,6 +8,9 @@
         FIRE_FIGHTER,
         DRUG_DEALER,
         TRUCK_DRIVER,
-        PILOT
+        PILOT,
+        FISHING,
+        BUS_DRIVER,
+        TRAIN_CONDUCTOR
     }
 }
