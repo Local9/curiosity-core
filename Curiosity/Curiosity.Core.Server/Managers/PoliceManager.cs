@@ -410,7 +410,10 @@ namespace Curiosity.Core.Server.Managers
                         // wanted flag so police are not punished
 
                         player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 1, true);
-                        player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWreckless, true);
+                        bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+
+                        if (isWreckless)
+                            player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
 
                         SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
 

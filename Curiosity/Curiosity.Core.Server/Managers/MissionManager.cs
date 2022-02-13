@@ -763,30 +763,25 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("mission:assistance:request", new EventCallback(metadata =>
             {
-                MissionData missionData = GetMissionData(metadata.Sender);
-
-                if (missionData == null) return false;
-
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                if (DateTime.Now.Subtract(curiosityUser.LastNotificationBackup).TotalMinutes > 2)
+                if ((API.GetGameTimer() - curiosityUser.LastNotificationBackup) > (1000 * 60) * 2)
                 {
-                    curiosityUser.LastNotificationBackup = DateTime.Now;
+                    curiosityUser.LastNotificationBackup = API.GetGameTimer();
+                    curiosityUser.AssistanceRequested = true;
 
-                    List<CuriosityUser> users = PluginManager.ActiveUsers.Where(x => x.Value.CurrentJob == "police" && x.Value.NotificationBackup).Select(y => y.Value).ToList();
+                    List<CuriosityUser> users = PluginManager.ActiveUsers.Where(x => x.Value.Job == ePlayerJobs.POLICE_OFFICER && x.Value.NotificationBackup).Select(y => y.Value).ToList();
 
                     users.ForEach(u =>
                     {
-                        EventSystem.Send("mission:notification:info", u.Handle, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "bottom-right");
+                        EventSystem.Send("ui:notification", u.Handle, eNotification.NOTIFICATION_SUCCESS, $"Dispatch A.I.<br />Back up request<br />Player {player.Name} has requested back up.", "bottom-right", "snackbar", true);
                     });
                 }
                 else
                 {
-                    EventSystem.Send("mission:notification:warning", metadata.Sender, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right");
+                    EventSystem.Send("ui:notification", metadata.Sender, eNotification.NOTIFICATION_WARNING, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right", "snackbar", true);
                 }
-
-                missionData.AssistanceRequested = true;
 
                 return true;
             }));
@@ -796,24 +791,21 @@ namespace Curiosity.Core.Server.Managers
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 player.State.Set(StateBagKey.PLAYER_ASSISTING, true, true);
 
-                int missionOwnerId = metadata.Find<int>(0);
-
-                if (!ActiveMissions.ContainsKey(missionOwnerId)) return false;
-
-                MissionData missionData = ActiveMissions[missionOwnerId];
-                missionData.AddMember(metadata.Sender);
-
-                return missionData;
+                return null;
             }));
 
             EventSystem.Attach("mission:assistance:list", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-
-                if (curiosityUser.IsDeveloper)
-                    return ActiveMissions.Where(x => x.Value.AssistanceRequested).Select(x => x.Value).ToList();
-
-                return ActiveMissions.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender).Select(x => x.Value).ToList();
+                List<dynamic> curiosityUsersRequesting = new();
+                List<CuriosityUser> curiosityUsers = PluginManager.ActiveUsers.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender && ((API.GetGameTimer() - curiosityUser.LastNotificationBackup) > 1000 * 60 * 2))
+                                                                              .Select(x => x.Value)
+                                                                              .ToList();
+                curiosityUsers.ForEach(u =>
+                {
+                    curiosityUsersRequesting.Add(new { name = u.LatestName, serverId = u.Handle });
+                });
+                return curiosityUsersRequesting;
             }));
 
             EventSystem.Attach("mission:assistance:leave", new EventCallback(metadata =>

@@ -65,7 +65,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsSupporterAccess => IsStaff || IsDonator;
 
         [JsonIgnore] public bool NotificationBackup { get; set; } = false;
-        [JsonIgnore] public DateTime LastNotificationBackup { get; set; }
+        [JsonIgnore] public long LastNotificationBackup { get; set; }
         [JsonIgnore] public int PersonalVehicle { get; set; }
         [JsonIgnore] public int PersonalTrailer { get; set; }
         [JsonIgnore] public int PersonalPlane { get; set; }
@@ -77,6 +77,8 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public int StaffVehicle { get; set; }
         [JsonIgnore] public string JobCallSign { get; set; }
         [JsonIgnore] public ePlayerJobs Job { get; set; }
+        [JsonIgnore] public bool AssistanceRequested { get; set; }
+
         [JsonIgnore] public int CurrentGroup = -1;
     }
 }

@@ -110,7 +110,10 @@ namespace Curiosity.Core.Client.Interface
         {
             Custom("~g~~h~Success~h~~s~: " + message, blink, saveToBrief, 20);
         }
-
+        public static void DispatchAI(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
+        {
+            CustomImage("CHAR_CALL911", "CHAR_CALL911", message, "~b~Dispatch A.I.", subtitle, saveToBrief, blink, iconType, 140);
+        }
         public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, int iconType = 0, int bgColor = 0)
         {
             API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~

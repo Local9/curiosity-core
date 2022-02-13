@@ -55,6 +55,14 @@ namespace Curiosity.Core.Client.Managers
             {
                 Screen.ShowNotification(msg);
             }));
+
+            EventSystem.Attach("mission:notification:warning", new EventCallback(metadata =>
+            {
+                string message = metadata.Find<string>(0);
+                string position = metadata.Find<string>(1);
+                SendNui(eNotification.NOTIFICATION_WARNING, message, position, playSound: true);
+                return null;
+            }));
         }
 
         public void SendNui(eNotification notification, string message, string position = "bottom-right", string theme = "snackbar", int duration = 10000, bool autoClose = true, bool dismissible = false, bool playSound = false)

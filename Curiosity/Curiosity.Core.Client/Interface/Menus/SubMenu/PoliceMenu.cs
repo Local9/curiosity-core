@@ -3,6 +3,7 @@ using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
 using NativeUI;
+using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -15,6 +16,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private UIMenu playerListMenu;
         private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
+
+        UIMenuItem miRequestBackup = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
+
+        private UIMenu menuAssistanceRequesters;
+        private PoliceSubMenu.PoliceBackupMenu _policeBackupMenu = new PoliceSubMenu.PoliceBackupMenu();
+
+        const string COMMAND_ARREST = "lv_police_request_backup";
+
         JobManager jobManager => JobManager.GetModule();
         PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
 
@@ -25,7 +34,28 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             playerListMenu = InteractionMenu.MenuPool.AddSubMenu(m, "Nearby Players");
             _playerListMenu.CreateMenu(playerListMenu);
 
+            //RegisterKeyMapping(COMMAND_ARREST, "POLICE: Request Backup", "keyboard", "");
+            //RegisterCommand(COMMAND_ARREST, new Action(OnRequestBackup), false);
+            //menu.AddItem(miRequestBackup);
+
+            //menuAssistanceRequesters = InteractionMenu.MenuPool.AddSubMenu(m, "Respond to Backup", "Users requesting back up will be found here.");
+            //_policeBackupMenu.CreateMenu(menuAssistanceRequesters);
+
+            menu.OnItemSelect += Menu_OnItemSelect;
+
             return menu;
+        }
+
+        private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == miRequestBackup)
+                OnRequestBackup();
+        }
+
+        private void OnRequestBackup()
+        {
+            EventSystem.Request<bool>("mission:assistance:request");
+            Notify.DispatchAI("Back Up Requested", "We have informed all available officers that you have requested back up at your location.");
         }
 
         public void Init()
