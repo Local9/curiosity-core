@@ -14,7 +14,7 @@ namespace Curiosity.Core.Server.Extensions
         public static void NotificationSuccess(this CuriosityUser user, string message)
         {
 
-            EventSystem.GetModule().Send("ui:notification", user.Handle, eNotification.NOTIFICATION_ANNOUNCEMENT, message, "bottom-right", "snackbar");
+            EventSystem.GetModule().Send("ui:notification", user.Handle, eNotification.NOTIFICATION_SUCCESS, message, "bottom-right", "snackbar", true);
         }
     }
 }
