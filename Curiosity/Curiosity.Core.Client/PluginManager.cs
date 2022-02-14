@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client
         public const string DECOR_PED_OWNER = "PED_OWNER";
 
         private bool IsAfkKickEnabled = false;
+        private int MP_STUN_GUN;
 
         public static PluginManager Instance { get; private set; }
         public static Random Rand = new Random();
@@ -98,6 +99,8 @@ namespace Curiosity.Core.Client
         private async Task Load()
         {
             DiscordRichPresence.Commit();
+
+            MP_STUN_GUN = API.GetHashKey("WEAPON_STUNGUN_MP");
 
             Logger.Info("[Curiosity]: Loading managers, please wait...");
             Logger.Info("[Curiosity]: Version: 2.0.1.3986");
@@ -228,6 +231,8 @@ namespace Curiosity.Core.Client
 
             int vehicleWeapon = -1553120962;
             API.SetWeaponDamageModifierThisFrame((uint)vehicleWeapon, 0.0f);
+            API.SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0.0f);
+            API.SetWeaponDamageModifierThisFrame((uint)MP_STUN_GUN, 0.0f);
 
             Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
             Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
