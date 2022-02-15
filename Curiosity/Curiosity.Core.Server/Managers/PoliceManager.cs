@@ -110,6 +110,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!activate && curiosityUser.Job == ePlayerJobs.POLICE_OFFICER)
                 {
                     curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
+                    curiosityUser.CurrentJob = "Unemployed";
                     curiosityUser.JobCallSign = string.Empty;
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
