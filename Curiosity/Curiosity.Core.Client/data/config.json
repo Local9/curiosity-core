@@ -6,8 +6,8 @@
       "legacyEvent": false
     },
     {
-      "label": "Police Officer [DISABLED]",
-      "jobEvent": "",
+      "label": "Police Officer [Not for wimps]",
+      "jobEvent": "job:police:duty",
       "legacyEvent": false
     }
   ],
