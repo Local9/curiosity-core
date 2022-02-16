@@ -376,8 +376,9 @@ namespace Curiosity.Core.Client.Managers
             //}
 
 
-            float randX = Utility.RANDOM.Next(50, 100);
-            float randY = Utility.RANDOM.Next(50, 100);
+            float randX = Utility.RANDOM.Next(200, 300);
+            float randY = Utility.RANDOM.Next(200, 300);
+
             Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
 
             if (Game.PlayerPed.IsInWater || Game.PlayerPed.IsInAir)
