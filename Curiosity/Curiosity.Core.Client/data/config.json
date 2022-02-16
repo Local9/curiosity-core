@@ -6,7 +6,7 @@
       "legacyEvent": false
     },
     {
-      "label": "Police Officer [Not for wimps]",
+      "label": "Police Officer [PvP ONLY]",
       "jobEvent": "job:police:duty",
       "legacyEvent": false
     }
