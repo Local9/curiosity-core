@@ -27,6 +27,8 @@ namespace Curiosity.Core.Client.Managers
         bool _canSpawn = true;
         NotificationManager NotificationManager => NotificationManager.GetModule();
 
+        public long GameTimeLeftVehicle;
+
         JobManager jobManager => JobManager.GetModule();
 
         VehicleState currentVehicle;
@@ -73,6 +75,7 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
+            GameTimeLeftVehicle = GetGameTimer();
             // spawn
             // delete
 
@@ -452,6 +455,7 @@ namespace Curiosity.Core.Client.Managers
         {
             if (!Cache.PlayerPed.IsInVehicle())
             {
+                GameTimeLeftVehicle = GetGameTimer();
                 lastUpdate = -1;
                 PluginManager.Instance.DetachTickHandler(OnVehicleFuel);
                 PluginManager.Instance.DetachTickHandler(OnVehicleRefuel);

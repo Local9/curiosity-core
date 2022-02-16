@@ -1,11 +1,15 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Managers;
 using NativeUI;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 {
     internal class PolicePlayerInteractionMenu
     {
+        VehicleManager VehicleManager => VehicleManager.GetModule();
+
         EventSystem EventSystem => EventSystem.GetModule();
         UIMenu _menu;
         int _playerServerId;
@@ -38,6 +42,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                 if (Game.PlayerPed.IsDead)
                 {
                     Notify.Alert($"Come on, you're dead, this isn't the Zombie Society.");
+                    return;
+                }
+
+                if ((GetGameTimer() - VehicleManager.GameTimeLeftVehicle) < 2000)
+                {
+                    Interface.Notify.Alert($"Unless you're called Clark Kent, I'm sorry, no more flying arrests.");
                     return;
                 }
 

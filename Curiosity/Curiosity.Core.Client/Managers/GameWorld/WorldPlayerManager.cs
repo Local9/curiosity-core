@@ -12,6 +12,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
     public class WorldPlayerManager : Manager<WorldPlayerManager>
     {
         PlayerOptionsManager PlayerOptionsManager => PlayerOptionsManager.GetModule();
+        VehicleManager VehicleManager => VehicleManager.GetModule();
         JobManager _JobManager => JobManager.GetModule();
 
         public Dictionary<int, WorldPlayer> WorldPlayers = new Dictionary<int, WorldPlayer>();
@@ -39,6 +40,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             if (Game.PlayerPed.IsDead)
             {
                 Interface.Notify.Alert($"Come on, you're dead, this isn't the Zombie Society.");
+                return;
+            }
+
+            if ((GetGameTimer() - VehicleManager.GameTimeLeftVehicle) < 2000)
+            {
+                Interface.Notify.Alert($"Unless you're called Clark Kent, I'm sorry, no more flying arrests.");
                 return;
             }
 
