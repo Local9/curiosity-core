@@ -36,6 +36,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 return;
             }
 
+            if (Game.PlayerPed.IsDead)
+            {
+                Interface.Notify.Alert($"Come on, you're dead, this isn't the Zombie Society.");
+                return;
+            }
+
             Dictionary<int, WorldPlayer> players = new Dictionary<int, WorldPlayer>(WorldPlayers);
 
             foreach (KeyValuePair<int, WorldPlayer> kvp in players)

@@ -35,6 +35,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                     return;
                 }
 
+                if (Game.PlayerPed.IsDead)
+                {
+                    Notify.Alert($"Come on, you're dead, this isn't the Zombie Society.");
+                    return;
+                }
+
                 bool res = await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
                 if (res)
                     InteractionMenu.MenuPool.CloseAllMenus();

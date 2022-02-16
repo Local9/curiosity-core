@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu menuAssistanceRequesters;
         private PoliceSubMenu.PoliceBackupMenu _policeBackupMenu = new PoliceSubMenu.PoliceBackupMenu();
 
-        const string COMMAND_ARREST = "lv_police_request_backup";
+        const string COMMAND_BACKUP = "lv_police_request_backup";
 
         JobManager jobManager => JobManager.GetModule();
         PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
@@ -34,8 +34,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             playerListMenu = InteractionMenu.MenuPool.AddSubMenu(m, "Nearby Players");
             _playerListMenu.CreateMenu(playerListMenu);
 
-            //RegisterKeyMapping(COMMAND_ARREST, "POLICE: Request Backup", "keyboard", "");
-            //RegisterCommand(COMMAND_ARREST, new Action(OnRequestBackup), false);
+            //RegisterKeyMapping(COMMAND_BACKUP, "POLICE: Request Backup", "keyboard", "");
+            //RegisterCommand(COMMAND_BACKUP, new Action(OnRequestBackup), false);
             //menu.AddItem(miRequestBackup);
 
             //menuAssistanceRequesters = InteractionMenu.MenuPool.AddSubMenu(m, "Respond to Backup", "Users requesting back up will be found here.");
