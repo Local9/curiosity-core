@@ -26,7 +26,7 @@ namespace Curiosity.Core.Server.Managers
         private const int MAX_NUMBER_OFFICERS = 20;
         private const int TIME_TIL_CULLING_RESET = (1000 * 10);
         private const int DB_POLICE_SKILL = 5;
-        Dictionary<int, long> playerCullingReset = new();
+        Dictionary<Player, long> playerCullingReset = new();
         const int CALL_SIGN_LENGTH = 4;
 
         public override void Begin()
@@ -286,10 +286,10 @@ namespace Curiosity.Core.Server.Managers
                         tableRows.Add("Officer", attacker.Name);
                         tableRows.Add("Info", "Wanted by Police");
 
-                        SetEntityDistanceCullingRadius(attacker.Character.Handle, 5000f); // make the player visible
+                        SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
-                        if (!playerCullingReset.ContainsKey(attacker.Character.Handle))
-                            playerCullingReset.Add(attacker.Character.Handle, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                        if (!playerCullingReset.ContainsKey(attacker))
+                            playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
                         string notificationTable = CreateBasicNotificationTable("Innocent Killed by Officer!", tableRows);
                         SendNotification(SEND_JOB_ONLY, notificationTable);
@@ -314,10 +314,10 @@ namespace Curiosity.Core.Server.Managers
                     attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                     attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
 
-                    SetEntityDistanceCullingRadius(attacker.Character.Handle, 5000f); // make the player visible
+                    SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
-                    if (!playerCullingReset.ContainsKey(attacker.Character.Handle))
-                        playerCullingReset.Add(attacker.Character.Handle, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                    if (!playerCullingReset.ContainsKey(attacker))
+                        playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
                     string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
                     SendNotification(SEND_JOB_ONLY, notificationTable);
@@ -415,10 +415,10 @@ namespace Curiosity.Core.Server.Managers
                         if (isWreckless)
                             player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
 
-                        SetEntityDistanceCullingRadius(player.Character.Handle, 5000f); // make the player visible
+                        SetEntityDistanceCullingRadius(player.Character.Handle, 15000f); // make the player visible
 
-                        if (!playerCullingReset.ContainsKey(player.Character.Handle))
-                            playerCullingReset.Add(player.Character.Handle, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                        if (!playerCullingReset.ContainsKey(player))
+                            playerCullingReset.Add(player, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
@@ -452,14 +452,20 @@ namespace Curiosity.Core.Server.Managers
             }
             else
             {
-                foreach (KeyValuePair<int, long> kvp in playerCullingReset.ToArray())
+                foreach (KeyValuePair<Player, long> kvp in playerCullingReset.ToArray())
                 {
                     try
                     {
                         if (kvp.Value < GetGameTimer())
                         {
-                            if (DoesEntityExist(kvp.Key))
-                                SetEntityDistanceCullingRadius(kvp.Key, 0f);
+                            Player player = kvp.Key;
+
+                            if (player.Character is not null)
+                            {
+                                int handle = player.Character.Handle;
+                                if (DoesEntityExist(handle))
+                                    SetEntityDistanceCullingRadius(handle, 0f);
+                            }
 
                             playerCullingReset.Remove(kvp.Key);
                         }
