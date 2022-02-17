@@ -225,8 +225,8 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 if (curiosityUser != null)
                 {
-                    await Database.Store.SkillDatabase.Adjust(curiosityUser.Character.CharacterId, DB_POLICE_SKILL, 100);
-                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500);
+                    await Database.Store.SkillDatabase.Adjust(curiosityUser.Character.CharacterId, DB_POLICE_SKILL, 250);
+                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 2500);
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' jailed by '{curiosityUser.LatestName}'");
                 }
 
