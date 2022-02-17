@@ -1,6 +1,4 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Environment.Data;
 using Curiosity.Core.Server.Events;
@@ -9,12 +7,13 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Police;
+using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Systems.Library.Utils;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -99,7 +98,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     curiosityUser.Job = ePlayerJobs.POLICE_OFFICER;
-                    await SetUserJobText(metadata.Sender, "Police Officer");
+                    await SetUserJobText(metadata.Sender, "Police Officer [PvP]");
                     player.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                     SendNotification(metadata.Sender, $"Welcome to the force.");
@@ -517,7 +516,7 @@ namespace Curiosity.Core.Server.Managers
             return sb.ToString();
         }
 
-        private async Task<bool> SetUserJobText(int playerServerId, string jobText)
+        public async Task<bool> SetUserJobText(int playerServerId, string jobText)
         {
             if (!PluginManager.ActiveUsers.ContainsKey(playerServerId)) return false;
 
@@ -526,6 +525,7 @@ namespace Curiosity.Core.Server.Managers
             switch (jobText)
             {
                 case "Police Officer":
+                case "Police Officer [PvP]":
                     string concatJob = string.Concat(jobText.Where(c => char.IsUpper(c)));
                     string randomStr = await CreateUniqueCallSign();
                     curiosityUser.JobCallSign = $"{concatJob}-{randomStr}";

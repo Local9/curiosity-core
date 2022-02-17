@@ -1,8 +1,8 @@
 ﻿namespace Curiosity.Systems.Library.Enums
 {
-    public enum ePlayerJobs
+    public enum ePlayerJobs : uint
     {
-        UNEMPLOYED,
+        UNEMPLOYED = 0,
         POLICE_OFFICER,
         EMT,
         FIRE_FIGHTER,
@@ -11,6 +11,7 @@
         PILOT,
         FISHING,
         BUS_DRIVER,
-        TRAIN_CONDUCTOR
+        TRAIN_CONDUCTOR,
+        BEAT_COP
     }
 }

@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class JobManager : Manager<JobManager>
     {
-        private const string JOB_POLICE = "Police Officer";
+        private const string JOB_POLICE = "Police Officer [PvP]";
         internal bool IsOnDuty = false;
         internal bool IsOfficer = false;
         internal bool WasOfficer = false;

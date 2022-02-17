@@ -82,6 +82,8 @@ namespace Curiosity.Core.Server.Managers
                     user.CurrentJob = job;
                     user.Job = (ePlayerJobs)jobHandle;
 
+                    PoliceManager.GetModule().SetUserJobText(playerId, job);
+
                     return true;
                 }));
         }
