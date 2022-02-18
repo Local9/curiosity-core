@@ -293,6 +293,10 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
             PluginManager.Instance.AttachTickHandler(OnDisableDriveBy);
+
+            uint weapHash = 0;
+            GetCurrentPedVehicleWeapon(Game.PlayerPed.Handle, ref weapHash);
+            DisableVehicleWeapon(true, weapHash, veh.Vehicle.Handle, Game.PlayerPed.Handle);
         }
 
         private async Task OnDisableDriveBy()
