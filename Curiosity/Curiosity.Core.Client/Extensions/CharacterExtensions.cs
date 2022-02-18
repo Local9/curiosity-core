@@ -161,7 +161,7 @@ namespace Curiosity.Core.Client.Extensions
 
             foreach (KeyValuePair<int, float> keyValuePair in character.Features)
             {
-                API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
+                API.SetPedFaceFeature(playerPedId, keyValuePair.Key, keyValuePair.Value);
             }
 
             API.ClearPedFacialDecorations(playerPedId);
