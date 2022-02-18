@@ -81,6 +81,12 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 // loop over them
                 foreach (VehicleMod mod in vehicleMods)
                 {
+                    if (mod.ModType == VehicleModType.Tank)
+                    {
+                        RemoveVehicleMod(vehicle.Handle, (int)VehicleModType.Tank);
+                        continue;
+                    }
+
                     if (mod.ModType == VehicleModType.FrontWheel && uiLstWheelType is null)
                     {
                         if (!vehicle.Model.IsBoat && !vehicle.Model.IsHelicopter && !vehicle.Model.IsPlane && !vehicle.Model.IsBicycle && !vehicle.Model.IsTrain)

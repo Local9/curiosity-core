@@ -215,7 +215,7 @@ namespace Curiosity.Core.Client.Extensions
                     {
                         vehicleInfo.mods.ToList().ForEach(mod =>
                         {
-                            if (vehicle != null && vehicle.Exists())
+                            if (vehicle != null && vehicle.Exists() && mod.Key != (int)VehicleModType.Tank)
                                 SetVehicleMod(vehicle.Handle, mod.Key, mod.Value, vehicleInfo.customWheels);
                         });
                     }
