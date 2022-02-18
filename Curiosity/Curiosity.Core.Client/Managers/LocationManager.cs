@@ -86,6 +86,8 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
+                await Session.Loading();
+
                 if (MarkersAll.Count > 0)
                 {
                     BlipManager.ManagerInstance.RemoveAllBlips();
@@ -152,7 +154,8 @@ namespace Curiosity.Core.Client.Managers
                     });
                 }
 
-                InteractionMenu.MenuInstance.UpdateGpsMenuItem(true);
+                if (InteractionMenu.MenuInstance is not null)
+                    InteractionMenu.MenuInstance.UpdateGpsMenuItem(true);
             }
             catch (Exception ex)
             {

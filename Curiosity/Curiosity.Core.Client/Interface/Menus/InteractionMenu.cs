@@ -355,85 +355,92 @@ namespace Curiosity.Core.Client.Interface.Menus
         // Menu Items
         public void UpdateGpsMenuItem(bool reset = false)
         {
-            if (reset)
+            try
             {
-                gpsLocations.Clear();
-            }
-
-            if (gpsLocations.Count > 0) return;
-
-            foreach (KeyValuePair<string, List<Position>> kvp in BlipManager.ManagerInstance.Locations)
-            {
-                if (!gpsLocations.Contains(kvp.Key))
-                    gpsLocations.Add(kvp.Key);
-            }
-
-            if (!gpsLocations.Contains(PERSONAL_VEHICLE))
-            {
-                if (Cache.PersonalVehicle is not null)
+                if (reset)
                 {
-                    Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
-                    if (vehicle?.Exists() ?? false)
+                    gpsLocations.Clear();
+                }
+
+                if (gpsLocations.Count > 0) return;
+
+                foreach (KeyValuePair<string, List<Position>> kvp in BlipManager.ManagerInstance.Locations)
+                {
+                    if (!gpsLocations.Contains(kvp.Key))
+                        gpsLocations.Add(kvp.Key);
+                }
+
+                if (!gpsLocations.Contains(PERSONAL_VEHICLE))
+                {
+                    if (Cache.PersonalVehicle is not null)
                     {
-                        gpsLocations.Add(PERSONAL_VEHICLE);
+                        Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
+                        if (vehicle?.Exists() ?? false)
+                        {
+                            gpsLocations.Add(PERSONAL_VEHICLE);
+                        }
                     }
                 }
-            }
 
-            if (!gpsLocations.Contains(PERSONAL_BOAT))
-            {
-                if (Cache.PersonalBoat is not null)
+                if (!gpsLocations.Contains(PERSONAL_BOAT))
                 {
-                    Vehicle vehicle = Cache.PersonalBoat.Vehicle;
-                    if (vehicle?.Exists() ?? false)
+                    if (Cache.PersonalBoat is not null)
                     {
-                        gpsLocations.Add(PERSONAL_BOAT);
+                        Vehicle vehicle = Cache.PersonalBoat.Vehicle;
+                        if (vehicle?.Exists() ?? false)
+                        {
+                            gpsLocations.Add(PERSONAL_BOAT);
+                        }
                     }
                 }
-            }
 
-            if (!gpsLocations.Contains(PERSONAL_HELICOPTER))
-            {
-                if (Cache.PersonalHelicopter is not null)
+                if (!gpsLocations.Contains(PERSONAL_HELICOPTER))
                 {
-                    Vehicle vehicle = Cache.PersonalHelicopter.Vehicle;
-                    if (vehicle?.Exists() ?? false)
+                    if (Cache.PersonalHelicopter is not null)
                     {
-                        gpsLocations.Add(PERSONAL_HELICOPTER);
+                        Vehicle vehicle = Cache.PersonalHelicopter.Vehicle;
+                        if (vehicle?.Exists() ?? false)
+                        {
+                            gpsLocations.Add(PERSONAL_HELICOPTER);
+                        }
                     }
                 }
-            }
 
-            if (!gpsLocations.Contains(PERSONAL_PLANE))
-            {
-                if (Cache.PersonalPlane is not null)
+                if (!gpsLocations.Contains(PERSONAL_PLANE))
                 {
-                    Vehicle vehicle = Cache.PersonalPlane.Vehicle;
-                    if (vehicle?.Exists() ?? false)
+                    if (Cache.PersonalPlane is not null)
                     {
-                        gpsLocations.Add(PERSONAL_PLANE);
+                        Vehicle vehicle = Cache.PersonalPlane.Vehicle;
+                        if (vehicle?.Exists() ?? false)
+                        {
+                            gpsLocations.Add(PERSONAL_PLANE);
+                        }
                     }
                 }
-            }
 
-            if (!gpsLocations.Contains(PERSONAL_TRAILER))
-            {
-                if (Cache.PersonalTrailer is not null)
+                if (!gpsLocations.Contains(PERSONAL_TRAILER))
                 {
-                    Vehicle vehicle = Cache.PersonalTrailer.Vehicle;
-                    if (vehicle?.Exists() ?? false)
+                    if (Cache.PersonalTrailer is not null)
                     {
-                        gpsLocations.Add(PERSONAL_TRAILER);
+                        Vehicle vehicle = Cache.PersonalTrailer.Vehicle;
+                        if (vehicle?.Exists() ?? false)
+                        {
+                            gpsLocations.Add(PERSONAL_TRAILER);
+                        }
                     }
                 }
+
+                if (gpsLocations.Count > 1)
+                {
+                    gpsLocations.Sort((x, y) => string.Compare(x, y));
+
+                    mlGpsLocations.Items = gpsLocations;
+                    mlGpsLocations.Index = gpsIndex;
+                }
             }
-
-            if (gpsLocations.Count > 1)
+            catch (Exception ex)
             {
-                gpsLocations.Sort((x, y) => string.Compare(x, y));
-
-                mlGpsLocations.Items = gpsLocations;
-                mlGpsLocations.Index = gpsIndex;
+                Logger.Error(ex, $"UpdateGpsMenuItems");
             }
         }
     }
