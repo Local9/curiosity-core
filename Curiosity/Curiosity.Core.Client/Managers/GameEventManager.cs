@@ -285,6 +285,8 @@ namespace Curiosity.Core.Client.Managers
 
         Vector3 CameraOffset = new Vector3();
 
+        bool wasKilledByPlayer = false;
+
         public override void Begin()
         {
             GameEventManager.OnDeath += GameEventManager_OnDeath;
@@ -328,11 +330,15 @@ namespace Curiosity.Core.Client.Managers
                 if (victim == attacker) return;
                 if (attacker != Game.Player) return;
 
+
                 int hash = (int)weaponInfoHash;
 
                 string causeOfDeath = "Unknown";
                 if (DeathHash.CauseOfDeath.ContainsKey(hash))
                     causeOfDeath = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+
+                Cache.Player.Character.IsDead = true;
+                wasKilledByPlayer = true;
 
                 EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId, causeOfDeath);
             }
@@ -348,6 +354,7 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Send("character:death");
 
             Cache.Player.Character.IsDead = true;
+            wasKilledByPlayer = false;
 
             CreateCamera();
 
@@ -375,9 +382,14 @@ namespace Curiosity.Core.Client.Managers
             //    spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
             //}
 
-
             float randX = Utility.RANDOM.Next(200, 300);
             float randY = Utility.RANDOM.Next(200, 300);
+
+            if (!wasKilledByPlayer)
+            {
+                randX = Utility.RANDOM.Next(10, 50);
+                randY = Utility.RANDOM.Next(10, 50);
+            }
 
             Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
 
@@ -408,6 +420,9 @@ namespace Curiosity.Core.Client.Managers
             //if (safeCoord != Vector3.Zero)
             //    spawnLocation = safeCoord;
 
+            Cache.Player.Character.IsDead = false;
+            wasKilledByPlayer = false;
+
             curiosityPlayer.Character.Revive(new Position(entityPos.X, entityPos.Y, entityPos.Z, Game.PlayerPed.Heading));
             BaseScript.TriggerEvent("onPlayerResurrected", "hospital");
             Cache.PlayerPed.FadeIn();
@@ -428,6 +443,9 @@ namespace Curiosity.Core.Client.Managers
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Cache.PlayerPed.Heading));
 
             RemoveCamera();
+
+            Cache.Player.Character.IsDead = false;
+            wasKilledByPlayer = false;
 
             await BaseScript.Delay(1000);
 
