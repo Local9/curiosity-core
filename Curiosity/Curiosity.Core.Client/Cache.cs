@@ -48,7 +48,8 @@ namespace Curiosity.Core.Client
             PlayerPed = new Ped(PlayerPedId());
             _ped = PlayerPed;
 
-            Player.Entity = new CuriosityEntity(_ped.Handle);
+            if (Player is not null)
+                Player.Entity = new CuriosityEntity(_ped.Handle);
 
             if (export)
             {
