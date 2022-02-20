@@ -263,6 +263,8 @@ namespace Curiosity.Core.Client.Managers
             }
 
             DisablePlayerFiring(Game.Player.Handle, WeaponsDisabled);
+            DisableControlAction(0, 140, WeaponsDisabled);
+            DisableControlAction(2, 140, WeaponsDisabled);
             DisableControlAction(0, 22, WeaponsDisabled);
             DisableControlAction(2, 22, WeaponsDisabled);
             DisableControlAction(0, 24, WeaponsDisabled);
