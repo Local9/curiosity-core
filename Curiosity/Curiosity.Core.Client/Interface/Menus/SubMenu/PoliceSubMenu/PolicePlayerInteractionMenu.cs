@@ -51,6 +51,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
                     return;
                 }
 
+                if (Game.PlayerPed.IsRagdoll)
+                {
+                    Interface.Notify.Alert($"You need to be on your feet to make an arrest.");
+                    return;
+                }
+
                 bool res = await EventSystem.Request<bool>("police:suspect:jailed", _playerServerId);
                 if (res)
                     InteractionMenu.MenuPool.CloseAllMenus();

@@ -49,6 +49,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 return;
             }
 
+            if (Game.PlayerPed.IsRagdoll)
+            {
+                Interface.Notify.Alert($"You need to be on your feet to make an arrest.");
+                return;
+            }
+
             Dictionary<int, WorldPlayer> players = new Dictionary<int, WorldPlayer>(WorldPlayers);
 
             foreach (KeyValuePair<int, WorldPlayer> kvp in players)
