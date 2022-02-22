@@ -472,5 +472,50 @@ namespace Curiosity.Core.Client.Managers
                 EnableDispatchService((int)dispatchTypes[i], toggle);
             }
         }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnPedManagement()
+        {
+            try
+            {
+                SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0f);
+                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 50f)).ToList();
+
+                if (peds.Count == 0)
+                {
+                    await BaseScript.Delay(100);
+                    return;
+                }
+
+                foreach (CitizenFX.Core.Ped ped in peds)
+                {
+                    if (ped.IsInVehicle()) continue;
+
+                    if (!IsEntityStatic(ped.Handle))
+                    {
+                        ped.CanWrithe = false;
+                        ped.DropsWeaponsOnDeath = false;
+
+                        if (ped.IsBeingStunned)
+                        {
+                            // ped.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+
+                            ped.Health = ped.MaxHealth;
+                            ped.ClearBloodDamage();
+                        }
+
+                        if (ped.IsInjured)
+                        {
+                            ReviveInjuredPed(ped.Handle);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Cache.UpdatePedId();
+                Logger.Error($"OnPedManagement -> {ex}");
+            }
+        }
     }
 }
