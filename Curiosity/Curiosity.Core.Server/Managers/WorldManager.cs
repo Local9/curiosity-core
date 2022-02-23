@@ -150,7 +150,7 @@ namespace Curiosity.Core.Server.Managers
                     WeatherSeason season = WeatherData.GetCurrentSeason();
                     List<WeatherType> weatherTypes = WeatherData.SeasonalWeather[season];
 
-                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SPRING)
+                    if (numberOfWeatherCyclesProcessed == 3 && season == WeatherSeason.SPRING)
                     {
                         if (Utility.RANDOM.Bool(.2f))
                             weatherTypes.Add(WeatherType.RAINING);
@@ -158,12 +158,12 @@ namespace Curiosity.Core.Server.Managers
                             weatherTypes.Add(WeatherType.CLEARING);
                     }
 
-                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
+                    if (numberOfWeatherCyclesProcessed == 3 && season == WeatherSeason.SUMMER && Utility.RANDOM.Bool(.1f))
                     {
                         weatherTypes.Add(WeatherType.RAINING);
                     }
 
-                    if (numberOfWeatherCyclesProcessed % 3 == 0 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
+                    if (numberOfWeatherCyclesProcessed == 3 && season == WeatherSeason.AUTUMN && Utility.RANDOM.Bool(.1f))
                     {
                         if (Utility.RANDOM.Bool(.15f))
                             weatherTypes.Add(WeatherType.RAINING);
@@ -177,6 +177,7 @@ namespace Curiosity.Core.Server.Managers
                     ToggleChristmasResources();
                 }
             }
+
             numberOfWeatherCyclesProcessed++;
 
             if (numberOfWeatherCyclesProcessed > 7)
