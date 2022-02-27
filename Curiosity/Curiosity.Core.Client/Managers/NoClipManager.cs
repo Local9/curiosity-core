@@ -128,9 +128,8 @@ namespace Curiosity.Core.Client.Managers
                             await droneModel.Request(5000);
 
                         droneProp = await World.CreateProp(droneModel, ped.Position, false, false);
-                        droneProp.AttachTo(ped, new Vector3(0f, 0f, .5f), new Vector3(0f, 0f, 180f));
+                        droneProp.AttachTo(ped, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 180f));
                         droneProp.IsPositionFrozen = true;
-                        API.SetEntityLocallyInvisible(droneProp.Handle);
                     }
                 }
 
@@ -202,6 +201,11 @@ namespace Curiosity.Core.Client.Managers
 
                 ped.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
 
+                if (droneProp is not null)
+                {
+                    if (droneProp.Exists())
+                        API.SetEntityLocallyInvisible(droneProp.Handle);
+                }
                 API.DisablePlayerFiring(Game.Player.Handle, false);
             }
             catch (Exception ex)
