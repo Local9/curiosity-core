@@ -19,6 +19,7 @@ namespace Curiosity.Core.Server.Managers
 {
     public class PoliceManager : Manager<PoliceManager>
     {
+        const long TWO_MINUTES = (1000 * 60) * 2;
         ServerConfigManager serverConfigManager => ServerConfigManager.GetModule();
         DiscordClient discordClient => DiscordClient.GetModule();
 
@@ -155,7 +156,7 @@ namespace Curiosity.Core.Server.Managers
                 if (policeTicket is null)
                 {
                     Logger.Error("police:suspect:ticket:pay => Invalid Ticket");
-                    em.error = "Ticket not found";
+                    em.error = "Ticket not found, or has already been paid. Please refresh your tickets.";
                     return em;
                 }
 
@@ -189,6 +190,9 @@ namespace Curiosity.Core.Server.Managers
                     Player player = PluginManager.PlayersList[suspectServerId];
                     if (player == null) return false;
 
+                    Player officer = PluginManager.PlayersList[metadata.Sender];
+                    if (officer == null) return false;
+
                     bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
                     if (isPlayerJailed) return false;
 
@@ -200,10 +204,26 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     if (curiosityUser != null)
                     {
-                        await Database.Store.SkillDatabase.Adjust(curiosityUser.Character.CharacterId, DB_POLICE_SKILL, 250);
-                        await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 2500);
+                        int userCharacterId = curiosityUser.Character.CharacterId;
+                        await Database.Store.SkillDatabase.Adjust(userCharacterId, DB_POLICE_SKILL, 250);
+                        await Database.Store.BankDatabase.Adjust(userCharacterId, 2500);
                         discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' jailed by '{curiosityUser.LatestName}'");
-                        SendNotification(message: $"{player.Name} jailed by {curiosityUser.LatestName}");
+                        SendNotification(message: $"{player.Name} has been jailed by {curiosityUser.LatestName}");
+
+                        Vector3 position = officer.Character.Position;
+                        List<Player> players = Instance.GetPlayersInRange(position, 50f);
+
+                        foreach(Player p in players)
+                        {
+                            int handle = int.Parse(p.Handle);
+                            if (!PluginManager.ActiveUsers.ContainsKey(handle)) continue;
+                            CuriosityUser cUser = PluginManager.ActiveUsers[handle];
+                            int characterId = cUser.Character.CharacterId;
+                            await Database.Store.SkillDatabase.Adjust(characterId, DB_POLICE_SKILL, 125);
+                            await Database.Store.BankDatabase.Adjust(characterId, 1250);
+                            SendNotification(handle, message: $"You have been awarded for assisting in an arrest.", notification: eNotification.NOTIFICATION_SUCCESS);
+                        }
+
                     }
 
                     return true;
@@ -327,7 +347,7 @@ namespace Curiosity.Core.Server.Managers
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 curiosityUser.DisableNotifications = !curiosityUser.DisableNotifications;
-                return true;
+                return curiosityUser.DisableNotifications;
             }));
 
             EventSystem.Attach("police:player:isJailed", new AsyncEventCallback(async metadata =>
@@ -439,6 +459,26 @@ namespace Curiosity.Core.Server.Managers
             RETURN_MESSAGE:
                 return em;
             }));
+
+            EventSystem.Attach("mission:assistance:list", new EventCallback(metadata =>
+            {
+                long gameTimer = GetGameTimer();
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                List<GenericUserListItem> curiosityUsersRequesting = new();
+                List<CuriosityUser> users = GetUsersWhoArePolice();
+
+                foreach (CuriosityUser user in users)
+                {
+                    if (!user.AssistanceRequested) continue;
+                    if ((gameTimer - user.LastNotificationBackup) > TWO_MINUTES) continue;
+
+                    GenericUserListItem genericUserListItem = new();
+                    genericUserListItem.Name = user.LatestName;
+                    genericUserListItem.ServerId = user.Handle;
+                }
+
+                return curiosityUsersRequesting;
+            }));
         }
 
         private async Task SendSuspectToJail(int suspectServerId, Player player)
@@ -472,42 +512,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(100);
         }
 
-        [TickHandler]
-        private async Task OnPlayerCullingReset()
-        {
-            if (playerCullingReset.Count == 0)
-            {
-                await BaseScript.Delay(5000);
-            }
-            else
-            {
-                foreach (KeyValuePair<Player, long> kvp in playerCullingReset.ToArray())
-                {
-                    try
-                    {
-                        if (kvp.Value < GetGameTimer())
-                        {
-                            Player player = kvp.Key;
-
-                            if (player.Character is not null)
-                            {
-                                int handle = player.Character.Handle;
-                                if (DoesEntityExist(handle))
-                                    SetEntityDistanceCullingRadius(handle, 0f);
-                            }
-
-                            playerCullingReset.Remove(kvp.Key);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        playerCullingReset.Remove(kvp.Key);
-                    }
-                }
-            }
-        }
-
-        void SendNotification(int serverId = -1, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 10000, int vehicleNetId = -1)
+        void SendNotification(int serverId = -1, string message = "", eNotification notification = eNotification.NOTIFICATION_INFO, int duration = 5000, int vehicleNetId = -1)
         {
             if (serverId == -1) // all
             {
@@ -534,6 +539,13 @@ namespace Curiosity.Core.Server.Managers
             return PluginManager.ActiveUsers
                 .Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER && !y.Value.DisableNotifications)
                 .Select(x => x.Key).ToList();
+        }
+
+        List<CuriosityUser> GetUsersWhoArePolice()
+        {
+            return PluginManager.ActiveUsers
+                .Where(y => y.Value.Job == ePlayerJobs.POLICE_OFFICER)
+                .Select(x => x.Value).ToList();
         }
 
         string CreateBasicNotificationTable(string heading, Dictionary<string, string> rows)

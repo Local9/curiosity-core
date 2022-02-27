@@ -406,16 +406,6 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
-                    bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
-
-                    if (userHadMission)
-                    {
-                        MissionData mission = MissionManager.ActiveMissions[playerHandle];
-                        foreach (int partyMember in mission.PartyMembers)
-                        {
-                            EventSystem.Send("mission:backup:completed", partyMember);
-                        }
-                    }
 
                     if (curUser.PersonalVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
                     await BaseScript.Delay(100);
@@ -429,9 +419,6 @@ namespace Curiosity.Core.Server.Managers
                     await BaseScript.Delay(100);
                     if (curUser.StaffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(curUser.StaffVehicle);
 
-                    bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
-                    bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
-
                     if (API.GetResourceState("npwd") == "started")
                     {
                         if (Instance.ExportDictionary["npwd"] is not null)
@@ -444,7 +431,7 @@ namespace Curiosity.Core.Server.Managers
                     QueueManager.GetModule().OnPlayerDropped(player, reason);
 
                     ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");
-                    Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
+                    Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}");
                 }
             }
             catch (Exception ex)

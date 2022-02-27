@@ -40,7 +40,6 @@ namespace Curiosity.Core.Server.Web
         static Request request = new Request();
         public Dictionary<WebhookChannel, DiscordWebhook> Webhooks = new Dictionary<WebhookChannel, DiscordWebhook>();
         static DateTime lastUpdate = DateTime.Now;
-        static string DATE_FORMAT = "yyyy-MM-dd HH:mm";
         static bool IsDelayRunnning = false;
         static long DelayMillis = 0;
 

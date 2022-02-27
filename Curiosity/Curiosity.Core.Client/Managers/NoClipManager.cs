@@ -114,7 +114,7 @@ namespace Curiosity.Core.Client.Managers
                 if (CurrentCamera == null)
                 {
                     CurrentCamera = World.CreateCamera(ped.Position, GameplayCamera.Rotation, 75f);
-                    CurrentCamera.AttachTo(ped, Vector3.Zero);
+                    CurrentCamera.AttachTo(ped, new Vector3(0f, 0f, 0.5f));
                     World.RenderingCamera = CurrentCamera;
                     ped.IsPositionFrozen = true;
                     ped.IsCollisionEnabled = false;
@@ -128,7 +128,7 @@ namespace Curiosity.Core.Client.Managers
                             await droneModel.Request(5000);
 
                         droneProp = await World.CreateProp(droneModel, ped.Position, false, false);
-                        droneProp.AttachTo(ped, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 180f));
+                        droneProp.AttachTo(ped, new Vector3(0f, 0f, 0.5f), new Vector3(0f, 0f, 180f));
                         droneProp.IsPositionFrozen = true;
                     }
                 }

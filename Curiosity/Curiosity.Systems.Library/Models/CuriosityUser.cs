@@ -78,7 +78,7 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public string JobCallSign { get; set; }
         [JsonIgnore] public ePlayerJobs Job { get; set; }
         [JsonIgnore] public bool AssistanceRequested { get; set; }
-        [JsonIgnore] public bool DisableNotifications { get; set; }
+        [JsonIgnore] public bool DisableNotifications { get; set; } = false;
 
         [JsonIgnore] public int CurrentGroup = -1;
     }

@@ -14,10 +14,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private UIMenu menu;
         EventSystem EventSystem => EventSystem.GetModule();
 
+        bool openedViaKeyboard = false;
+
         private UIMenu playerListMenu;
         private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
 
         UIMenuItem miRequestBackup = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
+        UIMenuItem miCodeFour = new UIMenuItem("Code 4: All Clear", "This will allow the system to know there is no further assistance required.");
         UIMenuCheckboxItem miDisableNotifications = new UIMenuCheckboxItem("Notifications", true, "Toggle Notifications");
 
         private UIMenu menuAssistanceRequesters;
@@ -37,34 +40,56 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             menu.AddItem(miDisableNotifications);
 
-            //RegisterKeyMapping(COMMAND_BACKUP, "POLICE: Request Backup", "keyboard", "");
-            //RegisterCommand(COMMAND_BACKUP, new Action(OnRequestBackup), false);
-            //menu.AddItem(miRequestBackup);
+            RegisterKeyMapping(COMMAND_BACKUP, "POLICE: Request Backup", "keyboard", "");
+            RegisterCommand(COMMAND_BACKUP, new Action(OnRequestBackup), false);
+            menu.AddItem(miRequestBackup);
+            menu.AddItem(miCodeFour);
 
-            //menuAssistanceRequesters = InteractionMenu.MenuPool.AddSubMenu(m, "Respond to Backup", "Users requesting back up will be found here.");
-            //_policeBackupMenu.CreateMenu(menuAssistanceRequesters);
+            menuAssistanceRequesters = InteractionMenu.MenuPool.AddSubMenu(m, "Respond to Backup", "Users requesting back up will be found here.");
+            _policeBackupMenu.CreateMenu(menuAssistanceRequesters);
 
             menu.OnItemSelect += Menu_OnItemSelect;
+            menu.OnCheckboxChange += Menu_OnCheckboxChange;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             return menu;
         }
 
-        private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (selectedItem == miRequestBackup)
-                OnRequestBackup();
-            else if (selectedItem == miDisableNotifications)
+            if (openedViaKeyboard && state == MenuState.ChangeBackward)
             {
-                bool res = await EventSystem.Request<bool>("police:report:notification:toggle");
-                if (res)
-                    Notify.Success($"Police Notification State has been changed");
+                openedViaKeyboard = false;
+                menu.Visible = false;
+                InteractionMenu.MenuPool.CloseAllMenus();
             }
         }
 
-        private void OnRequestBackup()
+        private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
-            EventSystem.Request<bool>("mission:assistance:request");
-            Notify.DispatchAI("Back Up Requested", "We have informed all available officers that you have requested back up at your location.");
+            if (checkboxItem == miDisableNotifications)
+            {
+                bool res = await EventSystem.Request<bool>("police:report:notification:toggle");
+                if (res)
+                    Notify.Success($"Police Notification: ~r~Disabled");
+                if (!res)
+                    Notify.Success($"Police Notification: ~g~Enabled");
+            }
+        }
+
+        private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == miRequestBackup)
+                OnRequestBackup();
+            else if (selectedItem == miCodeFour)
+                EventSystem.Send("mission:assistance:codefour");
+        }
+
+        private async void OnRequestBackup()
+        {
+            bool result = await EventSystem.Request<bool>("mission:assistance:request");
+            if (result)
+                Notify.DispatchAI("Back Up Requested", "We have informed all available officers that you have requested back up to your location.");
         }
 
         public void Init()
@@ -95,15 +120,17 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 {
                     if (ControlHelper.IsControlJustPressed(Control.Context, true, ControlModifier.Alt))
                     {
+                        openedViaKeyboard = false;
                         menu.Visible = false;
                         InteractionMenu.MenuPool.CloseAllMenus();
                     }
                 }
-                else if (!menu.Visible)
+                else if (!menu.Visible && !InteractionMenu.MenuPool.IsAnyMenuOpen())
                 {
                     if (ControlHelper.IsControlJustPressed(Control.Context, true, ControlModifier.Alt))
                     {
                         menu.Visible = true;
+                        openedViaKeyboard = true;
                     }
                 }
             }
