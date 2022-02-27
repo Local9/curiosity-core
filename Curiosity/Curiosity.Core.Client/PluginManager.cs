@@ -172,6 +172,7 @@ namespace Curiosity.Core.Client
                 AttachTickHandlers(this);
 
                 API.DecorRegister(DECOR_PED_OWNER, 3);
+                API.DecorRegister("Player_Vehicle", 3);
 
                 Logger.Info("Load method has been completed.");
             }

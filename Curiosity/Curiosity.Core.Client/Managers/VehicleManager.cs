@@ -1191,6 +1191,11 @@ namespace Curiosity.Core.Client.Managers
                 vehicle.IsPositionFrozen = false;
                 vehicle.IsCollisionEnabled = true;
 
+                if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
+                {
+                    API.DecorSetInt(vehicle.Handle, "Player_Vehicle", -1);
+                }
+
                 if (velocity == 0f)
                 {
                     vehicle.Position = returnedSpawnPosition;
