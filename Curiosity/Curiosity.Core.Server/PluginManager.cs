@@ -566,5 +566,11 @@ namespace Curiosity.Core.Server
                 Logger.Success($"Accounts saved");
             }
         }
+
+        List<Player> GetPlayersInRange(Vector3 position, float range)
+        {
+            Player[] players = PluginManager.PlayersList.ToArray();
+            return players.Where(x => Vector3.Distance(x.Character.Position, position) <= range).ToList();
+        }
     }
 }
