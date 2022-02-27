@@ -18,6 +18,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private PoliceSubMenu.PolicePlayerListMenu _playerListMenu = new PoliceSubMenu.PolicePlayerListMenu();
 
         UIMenuItem miRequestBackup = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
+        UIMenuCheckboxItem miDisableNotifications = new UIMenuCheckboxItem("Notifications", true, "Toggle Notifications");
 
         private UIMenu menuAssistanceRequesters;
         private PoliceSubMenu.PoliceBackupMenu _policeBackupMenu = new PoliceSubMenu.PoliceBackupMenu();
@@ -34,6 +35,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             playerListMenu = InteractionMenu.MenuPool.AddSubMenu(m, "Nearby Players");
             _playerListMenu.CreateMenu(playerListMenu);
 
+            menu.AddItem(miDisableNotifications);
+
             //RegisterKeyMapping(COMMAND_BACKUP, "POLICE: Request Backup", "keyboard", "");
             //RegisterCommand(COMMAND_BACKUP, new Action(OnRequestBackup), false);
             //menu.AddItem(miRequestBackup);
@@ -46,10 +49,16 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             return menu;
         }
 
-        private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             if (selectedItem == miRequestBackup)
                 OnRequestBackup();
+            else if (selectedItem == miDisableNotifications)
+            {
+                bool res = await EventSystem.Request<bool>("police:report:notification:toggle");
+                if (res)
+                    Notify.Success($"Police Notification State has been changed");
+            }
         }
 
         private void OnRequestBackup()
