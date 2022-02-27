@@ -13,6 +13,9 @@ namespace Curiosity.Core.Client.Managers
         private const float MinY = -89f, MaxY = 89f;
         private const float MaxSpeed = 32f;
 
+        Model droneModel = "ch_prop_casino_drone_02a";
+        Prop droneProp;
+
         public static NoClipManager NoClipInstance;
 
         private static readonly List<Control> DisabledControls = new List<Control> {
@@ -60,7 +63,10 @@ namespace Curiosity.Core.Client.Managers
                 if (ControlHelper.IsControlJustPressed(Control.SaveReplayClip) && Cache.Player.User.IsDeveloper)
                 {
                     IsEnabled = !IsEnabled;
+                    API.SetPlayerInvisibleLocally(Game.Player.Handle, IsEnabled);
                 }
+
+                Ped ped = Cache.PlayerPed;
 
                 if (!IsEnabled)
                 {
@@ -75,12 +81,30 @@ namespace Curiosity.Core.Client.Managers
                         if (API.GetGroundZFor_3dCoord_2(pos.X, pos.Y, pos.Z, ref groundZ, false))
                             Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, groundZ);
 
-                        Cache.PlayerPed.IsPositionFrozen = false;
-                        Cache.PlayerPed.IsCollisionEnabled = true;
-                        Cache.PlayerPed.CanRagdoll = true;
-                        Cache.PlayerPed.IsVisible = true;
-                        Cache.PlayerPed.Opacity = 255;
-                        Cache.PlayerPed.Task.ClearAllImmediately();
+                        ped.IsPositionFrozen = false;
+                        ped.IsCollisionEnabled = true;
+                        ped.CanRagdoll = true;
+                        ped.IsVisible = true;
+                        ped.Task.ClearAllImmediately();
+
+                        if (droneModel is not null)
+                        {
+                            if (droneModel.IsLoaded)
+                                droneModel.MarkAsNoLongerNeeded();
+                        }
+
+                        if (droneProp is not null)
+                        {
+                            if (droneProp.Exists())
+                            {
+                                droneProp.Detach();
+                                droneProp.Delete();
+                            }
+
+                            droneProp.MarkAsNoLongerNeeded();
+                            droneProp = null;
+                        }
+
                         await BaseScript.Delay(100);
                     }
                     return;
@@ -89,15 +113,25 @@ namespace Curiosity.Core.Client.Managers
                 // Create camera on toggle
                 if (CurrentCamera == null)
                 {
-                    CurrentCamera = World.CreateCamera(Cache.PlayerPed.Position, GameplayCamera.Rotation, 75f);
-                    CurrentCamera.AttachTo(Cache.PlayerPed, Vector3.Zero);
+                    CurrentCamera = World.CreateCamera(ped.Position, GameplayCamera.Rotation, 75f);
+                    CurrentCamera.AttachTo(ped, Vector3.Zero);
                     World.RenderingCamera = CurrentCamera;
-                    Cache.PlayerPed.IsPositionFrozen = true;
-                    Cache.PlayerPed.IsCollisionEnabled = false;
-                    Cache.PlayerPed.Opacity = 0;
-                    Cache.PlayerPed.CanRagdoll = false;
-                    Cache.PlayerPed.IsVisible = false;
-                    Cache.PlayerPed.Task.ClearAllImmediately();
+                    ped.IsPositionFrozen = true;
+                    ped.IsCollisionEnabled = false;
+                    ped.CanRagdoll = false;
+                    ped.IsVisible = false;
+                    ped.Task.ClearAllImmediately();
+
+                    if (droneProp is null)
+                    {
+                        if (!droneModel.IsLoaded)
+                            await droneModel.Request(5000);
+
+                        droneProp = await World.CreateProp(droneModel, ped.Position, false, false);
+                        droneProp.AttachTo(ped, new Vector3(0f, 0f, .5f), new Vector3(0f, 0f, 180f));
+                        droneProp.IsPositionFrozen = true;
+                        API.SetEntityLocallyInvisible(droneProp.Handle);
+                    }
                 }
 
                 // Speed Control
@@ -127,36 +161,36 @@ namespace Curiosity.Core.Client.Managers
                 // Forward
                 if (Game.IsControlPressed(2, Control.MoveUpOnly))
                 {
-                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.Position + CurrentCamera.UpVector * (Speed * multiplier);
+                    ped.PositionNoOffset = ped.Position + CurrentCamera.UpVector * (Speed * multiplier);
                 }
                 // Backward
                 else if (Game.IsControlPressed(2, Control.MoveUpDown))
                 {
-                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.Position - CurrentCamera.UpVector * (Speed * multiplier);
+                    ped.PositionNoOffset = ped.Position - CurrentCamera.UpVector * (Speed * multiplier);
                 }
                 // Left
                 if (Game.IsControlPressed(2, Control.MoveLeftOnly))
                 {
-                    var pos = Cache.PlayerPed.GetOffsetPosition(new Vector3(-Speed * multiplier, 0f, 0f));
-                    Cache.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Cache.PlayerPed.Position.Z);
+                    var pos = ped.GetOffsetPosition(new Vector3(-Speed * multiplier, 0f, 0f));
+                    ped.PositionNoOffset = new Vector3(pos.X, pos.Y, ped.Position.Z);
                 }
                 // Right
                 else if (Game.IsControlPressed(2, Control.MoveLeftRight))
                 {
-                    var pos = Cache.PlayerPed.GetOffsetPosition(new Vector3(Speed * multiplier, 0f, 0f));
-                    Cache.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Cache.PlayerPed.Position.Z);
+                    var pos = ped.GetOffsetPosition(new Vector3(Speed * multiplier, 0f, 0f));
+                    ped.PositionNoOffset = new Vector3(pos.X, pos.Y, ped.Position.Z);
                 }
 
                 // Up (E)
                 if (Game.IsControlPressed(2, Control.Context))
                 {
-                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * Speed / 2));
+                    ped.PositionNoOffset = ped.GetOffsetPosition(new Vector3(0f, 0f, multiplier * Speed / 2));
                 }
 
                 // Down (Q)
                 if (Game.IsControlPressed(2, Control.ContextSecondary))
                 {
-                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * -Speed / 2));
+                    ped.PositionNoOffset = ped.GetOffsetPosition(new Vector3(0f, 0f, multiplier * -Speed / 2));
                 }
 
 
@@ -166,14 +200,19 @@ namespace Curiosity.Core.Client.Managers
                     Game.DisableControlThisFrame(2, ctrl);
                 }
 
-                Cache.PlayerPed.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
-                Cache.PlayerPed.Opacity = 0;
+                ped.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
+
                 API.DisablePlayerFiring(Game.Player.Handle, false);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
+        }
+
+        public void UpdatePlayerDrone()
+        {
+            Ped ped = Game.PlayerPed;
         }
 
         private async Task OnNoClipCheckRotationTick()
@@ -197,6 +236,7 @@ namespace Curiosity.Core.Client.Managers
                 if (rotation.X + yValue > MinY && rotation.X + yValue < MaxY)
                     rotation.X += yValue;
                 CurrentCamera.Rotation = rotation;
+                droneProp.Rotation = rotation;
             }
             catch (Exception ex)
             {
