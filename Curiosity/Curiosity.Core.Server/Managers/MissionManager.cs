@@ -24,9 +24,13 @@ namespace Curiosity.Core.Server.Managers
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                if ((API.GetGameTimer() - curiosityUser.LastNotificationBackup) > TWO_MINUTES)
+                long gameTimer = API.GetGameTimer();
+                long cooldown = (gameTimer - curiosityUser.LastNotificationBackup);
+                bool canNowRequest = cooldown > TWO_MINUTES;
+
+                if (canNowRequest || curiosityUser.LastNotificationBackup == 0)
                 {
-                    curiosityUser.LastNotificationBackup = API.GetGameTimer();
+                    curiosityUser.LastNotificationBackup = gameTimer;
                     curiosityUser.AssistanceRequested = true;
 
                     List<CuriosityUser> users = PluginManager.ActiveUsers.Where(x => x.Value.Job == ePlayerJobs.POLICE_OFFICER && !x.Value.DisableNotifications && x.Key != metadata.Sender).Select(y => y.Value).ToList();
@@ -35,14 +39,15 @@ namespace Curiosity.Core.Server.Managers
                     {
                         EventSystem.Send("ui:notification", u.Handle, eNotification.NOTIFICATION_WARNING, $"Dispatch A.I.<br />Back up request<br />Player '{player.Name}' has requested back up. You can find their location in the Police Menu.", "bottom-right", "snackbar", true);
                     });
+
+                    return true;
                 }
                 else
                 {
                     EventSystem.Send("ui:notification", metadata.Sender, eNotification.NOTIFICATION_WARNING, "Dispatch A.I.<br />Back up request<br />Sorry, you cannot request backup currently.", "bottom-right", "snackbar", true);
                     return false;
                 }
-
-                return true;
+                return false;
             }));
 
             EventSystem.Attach("mission:assistance:accept", new EventCallback(metadata =>
@@ -65,7 +70,7 @@ namespace Curiosity.Core.Server.Managers
 
                     RecordBackup(curiosityUser.Character.CharacterId);
 
-                    return new { x = pos.X, y = pos.Y, z = pos.Z };
+                    return new Position(pos.X, pos.Y, pos.Z);
                 }
                 catch (Exception e)
                 {

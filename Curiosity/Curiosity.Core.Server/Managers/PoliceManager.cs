@@ -475,8 +475,10 @@ namespace Curiosity.Core.Server.Managers
                     GenericUserListItem genericUserListItem = new();
                     genericUserListItem.Name = user.LatestName;
                     genericUserListItem.ServerId = user.Handle;
+                    curiosityUsersRequesting.Add(genericUserListItem);
                 }
 
+                Logger.Debug($"Returning {curiosityUsersRequesting.Count} for mission:assistance:list");
                 return curiosityUsersRequesting;
             }));
         }
