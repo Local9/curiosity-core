@@ -45,6 +45,21 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void JobMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
+            uiLstJobs.Enabled = true;
+            uiLstJobs.Description = "Press ENTER when you want to select a job. Selecting the same item will toggle.";
+
+            if (playerOptionsManager.IsPassiveModeCooldownEnabled)
+            {
+                uiLstJobs.Enabled = false;
+                uiLstJobs.Description = "Passive Mode cooldown is active, cannot swap jobs.";
+            }
+
+            if (playerOptionsManager.IsPassive)
+            {
+                uiLstJobs.Enabled = false;
+                uiLstJobs.Description = "Passive Mode is active, cannot swap jobs.";
+            }
+
             if (state == MenuState.Opened || state == MenuState.ChangeForward)
             {
                 menuPolice.ParentItem.Enabled = (playerOptionsManager.CurrentJob == ePlayerJobs.POLICE_OFFICER);
@@ -53,6 +68,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private async void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
+            if (playerOptionsManager.IsPassiveModeCooldownEnabled) return;
+            if (playerOptionsManager.IsPassive) return;
+
             listItem.Enabled = false;
             menuPolice.ParentItem.Enabled = false;
 

@@ -15,7 +15,8 @@ namespace Curiosity.Core.Client.Managers
     public class PlayerOptionsManager : Manager<PlayerOptionsManager>
     {
         DateTime passiveModeDisabled;
-        public bool IsPassiveModeEnabledCooldown = false;
+        DateTime passiveModeJobCooldown;
+        public bool IsPassiveModeCooldownEnabled = false;
         public bool IsPassive = false;
         public bool IsWanted = false;
         DateTime playerKilledSelf;
@@ -136,7 +137,7 @@ namespace Curiosity.Core.Client.Managers
             if (!isPassive)
             {
                 passiveModeDisabled = DateTime.UtcNow.AddSeconds(30);
-                IsPassiveModeEnabledCooldown = true;
+                IsPassiveModeCooldownEnabled = true;
                 Instance.AttachTickHandler(PassiveCooldownTick);
             }
 
@@ -173,7 +174,7 @@ namespace Curiosity.Core.Client.Managers
                     Logger.Debug($"Passive Mode Disabled");
                 }
 
-                IsPassiveModeEnabledCooldown = false;
+                IsPassiveModeCooldownEnabled = false;
                 Interface.Notify.Info($"Passive Mode can now be changed.");
             }
             else

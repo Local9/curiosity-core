@@ -31,6 +31,18 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 return;
             }
 
+            if (PlayerOptionsManager.IsPassive)
+            {
+                Interface.Notify.Alert($"You're in passive, feck off!");
+                return;
+            }
+
+            if (PlayerOptionsManager.IsPassiveModeCooldownEnabled)
+            {
+                Interface.Notify.Alert($"You're in a passive cooldown.");
+                return;
+            }
+
             if (Game.PlayerPed.IsInVehicle())
             {
                 Interface.Notify.Alert($"You must exit the vehicle to arrest the player.");
