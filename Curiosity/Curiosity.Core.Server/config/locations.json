@@ -54,80 +54,13 @@
       "markers": [
         {
           "control": 51,
-          "jobRequirement": "Police Officer [PvP]",
-          "message": "Book Suspect",
-          "helpText": "You can't book a suspect this way, just kill'em.",
-          "event": "job:police:arrest",
-          "isServerEvent": true,
-          "isLegacyEvent": false,
-          "isLuaEvent": false,
-          "setOnGround": true,
-          "markerId": 1,
-          "scale": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 0.5
-          },
-          "contextAoe": 1.5,
-          "drawThreshold": 5,
-          "color": {
-            "alpha": 255,
-            "red": 0,
-            "green": 128,
-            "blue": 0
-          },
-          "positions": [
-            {
-              "X": 1690.787,
-              "Y": 2591.55,
-              "Z": 44.90903
-            },
-            {
-              "X": 469.3234,
-              "Y": -1022.069,
-              "Z": 28.19849
-            },
-            {
-              "X": 826.2773,
-              "Y": -1291.972,
-              "Z": 28.24066
-            },
-            {
-              "X": -1113.296,
-              "Y": -849.0849,
-              "Z": 13.44594
-            },
-            {
-              "X": -449.3008,
-              "Y": 6012.623,
-              "Z": 30.71638
-            },
-            {
-              "X": -566.5678,
-              "Y": -133.2066,
-              "Z": 37.97133
-            },
-            {
-              "X": 370.3031,
-              "Y": -1608.2098,
-              "Z": 28.2919
-            },
-            {
-              "X": 1852.139,
-              "Y": 3691.1,
-              "Z": 33.26702
-            }
-          ]
-        },
-        {
-          "control": 51,
           "jobRequirement": "Police Officer",
           "message": "Book Suspect",
-          "helpText": "~s~Press ~b~F5~s~ to book a ~b~Suspect~s~ via the Menu.",
-          "event": "job:police:arrest",
-          "isServerEvent": true,
+          "helpText": "Use F5 Menu to ~r~Arrest~w~ the ~b~Suspect",
+          "event": "world:blank:event",
+          "isServerEvent": false,
           "isLegacyEvent": false,
-          "isLuaEvent": false,
+          "isLuaEvent": true,
           "setOnGround": true,
           "markerId": 1,
           "scale": {
@@ -145,24 +78,9 @@
           },
           "positions": [
             {
-              "X": 1690.787,
-              "Y": 2591.55,
-              "Z": 44.90903
-            },
-            {
-              "X": 469.3234,
-              "Y": -1022.069,
-              "Z": 28.19849
-            },
-            {
-              "X": 826.2773,
-              "Y": -1291.972,
-              "Z": 28.24066
-            },
-            {
-              "X": -1113.296,
-              "Y": -849.0849,
-              "Z": 13.44594
+              "X": 1690.975,
+              "Y": 2592.581,
+              "Z": 44.71336
             },
             {
               "X": -449.3008,
@@ -170,19 +88,39 @@
               "Z": 30.71638
             },
             {
-              "X": -566.5678,
-              "Y": -133.2066,
-              "Z": 37.97133
+              "X": -1113.08,
+              "Y": -848.660,
+              "Z": 12.4414
             },
             {
-              "X": 370.3031,
-              "Y": -1608.2098,
-              "Z": 28.2919
+              "X": -562.1006,
+              "Y": -131.9594,
+              "Z": 37.2119
             },
             {
-              "X": 1852.139,
-              "Y": 3691.1,
-              "Z": 33.26702
+              "X": 830.4728,
+              "Y": -1310.793,
+              "Z": 27.13673
+            },
+            {
+              "X": 370.30310058594,
+              "Y": -1608.2098388672,
+              "Z": 28.291940689087
+            },
+            {
+              "X": 458.93930053711,
+              "Y": -1001.6194458008,
+              "Z": 23.91487121582
+            },
+            {
+              "X": 458.92138671875,
+              "Y": -997.96075439453,
+              "Z": 23.914873123169
+            },
+            {
+              "X": 460.76171875,
+              "Y": -994.22833251953,
+              "Z": 23.914852142334
             }
           ]
         }
@@ -206,6 +144,86 @@
           "X": 987.6438,
           "Y": 79.82104,
           "Z": 80.99055
+        }
+      ]
+    },
+    {
+      "name": "Gun Range",
+      "sprite": 567,
+      "color": 0,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 805.4521,
+          "Y": -2200.755,
+          "Z": 43.09853
+        }
+      ]
+    },
+    {
+      "name": "POLICE:Evidence Turn In",
+      "sprite": 568,
+      "color": 14,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 451.6057,
+          "Y": -980.3557,
+          "Z": 30.68959
+        }
+      ]
+    },
+    {
+      "name": "POLICE:LSPD Recruiter",
+      "sprite": 480,
+      "color": 43,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -555.8563,
+          "Y": -227.6408,
+          "Z": 38.17812
+        }
+      ]
+    },
+    {
+      "name": "POLICE:BSCO Recruiter",
+      "sprite": 480,
+      "color": 44,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -517.1697,
+          "Y": -211.2708,
+          "Z": 38.16921
+        }
+      ]
+    },
+    {
+      "name": "POLICE:SAHP Recruiter",
+      "sprite": 480,
+      "color": 30,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -544.8035,
+          "Y": -204.4762,
+          "Z": 38.21514
         }
       ]
     },
