@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client
@@ -14,6 +15,8 @@ namespace Curiosity.Core.Client
         public static int LastSession { get; set; }
 
         public static bool ForceLoaded = false;
+
+        public static bool IsWanted => Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
         public static async Task Loading()
         {

@@ -162,6 +162,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             if (selectedItem == miPassive)
             {
+                if (Session.IsWanted)
+                {
+                    Notify.Error($"You're currently wanted.");
+                    return;
+                }
+
                 if (playerOptionsManager.IsPassiveModeEnabledCooldown) return;
 
                 playerOptionsManager.TogglePlayerPassive(!Cache.Character.IsPassive);
@@ -176,6 +182,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             if (selectedItem == miKillYourself)
             {
+                if (Session.IsWanted)
+                {
+                    Notify.Error($"You're currently wanted.");
+                    return;
+                }
+
                 if (!playerOptionsManager.IsKillSelfEnabled) return;
 
                 playerOptionsManager.KillSelf();
@@ -186,6 +198,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             if (selectedItem == miEditPed)
             {
+                if (Session.IsWanted)
+                {
+                    Notify.Error($"You're currently wanted.");
+                    return;
+                }
+
                 if (Cache.PlayerPed.IsDead)
                 {
                     NotificationManager.GetModule().Error($"You're currently dead.");
@@ -199,6 +217,12 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             if (selectedItem == miOpenPda)
             {
+                if (Session.IsWanted)
+                {
+                    Notify.Error($"You're currently wanted.");
+                    return;
+                }
+
                 PdaManager.GetModule().OpenPDA();
                 MenuPool.CloseAllMenus();
             }
