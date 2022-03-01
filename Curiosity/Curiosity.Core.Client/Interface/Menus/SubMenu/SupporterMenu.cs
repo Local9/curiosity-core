@@ -24,9 +24,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
          * */
 
         UIMenuListItem uiLstPlayerModels;
-        UIMenuListItem uiLstCompanions;
+        //UIMenuListItem uiLstCompanions;
 
-        UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companions", "This will remove all companions.");
+        //UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companions", "This will remove all companions.");
         UIMenuItem uiItemResetCharacter = new UIMenuItem("Reset Character");
         UIMenuItem uiStartAutoDrive = new UIMenuItem("Start Auto Drive", "Vehicle will drive to the waypoint you have set.");
 
@@ -61,9 +61,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     companions.Add(juggernaut);
                 }
 
-                uiLstCompanions = new UIMenuListItem("Companion", companions.Select(x => x.Label).ToList<dynamic>(), 0);
-                baseMenu.AddItem(uiLstCompanions);
-                baseMenu.AddItem(uiItemRemoveCompanion);
+                //uiLstCompanions = new UIMenuListItem("Companion", companions.Select(x => x.Label).ToList<dynamic>(), 0);
+                //baseMenu.AddItem(uiLstCompanions);
+                //baseMenu.AddItem(uiItemRemoveCompanion);
             }
 
             baseMenu.AddItem(uiStartAutoDrive);
@@ -100,10 +100,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 await BaseScript.Delay(500); // JIC
                 await Cache.PlayerPed.FadeIn();
             }
-            else if (selectedItem == uiItemRemoveCompanion)
-            {
-                CompanionManager.GetModule().RemoveCompanions();
-            }
+            //else if (selectedItem == uiItemRemoveCompanion)
+            //{
+            //    CompanionManager.GetModule().RemoveCompanions();
+            //}
             else if (selectedItem == uiStartAutoDrive)
             {
                 VehicleManager.GetModule().EnableAutodrive();
@@ -154,25 +154,25 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
                 Game.Player.ChangeModel(model);
             }
-            else if (listItem == uiLstCompanions)
-            {
-                Companion companion = companions[newIndex];
-                string modelHash = companion.Hash;
-                bool isHuman = companion.Human;
-                int model = API.GetHashKey(modelHash);
+            //else if (listItem == uiLstCompanions)
+            //{
+            //    Companion companion = companions[newIndex];
+            //    string modelHash = companion.Hash;
+            //    bool isHuman = companion.Human;
+            //    int model = API.GetHashKey(modelHash);
 
-                if (!isHuman)
-                    NotificationManager.GetModule().Error($"Currently unable to handle animals.");
-                // CompanionManager.GetModule().SpawnNonHuman((uint)model);
+            //    if (!isHuman)
+            //        NotificationManager.GetModule().Error($"Currently unable to handle animals.");
+            //    // CompanionManager.GetModule().SpawnNonHuman((uint)model);
 
-                if (isHuman)
-                {
-                    int ped = await CompanionManager.GetModule().SpawnHuman((uint)model);
-                    AdditionalPedConfiguration(modelHash, ped);
-                }
+            //    if (isHuman)
+            //    {
+            //        int ped = await CompanionManager.GetModule().SpawnHuman((uint)model);
+            //        AdditionalPedConfiguration(modelHash, ped);
+            //    }
 
-                goto Exit;
-            }
+            //    goto Exit;
+            //}
 
         ExitAndFade:
             await Cache.PlayerPed.FadeIn();
