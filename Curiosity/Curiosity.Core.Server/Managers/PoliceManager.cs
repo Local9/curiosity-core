@@ -211,17 +211,22 @@ namespace Curiosity.Core.Server.Managers
                         SendNotification(message: $"{player.Name} has been jailed by {curiosityUser.LatestName}");
 
                         Vector3 position = officer.Character.Position;
-                        List<Player> players = Instance.GetPlayersInRange(position, 50f);
+                        List<int> police = GetPlayersWhoArePolice();
+                        // List<Player> players = Instance.GetPlayersInRange(position, 50f);
 
-                        foreach(Player p in players)
+                        foreach(int serverHandle in police)
                         {
-                            int handle = int.Parse(p.Handle);
-                            if (!PluginManager.ActiveUsers.ContainsKey(handle)) continue;
-                            CuriosityUser cUser = PluginManager.ActiveUsers[handle];
+                            Player playerToReward = PluginManager.GetPlayer(serverHandle);
+                            if (playerToReward is null) continue;
+                            if (Vector3.Distance(position, playerToReward.Character.Position) > 20f) continue;
+                            
+                            if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) continue;
+                            CuriosityUser cUser = PluginManager.ActiveUsers[serverHandle];
+
                             int characterId = cUser.Character.CharacterId;
                             await Database.Store.SkillDatabase.Adjust(characterId, DB_POLICE_SKILL, 125);
                             await Database.Store.BankDatabase.Adjust(characterId, 1250);
-                            SendNotification(handle, message: $"You have been awarded for assisting in an arrest.", notification: eNotification.NOTIFICATION_SUCCESS);
+                            SendNotification(serverHandle, message: $"You have been awarded for assisting in an arrest.", notification: eNotification.NOTIFICATION_SUCCESS);
                         }
 
                     }
