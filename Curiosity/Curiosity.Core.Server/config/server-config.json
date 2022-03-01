@@ -2,7 +2,7 @@
   "tips": [
     {
       "header": "<span class=\"text-yellow-300 uppercase\">Welcome to LifeV</span>",
-      "content": "<span class=\"text-xl text-red-300\"><b>We do not tolerate any form of racism​ or hate speech, users found doing so will be banned.</b></span><ul><li><span class=\"text-green-300\">RESPECT ALL</span> members of the server, this is a community that will welcome you.</li><li><span class=\"text-red-300\">DO NOT</span> Force people to RP. It is not an RP Server it is a PVE simulator server.​</li><li><span class=\"text-red-300\">DO NOT</span> Troll other players​, excessive harassment of other players will be dealt with via a kick or ban.</li><li><span class=\"text-red-300\">DO NOT</span> Spam chat​ or voice, doing so will get you kicked or banned.</li><li><span class=\"text-red-300\">DO NOT</span> Drive recklessly or speed around the Police stations, Fire Stations and Hospitals​.</li><li><span class=\"text-blue-300\">USE ONLY</span> English in the Global chat, please use the International Channel.</li><li><span class=\"text-blue-300\">USE</span> Common sense​, and don't make us add another rule.</li></ul>"
+      "content": "<span class=\"text-xl text-red-300\"><b>Please behave politely at all times, this means refraining from disrespectful comments (racist, homophobic, religious, etc.), users found doing so will be removed from our community and if necessary, reported for violation of community standards.</b></span><ul><li><span class=\"text-green-300\">RESPECT ALL</span> members of the server.</li><li><span class=\"text-red-300\">DO NOT</span> Force people to RP. This is not an RP Server.</li><li><span class=\"text-red-300\">DO NOT</span> Troll or target other players.</li><li><span class=\"text-red-300\">DO NOT</span> Spam chat or voice.</li><li><span class=\"text-red-300\">DO NOT</span> Drive recklessly or speed around the Police Stations, Fire Stations, or Hospitals.</li><li><span class=\"text-blue-300\">USE ONLY</span> English in the Global chat, please use the International Channel for other cases.</li><li><span class=\"text-blue-300\">USE</span> Common sense, we're aware not everyone has it, just don't make us add another rule.</li></ul><span class=\"text-xl text-blue-300\">Our admins reserve the right to temporarily restrict or ban any players, in response to behavior that violates these rules. However, our admins shall be gentle and reasonable and will use their discretion. Ban appeals can be done via our forums.</span>"
     },
     {
       "header": "<span class=\"text-yellow-300 uppercase\">How to get started</span>",
@@ -11,7 +11,7 @@
     },
     {
       "header": "<span class=\"text-yellow-300 uppercase\">Current Activities</span>",
-      "content": "<ul><li>Trucking</li><li>Piloting</li><li>Drifting</li><li>Drug Dealing</li><li>Fishing</li><li>Fire Fighting</li><li>EMT</li><li>Police (<span class=\"text-blue-300\">has issues</span>)</li></ul>"
+      "content": "<ul><li>Trucking</li><li>Piloting</li><li>Fishing</li><li>Fire Fighting</li><li>EMT</li><li>Police (PvP or PvE)</li><li>Various Criminal Activities</li></ul>More information can be found on <span class=\"text-blue-300\">wiki.lifev.net</span>"
     }
   ],
   "loadingImages": [
