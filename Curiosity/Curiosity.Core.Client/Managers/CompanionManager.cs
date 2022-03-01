@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -92,58 +94,66 @@ namespace Curiosity.Core.Client.Managers
             CompanionMoving.Add(ped, false);
         }
 
-        public async Task<int> SpawnHuman(uint model)
+        public async Task<int> SpawnHuman(string modelHash)
         {
-            if (ActiveCompanions.Count == 2 && !Cache.Player.User.IsSeniorDeveloper)
+            try
             {
-                notification.Error("Maximum number of companions allowed.");
-                return -1;
-            }
-
-            if (!IsModelAPed(model))
-            {
-                notification.Error("model is invalid and not a ped model");
-                return -1;
-            }
-
-            int ped;
-            int player = GetPlayerPed(-1);
-            var coords = GetOffsetFromEntityInWorldCoords(player, 0, 2f, 0);
-
-            if (IsPedInAnyVehicle(player, false))
-            {
-                var vehicle = GetVehiclePedIsIn(player, false);
-                if (Vehicles.GetFreeSeat(vehicle, out int seat))
+                if (ActiveCompanions.Count == 2 && !Cache.Player.User.IsSeniorDeveloper)
                 {
-                    await Common.RequestModel(model);
-                    ped = CreatePedInsideVehicle(vehicle, 26, model, seat, true, false);
-                    SetModelAsNoLongerNeeded(model);
-                }
-                else if (GetEntitySpeed(vehicle) > 0.1f)
-                {
-                    notification.Error("Player is in a moving vehicle and there are no free seats");
+                    notification.Error("Maximum number of companions allowed.");
                     return -1;
+                }
+
+                Model pedModel = new Model(modelHash);
+                await pedModel.Request(1000);
+
+                int ped = -1;
+                Ped playerPed = Game.PlayerPed;
+                var coords = playerPed.Position + new Vector3(0f, 2f, 0f);
+
+                if (playerPed.IsInVehicle())
+                {
+                    var vehicle = playerPed.CurrentVehicle.Handle;
+                    if (Vehicles.GetFreeSeat(vehicle, out int seat))
+                    {
+                        ped = CreatePedInsideVehicle(vehicle, 26, (uint)pedModel.Hash, seat, true, false);
+                    }
+                    else if (GetEntitySpeed(vehicle) > 0.1f)
+                    {
+                        notification.Error("Player is in a moving vehicle and there are no free seats");
+                        pedModel.MarkAsNoLongerNeeded();
+                        return -1;
+                    }
+                    else
+                    {
+                        Ped pedSpawn = await World.CreatePed(pedModel, coords);
+                        ped = pedSpawn.Handle;
+                        pedModel.MarkAsNoLongerNeeded();
+                    }
                 }
                 else
                 {
-                    ped = await Peds.Spawn(model, coords, true);
+                    Ped pedSpawn = await World.CreatePed(pedModel, coords);
+                    pedModel.MarkAsNoLongerNeeded();
+                    ped = pedSpawn.Handle;
                 }
-            }
-            else
-            {
-                ped = await Peds.Spawn(model, coords, true);
-            }
 
-            if (!IsPedHuman(ped))
+                //if (!IsPedHuman(ped))
+                //{
+                //    notification.Error("Ped is not human.");
+                //    DeleteEntity(ref ped);
+                //    return -1;
+                //}
+
+                Add(ped);
+                await Peds.Arm(ped, weaponList);
+                return ped;
+            }
+            catch(Exception ex)
             {
-                notification.Error("Ped is not human.");
-                DeleteEntity(ref ped);
+                Logger.Error(ex, $"SpawnHuman");
                 return -1;
             }
-
-            Add(ped);
-            await Peds.Arm(ped, weaponList);
-            return ped;
         }
 
         public async Task<int> SpawnNonHuman(uint model)
@@ -180,221 +190,273 @@ namespace Curiosity.Core.Client.Managers
 
         private bool CheckAndHandlePlayerCombat(IEnumerable<int> peds, IEnumerable<int> companions)
         {
-            var player = GetPlayerPed(-1);
-            int target = 0;
-            if (GetEntityPlayerIsFreeAimingAt(PlayerId(), ref target) || GetPlayerTargetEntity(PlayerId(), ref target))
+            try
             {
-                foreach (var companion in companions)
+                var player = GetPlayerPed(-1);
+                int target = 0;
+                if (GetEntityPlayerIsFreeAimingAt(PlayerId(), ref target) || GetPlayerTargetEntity(PlayerId(), ref target))
                 {
-                    TaskCombatPed(companion, target, 0, 16);
-                }
-
-                return true;
-            }
-
-            foreach (var ped in peds)
-            {
-                if (IsPedInCombat(ped, player))
-                {
-                    if (IsCompanion(ped))
-                    {
-                        ClearPedTasks(ped);
-                        continue;
-                    }
-
                     foreach (var companion in companions)
                     {
-                        TaskCombatPed(companion, ped, 0, 16);
+                        TaskCombatPed(companion, target, 0, 16);
                     }
 
                     return true;
                 }
-            }
 
-            return false;
+                foreach (var ped in peds)
+                {
+                    if (IsPedInCombat(ped, player))
+                    {
+                        if (IsCompanion(ped))
+                        {
+                            ClearPedTasks(ped);
+                            continue;
+                        }
+
+                        foreach (var companion in companions)
+                        {
+                            TaskCombatPed(companion, ped, 0, 16);
+                        }
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"CheckAndHandlePlayerCombat");
+                return false;
+            }
         }
 
         private bool CheckAndHandleFreefall(int companion, Vector3 coords)
         {
-            var paraState = GetPedParachuteState(companion);
-            if (paraState == 1 || paraState == 2)
+            try
             {
-                SetParachuteTaskTarget(companion, coords.X, coords.Y, coords.Z);
-                return true;
-            }
+                var paraState = GetPedParachuteState(companion);
+                if (paraState == 1 || paraState == 2)
+                {
+                    SetParachuteTaskTarget(companion, coords.X, coords.Y, coords.Z);
+                    return true;
+                }
 
-            if ((IsPedFalling(companion) || IsPedInParachuteFreeFall(companion)) &&
-                !IsPedInAnyVehicle(companion, false))
+                if ((IsPedFalling(companion) || IsPedInParachuteFreeFall(companion)) &&
+                    !IsPedInAnyVehicle(companion, false))
+                {
+                    SetPedSeeingRange(companion, 1f);
+                    SetPedHearingRange(companion, 1f);
+                    SetPedKeepTask(companion, true);
+                    GiveWeaponToPed(companion, (uint)PARACHUTE, 1, false, true);
+                    TaskParachuteToTarget(companion, coords.X, coords.Y, coords.Z);
+                    return true;
+                }
+
+                SetPedSeeingRange(companion, 100f);
+                SetPedHearingRange(companion, 100f);
+                return false;
+            }
+            catch (Exception ex)
             {
-                SetPedSeeingRange(companion, 1f);
-                SetPedHearingRange(companion, 1f);
-                SetPedKeepTask(companion, true);
-                GiveWeaponToPed(companion, (uint)PARACHUTE, 1, false, true);
-                TaskParachuteToTarget(companion, coords.X, coords.Y, coords.Z);
-                return true;
+                Logger.Error(ex, $"CheckAndHandleFreefall");
+                return false;
             }
-
-            SetPedSeeingRange(companion, 100f);
-            SetPedHearingRange(companion, 100f);
-            return false;
         }
 
         private void FollowPlayerToVehicle(int player, IEnumerable<int> companions)
         {
-            var vehicle = GetVehiclePedIsIn(player, false);
-            var seats = Vehicles.GetFreeSeats(vehicle);
-
-            foreach (var companion in companions)
+            try
             {
-                if (seats.Count == 0)
-                    break;
+                var vehicle = GetVehiclePedIsIn(player, false);
+                var seats = Vehicles.GetFreeSeats(vehicle);
 
-                var seat = seats.Dequeue();
-
-                if (!IsPedHuman(companion))
+                foreach (var companion in companions)
                 {
-                    TaskWarpPedIntoVehicle(companion, vehicle, seat);
-                    SetPedConfigFlag(companion, 292, true);
-                    continue;
+                    if (seats.Count == 0)
+                        break;
+
+                    var seat = seats.Dequeue();
+
+                    if (!IsPedHuman(companion))
+                    {
+                        TaskWarpPedIntoVehicle(companion, vehicle, seat);
+                        SetPedConfigFlag(companion, 292, true);
+                        continue;
+                    }
+
+                    if (IsPedInAnyVehicle(companion, true))
+                    {
+                        var otherVehicle = GetVehiclePedIsUsing(companion);
+                        if (otherVehicle != vehicle)
+                            TaskLeaveVehicle(companion, otherVehicle, 0);
+
+                        continue;
+                    }
+
+                    TaskEnterVehicle(companion, vehicle, -1, seat, 2f, 1, 0);
                 }
-
-                if (IsPedInAnyVehicle(companion, true))
-                {
-                    var otherVehicle = GetVehiclePedIsUsing(companion);
-                    if (otherVehicle != vehicle)
-                        TaskLeaveVehicle(companion, otherVehicle, 0);
-
-                    continue;
-                }
-
-                TaskEnterVehicle(companion, vehicle, -1, seat, 2f, 1, 0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"FollowPlayerToVehicle");
             }
         }
 
         private void FollowPlayer(int player, IEnumerable<int> companions)
         {
-            var coords = GetEntityCoords(player, true);
-            foreach (var companion in companions)
+            try
             {
-                if (CheckAndHandleFreefall(companion, coords))
-                    continue;
+                var coords = GetEntityCoords(player, true);
+                foreach (var companion in companions)
+                {
+                    if (CheckAndHandleFreefall(companion, coords))
+                        continue;
 
-                var pos = GetEntityCoords(companion, true);
-                bool isHuman = IsPedHuman(companion);
-                if (IsPedInAnyVehicle(companion, true) && isHuman)
-                {
-                    var vehicle = GetVehiclePedIsIn(companion, false);
-                    if (GetEntitySpeed(vehicle) < 0.1f)
-                        TaskLeaveVehicle(companion, vehicle, 0);
-                    else
-                        TaskLeaveVehicle(companion, vehicle, 4096);
-                }
-                else if (IsPedInAnyVehicle(companion, true) && !isHuman)
-                {
-                    var vehicle = GetVehiclePedIsIn(companion, false);
-                    if (GetEntitySpeed(vehicle) < 0.1f)
+                    var pos = GetEntityCoords(companion, true);
+                    bool isHuman = IsPedHuman(companion);
+                    if (IsPedInAnyVehicle(companion, true) && isHuman)
                     {
-                        TaskLeaveVehicle(companion, vehicle, 16);
-                        SetPedConfigFlag(companion, 292, false);
+                        var vehicle = GetVehiclePedIsIn(companion, false);
+                        if (GetEntitySpeed(vehicle) < 0.1f)
+                            TaskLeaveVehicle(companion, vehicle, 0);
+                        else
+                            TaskLeaveVehicle(companion, vehicle, 4096);
                     }
-                }
-                else if (pos.DistanceToSquared(coords) > 25f)
-                {
-                    if (IsPedActiveInScenario(companion))
+                    else if (IsPedInAnyVehicle(companion, true) && !isHuman)
                     {
-                        ClearPedTasks(companion);
-                        ClearPedTasksImmediately(companion);
+                        var vehicle = GetVehiclePedIsIn(companion, false);
+                        if (GetEntitySpeed(vehicle) < 0.1f)
+                        {
+                            TaskLeaveVehicle(companion, vehicle, 16);
+                            SetPedConfigFlag(companion, 292, false);
+                        }
                     }
-
-                    if (CompanionMoving[companion]) continue;
-
-                    TaskGoToEntity(companion, player, -1, 5f, 2f, 0, 0);
-
-                    CompanionMoving[companion] = true;
-                }
-                else if (IsPedHuman(companion))
-                {
-                    if (IsPedOnFoot(companion) && !IsPedUsingAnyScenario(companion))
+                    else if (pos.DistanceToSquared(coords) > 25f)
                     {
-                        var scenario = (scenarioList.Length > 0) ? scenarioList[GetRandomIntInRange(0, scenarioList.Length)] : "WORLD_HUMAN_STAND_MOBILE";
-                        TaskStartScenarioInPlace(companion, scenario, 0, true);
+                        if (IsPedActiveInScenario(companion))
+                        {
+                            ClearPedTasks(companion);
+                            ClearPedTasksImmediately(companion);
+                        }
+
+                        if (CompanionMoving[companion]) continue;
+
+                        TaskGoToEntity(companion, player, -1, 5f, 2f, 0, 0);
+
+                        CompanionMoving[companion] = true;
+                    }
+                    else if (IsPedHuman(companion))
+                    {
+                        if (IsPedOnFoot(companion) && !IsPedUsingAnyScenario(companion))
+                        {
+                            var scenario = (scenarioList.Length > 0) ? scenarioList[GetRandomIntInRange(0, scenarioList.Length)] : "WORLD_HUMAN_STAND_MOBILE";
+                            TaskStartScenarioInPlace(companion, scenario, 0, true);
+                            CompanionMoving[companion] = false;
+                        }
                         CompanionMoving[companion] = false;
                     }
-                    CompanionMoving[companion] = false;
-                }
-                else
-                {
-                    CompanionMoving[companion] = false;
-                    TaskLookAtEntity(companion, player, -1, 2048, 3);
+                    else
+                    {
+                        CompanionMoving[companion] = false;
+                        TaskLookAtEntity(companion, player, -1, 2048, 3);
+                    }
                 }
             }
-        }
-
-        [TickHandler(SessionWait = true)]
-        private Task OnUpdateCompanions()
-        {
-            var player = GetPlayerPed(-1);
-            var peds = Peds.Get(Peds.Filter.LocalPlayer);
-            var companions = Get(peds);
-
-            if (companions.Count == 0 || CheckAndHandlePlayerCombat(peds, companions))
-                return BaseScript.Delay(2000);
-
-            if (IsPedInAnyVehicle(player, false))
-                FollowPlayerToVehicle(player, companions);
-            else
-                FollowPlayer(player, companions);
-
-            return BaseScript.Delay(2000);
-        }
-
-        [TickHandler(SessionWait = true)]
-        private Task OnCompanionCheck()
-        {
-            foreach (KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
+            catch (Exception ex)
             {
-                int pedId = kvp.Key;
-                int netId = kvp.Value;
+                Logger.Error(ex, $"FollowPlayer");
+            }
+}
 
-                if (!DoesEntityExist(pedId))
+        [TickHandler(SessionWait = true)]
+        private async Task OnUpdateCompanions()
+        {
+            try
+            {
+                var player = GetPlayerPed(-1);
+                var peds = Peds.Get(Peds.Filter.LocalPlayer);
+                var companions = Get(peds);
+
+                if (companions.Count == 0 || CheckAndHandlePlayerCombat(peds, companions))
+                    await BaseScript.Delay(2000);
+
+                if (IsPedInAnyVehicle(player, false))
+                    FollowPlayerToVehicle(player, companions);
+                else
+                    FollowPlayer(player, companions);
+
+                await BaseScript.Delay(2000);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"OnUpdateCompanions");
+                await BaseScript.Delay(2000);
+            }
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnCompanionCheck()
+        {
+            try
+            {
+                foreach (KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
                 {
-                    goto REMOVE;
+                    int pedId = kvp.Key;
+                    int netId = kvp.Value;
+
+                    if (!DoesEntityExist(pedId))
+                    {
+                        goto REMOVE;
+                    }
+
+                    Vector3 position = GetEntityCoords(pedId, false);
+
+                    if (Game.PlayerPed.Position.Distance(position) > 100f)
+                    {
+                        goto REMOVE;
+                    }
+
+                    continue;
+
+                REMOVE:
+                    ActiveCompanions.Remove(pedId);
+                    CompanionMoving.Remove(pedId);
+                    EventSystem.Send("delete:entity", netId);
                 }
-
-                Vector3 position = GetEntityCoords(pedId, false);
-
-                if (Game.PlayerPed.Position.Distance(position) > 100f)
-                {
-                    goto REMOVE;
-                }
-
-                continue;
-
-            REMOVE:
-                ActiveCompanions.Remove(pedId);
-                CompanionMoving.Remove(pedId);
-                EventSystem.Send("delete:entity", netId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"OnCompanionCheck");
             }
 
-            return BaseScript.Delay(2000);
+            await BaseScript.Delay(2000);
         }
 
         public void RemoveCompanions()
         {
-            foreach (KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
+            try
             {
-                int pedId = kvp.Key;
-                int netId = kvp.Value;
-
-                if (DoesEntityExist(pedId))
+                foreach (KeyValuePair<int, int> kvp in ActiveCompanions.ToArray())
                 {
-                    goto REMOVE;
-                }
+                    int pedId = kvp.Key;
+                    int netId = kvp.Value;
 
-            REMOVE:
-                ActiveCompanions.Remove(pedId);
-                CompanionMoving.Remove(pedId);
-                EventSystem.Send("delete:entity", netId);
+                    if (DoesEntityExist(pedId))
+                    {
+                        goto REMOVE;
+                    }
+
+                REMOVE:
+                    ActiveCompanions.Remove(pedId);
+                    CompanionMoving.Remove(pedId);
+                    EventSystem.Send("delete:entity", netId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"RemoveCompanions");
             }
         }
     }

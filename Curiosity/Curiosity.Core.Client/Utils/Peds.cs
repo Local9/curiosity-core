@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -215,28 +216,35 @@ namespace Curiosity.Core.Client.Utils
 
         public static async Task Arm(int ped, string[] weaponList)
         {
-            API.TaskSetBlockingOfNonTemporaryEvents(ped, true);
-            API.SetPedKeepTask(ped, true);
-            await Delay(10);
-
-            API.SetPedCombatAbility(ped, 100);
-            API.SetPedCombatMovement(ped, 2);
-            API.SetPedCombatRange(ped, 2);
-            API.SetPedHearingRange(ped, float.MaxValue);
-            API.SetPedCombatAttributes(ped, 2, true);
-            API.SetPedCombatAttributes(ped, 5, true);
-            API.SetPedCombatAttributes(ped, 17, true);
-            API.SetPedCombatAttributes(ped, 46, true);
-            API.SetPedCombatAttributes(ped, 1424, true);
-            API.SetPedFleeAttributes(ped, 0, false);
-            API.SetEntityHealth(ped, 200);
-
-            if (weaponList != null && weaponList.Length > 0)
+            try
             {
-                API.SetPedArmour(ped, 200);
-                var weapon = weaponList[API.GetRandomIntInRange(0, weaponList.Length)];
-                int weaponHash = API.GetHashKey(weapon);
-                Weapons.Give(ped, (uint)weaponHash);
+                API.TaskSetBlockingOfNonTemporaryEvents(ped, true);
+                API.SetPedKeepTask(ped, true);
+                await Delay(10);
+
+                API.SetPedCombatAbility(ped, 100);
+                API.SetPedCombatMovement(ped, 2);
+                API.SetPedCombatRange(ped, 2);
+                API.SetPedHearingRange(ped, float.MaxValue);
+                API.SetPedCombatAttributes(ped, 2, true);
+                API.SetPedCombatAttributes(ped, 5, true);
+                API.SetPedCombatAttributes(ped, 17, true);
+                API.SetPedCombatAttributes(ped, 46, true);
+                API.SetPedCombatAttributes(ped, 1424, true);
+                API.SetPedFleeAttributes(ped, 0, false);
+                API.SetEntityHealth(ped, 200);
+
+                if (weaponList != null && weaponList.Length > 0)
+                {
+                    API.SetPedArmour(ped, 200);
+                    var weapon = weaponList[API.GetRandomIntInRange(0, weaponList.Length)];
+                    int weaponHash = API.GetHashKey(weapon);
+                    Weapons.Give(ped, (uint)weaponHash);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Arm Ped");
             }
         }
 
