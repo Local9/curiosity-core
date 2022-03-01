@@ -33,6 +33,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             {
                 jailEndTime = DateTime.UtcNow.AddMinutes(3);
 
+                PlayerOptionsManager.DisableWeapons(true);
+
                 float x = metadata.Find<float>(0);
                 float y = metadata.Find<float>(1);
                 float z = metadata.Find<float>(2);
