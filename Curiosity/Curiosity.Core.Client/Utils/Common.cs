@@ -154,16 +154,6 @@ namespace Curiosity.Core.Client.Utils
             }
         }
 
-        public static async Task<Model> RequestModel(uint modelHash)
-        {
-            if (!IsModelValid(modelHash))
-                return null;
-
-            Model model = new Model((int)modelHash);
-            await model.Request(1000);
-            return model;
-        }
-
         public static async Task RequestCollision(uint model)
         {
             if (!IsModelValid(model))

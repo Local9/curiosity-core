@@ -185,7 +185,7 @@ namespace Curiosity.Core.Client.Utils
 
         public static async Task<int> Spawn(uint modelKey, Vector3 coords, bool trySafeCoords = true, int pedType = 26)
         {
-            Model model = await Common.RequestModel(modelKey);
+            Model model = (int)modelKey;
             var pos = trySafeCoords ? GetSafeCoords(coords) : coords;
             var ped = await World.CreatePed(model, coords, API.GetRandomFloatInRange(0f, 360f));
             model.MarkAsNoLongerNeeded();

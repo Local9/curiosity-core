@@ -103,8 +103,8 @@ namespace Curiosity.Core.Client.Utils
                 Common.Notification(string.Format("Invalid model hash: 0x{0:X8} ({1})", hash, modelHashName));
                 return -1;
             }
-
-            Model model = await Common.RequestModel(hash);
+            
+            Model model = new Model(modelHashName);
             await Common.RequestCollision(hash);
             var prop = API.CreateObject(model.Hash, coords.X, coords.Y, coords.Z, true, false, false);
             _props.Add(prop);
