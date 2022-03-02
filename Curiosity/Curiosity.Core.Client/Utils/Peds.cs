@@ -183,14 +183,13 @@ namespace Curiosity.Core.Client.Utils
             return pos;
         }
 
-        public static async Task<int> Spawn(uint model, Vector3 coords, bool trySafeCoords = true, int pedType = 26)
+        public static async Task<int> Spawn(uint modelKey, Vector3 coords, bool trySafeCoords = true, int pedType = 26)
         {
-            await Common.RequestModel(model);
+            Model model = await Common.RequestModel(modelKey);
             var pos = trySafeCoords ? GetSafeCoords(coords) : coords;
-            var ped = API.CreatePed(pedType, model, pos.X, pos.Y, pos.Z, 0f, true, false);
-            API.SetModelAsNoLongerNeeded(model);
-            API.SetEntityHeading(ped, API.GetRandomFloatInRange(0f, 360f));
-            return ped;
+            var ped = await World.CreatePed(model, coords, API.GetRandomFloatInRange(0f, 360f));
+            model.MarkAsNoLongerNeeded();
+            return ped.Handle;
         }
 
         public static Task<int> Spawn(uint[] modelList, int pedType = 26)

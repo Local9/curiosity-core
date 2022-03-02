@@ -95,18 +95,18 @@ namespace Curiosity.Core.Client.Utils
             }
         }
 
-        public static async Task<int> SpawnAtCoords(string model, Vector3 coords, Vector3 rotation, bool allowEdit = true)
+        public static async Task<int> SpawnAtCoords(string modelHashName, Vector3 coords, Vector3 rotation, bool allowEdit = true)
         {
-            var hash = (uint)API.GetHashKey(model);
+            var hash = (uint)API.GetHashKey(modelHashName);
             if (!API.IsModelValid(hash))
             {
-                Common.Notification(string.Format("Invalid model hash: 0x{0:X8} ({1})", hash, model));
+                Common.Notification(string.Format("Invalid model hash: 0x{0:X8} ({1})", hash, modelHashName));
                 return -1;
             }
 
-            await Common.RequestModel(hash);
+            Model model = await Common.RequestModel(hash);
             await Common.RequestCollision(hash);
-            var prop = API.CreateObject((int)hash, coords.X, coords.Y, coords.Z, true, false, false);
+            var prop = API.CreateObject(model.Hash, coords.X, coords.Y, coords.Z, true, false, false);
             _props.Add(prop);
 
             API.SetModelAsNoLongerNeeded(hash);

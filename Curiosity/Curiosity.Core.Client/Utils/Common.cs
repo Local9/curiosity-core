@@ -154,18 +154,14 @@ namespace Curiosity.Core.Client.Utils
             }
         }
 
-        public static async Task RequestModel(uint model)
+        public static async Task<Model> RequestModel(uint modelHash)
         {
-            if (!IsModelValid(model))
-                return;
+            if (!IsModelValid(modelHash))
+                return null;
 
-            var start = DateTime.Now;
-
-            while (!HasModelLoaded(model))
-            {
-                RequestModel(model);
-                await BaseScript.Delay(10);
-            }
+            Model model = new Model((int)modelHash);
+            await model.Request(1000);
+            return model;
         }
 
         public static async Task RequestCollision(uint model)
