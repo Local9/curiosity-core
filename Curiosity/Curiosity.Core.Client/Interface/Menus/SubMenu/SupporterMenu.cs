@@ -168,8 +168,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 {
                     int ped = await CompanionManager.GetModule().SpawnHuman(modelHash);
 
-                    //if (ped != -1)
-                    //    AdditionalPedConfiguration(modelHash, ped);
+                    if (ped != -1)
+                        AdditionalPedConfiguration(modelHash, ped);
                 }
 
                 goto Exit;
