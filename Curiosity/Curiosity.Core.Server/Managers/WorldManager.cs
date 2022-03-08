@@ -148,7 +148,7 @@ namespace Curiosity.Core.Server.Managers
                 else
                 {
                     WeatherSeason season = WeatherData.GetCurrentSeason();
-                    List<WeatherType> weatherTypes = WeatherData.SeasonalWeather[season];
+                    List<WeatherType> weatherTypes = new List<WeatherType>(WeatherData.SeasonalWeather[season]);
 
                     if (numberOfWeatherCyclesProcessed == 3 && season == WeatherSeason.SPRING)
                     {
