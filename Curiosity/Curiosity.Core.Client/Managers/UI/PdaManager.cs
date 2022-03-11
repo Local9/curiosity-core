@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.FiveM;
@@ -72,6 +73,20 @@ namespace Curiosity.Core.Client.Managers
         public async void OpenPDA()
         {
             await Session.Loading();
+
+            bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+
+            if (Game.Player.WantedLevel > 0)
+            {
+                Notify.Error($"Cannot open PDA when wanted.");
+                return;
+            }
+
+            if (isWantedByPolice)
+            {
+                Notify.Error($"Cannot open PDA when wanted.");
+                return;
+            }
 
             if (!IsCoreOpen && Cache.Character.MarkedAsRegistered)
             {
