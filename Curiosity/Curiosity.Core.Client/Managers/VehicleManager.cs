@@ -258,6 +258,9 @@ namespace Curiosity.Core.Client.Managers
                 vehicle.IsPositionFrozen = true;
                 vehicle.FuelLevel = 0;
 
+                Game.PlayerPed.Task.WarpOutOfVehicle(vehicle);
+                vehicle.Dispose(true);
+
                 Notify.Error("Vehicle failed to be setup. Please try again.");
 
                 return;
