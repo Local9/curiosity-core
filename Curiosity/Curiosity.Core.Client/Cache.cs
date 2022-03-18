@@ -55,6 +55,8 @@ namespace Curiosity.Core.Client
             {
                 // PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
             }
+
+            SetPedMinGroundTimeForStungun(_ped.Handle, 20000);
         }
     }
 }
