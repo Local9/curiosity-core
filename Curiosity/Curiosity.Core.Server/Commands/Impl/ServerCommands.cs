@@ -16,6 +16,32 @@ namespace Curiosity.Core.Server.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
+        [CommandInfo(new[] { "wanted" })]
+        public class PlayerWanted : ICommand
+        {
+            public void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                string wanted = arguments.ElementAt(1);
+                if (!int.TryParse(arg, out int worldId))
+                {
+                    ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
+                    return;
+                }
+
+                bool isWanted = wanted == "wanted";
+
+                Player p = PluginManager.PlayersList[worldId];
+                p.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWanted, true);
+            }
+        }
+
         #region WORLD
         [CommandInfo(new[] { "weather" })]
         public class WorldWeather : ICommand
