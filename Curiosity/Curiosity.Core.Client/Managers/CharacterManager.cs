@@ -296,7 +296,7 @@ namespace Curiosity.Core.Client.Managers
                 WorldManager.GetModule().UpdateWeather(true);
 
                 await transition.Wait();
-                Screen.Fading.FadeIn(5000);
+                Screen.Fading.FadeIn(2500);
                 await transition.Down(player);
                 Game.PlayerPed.IsInvincible = false;
             }
@@ -311,9 +311,15 @@ namespace Curiosity.Core.Client.Managers
 
             TriggerMusicEvent($"{Instance.ClientMusicEvent.Stop}");
 
+            PopulateNow();
             if (Screen.Fading.IsFadedOut && !Screen.Fading.IsFadingOut)
             {
-                Screen.Fading.FadeIn(5000);
+                Screen.Fading.FadeIn(2500);
+            }
+
+            while(Screen.Fading.IsFadingIn)
+            {
+                await BaseScript.Delay(0);
             }
 
             CancelMusicEvent($"{Instance.ClientMusicEvent.Start}");
