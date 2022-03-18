@@ -468,5 +468,15 @@ namespace Curiosity.Core.Client.Utils
             }
             return -1;
         }
+
+        public static bool IsPointWithinCircle(float circleRadius, float circleCenterPointX, float circleCenterPointY, float pointToCheckX, float pointToCheckY)
+        {
+            return (Math.Pow(pointToCheckX - circleCenterPointX, 2) + Math.Pow(pointToCheckY - circleCenterPointY, 2)) < (Math.Pow(circleRadius, 2));
+        }
+
+        public static bool IsPointWithinSphere(this Vector3 PointToCheck, float sphereRadius, Vector3 SphereCenter)
+        {
+            return (Math.Pow(SphereCenter.X - PointToCheck.X, 2) + Math.Pow(SphereCenter.Y - PointToCheck.Y, 2) + Math.Pow(SphereCenter.Z - PointToCheck.Z, 2)) < Math.Pow(sphereRadius, 2);
+        }
     }
 }

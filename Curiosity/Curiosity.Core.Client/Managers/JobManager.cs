@@ -4,6 +4,8 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -19,6 +21,7 @@ namespace Curiosity.Core.Client.Managers
 
         internal static int isPassiveStateBagHandler = 0;
         internal static int jobStateBagHandler = 0;
+        internal int stunGunHash => GetHashKey("WEAPON_STUNGUN");
 
         internal NotificationManager Notify => NotificationManager.GetModule();
         internal PlayerOptionsManager playerOptionsManager => PlayerOptionsManager.GetModule();
@@ -115,6 +118,7 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
                 await BaseScript.Delay(100);
+                Instance.AttachTickHandler(OnPoliceStunGunMonitor);
                 Instance.AttachTickHandler(OnDisablePoliceAndDispatch);
 
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
@@ -124,6 +128,7 @@ namespace Curiosity.Core.Client.Managers
             }
             else if (!IsOfficer && WasOfficer)
             {
+                Instance.DetachTickHandler(OnPoliceStunGunMonitor);
                 Instance.DetachTickHandler(OnDisablePoliceAndDispatch);
 
                 Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
@@ -150,6 +155,30 @@ namespace Curiosity.Core.Client.Managers
         {
             SetMaxWantedLevel(0);
             await BaseScript.Delay(500);
+        }
+
+        async Task OnPoliceStunGunMonitor()
+        {
+            bool isStungun = Game.PlayerPed.Weapons.Current.Hash == WeaponHash.StunGun;
+            if (!isStungun)
+            {
+                await BaseScript.Delay(500);
+                return;
+            }
+
+            if (Game.PlayerPed.IsShooting)
+            {
+                Vector3 weaponImpact = Game.PlayerPed.GetLastWeaponImpactPosition();
+                List<Player> players = PluginManager.Instance.PlayerList.Where(p => p.Character.IsInRangeOf(weaponImpact, 1f)).ToList();
+                foreach (Player player in players)
+                {
+                    bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+                    if (!isWanted)
+                    {
+                        EventSystem.Send("police:officerTazedPlayer", Game.Player.ServerId, player.ServerId);
+                    }
+                }
+            }
         }
 
         void ToggleDispatch(bool toggle)

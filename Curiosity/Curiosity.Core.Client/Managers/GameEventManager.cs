@@ -244,6 +244,8 @@ namespace Curiosity.Core.Client.Managers
                 }
             }
 
+            Logger.Debug($"Damage Event: weaponInfoHash : {weaponInfoHash} : StunGun: {GetHashKey("WEAPON_STUNGUN")}");
+
             if (isDamageFatal)
             {
                 if (isAttackerPlayer && isVictimPlayer)
