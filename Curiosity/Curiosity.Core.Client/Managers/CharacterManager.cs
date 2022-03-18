@@ -343,7 +343,7 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Send("user:job", "Unemployed");
 
             // CreatePlayerGroup();
-            SetPedMinGroundTimeForStungun(Game.PlayerPed.Handle, 20000);
+            SetPedMinGroundTimeForStungun(Game.PlayerPed.Handle, 10000);
 
             Vector3 p = Game.PlayerPed.Position;
             var spawn = new { x = p.X, y = p.Y, z = p.Z, heading = Game.PlayerPed.Heading, model = Game.PlayerPed.Model.Hash };
