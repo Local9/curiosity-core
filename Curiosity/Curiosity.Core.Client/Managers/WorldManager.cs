@@ -406,7 +406,7 @@ namespace Curiosity.Core.Client.Managers
             if (vehiclesToLock.Count > 0)
                 vehiclesToLock.Clear();
 
-            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 10f)).ToList();
+            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 15f)).ToList();
 
             vehiclesToLock.ForEach(async vehicle =>
             {
@@ -451,7 +451,12 @@ namespace Curiosity.Core.Client.Managers
                     bool serverSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
                     bool shouldBeDeleted = veh.State.Get(StateBagKey.ENTITY_DELETE) ?? false;
 
-                    if (veh.Driver == Game.PlayerPed && !Cache.Player.User.IsStaff && !serverSpawned)
+                    if (shouldBeDeleted)
+                    {
+                        if (veh.Exists())
+                            veh.Delete();
+                    }
+                    else if (veh.Driver == Game.PlayerPed && !Cache.Player.User.IsStaff && !serverSpawned)
                     {
                         Game.PlayerPed.Task.WarpOutOfVehicle(veh);
                         Notify.Warn($"This is a blacklisted vehicle.");
