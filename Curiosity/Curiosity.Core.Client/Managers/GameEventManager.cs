@@ -8,6 +8,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
 using Curiosity.Core.Client.State;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
@@ -42,6 +43,8 @@ namespace Curiosity.Core.Client.Managers
         public static event EntityKillEntityEvent OnEntityKillEntity;
         public static event DeadEvent OnDeath;
         public static event EnteredVehicle OnEnteredVehicle;
+
+        PlayerOptionsManager playerOptions => PlayerOptionsManager.GetModule();
 
         public override void Begin()
         {
@@ -205,46 +208,46 @@ namespace Curiosity.Core.Client.Managers
             int arg5, int arg6, object arg7, object arg8, bool isMeleeDamage,
             int damageTypeFlag)
         {
+            bool isAttackerPed = false;
+            bool isAttackerPlayer = false;
+            Ped pedAttacker = null;
+            Player playerAttacker = null;
+            // Ped
+            if (attacker is Ped)
+            {
+                pedAttacker = (Ped)attacker;
+                isAttackerPed = true;
+                // Player
+                if (pedAttacker.IsPlayer)
+                {
+                    playerAttacker = new Player(API.NetworkGetPlayerIndexFromPed(pedAttacker.Handle));
+                    isAttackerPlayer = true;
+                }
+            }
+            bool isVictimPed = false;
+            bool isVictimPlayer = false;
+            bool isVictimThisPlayer = false;
+            Ped pedVictim = null;
+            Player playerVictim = null;
+            // Ped
+            if (victim is Ped)
+            {
+                pedVictim = (Ped)victim;
+                isVictimPed = true;
+                // Player
+                if (pedVictim.IsPlayer)
+                {
+                    playerVictim = new Player(API.NetworkGetPlayerIndexFromPed(pedVictim.Handle));
+                    isVictimPlayer = true;
+                    if (playerVictim == Game.Player)
+                    {
+                        isVictimThisPlayer = true;
+                    }
+                }
+            }
+
             if (isDamageFatal)
             {
-                bool isAttackerPed = false;
-                bool isAttackerPlayer = false;
-                Ped pedAttacker = null;
-                Player playerAttacker = null;
-                // Ped
-                if (attacker is Ped)
-                {
-                    pedAttacker = (Ped)attacker;
-                    isAttackerPed = true;
-                    // Player
-                    if (pedAttacker.IsPlayer)
-                    {
-                        playerAttacker = new Player(API.NetworkGetPlayerIndexFromPed(pedAttacker.Handle));
-                        isAttackerPlayer = true;
-                    }
-                }
-                bool isVictimPed = false;
-                bool isVictimPlayer = false;
-                bool isVictimThisPlayer = false;
-                Ped pedVictim = null;
-                Player playerVictim = null;
-                // Ped
-                if (victim is Ped)
-                {
-                    pedVictim = (Ped)victim;
-                    isVictimPed = true;
-                    // Player
-                    if (pedVictim.IsPlayer)
-                    {
-                        playerVictim = new Player(API.NetworkGetPlayerIndexFromPed(pedVictim.Handle));
-                        isVictimPlayer = true;
-                        if (playerVictim == Game.Player)
-                        {
-                            isVictimThisPlayer = true;
-                        }
-                    }
-                }
-
                 if (isAttackerPlayer && isVictimPlayer)
                 {
                     OnPlayerKillPlayer?.Invoke(playerAttacker, playerVictim, isMeleeDamage, weaponInfoHash, damageTypeFlag);
@@ -271,6 +274,16 @@ namespace Curiosity.Core.Client.Managers
                     OnDeath?.Invoke(attacker, isMeleeDamage, weaponInfoHash, damageTypeFlag);
                 }
 
+            }
+            else if (!isDamageFatal)
+            {
+                if (isAttackerPlayer && isVictimPlayer && weaponInfoHash == GetHashKey("WEAPON_STUNGUN"))
+                {
+                    if (pedAttacker == Cache.PlayerPed && playerOptions.CurrentJob == ePlayerJobs.POLICE_OFFICER)
+                    {
+                        EventSystem.Send("police:officerTazedPlayer", playerAttacker.ServerId, playerVictim.ServerId);
+                    }
+                }
             }
 
         }
