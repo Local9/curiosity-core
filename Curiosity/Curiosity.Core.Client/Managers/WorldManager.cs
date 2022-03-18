@@ -406,7 +406,7 @@ namespace Curiosity.Core.Client.Managers
             if (vehiclesToLock.Count > 0)
                 vehiclesToLock.Clear();
 
-            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 10f)).ToList();
+            vehiclesToLock = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 10f)).ToList();
 
             vehiclesToLock.ForEach(async vehicle =>
             {
@@ -444,7 +444,7 @@ namespace Curiosity.Core.Client.Managers
                     SetVehicleModelIsSuppressed((uint)veh, true);
                 });
 
-                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f) && vehiclesToSuppress.Contains(x.Model.Hash)).ToList();
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 50f) && vehiclesToSuppress.Contains(x.Model.Hash)).ToList();
 
                 vehicles.ForEach(veh =>
                 {
@@ -479,7 +479,7 @@ namespace Curiosity.Core.Client.Managers
             try
             {
                 SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0f);
-                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 50f)).ToList();
+                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 50f)).ToList();
 
                 if (peds.Count == 0)
                 {
@@ -513,7 +513,6 @@ namespace Curiosity.Core.Client.Managers
             }
             catch (Exception ex)
             {
-                Cache.UpdatePedId();
                 Logger.Error($"OnPedManagement -> {ex}");
             }
         }

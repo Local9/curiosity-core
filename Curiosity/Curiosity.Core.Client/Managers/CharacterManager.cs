@@ -337,13 +337,13 @@ namespace Curiosity.Core.Client.Managers
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
-            Cache.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
+            Game.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
             Game.PlayerPed.IsInvincible = false;
 
             EventSystem.Send("user:job", "Unemployed");
 
             // CreatePlayerGroup();
-            Cache.UpdatePedId(true);
+            SetPedMinGroundTimeForStungun(Game.PlayerPed.Handle, 20000);
 
             Vector3 p = Game.PlayerPed.Position;
             var spawn = new { x = p.X, y = p.Y, z = p.Z, heading = Game.PlayerPed.Heading, model = Game.PlayerPed.Model.Hash };

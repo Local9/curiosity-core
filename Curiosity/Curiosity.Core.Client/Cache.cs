@@ -21,42 +21,13 @@ namespace Curiosity.Core.Client
         public static VehicleState PersonalHelicopter;
 
         private static Ped _ped;
-        public static Ped PlayerPed
-        {
-            get
-            {
-                if (_ped == null)
-                    UpdatePedId();
-
-                if (_ped.Handle != PlayerPedId())
-                    UpdatePedId();
-
-                return _ped;
-            }
-            internal set => _ped = value;
-        }
+        public static Ped PlayerPed => Game.PlayerPed;
 
         public static PedGroup PedGroup { get; internal set; }
 
         static Cache()
         {
             _ped = new Ped(PlayerPedId());
-        }
-
-        public static void UpdatePedId(bool export = false)
-        {
-            PlayerPed = new Ped(PlayerPedId());
-            _ped = PlayerPed;
-
-            if (Player is not null)
-                Player.Entity = new CuriosityEntity(_ped.Handle);
-
-            if (export)
-            {
-                // PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
-            }
-
-            SetPedMinGroundTimeForStungun(_ped.Handle, 20000);
         }
     }
 }

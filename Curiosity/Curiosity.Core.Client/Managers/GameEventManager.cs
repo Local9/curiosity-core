@@ -125,8 +125,6 @@ namespace Curiosity.Core.Client.Managers
 
             // MOVE THIS SHIT
 
-            Cache.UpdatePedId();
-
             if (player.Character.Handle != Cache.PlayerPed.Handle) return;
 
             if (vehicle is Vehicle)

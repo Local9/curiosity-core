@@ -327,7 +327,6 @@ namespace Curiosity.Core.Client.Managers
 
         internal Position NearestHospital()
         {
-            Cache.UpdatePedId();
             return FindClosestPoint(Cache.PlayerPed.Position, HospitalSpawns);
         }
 

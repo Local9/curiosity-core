@@ -125,8 +125,6 @@ namespace Curiosity.Core.Client.Extensions
             await Game.Player.ChangeModel(playerModel);
             playerModel.MarkAsNoLongerNeeded();
 
-            Cache.UpdatePedId();
-
             int fatherId = character.Heritage.FatherId;
             int motherId = character.Heritage.MotherId;
             float remBlend = character.Heritage.BlendApperance;
@@ -281,7 +279,6 @@ namespace Curiosity.Core.Client.Extensions
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             Cache.PlayerPed.IsPositionFrozen = true;
             PlaceObjectOnGroundProperly(Cache.PlayerPed.Handle);
-            Cache.UpdatePedId(true);
 
             await Cache.PlayerPed.FadeIn();
 

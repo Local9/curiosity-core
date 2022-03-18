@@ -17,8 +17,6 @@ namespace Curiosity.Core.Client.Managers
             Logger.Info($"------------ [LoginManager] Begin ----------------");
             Logger.Info($"--------------------------------------------------");
 
-            Cache.UpdatePedId();
-
             API.NetworkSetFriendlyFireOption(false);
             API.SetCanAttackFriendly(API.PlayerPedId(), false, false);
             API.StopPlayerSwitch();
@@ -42,8 +40,6 @@ namespace Curiosity.Core.Client.Managers
             }
 
             await Game.Player.ChangeModel(playerModel);
-
-            Cache.UpdatePedId();
 
             playerModel.MarkAsNoLongerNeeded();
 

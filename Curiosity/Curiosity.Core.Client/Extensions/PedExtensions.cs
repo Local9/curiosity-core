@@ -43,8 +43,6 @@ namespace Curiosity.Core.Client.Extensions
             {
                 await BaseScript.Delay(10);
             }
-
-            Cache.UpdatePedId();
         }
     }
 }

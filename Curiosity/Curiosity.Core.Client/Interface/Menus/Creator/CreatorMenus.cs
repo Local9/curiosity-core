@@ -146,7 +146,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 while (Screen.Fading.IsFadingOut) await BaseScript.Delay(10);
 
                 await Game.Player.ChangeModel(playerModel);
-                Cache.UpdatePedId();
 
                 if (Cache.Character.Heritage == null)
                 {
