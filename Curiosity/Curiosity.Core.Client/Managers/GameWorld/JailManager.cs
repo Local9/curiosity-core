@@ -114,6 +114,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 Instance.DetachTickHandler(OnJailTimerCheck);
                 Instance.DetachTickHandler(OnJailCheck);
 
+                StungunManager.GetModule().StungunCount = 0;
+
                 TeleportPlayer(1847.085f, 2585.711f, 45.67204f);
                 PlayerOptionsManager.DisableWeapons(false);
                 EventSystem.Send("police:player:jail:served");

@@ -248,6 +248,43 @@ namespace Curiosity.Core.Server.Managers
                 return false;
             }));
 
+            EventSystem.Attach("police:playerTazedPlayer", new AsyncEventCallback(async metadata =>
+            {
+                int attackerServerId = metadata.Find<int>(0);
+                int victimServerId = metadata.Find<int>(1);
+
+                if (attackerServerId == victimServerId) return null;
+
+                Player attacker = PluginManager.PlayersList[attackerServerId];
+                Player victim = PluginManager.PlayersList[victimServerId];
+
+                bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                bool isAttackerPassive = attacker.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+
+                bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+                bool attackerIsOfficer = (attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == (int)ePlayerJobs.POLICE_OFFICER;
+
+                if (isAttackerPassive)
+                {
+                    SendNotification(attackerServerId, $"You have attacked someone while in a passive state, go straight to Jail. No pass go, do not pick up $200.");
+                    await SendSuspectToJail(attackerServerId, attacker);
+
+                    return null;
+                }
+
+                attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
+                SendNotification(attackerServerId, $"You are now wanted.");
+
+                Dictionary<string, string> tableRows = new Dictionary<string, string>();
+                tableRows.Add("Player", attacker.Name);
+                tableRows.Add("Info", "Wanted by Police");
+
+                string notificationTable = CreateBasicNotificationTable("Player abusing stungun!", tableRows);
+                SendNotification(SEND_JOB_ONLY, notificationTable);
+
+                return null;
+            }));
+
             EventSystem.Attach("police:officerTazedPlayer", new AsyncEventCallback(async metadata =>
             {
                 int attackerServerId = metadata.Find<int>(0);
