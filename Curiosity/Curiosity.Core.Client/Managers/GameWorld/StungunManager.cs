@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Enums;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,27 @@ namespace Curiosity.Core.Client.Managers.GameWorld
     {
         PlayerOptionsManager playerOptions => PlayerOptionsManager.GetModule();
         public int StungunCount = 0;
+        int lastTimer = 0;
+        int cooldownTime = (1000 * 60);
 
         public override void Begin()
         {
-            
+            lastTimer = API.GetGameTimer();
         }
 
-
+        [TickHandler(SessionWait = true)]
+        private async Task OnStunCooldown()
+        {
+            if ((API.GetGameTimer() - lastTimer) > cooldownTime)
+            {
+                if (StungunCount > 0)
+                    StungunCount--;
+                lastTimer = API.GetGameTimer();
+            }
+        }
 
         [TickHandler(SessionWait = true)]
-        async Task OnStunGunMonitor()
+        private async Task OnStunGunMonitor()
         {
             bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             if (isPassive)
