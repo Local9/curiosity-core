@@ -19,8 +19,15 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
 
         [TickHandler(SessionWait = true)]
-        async Task OnPoliceStunGunMonitor()
+        async Task OnStunGunMonitor()
         {
+            bool isPassive = Game.Player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+            if (isPassive)
+            {
+                await BaseScript.Delay(500);
+                return;
+            }
+
             bool isStungun = Game.PlayerPed.Weapons.Current.Hash == WeaponHash.StunGun;
             if (!isStungun)
             {
