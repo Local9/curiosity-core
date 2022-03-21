@@ -123,10 +123,12 @@ namespace Curiosity.Core.Client.Managers
                 isPassiveStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_PASSIVE, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerPassiveChange));
                 jobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerJobChange));
 
+                SetPedMinGroundTimeForStungun(Game.PlayerPed.Handle, 2500);
                 ToggleDispatch(false);
             }
             else if (!IsOfficer && WasOfficer)
             {
+                SetPedMinGroundTimeForStungun(Game.PlayerPed.Handle, 10000);
                 Instance.DetachTickHandler(OnDisablePoliceAndDispatch);
 
                 Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
