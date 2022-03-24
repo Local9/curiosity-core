@@ -204,6 +204,9 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     if (curiosityUser != null)
                     {
+                        if (curiosityUser.Job != ePlayerJobs.POLICE_OFFICER)
+                            return false;
+
                         int userCharacterId = curiosityUser.Character.CharacterId;
                         await Database.Store.SkillDatabase.Adjust(userCharacterId, DB_POLICE_SKILL, 250);
                         await Database.Store.BankDatabase.Adjust(userCharacterId, 2500);
