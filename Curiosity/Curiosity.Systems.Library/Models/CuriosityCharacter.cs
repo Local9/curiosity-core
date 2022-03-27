@@ -19,7 +19,7 @@ namespace Curiosity.Systems.Library.Models
         public int Armor { get; set; }
         public bool IsDead { get; set; }
         public bool IsPassive { get; set; }
-        public long Cash { get; set; }
+        public ulong Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
         public int Gender { get; set; } = 0; // Default Gender is Male
         public Position LastPosition { get; set; } = new Position(405.9247f, -997.2114f, -99.00401f, 86.36787f);

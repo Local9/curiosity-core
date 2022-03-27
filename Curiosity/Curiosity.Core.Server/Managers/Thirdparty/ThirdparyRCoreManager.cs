@@ -35,7 +35,7 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
 
-                if ((user.Character.Cash - amt) < 0)
+                if ((user.Character.Cash - (ulong)amt) < 0)
                 {
                     cb.Invoke(false);
                     return;
@@ -51,7 +51,7 @@ namespace Curiosity.Core.Server.Managers.Thirdparty
                 if (!PluginManager.ActiveUsers.ContainsKey(source)) return;
                 CuriosityUser user = PluginManager.ActiveUsers[source];
 
-                if ((user.Character.Cash - amt) < 0)
+                if ((user.Character.Cash - (ulong)amt) < 0)
                     amt = (int)user.Character.Cash;
 
                 DiscordClient.SendDiscordPlayerLogMessage($"RACE: Player {user.LatestName} just entered a race for ${amt:N0}");

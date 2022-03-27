@@ -160,7 +160,7 @@ namespace Curiosity.Core.Server.Managers
                     return em;
                 }
 
-                if (curiosityUser.Character.Cash < policeTicket.TicketValue)
+                if (curiosityUser.Character.Cash < (ulong)policeTicket.TicketValue)
                 {
                     SendNotification(metadata.Sender, $"Not enough cash to pay.", eNotification.NOTIFICATION_WARNING);
                     Logger.Error("police:suspect:ticket:pay => Not enough cash to pay");

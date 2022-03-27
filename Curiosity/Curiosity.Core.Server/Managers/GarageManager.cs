@@ -97,7 +97,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (success)
                     {
-                        long characterAmount = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -5000);
+                        ulong characterAmount = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -5000);
                         curiosityUser.Character.Cash = characterAmount;
                         return exportMessage;
                     }
@@ -325,7 +325,7 @@ namespace Curiosity.Core.Server.Managers
                         goto EXIT;
                     }
 
-                    int newCash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, vehicleItem.BuyBackValue);
+                    ulong newCash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, vehicleItem.BuyBackValue);
                     curiosityUser.Character.Cash = newCash;
 
                     curiosityUser.NotificationSuccess($"Vehicle Sold ({vehicleItem.BuyBackValue:C0})");

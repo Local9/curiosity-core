@@ -16,7 +16,7 @@ namespace Curiosity.Core.Server.Database.Store
         public static async Task<CuriosityCharacter> Get(ulong discordId)
         {
             int serverId = PluginManager.ServerId;
-            int starterCash = API.GetConvarInt("starter_cash", 100);
+            ulong starterCash = (ulong)API.GetConvarInt("starter_cash", 100);
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
             {
@@ -44,7 +44,7 @@ namespace Curiosity.Core.Server.Database.Store
 
                     curiosityCharacter.CharacterId = kv["characterId"].ToInt();
                     curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToInt() == 1;
-                    curiosityCharacter.Cash = kv["Cash"].ToLong();
+                    curiosityCharacter.Cash = kv["Cash"].ToUnsignedLong();
 
                     if (!curiosityCharacter.MarkedAsRegistered && curiosityCharacter.Cash == 0)
                         curiosityCharacter.Cash = starterCash;

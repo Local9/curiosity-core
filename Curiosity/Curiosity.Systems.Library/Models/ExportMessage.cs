@@ -25,13 +25,13 @@ namespace Curiosity.Systems.Library.Models
         public string error;
 
         [DataMember(Name = "newNumberValue", Order = 2, EmitDefaultValue = false)]
-        public int newNumberValue;
+        public long newNumberValue;
 
         [DataMember(Name = "skill", Order = 2, EmitDefaultValue = false)]
         public CharacterSkillExport skill;
 
         [DataMember(Name = "value", Order = 2, EmitDefaultValue = false)]
-        public int value { get; set; }
+        public long value { get; set; }
 
         [DataMember(Name = "item", Order = 2, EmitDefaultValue = false)]
         public CuriosityShopItem item { get; set; }

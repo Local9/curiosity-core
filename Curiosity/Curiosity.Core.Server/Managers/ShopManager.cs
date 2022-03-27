@@ -134,10 +134,10 @@ namespace Curiosity.Core.Server.Managers
 
                 CheckWallet:
                     // Check wallet
-                    int characterCash = await Database.Store.BankDatabase.Get(characterId);
+                    ulong characterCash = await Database.Store.BankDatabase.Get(characterId);
                     curiosityUser.Character.Cash = characterCash;
 
-                    if (curiosityUser.Character.Cash < item.BuyValue) goto FailedPurchaseCash;
+                    if (curiosityUser.Character.Cash < (ulong)item.BuyValue) goto FailedPurchaseCash;
                     goto CheckRoles;
 
                 CheckRoles:
@@ -226,7 +226,7 @@ namespace Curiosity.Core.Server.Managers
                 AdjustWallet:
                     // if all pass, allow purchase, else fail
                     int minusValue = (int)item.BuyValue * -1;
-                    int newWalletValue = await Database.Store.BankDatabase.Adjust(characterId, minusValue);
+                    ulong newWalletValue = await Database.Store.BankDatabase.Adjust(characterId, minusValue);
                     curiosityUser.Character.Cash = newWalletValue;
 
                     if (item.IsStockManaged)

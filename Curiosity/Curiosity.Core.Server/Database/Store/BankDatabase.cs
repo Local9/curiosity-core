@@ -9,7 +9,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class BankDatabase
     {
-        public static async Task<int> Adjust(int characterId, long amount)
+        public static async Task<ulong> Adjust(int characterId, long amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             string myQuery = "call upCharacterCash(@characterId, @amount);";
 
-            int newValue = 0;
+            ulong newValue = 0;
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -32,14 +32,14 @@ namespace Curiosity.Core.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    newValue = kv["return"].ToInt();
+                    newValue = kv["return"].ToUnsignedLong();
                 }
             }
 
             return newValue;
         }
 
-        public static async Task<int> Get(int characterId)
+        public static async Task<ulong> Get(int characterId)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
@@ -48,7 +48,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             string myQuery = "call selCharacterCash(@characterId);";
 
-            int newValue = 0;
+            ulong newValue = 0;
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -61,7 +61,7 @@ namespace Curiosity.Core.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    newValue = kv["return"].ToInt();
+                    newValue = kv["return"].ToUnsignedLong();
                 }
             }
 

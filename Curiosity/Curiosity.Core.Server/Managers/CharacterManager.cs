@@ -325,11 +325,11 @@ namespace Curiosity.Core.Server.Managers
 
                 int costOfRespawn = curiosityUser.Character.RespawnCharge();
 
-                long totalSum = curiosityUser.Character.Cash - costOfRespawn;
+                long totalSum = (long)curiosityUser.Character.Cash - costOfRespawn;
                 if (totalSum < 0)
                     costOfRespawn = 0;
 
-                if (curiosityUser.Character.Cash >= costOfRespawn)
+                if (curiosityUser.Character.Cash >= (ulong)costOfRespawn)
                 {
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn * -1);
                     curiosityUser.Send("character:respawn:hospital");
@@ -432,19 +432,19 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
 
-                long costForDeath = 500 * player.TimesKilledSelf;
+                long costForDeath = (long)(500 * player.TimesKilledSelf);
 
                 player.TimesKilledSelf++;
 
                 if (costForDeath > 10000)
                     costForDeath = 10000;
 
-                if (player.Character.Cash - costForDeath < 0)
-                    costForDeath = player.Character.Cash;
+                if (player.Character.Cash - (ulong)costForDeath < 0)
+                    costForDeath = (long)player.Character.Cash;
 
                 if (costForDeath > 0)
                 {
-                    player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, costForDeath * -1);
+                    player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, (costForDeath * -1));
                     await Database.Store.StatDatabase.Adjust(player.Character.CharacterId, Stat.STAT_KILLED_SELF, 1);
                 }
 
@@ -779,11 +779,11 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
-                    int cashValue = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
+                    ulong cashValue = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
 
                     user.Character.Cash = cashValue;
 
-                    exportMessage.value = cashValue;
+                    exportMessage.value = (long)cashValue;
 
                 SendMessage:
                     return $"{exportMessage}";
@@ -809,13 +809,13 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
-                    long originalValue = user.Character.Cash;
+                    ulong originalValue = user.Character.Cash;
 
-                    int newCashValue = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
+                    ulong newCashValue = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
 
                     user.Character.Cash = newCashValue;
 
-                    exportMessage.newNumberValue = newCashValue;
+                    exportMessage.newNumberValue = (long)newCashValue;
 
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt}' (change '{originalValue}' to '{newCashValue}')");
                     await BaseScript.Delay(0);

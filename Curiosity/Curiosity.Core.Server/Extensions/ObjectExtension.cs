@@ -44,6 +44,11 @@ namespace Curiosity.Core.Server.Extensions
             return long.Parse($"{o}");
         }
 
+        public static ulong ToUnsignedLong(this object o)
+        {
+            return ulong.Parse($"{o}");
+        }
+
         public static DateTime ToDateTime(this object o)
         {
             return DateTime.Parse($"{o}");
