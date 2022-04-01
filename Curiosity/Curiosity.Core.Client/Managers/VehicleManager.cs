@@ -1193,6 +1193,7 @@ namespace Curiosity.Core.Client.Managers
 
                 vehicle.IsPositionFrozen = false;
                 vehicle.IsCollisionEnabled = true;
+                vehicle.FadeIn();
 
                 if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
                 {
