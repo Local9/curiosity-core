@@ -32,7 +32,7 @@ namespace Curiosity.Core.Client.Extensions
         {
             if (fadeIn)
             {
-                API.NetworkFadeInEntity(ped.Handle, slow);
+                Function.Call((Hash)0x1F4ED342ACEFE62D, ped.Handle, fadeIn, slow);
             }
             else
             {

@@ -148,7 +148,8 @@ namespace Curiosity.Core.Client.Extensions
         {
             if (fadeIn)
             {
-                API.NetworkFadeInEntity(veh.Handle, slow);
+                Function.Call((Hash)0x1F4ED342ACEFE62D, veh.Handle, fadeOutNormal, slow);
+                // API.NetworkFadeInEntity(veh.Handle, slow);
             }
             else
             {
