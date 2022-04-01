@@ -1129,7 +1129,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     vehicle.Position = Game.PlayerPed.Position;
 
-                    await vehicle.FadeIn();
+                    vehicle.FadeIn();
                     vehicle.Opacity = 255;
                     vehicle.ResetOpacity();
                     return;

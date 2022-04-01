@@ -356,7 +356,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         vehicle.PlaceOnGround();
                     }
 
-                    await vehicle.FadeIn();
+                    vehicle.FadeIn();
                     vehicle.Opacity = 255;
                     vehicle.ResetOpacity();
                     API.SetVehicleExclusiveDriver_2(vehicle.Handle, Game.PlayerPed.Handle, 1);
@@ -447,7 +447,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     Cache.PersonalTrailer = new State.VehicleState(vehicle);
                     Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
-                    await vehicle.FadeIn();
+                    vehicle.FadeIn();
                     return;
                 }
                 EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
