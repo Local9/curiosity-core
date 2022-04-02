@@ -126,8 +126,8 @@ namespace Curiosity.Core.Server.Managers
                         if (Instance.ExportDictionary["npwd"] is not null)
                         {
                             var npwd = Instance.ExportDictionary["npwd"];
-                            NPWD newPlayer = new NPWD() { source = metadata.Sender, firstname = player.Name, identifier = player.Identifiers["discord"], phoneNumber = player.Identifiers["discord"] };
-                            npwd.newPlayer($"{newPlayer}");
+                            string discord = player.Identifiers["discord"];
+                            npwd.newPlayerAdvanced(metadata.Sender, player.Name, discord, discord);
                         }
                     }
 
