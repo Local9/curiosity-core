@@ -129,7 +129,7 @@ namespace Curiosity.LifeV.Bot
                     PingHandler.ReactToMention(message, context);
                 }
 
-                messageHandlers.DeleteAnythingWithTheWordNitro(message, context);
+                // messageHandlers.DeleteAnythingWithTheWordNitro(message, context);
 
                 messageHandlers.HandleCustomResponseMessage(message, context);
 

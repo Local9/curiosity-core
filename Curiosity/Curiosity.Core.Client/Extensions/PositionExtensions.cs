@@ -53,6 +53,8 @@ namespace Curiosity.Core.Client.Extensions
 
         public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
         {
+            if (!useZ) return Vector3.Distance(position, target);
+
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
 

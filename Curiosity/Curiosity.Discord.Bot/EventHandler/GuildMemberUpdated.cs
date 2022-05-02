@@ -19,11 +19,11 @@ namespace Curiosity.LifeV.Bot.EventHandler
 
         public static object StringValue { get; private set; }
 
-        public static async Task Handle(SocketGuildUser before, SocketGuildUser after)
+        public static async Task Handle(Cacheable<SocketGuildUser, ulong> before, SocketGuildUser after)
         {
             try
             {
-                if (before.Roles.Count != after.Roles.Count)
+                if (before.Value.Roles.Count != after.Roles.Count)
                 {
                     Models.User dbUser = await new Models.User().FindUserAsync(after.Id);
 
