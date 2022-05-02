@@ -142,6 +142,7 @@ namespace Curiosity.LifeV.Bot
                                 if (socketGuild != null)
                                 {
                                     SocketGuildUser socketGuildUser = socketGuild.GetUser(discordId);
+                                    await Task.Delay(250);
 
                                     int failureCount = 0;
 
@@ -218,9 +219,9 @@ namespace Curiosity.LifeV.Bot
                                     }
                                     else
                                     {
-                                        Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
-                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times, D: {discordId})");
-                                        await user.RemoveDonatorStatus(); // just fucking removing it
+                                        // Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
+                                        // _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times, D: {discordId})");
+                                        // await user.RemoveDonatorStatus(); // just fucking removing it
                                     }
                                 }
                                 else
