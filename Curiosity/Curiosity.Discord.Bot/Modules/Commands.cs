@@ -64,6 +64,9 @@ namespace Curiosity.LifeV.Bot.Modules
                 case "drifting":
                     url = $"{url}Drifting";
                     break;
+                case "firststeps":
+                    url = $"{url}First_Steps";
+                    break;
             }
 
             await ReplyAsync($"Wiki URL: <{url}>");
