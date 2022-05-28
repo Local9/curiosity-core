@@ -88,10 +88,28 @@ namespace Curiosity.LifeV.Bot
             }
 
             _client.GuildMemberUpdated += GuildMemberUpdated.Handle;
+            _client.PresenceUpdated += _client_PresenceUpdated;
+            _client.InviteCreated += _client_InviteCreated;
+            _client.GuildScheduledEventCreated += _client_GuildScheduledEventCreated;
 
             messageHandlers = new MessageHandlers(_client, guildId);
 
             await Task.Delay(-1);
+        }
+
+        private Task _client_GuildScheduledEventCreated(SocketGuildEvent arg)
+        {
+            return Task.CompletedTask;
+        }
+
+        private Task _client_InviteCreated(SocketInvite arg)
+        {
+            return Task.CompletedTask;
+        }
+
+        private Task _client_PresenceUpdated(SocketUser arg1, SocketPresence arg2, SocketPresence arg3)
+        {
+            return Task.CompletedTask;
         }
 
         private Task Client_Log(LogMessage arg)
