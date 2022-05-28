@@ -291,7 +291,7 @@ namespace Curiosity.LifeV.Bot.Modules
                 hasDonatorRole = roleIdList.Contains(541955570601558036) // LIFE
                             || roleIdList.Contains(588440994543042560) // L2
                             || roleIdList.Contains(588443443496222720) // L1
-                            || roleIdList.Contains(588444129722105856); // L3
+                            || roleIdList.Contains(588444129722105856); // L3 588444129722105856
 
                 int donatorRoleId = 9;
                 string tier = "Life V Life Time Supporter";

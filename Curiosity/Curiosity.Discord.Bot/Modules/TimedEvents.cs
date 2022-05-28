@@ -160,6 +160,11 @@ namespace Curiosity.LifeV.Bot
                                     if (socketGuildUser == null)
                                     {
 
+                                        if (socketGuildUser?.Roles == null)
+                                        {
+                                            throw new Exception($"BS ERROR: {discordId} has no roles?!");
+                                        }
+
                                         IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
 
                                         if (roles.Count == 0)
