@@ -57,6 +57,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
             if (!Game.PlayerPed.IsInVehicle())
             {
                 PluginManager.Instance.DetachTickHandler(TestHorn);
+                return;
             }
 
             if (Game.IsControlJustPressed(0, Control.VehicleHorn))
