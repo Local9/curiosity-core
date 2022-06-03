@@ -125,7 +125,7 @@ namespace Curiosity.LifeV.Bot
                             return;
                         }
 
-                        donators.ForEach(async user =>
+                        foreach(User user in donators)
                         {
                             Role donatorRole = Role.USER;
                             ulong discordId = 0;
@@ -162,14 +162,16 @@ namespace Curiosity.LifeV.Bot
 
                                         if (socketGuildUser?.Roles == null)
                                         {
-                                            throw new Exception($"BS ERROR: {discordId} has no roles?!");
+                                            await user.RemoveDonatorStatus();
+                                            _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, D: @{discordId} | Removed server role as they returned no roles on Discord.");
+                                            continue;
                                         }
 
                                         IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
 
                                         if (roles.Count == 0)
                                         {
-                                            Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; {discordId}");
+                                            Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; @{discordId}");
                                             await user.RemoveDonatorStatus();
                                         }
                                         else
@@ -213,12 +215,12 @@ namespace Curiosity.LifeV.Bot
 
                                                 await user.AddDonatorStatus((int)donatorRole);
 
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {donatorRole}, D: {discordId}");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {donatorRole}, D: @{discordId}");
                                             }
                                             else
                                             {
                                                 await user.RemoveDonatorStatus();
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, D: {discordId} | Removed Role");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, D: @{discordId} | Removed Role");
                                             }
                                         }
                                     }
@@ -231,7 +233,7 @@ namespace Curiosity.LifeV.Bot
                             }
 
                             await Task.Delay(5000);
-                        });
+                        };
                     }
                 }
 
