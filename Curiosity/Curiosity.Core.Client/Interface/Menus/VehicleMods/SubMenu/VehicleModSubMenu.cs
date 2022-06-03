@@ -45,7 +45,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     PluginManager.Instance.AttachTickHandler(TestHorn);
                 }
 
-                if (newMenu == menu && state == MenuState.ChangeBackward)
+                if (newMenu == menu && (state == MenuState.ChangeBackward || state == MenuState.Closed))
                 {
                     PluginManager.Instance.DetachTickHandler(TestHorn);
                 }
@@ -54,6 +54,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
         private async Task TestHorn()
         {
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                PluginManager.Instance.DetachTickHandler(TestHorn);
+            }
+
             if (Game.IsControlJustPressed(0, Control.VehicleHorn))
             {
                 Game.PlayerPed.CurrentVehicle.SoundHorn(3000);
