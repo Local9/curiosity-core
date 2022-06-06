@@ -82,8 +82,11 @@ namespace Curiosity.Core.Client.Extensions
             if (API.GetGroundZFor_3dCoord(vPos.X, vPos.Y, vPos.Z, ref groundZ, false))
                 vPos = new Vector3(vPos.X, vPos.Y, groundZ);
 
-            Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
-            character.LastPosition = position;
+            if (Cache.Player.User.RoutingBucket <= 10)
+            {
+                Position position = new Position(vPos.X, vPos.Y, vPos.Z, Game.PlayerPed.Heading);
+                character.LastPosition = position;
+            }
 
             //Logger.Debug($"[LAST POSITION] {character.LastPosition}");
 

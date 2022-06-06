@@ -419,7 +419,8 @@ namespace Curiosity.Core.Server
             {
                 Ped ped = new Ped(playerId);
 
-                user.Character.LastPosition = new Position(ped.Position.X, ped.Position.Y, ped.Position.Z);
+                if (user.RoutingBucket <= 10)
+                    user.Character.LastPosition = new Position(ped.Position.X, ped.Position.Y, ped.Position.Z);
             }
 
             await user.Character.Save();

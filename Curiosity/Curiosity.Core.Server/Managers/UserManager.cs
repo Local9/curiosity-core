@@ -389,7 +389,9 @@ namespace Curiosity.Core.Server.Managers
                         if (API.DoesEntityExist(playerPed))
                         {
                             Vector3 pos = API.GetEntityCoords(playerPed);
-                            curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
+
+                            if (curUser.RoutingBucket <= 10)
+                                curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
 
                             int playerPedHealth = API.GetEntityHealth(playerPed);
                             curUser.Character.IsDead = playerPedHealth == 0;
