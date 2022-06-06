@@ -9,5 +9,8 @@
     <Import_RootNamespace>Curiosity.Framework.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\EventLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Logger.cs" />
   </ItemGroup>
 </Project>

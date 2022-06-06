@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\ClientGateway.cs" />
+    <Compile Include="Events\ServerId.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,6 +61,14 @@
     <ProjectReference Include="..\_vendor\fx-events\src\events\Events.csproj">
       <Project>{8f57c378-40f7-49ff-8221-6c235118021f}</Project>
       <Name>Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj">
+      <Project>{f5614594-90fd-4f4c-9c68-c9dc90060f8d}</Project>
+      <Name>ScaleformUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj">
+      <Project>{b33090d4-00a7-492b-8c49-990bffa662e5}</Project>
+      <Name>Snowflake</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
