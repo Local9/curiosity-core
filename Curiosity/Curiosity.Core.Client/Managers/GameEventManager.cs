@@ -308,14 +308,14 @@ namespace Curiosity.Core.Client.Managers
             EventSystem.Attach("character:respawnNow", new EventCallback(metadata =>
             {
                 Respawn(Cache.Player);
-
+                EventSystem.Send("world:routing:city");
                 return null;
             }));
 
             EventSystem.Attach("character:respawn:hospital", new EventCallback(metadata =>
             {
                 RespawnAtHospital(Cache.Player);
-
+                EventSystem.Send("world:routing:city");
                 return null;
             }));
         }
