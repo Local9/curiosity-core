@@ -9,8 +9,10 @@ namespace Curiosity.Framework.Server
 
         public PluginManager()
         {
+            Logger.Trace($"CURIOSITY INITIATION");
             Instance = this;
             Events = new ServerGateway(Instance);
+            Logger.Trace($"CURIOSITY INITIATED");
         }
 
         public void Hook(string eventName, Delegate @delegate)
