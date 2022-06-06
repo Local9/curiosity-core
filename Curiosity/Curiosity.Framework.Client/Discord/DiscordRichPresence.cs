@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Framework.Client.Discord
 {
-    internal class DiscordRichPresence
+    public class DiscordRichPresence
     {
         public string AppId { get; set; }
         public string Asset { get; set; }
@@ -16,7 +16,6 @@
             Asset = asset;
             AssetText = assetText;
 
-            // Commented out until the exist, natives list says they should be they do not
             string serverAddress = API.GetCurrentServerEndpoint();
             API.SetDiscordRichPresenceAction(0, "Join Server", $"fivem://connect/{serverAddress}");
             string websiteText = GetResourceMetadata(GetCurrentResourceName(), "discord_button_text", 0);
