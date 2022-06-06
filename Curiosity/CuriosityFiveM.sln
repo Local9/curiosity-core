@@ -248,6 +248,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{07185efc-0d4f-4f96-9f33-053d4de65a1a}*SharedItemsImports = 13
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{b5a91b51-37d8-4b0b-a9db-dbda468f800b}*SharedItemsImports = 5
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{e1180ae2-809c-469b-bb4c-830ddea32e8d}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

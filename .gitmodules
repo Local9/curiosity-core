@@ -1,6 +1,3 @@
-[submodule "Curiosity/NativeUI"]
-	path = Curiosity/NativeUI
-	url = https://github.com/citizenfx/NativeUI
 [submodule "Curiosity/FiveM-MySQL"]
 	path = Curiosity/FiveM-MySQL
 	url = https://github.com/Local9/FiveM-MySQL.git
@@ -13,9 +10,6 @@
 [submodule "thirdparty/NativeUI"]
 	path = thirdparty/NativeUI
 	url = https://github.com/citizenfx/NativeUI.git
-[submodule "Curiosity/_vendor/--force"]
-	path = Curiosity/_vendor/--force
-	url = https://github.com/Local9/fx-events.git
 [submodule "Curiosity/_vendor/snowflake"]
 	path = Curiosity/_vendor/snowflake
 	url = https://github.com/Local9/snowflake.git

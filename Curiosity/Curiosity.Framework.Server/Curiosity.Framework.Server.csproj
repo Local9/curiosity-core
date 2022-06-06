@@ -4,4 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CitizenFX.Core.Server" Version="1.0.5631" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="MySqlConnector" Version="2.1.10" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\_vendor\fx-events\src\events\Events.csproj" />
+    <ProjectReference Include="..\_vendor\fx-events\src\generator\Generator.csproj" />
+    <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
+
 </Project>
