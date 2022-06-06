@@ -307,8 +307,8 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.ItemId = int.Parse($"{kv[0]["ItemId"]}");
                     curiosityStoreItem.Label = $"{kv[0]["Label"]}";
                     curiosityStoreItem.Description = $"{kv[0]["Description"]}";
-                    curiosityStoreItem.BuyValue = int.Parse($"{kv[0]["BuyValue"]}");
-                    curiosityStoreItem.BuyBackValue = int.Parse($"{kv[0]["BuyBackValue"]}");
+                    curiosityStoreItem.BuyValue = long.Parse($"{kv[0]["BuyValue"]}");
+                    curiosityStoreItem.BuyBackValue = long.Parse($"{kv[0]["BuyBackValue"]}");
                     curiosityStoreItem.NumberInStock = int.Parse($"{kv[0]["NumberInStock"]}");
                     curiosityStoreItem.ItemPurchased = int.Parse($"{kv[0]["ItemPurchased"]}") == 1;
                     curiosityStoreItem.NumberOwned = int.Parse($"{kv[0]["NumberOwned"]}");
@@ -319,7 +319,7 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv[0]["NumberItemRequirements"]}");
                     curiosityStoreItem.ImageUri = $"{kv[0]["ImageUri"]}";
                     curiosityStoreItem.SpawnTypeId = (SpawnType)kv[0]["SpawnTypeId"];
-                    curiosityStoreItem.OriginalValue = int.Parse($"{kv[0]["OriginalValue"]}");
+                    curiosityStoreItem.OriginalValue = long.Parse($"{kv[0]["OriginalValue"]}");
                     curiosityStoreItem.HashKey = $"{kv[0]["HashKey"]}";
 
                     return curiosityStoreItem;
@@ -367,8 +367,8 @@ namespace Curiosity.Core.Server.Database.Store
                             curiosityStoreItem.ItemId = int.Parse($"{kv["ItemId"]}");
                             curiosityStoreItem.Label = $"{kv["Label"]}";
                             curiosityStoreItem.Description = $"{kv["Description"]}";
-                            curiosityStoreItem.BuyValue = int.Parse($"{kv["BuyValue"]}");
-                            curiosityStoreItem.BuyBackValue = int.Parse($"{kv["BuyBackValue"]}");
+                            curiosityStoreItem.BuyValue = long.Parse($"{kv["BuyValue"]}");
+                            curiosityStoreItem.BuyBackValue = long.Parse($"{kv["BuyBackValue"]}");
                             curiosityStoreItem.NumberInStock = int.Parse($"{kv["NumberInStock"]}");
                             curiosityStoreItem.ItemPurchased = int.Parse($"{kv["ItemPurchased"]}") == 1;
                             curiosityStoreItem.NumberOwned = int.Parse($"{kv["NumberOwned"]}");
