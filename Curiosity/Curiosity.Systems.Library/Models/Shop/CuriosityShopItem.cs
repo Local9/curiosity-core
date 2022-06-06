@@ -90,7 +90,7 @@ namespace Curiosity.Systems.Library.Models.Shop
         public int HealingAmount;
 
         [DataMember(Name = "originalValue")]
-        public long OriginalValue;
+        public long? OriginalValue;
 
         [DataMember(Name = "canCarry")]
         public bool CanCarry = false;
