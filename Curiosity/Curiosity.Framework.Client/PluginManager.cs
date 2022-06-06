@@ -30,12 +30,12 @@ namespace Curiosity.Framework.Client
 
         private void OnResourceStart(string obj)
         {
-            throw new NotImplementedException();
+
         }
 
         private void OnResourceStop(string obj)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Hook(string eventName, Delegate @delegate)
