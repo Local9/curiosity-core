@@ -54,6 +54,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
 
                 Position position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+                EventSystem.Send("world:routing:city");
                 await SafeTeleport.TeleportFadePlayer(position);
             }
         }
