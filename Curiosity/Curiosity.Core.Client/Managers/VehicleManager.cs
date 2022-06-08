@@ -42,6 +42,7 @@ namespace Curiosity.Core.Client.Managers
             [VehicleClass.Emergency] = 2.4f,
             [VehicleClass.Industrial] = 2.4f,
             [VehicleClass.Commercial] = 2.4f,
+            [VehicleClass.Boats] = 2.4f,
             [(VehicleClass)22] = 4.5f // OpenWheel
         };
 
