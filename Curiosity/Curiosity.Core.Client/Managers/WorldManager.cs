@@ -400,7 +400,7 @@ namespace Curiosity.Core.Client.Managers
             //SetClockTime(hour, minute, 0);
         }
 
-        [TickHandler(SessionWait = true)]
+        // [TickHandler(SessionWait = true)]
         private async Task OnLockVehicles()
         {
             if (vehiclesToLock.Count > 0)
