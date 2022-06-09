@@ -275,9 +275,12 @@ namespace Curiosity.Core.Client.Managers
                 while(Game.PlayerPed.IsInVehicle())
                 {
                     if (!veh.Vehicle.IsAlarmSounding)
+                    {
+                        veh.Vehicle.IsAlarmSet = true;
                         veh.Vehicle.StartAlarm();
+                    }
 
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(500);
                 }
 
                 return;
