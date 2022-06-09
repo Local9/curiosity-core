@@ -253,6 +253,17 @@ namespace Curiosity.Core.Client.Managers
                 attempts++;
             }
 
+            bool isServerSpawned = veh.Vehicle.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+            if (!isServerSpawned)
+            {
+                veh.Vehicle.FuelLevel = 0;
+                veh.Vehicle.StartAlarm();
+                veh.Vehicle.IsEngineRunning = false;
+                veh.Vehicle.IsHandbrakeForcedOn = true;
+                Notify.Error($"<b>Vehicle is not owned by a player and will not start.</b><br /><br />Please access the store by pressing the [HOME] key, or by the bind you have setup for the Rockstar Social Club.", "top-center", true);
+                return;
+            }
+
             if (!isSetup)
             {
                 Vehicle vehicle = veh.Vehicle;
