@@ -271,6 +271,15 @@ namespace Curiosity.Core.Client.Managers
                 API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
                 await BaseScript.Delay(500);
                 API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
+
+                while(Game.PlayerPed.IsInVehicle())
+                {
+                    if (!veh.Vehicle.IsAlarmSounding)
+                        veh.Vehicle.StartAlarm();
+
+                    await BaseScript.Delay(0);
+                }
+
                 return;
             }
 
