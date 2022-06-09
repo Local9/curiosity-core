@@ -265,6 +265,12 @@ namespace Curiosity.Core.Client.Managers
                 veh.Vehicle.IsEngineRunning = false;
                 veh.Vehicle.IsHandbrakeForcedOn = true;
                 Notify.Error($"<b>Vehicle is not owned by a player and will not start.</b><br /><br />Please access the store by pressing the [HOME] key, or by the bind you have setup for the Rockstar Social Club.<br /><br />Access to the store can also be found by pressing [M] and opening the PDA at the bottom.", "top-center", true);
+
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
+                await BaseScript.Delay(500);
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
+                await BaseScript.Delay(500);
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
                 return;
             }
 
