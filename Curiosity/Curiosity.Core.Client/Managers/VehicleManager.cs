@@ -22,6 +22,7 @@ namespace Curiosity.Core.Client.Managers
     public class VehicleManager : Manager<VehicleManager>
     {
         private const string DECOR_VEH_FUEL = "Vehicle.Fuel";
+        private const string DECOR_VEH_FUEL_USE = "Vehicle.Fuel.Use";
         private const float FUEL_PUMP_RANGE = 6f;
         private uint GAS_STATION_TESLA = 2140883938;
         bool _canSpawn = true;
@@ -90,6 +91,7 @@ namespace Curiosity.Core.Client.Managers
                 GAS_STATION_TESLA = (uint)stationHash;
 
             API.DecorRegister(DECOR_VEH_FUEL, 1);
+            API.DecorRegister(DECOR_VEH_FUEL_USE, 1);
 
             EventSystem.Attach("delete:vehicle", new EventCallback(metadata =>
             {
@@ -550,6 +552,7 @@ namespace Curiosity.Core.Client.Managers
                 currentVehicle.Vehicle.IsEngineRunning = false;
                 currentVehicle.Vehicle.FuelLevel = 0f;
 
+                API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL_USE, 0); // LEGACY
                 API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
             }
 
@@ -585,10 +588,14 @@ namespace Curiosity.Core.Client.Managers
                     currentVehicle.Vehicle.IsEngineRunning = false;
                     currentVehicle.Vehicle.FuelLevel = 0f;
 
+                    API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL_USE, 0); // LEGACY
                     API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
                 }
 
-                fuel = Math.Max(0f, fuel - (float)(deltaTime * multi * vehicleSpeed));
+                float useAmount = (float)(deltaTime * multi * vehicleSpeed);
+
+                API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL_USE, useAmount); // LEGACY
+                fuel = Math.Max(0f, fuel - useAmount);
                 currentVehicle.Vehicle.FuelLevel = fuel;
                 currentVehicle.Vehicle.State.Set(StateBagKey.VEH_FUEL, fuel, true);
 
