@@ -12,5 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\EventLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
   </ItemGroup>
 </Project>
