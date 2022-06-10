@@ -127,7 +127,7 @@ namespace Curiosity.Core.Server.Managers
                         {
                             var npwd = Instance.ExportDictionary["npwd"];
                             string discord = player.Identifiers["discord"];
-                            npwd.newPlayerAdvanced(metadata.Sender, player.Name, discord, discord);
+                            npwd.newPlayerAdvanced(metadata.Sender, discord, player.Name, discord);
                         }
                     }
 
