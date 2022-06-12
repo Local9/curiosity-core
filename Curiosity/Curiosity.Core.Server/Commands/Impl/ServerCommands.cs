@@ -66,6 +66,55 @@ namespace Curiosity.Core.Server.Commands.Impl
                 curiosityUser.NotificationSuccess($"You has been given ${money:N0}");
             }
         }
+        [CommandInfo(new[] { "removeMoney" })]
+        public class RemoveMoney : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    user.NotificationError($"Missing arguments. /srv removeMoney <playerId> <money>");
+                    ChatManager.OnChatMessage(player, $"Missing arguments. /srv removeMoney <playerId> <money>");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                string cash = arguments.ElementAt(1);
+                if (!int.TryParse(arg, out int playerId))
+                {
+                    user.NotificationError($"Player Argument is not a valid number.");
+                    ChatManager.OnChatMessage(player, $"Player Argument is not a valid number.");
+                    return;
+                }
+
+                if (!ulong.TryParse(cash, out ulong money))
+                {
+                    user.NotificationError($"Cash Argument is not a valid number.");
+                    ChatManager.OnChatMessage(player, $"Cash Argument is not a valid number.");
+                    return;
+                }
+
+                if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                {
+                    user.NotificationError($"Player is missing from Active Users, did they disconnect?");
+                    ChatManager.OnChatMessage(player, $"Player is missing from Active Users, did they disconnect?");
+                    return;
+                }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerId];
+                ulong originalValue = curiosityUser.Character.Cash;
+                ulong newCashValue = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)money * -1);
+                curiosityUser.Character.Cash = newCashValue;
+
+                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
+
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
+
+                user.NotificationSuccess($"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
+                curiosityUser.NotificationSuccess($"You has been given ${money:N0}");
+            }
+        }
+
 
         [CommandInfo(new[] { "wanted" })]
         public class PlayerWanted : ICommand
