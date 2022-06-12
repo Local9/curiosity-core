@@ -415,7 +415,7 @@ namespace Curiosity.Core.Client.Utils
             return diff > pi ? diff - (2 * pi) : diff;
         }
 
-        public static Vector3 GetRandomSpawnCoordsInRange(Vector3 center, float minRange, float maxRange, out float heading)
+        public static Vector3 GetRandomSpawnCoordsInRange(Vector3 center, float minRange, float maxRange, out float heading, bool findGroundZ = true)
         {
             heading = GetRandomFloatInRange(0f, 360f);
             var headingRad = heading * (Math.PI / 180f);
@@ -423,7 +423,7 @@ namespace Curiosity.Core.Client.Utils
             var offset = new Vector3(-(float)Math.Sin(headingRad), (float)Math.Cos(headingRad), 0) * distance;
 
             float groundZ = 0f;
-            if (GetGroundZFor_3dCoord(center.X + offset.X, center.Y + offset.Y, center.Z, ref groundZ, false))
+            if (GetGroundZFor_3dCoord(center.X + offset.X, center.Y + offset.Y, center.Z, ref groundZ, false) && findGroundZ)
                 offset.Z = groundZ - center.Z;
 
             return center + offset;

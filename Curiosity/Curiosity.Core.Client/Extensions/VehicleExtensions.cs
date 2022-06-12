@@ -324,7 +324,7 @@ namespace Curiosity.Core.Client.Extensions
 
             API.EndTextCommandSetBlipName(blip.Handle);
 
-            VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
+            long vehicleHash = vehicle.Model.Hash;
 
             if (!setBlip)
             {
@@ -332,12 +332,9 @@ namespace Curiosity.Core.Client.Extensions
                 {
                     API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
                 }
-                else
+                else if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
                 {
-                    if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
-                    {
-                        API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
-                    }
+                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
                 }
             }
 

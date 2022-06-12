@@ -1022,121 +1022,129 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = null;
-
-                if (Cache.Entity is not null && Cache.Entity.Vehicle is not null)
-                {
-                    if (Cache.Entity.Vehicle.Exists()) // get vehicle player is in
-                    {
-                        vehicle = Cache.Entity.Vehicle;
-
-                        if (vehicle.Driver == Cache.PlayerPed)
-                            Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
-
-                        await vehicle.FadeOut(true);
-
-                        vehicle.IsPositionFrozen = true;
-                        vehicle.IsCollisionEnabled = false;
-
-                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
-
-                        if (vehicle.Exists())
-                            vehicle.Delete();
-
-                        await BaseScript.Delay(500);
-                    }
-                }
-
-                Model vehModel = new Model(arguments.ElementAt(0));
-
-                if (!API.IsModelInCdimage((uint)vehModel.Hash))
-                {
-                    NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not loaded.");
-                    return;
-                }
-
-                if (!vehModel.IsValid)
-                {
-                    NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
-                    return;
-                }
-
-                DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
-
-                while (!vehModel.IsLoaded)
-                {
-                    await vehModel.Request(3000);
-
-                    if (DateTime.UtcNow > maxTime) break;
-                }
-
-                if (!vehModel.IsLoaded)
-                {
-                    NotificationManager.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
-                    return;
-                }
-
                 if (arguments.Count == 1)
                 {
-                    Vector3 pos = Game.PlayerPed.Position;
-                    pos.Z = pos.Z - 50f;
-
-                    vehicle = await World.CreateVehicle(vehModel, pos, Game.PlayerPed.Heading);
-                }
-
-                if (arguments.Count == 5)
-                {
-                    float x = float.Parse(arguments.ElementAt(1));
-                    float y = float.Parse(arguments.ElementAt(2));
-                    float z = float.Parse(arguments.ElementAt(3));
-                    float h = float.Parse(arguments.ElementAt(4));
-
-                    Vector3 pos = new Vector3(x, y, z);
-
-                    vehicle = await World.CreateVehicle(vehModel, pos, h);
-                }
-
-                vehicle.IsPersistent = true;
-                vehicle.PreviouslyOwnedByPlayer = true;
-                vehicle.IsPositionFrozen = true;
-                vehicle.IsCollisionEnabled = false;
-
-                await vehicle.FadeOut();
-                vehicle.Repair();
-
-                await BaseScript.Delay(500);
-
-                if (vehModel?.IsLoaded ?? false)
-                    vehModel.MarkAsNoLongerNeeded();
-
-                API.NetworkRequestControlOfEntity(vehicle.Handle);
-                API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
-                API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
-                API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
-
-                bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
-
-                if (b)
-                {
-
-                    vehicle.CreateBlip();
-                    Cache.StaffVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
-                    Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
-
-                    vehicle.IsPositionFrozen = false;
-                    vehicle.IsCollisionEnabled = true;
-
-                    vehicle.Position = Game.PlayerPed.Position;
-
-                    vehicle.FadeIn();
-                    vehicle.Opacity = 255;
-                    vehicle.ResetOpacity();
+                    await SpawnVehicle(arguments);
                     return;
                 }
 
-                EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
-                vehicle.Delete();
+                int.TryParse(arguments.ElementAt(1), out int numberOfVehicles);
+                if (numberOfVehicles > 0)
+                {
+                    while (numberOfVehicles > 0)
+                    {
+                        await SpawnVehicle(arguments);
+                        numberOfVehicles--;
+                        await BaseScript.Delay(100);
+                    }
+                }
+            }
+
+            private static async Task SpawnVehicle(List<string> arguments)
+            {
+                try
+                {
+                    Vehicle vehicle = null;
+
+                    Model vehModel = new Model(arguments.ElementAt(0));
+
+                    if (!API.IsModelInCdimage((uint)vehModel.Hash))
+                    {
+                        NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not loaded.");
+                        return;
+                    }
+
+                    if (!vehModel.IsValid)
+                    {
+                        NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
+                        return;
+                    }
+
+                    DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
+
+                    while (!vehModel.IsLoaded)
+                    {
+                        await vehModel.Request(3000);
+
+                        if (DateTime.UtcNow > maxTime) break;
+                    }
+
+                    if (!vehModel.IsLoaded)
+                    {
+                        NotificationManager.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
+                        return;
+                    }
+
+                    if (arguments.Count >= 1 && arguments.Count < 5)
+                    {
+                        Vector3 pos = Game.PlayerPed.Position;
+                        pos.Z = pos.Z - 50f;
+
+                        vehicle = await World.CreateVehicle(vehModel, pos, Game.PlayerPed.Heading);
+                    }
+
+                    if (arguments.Count == 5)
+                    {
+                        float x = float.Parse(arguments.ElementAt(1));
+                        float y = float.Parse(arguments.ElementAt(2));
+                        float z = float.Parse(arguments.ElementAt(3));
+                        float h = float.Parse(arguments.ElementAt(4));
+
+                        Vector3 pos = new Vector3(x, y, z);
+
+                        vehicle = await World.CreateVehicle(vehModel, pos, h);
+                    }
+
+                    vehicle.IsPersistent = true;
+                    vehicle.PreviouslyOwnedByPlayer = true;
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsCollisionEnabled = false;
+
+                    await vehicle.FadeOut();
+                    vehicle.Repair();
+
+                    await BaseScript.Delay(500);
+
+                    if (vehModel?.IsLoaded ?? false)
+                        vehModel.MarkAsNoLongerNeeded();
+
+                    API.NetworkRequestControlOfEntity(vehicle.Handle);
+                    API.SetNetworkIdExistsOnAllMachines(vehicle.NetworkId, true);
+                    API.SetNetworkIdCanMigrate(vehicle.NetworkId, true);
+                    API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, true);
+
+                    bool b = await EventSystem.GetModule().Request<bool>("garage:set:vehicle", vehicle.NetworkId, (int)SpawnType.Vehicle);
+
+                    if (b)
+                    {
+
+                        vehicle.CreateBlip();
+                        Cache.StaffVehicle = new State.VehicleState(vehicle);
+
+                        if (arguments.Count == 1)
+                            Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
+
+                        Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
+
+                        vehicle.IsPositionFrozen = false;
+                        vehicle.IsCollisionEnabled = true;
+
+                        vehicle.Position = Common.GetRandomSpawnCoordsInRange(Game.PlayerPed.Position, 10f, 25f, out float heading, false);
+                        vehicle.Heading = heading;
+
+                        vehicle.FadeIn();
+                        vehicle.Opacity = 255;
+                        vehicle.ResetOpacity();
+                        return;
+                    }
+
+                    EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+                    vehicle.Delete();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "Vehicle Spawn");
+                }
             }
         }
     }

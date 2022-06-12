@@ -39,22 +39,22 @@ namespace Curiosity.Core.Client.Interface
             { (VehicleClass)22, 531 },
         };
 
-        public static Dictionary<VehicleHash, int> VehicleBlips = new Dictionary<VehicleHash, int>()
+        public static Dictionary<long, int> VehicleBlips = new Dictionary<long, int>()
         {
-            { VehicleHash.Rhino, (int)BlipSprite.Tank },
-            { VehicleHash.Seashark, 471 },
-            { VehicleHash.Seashark2, 471 },
-            { VehicleHash.Seashark3, 471 },
-            { VehicleHash.Phantom, 477 },
-            { VehicleHash.Phantom2, 528 },
-            { VehicleHash.Phantom3, 477 },
-            { VehicleHash.Hauler, 477 },
-            { VehicleHash.Hauler2, 477 },
-            { VehicleHash.Bus, 513 },
-            { VehicleHash.PBus, 513 },
-            { VehicleHash.RentalBus, 513 },
-            { VehicleHash.Dune4, 531 },
-            { VehicleHash.Dune5, 531 },
+            { (long)VehicleHash.Rhino, (int)BlipSprite.Tank },
+            { (long)VehicleHash.Seashark, 471 },
+            { (long)VehicleHash.Seashark2, 471 },
+            { (long)VehicleHash.Seashark3, 471 },
+            { (long)VehicleHash.Phantom, 477 },
+            { (long)VehicleHash.Phantom2, 528 },
+            { (long)VehicleHash.Phantom3, 477 },
+            { (long)VehicleHash.Hauler, 477 },
+            { (long)VehicleHash.Hauler2, 477 },
+            { (long)VehicleHash.Bus, 513 },
+            { (long)VehicleHash.PBus, 513 },
+            { (long)VehicleHash.RentalBus, 513 },
+            { (long)VehicleHash.Dune4, 531 },
+            { (long)VehicleHash.Dune5, 531 },
         };
 
         public static bool TimeoutStateValue = false;

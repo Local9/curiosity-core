@@ -1,7 +1,10 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
+using CitizenFX.Core.Native;
+using CitizenFX.Core;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -14,6 +17,8 @@ namespace Curiosity.Core.Client.Managers
         public override void Begin()
         {
             ManagerInstance = this;
+
+            ScreenInterface.VehicleBlips.Add(API.GetHashKey("kosatka"), 760);
         }
 
         public Dictionary<string, List<Position>> Locations = new Dictionary<string, List<Position>>();
