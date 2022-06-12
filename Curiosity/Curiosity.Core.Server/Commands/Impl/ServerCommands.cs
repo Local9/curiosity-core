@@ -25,7 +25,8 @@ namespace Curiosity.Core.Server.Commands.Impl
             {
                 if (arguments.Count == 0)
                 {
-                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    user.NotificationError($"Missing arguments. /srv giveMoney <playerId> <money>");
+                    ChatManager.OnChatMessage(player, $"Missing arguments. /srv giveMoney <playerId> <money>");
                     return;
                 }
 
@@ -33,18 +34,21 @@ namespace Curiosity.Core.Server.Commands.Impl
                 string cash = arguments.ElementAt(1);
                 if (!int.TryParse(arg, out int playerId))
                 {
+                    user.NotificationError($"Player Argument is not a valid number.");
                     ChatManager.OnChatMessage(player, $"Player Argument is not a valid number.");
                     return;
                 }
 
                 if (!ulong.TryParse(cash, out ulong money))
                 {
+                    user.NotificationError($"Cash Argument is not a valid number.");
                     ChatManager.OnChatMessage(player, $"Cash Argument is not a valid number.");
                     return;
                 }
 
                 if (!PluginManager.ActiveUsers.ContainsKey(playerId))
                 {
+                    user.NotificationError($"Player is missing from Active Users, did they disconnect?");
                     ChatManager.OnChatMessage(player, $"Player is missing from Active Users, did they disconnect?");
                     return;
                 }
