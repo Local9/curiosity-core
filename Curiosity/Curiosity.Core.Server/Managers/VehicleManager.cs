@@ -21,7 +21,7 @@ namespace Curiosity.Core.Server.Managers
         const int VEHICLE_REPAIR_CHARGE = 100;
         const int VEHICLE_TOW_REP = 1000;
         const int VEHICLE_TOW_COST = 1000;
-
+        private const float VEHICLE_CULLING_RADIUS = 600f;
         private LocationsConfigManager config;
 
         // Move these to a config file
@@ -690,7 +690,7 @@ namespace Curiosity.Core.Server.Managers
             }
 
             API.SetEntityRoutingBucket(vehicleId, routingBucket);
-            API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
+            API.SetEntityDistanceCullingRadius(vehicleId, VEHICLE_CULLING_RADIUS);
         }
     }
 }
