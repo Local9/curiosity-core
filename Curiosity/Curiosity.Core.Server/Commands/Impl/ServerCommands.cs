@@ -58,12 +58,12 @@ namespace Curiosity.Core.Server.Commands.Impl
                 ulong newCashValue = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)money);
                 curiosityUser.Character.Cash = newCashValue;
 
-                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
+                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}') by {user.LatestName}");
 
-                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' have been given ${money:N0}");
 
                 user.NotificationSuccess($"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
-                curiosityUser.NotificationSuccess($"You has been given ${money:N0}");
+                curiosityUser.NotificationSuccess($"You have been given ${money:N0}");
             }
         }
         [CommandInfo(new[] { "removeMoney" })]
@@ -106,7 +106,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 ulong newCashValue = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)money * -1);
                 curiosityUser.Character.Cash = newCashValue;
 
-                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
+                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}') by {user.LatestName}");
 
                 ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has had ${money:N0} removed.");
 
