@@ -1105,14 +1105,13 @@ namespace Curiosity.Core.Client.Managers
 
                 if (vehicleItem is null)
                 {
-                    Notify.Error("Vehicle failed to be created. Please try again.");
                     vehModel.MarkAsNoLongerNeeded();
                     return new { success = false };
                 }
 
                 if (!string.IsNullOrEmpty(vehicleItem.Message))
                 {
-                    Notify.Error(vehicleItem.Message);
+                    Notify.Error(vehicleItem.Message, playSound: true);
                     vehModel.MarkAsNoLongerNeeded();
                     return new { success = false };
                 }

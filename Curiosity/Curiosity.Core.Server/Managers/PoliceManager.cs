@@ -492,6 +492,14 @@ namespace Curiosity.Core.Server.Managers
                     // add ticket to the database against the character/vehicle
                     int characterId = curiosityUser.Character.CharacterId;
                     int characterVehicleId = vehicle.State.Get(StateBagKey.VEH_ID); // mark in the Database
+
+                    if (characterVehicleId == 0)
+                    {
+                        Logger.Error($"Issue saving ticket, vehicle is unknown.");
+                        em.error = "Vehicle is unknown to the server.";
+                        goto RETURN_MESSAGE;
+                    }
+
                     int costOfTicket = (int)((speed - speedLimit) * (isWrongWay ? 75 : 50)); // only charge for speed over the limit
 
                     // TODO: Move the DateTime into the database

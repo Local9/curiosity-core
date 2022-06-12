@@ -78,6 +78,8 @@ namespace Curiosity.Core.Server.Database.Store
                 item.DatePurchased = keyValuePairs[0]["DatePurchased"];
                 item.SpawnTypeId = (SpawnType)keyValuePairs[0]["SpawnTypeId"];
                 item.BuyBackValue = keyValuePairs[0]["BuyBackValue"];
+                item.TicketsOutstanding = $"{keyValuePairs[0]["HasTickets"]}" == "true";
+                item.TicketsOverdue = $"{keyValuePairs[0]["HasOverdueTickets"]}" == "true";
 
                 string vehicleData = $"{keyValuePairs[0]["VehicleData"]}";
 

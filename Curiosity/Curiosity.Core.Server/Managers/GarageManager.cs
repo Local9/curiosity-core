@@ -145,6 +145,12 @@ namespace Curiosity.Core.Server.Managers
                         return vehicleItem;
                     }
 
+                    if (vehicleItem.TicketsOverdue)
+                    {
+                        vehicleItem.Message = $"Sorry, vehicle has overdue speeding tickets and has been impounded. When they have been paid, you'll be able to request the vehicle again.";
+                        return vehicleItem;
+                    }
+
                     Player player = PluginManager.PlayersList[metadata.Sender];
                     int routingBucket = curiosityUser.RoutingBucket;
 
@@ -313,6 +319,13 @@ namespace Curiosity.Core.Server.Managers
                     {
                         Logger.Debug($"Vehicle wasn't returned, unable to sell.");
                         exportMessage.error = "Vehicle doesn't exist or is already sold.";
+                        goto EXIT;
+                    }
+
+                    if (vehicleItem.TicketsOutstanding)
+                    {
+                        Logger.Debug($"Vehicle has outstanding tickets.");
+                        exportMessage.error = "Vehicle cannot be sold with outstanding tickets. Pay for all the tickets, and then you can sell the vehicle.";
                         goto EXIT;
                     }
 

@@ -83,6 +83,7 @@ namespace Curiosity.Core.Server.Database.Store
                     pt.TicketValue = kv["TicketValue"].ToInt();
                     pt.VehicleSpeed = kv["VehicleSpeed"].ToInt();
                     pt.SpeedLimit = kv["SpeedLimit"].ToInt();
+                    pt.VehicleLabel = $"{kv["Label"]}";
 
                     policeTickets.Add(pt);
                 }

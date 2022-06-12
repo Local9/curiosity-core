@@ -42,5 +42,8 @@ namespace Curiosity.Systems.Library.Models.Police
 
         [DataMember(Name = "speedLimit")]
         public int SpeedLimit;
+
+        [DataMember(Name = "vehicleLabel")]
+        public string VehicleLabel;
     }
 }

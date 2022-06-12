@@ -22,5 +22,7 @@ namespace Curiosity.Systems.Library.Models
         public float Z;
 
         public long BuyBackValue;
+        public bool TicketsOutstanding;
+        public bool TicketsOverdue;
     }
 }
