@@ -11,6 +11,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -76,9 +77,12 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 user.StaffVehicle = netId;
+                user.PersonalVehicle = netId;
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 player.State.Set($"{StateBagKey.PLAYER_VEHICLE}", user.PersonalVehicle, true);
+
+                SetCullingRadius(netId, user.RoutingBucket);
 
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
@@ -87,7 +91,11 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                PluginManager.ActiveUsers[metadata.Sender].PersonalTrailer = netId;
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.PersonalTrailer = netId;
+
+                SetCullingRadius(netId, user.RoutingBucket);
+
                 Logger.Debug($"vehicle:log:player:trailer -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
@@ -95,7 +103,12 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("vehicle:log:player:plane", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                PluginManager.ActiveUsers[metadata.Sender].PersonalPlane = netId;
+
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.PersonalPlane = netId;
+
+                SetCullingRadius(netId, user.RoutingBucket);
+
                 Logger.Debug($"vehicle:log:player:plane -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
@@ -103,7 +116,11 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("vehicle:log:player:boat", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                PluginManager.ActiveUsers[metadata.Sender].PersonalBoat = netId;
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.PersonalBoat = netId;
+
+                SetCullingRadius(netId, user.RoutingBucket);
+
                 Logger.Debug($"vehicle:log:player:boat -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
@@ -111,7 +128,11 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.Attach("vehicle:log:player:helicopter", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                PluginManager.ActiveUsers[metadata.Sender].PersonalHelicopter = netId;
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.PersonalHelicopter = netId;
+
+                SetCullingRadius(netId, user.RoutingBucket);
+
                 Logger.Debug($"vehicle:log:player:helicopter -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
@@ -649,6 +670,27 @@ namespace Curiosity.Core.Server.Managers
                     return sqlResult;
                 }
             }));
+        }
+
+        async Task SetCullingRadius(int vehicleNetworkId, int routingBucket)
+        {
+            int vehicleId = NetworkGetEntityFromNetworkId(vehicleNetworkId);
+            long gameTimer = GetGameTimer();
+            while (!API.DoesEntityExist(vehicleId))
+            {
+                await BaseScript.Delay(100);
+
+                if ((GetGameTimer() - 5000) > gameTimer) break;
+            }
+
+            if (!API.DoesEntityExist(vehicleId))
+            {
+                Logger.Debug($"Failed to create vehicle in timely manner.");
+                return;
+            }
+
+            API.SetEntityRoutingBucket(vehicleId, routingBucket);
+            API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
         }
     }
 }
