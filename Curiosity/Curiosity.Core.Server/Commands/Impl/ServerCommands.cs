@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
@@ -16,6 +18,51 @@ namespace Curiosity.Core.Server.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
+        [CommandInfo(new[] { "giveMoney" })]
+        partial class GiveMoney : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                string cash = arguments.ElementAt(1);
+                if (!int.TryParse(arg, out int playerId))
+                {
+                    ChatManager.OnChatMessage(player, $"Player Argument is not a valid number.");
+                    return;
+                }
+
+                if (!ulong.TryParse(cash, out ulong money))
+                {
+                    ChatManager.OnChatMessage(player, $"Cash Argument is not a valid number.");
+                    return;
+                }
+
+                if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                {
+                    ChatManager.OnChatMessage(player, $"Player is missing from Active Users, did they disconnect?");
+                    return;
+                }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerId];
+                ulong originalValue = curiosityUser.Character.Cash;
+                ulong newCashValue = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)money);
+                curiosityUser.Character.Cash = newCashValue;
+
+                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
+
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has been given $'{money:N0}'");
+
+                user.NotificationSuccess($"Player '{curiosityUser.LatestName}' has been given $'{money:N0}'");
+                curiosityUser.NotificationSuccess($"You has been given $'{money:N0}'");
+            }
+        }
+
         [CommandInfo(new[] { "wanted" })]
         public class PlayerWanted : ICommand
         {
@@ -29,15 +76,15 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                 string arg = arguments.ElementAt(0);
                 string wanted = arguments.ElementAt(1);
-                if (!int.TryParse(arg, out int worldId))
+                if (!int.TryParse(arg, out int playerId))
                 {
                     ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
                     return;
                 }
 
-                bool isWanted = wanted == "wanted";
+                bool isWanted = wanted == "true";
 
-                Player p = PluginManager.PlayersList[worldId];
+                Player p = PluginManager.PlayersList[playerId];
                 p.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWanted, true);
             }
         }

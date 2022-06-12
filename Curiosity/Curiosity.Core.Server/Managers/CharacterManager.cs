@@ -789,7 +789,7 @@ namespace Curiosity.Core.Server.Managers
                     return $"{exportMessage}";
                 }));
 
-            Instance.ExportDictionary.Add("CashAdjust", new Func<string, int, Task<string>>(
+            Instance.ExportDictionary.Add("CashAdjust", new Func<string, long, Task<string>>(
                 async (playerHandle, amt) =>
                 {
                     ExportMessage exportMessage = new ExportMessage();
@@ -817,7 +817,7 @@ namespace Curiosity.Core.Server.Managers
 
                     exportMessage.newNumberValue = (long)newCashValue;
 
-                    DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt}' (change '{originalValue}' to '{newCashValue}')");
+                    DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{user.LatestName}' cash adjust of '{amt:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
                     await BaseScript.Delay(0);
 
                 SendMessage:
