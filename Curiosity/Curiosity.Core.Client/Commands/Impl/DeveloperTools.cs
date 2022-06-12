@@ -1048,6 +1048,16 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     Vehicle vehicle = null;
 
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        Vehicle del = Game.PlayerPed.CurrentVehicle;
+                        Game.PlayerPed.Task.WarpOutOfVehicle(del);
+                        await BaseScript.Delay(100);
+
+                        EventSystem.GetModule().Send("delete:entity", del.NetworkId);
+                        del.Delete();
+                    }
+
                     Model vehModel = new Model(arguments.ElementAt(0));
 
                     if (!API.IsModelInCdimage((uint)vehModel.Hash))
