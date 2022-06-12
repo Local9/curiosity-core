@@ -1037,6 +1037,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                         numberOfVehicles--;
                         await BaseScript.Delay(100);
                     }
+
+                    Notify.Alert($"Finished spawning.");
                 }
             }
 
