@@ -1129,7 +1129,6 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     if (b)
                     {
-
                         vehicle.CreateBlip();
                         Cache.StaffVehicle = new State.VehicleState(vehicle);
 
@@ -1147,6 +1146,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                         vehicle.FadeIn();
                         vehicle.Opacity = 255;
                         vehicle.ResetOpacity();
+
+                        vehicle.Mods.InstallModKit();
+                        SetVehicleMod(vehicle.Handle, 11, 5, false);
+                        SetVehicleMod(vehicle.Handle, 12, 5, false);
+                        SetVehicleMod(vehicle.Handle, 13, 5, false);
+                        SetVehicleMod(vehicle.Handle, 15, 5, false);
+                        SetVehicleMod(vehicle.Handle, 18, 1, false);
+
                         return;
                     }
 
