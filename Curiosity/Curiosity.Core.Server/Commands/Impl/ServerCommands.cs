@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Commands.Impl
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
         [CommandInfo(new[] { "giveMoney" })]
-        partial class GiveMoney : ICommand
+        public class GiveMoney : ICommand
         {
             public async void On(CuriosityUser user, Player player, List<string> arguments)
             {
@@ -60,10 +60,10 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                 DiscordClient.GetModule().SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' cash adjust of '{money:N0}' (change '{originalValue:N0}' to '{newCashValue:N0}')");
 
-                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has been given $'{money:N0}'");
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
 
-                user.NotificationSuccess($"Player '{curiosityUser.LatestName}' has been given $'{money:N0}'");
-                curiosityUser.NotificationSuccess($"You has been given $'{money:N0}'");
+                user.NotificationSuccess($"Player '{curiosityUser.LatestName}' has been given ${money:N0}");
+                curiosityUser.NotificationSuccess($"You has been given ${money:N0}");
             }
         }
 
