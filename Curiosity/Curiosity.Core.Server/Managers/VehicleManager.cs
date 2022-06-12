@@ -435,6 +435,8 @@ namespace Curiosity.Core.Server.Managers
                 Vehicle vehicle = new Vehicle(vehicleId);
                 vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
                 vehicle.State.Set($"{StateBagKey.VEH_PERSONAL_TRAILER}", true, true);
+                API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+                API.SetEntityDistanceCullingRadius(vehicleId, 15000f);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
