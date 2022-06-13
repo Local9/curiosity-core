@@ -160,6 +160,24 @@ namespace Curiosity.Core.Client.Environment.Entities
         private void OnStateClientPlayerRadarChange(string bag, string key, dynamic isHidden, int reserved, bool replicated)
         {
             IsHidden = isHidden;
+            
+            if (PlayerPed.AttachedBlip is null && !IsHidden)
+            {
+                _blip = PlayerPed.AttachBlip();
+                _blipHandle = _blip.Handle;
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
+                SetBlipCategory(_blipHandle, 7);
+                SetBlipPriority(_blipHandle, 11);
+                SetBlipNameToPlayerName(_blipHandle, Player.Handle);
+
+                UpdateBlipString();
+            }
+
+            if (PlayerPed.AttachedBlip is not null && IsHidden)
+            {
+                _blip = PlayerPed.AttachedBlip;
+                _blip.Delete();
+            }
         }
 
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
@@ -206,9 +224,8 @@ namespace Curiosity.Core.Client.Environment.Entities
 
                 if (IsHidden)
                 {
-                    Blip blip = PlayerPed.AttachedBlip;
-                    if (blip != null)
-                        blip.Delete();
+                    if (_blip != null)
+                        _blip.Delete();
                 }
 
                 UpdatePlayerCollisionStates();
