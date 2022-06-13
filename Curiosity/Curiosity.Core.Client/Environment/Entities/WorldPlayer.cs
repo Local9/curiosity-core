@@ -85,7 +85,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
             clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
             playerJobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
-            isHiddenStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_OFF_RADAR, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
+            isHiddenStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_OFF_RADAR, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerRadarChange));
 
             if (player.Character.AttachedBlip is null && !IsHidden)
             {
@@ -155,6 +155,11 @@ namespace Curiosity.Core.Client.Environment.Entities
             BeginTextCommandSetBlipName(key);
             AddTextComponentSubstringPlayerName(key);
             EndTextCommandSetBlipName(_blipHandle);
+        }
+
+        private void OnStateClientPlayerRadarChange(string bag, string key, dynamic isHidden, int reserved, bool replicated)
+        {
+            IsHidden = isHidden;
         }
 
         private void OnStatePlayerPassiveChange(string bag, string key, dynamic isPassive, int reserved, bool replicated)
