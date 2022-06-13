@@ -13,7 +13,7 @@ namespace Curiosity.Core.Server.Commands.Impl
 {
     public class ServerCommands : CommandContext
     {
-        public override string[] Aliases { get; set; } = { "srv" };
+        public override string[] Aliases { get; set; } = { "srv", "lv", "lvserver", "server", "svr" };
         public override string Title { get; set; } = "Server Commands";
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
