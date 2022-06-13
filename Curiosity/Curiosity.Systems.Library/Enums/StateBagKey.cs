@@ -99,5 +99,7 @@
         public const string PLAYER_RACE_ACTIVE = "PLAYER_RACE_ACTIVE";
 
         public const string IS_JAILED = "PLAYER_IS_JAILED";
+
+        public static string PLAYER_OFF_RADAR = "PLAYER_HIDDEN";
     }
 }

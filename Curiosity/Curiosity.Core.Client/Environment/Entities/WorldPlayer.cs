@@ -44,6 +44,9 @@ namespace Curiosity.Core.Client.Environment.Entities
         public int WantedLevel = 0;
         int wantedLevelStateBagHandler = -1;
 
+        public bool IsHidden = false;
+        int isHiddenStateBagHandler = -1;
+
         public int GroupId;
         int groupStateBagHandler = -1;
         bool _sameGroup;
@@ -63,6 +66,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             PedHandle = player.Character.Handle;
             IsPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
             IsWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+            IsHidden = player.State.Get(StateBagKey.PLAYER_OFF_RADAR) ?? false;
             GroupId = player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
             PlayerJob = player.State.Get(StateBagKey.PLAYER_JOB) ?? -1;
             int myGroupId = Game.Player.State.Get(StateBagKey.PLAYER_GROUP) ?? -1;
@@ -81,8 +85,9 @@ namespace Curiosity.Core.Client.Environment.Entities
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
             clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
             playerJobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
+            isHiddenStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_OFF_RADAR, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
 
-            if (player.Character.AttachedBlip is null)
+            if (player.Character.AttachedBlip is null && !IsHidden)
             {
                 _blip = player.Character.AttachBlip();
                 _blipHandle = _blip.Handle;
@@ -111,6 +116,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                 RemoveStateBagChangeHandler(groupStateBagHandler);
                 RemoveStateBagChangeHandler(clientGroupStateBagHandler);
                 RemoveStateBagChangeHandler(playerJobStateBagHandler);
+                RemoveStateBagChangeHandler(isHiddenStateBagHandler);
 
                 bool playerInVehicle = PlayerPed.IsInVehicle();
                 bool currentPlayerInVehicle = Game.PlayerPed.IsInVehicle();
@@ -187,8 +193,19 @@ namespace Curiosity.Core.Client.Environment.Entities
             try
             {
                 _sameGroup = GroupId == ClientGroupId;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
-                UpdateBlipString();
+                if (!IsHidden)
+                {
+                    Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
+                    UpdateBlipString();
+                }
+
+                if (IsHidden)
+                {
+                    Blip blip = PlayerPed.AttachedBlip;
+                    if (blip != null)
+                        blip.Delete();
+                }
+
                 UpdatePlayerCollisionStates();
                 UpdatePlayerWantedState();
             }

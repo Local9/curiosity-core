@@ -115,6 +115,35 @@ namespace Curiosity.Core.Server.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "hide" })]
+        public class PlayerOffRadar : ICommand
+        {
+            public void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                string hidden = arguments.ElementAt(1);
+                if (!int.TryParse(arg, out int playerId))
+                {
+                    ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
+                    return;
+                }
+
+                bool isHidden = hidden == "true";
+
+                Player p = PluginManager.PlayersList[playerId];
+                p.State.Set(StateBagKey.PLAYER_OFF_RADAR, isHidden, true);
+                if (isHidden)
+                    user.NotificationSuccess("You should now be hidden");
+                if (!isHidden)
+                    user.NotificationSuccess("You should now showing on radar");
+            }
+        }
 
         [CommandInfo(new[] { "wanted" })]
         public class PlayerWanted : ICommand
