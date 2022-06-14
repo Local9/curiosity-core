@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client.Managers
         private const string DECOR_VEH_FUEL = "Vehicle.Fuel";
         private const string DECOR_VEH_FUEL_USE = "Vehicle.Fuel.Use";
         private const float FUEL_PUMP_RANGE = 6f;
+        private const float FUEL_PUMP_RANGE_BOAT = 30f;
         private uint GAS_STATION_TESLA = 2140883938;
         bool _canSpawn = true;
         NotificationManager NotificationManager => NotificationManager.GetModule();
@@ -371,7 +372,11 @@ namespace Curiosity.Core.Client.Managers
 
         private bool IsNearNormalFuelPump()
         {
-            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
+            if (!Game.PlayerPed.IsInVehicle()) return false;
+
+            float distanceToPump = (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Boats) ? FUEL_PUMP_RANGE_BOAT : FUEL_PUMP_RANGE;
+
+            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * distanceToPump, 2));
         }
 
         private async Task CheckFuelPumpDistance()
