@@ -13,6 +13,9 @@ namespace Curiosity.Core.Client.Managers.Milo
         Vector3 markerScale = new Vector3(1.5f, 1.5f, .5f);
         Vector3 markerScaleVehicle = new Vector3(10f, 10f, 1f);
 
+        NUIMarker markerLs1;
+        NUIMarker markerNy1;
+
         public override void Begin()
         {
 
