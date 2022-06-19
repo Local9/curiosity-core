@@ -20,9 +20,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         Vector3 jailStart = new Vector3(1812.00183f, 2736.8418f, 40.5720177f);
         Vector3 jailEnd = new Vector3(1591.87036f, 2452.705f, 90.95463f);
 
-        Vector3 jailVehicleStart = new Vector3(1802.85742f, 2617.514f, 43.2783966f);
-        Vector3 jailVehicleEnd = new Vector3(1792.96167f, 2617.97119f, 50.8206558f);
-        float jailVehicleWidth = 20;
+        Vector3 jailVehicleStart = new Vector3(1803.574f, 2618.442f, 43.501f);
+        Vector3 jailVehicleEnd = new Vector3(1790.561f, 2618.576f, 50.56498f);
+        float jailVehicleWidth = 10;
 
         Vector3 mainJail = new(1669.652f, 2564.316f, 45.56488f);
 
@@ -82,22 +82,20 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         private async Task OnJailWeaponCheck()
         {
             Ped playerPed = Game.PlayerPed;
-            bool isInsideJail = Common.IsEntityInAngledArea(playerPed, jailStart, jailEnd, width);
+            bool isInsideJail = Common.IsEntityInAngledArea(playerPed, jailStart, jailEnd, width, debug: true);
 
             if (isInsideJail != lastCheck)
             {
                 lastCheck = isInsideJail;
                 PlayerOptionsManager.DisableWeapons(isInsideJail);
+            }
 
-                bool canDeleteVehicle = Common.IsEntityInAngledArea(playerPed, jailVehicleStart, jailVehicleEnd, jailVehicleWidth);
-
-                if (Game.PlayerPed.IsInVehicle() && canDeleteVehicle)
+            if (Game.PlayerPed.IsInVehicle() && isInsideJail)
+            {
+                Vehicle playerVehicle = Game.PlayerPed.CurrentVehicle;
+                if (playerVehicle.Driver == playerPed && playerVehicle.ClassType != VehicleClass.Emergency)
                 {
-                    Vehicle playerVehicle = Game.PlayerPed.CurrentVehicle;
-                    if (playerVehicle.Driver == playerPed)
-                    {
-                        playerVehicle.Dispose();
-                    }
+                    playerVehicle.Dispose();
                 }
             }
         }
