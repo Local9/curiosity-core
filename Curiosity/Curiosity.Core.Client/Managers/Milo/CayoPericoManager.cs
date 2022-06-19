@@ -1,14 +1,11 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Extensions.Native;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.Milo
 {

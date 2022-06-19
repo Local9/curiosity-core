@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Curiosity.Core.Client.Interface.Menus.Data
+﻿namespace Curiosity.Core.Client.Interface.Menus.Data
 {
     public enum TattooZone
     {

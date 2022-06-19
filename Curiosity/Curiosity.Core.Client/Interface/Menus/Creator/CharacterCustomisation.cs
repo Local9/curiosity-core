@@ -1,8 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Utils;
-using NativeUI;
-using System;
-using System.Collections.Generic;
+﻿using NativeUI;
 using static Curiosity.Core.Client.Utils.ShopPed;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator

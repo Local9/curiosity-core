@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Extensions
+﻿namespace Curiosity.Core.Client.Extensions
 {
     public static class PedExtensions
     {

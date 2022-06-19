@@ -1,14 +1,10 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

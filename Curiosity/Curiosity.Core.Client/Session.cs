@@ -2,7 +2,6 @@ using Curiosity.Core.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client
 {

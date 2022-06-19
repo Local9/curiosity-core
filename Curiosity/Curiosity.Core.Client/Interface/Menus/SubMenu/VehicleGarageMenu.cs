@@ -2,9 +2,7 @@
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

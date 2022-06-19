@@ -1,7 +1,5 @@
 ﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.UI
 {

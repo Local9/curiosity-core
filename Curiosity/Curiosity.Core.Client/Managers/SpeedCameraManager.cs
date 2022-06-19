@@ -1,14 +1,10 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Scripts.JobPolice;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

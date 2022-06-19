@@ -1,9 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.Milo.Casino
 {

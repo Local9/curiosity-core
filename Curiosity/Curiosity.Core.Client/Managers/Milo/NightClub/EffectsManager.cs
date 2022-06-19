@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Managers.Milo.NightClub
+﻿namespace Curiosity.Core.Client.Managers.Milo.NightClub
 {
     public class EffectsManager : Manager<EffectsManager>
     {

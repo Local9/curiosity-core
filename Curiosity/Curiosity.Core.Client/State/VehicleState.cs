@@ -1,5 +1,4 @@
 ﻿using Curiosity.Core.Client.Managers;
-using System;
 
 namespace Curiosity.Core.Client.State
 {

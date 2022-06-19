@@ -1,9 +1,6 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using NativeUI;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {

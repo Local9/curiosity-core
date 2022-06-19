@@ -1,13 +1,9 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {

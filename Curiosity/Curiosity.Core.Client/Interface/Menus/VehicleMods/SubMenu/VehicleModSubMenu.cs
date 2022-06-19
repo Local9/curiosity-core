@@ -1,7 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using NativeUI;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 {

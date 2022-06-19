@@ -1,5 +1,4 @@
 using Curiosity.Systems.Library.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Extensions

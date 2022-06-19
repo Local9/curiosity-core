@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Curiosity.Core.Client.Environment.Entities.Modules.Impl
 {
     public class EntityNetworkModule : EntityModule

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Curiosity.Core.Client.Managers
+﻿namespace Curiosity.Core.Client.Managers
 {
     public class LevelManager : Manager<LevelManager>
     {

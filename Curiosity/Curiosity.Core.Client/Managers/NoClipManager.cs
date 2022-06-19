@@ -1,10 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Utils;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Managers
+﻿namespace Curiosity.Core.Client.Managers
 {
     public class NoClipManager : Manager<NoClipManager>
     {

@@ -4,8 +4,6 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu

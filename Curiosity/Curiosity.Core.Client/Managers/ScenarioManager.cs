@@ -1,8 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Curiosity.Systems.Library.Models;
 
 namespace Curiosity.Core.Client.Managers
 {

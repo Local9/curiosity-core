@@ -1,7 +1,6 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Managers

@@ -1,7 +1,4 @@
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Commands

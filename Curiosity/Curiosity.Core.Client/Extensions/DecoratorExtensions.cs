@@ -1,6 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-
-namespace Curiosity.Core.Client.net.Extensions
+﻿namespace Curiosity.Core.Client.net.Extensions
 {
     class DecoratorExtensions
     {

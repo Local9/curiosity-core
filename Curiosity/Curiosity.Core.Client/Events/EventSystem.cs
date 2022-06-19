@@ -1,12 +1,8 @@
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Events
 {

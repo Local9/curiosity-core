@@ -1,9 +1,6 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Enums;
+﻿using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

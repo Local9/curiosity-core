@@ -1,5 +1,4 @@
 ﻿using Curiosity.Systems.Library.Models;
-using System;
 
 namespace Curiosity.Core.Client.Interface
 {

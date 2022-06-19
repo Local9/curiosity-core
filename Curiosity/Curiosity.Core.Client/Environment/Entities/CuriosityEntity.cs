@@ -1,9 +1,7 @@
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Environment.Entities.Modules;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {

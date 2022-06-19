@@ -1,12 +1,10 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu

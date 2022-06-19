@@ -1,8 +1,5 @@
 ﻿using Curiosity.Core.Client.Interface;
-using Curiosity.Core.Client.Utils;
-using System;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.UI
 {

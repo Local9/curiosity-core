@@ -1,6 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Events;
-using System.Threading.Tasks;
+﻿using Curiosity.Core.Client.Events;
 
 namespace Curiosity.Core.Client.Managers.Milo.Casino
 {

@@ -1,8 +1,5 @@
 using CitizenFX.Core.UI;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 using Font = CitizenFX.Core.UI.Font;
 
 namespace Curiosity.Core.Client.Interface

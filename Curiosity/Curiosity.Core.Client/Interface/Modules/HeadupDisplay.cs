@@ -1,5 +1,4 @@
 using Curiosity.Core.Client.Managers;
-using System;
 using System.Drawing;
 
 namespace Curiosity.Core.Client.Interface.Modules

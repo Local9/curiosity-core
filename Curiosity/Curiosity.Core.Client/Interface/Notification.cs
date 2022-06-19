@@ -1,6 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Enums;
-using System.Collections.Generic;
+﻿using Curiosity.Systems.Library.Enums;
 
 namespace Curiosity.Core.Client.Interface
 {

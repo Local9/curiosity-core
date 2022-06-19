@@ -1,9 +1,7 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Managers;
+﻿using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Data;
 using NativeUI;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu

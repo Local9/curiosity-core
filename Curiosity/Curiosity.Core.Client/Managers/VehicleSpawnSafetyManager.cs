@@ -1,8 +1,5 @@
 ﻿using Curiosity.Core.Client.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

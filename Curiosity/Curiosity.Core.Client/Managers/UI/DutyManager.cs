@@ -1,6 +1,5 @@
 ﻿using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Models;
-using System;
 
 namespace Curiosity.Core.Client.Managers
 {

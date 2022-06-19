@@ -1,8 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Models;
+﻿using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Managers
 {

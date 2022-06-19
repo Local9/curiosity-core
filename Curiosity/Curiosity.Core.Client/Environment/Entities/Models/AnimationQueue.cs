@@ -1,11 +1,7 @@
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities.Models
 {

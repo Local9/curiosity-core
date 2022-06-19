@@ -1,11 +1,7 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus
 {

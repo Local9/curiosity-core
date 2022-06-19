@@ -1,8 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using System;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Utils
+﻿namespace Curiosity.Core.Client.Utils
 {
     internal static class WorldProbe
     {

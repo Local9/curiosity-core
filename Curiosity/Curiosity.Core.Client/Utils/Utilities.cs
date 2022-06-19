@@ -1,7 +1,5 @@
 ﻿using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Exceptions;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Utils
 {

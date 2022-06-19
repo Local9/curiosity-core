@@ -1,6 +1,5 @@
 ﻿using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Enums;
-using System;
 
 namespace Curiosity.Core.Client.Diagnostics
 {

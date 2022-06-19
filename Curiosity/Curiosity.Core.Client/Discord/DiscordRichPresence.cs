@@ -1,5 +1,3 @@
-using System;
-
 namespace Curiosity.Core.Client.Discord
 {
     public class DiscordRichPresence

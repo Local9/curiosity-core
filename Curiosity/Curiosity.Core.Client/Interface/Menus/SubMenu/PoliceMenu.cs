@@ -1,9 +1,6 @@
 ﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
-using Curiosity.Core.Client.Utils;
 using NativeUI;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

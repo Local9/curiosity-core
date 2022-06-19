@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Curiosity.Core.Client.Environment.Entities.Models
+﻿namespace Curiosity.Core.Client.Environment.Entities.Models
 {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class MapObjectPosition

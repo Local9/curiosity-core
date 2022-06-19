@@ -1,7 +1,6 @@
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Models;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment
 {

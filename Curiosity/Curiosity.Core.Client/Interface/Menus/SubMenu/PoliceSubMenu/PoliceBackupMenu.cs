@@ -1,9 +1,7 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Events;
+﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 {

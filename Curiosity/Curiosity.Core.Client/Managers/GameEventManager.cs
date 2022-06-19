@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Data;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
@@ -11,10 +10,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.Events
 {

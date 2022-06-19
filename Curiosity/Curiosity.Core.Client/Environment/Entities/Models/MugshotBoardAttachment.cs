@@ -1,6 +1,5 @@
 using Curiosity.Systems.Library.Enums;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities.Models
 {

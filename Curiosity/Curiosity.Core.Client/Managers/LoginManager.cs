@@ -1,9 +1,7 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Systems.Library.Models;
-using System;
 
 namespace Curiosity.Core.Client.Managers
 {

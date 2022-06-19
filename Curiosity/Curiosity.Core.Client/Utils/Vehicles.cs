@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Utils
+﻿namespace Curiosity.Core.Client.Utils
 {
     public class Vehicles : BaseScript
     {

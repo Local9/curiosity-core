@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Curiosity.Core.Client.Extensions
+﻿namespace Curiosity.Core.Client.Extensions
 {
     static class ObjectExtensions
     {

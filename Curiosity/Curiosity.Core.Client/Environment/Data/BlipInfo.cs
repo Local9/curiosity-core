@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Curiosity.Core.Client.Environment.Data
+﻿namespace Curiosity.Core.Client.Environment.Data
 {
     public static class BlipInfo
     {

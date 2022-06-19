@@ -2,7 +2,6 @@
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Managers
 {

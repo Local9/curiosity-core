@@ -1,8 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment.Entities.Models.Config;
+﻿using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Scripts.JobPolice
 {

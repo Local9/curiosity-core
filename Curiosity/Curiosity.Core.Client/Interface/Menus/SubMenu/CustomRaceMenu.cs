@@ -1,7 +1,5 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using NativeUI;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu

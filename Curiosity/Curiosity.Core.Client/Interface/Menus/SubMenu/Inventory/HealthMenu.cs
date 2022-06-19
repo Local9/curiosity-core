@@ -4,7 +4,6 @@ using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using NativeUI;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.Inventory
 {

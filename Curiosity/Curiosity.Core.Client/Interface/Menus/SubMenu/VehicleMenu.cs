@@ -1,6 +1,5 @@
 ﻿using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using NativeUI;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

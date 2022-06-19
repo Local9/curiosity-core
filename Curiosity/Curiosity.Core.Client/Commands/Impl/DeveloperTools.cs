@@ -1,5 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment.Entities;
+﻿using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Exceptions;
 using Curiosity.Core.Client.Extensions;
@@ -7,14 +6,10 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
-using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {

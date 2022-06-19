@@ -1,10 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Extensions;
-using Curiosity.Core.Client.Utils;
-using System;
-using System.Collections.Generic;
+﻿using Curiosity.Core.Client.Extensions;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

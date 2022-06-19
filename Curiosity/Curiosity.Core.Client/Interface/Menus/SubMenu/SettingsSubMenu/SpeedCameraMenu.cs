@@ -3,12 +3,9 @@ using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Scripts.JobPolice;
-using Curiosity.Core.Client.Utils;
 using NativeUI;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 {

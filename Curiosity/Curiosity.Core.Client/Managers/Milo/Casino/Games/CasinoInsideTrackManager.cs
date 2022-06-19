@@ -1,10 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Utils;
-using Curiosity.Systems.Library.Utils;
+﻿using Curiosity.Systems.Library.Utils;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.Milo.Casino.Games
 {

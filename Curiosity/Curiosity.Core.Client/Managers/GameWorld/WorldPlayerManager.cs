@@ -1,9 +1,5 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Core.Client.Environment.Entities;
-using System;
-using System.Collections.Generic;
+﻿using Curiosity.Core.Client.Environment.Entities;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.GameWorld
 {

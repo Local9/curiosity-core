@@ -1,11 +1,8 @@
 ﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {

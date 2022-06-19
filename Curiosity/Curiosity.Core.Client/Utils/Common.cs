@@ -1,9 +1,6 @@
 ﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Utils
 {

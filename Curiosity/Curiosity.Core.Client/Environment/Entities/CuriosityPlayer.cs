@@ -5,8 +5,6 @@ using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {

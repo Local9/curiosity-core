@@ -7,7 +7,6 @@ using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 

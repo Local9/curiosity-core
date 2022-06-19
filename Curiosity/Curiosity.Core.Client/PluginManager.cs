@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Commands;
 using Curiosity.Core.Client.Commands.Impl;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Discord;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
@@ -9,11 +8,8 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Events;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client
 {

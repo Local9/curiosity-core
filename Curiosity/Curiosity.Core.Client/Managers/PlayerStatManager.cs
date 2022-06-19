@@ -1,7 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Enums;
-using System;
-using System.Threading.Tasks;
+﻿using Curiosity.Systems.Library.Enums;
 
 namespace Curiosity.Core.Client.Managers
 {

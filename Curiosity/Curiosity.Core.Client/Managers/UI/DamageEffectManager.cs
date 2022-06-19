@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Curiosity.Core.Client.Managers.UI
+﻿namespace Curiosity.Core.Client.Managers.UI
 {
     public class DamageEffectManager : Manager<DamageEffectManager>
     {

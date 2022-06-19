@@ -1,7 +1,4 @@
-﻿using Curiosity.Core.Client.Diagnostics;
-using System;
-
-namespace Curiosity.Core.Client.Environment.Entities
+﻿namespace Curiosity.Core.Client.Environment.Entities
 {
     class CuriosityVehicle
     {
