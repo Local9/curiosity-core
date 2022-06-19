@@ -121,7 +121,7 @@ namespace Curiosity.Core.Client.Extensions
                 attempts++;
             }
 
-            EventSystem.GetModule().Send("entity:delete", entity.NetworkId);
+            EventSystem.GetModule().Send("delete:entity", entity.NetworkId);
 
             if (detatch && entity.IsAttached()) DetachEntity(handle, false, false);
             SetEntityAsMissionEntity(handle, true, true);
