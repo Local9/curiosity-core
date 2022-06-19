@@ -78,7 +78,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         private async Task OnJailWeaponCheck()
         {
             Ped playerPed = Game.PlayerPed;
-            bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width, debug: true);
+            bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
 
             if (isInsideJail != lastCheck)
             {
