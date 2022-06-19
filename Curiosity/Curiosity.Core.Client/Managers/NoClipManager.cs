@@ -79,7 +79,16 @@ namespace Curiosity.Core.Client.Managers
                         Vector3 pos = Game.PlayerPed.Position;
                         float groundZ = pos.Z;
                         if (API.GetGroundZFor_3dCoord_2(pos.X, pos.Y, pos.Z, ref groundZ, false))
-                            Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, groundZ);
+                            pos = new Vector3(pos.X, pos.Y, groundZ);
+
+                        float waterHeight = pos.Z;
+
+                        if (API.TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 0, ref waterHeight))
+                        {
+                            pos.Z = waterHeight;
+                        }
+
+                        Game.PlayerPed.Position = pos;
 
                         ped.IsPositionFrozen = false;
                         ped.IsCollisionEnabled = true;

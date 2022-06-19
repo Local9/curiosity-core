@@ -260,6 +260,16 @@ namespace Curiosity.Core.Client.Managers
                         MoveToCityHall();
                     }
 
+                    float waterHeight = pos.Z;
+                    currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
+
+                    if (API.TestVerticalProbeAgainstAllWater(currentPos.X, currentPos.Y, currentPos.Z, 0, ref waterHeight))
+                    {
+                        currentPos.Z = waterHeight;
+                    }
+
+                    Game.PlayerPed.Position = currentPos;
+
                     if (API.IsEntityInWater(API.PlayerPedId()))
                     {
                         sendMessage = true;
