@@ -247,7 +247,9 @@ namespace Curiosity.Core.Client.Managers
                 if (rotation.X + yValue > MinY && rotation.X + yValue < MaxY)
                     rotation.X += yValue;
                 CurrentCamera.Rotation = rotation;
-                droneProp.Rotation = rotation;
+
+                if (droneProp is not null)
+                    droneProp.Rotation = rotation;
             }
             catch (Exception ex)
             {
