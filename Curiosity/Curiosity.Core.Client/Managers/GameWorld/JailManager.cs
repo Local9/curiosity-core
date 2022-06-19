@@ -76,12 +76,21 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         [TickHandler(SessionWait = true)]
         private async Task OnJailWeaponCheck()
         {
+            Ped playerPed = Game.PlayerPed;
             bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
 
             if (isInsideJail != lastCheck)
             {
                 lastCheck = isInsideJail;
                 PlayerOptionsManager.DisableWeapons(isInsideJail);
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Vehicle playerVehicle = Game.PlayerPed.CurrentVehicle;
+                    if (playerVehicle.Driver == playerPed)
+                    {
+                        playerVehicle.Dispose();
+                    }
+                }
             }
         }
 
