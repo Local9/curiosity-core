@@ -221,11 +221,6 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        public void UpdatePlayerDrone()
-        {
-            Ped ped = Game.PlayerPed;
-        }
-
         private async Task OnNoClipCheckRotationTick()
         {
             try
