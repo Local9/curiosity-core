@@ -110,9 +110,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld
             bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
             if (isInsideJail) return; // if they are jailed and still inside, do nothing
 
-            //Instance.DetachTickHandler(OnJailTimerCheck);
-            //Instance.DetachTickHandler(OnJailCheck);
-            // if they have left, then we need to inform the police
             await TeleportPlayer(mainJail.X, mainJail.Y, mainJail.Z);
         }
 
