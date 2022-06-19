@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Events;
+﻿using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using Newtonsoft.Json;

@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
+﻿using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.UI
 {

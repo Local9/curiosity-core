@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-
-namespace Curiosity.Core.Client.Utils
+﻿namespace Curiosity.Core.Client.Utils
 {
     internal class ParticleEffectsAssetNetworked : ParticleEffectsAsset
     {

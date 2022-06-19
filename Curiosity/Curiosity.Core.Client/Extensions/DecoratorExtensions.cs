@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 
 namespace Curiosity.Core.Client.net.Extensions
 {

@@ -1,10 +1,7 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using System;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Extensions
 {

@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Managers;
-using Curiosity.Systems.Library.Enums;
+﻿using Curiosity.Core.Client.Managers;
 using System;
 
 namespace Curiosity.Core.Client.ClientExports

@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;

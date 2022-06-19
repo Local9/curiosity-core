@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Enums;
@@ -8,7 +6,6 @@ using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -40,7 +37,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 DisplayRadar(false);
             }));
-            
+
             Instance.EventRegistry.Add("npwd:PhotoModeEnded", new Action(() =>
             {
                 DisplayRadar(true);
@@ -119,7 +116,7 @@ namespace Curiosity.Core.Client.Managers
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
             Game.PlayerPed.IsInvincible = false;
-            
+
             bool isWantedByPolice = Game.Player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
             if (isWantedByPolice)

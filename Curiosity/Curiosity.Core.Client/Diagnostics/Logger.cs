@@ -1,7 +1,6 @@
 ﻿using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Enums;
 using System;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Diagnostics
 {

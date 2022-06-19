@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Utils;
 using System;
 using System.Collections.Generic;

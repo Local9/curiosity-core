@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu;
 using Curiosity.Core.Client.Managers;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 {

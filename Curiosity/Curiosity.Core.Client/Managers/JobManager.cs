@@ -1,13 +1,9 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {

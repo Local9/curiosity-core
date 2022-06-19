@@ -1,4 +1,3 @@
-using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 
 namespace Curiosity.Core.Client.Environment.Entities.Modules.Impl

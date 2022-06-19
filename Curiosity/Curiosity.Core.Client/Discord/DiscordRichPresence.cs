@@ -1,4 +1,3 @@
-using CitizenFX.Core.Native;
 using System;
 
 namespace Curiosity.Core.Client.Discord

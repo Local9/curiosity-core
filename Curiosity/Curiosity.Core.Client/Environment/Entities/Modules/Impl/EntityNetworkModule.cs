@@ -1,5 +1,3 @@
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Environment.Entities.Modules.Impl

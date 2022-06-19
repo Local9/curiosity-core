@@ -1,5 +1,4 @@
-﻿using Curiosity.Core.Client.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Core.Client.Environment.Entities.Models.Config

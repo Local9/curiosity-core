@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Interface.Modules;
 using Curiosity.Core.Client.Managers;

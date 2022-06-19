@@ -1,11 +1,9 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.Milo.Casino
 {

@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using System.Collections.Generic;
-using static CitizenFX.Core.Native.API;
+﻿using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Environment.Data
 {

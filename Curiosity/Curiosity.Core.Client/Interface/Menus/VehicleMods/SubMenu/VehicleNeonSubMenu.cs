@@ -1,8 +1,6 @@
-﻿using CitizenFX.Core;
-using NativeUI;
+﻿using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 {

@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Events;
+﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;

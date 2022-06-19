@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core.Native;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Curiosity.Core.Client.Utils
 {

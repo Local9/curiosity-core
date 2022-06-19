@@ -3,8 +3,6 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
-using CitizenFX.Core.Native;
-using CitizenFX.Core;
 
 namespace Curiosity.Core.Client.Managers
 {

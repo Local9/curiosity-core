@@ -1,11 +1,9 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface.Menus.Data;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {

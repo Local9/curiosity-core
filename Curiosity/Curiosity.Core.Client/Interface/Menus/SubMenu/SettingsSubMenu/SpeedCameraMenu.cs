@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Core.Client.Environment.Entities.Models;
+﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
@@ -11,7 +9,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CitizenFX.Core.UI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 {

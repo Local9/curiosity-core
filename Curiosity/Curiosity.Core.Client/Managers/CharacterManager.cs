@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
@@ -10,7 +8,6 @@ using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
 using System.Text;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -327,7 +324,7 @@ namespace Curiosity.Core.Client.Managers
                 Screen.Fading.FadeIn(2500);
             }
 
-            while(Screen.Fading.IsFadingIn)
+            while (Screen.Fading.IsFadingIn)
             {
                 await BaseScript.Delay(0);
             }

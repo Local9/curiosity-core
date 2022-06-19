@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Models;
+﻿using Curiosity.Systems.Library.Models;
 using System.Drawing;
 
 namespace Curiosity.Core.Client.Extensions.Native

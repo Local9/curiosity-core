@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Environment.Entities.Models;
+﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;

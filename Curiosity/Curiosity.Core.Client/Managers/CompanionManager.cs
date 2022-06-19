@@ -1,12 +1,10 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -149,7 +147,7 @@ namespace Curiosity.Core.Client.Managers
                 await Peds.Arm(ped, weaponList);
                 return ped;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error(ex, $"SpawnHuman");
                 return -1;
@@ -368,7 +366,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 Logger.Error(ex, $"FollowPlayer");
             }
-}
+        }
 
         [TickHandler(SessionWait = true)]
         private async Task OnUpdateCompanions()

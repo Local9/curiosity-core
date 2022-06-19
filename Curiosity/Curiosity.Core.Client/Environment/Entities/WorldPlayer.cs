@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
@@ -9,7 +8,6 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Environment.Entities
 {
@@ -160,7 +158,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         private void OnStateClientPlayerRadarChange(string bag, string key, dynamic isHidden, int reserved, bool replicated)
         {
             IsHidden = isHidden;
-            
+
             if (PlayerPed.AttachedBlip is null && !IsHidden)
             {
                 _blip = PlayerPed.AttachBlip();

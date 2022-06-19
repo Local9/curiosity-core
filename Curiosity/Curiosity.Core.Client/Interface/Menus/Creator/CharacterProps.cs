@@ -1,6 +1,5 @@
 ﻿using NativeUI;
 using System.Collections.Generic;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.Creator
 {

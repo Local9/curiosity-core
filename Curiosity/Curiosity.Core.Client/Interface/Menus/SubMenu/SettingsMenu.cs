@@ -1,12 +1,10 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Data;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

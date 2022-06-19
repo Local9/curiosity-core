@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Utils;
+﻿using Curiosity.Core.Client.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

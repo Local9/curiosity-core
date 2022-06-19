@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Utils;
@@ -8,7 +7,6 @@ using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.GameWorld
 {
@@ -50,7 +48,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
                 return null;
             }));
-            
+
         }
 
         private static async Task TeleportPlayer(float x, float y, float z)

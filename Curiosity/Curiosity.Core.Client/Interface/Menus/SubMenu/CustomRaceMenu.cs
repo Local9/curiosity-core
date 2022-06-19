@@ -3,7 +3,6 @@ using Curiosity.Core.Client.Diagnostics;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
@@ -65,7 +64,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            if (listItem == miCreateRace) {
+            if (listItem == miCreateRace)
+            {
                 dynamic item = raceList[newIndex];
 
                 int min = item.minimalBet;
@@ -84,7 +84,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     Notify.Alert($"Current Bet Amount: ~g~${betAmountSelected:N0}");
                     Notify.Alert($"Bet must be between~n~$~g~{item.minimalBet:N0} ~s~& $~g~{item.maxBet:N0}");
                 }
-                
+
             }
             else if (listItem == miRaceBet)
             {

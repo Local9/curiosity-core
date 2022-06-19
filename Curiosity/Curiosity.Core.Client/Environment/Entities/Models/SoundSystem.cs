@@ -1,5 +1,3 @@
-using CitizenFX.Core.Native;
-
 namespace Curiosity.Core.Client.Environment.Entities.Models
 {
     public class SoundSystem

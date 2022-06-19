@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Extensions
 {

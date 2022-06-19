@@ -1,8 +1,6 @@
-using CitizenFX.Core;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Models;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client
 {

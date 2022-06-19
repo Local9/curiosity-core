@@ -1,5 +1,3 @@
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Linq;

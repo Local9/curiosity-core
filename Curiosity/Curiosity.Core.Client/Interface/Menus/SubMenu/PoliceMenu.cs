@@ -1,11 +1,9 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Events;
+﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
 using NativeUI;
 using System;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

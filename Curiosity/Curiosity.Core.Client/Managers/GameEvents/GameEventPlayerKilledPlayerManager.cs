@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-
-namespace Curiosity.Core.Client.Managers.GameEvents
+﻿namespace Curiosity.Core.Client.Managers.GameEvents
 {
     public class GameEventPlayerKilledPlayerManager : Manager<GameEventPlayerKilledPlayerManager>
     {

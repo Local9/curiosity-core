@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Core.Client.Environment.Entities;
+﻿using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Managers.GameWorld;
 using NativeUI;
 using System.Collections.Generic;

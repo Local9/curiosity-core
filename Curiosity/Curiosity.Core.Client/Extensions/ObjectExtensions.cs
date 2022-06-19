@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using System;
+﻿using System;
 
 namespace Curiosity.Core.Client.Extensions
 {

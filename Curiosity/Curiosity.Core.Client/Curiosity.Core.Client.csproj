@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +75,7 @@
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterTattoos.cs" />
     <Compile Include="Interface\Menus\Data\TattoosData.cs" />
     <Compile Include="Interface\Menus\PedShopMenu\AppreanceShopMenu.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Managers\Milo\NightClubCasino\NightClubCasinoManager.cs" />
     <Compile Include="Managers\Milo\NightClub\EffectsManager.cs" />
     <Compile Include="Managers\Milo\NightClub\NightClubManager.cs" />
+    <Compile Include="Managers\Milo\NorthYanktonManager.cs" />
     <Compile Include="Managers\Milo\Office\OfficeManager.cs" />
     <Compile Include="Managers\Milo\TunerRaceTrackManager.cs" />
     <Compile Include="Managers\SpeedCameraManager.cs" />
@@ -253,6 +255,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Managers\Minigames\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
   <ItemGroup>

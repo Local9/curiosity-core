@@ -1,9 +1,7 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.UI
 {

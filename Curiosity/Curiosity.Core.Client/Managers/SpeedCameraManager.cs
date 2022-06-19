@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models.Config;
 using Curiosity.Core.Client.Extensions;
@@ -10,7 +9,6 @@ using Curiosity.Systems.Library.Events;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -55,7 +53,7 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
-                    NotificationManager.GetModule().SendNui((eNotification)notificationType, notificationMessage, "bottom-right", "snackbar", notificationDuration, true, false);
+                NotificationManager.GetModule().SendNui((eNotification)notificationType, notificationMessage, "bottom-right", "snackbar", notificationDuration, true, false);
 
                 return null;
             }));
@@ -185,7 +183,7 @@ namespace Curiosity.Core.Client.Managers
             List<PoliceCamera> closestCameras = GetClosestCamera(currentVehicle.Position, _speedCameraDistance);
 
             if (closestCameras.Count == 0) return;
-            foreach(PoliceCamera camera in closestCameras)
+            foreach (PoliceCamera camera in closestCameras)
             {
                 camera.Active = false;
 
@@ -234,7 +232,7 @@ namespace Curiosity.Core.Client.Managers
                     camera.Active = false;
                 }
 
-                
+
             }
         }
 

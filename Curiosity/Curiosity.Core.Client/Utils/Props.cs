@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -103,7 +101,7 @@ namespace Curiosity.Core.Client.Utils
                 Common.Notification(string.Format("Invalid model hash: 0x{0:X8} ({1})", hash, modelHashName));
                 return -1;
             }
-            
+
             Model model = new Model(modelHashName);
             await Common.RequestCollision(hash);
             var prop = API.CreateObject(model.Hash, coords.X, coords.Y, coords.Z, true, false, false);

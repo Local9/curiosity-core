@@ -1,8 +1,6 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Events;
+﻿using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
 using NativeUI;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu.PoliceSubMenu
 {

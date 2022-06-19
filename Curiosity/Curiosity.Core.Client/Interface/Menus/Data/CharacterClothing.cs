@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-
-namespace Curiosity.Core.Client.Interface.Menus.Data
+﻿namespace Curiosity.Core.Client.Interface.Menus.Data
 {
     class CharacterClothing
     {

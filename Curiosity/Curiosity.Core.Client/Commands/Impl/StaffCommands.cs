@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Environment.Entities;
+﻿using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
@@ -10,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -27,7 +24,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
         static ConfigurationManager config => ConfigurationManager.GetModule();
 
-        
+
 
         #region Entities
 

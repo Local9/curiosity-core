@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
@@ -14,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 using LibUtils = Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Client.Managers
@@ -261,7 +258,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 veh.Vehicle.FuelLevel = 0;
                 veh.Vehicle.IsAlarmSet = true;
-                
+
                 if (!veh.Vehicle.IsAlarmSounding)
                     veh.Vehicle.StartAlarm();
 
@@ -275,7 +272,7 @@ namespace Curiosity.Core.Client.Managers
                 await BaseScript.Delay(500);
                 API.PlaySoundFrontend(-1, "ERROR", "HUD_FREEMODE_SOUNDSET", true);
 
-                while(Game.PlayerPed.IsInVehicle())
+                while (Game.PlayerPed.IsInVehicle())
                 {
                     if (!veh.Vehicle.IsAlarmSounding)
                     {

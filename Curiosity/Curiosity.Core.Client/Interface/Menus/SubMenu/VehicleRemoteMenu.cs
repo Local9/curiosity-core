@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using NativeUI;
+﻿using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {

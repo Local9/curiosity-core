@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Diagnostics;
+﻿using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
@@ -11,9 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -162,7 +157,7 @@ namespace Curiosity.Core.Client.Managers
                 minute = 0;
 
             NetworkOverrideClockTime(hour, minute, 0);
-            
+
             isTimeLocked = true;
 
             Logger.Debug($"LockAndSetTime: {hour:00}:{minute:00}");
@@ -172,7 +167,7 @@ namespace Curiosity.Core.Client.Managers
         {
             NetworkClearClockTimeOverride();
             isTimeLocked = false;
-            
+
             Logger.Debug($"UnlockTime");
         }
 

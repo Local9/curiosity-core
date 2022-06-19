@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-
-namespace Curiosity.Core.Client.Managers.Milo.Casino
+﻿namespace Curiosity.Core.Client.Managers.Milo.Casino
 {
     class CasinoLuckyWheel
     {
