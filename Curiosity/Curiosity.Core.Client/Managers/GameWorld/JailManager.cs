@@ -17,12 +17,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         PlayerOptionsManager PlayerOptionsManager => PlayerOptionsManager.GetModule();
 
 
-        Vector3 jailStart = new Vector3(1849.58679f, 2605.6687f, 40.5720177f);
-        Vector3 jailEnd = new Vector3(1522.98364f, 2598.043f, 90.95463f);
+        Vector3 jailStart = new Vector3(1812.00183f, 2736.8418f, 40.5720177f);
+        Vector3 jailEnd = new Vector3(1591.87036f, 2452.705f, 90.95463f);
 
         Vector3 mainJail = new(1669.652f, 2564.316f, 45.56488f);
 
-        float width = 400;
+        float width = 340;
 
         public bool IsJailed = false;
         DateTime jailEndTime;
@@ -46,6 +46,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
                 return null;
             }));
+            
         }
 
         private static async Task TeleportPlayer(float x, float y, float z)
@@ -77,7 +78,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         private async Task OnJailWeaponCheck()
         {
             Ped playerPed = Game.PlayerPed;
-            bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width);
+            bool isInsideJail = Common.IsEntityInAngledArea(Game.PlayerPed, jailStart, jailEnd, width, debug: true);
 
             if (isInsideJail != lastCheck)
             {
