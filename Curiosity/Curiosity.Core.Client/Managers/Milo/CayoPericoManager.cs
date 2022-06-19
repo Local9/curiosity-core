@@ -306,8 +306,6 @@ namespace Curiosity.Core.Client.Managers.Milo
             RemoveIpls(losSantosIpls);
             RequestIpls(cayoIpls);
 
-            // SwitchTrainTrack(0, true); // Enable main train
-            SwitchTrainTrack(3, true); // Enable Metro
         }
 
         public void SetupCayoPerico()
@@ -344,9 +342,6 @@ namespace Curiosity.Core.Client.Managers.Milo
             RemoveIpls(activeIpls);
             RequestIpls(losSantosIpls);
             RemoveIpls(cayoIpls);
-
-            // SwitchTrainTrack(0, false); // Enable main train
-            SwitchTrainTrack(3, false); // Enable Metro
         }
 
         private void RemoveIpls(List<string> ipls)

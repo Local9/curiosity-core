@@ -471,5 +471,23 @@ namespace Curiosity.Core.Client.Utils
         {
             return (Math.Pow(SphereCenter.X - PointToCheck.X, 2) + Math.Pow(SphereCenter.Y - PointToCheck.Y, 2) + Math.Pow(SphereCenter.Z - PointToCheck.Z, 2)) < Math.Pow(sphereRadius, 2);
         }
+
+        public static void RemoveIpls(List<string> ipls)
+        {
+            foreach (string ipl in ipls)
+            {
+                Logger.Debug($"Remove IPL: {ipl}");
+                if (IsIplActive(ipl)) RemoveIpl(ipl);
+            }
+        }
+
+        public static void RequestIpls(List<string> ipls)
+        {
+            foreach (string ipl in ipls)
+            {
+                Logger.Debug($"Request IPL: {ipl}");
+                if (!IsIplActive(ipl)) RequestIpl(ipl);
+            }
+        }
     }
 }
