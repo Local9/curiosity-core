@@ -74,6 +74,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "losSantosLOD")]
         public List<string> LosSantosLOD;
+
+        [DataMember(Name = "northYankton")]
+        public List<string> NorthYankton;
     }
 
     public class Job

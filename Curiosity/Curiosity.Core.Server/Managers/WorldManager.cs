@@ -74,6 +74,16 @@ namespace Curiosity.Core.Server.Managers
                 return WeatherData.IsHalloween();
             }));
 
+            EventSystem.Attach("world:routing:northYankton", new EventCallback(metadata =>
+            {
+                string playerId = $"{metadata.Sender}";
+                SetPlayerRoutingBucket(playerId, 4);
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.RoutingBucket = 4;
+                return null;
+            }));
+
             EventSystem.Attach("world:routing:island", new EventCallback(metadata =>
             {
                 string playerId = $"{metadata.Sender}";

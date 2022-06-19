@@ -88,6 +88,14 @@ namespace Curiosity.Core.Client.Managers
             return GetConfig().Milos.LosSantosLOD;
         }
 
+        public List<string> NorthYanktonIpls()
+        {
+            if (GetConfig().Milos.NorthYankton is null)
+                return new List<string>();
+
+            return GetConfig().Milos.NorthYankton;
+        }
+
         public List<string> EletricVehicles()
         {
             if (GetConfig().EletricVehicles is null)
