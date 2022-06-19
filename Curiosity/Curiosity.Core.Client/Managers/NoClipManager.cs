@@ -127,9 +127,9 @@ namespace Curiosity.Core.Client.Managers
                         if (!droneModel.IsLoaded)
                             await droneModel.Request(5000);
 
-                        droneProp = await World.CreateProp(droneModel, ped.Position, false, false);
-                        droneProp.AttachTo(ped, new Vector3(0f, 0f, 0.5f), new Vector3(0f, 0f, 180f));
-                        droneProp.IsPositionFrozen = true;
+                        //droneProp = await World.CreateProp(droneModel, ped.Position, false, false);
+                        //droneProp.AttachTo(ped, new Vector3(0f, 0f, 0.5f), new Vector3(0f, 0f, 180f));
+                        //droneProp.IsPositionFrozen = true;
                     }
                 }
 
