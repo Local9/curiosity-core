@@ -24,6 +24,7 @@ namespace Curiosity.Core.Client.Managers.Milo
         NUIMarker markerNorthYankton;
 
         ConfigurationManager configurationManager = ConfigurationManager.GetModule();
+        BlipManager blipManager = BlipManager.GetModule();
 
         public override void Begin()
         {
