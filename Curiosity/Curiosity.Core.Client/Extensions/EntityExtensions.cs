@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Events;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -119,6 +120,8 @@ namespace Curiosity.Core.Client.Extensions
                 await BaseScript.Delay(10);
                 attempts++;
             }
+
+            EventSystem.GetModule().Send("entity:delete", entity.NetworkId);
 
             if (detatch && entity.IsAttached()) DetachEntity(handle, false, false);
             SetEntityAsMissionEntity(handle, true, true);
