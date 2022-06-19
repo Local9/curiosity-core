@@ -75,7 +75,7 @@
 
                         float waterHeight = pos.Z;
 
-                        if (API.TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 0, ref waterHeight))
+                        if (API.TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 1, ref waterHeight))
                         {
                             pos.Z = waterHeight;
                         }

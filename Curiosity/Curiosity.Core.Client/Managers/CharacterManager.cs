@@ -258,7 +258,7 @@ namespace Curiosity.Core.Client.Managers
                     float waterHeight = pos.Z;
                     currentPos = Cache.PlayerPed.Position = Game.PlayerPed.Position;
 
-                    if (API.TestVerticalProbeAgainstAllWater(currentPos.X, currentPos.Y, currentPos.Z, 0, ref waterHeight))
+                    if (API.TestVerticalProbeAgainstAllWater(currentPos.X, currentPos.Y, currentPos.Z, 1, ref waterHeight))
                     {
                         currentPos.Z = waterHeight;
                     }
