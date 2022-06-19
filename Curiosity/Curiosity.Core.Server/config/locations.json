@@ -308,6 +308,22 @@
       ]
     },
     {
+      "name": "North Yankton",
+      "sprite": 805,
+      "color": 0,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -1027.266,
+          "Y": -2487.949,
+          "Z": 13.93783
+        }
+      ]
+    },
+    {
       "name": "Jail",
       "sprite": 253,
       "color": 3,
