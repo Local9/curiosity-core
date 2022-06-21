@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>$(MSBuildProjectName).net</AssemblyName>
+    <PackageId>$(AssemblyName).net</PackageId>
     <LangVersion>latest</LangVersion>
-    <Configurations>Debug;Release;CLIENT;SERVER</Configurations>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Configurations>Debug;Release;SERVER</Configurations>
     <BaseOutputPath>Y:\GTA\FXServer\curiosity\resources\[curiosity-framework]\curiosity</BaseOutputPath>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
-    <PackageId>$(AssemblyName).net</PackageId>
-    <AssemblyName>$(MSBuildProjectName).net</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,26 +22,26 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CLIENT|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE;SERVER</DefineConstants>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SERVER|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE;SERVER</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CitizenFX.Core.Server" Version="1.0.5631" />
+    <PackageReference Include="CitizenFX.Core.Server" Version="1.0.5631" ExcludeAssets="runtime" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MySqlConnector" Version="2.1.10" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\_vendor\fx-events\src\events\Events.csproj" />
-    <ProjectReference Include="..\_vendor\fx-events\src\generator\Generator.csproj" />
+    <ProjectReference Include="..\_vendor\fx-events\src\generator\Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utils\" />
   </ItemGroup>
 
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />

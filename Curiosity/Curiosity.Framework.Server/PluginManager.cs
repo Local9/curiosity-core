@@ -7,11 +7,31 @@ namespace Curiosity.Framework.Server
         public static PluginManager Instance { get; private set; }
         public ServerGateway Events;
 
+        public PlayerList PlayerList;
+
         public PluginManager()
         {
             Logger.Trace($"CURIOSITY INITIATION");
             Instance = this;
             Events = new ServerGateway(Instance);
+
+            Load();
+        }
+
+        public async void Load()
+        {
+            PlayerList = Players;
+
+            bool databaseTest = await Database.DapperDatabase<bool>.GetSingleAsync("select 1;");
+            if (databaseTest)
+            {
+                Logger.Trace($"Database Connection Test Successful!");
+            }
+            else
+            {
+                Logger.CriticalError($"Database Connection Test Failed!");
+            }
+
             Logger.Trace($"CURIOSITY INITIATED");
         }
 

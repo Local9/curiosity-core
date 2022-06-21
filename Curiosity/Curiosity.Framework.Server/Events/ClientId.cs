@@ -1,5 +1,4 @@
 ﻿using Lusive.Events;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Framework.Server.Events
