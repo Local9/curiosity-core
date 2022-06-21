@@ -11,6 +11,7 @@ namespace Curiosity.Framework.Client.Events
     {
         public const string SignaturePipeline = "moonlight_event_sig";
 
+        protected sealed override IEventLogger Logger { get; }
         protected override ISerialization Serialization { get; }
 #nullable enable
         private string? _signature;
@@ -20,7 +21,8 @@ namespace Curiosity.Framework.Client.Events
             short playerId = (short)GetPlayerServerId(PlayerId());
             SnowflakeGenerator.Create(playerId);
 
-            Serialization = new BinarySerialization();
+            Logger = new EventLogger();
+            Serialization = new BinarySerialization(Logger);
             DelayDelegate = async delay => await BaseScript.Delay(delay);
             PrepareDelegate = PrepareAsync;
             PushDelegate = Push;

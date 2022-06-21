@@ -10,7 +10,7 @@ namespace Curiosity.Framework.Shared.Diagnostics
         {
             string lowercase = _loggingLevel.ToLower();
             if (lowercase == "all") return true;
-            return (lowercase == _loggingLevel);
+            return (level == _loggingLevel);
         }
 
         public void Debug(params object[] values)
