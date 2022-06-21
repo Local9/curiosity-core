@@ -10,12 +10,12 @@
 [submodule "thirdparty/NativeUI"]
 	path = thirdparty/NativeUI
 	url = https://github.com/citizenfx/NativeUI.git
-[submodule "Curiosity/_vendor/snowflake"]
-	path = Curiosity/_vendor/snowflake
-	url = https://github.com/Local9/snowflake.git
-[submodule "Curiosity/_vendor/fx-events"]
-	path = Curiosity/_vendor/fx-events
-	url = https://github.com/Local9/fx-events.git
 [submodule "Curiosity/_vendor/ScaleformUI"]
 	path = Curiosity/_vendor/ScaleformUI
 	url = https://github.com/Local9/ScaleformUI.git
+[submodule "Curiosity/_vendor/fx-events"]
+	path = Curiosity/_vendor/fx-events
+	url = https://github.com/frostylucas/fx-events.git
+[submodule "Curiosity/_vendor/snowflake"]
+	path = Curiosity/_vendor/snowflake
+	url = https://github.com/frostylucas/snowflake.git
