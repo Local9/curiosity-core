@@ -124,6 +124,8 @@ namespace Curiosity.Core.Client.Managers.Milo
 
         private async Task MovePlayer(Position pos, bool teleportToLosSantos, bool allowVehicle)
         {
+            Init();
+
             Logger.Debug($"teleportToLosSantos: {teleportToLosSantos} Position: {pos}");
 
             Cache.PlayerPed.FadeOut();
@@ -204,8 +206,6 @@ namespace Curiosity.Core.Client.Managers.Milo
         {
             Logger.Debug($"Run Los Santos Setup");
 
-            Init();
-
             Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
             foreach (KeyValuePair<string, BlipData> kvp in blips)
             {
@@ -230,15 +230,13 @@ namespace Curiosity.Core.Client.Managers.Milo
         {
             Logger.Debug($"Run North Yankton Setup");
 
-            Init();
-
             Dictionary<string, BlipData> blips = BlipManager.GetModule().AllBlips;
             foreach (KeyValuePair<string, BlipData> kvp in blips)
             {
                 BlipData blip = kvp.Value;
                 foreach (Blip b in blip.Blips)
                 {
-                    SetBlipHiddenOnLegend(b.Handle, false);
+                    SetBlipHiddenOnLegend(b.Handle, true);
                     SetBlipAlpha(b.Handle, 0);
                 }
             }
