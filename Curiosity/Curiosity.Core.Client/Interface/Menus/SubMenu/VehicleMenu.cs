@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Client.Interface.Menus.VehicleMods;
+using Curiosity.Core.Client.Managers;
 using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
@@ -16,6 +17,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
         UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
         UIMenuItem uiOpenModMenu = new UIMenuItem("Modify Vehicle");
+
+        UIMenuCheckboxItem uiChkInverseTorque;
 
         UIMenuCheckboxItem uiChkDriftTires;
         bool driftTiresEnabled = false;
@@ -60,8 +63,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
 
             uiChkDriftTires = new UIMenuCheckboxItem("Enable Drift Tires", driftTiresEnabled);
+            uiChkInverseTorque = new UIMenuCheckboxItem("Enable Inverse Torque", VehicleManager.EnableInverseTorque);
 
             menu.AddItem(uiChkDriftTires);
+            menu.AddItem(uiChkInverseTorque);
             menu.AddItem(uiVehicleLock);
             menu.AddItem(uiOpenModMenu);
 
@@ -120,6 +125,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 SetDriftTyresEnabled(vehicle.Handle, Checked);
                 SetReduceDriftVehicleSuspension(vehicle.Handle, Checked);
+            }
+            else if (checkboxItem == uiChkInverseTorque)
+            {
+                VehicleManager.EnableInverseTorque = uiChkInverseTorque.Checked;
             }
         }
 

@@ -489,5 +489,20 @@ namespace Curiosity.Core.Client.Utils
                 if (!IsIplActive(ipl)) RequestIpl(ipl);
             }
         }
+
+        public static float Map(float x, float inMin, float inMax, float outMin, float outMax, bool clamp = false)
+        {
+            float val = (float)((x - inMin) * (outMax - outMin) / (inMax - inMin)) + outMin;
+            if (clamp)
+                val = Clamp(val, outMin, outMax);
+            return val;
+        }
+
+        public static float Clamp(float val, float min, float max)
+        {
+            if (val.CompareTo(min) < 0)
+                return min;
+            return val.CompareTo(max) > 0 ? max : val;
+        }
     }
 }

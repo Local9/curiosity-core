@@ -68,6 +68,8 @@ namespace Curiosity.Core.Client.Managers
             ObjectHash.prop_vintage_pump
         };
 
+        public static bool EnableInverseTorque = false;
+
         public override void Begin()
         {
             GameTimeLeftVehicle = GetGameTimer();
@@ -325,12 +327,45 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
             PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
             PluginManager.Instance.AttachTickHandler(OnDisableDriveBy);
+            PluginManager.Instance.AttachTickHandler(OnVehicleInverseTorque);
 
             uint weapHash = 0;
             GetCurrentPedVehicleWeapon(Game.PlayerPed.Handle, ref weapHash);
 
             if (weapHash > 0 && veh.Vehicle.ClassType != VehicleClass.Emergency)
                 DisableVehicleWeapon(true, weapHash, veh.Vehicle.Handle, Game.PlayerPed.Handle);
+        }
+
+        private async Task OnVehicleInverseTorque()
+        {
+            if (!EnableInverseTorque) return;
+
+            Vehicle vehicle = currentVehicle.Vehicle;
+            if (!vehicle.Model.IsCar) return;
+            if (vehicle.CurrentGear <= 0) return;
+
+            bool scaleWithGrip = true;
+            bool scaleWithGear = true;
+            float topMultiplier = 2.0f;
+            float deadZone = 4.0f;
+
+            float vehicleTraction = GetVehicleMaxTraction(vehicle.Handle);
+            Vector3 forwardVector = vehicle.ForwardVector;
+            Vector3 velocity1 = vehicle.Velocity;
+            velocity1.Normalize();
+            Vector3 velocity1Normalise = velocity1;
+            Vector3 upVector = vehicle.UpVector;
+            float x = Math.Abs(PositionExtensions.SignedAngle(forwardVector, velocity1Normalise, upVector));
+            float torqueMap = 0.0f;
+            if (x > deadZone)
+                torqueMap = Common.Map(x, 5f, 90f, 1f, (float)(topMultiplier * (scaleWithGrip ? vehicleTraction : 1.0) * (scaleWithGear ? vehicle.CurrentGear : 1.0)), true);
+            float torqueMapCopy = torqueMap;
+            Vector3 velocity2 = vehicle.Velocity;
+            double roundedVelocity = Math.Round(Common.Map(velocity2.Length(), 1f, 5f, 0.0f, 1f, true), 2);
+            float engineTorque = (float)(torqueMapCopy * roundedVelocity);
+            if (engineTorque > 1.0)
+                vehicle.EngineTorqueMultiplier = engineTorque;
+
         }
 
         private async Task OnDisableDriveBy()
@@ -504,6 +539,7 @@ namespace Curiosity.Core.Client.Managers
                 PluginManager.Instance.DetachTickHandler(CheckFuelPumpDistance);
                 PluginManager.Instance.DetachTickHandler(OnVehicleIsTowing);
                 PluginManager.Instance.DetachTickHandler(OnDisableDriveBy);
+                PluginManager.Instance.DetachTickHandler(OnVehicleInverseTorque);
                 IsNearFuelPump = false;
                 IsRefueling = false;
 

@@ -69,5 +69,28 @@ namespace Curiosity.Core.Client.Extensions
             }
             return sum / vectors.Count;
         }
+
+        public static float Angle(Vector3 from, Vector3 to)
+        {
+            Vector3 fromNorm = Vector3.Normalize(new Vector3(from.X, from.Y, from.Z));
+            Vector3 toNorm = Vector3.Normalize(new Vector3(to.X, to.Y, to.Z));
+
+            double dot = Vector3.Dot(fromNorm, toNorm);
+            return (float)(System.Math.Acos((dot)) * (180.0 / System.Math.PI));
+        }
+
+        public static float SignedAngle(Vector3 from, Vector3 to, Vector3 planeNormal)
+        {
+            Vector3 perpVector = Vector3.Cross(planeNormal, from);
+
+            double angle = Angle(from, to);
+            double dot = Vector3.Dot(perpVector, to);
+            if (dot < 0)
+            {
+                angle *= -1;
+            }
+
+            return (float)angle;
+        }
     }
 }
