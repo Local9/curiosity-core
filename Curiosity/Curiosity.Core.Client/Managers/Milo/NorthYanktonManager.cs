@@ -91,7 +91,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 return;
             }
 
-            while(activeMarker.IsInRange)
+            while (activeMarker.IsInRange)
             {
                 if (activeMarker.IsInMarker)
                 {
