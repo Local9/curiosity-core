@@ -185,6 +185,27 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "particle" })] // /d particle scr_xm_orbital scr_xm_orbital_blast
+        public class ParticleCommand : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                World.RemoveAllParticleEffectsInRange(Game.PlayerPed.Position, 10f);
+                Game.PlayerPed.RemoveAllParticleEffects();
+
+                ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAssetNetworked(arguments[0]);
+                particleEffectsAsset.Request();
+                while (!particleEffectsAsset.IsLoaded) await BaseScript.Delay(0);
+
+                Vector3 pos = Game.PlayerPed.Position;
+
+                if (!particleEffectsAsset.StartNonLoopedAtCoord(arguments[1], pos))
+                    particleEffectsAsset.CreateEffectAtCoord(arguments[1], pos);                
+
+                particleEffectsAsset.MarkAsNoLongerNeeded();
+            }
+        }
+
         [CommandInfo(new[] { "scaleform" })]
         public class ScalefromTest : ICommand
         {
