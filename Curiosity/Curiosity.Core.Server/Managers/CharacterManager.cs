@@ -337,6 +337,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn * -1);
                     curiosityUser.Send("character:respawn:hospital", spawnHospital);
+                    curiosityUser.NotificationSuccess($"Charged ${costOfRespawn:N0} for respawning.");
                 }
 
                 return null;
