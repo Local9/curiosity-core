@@ -1221,6 +1221,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                 {
+                    Cache.PersonalVehicle = null;
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.SetIntoVehicle(vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
@@ -1231,24 +1232,28 @@ namespace Curiosity.Core.Client.Managers
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Plane)
                 {
+                    Cache.PersonalPlane = null;
                     Cache.PersonalPlane = new State.VehicleState(vehicle);
                     Cache.Player.User.SendEvent("vehicle:log:player:plane", vehicle.NetworkId);
                 }
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Boat)
                 {
+                    Cache.PersonalBoat = null;
                     Cache.PersonalBoat = new State.VehicleState(vehicle);
                     Cache.Player.User.SendEvent("vehicle:log:player:boat", vehicle.NetworkId);
                 }
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Helicopter)
                 {
+                    Cache.PersonalHelicopter = null;
                     Cache.PersonalHelicopter = new State.VehicleState(vehicle);
                     Cache.Player.User.SendEvent("vehicle:log:player:helicopter", vehicle.NetworkId);
                 }
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
                 {
+                    Cache.PersonalTrailer = null;
                     Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
                     Cache.PersonalTrailer = new State.VehicleState(vehicle);
                 }
