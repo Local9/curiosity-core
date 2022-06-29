@@ -324,6 +324,7 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                 int costOfRespawn = curiosityUser.Character.RespawnCharge();
+                bool spawnHospital = metadata.Find<bool>(0);
 
                 long totalSum = (long)curiosityUser.Character.Cash - costOfRespawn;
                 if (totalSum < 0)
@@ -332,7 +333,7 @@ namespace Curiosity.Core.Server.Managers
                 if (curiosityUser.Character.Cash >= (ulong)costOfRespawn)
                 {
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn * -1);
-                    curiosityUser.Send("character:respawn:hospital");
+                    curiosityUser.Send("character:respawn:hospital", spawnHospital);
                 }
 
                 return null;

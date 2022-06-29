@@ -4,6 +4,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
+using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -307,7 +308,7 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Attach("character:respawn:hospital", new EventCallback(metadata =>
             {
-                RespawnAtHospital(Cache.Player);
+                RespawnAtHospital(Cache.Player, metadata.Find<bool>(0));
                 EventSystem.Send("world:routing:city");
                 return null;
             }));
@@ -367,26 +368,10 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnRespawnControlTask);
         }
 
-        async void RespawnAtHospital(CuriosityPlayer curiosityPlayer)
+        async void RespawnAtHospital(CuriosityPlayer curiosityPlayer, bool hospital)
         {
             Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut();
-
-            //if (Cache.Character.IsOnIsland)
-            //{
-            //    CayoPericoManager.GetModule().SetupLosSantos();
-
-            //    NotificationManager.GetModule().Info($"Chartering a flight to the nearest hospital.");
-
-            //    await BaseScript.Delay(3000);
-            //}
-
-            //Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
-
-            //if (spawnLocation.X == 0f)
-            //{
-            //    spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
-            //}
 
             float randX = Utility.RANDOM.Next(200, 300);
             float randY = Utility.RANDOM.Next(200, 300);
@@ -397,10 +382,19 @@ namespace Curiosity.Core.Client.Managers
                 randY = Utility.RANDOM.Next(10, 50);
             }
 
-            Vector3 entityPos = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
+            Vector3 spawnPosition = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
 
-            if (Game.PlayerPed.IsInWater || Game.PlayerPed.IsInAir)
+            if (hospital)
             {
+                if (Cache.Character.IsOnIsland)
+                {
+                    CayoPericoManager.GetModule().SetupLosSantos();
+
+                    NotificationManager.GetModule().Info($"Chartering a flight to the nearest hospital.");
+
+                    await BaseScript.Delay(3000);
+                }
+
                 Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
 
                 if (spawnLocation.X == 0f)
@@ -408,35 +402,30 @@ namespace Curiosity.Core.Client.Managers
                     spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
                 }
 
-                entityPos = spawnLocation.AsVector();
+                spawnPosition.X = spawnLocation.X;
+                spawnPosition.Y = spawnLocation.Y;
+                spawnPosition.Z = spawnLocation.Z;
             }
-            else
-            {
-                Vector3 sidewalk1 = entityPos;
-                API.GetSafeCoordForPed(entityPos.X, entityPos.Y, entityPos.Z, true, ref sidewalk1, 16);
-                entityPos = sidewalk1;
-
-                entityPos.Z += 50f;
-                float groundZ = entityPos.Z;
-                if (GetGroundZFor_3dCoord(entityPos.X, entityPos.Y, entityPos.Z, ref groundZ, false))
-                    entityPos.Z = groundZ;
-            }
-
-            //Vector3 safeCoord = World.GetSafeCoordForPed(spawnLocation, true, 1);
-            //if (safeCoord != Vector3.Zero)
-            //    spawnLocation = safeCoord;
 
             Cache.Player.Character.IsDead = false;
             wasKilledByPlayer = false;
 
-            curiosityPlayer.Character.Revive(new Position(entityPos.X, entityPos.Y, entityPos.Z, Game.PlayerPed.Heading));
+            float groundZ = spawnPosition.Z;
+            if (API.GetGroundZFor_3dCoord_2(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, ref groundZ, false))
+                spawnPosition = new Vector3(spawnPosition.X, spawnPosition.Y, groundZ);
+
+            float waterHeight = spawnPosition.Z;
+
+            if (API.TestVerticalProbeAgainstAllWater(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 1, ref waterHeight))
+            {
+                spawnPosition.Z = waterHeight;
+            }
+
+            curiosityPlayer.Character.Revive(new Position(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Game.PlayerPed.Heading));
             BaseScript.TriggerEvent("onPlayerResurrected", "hospital");
-            Cache.PlayerPed.FadeIn();
             RemoveCamera();
-
-            await BaseScript.Delay(3000);
-
             await ScreenInterface.FadeIn(3000);
+            await Cache.PlayerPed.FadeIn();
         }
 
         public async void Respawn(CuriosityPlayer curiosityPlayer)
@@ -477,14 +466,19 @@ namespace Curiosity.Core.Client.Managers
             if (!Game.PlayerPed.IsDead)
                 Game.PlayerPed.Kill();
 
-            ScreenInterface.DrawTextLegacy($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to respawn now ~g~${Cache.Player.Character.RespawnCharge()}~w~).",
-                0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
+            ScreenInterface.DrawTextLegacy($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to respawn now ~g~${Cache.Player.Character.RespawnCharge()}~w~)", 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
+            ScreenInterface.DrawTextLegacy($"~w~(Press Q to respawn at a hospital)", 0.3f, new Vector2(0.5f, 0.79f), Color.FromArgb(175, 175, 175), true);
 
             Screen.DisplayHelpTextThisFrame($"~w~You are unconscious, wait for revive. (~y~{timeSpanLeft}~w~)~n~Press ~INPUT_CONTEXT~ to respawn now for ~g~${Cache.Player.Character.RespawnCharge()}~w~");
 
             if (Game.IsControlPressed(0, Control.Context))
             {
-                EventSystem.Send("character:respawn:charge");
+                EventSystem.Send("character:respawn:charge", false);
+                PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
+            }
+            else if (Game.IsControlPressed(0, Control.Cover))
+            {
+                EventSystem.Send("character:respawn:charge", true);
                 PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
             }
             else if (timeSpan.TotalSeconds <= 0)
