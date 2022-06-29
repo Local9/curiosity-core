@@ -40,6 +40,18 @@ namespace Curiosity.Core.Client.Utils
                 ShowHeadingIndicatorOnBlip(blip, false);
 
                 int vehicle = GetVehiclePedIsIn(ped, false);
+                Vehicle pVehicle = new Vehicle(vehicle);
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Vehicle myVehicle = Game.PlayerPed.CurrentVehicle;
+                    if (myVehicle.Handle == vehicle)
+                    {
+                        SetBlipAlpha(blip, 0);
+                        return;
+                    }
+                }
+
                 int blipSprite = BlipInfo.GetBlipSpriteForVehicle(vehicle);
                 if (GetBlipSprite(blip) != blipSprite)
                 {
@@ -56,6 +68,9 @@ namespace Curiosity.Core.Client.Utils
                     else
                     {
                         SetBlipColour(blip, (int)BlipColor.White);
+
+                        if (pVehicle.PassengerCount > 1)
+                            ShowNumberOnBlip(blip, pVehicle.PassengerCount);
                     }
                 }
             }
