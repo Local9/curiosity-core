@@ -69,6 +69,7 @@
     <Compile Include="Models\Discord\DiscordAvatar.cs" />
     <Compile Include="Models\GenericMessage.cs" />
     <Compile Include="Models\GenericUserListItem.cs" />
+    <Compile Include="Models\Particle.cs" />
     <Compile Include="Models\Police\PoliceTicket.cs" />
     <Compile Include="Models\ScenarioItem.cs" />
     <Compile Include="Models\Shop\CuriosityShopItem.cs" />

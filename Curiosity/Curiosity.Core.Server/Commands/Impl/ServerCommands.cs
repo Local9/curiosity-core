@@ -1,10 +1,13 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,43 @@ namespace Curiosity.Core.Server.Commands.Impl
         public override string Title { get; set; } = "Server Commands";
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
+
+        [CommandInfo(new[] { "particle" })]
+        public class ParticleCommand : ICommand
+        {
+            // srv particle 1 scr_xm_orbital scr_xm_orbital_blast
+            public void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (!int.TryParse(arguments[0], out int playerId))
+                {
+                    return;
+                }
+
+                Player target = PluginManager.PlayersList[playerId];
+
+                Particle particle = new Particle();
+                particle.Asset = arguments[1];
+                particle.Name = arguments[2];
+
+                Vector3 pos = target.Character.Position;
+                particle.Position = new Position();
+
+                particle.Position.X = pos.X;
+                particle.Position.Y = pos.Y;
+                particle.Position.Z = pos.Z - 1f;
+
+                if (arguments.Count > 3)
+                {
+                    particle.Position.X = float.Parse(arguments[3]);
+                    particle.Position.Y = float.Parse(arguments[4]);
+                    particle.Position.Z = float.Parse(arguments[5]);
+                }
+
+                string particleUpdate = JsonConvert.SerializeObject(particle);
+
+                EventSystem.GetModule().SendAll("world:particle", particleUpdate);
+            }
+        }
 
         [CommandInfo(new[] { "giveMoney" })]
         public class GiveMoney : ICommand

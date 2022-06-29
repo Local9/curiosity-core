@@ -92,14 +92,12 @@
         public const string PLAYER_POLICE_WANTED = "PLAYER_POLICE_WANTED";
         public const string PLAYER_WANTED_LEVEL = "PLAYER_POLICE_WANTED_LEVEL"; // lua handling required
         // Job Manager Flags
-        public const string PLAYER_JOB = "p::job::current";
+        public const string PLAYER_JOB = "PLAYER_JOB_CURRENT";
         // Group
-        public const string PLAYER_GROUP = "p::group";
-
+        public const string PLAYER_GROUP = "PLAYER_GROUP";
         public const string PLAYER_RACE_ACTIVE = "PLAYER_RACE_ACTIVE";
-
         public const string IS_JAILED = "PLAYER_IS_JAILED";
-
         public static string PLAYER_OFF_RADAR = "PLAYER_HIDDEN";
+        public static string PLAYER_PARTICLE = "PLAYER_PARTICLE";
     }
 }

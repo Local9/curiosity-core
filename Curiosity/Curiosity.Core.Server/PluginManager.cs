@@ -28,6 +28,7 @@ namespace Curiosity.Core.Server
         private string SERVER_KEY;
 
         public static PluginManager Instance { get; private set; }
+        public static StateBag GlobalStateBag { get; private set; }
         public static PlayerList PlayersList { get; private set; }
         public static int MaximumPlayers { get; } = 32;
         public static int ServerId { get; private set; }
@@ -137,6 +138,8 @@ namespace Curiosity.Core.Server
             try
             {
                 GlobalState["mode"] = "open";
+
+                GlobalStateBag = GlobalState;
 
                 IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
