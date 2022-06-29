@@ -368,10 +368,11 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnRespawnControlTask);
         }
 
-        async void RespawnAtHospital(CuriosityPlayer curiosityPlayer, bool hospital)
+        async void RespawnAtHospital(CuriosityPlayer curiosityPlayer, bool hospitalSpawn)
         {
             Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut();
+            Game.PlayerPed.IsInvincible = true;
 
             float randX = Utility.RANDOM.Next(200, 300);
             float randY = Utility.RANDOM.Next(200, 300);
@@ -384,7 +385,7 @@ namespace Curiosity.Core.Client.Managers
 
             Vector3 spawnPosition = curiosityPlayer.Entity.Position.AsVector() + new Vector3(randX, randY, 1f);
 
-            if (hospital)
+            if (hospitalSpawn)
             {
                 if (Cache.Character.IsOnIsland)
                 {
@@ -422,15 +423,21 @@ namespace Curiosity.Core.Client.Managers
             }
 
             curiosityPlayer.Character.Revive(new Position(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Game.PlayerPed.Heading));
+
             BaseScript.TriggerEvent("onPlayerResurrected", "hospital");
             RemoveCamera();
+
+            if (hospitalSpawn)
+                await BaseScript.Delay(1000);
+
+            Game.PlayerPed.IsInvincible = false;
             await ScreenInterface.FadeIn(3000);
-            await Cache.PlayerPed.FadeIn();
         }
 
         public async void Respawn(CuriosityPlayer curiosityPlayer)
         {
             await ScreenInterface.FadeOut();
+            Game.PlayerPed.IsInvincible = true;
             PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
 
             Vector3 spawnLocation = curiosityPlayer.Entity.Position.AsVector();
@@ -443,7 +450,7 @@ namespace Curiosity.Core.Client.Managers
             wasKilledByPlayer = false;
 
             await BaseScript.Delay(1000);
-
+            Game.PlayerPed.IsInvincible = false;
             await ScreenInterface.FadeIn(3000);
         }
 
