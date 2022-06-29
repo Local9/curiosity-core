@@ -272,10 +272,8 @@ namespace Curiosity.Core.Client.Extensions
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             Cache.PlayerPed.IsPositionFrozen = true;
             PlaceObjectOnGroundProperly(Cache.PlayerPed.Handle);
-
-            await Cache.PlayerPed.FadeIn();
-
             Cache.PlayerPed.IsPositionFrozen = false;
+            await Cache.PlayerPed.FadeIn();
             Cache.Player.EnableHud();
         }
 

@@ -370,7 +370,6 @@ namespace Curiosity.Core.Client.Managers
 
         async void RespawnAtHospital(CuriosityPlayer curiosityPlayer, bool hospitalSpawn)
         {
-            Cache.PlayerPed.FadeOut();
             await ScreenInterface.FadeOut();
             Game.PlayerPed.IsInvincible = true;
 
@@ -420,6 +419,12 @@ namespace Curiosity.Core.Client.Managers
             if (API.TestVerticalProbeAgainstAllWater(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 1, ref waterHeight))
             {
                 spawnPosition.Z = waterHeight;
+            }
+
+            Vector3 safeSpawn = spawnPosition;
+            if (!hospitalSpawn && GetSafeCoordForPed(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, true, ref safeSpawn, 1))
+            {
+                spawnPosition = safeSpawn;
             }
 
             curiosityPlayer.Character.Revive(new Position(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Game.PlayerPed.Heading));
