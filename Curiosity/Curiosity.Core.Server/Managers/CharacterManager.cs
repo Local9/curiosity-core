@@ -326,6 +326,9 @@ namespace Curiosity.Core.Server.Managers
                 int costOfRespawn = curiosityUser.Character.RespawnCharge();
                 bool spawnHospital = metadata.Find<bool>(0);
 
+                if (spawnHospital)
+                    costOfRespawn = costOfRespawn * 2;
+
                 long totalSum = (long)curiosityUser.Character.Cash - costOfRespawn;
                 if (totalSum < 0)
                     costOfRespawn = 0;
