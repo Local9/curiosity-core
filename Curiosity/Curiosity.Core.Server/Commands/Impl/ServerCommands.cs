@@ -122,7 +122,14 @@ namespace Curiosity.Core.Server.Commands.Impl
             {
                 if (arguments.Count == 0)
                 {
-                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    bool isHiddenState = player.State.Get(StateBagKey.PLAYER_OFF_RADAR) ?? false;
+                    bool toggleState = !isHiddenState;
+
+                    player.State.Set(StateBagKey.PLAYER_OFF_RADAR, toggleState, true);
+                    if (toggleState)
+                        user.NotificationSuccess($"{player.Name} should now be hidden");
+                    if (!toggleState)
+                        user.NotificationSuccess($"{player.Name} should now showing on radar");
                     return;
                 }
 
@@ -139,9 +146,9 @@ namespace Curiosity.Core.Server.Commands.Impl
                 Player p = PluginManager.PlayersList[playerId];
                 p.State.Set(StateBagKey.PLAYER_OFF_RADAR, isHidden, true);
                 if (isHidden)
-                    user.NotificationSuccess("You should now be hidden");
+                    user.NotificationSuccess($"{p.Name} should now be hidden");
                 if (!isHidden)
-                    user.NotificationSuccess("You should now showing on radar");
+                    user.NotificationSuccess($"{p.Name} should now showing on radar");
             }
         }
 
