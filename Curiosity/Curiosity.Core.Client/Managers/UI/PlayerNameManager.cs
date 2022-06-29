@@ -55,7 +55,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
                     bool isHidden = player.State.Get(StateBagKey.PLAYER_OFF_RADAR) ?? false;
 
-                    if (isHidden)
+                    if (isHidden || !player.Character.IsVisible)
                     {
                         if (gamerTags.ContainsKey(player))
                         {
