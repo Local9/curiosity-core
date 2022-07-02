@@ -564,7 +564,7 @@ namespace Curiosity.Core.Server.Managers
 
                     SendNotification(metadata.Sender, playerMsg, vehicleNetId: vehicle.NetworkId);
 
-                    bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
+                    bool isPassive = player.State.Get(StateBagKey.PLAYER_PASSIVE) ?? curiosityUser.Character.IsPassive;
                     bool isOfficer = curiosityUser.Job == ePlayerJobs.POLICE_OFFICER;
 
                     if (informPolice && !isPassive && !isOfficer)

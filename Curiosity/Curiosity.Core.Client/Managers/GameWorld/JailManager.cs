@@ -37,10 +37,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
                 PlayerOptionsManager.DisableWeapons(true);
 
-                float x = metadata.Find<float>(0);
-                float y = metadata.Find<float>(1);
-                float z = metadata.Find<float>(2);
-
                 await TeleportPlayer(mainJail.X, mainJail.Y, mainJail.Z);
 
                 Instance.AttachTickHandler(OnJailCheck);
