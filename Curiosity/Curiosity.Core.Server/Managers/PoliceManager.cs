@@ -248,13 +248,25 @@ namespace Curiosity.Core.Server.Managers
                 {
                     int suspectServerId = metadata.Find<int>(0);
                     Player player = PluginManager.PlayersList[suspectServerId];
-                    if (player == null) return false;
+                    if (player == null)
+                    {
+                        Logger.Debug($"police:suspect:jail:self; Player not found");
+                        return false;
+                    }
 
                     bool isPlayerWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
-                    if (!isPlayerWanted) return false;
+                    if (!isPlayerWanted)
+                    {
+                        Logger.Debug($"police:suspect:jail:self; Player is not wanted");
+                        return false;
+                    }
 
                     bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
-                    if (isPlayerJailed) return false;
+                    if (!isPlayerJailed)
+                    {
+                        Logger.Debug($"police:suspect:jail:self; Player is currently jailed?!");
+                        return false;
+                    }
 
                     await SendSuspectToJail(suspectServerId, player);
 
