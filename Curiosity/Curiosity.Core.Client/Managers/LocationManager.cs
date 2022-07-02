@@ -137,6 +137,9 @@ namespace Curiosity.Core.Client.Managers
                             markerData.WrappingMarker = m.WrappingMarker;
                             markerData.SetOnGround = m.SetOnGround;
                             markerData.SpawnType = location.SpawnType;
+                            markerData.IsServerEvent = m.IsServerEvent;
+                            markerData.IsLegacyEvent = m.IsLegacyEvent;
+                            markerData.IsLuaEvent = m.IsLuaEvent;
 
                             float ground = 0f;
 
@@ -253,12 +256,14 @@ namespace Curiosity.Core.Client.Managers
 
                 OnMarkerCooldown();
 
-                Logger.Debug($"Control for event '{activeMarker.Event}' pressed");
+                Logger.Debug($"Control for event '{activeMarker.Event}' pressed; {activeMarker.IsServerEvent}");
 
                 if (activeMarker.IsServerEvent)
                 {
+                    Logger.Debug($"'{activeMarker.Event}' is a server event.");
                     if (activeMarker.IsLegacyEvent || activeMarker.IsLuaEvent)
                     {
+                        Logger.Debug($"'{activeMarker.Event}' is a legacy or lua event.");
                         BaseScript.TriggerServerEvent(activeMarker.Event, activeMarker.Position.X, activeMarker.Position.Y, activeMarker.Position.Z);
                     }
                     else
@@ -268,8 +273,10 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else
                 {
+                    Logger.Debug($"'{activeMarker.Event}' is a client event.");
                     if (activeMarker.IsLegacyEvent || activeMarker.IsLuaEvent)
                     {
+                        Logger.Debug($"'{activeMarker.Event}' is a legacy or lua event.");
                         BaseScript.TriggerEvent(activeMarker.Event, activeMarker.Position.X, activeMarker.Position.Y, activeMarker.Position.Z);
                     }
                     else
