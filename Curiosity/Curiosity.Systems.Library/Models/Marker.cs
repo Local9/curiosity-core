@@ -17,13 +17,13 @@ namespace Curiosity.Systems.Library.Models
         public string HelpText;
 
         [DataMember(Name = "isServerEvent")]
-        public bool IsServerEvent = false;
+        public bool IsServerEvent;
 
         [DataMember(Name = "isLegacyEvent")]
-        public bool IsLegacyEvent = false;
+        public bool IsLegacyEvent;
 
         [DataMember(Name = "isLuaEvent")]
-        public bool IsLuaEvent = false;
+        public bool IsLuaEvent;
 
         [DataMember(Name = "event")]
         public string Event;
@@ -35,7 +35,7 @@ namespace Curiosity.Systems.Library.Models
         public int MarkerId = 1;
 
         [DataMember(Name = "wrappingMarker")]
-        public bool WrappingMarker = false;
+        public bool WrappingMarker;
 
         [DataMember(Name = "scale")]
         public Position Scale = new Position(1f, 1f, 1f);
@@ -59,16 +59,16 @@ namespace Curiosity.Systems.Library.Models
         public int Control = 51;
 
         [DataMember(Name = "bob")]
-        public bool Bob = false;
+        public bool Bob;
 
         [DataMember(Name = "rotate")]
-        public bool Rotate = false;
+        public bool Rotate;
 
         [DataMember(Name = "faceCamera")]
-        public bool FaceCamera = false;
+        public bool FaceCamera;
 
         [DataMember(Name = "setOnGround")]
-        public bool SetOnGround = true;
+        public bool SetOnGround;
 
         public SpawnType SpawnType;
     }
