@@ -246,8 +246,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
-                    int suspectServerId = metadata.Find<int>(0);
-                    Player player = PluginManager.PlayersList[suspectServerId];
+                    Player player = PluginManager.PlayersList[metadata.Sender];
                     if (player == null)
                     {
                         Logger.Debug($"police:suspect:jail:self; Player not found");
@@ -268,7 +267,7 @@ namespace Curiosity.Core.Server.Managers
                         return false;
                     }
 
-                    await SendSuspectToJail(suspectServerId, player);
+                    await SendSuspectToJail(metadata.Sender, player);
 
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' has jailed themselves.");
                     SendNotification(message: $"{player.Name} has jailed themselves.");
