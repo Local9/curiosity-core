@@ -262,7 +262,7 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
-                    if (!isPlayerJailed)
+                    if (isPlayerJailed)
                     {
                         Logger.Debug($"police:suspect:jail:self; Player is currently jailed?!");
                         return false;
