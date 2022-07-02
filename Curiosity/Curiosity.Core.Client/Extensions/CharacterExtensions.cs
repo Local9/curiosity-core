@@ -110,7 +110,7 @@ namespace Curiosity.Core.Client.Extensions
             API.SetPedDefaultComponentVariation(player.Entity.Id);
 
             Model playerModel = PedHash.FreemodeMale01;
-            if (character.Gender == 1)
+            if (!character.IsMale)
             {
                 playerModel = PedHash.FreemodeFemale01;
             }
