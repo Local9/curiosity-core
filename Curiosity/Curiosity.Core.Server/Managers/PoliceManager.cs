@@ -268,7 +268,7 @@ namespace Curiosity.Core.Server.Managers
                         return false;
                     }
 
-                    await SendSuspectToJail(metadata.Sender, player);
+                    await SendSuspectToJail(metadata.Sender, player, true);
 
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' has jailed themselves.");
                     SendNotification(message: $"{player.Name} has jailed themselves.");
@@ -628,14 +628,14 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        private async Task SendSuspectToJail(int suspectServerId, Player player)
+        private async Task SendSuspectToJail(int suspectServerId, Player player, bool jailSelf = false)
         {
             SetEntityDistanceCullingRadius(player.Character.Handle, 0f); // reset culling
             player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
             player.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
             player.State.Set(StateBagKey.IS_JAILED, true, true);
 
-            EventSystem.Send("police:suspect:jail", suspectServerId); // jail
+            EventSystem.Send("police:suspect:jail", suspectServerId, jailSelf); // jail
             CuriosityUser curiosityUserSuspect = PluginManager.ActiveUsers[suspectServerId];
 
             int staffVehicle = curiosityUserSuspect.StaffVehicle;
