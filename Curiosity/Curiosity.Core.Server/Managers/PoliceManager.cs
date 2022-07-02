@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Environment.Data;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -274,6 +275,7 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500 * -1);
+                    curiosityUser.NotificationSuccess($"You have been charged ${500:N0} for handing yourself in.");
 
                     return true;
                 }
