@@ -242,6 +242,33 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            EventSystem.Attach("police:suspect:jail:self", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    int suspectServerId = metadata.Find<int>(0);
+                    Player player = PluginManager.PlayersList[suspectServerId];
+                    if (player == null) return false;
+
+                    bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
+                    if (isPlayerJailed) return false;
+
+                    await SendSuspectToJail(suspectServerId, player);
+
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' has jailed themselves.");
+                    SendNotification(message: $"{player.Name} has jailed themselves.");
+
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }));
+
             EventSystem.Attach("police:player:jail:served", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
