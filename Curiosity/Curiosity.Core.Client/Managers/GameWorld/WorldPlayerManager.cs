@@ -69,7 +69,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 Player player = kvp.Value.Player;
 
                 if (player == Game.Player) continue; // ignore self
-                if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 10f)) continue;
+                if (!Game.PlayerPed.IsInRangeOf(player.Character.Position, 5f)) continue;
                 if (player.Character.IsInVehicle()) continue; // they must be outside a vehicle
                 if (!worldPlayer.IsWanted) continue;
 
