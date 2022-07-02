@@ -250,6 +250,9 @@ namespace Curiosity.Core.Server.Managers
                     Player player = PluginManager.PlayersList[suspectServerId];
                     if (player == null) return false;
 
+                    bool isPlayerWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+                    if (!isPlayerWanted) return false;
+
                     bool isPlayerJailed = player.State.Get(StateBagKey.IS_JAILED) ?? false;
                     if (isPlayerJailed) return false;
 
@@ -259,7 +262,7 @@ namespace Curiosity.Core.Server.Managers
                     SendNotification(message: $"{player.Name} has jailed themselves.");
 
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500);
+                    await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500 * -1);
 
                     return true;
                 }
