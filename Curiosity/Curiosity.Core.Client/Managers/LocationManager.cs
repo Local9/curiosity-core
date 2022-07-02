@@ -141,10 +141,21 @@ namespace Curiosity.Core.Client.Managers
                             markerData.IsLegacyEvent = m.IsLegacyEvent;
                             markerData.IsLuaEvent = m.IsLuaEvent;
 
-                            float ground = 0f;
+                            if (m.SetOnGround)
+                            {
+                                Vector3 pos = markerData.Position;
+                                float groundZ = pos.Z;
+                                if (API.GetGroundZFor_3dCoord_2(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                                    pos = new Vector3(pos.X, pos.Y, groundZ);
 
-                            if (API.GetGroundZFor_3dCoord_2(markerData.Position.X, markerData.Position.Y, markerData.Position.Z, ref ground, false) && m.SetOnGround)
-                                markerData.Position.Z = ground;
+                                float waterHeight = pos.Z;
+
+                                if (API.TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 1, ref waterHeight))
+                                {
+                                    pos.Z = waterHeight;
+                                }
+                                markerData.Position = pos;
+                            }
 
                             MarkersAll.Add(markerData);
                         });
@@ -208,10 +219,26 @@ namespace Curiosity.Core.Client.Managers
         {
             MarkersClose.ForEach(m =>
             {
+                if (m.SetOnGround)
+                {
+                    Vector3 pos = m.Position;
+                    float groundZ = pos.Z;
+                    if (API.GetGroundZFor_3dCoord_2(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                        pos = new Vector3(pos.X, pos.Y, groundZ);
+
+                    float waterHeight = pos.Z;
+
+                    if (API.TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 1, ref waterHeight))
+                    {
+                        pos.Z = waterHeight;
+                    }
+                    m.Position = pos;
+                }
+
                 World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
-                Vector3 pos = m.Position;
-                pos.Z = pos.Z + 1f;
-                NativeUI.Notifications.ShowFloatingHelpNotification(m.Message, pos);
+                Vector3 floatingHelpPos = m.Position;
+                floatingHelpPos.Z = floatingHelpPos.Z + 1f;
+                NativeUI.Notifications.ShowFloatingHelpNotification(m.Message, floatingHelpPos);
             });
         }
 
