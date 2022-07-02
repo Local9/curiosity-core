@@ -30,10 +30,10 @@ namespace Curiosity.Core.Client.Managers.GameWorld
         {
             EventSystem.Attach("police:suspect:jail", new AsyncEventCallback(async metadata =>
             {
-                jailEndTime = DateTime.UtcNow.AddMinutes(3);
+                jailEndTime = DateTime.UtcNow.AddMinutes(4);
 
                 if (metadata.Find<bool>(0))
-                    jailEndTime = DateTime.UtcNow.AddMinutes(1);
+                    jailEndTime = DateTime.UtcNow.AddMinutes(2);
 
                 PlayerOptionsManager.DisableWeapons(true);
 
