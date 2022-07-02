@@ -123,6 +123,72 @@
               "Z": 23.914852142334
             }
           ]
+        },
+        {
+          "control": 51,
+          "message": "Hand yourself in",
+          "helpText": "Press ~INPUT_CONTEXT~ to hand yourself in.",
+          "event": "police:suspect:jail:self",
+          "isServerEvent": true,
+          "isLegacyEvent": false,
+          "isLuaEvent": false,
+          "setOnGround": true,
+          "markerId": 1,
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 0.5
+          },
+          "contextAoe": 1.5,
+          "drawThreshold": 5,
+          "color": {
+            "alpha": 255,
+            "red": 0,
+            "green": 128,
+            "blue": 0
+          },
+          "positions": [
+            {
+              "X": -447.4104,
+              "Y": 6013.927,
+              "Z": 31.7164
+            },
+            {
+              "X": 1853.635,
+              "Y": 3687.6,
+              "Z": 34.26704
+            },
+            {
+              "X": 639.6589,
+              "Y": 1.640641,
+              "Z": 82.78644
+            },
+            {
+              "X": -560.3462,
+              "Y": -134.918,
+              "Z": 38.14231
+            },
+            {
+              "X": -1107.152,
+              "Y": -848.7338,
+              "Z": 19.31688
+            },
+            {
+              "X": 358.2428,
+              "Y": -1584.644,
+              "Z": 29.29193
+            },
+            {
+              "X": 823.4781,
+              "Y": -1292.485,
+              "Z": 28.24066
+            },
+            {
+              "X": 441.2228,
+              "Y": -981.2025,
+              "Z": 30.6896
+            }
+          ]
         }
       ]
     },
