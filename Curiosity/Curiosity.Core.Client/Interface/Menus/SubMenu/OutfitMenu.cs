@@ -17,8 +17,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             await Session.Loading();
             menu = uiMenu;
 
-            menu.AddItem(uiItemResetCharacter);
-
             List<dynamic> dynList = new();
 
             foreach(Outfit outfit in configuration.Outfits())
@@ -28,6 +26,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
 
             uiListOutfits = new UIMenuListItem("Job Outfits", dynList, 0);
+            menu.AddItem(uiListOutfits);
+
+            menu.AddItem(uiItemResetCharacter);
 
             menu.OnItemSelect += Menu_OnItemSelectAsync;
             menu.OnListSelect += Menu_OnListSelect;
