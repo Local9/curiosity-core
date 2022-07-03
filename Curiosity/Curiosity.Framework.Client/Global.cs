@@ -6,3 +6,4 @@ global using static CitizenFX.Core.Native.API;
 global using Curiosity.Framework.Shared;
 global using Curiosity.Framework.Shared.Diagnostics;
 global using System.Threading.Tasks;
+global using System.Collections.Generic;
