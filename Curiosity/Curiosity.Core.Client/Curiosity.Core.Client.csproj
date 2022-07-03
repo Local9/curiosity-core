@@ -84,6 +84,7 @@
     <Compile Include="Interface\Menus\SubMenu\Inventory\RepairKitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\HealthMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\Inventory\BodyArmorMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\OutfitMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PoliceBackupMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\PoliceSubMenu\PolicePlayerInteractionMenu.cs" />
