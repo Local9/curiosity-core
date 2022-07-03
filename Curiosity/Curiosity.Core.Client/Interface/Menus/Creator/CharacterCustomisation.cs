@@ -11,7 +11,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         {
             menu.Subtitle.Caption = "Customise Ped Clothing";
 
-            string[] clothingCategoryNames = new string[12] { "Unused (head)", "Masks", "Unused (hair)", "Upper Body", "Lower Body", "Bags & Parachutes", "Shoes", "Scarfs & Chains", "Shirt & Accessory", "Body Armor & Accessory 2", "Badges & Logos", "Shirt Overlay & Jackets" };
+            string[] clothingCategoryNames = new string[12] { "Unused (head)", "Masks", "Unused (hair)", "Upper Body", "Lower Body", "Bags & Parachutes", "Shoes", "Scarfs & Chains", "Shirt & Accessory", "Body Armor", "Badges & Logos", "Jackets" };
             for (int i = 0; i < 12; i++)
             {
                 if (i != 0 && i != 2)
@@ -36,25 +36,25 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             menu.OnIndexChange += (_sender, newIndex) =>
             {
-                if (newIndex == 0)
+                if (newIndex == 0) // Masks
                     componentIndex = 1;
-                if (newIndex == 1)
+                if (newIndex == 1) // Upper Body
                     componentIndex = 3;
-                if (newIndex == 2)
+                if (newIndex == 2) // Lower Body
                     componentIndex = 4;
-                if (newIndex == 3)
+                if (newIndex == 3) // Bags & Parachutes
                     componentIndex = 5;
-                if (newIndex == 4)
+                if (newIndex == 4) // Shoes
                     componentIndex = 6;
-                if (newIndex == 5)
+                if (newIndex == 5) // Scarfs & Chains
                     componentIndex = 7;
-                if (newIndex == 6)
+                if (newIndex == 6) // Shirt & Accessory
                     componentIndex = 8;
-                if (newIndex == 7)
+                if (newIndex == 7) // Body Armor & Accessory
                     componentIndex = 9;
-                if (newIndex == 8)
+                if (newIndex == 8) // Badges & Logos
                     componentIndex = 10;
-                if (newIndex == 9)
+                if (newIndex == 9) // Shirt Overlay & Jackets
                     componentIndex = 11;
             };
 
