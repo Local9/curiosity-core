@@ -8,6 +8,21 @@ namespace Curiosity.Framework.Server
         public ServerGateway Events;
 
         public PlayerList PlayerList;
+        internal static int ServerID
+        {
+            get
+            {
+                int _ServerId = GetConvarInt("server_id", 0);
+                if (_ServerId == 0)
+                {
+                    Logger.CriticalError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Logger.CriticalError("! Convar 'server_id' is not set or is not a number! !");
+                    Logger.CriticalError("!!! Please set this value and restart the server! !!!");
+                    Logger.CriticalError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+                return _ServerId;
+            }
+        }
 
         public PluginManager()
         {
