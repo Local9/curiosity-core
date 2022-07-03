@@ -38,6 +38,11 @@ namespace Curiosity.Core.Client.Managers
             return GetConfig().Jobs;
         }
 
+        public List<Outfit> Outfits()
+        {
+            return GetConfig().Outfits;
+        }
+
         public List<string> VehiclesToSuppress()
         {
             return GetConfig().VehiclesToSuppress;
