@@ -26,6 +26,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
 
             uiListOutfits = new UIMenuListItem("Job Outfits", dynList, 0);
+            uiListOutfits.Description = "Press ENTER to select the outfit of your choice.";
             menu.AddItem(uiListOutfits);
 
             menu.AddItem(uiItemResetCharacter);
