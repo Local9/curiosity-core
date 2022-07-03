@@ -44,6 +44,12 @@ namespace Curiosity.Systems.Library.Models
     [DataContract]
     public class Outfit
     {
+        [DataMember(Name = "label")]
+        public string Label;
+
+        [DataMember(Name = "male")]
+        public bool IsMale;
+
         [DataMember(Name = "components")]
         public List<Component> Components;
 
