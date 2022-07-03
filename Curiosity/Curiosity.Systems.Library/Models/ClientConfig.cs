@@ -10,7 +10,7 @@ namespace Curiosity.Systems.Library.Models
         public List<Job> Jobs;
 
         [DataMember(Name = "outfits")]
-        public List<Outfits> Outfits;
+        public List<Outfit> Outfits;
 
         [DataMember(Name = "suppressedVehicles")]
         public List<string> VehiclesToSuppress;
@@ -42,7 +42,7 @@ namespace Curiosity.Systems.Library.Models
     }
 
     [DataContract]
-    public class Outfits
+    public class Outfit
     {
         [DataMember(Name = "components")]
         public List<Component> Components;
