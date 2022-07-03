@@ -9,6 +9,9 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "jobs")]
         public List<Job> Jobs;
 
+        [DataMember(Name = "outfits")]
+        public List<Outfits> Outfits;
+
         [DataMember(Name = "suppressedVehicles")]
         public List<string> VehiclesToSuppress;
 
@@ -36,6 +39,42 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "models")]
         public List<SupporterModel> SupporterModels;
+    }
+
+    [DataContract]
+    public class Outfits
+    {
+        [DataMember(Name = "components")]
+        public List<Component> Components;
+
+        [DataMember(Name = "props")]
+        public List<Prop> Props;
+    }
+
+    [DataContract]
+    public class Component
+    {
+        [DataMember(Name = "component")]
+        public int Components;
+
+        [DataMember(Name = "drawable")]
+        public int Drawable;
+
+        [DataMember(Name = "texture")]
+        public int Texture;
+    }
+
+    [DataContract]
+    public class Prop
+    {
+        [DataMember(Name = "index")]
+        public int Index;
+
+        [DataMember(Name = "drawable")]
+        public int Drawable;
+
+        [DataMember(Name = "texture")]
+        public int Texture;
     }
 
 
