@@ -27,7 +27,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     dynList.Add(outfit);
             }
 
-            uiListOutfits = new UIMenuListItem("Outfit", dynList, 0);
+            uiListOutfits = new UIMenuListItem("Job Outfits", dynList, 0);
 
             menu.OnItemSelect += Menu_OnItemSelectAsync;
             menu.OnListSelect += Menu_OnListSelect;
