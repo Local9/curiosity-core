@@ -51,17 +51,22 @@ namespace Curiosity.Systems.Library.Models
         public bool IsMale;
 
         [DataMember(Name = "components")]
-        public List<Component> Components;
+        public List<OutfitComponent> Components;
 
         [DataMember(Name = "props")]
-        public List<Prop> Props;
+        public List<OutfitProp> Props;
+
+        public override string ToString()
+        {
+            return Label;
+        }
     }
 
     [DataContract]
-    public class Component
+    public class OutfitComponent
     {
         [DataMember(Name = "component")]
-        public int Components;
+        public int Component;
 
         [DataMember(Name = "drawable")]
         public int Drawable;
@@ -71,7 +76,7 @@ namespace Curiosity.Systems.Library.Models
     }
 
     [DataContract]
-    public class Prop
+    public class OutfitProp
     {
         [DataMember(Name = "index")]
         public int Index;
