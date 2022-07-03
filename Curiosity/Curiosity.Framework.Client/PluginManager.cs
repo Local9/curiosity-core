@@ -26,16 +26,18 @@ namespace Curiosity.Framework.Client
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
         }
 
-        private void OnResourceStart(string obj)
+        private void OnResourceStart(string resourceName)
         {
-
+            if (resourceName != GetCurrentResourceName()) return;
         }
 
-        private void OnResourceStop(string obj)
+        private void OnResourceStop(string resourceName)
         {
-            
+            if (resourceName != GetCurrentResourceName()) return;
         }
 
         public void Hook(string eventName, Delegate @delegate)
