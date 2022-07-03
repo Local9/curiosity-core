@@ -11,6 +11,638 @@
       "legacyEvent": false
     }
   ],
+  "outfits": [
+    {
+      "label": "LSPD",
+      "male": false,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 3,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 54,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 61,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 55,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 310,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 1,
+          "texture": 0
+        }
+      ]
+    },
+    {
+      "label": "LSSD",
+      "male": false,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 3,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 51,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 83,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 37,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 310,
+          "texture": 2
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 13,
+          "texture": 3
+        }
+      ]
+    },
+    {
+      "label": "SA Highway Patrol",
+      "male": false,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 51,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 83,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 1,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 300,
+          "texture": 4
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 13,
+          "texture": 2
+        }
+      ]
+    },
+    {
+      "label": "LSPD",
+      "male": true,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 12,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 99,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 133,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 212,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 51,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 397,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 1,
+          "texture": 0
+        }
+      ]
+    },
+    {
+      "label": "LSSD",
+      "male": true,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 12,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 96,
+          "texture": 2
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 105,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 52,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 39,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 397,
+          "texture": 2
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 13,
+          "texture": 3
+        }
+      ]
+    },
+    {
+      "label": "SA Highway Patrol",
+      "male": true,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 12,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 96,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 105,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 15,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 390,
+          "texture": 4
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 13,
+          "texture": 2
+        }
+      ]
+    },
+    {
+      "label": "EMT",
+      "male": false,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 104,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 155,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 61,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 120,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 14,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 365,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 127,
+          "texture": 0
+        }
+      ]
+    },
+    {
+      "label": "EMT",
+      "male": true,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 1,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 193,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 2,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 216,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 15,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 446,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 170,
+          "texture": 0
+        }
+      ]
+    },
+    {
+      "label": "Firefighter",
+      "male": false,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 127,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 38,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 84,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 191,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 434,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 142,
+          "texture": 0
+        }
+      ]
+    },
+    {
+      "label": "EMT",
+      "male": true,
+      "components": [
+        {
+          "component": 1,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 3,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 4,
+          "drawable": 83,
+          "texture": 0
+        },
+        {
+          "component": 5,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 6,
+          "drawable": 124,
+          "texture": 0
+        },
+        {
+          "component": 7,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 8,
+          "drawable": 164,
+          "texture": 0
+        },
+        {
+          "component": 9,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 10,
+          "drawable": 0,
+          "texture": 0
+        },
+        {
+          "component": 11,
+          "drawable": 511,
+          "texture": 1
+        }
+      ],
+      "props": [
+        {
+          "index": 0,
+          "drawable": 185,
+          "texture": 0
+        }
+      ]
+    }
+  ],
   "eletricVehicles": [
     "imorgon",
     "p90d",
