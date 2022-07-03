@@ -70,7 +70,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             // items
 
-            mLstGender = new UIMenuListItem("Gender", Genders, 0);
+            mLstGender = new UIMenuListItem("Gender", Genders, Cache.Character.Gender);
             menuMain.AddItem(mLstGender);
 
             if (canChangeParents)
