@@ -46,15 +46,15 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnIndexChange += (_sender, newIndex) =>
             {
                 if (newIndex == 0)
-                    propIndex = 0;
+                    propIndex = 0; // Hats
                 if (newIndex == 1)
-                    propIndex = 1;
+                    propIndex = 1; // Glasses
                 if (newIndex == 2)
-                    propIndex = 2;
+                    propIndex = 2; // Misc
                 if (newIndex == 3)
-                    propIndex = 6;
+                    propIndex = 6; // Watches
                 if (newIndex == 4)
-                    propIndex = 7;
+                    propIndex = 7; // Bracelets
             };
 
             menu.OnListChange += (_sender, listItem, listIndex) =>
