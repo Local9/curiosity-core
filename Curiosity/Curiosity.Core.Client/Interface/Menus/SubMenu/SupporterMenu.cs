@@ -22,7 +22,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuListItem uiLstCompanions;
 
         UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companions", "This will remove all companions.");
-        UIMenuItem uiItemResetCharacter = new UIMenuItem("Reset Character");
         UIMenuItem uiStartAutoDrive = new UIMenuItem("Start Auto Drive", "Vehicle will drive to the waypoint you have set.");
 
         List<Companion> companions;
@@ -42,7 +41,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             {
                 uiLstPlayerModels = new UIMenuListItem("Model", playerModels.Select(x => x.Label).ToList<dynamic>(), 0);
                 baseMenu.AddItem(uiLstPlayerModels);
-                baseMenu.AddItem(uiItemResetCharacter);
             }
 
             if (companions is not null)
@@ -77,25 +75,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             //    uiLstCompanions.Description = "Able to create a companion.";
         }
 
-        private async void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        private void BaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             selectedItem.Enabled = false;
 
-            if (selectedItem == uiItemResetCharacter)
-            {
-                if (Cache.PlayerPed.IsDead)
-                {
-                    NotificationManager.GetModule().Error($"Computer said no.");
-                    selectedItem.Enabled = true;
-                    return;
-                }
-
-                await Cache.PlayerPed.FadeOut();
-                Cache.Player.Character.Load();
-                await BaseScript.Delay(500); // JIC
-                await Cache.PlayerPed.FadeIn();
-            }
-            else if (selectedItem == uiItemRemoveCompanion)
+            if (selectedItem == uiItemRemoveCompanion)
             {
                 CompanionManager.GetModule().RemoveCompanions();
             }
