@@ -34,7 +34,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CLIENT|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>Y:\GTA\FXServer\curiosity\resources\[curiosity-framework]\curiosity\client\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CLIENT</DefineConstants>
     <DebugType>embedded</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Discord\DiscordRichPresence.cs" />
+    <Compile Include="Engine\SoundEngine.cs" />
     <Compile Include="Events\ClientGateway.cs" />
     <Compile Include="Events\ServerId.cs" />
     <Compile Include="Global.cs" />
