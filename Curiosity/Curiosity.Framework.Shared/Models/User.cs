@@ -55,9 +55,10 @@ namespace Curiosity.Framework.Shared.Models
 
 #if SERVER
         const string SQL_GET_USER = "call spGetUser(@pUsername, @pDiscordId);";
-        const string SQL_GET_CHARACTERS = "call spGetCharacter(@pDiscordID, @pServerID);";
+        const string SQL_GET_CHARACTERS = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId;";
+        const string SQL_GET_CHARACTER = "call spGetCharacter(@pDiscordID, @pServerID);";
 
-        public async Task<User> GetUserAsync(string username, string discordId, bool withCharacters = false)
+        internal static async Task<User> GetUserAsync(string username, ulong discordId, bool withCharacters = false)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("pUsername", username);
@@ -67,18 +68,19 @@ namespace Curiosity.Framework.Shared.Models
             await Common.MoveToMainThread();
 
             if (withCharacters)
-                await GetCharactersAsync();
+                await user.GetCharactersAsync();
 
             return user;
         }
 
-        public async Task GetCharactersAsync()
+        internal async Task GetCharactersAsync()
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("pDiscordId", DiscordId);
-            dynamicParameters.Add("pServerID", PluginManager.ServerID);
-            Characters = await DapperDatabase<Character>.GetListAsync(SQL_GET_CHARACTERS, dynamicParameters);
+            dynamicParameters.Add("pUserId", UserID);
+            dynamicParameters.Add("pServerId", PluginManager.ServerID);
+            var _characters = await DapperDatabase<Character>.GetListAsync(SQL_GET_CHARACTERS, dynamicParameters);
             await Common.MoveToMainThread();
+            Characters = _characters;
         }
 #endif
     }

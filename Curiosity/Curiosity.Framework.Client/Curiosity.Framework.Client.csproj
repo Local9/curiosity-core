@@ -71,16 +71,22 @@
     <Compile Include="Engine\SoundEngine.cs" />
     <Compile Include="Events\ClientGateway.cs" />
     <Compile Include="Events\ServerId.cs" />
+    <Compile Include="Extensions\DecoratorExtension.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\CharacterScript.cs" />
+    <Compile Include="Scripts\InitiationScript.cs" />
     <Compile Include="Session.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Curiosity.Framework.Server\Curiosity.Framework.Server.csproj">
+      <Project>{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B}</Project>
+      <Name>Curiosity.Framework.Server</Name>
+    </ProjectReference>
     <ProjectReference Include="..\_vendor\fx-events\src\events\Events.csproj">
       <Project>{8f57c378-40f7-49ff-8221-6c235118021f}</Project>
       <Name>Events</Name>

@@ -6,6 +6,7 @@ namespace Curiosity.Framework.Server
     {
         const string SERVER_CONFIG_LOCATION = $"/data/server-config.json";
         private static ServerConfig _serverConfig = null;
+        static Dictionary<string, string> _serverLanguage = new();
 
         private static ServerConfig GetConfig()
         {
@@ -27,5 +28,14 @@ namespace Curiosity.Framework.Server
 
         public static ServerConfig GetServerConfig => GetConfig();
         public static DatabaseConfig GetDatabaseConfig => GetServerConfig.Database;
+        public static Discord GetDiscordConfig => GetServerConfig.Discord;
+
+        public static string GetTranslation(string key, string defaultMessage)
+        {
+            if (!_serverLanguage.ContainsKey(key))
+                return defaultMessage;
+
+            return _serverLanguage[key];
+        }
     }
 }

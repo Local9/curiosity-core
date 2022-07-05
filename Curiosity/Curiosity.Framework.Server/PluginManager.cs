@@ -106,10 +106,8 @@ namespace Curiosity.Framework.Server
             }
 
             IsServerReady = !IsServerReady;
-            Logger.Trace($"CURIOSITY INITIATED");
+            Logger.Trace($"CURIOSITY INITIATED: {loaded} Managers Initiated");
         }
-
-
 
         public object LoadManager(Type type)
         {
