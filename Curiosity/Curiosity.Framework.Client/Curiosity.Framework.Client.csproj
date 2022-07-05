@@ -92,6 +92,10 @@
       <Project>{f5614594-90fd-4f4c-9c68-c9dc90060f8d}</Project>
       <Name>ScaleformUI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj">
+      <Project>{9038a48a-fe25-48c9-85ab-fa00173431cb}</Project>
+      <Name>Snowflake</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
