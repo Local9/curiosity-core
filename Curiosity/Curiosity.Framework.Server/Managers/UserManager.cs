@@ -22,7 +22,7 @@ namespace Curiosity.Framework.Server.Managers
             Event("playerDropped", new Action<Player, string>(OnPlayerDroppedAsync));
             Event("onResourceStop", new Action<string>(OnResourceStopAsync));
 
-            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<string>>(OnUserActiveAsync));
+            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
         }
 
         private async void OnPlayerConnectingAsync([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
@@ -195,9 +195,10 @@ namespace Curiosity.Framework.Server.Managers
 
         }
 
-        private async Task<string> OnUserActiveAsync(ClientId arg1, int arg2)
+        // return the user from sessions with the characters
+        private async Task<User> OnUserActiveAsync(ClientId client, int serverId)
         {
-            return string.Empty;
+            return default;
         }
 
         private void DefferAndKick(string languageKey, string defaultMessage, CallbackDelegate denyWithReason, dynamic deferrals)
