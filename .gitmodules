@@ -16,3 +16,6 @@
 [submodule "Curiosity/_vendor/fx-events"]
 	path = Curiosity/_vendor/fx-events
 	url = https://github.com/frostylucas/fx-events.git
+[submodule "Curiosity/_vendor/snowflake"]
+	path = Curiosity/_vendor/snowflake
+	url = https://github.com/Local9/snowflake.git
