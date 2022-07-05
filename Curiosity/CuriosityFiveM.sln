@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{6CA7B9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQL", "{5AE38E6D-71AE-4964-AC70-D530AF1E97A5}"
 	ProjectSection(SolutionItems) = preProject
-		_Dependancies\server\GHMattiMySQL\__resource.lua = _Dependancies\server\GHMattiMySQL\__resource.lua
 		_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll = _Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll
 		_Dependancies\server\GHMattiMySQL\settings.xml = _Dependancies\server\GHMattiMySQL\settings.xml
+		_Dependancies\server\GHMattiMySQL\__resource.lua = _Dependancies\server\GHMattiMySQL\__resource.lua
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Weather.Client.net", "Curiosity.Weather.Client.net\Curiosity.Weather.Client.net.csproj", "{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}"
@@ -233,8 +233,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events", "_vendor\fx-events
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "_vendor\fx-events\src\generator\Generator.csproj", "{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snowflake", "_vendor\snowflake\src\Snowflake.csproj", "{B33090D4-00A7-492B-8C49-990BFFA662E5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Curiosity_v2", "Curiosity_v2", "{1170A2ED-4EA9-4A83-A51C-CA1FAD264F50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Curiosity_v3", "Curiosity_v3", "{0ED57BCB-C5A0-468F-80D9-000023F24DE5}"
@@ -248,11 +246,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleformUI", "_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj", "{F5614594-90FD-4F4C-9C68-C9DC90060F8D}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{07185efc-0d4f-4f96-9f33-053d4de65a1a}*SharedItemsImports = 13
-		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{b5a91b51-37d8-4b0b-a9db-dbda468f800b}*SharedItemsImports = 5
-		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{e1180ae2-809c-469b-bb4c-830ddea32e8d}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CLIENT|Any CPU = CLIENT|Any CPU
 		Debug|Any CPU = Debug|Any CPU
@@ -740,14 +733,6 @@ Global
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.SERVER|Any CPU.Build.0 = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.CLIENT|Any CPU.ActiveCfg = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.CLIENT|Any CPU.Build.0 = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
-		{B33090D4-00A7-492B-8C49-990BFFA662E5}.SERVER|Any CPU.Build.0 = Debug|Any CPU
 		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.CLIENT|Any CPU.ActiveCfg = CLIENT|Any CPU
 		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.CLIENT|Any CPU.Build.0 = CLIENT|Any CPU
 		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.Debug|Any CPU.ActiveCfg = CLIENT|Any CPU
@@ -874,7 +859,6 @@ Global
 		{3C739044-41BB-4E04-B695-B941D345784E} = {65C81C7E-4FDA-4A38-852D-FAAD70445BEB}
 		{8F57C378-40F7-49FF-8221-6C235118021F} = {C496E343-4195-426E-917C-F1C60ED2902C}
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C} = {C496E343-4195-426E-917C-F1C60ED2902C}
-		{B33090D4-00A7-492B-8C49-990BFFA662E5} = {C496E343-4195-426E-917C-F1C60ED2902C}
 		{E1180AE2-809C-469B-BB4C-830DDEA32E8D} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 		{07185EFC-0D4F-4F96-9F33-053D4DE65A1A} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 		{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
@@ -882,5 +866,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{07185efc-0d4f-4f96-9f33-053d4de65a1a}*SharedItemsImports = 13
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{b5a91b51-37d8-4b0b-a9db-dbda468f800b}*SharedItemsImports = 5
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{e1180ae2-809c-469b-bb4c-830ddea32e8d}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

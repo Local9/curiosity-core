@@ -1,6 +1,7 @@
 ﻿using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Web.Discord.API;
+using Curiosity.Framework.Shared.Extensions;
 using Curiosity.Framework.Shared.Models;
 using System.Net;
 using System.Net.Http;
@@ -19,8 +20,8 @@ namespace Curiosity.Framework.Server.Managers
 
             Event("playerConnecting", new Action<Player, string, CallbackDelegate, dynamic>(OnPlayerConnectingAsync));
             Event("playerJoining", new Action<Player, string>(OnPlayerJoiningAsync));
-            Event("playerDropped", new Action<Player, string>(OnPlayerDroppedAsync));
-            Event("onResourceStop", new Action<string>(OnResourceStopAsync));
+            Event("playerDropped", new Action<Player, string>(OnPlayerDropped));
+            Event("onResourceStop", new Action<string>(OnResourceStop));
 
             ServerGateway.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
         }
@@ -29,34 +30,34 @@ namespace Curiosity.Framework.Server.Managers
         {
             try
             {
-                    deferrals.defer();
+                deferrals.defer();
 
-                    await BaseScript.Delay(500);
-                    // First, check to see if we can get their discord information, else reject them with a card.
+                await BaseScript.Delay(500);
+                // First, check to see if we can get their discord information, else reject them with a card.
 
-                    deferrals.update(ServerConfiguration.GetTranslation("user:check:identity", "🔍 Checking users identity."));
-                    await BaseScript.Delay(100);
+                deferrals.update(ServerConfiguration.GetTranslation("user:check:identity", "🔍 Checking users identity."));
+                await BaseScript.Delay(100);
 
-                    string strDiscordId = player?.Identifiers["discord"] ?? string.Empty;
-                    ulong discordId = 0;
+                string strDiscordId = player?.Identifiers["discord"] ?? string.Empty;
+                ulong discordId = 0;
 
-                    if (string.IsNullOrEmpty(strDiscordId) || !ulong.TryParse(strDiscordId, out discordId))
-                    {
-                        ShowAdaptiveCard("data/cards/discord-error.json", deferrals);
-                        return;
-                    }
+                if (string.IsNullOrEmpty(strDiscordId) || !ulong.TryParse(strDiscordId, out discordId))
+                {
+                    ShowAdaptiveCard("data/cards/discord-error.json", deferrals);
+                    return;
+                }
 
-                    deferrals.update(ServerConfiguration.GetTranslation("user:check:discord", "🔍 Checking users Discord information."));
-                    await BaseScript.Delay(100);
+                deferrals.update(ServerConfiguration.GetTranslation("user:check:discord", "🔍 Checking users Discord information."));
+                await BaseScript.Delay(100);
 
-                    HttpClientHandler httpClientHandler = new HttpClientHandler
-                    {
-                        ClientCertificateOptions = ClientCertificateOption.Automatic,
-                        UseProxy = true,
-                        UseDefaultCredentials = true
-                    };
-                    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-                    ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                HttpClientHandler httpClientHandler = new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Automatic,
+                    UseProxy = true,
+                    UseDefaultCredentials = true
+                };
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
                 using (var discordAPI = new HttpClient(httpClientHandler))
                 {
@@ -152,6 +153,8 @@ namespace Curiosity.Framework.Server.Managers
         {
             try
             {
+                await PluginManager.IsReady();
+
                 string strDiscordId = player?.Identifiers["discord"] ?? string.Empty;
                 ulong discordId;
 
@@ -170,7 +173,7 @@ namespace Curiosity.Framework.Server.Managers
                 }
 
                 UserSessions.AddOrUpdate(int.Parse(player.Handle), user, (key, oldValue) => oldValue = user);
-                string msg = $"Player [{discordId}] '{player.Name}#{user.UserID}' is connecting to the server with {user.Characters.Count} character(s).";
+                string msg = $"Player [{discordId}] '{user.Username}#{user.UserID}' is connecting to the server with {user.Characters.Count} character(s).";
                 Logger.Trace(msg);
                 Logger.Trace($"Number of Sessions: {UserSessions.Count}");
             }
@@ -181,7 +184,7 @@ namespace Curiosity.Framework.Server.Managers
             }
         }
 
-        private async void OnPlayerDroppedAsync([FromSource] Player player, string reason)
+        private void OnPlayerDropped([FromSource] Player player, string reason)
         {
             Logger.Trace($"Player '{player.Name}' dropped, reason; {reason}.");
             int playerId = int.Parse(player.Handle);
@@ -189,7 +192,7 @@ namespace Curiosity.Framework.Server.Managers
                 UserSessions.TryRemove(playerId, out User user);
         }
 
-        private async void OnResourceStopAsync(string resourceName)
+        private void OnResourceStop(string resourceName)
         {
             if (resourceName != GetCurrentResourceName()) return;
 
@@ -198,7 +201,44 @@ namespace Curiosity.Framework.Server.Managers
         // return the user from sessions with the characters
         private async Task<User> OnUserActiveAsync(ClientId client, int serverId)
         {
-            return default;
+            try
+            {
+                if (client.Handle != serverId) return null;
+
+                User userResult = client.User;
+
+                if (userResult is null)
+                {
+                    string strDiscordId = client.Player?.Identifiers["discord"] ?? string.Empty;
+                    ulong discordId;
+
+                    if (!ulong.TryParse(strDiscordId, out discordId))
+                    {
+                        client.Player.Drop(ServerConfiguration.GetTranslation("user:join:error", "‼️ Something went wrong when joining the server."));
+                        return null;
+                    }
+
+                    User user = await User.GetUserAsync(client.Player.Name, discordId, true);
+
+                    if (user is null)
+                    {
+                        client.Player.Drop(ServerConfiguration.GetTranslation("user:join:error", "‼️ Something went wrong when joining the server."));
+                        return null;
+                    }
+
+                    UserSessions.AddOrUpdate(client.Handle, user, (key, oldValue) => oldValue = user);
+                    userResult = user;
+                    Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
+                }
+
+                return userResult;
+            }
+            catch (Exception ex)
+            {
+                client.Player.Drop(ServerConfiguration.GetTranslation("connection:error", "Something went wrong while trying to connect to the server."));
+                Logger.CriticalError(ex, "OnPlayerJoiningAsync");
+                return null;
+            }
         }
 
         private void DefferAndKick(string languageKey, string defaultMessage, CallbackDelegate denyWithReason, dynamic deferrals)

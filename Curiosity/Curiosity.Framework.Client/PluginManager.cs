@@ -1,5 +1,5 @@
-﻿using Curiosity.Framework.Client.Discord;
-using Curiosity.Framework.Client.Events;
+﻿using Curiosity.Framework.Client.Events;
+using Curiosity.Framework.Client.Scripts;
 
 namespace Curiosity.Framework.Client
 {
@@ -8,16 +8,16 @@ namespace Curiosity.Framework.Client
         public static PluginManager Instance { get; private set; }
         public ClientGateway ClientGateway;
         
-        public readonly DiscordRichPresence DiscordRichPresence =
-     new DiscordRichPresence(
-         GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset", 0),
-         GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset_text", 0)
-         )
-     {
-         SmallAsset = GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_small_asset", 0),
-         SmallAssetText = GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_small_asset_text", 0),
-         Status = "Connecting..."
-     };
+     //   public readonly DiscordRichPresence DiscordRichPresence =
+     //new DiscordRichPresence(
+     //    GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset", 0),
+     //    GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset_text", 0)
+     //    )
+     //{
+     //    SmallAsset = GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_small_asset", 0),
+     //    SmallAssetText = GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_small_asset_text", 0),
+     //    Status = "Connecting..."
+     //};
 
         public PluginManager()
         {
@@ -33,6 +33,8 @@ namespace Curiosity.Framework.Client
         private void OnResourceStart(string resourceName)
         {
             if (resourceName != GetCurrentResourceName()) return;
+            InitiationScript.Startup();
+            new CharacterScript().Init();
         }
 
         private void OnResourceStop(string resourceName)

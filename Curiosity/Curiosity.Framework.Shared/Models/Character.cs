@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Lusive.Events.Attributes;
+using System.ComponentModel;
 
 namespace Curiosity.Framework.Shared.Models
 {
-    public class Character
+    [Serialization]
+    public partial class Character
     {
         #region FIELDS
         [Description("characterId")]

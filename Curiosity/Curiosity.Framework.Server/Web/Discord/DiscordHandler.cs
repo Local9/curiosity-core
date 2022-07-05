@@ -75,7 +75,7 @@ namespace Curiosity.Framework.Server.Web.Discord
         {
             try
             {
-                while (!Instance.IsServerReady)
+                while (!PluginManager.IsServerReady)
                 {
                     await BaseScript.Delay(1000);
                 }

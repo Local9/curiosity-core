@@ -1,5 +1,6 @@
 ﻿#if CLIENT
 using Curiosity.Framework.Client.Engine;
+using System.IO;
 #endif
 
 #if SERVER
@@ -8,13 +9,15 @@ using Curiosity.Framework.Server.Database;
 using Dapper;
 #endif
 
+using Lusive.Events.Attributes;
 using System.ComponentModel;
 
 namespace Curiosity.Framework.Shared.Models
 {
-    public class User
+    [Serialization]
+    public partial class User
     {
-#region FIELDS
+        #region FIELDS
         [JsonIgnore]
         [Description("userId")]
         public int UserID { get; private set; }
@@ -36,6 +39,7 @@ namespace Curiosity.Framework.Shared.Models
         [Description("lastSeen")]
         public DateTime LastSeen { get; private set; }
 
+        [JsonIgnore]
         [Description("bannedPerm")]
         public int BannedPermanently { get; private set; }
 
@@ -45,7 +49,7 @@ namespace Curiosity.Framework.Shared.Models
         [Description("isPassive")]
         public int IsPassive { get; private set; }
 
-#endregion
+        #endregion
 
         public List<Character> Characters { get; private set; } = new();
 
@@ -54,21 +58,38 @@ namespace Curiosity.Framework.Shared.Models
 #endif
 
 #if SERVER
-        const string SQL_GET_USER = "call spGetUser(@pUsername, @pDiscordId);";
-        const string SQL_GET_CHARACTERS = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId;";
-        const string SQL_GET_CHARACTER = "call spGetCharacter(@pDiscordID, @pServerID);";
+        const string SQL_USER_GET = "select * from curiosity.user u where u.discordId = @pDiscordId;";
+        const string SQL_USER_INSERT = "insert into curiosity.user (username, license, lastSeen, discordId, roleId, IsPassive) values (@pUsername, @pDiscordId, CURRENT_TIMESTAMP, @pDiscordId, 1, 1);";
+        const string SQL_CHARACTERS_GET = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId;";
+        const string SQL_CHARACTER_GET = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId and c.characterId = @pCharacterId;";
 
-        internal static async Task<User> GetUserAsync(string username, ulong discordId, bool withCharacters = false)
+        internal static async Task<User> GetUserAsync(string playerName, ulong discordId, bool withCharacters = false)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("pUsername", username);
             dynamicParameters.Add("pDiscordId", discordId);
-            User user = await DapperDatabase<User>.GetSingleAsync(SQL_GET_USER, dynamicParameters);
-            
+            User user = await DapperDatabase<User>.GetSingleAsync(SQL_USER_GET, dynamicParameters);
+
             await Common.MoveToMainThread();
+
+            if (user is null)
+            {
+                dynamicParameters.Add("pUsername", playerName);
+                bool success = await DapperDatabase<User>.ExecuteAsync(SQL_USER_INSERT, dynamicParameters);
+
+                await Common.MoveToMainThread();
+
+                if (success)
+                {
+                    user = await DapperDatabase<User>.GetSingleAsync(SQL_USER_GET, dynamicParameters);
+                    
+                    await Common.MoveToMainThread();
+                }
+            }
 
             if (withCharacters)
                 await user.GetCharactersAsync();
+
+            user.Username = playerName;
 
             return user;
         }
@@ -78,10 +99,15 @@ namespace Curiosity.Framework.Shared.Models
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("pUserId", UserID);
             dynamicParameters.Add("pServerId", PluginManager.ServerID);
-            var _characters = await DapperDatabase<Character>.GetListAsync(SQL_GET_CHARACTERS, dynamicParameters);
+            var _characters = await DapperDatabase<Character>.GetListAsync(SQL_CHARACTERS_GET, dynamicParameters);
             await Common.MoveToMainThread();
             Characters = _characters;
         }
 #endif
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

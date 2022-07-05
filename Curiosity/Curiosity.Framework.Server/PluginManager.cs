@@ -21,7 +21,7 @@ namespace Curiosity.Framework.Server
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
         public static bool IsOneSyncEnabled => GetConvar("onesync", "off") != "off";
-        public bool IsServerReady = false;
+        public static bool IsServerReady = false;
 
 
         internal static int ServerID
@@ -176,6 +176,14 @@ namespace Curiosity.Framework.Server
         {
             if (!UserSessions.ContainsKey(handle)) return null;
             return UserSessions[handle];
+        }
+
+        internal static async Task IsReady()
+        {
+            while (!IsServerReady)
+            {
+                await BaseScript.Delay(100);
+            }
         }
     }
 }

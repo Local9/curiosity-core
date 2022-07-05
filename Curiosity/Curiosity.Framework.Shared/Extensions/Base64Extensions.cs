@@ -11,7 +11,20 @@ namespace Curiosity.Framework.Shared.Extensions
 
         public static string FromBase64(this string serialized)
         {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(serialized));
+            byte[] bytes = Convert.FromBase64String(serialized);
+            return BytesToStringConverted(bytes);
+            // return Encoding.UTF8.GetString(Convert.FromBase64String(serialized));
+        }
+
+        public static string BytesToStringConverted(byte[] bytes)
+        {
+            using (var stream = new System.IO.MemoryStream(bytes))
+            {
+                using (var streamReader = new System.IO.StreamReader(stream))
+                {
+                    return streamReader.ReadToEnd();
+                }
+            }
         }
     }
 }

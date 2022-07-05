@@ -1,4 +1,5 @@
-﻿using Lusive.Events;
+﻿using Curiosity.Framework.Shared.Models;
+using Lusive.Events;
 using System.Linq;
 
 namespace Curiosity.Framework.Server.Events
@@ -9,6 +10,8 @@ namespace Curiosity.Framework.Server.Events
 
         public int Handle { get; set; }
         public string[] Identifiers { get; set; }
+        public User User;
+        public Player Player;
 
         public ClientId(int handle)
         {
@@ -22,6 +25,11 @@ namespace Curiosity.Framework.Server.Events
             }
 
             Identifiers = holder.ToArray();
+
+            if (PluginManager.UserSessions.ContainsKey(handle))
+                User = PluginManager.UserSessions[handle];
+
+            Player = PluginManager.PlayerList[handle];
         }
 
         public override string ToString()
