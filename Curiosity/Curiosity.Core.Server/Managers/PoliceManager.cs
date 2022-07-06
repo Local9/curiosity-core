@@ -150,6 +150,7 @@ namespace Curiosity.Core.Server.Managers
                             await BaseScript.Delay(0);
                             if (updatedTicket)
                             {
+                                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)ticketValue * -1);
                                 totalPaid += ticketValue;
                             }
                             await BaseScript.Delay(10);
@@ -164,11 +165,7 @@ namespace Curiosity.Core.Server.Managers
 
 
                 if (totalPaid > 0)
-                {
-                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)totalPaid * -1);
-                    await BaseScript.Delay(0);
                     SendNotification(metadata.Sender, $"Paid ${totalPaid:N0} on Overdue tickets, with ${totalUnpaid:N0} remaining as you are low on funds. Please refresh your tickets to see the remaining.", eNotification.NOTIFICATION_SUCCESS);
-                }
 
                 if (totalPaid == 0)
                     SendNotification(metadata.Sender, $"No outstanding tickets where paid.", eNotification.NOTIFICATION_SUCCESS);
