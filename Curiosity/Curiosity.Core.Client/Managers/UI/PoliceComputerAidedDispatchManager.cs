@@ -13,11 +13,6 @@ namespace Curiosity.Core.Client.Managers.UI
                 List<PoliceTicket> policeTicketList = await EventSystem.Request<List<PoliceTicket>>("police:get:suspect:tickets");
                 return JsonConvert.SerializeObject(policeTicketList);
             }));
-
-            Instance.AttachNuiHandler("PayTicket", new AsyncEventCallback(async metadata =>
-            {
-                return null;
-            }));
         }
     }
 }
