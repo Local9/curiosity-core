@@ -143,14 +143,15 @@ namespace Curiosity.Core.Server.Managers
                 {
                     if (ticket.PaymentOverdue)
                     {
-                        if (curiosityUser.Character.Cash >= (ulong)ticket.TicketValue)
+                        ulong ticketValue = (ulong)(ticket.TicketValue * 1.1);
+                        if (curiosityUser.Character.Cash >= ticketValue)
                         {
                             bool updatedTicket = await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, ticket.Id);
                             await BaseScript.Delay(0);
                             if (updatedTicket)
                             {
-                                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, ticket.TicketValue * -1);
-                                totalPaid += (ulong)ticket.TicketValue;
+                                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)ticketValue * -1);
+                                totalPaid += ticketValue;
                             }
                             await BaseScript.Delay(10);
                         }
