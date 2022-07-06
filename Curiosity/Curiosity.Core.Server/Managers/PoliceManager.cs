@@ -130,6 +130,47 @@ namespace Curiosity.Core.Server.Managers
                 return await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
             }));
 
+            EventSystem.Attach("police:suspect:ticket:pay:overdue", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                List<PoliceTicket> tickets = await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
+                List<PoliceTicket> cpTickets = new(tickets);
+                ulong totalPaid = 0;
+                ulong totalUnpaid = 0;
+
+                foreach(PoliceTicket ticket in cpTickets)
+                {
+                    if (ticket.PaymentOverdue)
+                    {
+                        if (curiosityUser.Character.Cash >= (ulong)ticket.TicketValue)
+                        {
+                            bool updatedTicket = await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, ticket.Id);
+                            await BaseScript.Delay(0);
+                            if (updatedTicket)
+                            {
+                                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, ticket.TicketValue * -1);
+                                totalPaid += (ulong)ticket.TicketValue;
+                            }
+                            await BaseScript.Delay(10);
+                        }
+
+                        if (curiosityUser.Character.Cash < (ulong)ticket.TicketValue)
+                        {
+                            totalUnpaid += (ulong)ticket.TicketValue;
+                        }
+                    }
+                }
+
+                if (totalPaid > 0)
+                    SendNotification(metadata.Sender, $"Paid ${totalPaid:N0} on Overdue tickets, with ${totalUnpaid:N0} remaining as you are low on funds. Please refresh your tickets to see the remaining.", eNotification.NOTIFICATION_SUCCESS);
+
+                if (totalPaid == 0)
+                    SendNotification(metadata.Sender, $"No outstanding tickets where paid.", eNotification.NOTIFICATION_SUCCESS);
+
+                return null;
+            }));
+
             EventSystem.Attach("police:suspect:ticket:pay", new AsyncEventCallback(async metadata =>
             {
                 ExportMessage em = new();
