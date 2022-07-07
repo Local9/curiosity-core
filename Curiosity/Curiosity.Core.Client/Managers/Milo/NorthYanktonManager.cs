@@ -152,7 +152,7 @@ namespace Curiosity.Core.Client.Managers.Milo
                 PluginManager.Instance.DetachTickHandler(OnFellOffNorthYankton);
             }
 
-            Logger.Debug($"Teleport to: Cayo Perico");
+            Logger.Debug($"Teleport to: North Yankton");
             if (!teleportToLosSantos)
             {
                 SetupNorthYankton();
