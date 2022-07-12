@@ -689,6 +689,23 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
+                    switch(user.Role)
+                    {
+                        case Role.DONATOR_LEVEL_1:
+                            amt = (int)(amt * 1.25f);
+                            break;
+                        case Role.DONATOR_LEVEL_2:
+                            amt = (int)(amt * 1.45f);
+                            break;
+                        case Role.DONATOR_LEVEL_3:
+                        case Role.DONATOR_LIFE:
+                            amt = (int)(amt * 1.65f);
+                            break;
+                    }
+
+                    if (user.IsStaff)
+                        amt = (int)(amt * 1.65f);
+
                     int newSkillValue = await Database.Store.SkillDatabase.Adjust(user.Character.CharacterId, skillId, amt);
 
                     exportMessage.newNumberValue = newSkillValue;
