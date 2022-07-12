@@ -1,6 +1,8 @@
-﻿using Curiosity.Systems.Library.Events;
+﻿using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Police;
+using NativeUI;
 using Newtonsoft.Json;
 
 namespace Curiosity.Core.Client.Managers.UI
@@ -40,6 +42,8 @@ namespace Curiosity.Core.Client.Managers.UI
                 ExportMessage exportMessage = new ExportMessage();
 
                 exportMessage = await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay:overdue");
+
+                Notify.SendNui(eNotification.NOTIFICATION_INFO, "<b>Please wait, processing tickets</b>. You do not need to click the button again, please wait and you'll be notified when it is completed.");
 
                 Logger.Debug($"{exportMessage}");
 
