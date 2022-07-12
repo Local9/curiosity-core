@@ -253,6 +253,7 @@ namespace Curiosity.Core.Server.Managers
 
                         int userCharacterId = curiosityUser.Character.CharacterId;
                         await Database.Store.SkillDatabase.Adjust(userCharacterId, DB_POLICE_SKILL, 250);
+                        await Database.Store.StatDatabase.Adjust(userCharacterId, Stat.POLICE_REPUATATION, 100);
                         await Database.Store.BankDatabase.Adjust(userCharacterId, 2500);
                         discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' jailed by '{curiosityUser.LatestName}'");
                         SendNotification(message: $"{player.Name} has been jailed by {curiosityUser.LatestName}");
@@ -272,6 +273,7 @@ namespace Curiosity.Core.Server.Managers
 
                             int characterId = cUser.Character.CharacterId;
                             await Database.Store.SkillDatabase.Adjust(characterId, DB_POLICE_SKILL, 125);
+                            await Database.Store.StatDatabase.Adjust(userCharacterId, Stat.POLICE_REPUATATION, 50);
                             await Database.Store.BankDatabase.Adjust(characterId, 1250);
                             SendNotification(serverHandle, message: $"You have been awarded for assisting in an arrest.", notification: eNotification.NOTIFICATION_SUCCESS);
                         }
