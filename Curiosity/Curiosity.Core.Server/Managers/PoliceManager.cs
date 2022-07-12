@@ -319,6 +319,7 @@ namespace Curiosity.Core.Server.Managers
                     SendNotification(message: $"{player.Name} has jailed themselves.");
 
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    curiosityUser.IsWanted = false;
                     await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, 500 * -1);
                     curiosityUser.NotificationSuccess($"You have been charged ${500:N0} for handing yourself in.");
 
@@ -334,6 +335,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.IsWanted = false;
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 player.State.Set(StateBagKey.IS_JAILED, false, true);
                 return false;
@@ -362,6 +364,9 @@ namespace Curiosity.Core.Server.Managers
 
                     return null;
                 }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[int.Parse(attacker.Handle)];
+                curiosityUser.IsWanted = true;
 
                 attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                 SendNotification(attackerServerId, $"You are now wanted.");
@@ -409,6 +414,7 @@ namespace Curiosity.Core.Server.Managers
                         CuriosityUser curiosityUser = PluginManager.ActiveUsers[attackerServerId];
                         curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
                         curiosityUser.JobCallSign = string.Empty;
+                        curiosityUser.IsWanted = true;
                         attacker.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
 
                         SendNotification(attackerServerId, $"You have removed from the force for tazing an innocent player, and are now wanted.");
@@ -439,6 +445,10 @@ namespace Curiosity.Core.Server.Managers
                 Player attacker = PluginManager.PlayersList[attackerServerId];
                 Player victim = PluginManager.PlayersList[victimServerId];
 
+
+                CuriosityUser curiosityUserAttacker = PluginManager.ActiveUsers[attackerServerId];
+                CuriosityUser curiosityUserVictim = PluginManager.ActiveUsers[victimServerId];
+
                 bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
                 bool isAttackerPassive = attacker.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
@@ -460,17 +470,18 @@ namespace Curiosity.Core.Server.Managers
                         SetEntityDistanceCullingRadius(victim.Character.Handle, 0f); // reset culling
                         victim.State.Set(StateBagKey.PLAYER_POLICE_WANTED, false, true); // cannot want a dead person
                         victim.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 0, true);
+                        curiosityUserVictim.IsWanted = false;
                     }
 
                     if (!victimIsWanted)
                     {
                         attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                         attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+                        curiosityUserAttacker.IsWanted = true;
 
-                        CuriosityUser curiosityUser = PluginManager.ActiveUsers[attackerServerId];
-                        curiosityUser.Job = ePlayerJobs.UNEMPLOYED;
-                        curiosityUser.JobCallSign = string.Empty;
-                        attacker.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUser.Job, true);
+                        curiosityUserAttacker.Job = ePlayerJobs.UNEMPLOYED;
+                        curiosityUserAttacker.JobCallSign = string.Empty;
+                        attacker.State.Set(StateBagKey.PLAYER_JOB, (int)curiosityUserAttacker.Job, true);
 
                         SendNotification(attackerServerId, $"You have removed from the force for killing an innocent.");
 
@@ -505,6 +516,7 @@ namespace Curiosity.Core.Server.Managers
                     tableRows.Add("Info", "Wanted by Police");
                     attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
                     attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+                    curiosityUserAttacker.IsWanted = true;
 
                     SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
@@ -621,7 +633,10 @@ namespace Curiosity.Core.Server.Managers
                         bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                         if (isWreckless)
+                        {
                             player.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
+                            curiosityUser.IsWanted = true;
+                        }
 
                         SetEntityDistanceCullingRadius(player.Character.Handle, 15000f); // make the player visible
 
@@ -689,6 +704,8 @@ namespace Curiosity.Core.Server.Managers
             int playerTrailer = curiosityUserSuspect.PersonalTrailer;
             int playerPlane = curiosityUserSuspect.PersonalPlane;
             int playerHelicopter = curiosityUserSuspect.PersonalHelicopter;
+
+            curiosityUserSuspect.IsWanted = false;
 
             if (staffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(staffVehicle);
             await BaseScript.Delay(100);

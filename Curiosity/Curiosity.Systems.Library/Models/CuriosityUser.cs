@@ -31,6 +31,7 @@ namespace Curiosity.Systems.Library.Models
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; internal set; } = Guid.Empty;
         public string CurrentJob { get; set; } = string.Empty;
+        public bool IsWanted { get; set; } = false;
 
         public int TotalNumberOfPlayerKills { get; internal set; } = 0;
 
