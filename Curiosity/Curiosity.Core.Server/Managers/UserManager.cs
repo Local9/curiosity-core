@@ -392,7 +392,10 @@ namespace Curiosity.Core.Server.Managers
                         {
                             long moneyToTake = (long)(curUser.Character.Cash * 0.05f);
 
-                            if ((curUser.Character.Cash - (ulong)moneyToTake) > 0)
+                            if ((curUser.Character.Cash - (ulong)moneyToTake) < 0)
+                                moneyToTake = (long)curUser.Character.Cash;
+
+                            if (moneyToTake > 0)
                             {
                                 await Database.Store.BankDatabase.Adjust(curUser.Character.CharacterId, moneyToTake * -1);
                                 string msg = $"Player '{curUser.LatestName}' has Disconnected while wanted and has been fined ${moneyToTake:N0}.";
@@ -400,6 +403,7 @@ namespace Curiosity.Core.Server.Managers
                                 ChatManager.OnLogMessage(msg);
                                 discordClient.SendDiscordPlayerLogMessage(msg);
                             }
+                            
                         }
 
                         if (API.DoesEntityExist(playerPed))
