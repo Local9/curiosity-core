@@ -224,7 +224,14 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.IsCollisionEnabled = true;
                 Game.PlayerPed.IsPositionFrozen = false;
 
-                if (Cache.Character.IsOnIsland) // This is done to get around an IPL Bug in GTA
+                if (Cache.Character.IsWanted)
+                {
+                    EventSystem.Send("police:suspect:jail:combatLogged");
+                    Cache.Character.IsOnIsland = false;
+
+                    Notify.Warn($"You were found by the LSPD and jailed, the courts have taken 5% of your money, and sentenced you to 6 minutes in jail, failure to comply will lead to further fines.");
+                }
+                else if (Cache.Character.IsOnIsland) // This is done to get around an IPL Bug in GTA
                 {
                     Cache.PlayerPed.Position = new Vector3(-1016.42f, -2468.58f, 12.99f);
                     Cache.PlayerPed.Heading = 233.31f;

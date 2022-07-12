@@ -214,6 +214,9 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                 Player p = PluginManager.PlayersList[playerId];
                 p.State.Set(StateBagKey.PLAYER_POLICE_WANTED, isWanted, true);
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerId];
+                curiosityUser.Character.IsWanted = isWanted;
             }
         }
 

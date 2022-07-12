@@ -35,7 +35,17 @@ namespace Curiosity.Core.Client.Managers.GameWorld
                 if (metadata.Find<bool>(0))
                     jailEndTime = DateTime.UtcNow.AddMinutes(2);
 
-                PlayerOptionsManager.DisableWeapons(true);
+                if (metadata.Find<bool>(1))
+                {
+                    jailEndTime = DateTime.UtcNow.AddMinutes(6);
+                    Notifications.ShowNotification($"You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~r~You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~g~You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~b~You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~y~You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~o~You have been jailed for logging off while wanted or jailed.", true);
+                    Notifications.ShowNotification($"~p~You have been jailed for logging off while wanted or jailed.", true);
+                }
 
                 await TeleportPlayer(mainJail.X, mainJail.Y, mainJail.Z);
 

@@ -377,6 +377,8 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
+                DiscordClient discordClient = DiscordClient.GetModule();
+
                 int playerHandle = int.Parse(player.Handle);
                 if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
                 {
@@ -386,6 +388,16 @@ namespace Curiosity.Core.Server.Managers
 
                     try
                     {
+                        if (curUser.Character.IsWanted && reason == "Exiting")
+                        {
+                            long moneyToTake = (long)(curUser.Character.Cash * 0.05f);
+                            await Database.Store.BankDatabase.Adjust(curUser.Character.CharacterId, moneyToTake * -1);
+                            string msg = $"Player '{curUser.LatestName}' has Disconnected while wanted and has been fined ${moneyToTake:N0}.";
+                            Logger.Debug(msg);
+                            ChatManager.OnLogMessage(msg);
+                            discordClient.SendDiscordPlayerLogMessage(msg);
+                        }
+
                         if (API.DoesEntityExist(playerPed))
                         {
                             Vector3 pos = API.GetEntityCoords(playerPed);
@@ -396,8 +408,6 @@ namespace Curiosity.Core.Server.Managers
                             curUser.Character.IsDead = playerPedHealth == 0;
                             curUser.Character.Health = playerPedHealth;
                             curUser.Character.Armor = API.GetPedArmour(playerPed);
-
-                            await curUser.Character.Save();
                             Logger.Debug($"Player: '{curUser.LatestName}' position saved, health {playerPedHealth}");
                         }
                     }
@@ -405,6 +415,8 @@ namespace Curiosity.Core.Server.Managers
                     {
                         Logger.Error($"Player doesn't exist, not saving location or details.");
                     }
+
+                    await curUser.Character.Save();
 
                     bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
 
@@ -431,8 +443,9 @@ namespace Curiosity.Core.Server.Managers
 
                     QueueManager.GetModule().OnPlayerDropped(player, reason);
 
-                    ChatManager.OnLogMessage($"Player '{player.Name}' has Disconnected: '{reason}'");
-                    Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}");
+                    ChatManager.OnLogMessage($"Player '{curUser.LatestName}' has Disconnected: '{reason}'");
+                    Logger.Debug($"Player: {curUser.LatestName} disconnected ({reason}), UR: {userRemoved}");
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{curUser.LatestName}' has Disconnected: '{reason}'");
                 }
             }
             catch (Exception ex)

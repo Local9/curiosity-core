@@ -231,6 +231,9 @@ namespace Curiosity.Core.Server.Managers
                 if (!curiosityUser.Character.MarkedAsRegistered)
                     curiosityUser.Character.IsPassive = true;
 
+                if (curiosityUser.Character.IsWanted)
+                    curiosityUser.Character.LastPosition = new Position(1669.652f, 2564.316f, 45.56488f);
+
                 return curiosityUser.Character;
             }));
 
