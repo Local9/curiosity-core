@@ -1187,8 +1187,17 @@ namespace Curiosity.Core.Client.Managers
 
                 if (velocity > 0f)
                 {
-                    Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
-                    particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", previousVehicle.Position, scale: 4f);
+                    RequestNamedPtfxAsset("scr_powerplay");
+                    SetPtfxAssetNextCall("scr_powerplay");
+                    int fxHandle = StartParticleFxLoopedOnEntity("scr_powerplay_beast_appear", previousVehicle.Handle, 0f, 0f, 0f, 0f, 0f, 0f, 4.0f, false, false, false);
+                    float r = GetRandomFloatInRange(0f, 1f);
+                    float g = GetRandomFloatInRange(0f, 1f);
+                    float b = GetRandomFloatInRange(0f, 1f);
+                    SetParticleFxLoopedColour(fxHandle, r, g, b, false);
+                    
+                    //Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
+                    //particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", previousVehicle.Position, scale: 4f);
+                    
                 }
 
                 if (previousVehicle is not null)
