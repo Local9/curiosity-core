@@ -1185,21 +1185,6 @@ namespace Curiosity.Core.Client.Managers
                 if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     previousVehicle = Cache.PersonalTrailer.Vehicle;
 
-                if (velocity > 0f)
-                {
-                    RequestNamedPtfxAsset("scr_powerplay");
-                    SetPtfxAssetNextCall("scr_powerplay");
-                    int fxHandle = StartParticleFxLoopedOnEntity("scr_powerplay_beast_appear", previousVehicle.Handle, 0f, 0f, 0f, 0f, 0f, 0f, 4.0f, false, false, false);
-                    float r = GetRandomFloatInRange(0f, 1f);
-                    float g = GetRandomFloatInRange(0f, 1f);
-                    float b = GetRandomFloatInRange(0f, 1f);
-                    SetParticleFxLoopedColour(fxHandle, r, g, b, false);
-                    
-                    //Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
-                    //particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", previousVehicle.Position, scale: 4f);
-                    
-                }
-
                 if (previousVehicle is not null)
                 {
                     previousVehicle.Dispose();
@@ -1208,6 +1193,21 @@ namespace Curiosity.Core.Client.Managers
                 Vehicle vehicle = null;
 
                 vehicle = await World.CreateVehicle(vehModel, postionSpawn, heading);
+
+                if (velocity > 0f)
+                {
+                    RequestNamedPtfxAsset("scr_powerplay");
+                    SetPtfxAssetNextCall("scr_powerplay");
+                    int fxHandle = StartParticleFxLoopedOnEntity("scr_powerplay_beast_appear", vehicle.Handle, 0f, 0f, 0f, 0f, 0f, 0f, 2.0f, false, false, false);
+                    float r = GetRandomFloatInRange(0f, 1f);
+                    float g = GetRandomFloatInRange(0f, 1f);
+                    float b = GetRandomFloatInRange(0f, 1f);
+                    SetParticleFxLoopedColour(fxHandle, r, g, b, false);
+
+                    //Utils.ParticleEffectsAssetNetworked particleEffectsAssetNetworked = new Utils.ParticleEffectsAssetNetworked($"scr_powerplay");
+                    //particleEffectsAssetNetworked.StartNonLoopedAtCoordNetworked("scr_powerplay_beast_appear", previousVehicle.Position, scale: 4f);
+
+                }
 
                 API.NetworkRequestControlOfEntity(vehicle.Handle);
                 vehicle.IsPersistent = true;
