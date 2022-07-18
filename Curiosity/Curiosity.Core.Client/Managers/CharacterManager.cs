@@ -27,8 +27,9 @@ namespace Curiosity.Core.Client.Managers
                 await model.Request(1000);
 
                 if (!model.IsLoaded) return null;
-
+                await Game.PlayerPed.FadeOut();
                 Game.Player.ChangeModel(model);
+                Game.PlayerPed.FadeIn();
 
                 return null;
             }));
