@@ -4,6 +4,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System.Text;
 
@@ -15,7 +16,22 @@ namespace Curiosity.Core.Client.Managers
         Vector3 CityHallPosition = new Vector3(-542.1675f, -216.1688f, -216.1688f);
         public override void Begin()
         {
+            EventSystem.Attach("character:model", new AsyncEventCallback(async metadata =>
+            {
 
+                string modelStr = metadata.Find<string>(0);
+
+                if (string.IsNullOrEmpty(modelStr)) return null;
+
+                Model model = modelStr;
+                await model.Request(1000);
+
+                if (!model.IsLoaded) return null;
+
+                Game.Player.ChangeModel(model);
+
+                return null;
+            }));
         }
 
         public class LoadTransition

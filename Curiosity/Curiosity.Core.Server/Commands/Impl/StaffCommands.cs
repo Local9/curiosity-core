@@ -48,6 +48,39 @@ namespace Curiosity.Core.Server.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "model" })]
+        public class SetPlayerModel : ICommand
+        {
+            public void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                if (!int.TryParse(arg, out int handle))
+                {
+                    ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
+                    return;
+                }
+
+                if (!PluginManager.ActiveUsers.ContainsKey(handle))
+                {
+                    ChatManager.OnChatMessage(player, $"Player not found.");
+                    return;
+                }
+
+                string model = arguments.ElementAt(1);
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[handle];
+                curiosityUser.Send("character:model", model);
+
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' model set.");
+            }
+        }
+
         [CommandInfo(new[] { "world" })]
         public class PlayerWorld : ICommand
         {
