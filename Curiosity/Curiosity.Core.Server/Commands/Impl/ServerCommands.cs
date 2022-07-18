@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
@@ -62,31 +63,61 @@ namespace Curiosity.Core.Server.Commands.Impl
         {
             public void On(CuriosityUser user, Player player, List<string> arguments)
             {
-                if (arguments.Count == 0)
+                try
                 {
-                    ChatManager.OnChatMessage(player, $"Missing argument.");
-                    return;
-                }
+                    if (arguments.Count == 0)
+                    {
+                        ChatManager.OnChatMessage(player, $"Missing argument.");
+                        return;
+                    }
 
-                string arg = arguments.ElementAt(0);
-                if (!int.TryParse(arg, out int handle))
+                    string arg = arguments.ElementAt(0);
+                    string model = arguments.ElementAt(1);
+                    if (int.TryParse(arg, out int handle))
+                    {
+                        if (!PluginManager.ActiveUsers.ContainsKey(handle))
+                        {
+                            user.NotificationError($"Player not found.");
+                            return;
+                        }
+
+                        UpdatePlayerModel(user, handle, model);
+                        return;
+                    }
+
+                    if (arg == "*")
+                    {
+                        Vector3 pos = player.Character.Position;
+                        List<int> playersToChange = new();
+                        PlayerList players = PluginManager.PlayersList;
+
+                        foreach(Player p in players)
+                        {
+                            if (p?.Character is not null)
+                            {
+                                Vector3 playerPos = p.Character.Position;
+                                if (Vector3.Distance(pos, playerPos) < 50f)
+                                    playersToChange.Add(p.Handle.ToInt());
+                            }
+                        }
+
+                        foreach(int h in playersToChange)
+                        {
+                            UpdatePlayerModel(user, h, model);
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
-                    return;
+                    Logger.Error(ex, $"Command: model");
                 }
+            }
 
-                if (!PluginManager.ActiveUsers.ContainsKey(handle))
-                {
-                    ChatManager.OnChatMessage(player, $"Player not found.");
-                    return;
-                }
-
-                string model = arguments.ElementAt(1);
-
-                CuriosityUser curiosityUser = PluginManager.ActiveUsers[handle];
+            public void UpdatePlayerModel(CuriosityUser user, int playerHandle, string model)
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
                 curiosityUser.Send("character:model", model);
-
-                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' model set.");
+                user.NotificationSuccess($"Player '{curiosityUser.LatestName}' model '{model}' sent.");
             }
         }
 
