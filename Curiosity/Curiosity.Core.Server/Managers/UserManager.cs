@@ -382,12 +382,17 @@ namespace Curiosity.Core.Server.Managers
                 int playerHandle = int.Parse(player.Handle);
                 if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
                 {
+                    StateBag stateBag = player.State;
+
                     CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
 
                     int playerPed = API.GetPlayerPed(player.Handle);
 
                     try
                     {
+                        bool isWanted = stateBag.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
+                        curUser.Character.IsWanted = isWanted;
+
                         if (curUser.Character.IsWanted && reason == "Exiting")
                         {
                             long moneyToTake = (long)(curUser.Character.Cash * 0.05f);
