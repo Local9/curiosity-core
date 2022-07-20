@@ -390,8 +390,8 @@ namespace Curiosity.Core.Server.Managers
 
                     try
                     {
-                        bool isWanted = stateBag.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
-                        curUser.Character.IsWanted = isWanted;
+                        bool isJailed = stateBag.Get(StateBagKey.IS_JAILED) ?? false;
+                        curUser.Character.IsWanted = isJailed;
 
                         if (curUser.Character.IsWanted && reason == "Exiting")
                         {
