@@ -194,7 +194,7 @@ namespace Curiosity.Core.Client.Managers
                 }
             }
 
-            if (currentAmmo < JERRY_CAN_MAX && IsNearNormalFuelPump())
+            if (currentAmmo < JERRY_CAN_MAX && IsNearNormalFuelPumpJerryCan())
             {
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to refuel your Jerry Can.");
                 if (Game.IsControlJustPressed(0, Control.Context))
@@ -404,6 +404,11 @@ namespace Curiosity.Core.Client.Managers
             float distanceToPump = (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Boats) ? FUEL_PUMP_RANGE_BOAT : FUEL_PUMP_RANGE;
 
             return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * distanceToPump, 2));
+        }
+
+        private bool IsNearNormalFuelPumpJerryCan()
+        {
+            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
         }
 
         private async Task CheckFuelPumpDistance()
