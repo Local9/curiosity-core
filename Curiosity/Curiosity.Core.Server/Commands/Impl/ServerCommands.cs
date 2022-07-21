@@ -236,6 +236,8 @@ namespace Curiosity.Core.Server.Commands.Impl
                     return;
                 }
 
+                if (arguments.Count != 2) return;
+
                 string arg = arguments.ElementAt(0);
                 string hidden = arguments.ElementAt(1);
                 if (!int.TryParse(arg, out int playerId))
