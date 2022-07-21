@@ -161,8 +161,16 @@ namespace Curiosity.Core.Client.Managers
 
         public void UnlockTime()
         {
-            NetworkClearClockTimeOverride();
-            isTimeLocked = false;
+            if (NetworkIsClockTimeOverridden())
+            {
+                int hours = 0;
+                int minutes = 0;
+                int seconds = 0;
+                NetworkGetGlobalMultiplayerClock(ref hours, ref minutes, ref seconds);
+                NetworkOverrideClockTime(hours, minutes, seconds);
+                NetworkClearClockTimeOverride();
+                isTimeLocked = false;
+            }
 
             Logger.Debug($"UnlockTime");
         }
