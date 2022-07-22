@@ -1,4 +1,5 @@
-﻿using Curiosity.Framework.Client.Events;
+﻿using Curiosity.Framework.Client.Engine;
+using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Scripts;
 
 namespace Curiosity.Framework.Client
@@ -7,6 +8,7 @@ namespace Curiosity.Framework.Client
     {
         public static PluginManager Instance { get; private set; }
         public ClientGateway ClientGateway;
+        internal SoundEngine SoundEngine;
         
      //   public readonly DiscordRichPresence DiscordRichPresence =
      //new DiscordRichPresence(
@@ -22,7 +24,9 @@ namespace Curiosity.Framework.Client
         public PluginManager()
         {
             Instance = this;
-            ClientGateway = new ClientGateway(this);
+            ClientGateway = new ClientGateway();
+
+            SoundEngine = new SoundEngine();
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);

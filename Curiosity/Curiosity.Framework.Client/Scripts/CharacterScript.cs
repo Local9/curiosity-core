@@ -16,7 +16,9 @@ namespace Curiosity.Framework.Client.Scripts
                 Logger.Error($"No user was returned from the server.");
                 return;
             }
-            _user.Sound.Disable();
+
+            PluginManager.Instance.SoundEngine.Disable();
+
             Logger.Debug($"User: {_user.Username}, Characters: {_user?.Characters?.Count}");
         }
     }

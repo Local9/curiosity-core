@@ -13,7 +13,7 @@ namespace Curiosity.Framework.Server.Managers
 
         public PluginManager Instance { get; private set; }
         public PlayerList PlayerList => PluginManager.PlayerList;
-        public ConcurrentDictionary<int, User> UserSessions => PluginManager.UserSessions;
+        public ConcurrentDictionary<int, ClientId> UserSessions => PluginManager.UserSessions;
 
         public void Event(string name, Delegate @delegate) => Instance.AddEventHandler(name, @delegate);
         public ExportDictionary Export => Instance.ExportDictionary;

@@ -1,8 +1,8 @@
 ﻿using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Models;
+using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
 using Curiosity.Framework.Shared.Extensions;
-using Curiosity.Framework.Shared.Models;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -172,7 +172,12 @@ namespace Curiosity.Framework.Server.Managers
                     return;
                 }
 
-                UserSessions.AddOrUpdate(int.Parse(player.Handle), user, (key, oldValue) => oldValue = user);
+                int serverId = int.Parse(player.Handle);
+                ClientId clientId = new ClientId(serverId);
+                clientId.User = user;
+
+                UserSessions.AddOrUpdate(serverId, clientId, (key, oldValue) => oldValue = clientId);
+
                 string msg = $"Player [{discordId}] '{user.Username}#{user.UserID}' is connecting to the server with {user.Characters.Count} character(s).";
                 Logger.Trace(msg);
                 Logger.Trace($"Number of Sessions: {UserSessions.Count}");
@@ -189,7 +194,7 @@ namespace Curiosity.Framework.Server.Managers
             Logger.Trace($"Player '{player.Name}' dropped, reason; {reason}.");
             int playerId = int.Parse(player.Handle);
             if (UserSessions.ContainsKey(playerId))
-                UserSessions.TryRemove(playerId, out User user);
+                UserSessions.TryRemove(playerId, out ClientId user);
         }
 
         private void OnResourceStop(string resourceName)
@@ -226,7 +231,10 @@ namespace Curiosity.Framework.Server.Managers
                         return null;
                     }
 
-                    UserSessions.AddOrUpdate(client.Handle, user, (key, oldValue) => oldValue = user);
+                    ClientId clientId = new ClientId(serverId);
+                    clientId.User = user;
+
+                    UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
                     userResult = user;
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
                 }

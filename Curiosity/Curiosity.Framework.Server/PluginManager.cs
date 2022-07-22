@@ -1,7 +1,7 @@
 ﻿using Curiosity.Framework.Server.Attributes;
 using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Managers;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Server.Models.Database;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +12,7 @@ namespace Curiosity.Framework.Server
     {
         public static PluginManager Instance { get; private set; }
         public static PlayerList PlayerList;
-        public static ConcurrentDictionary<int, User> UserSessions = new();
+        public static ConcurrentDictionary<int, ClientId> UserSessions = new();
 
         public ServerGateway Events;
         public EventHandlerDictionary EventRegistry => EventHandlers;
@@ -168,11 +168,11 @@ namespace Curiosity.Framework.Server
         public static User GetUserFromId(string handle)
         {
             if (int.TryParse(handle, out int iHandle))
-                return ToUser(iHandle);
+                return ToClient(iHandle).User;
             return null;
         }
 
-        public static User ToUser(int handle)
+        public static ClientId ToClient(int handle)
         {
             if (!UserSessions.ContainsKey(handle)) return null;
             return UserSessions[handle];
