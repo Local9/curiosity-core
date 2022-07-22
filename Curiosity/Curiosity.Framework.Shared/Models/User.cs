@@ -10,6 +10,7 @@ using Dapper;
 #endif
 
 using Lusive.Events.Attributes;
+using Lusive.Snowflake;
 using System.ComponentModel;
 
 namespace Curiosity.Framework.Shared.Models
@@ -17,19 +18,28 @@ namespace Curiosity.Framework.Shared.Models
     [Serialization]
     public partial class User
     {
+        #region CFX Fields
+
+        public SnowflakeId PlayerID; // Lusive Snowflake
+        public int Handle; // CFX Handle
+        
+        [Ignore]
+        public Player Player;
+
+        #endregion
+
         #region FIELDS
-        [JsonIgnore]
         [Description("userId")]
         public int UserID { get; private set; }
 
         [Description("username")]
         public string Username { get; private set; }
 
-        [JsonIgnore]
+        [Ignore]
         [Description("license")]
         public string License { get; private set; }
 
-        [JsonIgnore]
+        [Ignore]
         [Description("discordId")]
         public ulong DiscordId { get; private set; }
 
@@ -39,7 +49,7 @@ namespace Curiosity.Framework.Shared.Models
         [Description("lastSeen")]
         public DateTime LastSeen { get; private set; }
 
-        [JsonIgnore]
+        [Ignore]
         [Description("bannedPerm")]
         public int BannedPermanently { get; private set; }
 
@@ -52,6 +62,7 @@ namespace Curiosity.Framework.Shared.Models
         #endregion
 
         public List<Character> Characters { get; private set; } = new();
+        public Character CurrentCharacter { get; private set; }
 
 #if CLIENT
         internal SoundEngine Sound => new SoundEngine();

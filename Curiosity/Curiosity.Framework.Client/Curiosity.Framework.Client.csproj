@@ -70,7 +70,8 @@
     <Compile Include="Discord\DiscordRichPresence.cs" />
     <Compile Include="Engine\SoundEngine.cs" />
     <Compile Include="Events\ClientGateway.cs" />
-    <Compile Include="Events\ServerId.cs" />
+    <Compile Include="Events\NetworkMessage.cs" />
+    <Compile Include="Events\ServerSource.cs" />
     <Compile Include="Extensions\DecoratorExtension.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="PluginManager.cs" />

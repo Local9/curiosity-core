@@ -15,7 +15,7 @@ namespace Curiosity.Framework.Server.Managers
         public PlayerList PlayerList => PluginManager.PlayerList;
         public ConcurrentDictionary<int, User> UserSessions => PluginManager.UserSessions;
 
-        public void Event(string name, Delegate @delegate) => Instance.Hook(name, @delegate);
+        public void Event(string name, Delegate @delegate) => Instance.AddEventHandler(name, @delegate);
         public ExportDictionary Export => Instance.ExportDictionary;
         public ServerGateway ServerGateway => Instance.Events;
 

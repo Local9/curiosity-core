@@ -44,7 +44,7 @@ namespace Curiosity.Framework.Server
         {
             Logger.Trace($"CURIOSITY INITIATION");
             Instance = this;
-            Events = new ServerGateway(Instance);
+            Events = new ServerGateway();
 
             Load();
         }
@@ -154,18 +154,18 @@ namespace Curiosity.Framework.Server
             });
         }
 
-        public void Hook(string eventName, Delegate @delegate)
+        public void AddEventHandler(string eventName, Delegate @delegate)
         {
             Logger.Debug($"Registered Legacy Event Handler '{eventName}'");
             EventHandlers.Add(eventName, @delegate);
         }
 
-        public static Player ToPlayer(int handle)
+        public static Player GetPlayerFromId(int handle)
         {
             return Instance.Players[handle];
         }
 
-        public static User ToUser(string handle)
+        public static User GetUserFromId(string handle)
         {
             if (int.TryParse(handle, out int iHandle))
                 return ToUser(iHandle);

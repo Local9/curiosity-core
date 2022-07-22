@@ -127,7 +127,7 @@ namespace Curiosity.Framework.Server.Web.Discord
             {
                 if (!Webhooks.ContainsKey(webhookChannel))
                 {
-                    Logger.Warn($"SendDiscordEmbededMessage() -> Discord {webhookChannel} Webhook Missing");
+                    Logger.Warning($"SendDiscordEmbededMessage() -> Discord {webhookChannel} Webhook Missing");
                     return;
                 }
 

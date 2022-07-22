@@ -3,36 +3,49 @@ using Lusive.Events.Diagnostics;
 using Lusive.Events.Message;
 using Lusive.Events.Serialization;
 using Lusive.Events.Serialization.Implementations;
-using Lusive.Snowflake;
 
 namespace Curiosity.Framework.Client.Events
 {
     public class ClientGateway : BaseGateway
     {
-        public const string SignaturePipeline = "moonlight_event_sig";
-
-        protected sealed override IEventLogger Logger { get; }
+        public List<NetworkMessage> Buffer { get; } = new List<NetworkMessage>();
         protected override ISerialization Serialization { get; }
-#nullable enable
-        private string? _signature;
-#nullable disable
-        public ClientGateway(PluginManager client)
-        {
-            short playerId = (short)GetPlayerServerId(PlayerId());
-            SnowflakeGenerator.Create(playerId);
+        private string _signature;
 
-            Logger = new EventLogger();
-            Serialization = new BinarySerialization(Logger);
+        public ClientGateway()
+        {
+            Serialization = new BinarySerialization();
             DelayDelegate = async delay => await BaseScript.Delay(delay);
             PrepareDelegate = PrepareAsync;
             PushDelegate = Push;
 
-            client.Hook(EventConstant.InboundPipeline,
-                new Action<byte[]>(async serialized => { await ProcessInboundAsync(new ServerId(), serialized); }));
-            client.Hook(EventConstant.OutboundPipeline, new Action<byte[]>(ProcessOutbound));
-            client.Hook(SignaturePipeline, new Action<string>(signature => _signature = signature));
+            PluginManager.Instance.AddEventHandler(EventConstant.InboundPipeline, new Action<byte[]>(async serialized =>
+            {
+                try
+                {
+                    await ProcessInboundAsync(new ServerId(), serialized);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString());
+                }
+            }));
 
-            BaseScript.TriggerServerEvent(SignaturePipeline);
+            PluginManager.Instance.AddEventHandler(EventConstant.OutboundPipeline, new Action<byte[]>(serialized =>
+            {
+                try
+                {
+                    ProcessOutbound(serialized);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString());
+                }
+            }));
+
+            PluginManager.Instance.AddEventHandler(EventConstant.SignaturePipeline, new Action<string>(signature => _signature = signature));
+
+            BaseScript.TriggerServerEvent(EventConstant.SignaturePipeline);
         }
 
         public async Task PrepareAsync(string pipeline, ISource source, IMessage message)
@@ -42,9 +55,9 @@ namespace Curiosity.Framework.Client.Events
                 var stopwatch = StopwatchUtil.StartNew();
 
                 while (_signature == null)
-                    await Common.MoveToMainThread();
+                    await BaseScript.Delay(0);
 
-                Logger.Debug($"[{message}] Signature fetch took {stopwatch.Elapsed.TotalMilliseconds}ms.");
+                //Client.Logger.Debug($"[{message}] Halted {stopwatch.Elapsed.TotalMilliseconds}ms due to signature retrieval.");
             }
 
             message.Signature = _signature;
@@ -54,19 +67,20 @@ namespace Curiosity.Framework.Client.Events
         {
             if (source.Handle != -1)
                 throw new Exception(
-                    $"The client can only target the server. (arg {nameof(source)} is not matching -1)");
+                    $"The client can only target server events. (arg {nameof(source)} is not matching -1)");
 
             BaseScript.TriggerServerEvent(pipeline, buffer);
         }
 
+
         public async void Send(string endpoint, params object[] args)
         {
-            await SendInternal(EventFlowType.Straight, ServerId.Instance, endpoint, args);
+            await SendInternal(EventFlowType.Straight, new ServerId(), endpoint, args);
         }
 
         public async Task<T> Get<T>(string endpoint, params object[] args)
         {
-            return await GetInternal<T>(ServerId.Instance, endpoint, args);
+            return await GetInternal<T>(new ServerId(), endpoint, args);
         }
     }
 }

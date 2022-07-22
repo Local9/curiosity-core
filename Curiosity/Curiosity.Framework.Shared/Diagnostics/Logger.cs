@@ -23,7 +23,7 @@
                 Format($"[TRACE] {msg}");
         }
 
-        public static void Warn(string msg)
+        public static void Warning(string msg)
         {
             if (ShowOutput("warn"))
                 Format($"[WARN] {msg}");

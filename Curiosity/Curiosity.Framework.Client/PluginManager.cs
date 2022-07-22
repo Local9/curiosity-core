@@ -42,7 +42,7 @@ namespace Curiosity.Framework.Client
             if (resourceName != GetCurrentResourceName()) return;
         }
 
-        public void Hook(string eventName, Delegate @delegate)
+        public void AddEventHandler(string eventName, Delegate @delegate)
         {
             EventHandlers[eventName] += @delegate;
         }
