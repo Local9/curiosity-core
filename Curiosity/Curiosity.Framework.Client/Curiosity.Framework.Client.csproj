@@ -84,8 +84,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\_vendor\fx-events\src\events\Events.csproj">
-      <Project>{8f57c378-40f7-49ff-8221-6c235118021f}</Project>
+    <ProjectReference Include="..\_vendor\manups4e-fx-events\src\events\Events.csproj">
+      <Project>{8e20e5f2-af0a-4976-b896-e33ff6fdb96c}</Project>
       <Name>Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj">
