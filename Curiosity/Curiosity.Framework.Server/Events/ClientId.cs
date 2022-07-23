@@ -1,8 +1,6 @@
-﻿using Curiosity.Framework.Server.Models;
-using Curiosity.Framework.Server.Models.Database;
+﻿using Curiosity.Framework.Shared.Models;
 using Lusive.Events;
 using Lusive.Events.Attributes;
-using Lusive.Snowflake;
 using System.Linq;
 
 namespace Curiosity.Framework.Server.Events

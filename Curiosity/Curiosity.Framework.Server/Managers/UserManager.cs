@@ -2,7 +2,7 @@
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
-using Curiosity.Framework.Shared.Extensions;
+using Curiosity.Framework.Shared.Models;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -128,7 +128,7 @@ namespace Curiosity.Framework.Server.Managers
                         deferrals.update(ServerConfiguration.GetTranslation("user:creation:check", "🔍 Checking for existing user information."));
                         await BaseScript.Delay(500);
 
-                        User user = await User.GetUserAsync(player.Name, discordId, false);
+                        DataStoreUser user = await DataStoreUser.GetUserAsync(player.Name, discordId, false);
 
                         if (user is null)
                         {
@@ -164,7 +164,7 @@ namespace Curiosity.Framework.Server.Managers
                     return;
                 }
 
-                User user = await User.GetUserAsync(player.Name, discordId, true);
+                DataStoreUser user = await DataStoreUser.GetUserAsync(player.Name, discordId, true);
 
                 if (user is null)
                 {
@@ -174,7 +174,7 @@ namespace Curiosity.Framework.Server.Managers
 
                 int serverId = int.Parse(player.Handle);
                 ClientId clientId = new ClientId(serverId);
-                clientId.User = user;
+                
 
                 UserSessions.AddOrUpdate(serverId, clientId, (key, oldValue) => oldValue = clientId);
 
@@ -223,7 +223,7 @@ namespace Curiosity.Framework.Server.Managers
                         return null;
                     }
 
-                    User user = await User.GetUserAsync(client.Player.Name, discordId, true);
+                    DataStoreUser user = await DataStoreUser.GetUserAsync(client.Player.Name, discordId, true);
 
                     if (user is null)
                     {
@@ -232,10 +232,9 @@ namespace Curiosity.Framework.Server.Managers
                     }
 
                     ClientId clientId = new ClientId(serverId);
-                    clientId.User = user;
-
+                    
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
-                    userResult = user;
+                    
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
                 }
 

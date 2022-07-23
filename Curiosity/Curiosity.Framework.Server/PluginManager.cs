@@ -1,7 +1,7 @@
 ﻿using Curiosity.Framework.Server.Attributes;
 using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Managers;
-using Curiosity.Framework.Server.Models.Database;
+using Curiosity.Framework.Shared.Models;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;

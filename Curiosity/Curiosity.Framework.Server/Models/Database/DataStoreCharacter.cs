@@ -2,7 +2,7 @@
 
 namespace Curiosity.Framework.Server.Models.Database
 {
-    public partial class Character
+    public partial class DataStoreCharacter
     {
         #region FIELDS
         [Description("characterId")]

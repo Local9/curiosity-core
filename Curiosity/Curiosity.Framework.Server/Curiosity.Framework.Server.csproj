@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\_vendor\manups4e-fx-events\src\events\Events.csproj" />
-    <ProjectReference Include="..\_vendor\manups4e-fx-events\src\generator\Generator.csproj" />
+    <ProjectReference Include="..\_vendor\manups4e-fx-events\src\generator\Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj" />
   </ItemGroup>
 
