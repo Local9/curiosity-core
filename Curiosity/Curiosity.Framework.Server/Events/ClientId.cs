@@ -1,6 +1,7 @@
 ﻿using Curiosity.Framework.Shared.Models;
 using Lusive.Events;
 using Lusive.Events.Attributes;
+using Lusive.Snowflake;
 using System.Linq;
 
 namespace Curiosity.Framework.Server.Events
@@ -8,6 +9,7 @@ namespace Curiosity.Framework.Server.Events
     [Serialization]
     public partial class ClientId : ISource
     {
+        public SnowflakeId Id { get; set; }
         public int UserId { get; set; }
         public int Handle { get; set; }
         public User User { get; set; }
@@ -25,6 +27,21 @@ namespace Curiosity.Framework.Server.Events
         public ClientId()
         {
 
+        }
+
+        public ClientId(SnowflakeId id)
+        {
+            Player owner = PluginManager.PlayerList.FirstOrDefault(x => x.Handle == Handle.ToString());
+            if (owner != null)
+            {
+                Id = id;
+                Handle = Convert.ToInt32(owner.Handle);
+                LoadUser();
+            }
+            else
+            {
+                throw new Exception($"Could not find runtime client: {id}");
+            }
         }
 
         public ClientId(int id)
