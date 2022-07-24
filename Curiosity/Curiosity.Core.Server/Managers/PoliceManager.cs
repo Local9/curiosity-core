@@ -484,19 +484,22 @@ namespace Curiosity.Core.Server.Managers
                 Player attacker = PluginManager.PlayersList[attackerServerId];
                 Player victim = PluginManager.PlayersList[victimServerId];
 
-
                 CuriosityUser curiosityUserAttacker = PluginManager.ActiveUsers[attackerServerId];
                 CuriosityUser curiosityUserVictim = PluginManager.ActiveUsers[victimServerId];
+
+                bool isAttackerWanted = attacker.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
 
                 bool isVictimPassive = victim.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
                 bool isAttackerPassive = attacker.State.Get(StateBagKey.PLAYER_PASSIVE) ?? false;
 
                 bool victimIsWanted = victim.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
                 bool attackerIsOfficer = (attacker.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == (int)ePlayerJobs.POLICE_OFFICER;
+                bool victimIsOfficer = (victim.State.Get(StateBagKey.PLAYER_JOB) ?? 0) == (int)ePlayerJobs.POLICE_OFFICER;
 
                 if (isAttackerPassive)
                 {
                     SendNotification(attackerServerId, $"You have killed someone while in a passive state, go straight to Jail. No pass go, do not pick up $200.");
+                    await BaseScript.Delay(0);
                     await SendSuspectToJail(attackerServerId, attacker);
 
                     return null;
@@ -534,36 +537,42 @@ namespace Curiosity.Core.Server.Managers
                             playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
                         string notificationTable = CreateBasicNotificationTable("Innocent Killed by Officer!", tableRows);
+                        await BaseScript.Delay(0);
                         SendNotification(SEND_JOB_ONLY, notificationTable);
                     }
                 }
 
                 if (!attackerIsOfficer)
                 {
-                    Vector3 victimPosition = victim.Character.Position;
-                    Vector3 attackerPosition = attacker.Character.Position;
+                    if (!isAttackerWanted)
+                    {
+                        string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
 
-                    //float distanceTotal = Vector3.Distance(victimPosition, attackerPosition) / 1000f;
-                    //float distanceFeet = distanceTotal * 5280f;
+                        Dictionary<string, string> tableRows = new Dictionary<string, string>();
+                        tableRows.Add("Attacker", attacker.Name);
+                        tableRows.Add("Victim", victim.Name);
+                        tableRows.Add("Weapon", weaponName);
+                        tableRows.Add("Info", "Wanted by Police");
 
-                    string weaponName = DeathHash.CauseOfDeath[(int)weaponInfoHash];
+                        attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
+                        attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
+                        curiosityUserAttacker.Character.IsWanted = true;
+                        SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
-                    Dictionary<string, string> tableRows = new Dictionary<string, string>();
-                    tableRows.Add("Attacker", attacker.Name);
-                    tableRows.Add("Victim", victim.Name);
-                    tableRows.Add("Weapon", weaponName);
-                    tableRows.Add("Info", "Wanted by Police");
-                    attacker.State.Set(StateBagKey.PLAYER_POLICE_WANTED, true, true);
-                    attacker.State.Set(StateBagKey.PLAYER_WANTED_LEVEL, 10, true);
-                    curiosityUserAttacker.Character.IsWanted = true;
+                        if (!playerCullingReset.ContainsKey(attacker))
+                            playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
 
-                    SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
+                        string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
+                        await BaseScript.Delay(0);
+                        SendNotification(SEND_JOB_ONLY, notificationTable);
+                    }
 
-                    if (!playerCullingReset.ContainsKey(attacker))
-                        playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
-
-                    string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
-                    SendNotification(SEND_JOB_ONLY, notificationTable);
+                    if (victimIsOfficer)
+                    {
+                        int characterId = curiosityUserAttacker.Character.CharacterId;
+                        Database.Store.SkillDatabase.Adjust(characterId, Skill.CRIMINAL, 25);
+                        curiosityUserAttacker.NotificationSuccess("Rewarded 25xp");
+                    }
                 }
                 // log kill & reward officers (if kill is near a safe area, its not rewarded)
 

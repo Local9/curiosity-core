@@ -3,6 +3,7 @@
     public enum Skill
     {
         POLICE = 5,
-        KNOWLEDGE = 6
+        KNOWLEDGE = 6,
+        CRIMINAL = 25
     }
 }

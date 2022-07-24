@@ -96,6 +96,7 @@
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
+    <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
     <Compile Include="Managers\GameWorld\StungunManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\Milo\Casino\CasinoAmbientPeds.cs" />

@@ -120,5 +120,10 @@ namespace Curiosity.Core.Server.Database.Store
                 return null;
             }
         }
+
+        internal static void Adjust(int characterId, object cRIMINAL, int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
