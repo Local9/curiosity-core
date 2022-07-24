@@ -96,6 +96,7 @@
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
+    <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
     <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
     <Compile Include="Managers\GameWorld\StungunManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
@@ -233,7 +234,7 @@
     <Content Include="data\scenarios.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="data\interiors.json">
+    <Content Include="data\durty\ipls.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="data\config.json">
@@ -242,6 +243,8 @@
     <Content Include="data\overlays.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="data\durty\garages.json" />
+    <None Include="data\durty\mloInteriors.json" />
     <None Include="data\police.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
