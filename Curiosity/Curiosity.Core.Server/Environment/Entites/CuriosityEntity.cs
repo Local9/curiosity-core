@@ -6,11 +6,11 @@ namespace Curiosity.Core.Server.Environment.Entities
 {
     public class CuriosityEntity
     {
-        private Ped CitizenPed => API.DoesEntityExist(NetId) ? (Ped)Entity.FromHandle(NetId) : null;
+        private EventPed CitizenPed => API.DoesEntityExist(NetId) ? (EventPed)Entity.FromHandle(NetId) : null;
         public int NetId { get; set; }
         public int Model => API.GetEntityModel(NetId);
 
-        public Position Position
+        public EventPosition Position
         {
             get
             {

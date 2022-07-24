@@ -1,0 +1,33 @@
+{
+  "events": [
+    {
+      "name": "randomEvent1",
+      "cooldown": 30,
+      "position": {
+        "X": 100.0,
+        "Y": 100.0,
+        "Z": 100.0
+      },
+      "peds": [
+        {
+          "model": "a_c_hen",
+          "position": {
+            "X": 100.0,
+            "Y": 100.0,
+            "Z": 100.0,
+            "H": 50.0
+          }
+        }
+      ],
+      "requirements": {
+        "requirement": "kill-peds"
+      },
+      "awards": [
+        {
+          "type": "money",
+          "value": "10000"
+        }
+      ]
+    }
+  ]
+}

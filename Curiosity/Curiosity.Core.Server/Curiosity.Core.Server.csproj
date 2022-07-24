@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,9 +85,11 @@
     <Compile Include="Database\Store\StatDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Environment\Data\DeathHash.cs" />
+    <Compile Include="Environment\RandomEventConfig.cs" />
     <Compile Include="Environment\ServerConfig.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Managers\BucketManager.cs" />
     <Compile Include="Managers\CasinoManager.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
+    <Compile Include="Managers\World\RandomEventConfigLoader.cs" />
+    <Compile Include="Managers\World\RandomEventManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Environment\Entites\CuriosityEntity.cs" />
@@ -149,6 +153,7 @@
     <Content Include="config\server-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="config\random-event.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
