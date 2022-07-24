@@ -1,6 +1,8 @@
-﻿namespace Curiosity.Framework.Shared.Models
+﻿using Lusive.Events.Attributes;
+
+namespace Curiosity.Framework.Shared.Models
 {
-    [Serializable]
+    [Serialization]
     public partial class Character
     {
     }

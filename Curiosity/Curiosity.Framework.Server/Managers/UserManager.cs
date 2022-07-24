@@ -227,7 +227,9 @@ namespace Curiosity.Framework.Server.Managers
                     ClientId clientId = new ClientId(serverId);
                     
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
-                    
+
+                    userResult = new User(client.Handle, client.Player.Name);
+
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
                     Logger.Trace($"Number of Sessions: {UserSessions.Count}");
                 }

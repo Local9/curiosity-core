@@ -5,7 +5,7 @@ namespace Curiosity.Framework.Client.Scripts
 {
     internal class CharacterScript : ScriptBase
     {
-        static User _user = new();
+        public User _user = new();
 
         public async void Init()
         {
@@ -19,7 +19,9 @@ namespace Curiosity.Framework.Client.Scripts
 
             PluginManager.Instance.SoundEngine.Disable();
 
-            Logger.Debug($"User: {_user.Username}, Characters: {_user?.Characters?.Count}");
+            _user = user;
+
+            Logger.Debug($"User: {_user.Username}");
         }
     }
 }

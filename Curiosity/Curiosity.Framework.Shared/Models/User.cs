@@ -1,18 +1,24 @@
 ﻿using Lusive.Events.Attributes;
+using Lusive.Snowflake;
 
 namespace Curiosity.Framework.Shared.Models
 {
-    [Serializable]
+    [Serialization]
     public partial class User
     {
         public int Handle;
-
-        [Ignore]
-        public Player Player;
-
         public string Username;
-        public List<Character> Characters = new();
+        public SnowflakeId PlayerID;
 
-        
+        public User()
+        {
+
+        }
+
+        public User(int handle, string username)
+        {
+            Handle = handle;
+            Username = username;
+        }
     }
 }

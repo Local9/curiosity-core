@@ -1,6 +1,7 @@
 ﻿using Curiosity.Framework.Client.Engine;
 using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Scripts;
+using Lusive.Snowflake;
 
 namespace Curiosity.Framework.Client
 {
@@ -27,6 +28,8 @@ namespace Curiosity.Framework.Client
             ClientGateway = new ClientGateway();
 
             SoundEngine = new SoundEngine();
+
+            SnowflakeGenerator.Create(-1);
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);

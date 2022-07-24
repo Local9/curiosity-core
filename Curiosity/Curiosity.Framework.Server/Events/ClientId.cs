@@ -44,19 +44,12 @@ namespace Curiosity.Framework.Server.Events
             }
         }
 
-        public ClientId(int id)
+        public ClientId(int handle)
         {
-            Player owner = PluginManager.PlayerList.FirstOrDefault(x => x.Handle == Handle.ToString());
-            if (owner != null)
-            {
-                UserId = id;
-                Handle = Convert.ToInt32(owner.Handle);
+            Handle = handle;
+            if (handle > 0)
                 LoadUser();
-            }
-            else
-            {
-                throw new Exception($"Could not find runtime client: {id}");
-            }
+            Id = User != null ? User.PlayerID : SnowflakeId.Empty;
         }
 
         public override string ToString()
@@ -81,6 +74,8 @@ namespace Curiosity.Framework.Server.Events
 
         public void LoadUser()
         {
+            if (!PluginManager.UserSessions.ContainsKey(Handle)) return;
+
             ClientId res = PluginManager.UserSessions[Handle];
             if (res != null)
                 User = res.User;
