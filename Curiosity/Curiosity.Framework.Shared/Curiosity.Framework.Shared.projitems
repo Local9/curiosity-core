@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Character.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Identifiers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
   </ItemGroup>
 </Project>

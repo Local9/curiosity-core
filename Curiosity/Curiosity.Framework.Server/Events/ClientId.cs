@@ -49,7 +49,7 @@ namespace Curiosity.Framework.Server.Events
             Handle = handle;
             if (handle > 0)
                 LoadUser();
-            Id = User != null ? User.PlayerID : SnowflakeId.Empty;
+            // Id = User != null ? User.PlayerID : SnowflakeId.Empty;
         }
 
         public override string ToString()

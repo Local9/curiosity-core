@@ -1,24 +1,20 @@
 ﻿using Lusive.Events.Attributes;
-using Lusive.Snowflake;
+
+#nullable enable
 
 namespace Curiosity.Framework.Shared.Models
 {
     [Serialization]
     public partial class User
     {
-        public int Handle;
-        public string Username;
-        public SnowflakeId PlayerID;
+        public int Handle { get; set; }
+        public int UserID { get; set; }
+        public string? Username { get; set; }
 
-        public User()
+        [Ignore]
+        public override string ToString()
         {
-
-        }
-
-        public User(int handle, string username)
-        {
-            Handle = handle;
-            Username = username;
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

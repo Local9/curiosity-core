@@ -213,7 +213,7 @@ namespace Curiosity.Framework.Server.Managers
                     if (!ulong.TryParse(strDiscordId, out discordId))
                     {
                         client.Player.Drop(ServerConfiguration.GetTranslation("user:join:error", "‼️ Something went wrong when joining the server."));
-                        return null;
+                        return userResult;
                     }
 
                     DataStoreUser user = await DataStoreUser.GetUserAsync(client.Player.Name, discordId, true);
@@ -221,18 +221,25 @@ namespace Curiosity.Framework.Server.Managers
                     if (user is null)
                     {
                         client.Player.Drop(ServerConfiguration.GetTranslation("user:join:error", "‼️ Something went wrong when joining the server."));
-                        return null;
+                        return userResult;
                     }
 
                     ClientId clientId = new ClientId(serverId);
                     
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
 
-                    userResult = new User(client.Handle, client.Player.Name);
+                    userResult = new User()
+                    {
+                        Handle = client.Handle,
+                        UserID = user.UserID,
+                        Username = client.Player.Name
+                    };
 
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
                     Logger.Trace($"Number of Sessions: {UserSessions.Count}");
                 }
+
+                Logger.Trace($"{userResult}");
 
                 return userResult;
             }
