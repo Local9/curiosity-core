@@ -172,15 +172,8 @@ namespace Curiosity.Framework.Server.Managers
                     return;
                 }
 
-                int serverId = int.Parse(player.Handle);
-                ClientId clientId = new ClientId(serverId);
-                
-
-                UserSessions.AddOrUpdate(serverId, clientId, (key, oldValue) => oldValue = clientId);
-
                 string msg = $"Player [{discordId}] '{user.Username}#{user.UserID}' is connecting to the server with {user.Characters.Count} character(s).";
                 Logger.Trace(msg);
-                Logger.Trace($"Number of Sessions: {UserSessions.Count}");
             }
             catch (Exception ex)
             {
@@ -236,6 +229,7 @@ namespace Curiosity.Framework.Server.Managers
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
                     
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
+                    Logger.Trace($"Number of Sessions: {UserSessions.Count}");
                 }
 
                 return userResult;
