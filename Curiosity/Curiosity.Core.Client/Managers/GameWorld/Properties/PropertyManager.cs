@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core.UI;
-using Curiosity.Core.Client.Interface;
-
-namespace Curiosity.Core.Client.Managers.GameWorld.Properties
+﻿namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 {
     public class PropertyManager : Manager<ParticleManager>
     {
@@ -15,7 +12,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             
         }
 
-        int currentLocation = 0;
+        int currentLocation = 5;
 
         [TickHandler]
         private async Task OnPropertyManager()
@@ -36,12 +33,13 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
             int currentInterior = GetInteriorFromEntity(Game.PlayerPed.Handle);
 
-            Screen.DisplayHelpTextThisFrame($"Current Location: {currentLocation}~n~Int: {currentInterior}");
+            // Screen.DisplayHelpTextThisFrame($"Current Location: {currentLocation}~n~Int: {currentInterior}");
         }
 
         private void DisableExterior(int location)
         {
             uint hashKey;
+            // GetHashKey("mpsv_lp0_31"); == 79
 
             SetDisableDecalRenderingThisFrame();
 
@@ -237,19 +235,19 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
                     DisableOcclusionThisFrame();
                     break;
 
-                //case GetHashKey("mpsv_lp0_31"):
-                //    hashKey = (uint)GetHashKey("apa_ch2_09c_hs13");
-                //    EnableExteriorCullModelThisFrame(hashKey);
-                //    hashKey = (uint)GetHashKey("apa_ch2_09c_hs13_details");
-                //    EnableExteriorCullModelThisFrame(hashKey);
-                //    hashKey = (uint)GetHashKey("apa_CH2_09c_House11_LOD");
-                //    EnableExteriorCullModelThisFrame(hashKey);
-                //    hashKey = (uint)GetHashKey("ch2_09c_Emissive_13_LOD");
-                //    EnableExteriorCullModelThisFrame(hashKey);
-                //    hashKey = (uint)GetHashKey("ch2_09c_Emissive_13");
-                //    EnableExteriorCullModelThisFrame(hashKey);
-                //    DisableOcclusionThisFrame();
-                //    break;
+                case 79:
+                    hashKey = (uint)GetHashKey("apa_ch2_09c_hs13");
+                    EnableExteriorCullModelThisFrame(hashKey);
+                    hashKey = (uint)GetHashKey("apa_ch2_09c_hs13_details");
+                    EnableExteriorCullModelThisFrame(hashKey);
+                    hashKey = (uint)GetHashKey("apa_CH2_09c_House11_LOD");
+                    EnableExteriorCullModelThisFrame(hashKey);
+                    hashKey = (uint)GetHashKey("ch2_09c_Emissive_13_LOD");
+                    EnableExteriorCullModelThisFrame(hashKey);
+                    hashKey = (uint)GetHashKey("ch2_09c_Emissive_13");
+                    EnableExteriorCullModelThisFrame(hashKey);
+                    DisableOcclusionThisFrame();
+                    break;
 
                 case 80:
                     hashKey = (uint)GetHashKey("apa_ch2_09b_hs02");

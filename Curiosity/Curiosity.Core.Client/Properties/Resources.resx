@@ -121,9 +121,6 @@
   <data name="config" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data\config.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="interiors" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\data\interiors.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="overlays" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\data\overlays.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

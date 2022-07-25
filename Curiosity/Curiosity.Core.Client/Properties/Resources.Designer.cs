@@ -69,66 +69,29 @@ namespace Curiosity.Core.Client.Properties {
         ///      &quot;legacyEvent&quot;: false
         ///    },
         ///    {
-        ///      &quot;label&quot;: &quot;Police Officer&quot;,
+        ///      &quot;label&quot;: &quot;Police Officer [PvP]&quot;,
         ///      &quot;jobEvent&quot;: &quot;job:police:duty&quot;,
         ///      &quot;legacyEvent&quot;: false
         ///    }
         ///  ],
-        ///  &quot;eletricVehicles&quot;: [
-        ///    &quot;imorgon&quot;,
-        ///    &quot;p90d&quot;,
-        ///    &quot;teslasemi&quot;,
-        ///    &quot;tezeract&quot;,
-        ///    &quot;neon&quot;,
-        ///    &quot;raiden&quot;,
-        ///    &quot;cyclone&quot;,
-        ///    &quot;caddy3&quot;,
-        ///    &quot;voltic2&quot;,
-        ///    &quot;khamelion&quot;,
-        ///    &quot;dilettante2&quot;,
-        ///    &quot;caddy2&quot;,
-        ///    &quot;forklift&quot;,
-        ///    &quot;caddy&quot;,
-        ///    &quot;airtug&quot;,
+        ///  &quot;outfits&quot;: [
+        ///    {
+        ///      &quot;label&quot;: &quot;LSPD&quot;,
+        ///      &quot;male&quot;: false,
+        ///      &quot;components&quot;: [
+        ///        {
+        ///          &quot;component&quot;: 1,
+        ///          &quot;drawable&quot;: 0,
+        ///          &quot;texture&quot;: 0
+        ///        },
+        ///        {
+        ///          &quot;component&quot;: 3,
+        ///          &quot;drawable&quot;: 3,
         ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string config {
             get {
                 return ResourceManager.GetString("config", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [
-        ///  {
-        ///    &quot;name&quot;: &quot;prologue01&quot;,
-        ///    &quot;dlcName&quot;: &quot;basegame&quot;,
-        ///    &quot;position&quot;: {
-        ///      &quot;X&quot;: 4729.80859,
-        ///      &quot;Y&quot;: -4553.80469,
-        ///      &quot;Z&quot;: 119.623032
-        ///    },
-        ///    &quot;dimensionMin&quot;: {
-        ///      &quot;X&quot;: 3301.531,
-        ///      &quot;Y&quot;: -5483.857,
-        ///      &quot;Z&quot;: 75.60556
-        ///    },
-        ///    &quot;dimensionMax&quot;: {
-        ///      &quot;X&quot;: 6158.08643,
-        ///      &quot;Y&quot;: -3623.75269,
-        ///      &quot;Z&quot;: 163.6405
-        ///    },
-        ///    &quot;entities&quot;: 716,
-        ///    &quot;contentFlags&quot;: 1,
-        ///    &quot;foundByScripted&quot;: true,
-        ///    &quot;interiors&quot;: [],
-        ///    &quot;extraData&quot;: {
-        ///      &quot;name&quot;: &quot;&quot;,
-        ///      &quot;groupNam [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string interiors {
-            get {
-                return ResourceManager.GetString("interiors", resourceCulture);
             }
         }
         
@@ -166,26 +129,27 @@ namespace Curiosity.Core.Client.Properties {
         ///   Looks up a localized string similar to {
         ///  &quot;speedCameraDistance&quot;: 100,
         ///  &quot;speedCameraWidth&quot;: 15,
-        ///  &quot;ignoredVehicles&quot;: [
-        ///    &quot;police&quot;,
-        ///    &quot;police2&quot;
-        ///  ],
         ///  &quot;speedLimits&quot;: {
-        ///    &quot;Joshua Rd&quot;: 50,
-        ///    &quot;East Joshua Road&quot;: 50,
-        ///    &quot;Marina Dr&quot;: 35,
-        ///    &quot;York St&quot;: 35,
-        ///    &quot;Alhambra Dr&quot;: 35,
-        ///    &quot;Niland Ave&quot;: 35,
-        ///    &quot;Zancudo Ave&quot;: 35,
-        ///    &quot;Armadillo Ave&quot;: 35,
-        ///    &quot;Algonquin Blvd&quot;: 35,
-        ///    &quot;Mountain View Dr&quot;: 35,
-        ///    &quot;Cholla Springs Ave&quot;: 35,
-        ///    &quot;Panorama Dr&quot;: 40,
-        ///    &quot;Lesbos Ln&quot;: 35,
-        ///    &quot;Calafia Rd&quot;: 30,
-        ///    &quot;North Calafia Way&quot;:  [rest of string was truncated]&quot;;.
+        ///    &quot;2896128334&quot;: 80,
+        ///    &quot;2552845347&quot;: 80,
+        ///    &quot;776581733&quot;: 80,
+        ///    &quot;2600585507&quot;: 80,
+        ///    &quot;3362327680&quot;: 80,
+        ///    &quot;302348953&quot;: 80,
+        ///    &quot;4124992785&quot;: 80,
+        ///    &quot;3436239235&quot;: 50,
+        ///    &quot;3168230186&quot;: 50,
+        ///    &quot;127506487&quot;: 50,
+        ///    &quot;3474613771&quot;: 50,
+        ///    &quot;3885181515&quot;: 80,
+        ///    &quot;1759459593&quot;: 50,
+        ///    &quot;2226519225&quot;: 50,
+        ///    &quot;127435642&quot;: 50,
+        ///    &quot;4155137&quot;: 50,
+        ///    &quot;4174973413&quot;: 50,
+        ///    &quot;2502989037&quot;: 50,
+        ///    &quot;2464268432&quot;: 50
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string police {
             get {
@@ -221,11 +185,11 @@ namespace Curiosity.Core.Client.Properties {
         ///  },
         ///  {
         ///    &quot;scenario&quot;: &quot;BLIMP&quot;,
-        ///    &quot;enabled&quot;: true
+        ///    &quot;enabled&quot;: false
         ///  },
         ///  {
         ///    &quot;scenario&quot;: &quot;CanyonCliffs&quot;,
-        ///    &quot;enabled&quot;: false [rest of string was truncated]&quot;;.
+        ///    &quot;enabled&quot;: fals [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string scenarios {
             get {

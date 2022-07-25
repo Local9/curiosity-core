@@ -75,6 +75,7 @@
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\PropExtensions.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterTattoos.cs" />
     <Compile Include="Interface\Menus\Data\TattoosData.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
+    <Compile Include="Managers\GameWorld\Properties\PropertyPropManager.cs" />
     <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
     <Compile Include="Managers\GameWorld\StungunManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
@@ -248,6 +250,7 @@
     <None Include="data\police.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="data\property-data.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
