@@ -103,6 +103,7 @@ namespace Curiosity.Core.Client.Managers
             }
 
             ToggleDispatch(false); // turn off all dispatch
+            DistantCopCarSirens(false);
         }
 
         public void ShowWeatherForecast()
