@@ -1061,10 +1061,16 @@ namespace Curiosity.Core.Client.Managers
                     return new { success = false };
                 }
 
+                if (Game.PlayerPed.IsDead)
+                {
+                    Notify.Error($"Cannot spawn/change a vehicle currently, you're dead.");
+                    return new { success = false };
+                }
+
                 bool weaponsAreDisabled = PlayerOptionsManager.GetModule().WeaponsDisabled;
                 if (weaponsAreDisabled)
                 {
-                    Notify.Error($"Cannot spawn/change a vehicle currently, you may have a timer active.");
+                    Notify.Error($"Cannot spawn/change a vehicle in your current location.");
                     return new { success = false };
                 }
 
