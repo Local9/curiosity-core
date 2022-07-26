@@ -245,12 +245,18 @@
     <Content Include="data\overlays.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="data\durty\garages.json" />
-    <None Include="data\durty\mloInteriors.json" />
-    <None Include="data\police.json">
+    <Content Include="data\durty\garages.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="data\property-data.json" />
+    </Content>
+    <Content Include="data\durty\mloInteriors.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\police.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\property-data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

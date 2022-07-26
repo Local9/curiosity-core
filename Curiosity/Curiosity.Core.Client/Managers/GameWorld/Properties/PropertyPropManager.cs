@@ -178,6 +178,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
         [TickHandler]
         private async Task OnPropertyTaskManager()
         {
+            // Screen.ShowSubtitle($"Radio: {GetPlayerRadioStationIndex()}");
             int interior = GetInteriorFromEntity(Game.PlayerPed.Handle);
             if (_currentInterior != interior)
             {
@@ -234,6 +235,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             _radioChannel = (int)station;
 
             string radioStationName = GetRadioStationName(_radioChannel);
+
+            SetRadioToStationIndex(_radioChannel);
 
             foreach(string em in _emitters)
                 SetEmitterRadioStation(em, radioStationName);
