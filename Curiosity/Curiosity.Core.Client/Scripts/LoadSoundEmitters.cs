@@ -48,7 +48,7 @@ namespace Curiosity.Core.Client.Scripts
 
             foreach(SoundEmitter soundEmitter in GetEmitters)
             {
-                if (pos.Distance(soundEmitter.Position.AsVector()) < 20f && !lst.Contains(soundEmitter))
+                if (pos.Distance(soundEmitter.Position.AsVector()) < 10f && !lst.Contains(soundEmitter))
                     lst.Add(soundEmitter);
             }
             return lst;
