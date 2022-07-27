@@ -97,6 +97,8 @@
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\Apartment.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\Building.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyPropManager.cs" />
     <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
@@ -270,6 +272,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Managers\GameWorld\Properties\Data\" />
     <Folder Include="Managers\Minigames\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
