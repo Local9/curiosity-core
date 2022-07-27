@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,122 +32,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
     {
         int _currentInterior = 0;
 
-        static List<string> _emitters = new()
-        {
-            "se_mp_apt_1_1",
-            "se_mp_apt_10_1",
-            "se_mp_apt_11_1",
-            "se_mp_apt_12_1",
-            "se_mp_apt_13_1",
-            "se_mp_apt_14_1",
-            "se_mp_apt_15_1",
-            "se_mp_apt_16_1",
-            "se_mp_apt_17_1",
-            "se_mp_apt_2_1",
-            "se_mp_apt_3_1",
-            "se_mp_apt_4_1",
-            "se_mp_apt_5_1",
-            "se_mp_apt_6_1",
-            "se_mp_apt_7_1",
-            "se_mp_apt_8_1",
-            "se_mp_apt_9_1",
-            "se_mp_apt_1_2",
-            "se_mp_apt_10_2",
-            "se_mp_apt_11_2",
-            "se_mp_apt_12_2",
-            "se_mp_apt_13_2",
-            "se_mp_apt_14_2",
-            "se_mp_apt_15_2",
-            "se_mp_apt_16_2",
-            "se_mp_apt_17_2",
-            "se_mp_apt_2_2",
-            "se_mp_apt_3_2",
-            "se_mp_apt_4_2",
-            "se_mp_apt_5_2",
-            "se_mp_apt_6_2",
-            "se_mp_apt_7_2",
-            "se_mp_apt_8_2",
-            "se_mp_apt_9_2",
-            "se_mp_apt_1_3",
-            "se_mp_apt_10_3",
-            "se_mp_apt_11_3",
-            "se_mp_apt_12_3",
-            "se_mp_apt_13_3",
-            "se_mp_apt_14_3",
-            "se_mp_apt_15_3",
-            "se_mp_apt_16_3",
-            "se_mp_apt_17_3",
-            "se_mp_apt_3_3",
-            "se_mp_apt_4_3",
-            "se_mp_apt_5_3",
-            "se_mp_apt_6_3",
-            "se_mp_apt_7_3",
-            "se_mp_apt_8_3",
-            "se_mp_apt_9_3",
-            "se_mp_apt_2_3",
-            "se_mp_apt_new_1_2",
-            "se_mp_apt_new_2_2",
-            "se_mp_apt_new_3_2",
-            "se_mp_apt_new_4_2",
-            "se_mp_apt_new_5_2",
-            "se_mp_apt_new_1_1",
-            "se_mp_apt_new_2_1",
-            "se_mp_apt_new_3_1",
-            "se_mp_apt_new_4_1",
-            "se_mp_apt_new_5_1",
-            "se_mp_apt_new_4_3",
-            "se_mp_apt_new_1_3",
-            "se_mp_apt_new_2_3",
-            "se_mp_apt_new_3_3",
-            "se_mp_apt_new_5_3",
-            "se_dlc_apt_yacht_bar",
-            "se_dlc_apt_yacht_bedroom",
-            "se_dlc_apt_yacht_exterior_01",
-            "se_dlc_apt_yacht_exterior_02",
-            "se_dlc_apt_yacht_exterior_03",
-            "se_dlc_apt_yacht_exterior_04",
-            "se_dlc_apt_yacht_bedroom_02",
-            "se_dlc_apt_yacht_bedroom_03",
-            "se_dlc_apt_custom_bedroom",
-            "se_dlc_apt_custom_heist_room",
-            "se_dlc_apt_custom_living_room",
-            "se_dlc_apt_stilts_a_living_room",
-            "se_dlc_apt_stilts_a_bedroom",
-            "se_dlc_apt_stilts_a_heist_room",
-            "se_dlc_apt_stilts_b_living_room",
-            "se_dlc_apt_stilts_b_heist_room",
-            "se_dlc_apt_stilts_b_bedroom",
-            "se_mp_ap_rad_v_apart_midspaz_lounge",
-            "se_mp_ap_rad_v_studio_lo_living",
-            "se_mp_garage_m_radio",
-            "SE_MP_GARAGE_S_RADIO",
-            "SE_MP_GARAGE_L_RADIO",
-            "SE_Script_Placed_Prop_Emitter_Boombox",
-            "dlc_h3_arcade_main_area_music_emitter",
-            "dlc_h3_arcade_planning_room_radio_emitter",
-            "se_h4_dlc_int_02_h4_main_front_01",
-            "se_h4_dlc_int_02_h4_main_front_02",
-            "se_h4_dlc_int_02_h4_main_bar",
-            "se_h4_dlc_int_02_h4_lobby",
-            "se_h4_dlc_int_02_h4_bogs",
-            "se_h4_dlc_int_02_h4_entrance_doorway",
-            "se_h4_dlc_int_02_h4_main_room_cutscenes",
-            "se_sf_dlc_garage_sec_room_f1_01",
-            "se_sf_dlc_garage_sec_room_f2_01",
-            "se_sf_dlc_garage_sec_room_gf_01",
-            "se_sf_dlc_garage_sec_room_stairs_01",
-            "se_sf_dlc_office_sec_apartment_01",
-            "se_sf_dlc_office_sec_hacker_01",
-            "se_sf_dlc_office_sec_backstairs_01",
-            "se_sf_dlc_office_sec_main_01",
-            "se_sf_dlc_office_sec_franklin_office",
-            "se_sf_dlc_office_sec_player_office",
-            "se_sf_dlc_studio_sec_studio_01",
-            "se_sf_dlc_studio_sec_writers_01",
-            "se_sf_dlc_studio_sec_studio_02",
-            "se_sf_dlc_studio_sec_lobby_01",
-            "se_dlc_sec_weed_warehouse_radio",
-        };
+        static List<SoundEmitter> _soundEmitters;
 
         static Prop _closestProp = null;        
         static Scaleform _scaleform;
@@ -173,6 +60,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             _radioModels = modelList3;
             _isRadioOn = false;
             _radioChannel = 0;
+            _soundEmitters = Game.PlayerPed.GetClosestEmitters();
+            Logger.Info($"Loaded {_soundEmitters.Count} emitters");
         }
 
         [TickHandler]
@@ -213,16 +102,16 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             _radioChannel = GetPlayerRadioStationIndex();
             UpdateRadio((RadioStation)_radioChannel);
 
-            foreach (string em in _emitters)
-                SetStaticEmitterEnabled(em, true);
+            foreach (SoundEmitter em in _soundEmitters)
+                SetStaticEmitterEnabled(em.Name, true);
         }
 
         private static void TurnOffRadio()
         {
-            foreach (string em in _emitters)
+            foreach (SoundEmitter em in _soundEmitters)
             {
-                SetEmitterRadioStation(em, "OFF");
-                SetStaticEmitterEnabled(em, false);
+                SetEmitterRadioStation(em.Name, "OFF");
+                SetStaticEmitterEnabled(em.Name, false);
             }
         }
 
@@ -238,8 +127,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
             SetRadioToStationIndex(_radioChannel);
 
-            foreach(string em in _emitters)
-                SetEmitterRadioStation(em, radioStationName);
+            foreach(SoundEmitter em in _soundEmitters)
+                SetEmitterRadioStation(em.Name, radioStationName);
         }
 
         public static void DrawRadioControlInstructionalButtons()

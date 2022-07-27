@@ -70,6 +70,7 @@
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Map.cs" />
     <Compile Include="Environment\Entities\Models\Config\PoliceConfigFile.cs" />
+    <Compile Include="Environment\Entities\Models\SoundEmitter.cs" />
     <Compile Include="Environment\Entities\Models\SpeedCamera.cs" />
     <Compile Include="Environment\Entities\WorldPlayer.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
@@ -128,6 +129,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scripts\JobPolice\PoliceConfig.cs" />
+    <Compile Include="Scripts\LoadSoundEmitters.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ParticleEffectsAssetNetworked.cs" />
     <Compile Include="Utils\Peds.cs" />
@@ -257,6 +259,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="data\property-data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\durty\soundEmitters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
