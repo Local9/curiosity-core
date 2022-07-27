@@ -2,5 +2,9 @@
 {
     internal class Building
     {
+        public string Name { get; set; }
+        public Quaternion Enterance { get; set; }
+        public Quaternion Exit { get; set; }
+        public Quaternion Lobby { get; set; }
     }
 }

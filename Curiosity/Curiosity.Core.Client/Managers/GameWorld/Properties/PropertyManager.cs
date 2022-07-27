@@ -14,7 +14,7 @@
 
         int currentLocation = 5;
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnPropertyManager()
         {
             if (Game.IsControlJustPressed(0, Control.FrontendDown))
