@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Server.Diagnostics;
+﻿using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
@@ -8,8 +7,6 @@ using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Core.Server.Commands.Impl
@@ -24,7 +21,7 @@ namespace Curiosity.Core.Server.Commands.Impl
         [CommandInfo(new[] { "particle" })]
         public class ParticleCommand : ICommand
         {
-            // srv particle 1 scr_xm_orbital scr_xm_orbital_blast
+            // lv particle 1 scr_xm_orbital scr_xm_orbital_blast
             public void On(CuriosityUser user, Player player, List<string> arguments)
             {
                 if (!int.TryParse(arguments[0], out int playerId))
