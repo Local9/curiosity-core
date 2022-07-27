@@ -1,9 +1,6 @@
-﻿using CitizenFX.Core.Native;
-using Curiosity.Core.Server.Diagnostics;
+﻿using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Environment;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers.World
 {
