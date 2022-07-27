@@ -98,8 +98,13 @@
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Enums\eBuildingType.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Enums\eFrontDoor.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Enums\eGarageType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Apartment.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Building.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\BuildingCamera.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\Garage.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyPropManager.cs" />
     <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
