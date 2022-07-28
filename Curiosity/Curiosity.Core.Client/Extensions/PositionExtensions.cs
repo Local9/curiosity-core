@@ -21,6 +21,11 @@ namespace Curiosity.Core.Client.Extensions
             return new Vector3(position.X, position.Y, position.Z);
         }
 
+        public static Vector3 AsVector(this Quaternion position)
+        {
+            return new Vector3(position.X, position.Y, position.Z);
+        }
+
         public static Vector3 Rotations(this RotatablePosition position)
         {
             return new Vector3(position.Pitch, position.Roll, position.Yaw);
