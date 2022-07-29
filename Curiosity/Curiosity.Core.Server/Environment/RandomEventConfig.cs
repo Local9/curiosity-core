@@ -58,16 +58,16 @@ namespace Curiosity.Core.Server.Environment
     public class EventPosition
     {
         [JsonProperty("X")]
-        public double X { get; set; }
+        public float X { get; set; }
 
         [JsonProperty("Y")]
-        public double Y { get; set; }
+        public float Y { get; set; }
 
         [JsonProperty("Z")]
-        public double Z { get; set; }
+        public float Z { get; set; }
 
         [JsonProperty("H")]
-        public double H { get; set; }
+        public float H { get; set; }
     }
 
     public class EventRequirement
