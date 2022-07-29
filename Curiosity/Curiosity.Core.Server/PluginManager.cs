@@ -245,12 +245,10 @@ namespace Curiosity.Core.Server
 
                 // API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
 
-                SetRoutingBucketPopulationEnabled(0, true);
-                SetRoutingBucketPopulationEnabled(1, true);
-                SetRoutingBucketPopulationEnabled(2, true);
-                SetRoutingBucketPopulationEnabled(3, true);
-                SetRoutingBucketPopulationEnabled(4, true);
-                SetRoutingBucketPopulationEnabled(5, true);
+                for(int i = 0; i <= 5; i++)
+                {
+                    SetRoutingBucketPopulationEnabled(i, true);
+                }
             }
             catch (Exception ex)
             {
