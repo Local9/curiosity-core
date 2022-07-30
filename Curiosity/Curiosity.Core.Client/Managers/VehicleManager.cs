@@ -968,6 +968,39 @@ namespace Curiosity.Core.Client.Managers
             if (this.AVOID_VEHICLES)
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidEmptyVehicles);
 
+            // vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AllowGoingWrongWay);
+
+            Game.PlayerPed.VehicleDrivingFlags = vehicleDrivingFlags;
+            return vehicleDrivingFlags;
+        }
+
+        private VehicleDrivingFlags SetupFlagsReverse()
+        {
+            VehicleDrivingFlags vehicleDrivingFlags = (VehicleDrivingFlags)0;
+            if (this.ALLOW_CROSSING_MEDIAN)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AllowMedianCrossing);
+            if (this.STOP_AT_DESTINATION)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.StopAtDestination);
+            if (this.STOP_AT_TRAFFIC_LIGHTS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.StopAtTrafficLights);
+            if (this.FOLLOW_TRAFFIC)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.FollowTraffic);
+            if (this.YIELD_TO_PEDESTRIANS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.YieldToPeds);
+            if (this.AVOID_PEDESTRIANS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidPeds);
+            if (this.AVOID_VEHICLES)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidVehicles);
+            if (this.AVOID_OBJECTS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidObjects);
+            if (this.USE_BLINKERS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.UseBlinkers);
+            if (this.AVOID_VEHICLES)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidEmptyVehicles);
+
+            vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AllowGoingWrongWay);
+            vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.Reverse);
+
             Game.PlayerPed.VehicleDrivingFlags = vehicleDrivingFlags;
             return vehicleDrivingFlags;
         }
@@ -1024,6 +1057,8 @@ namespace Curiosity.Core.Client.Managers
             return false;
         }
 
+        Vector3 currerntPosition;
+
         private async Task OnVehicleAutoDrive()
         {
             if (!Game.PlayerPed.IsInVehicle())
@@ -1040,11 +1075,29 @@ namespace Curiosity.Core.Client.Managers
 
             ++tickCount;
 
+            //if (this.tickCount % 250 == 0)
+            //{
+            //    if (Game.PlayerPed.CurrentVehicle.IsInRangeOf(currerntPosition, 5f))
+            //    {
+            //        Vector5 v5 = await VehicleGenerationPositions.GetNearestParkingSpot();
+            //        Game.PlayerPed.CurrentVehicle.Position = v5.Vector3;
+            //        Game.PlayerPed.CurrentVehicle.Heading = v5.Vector2.ToHeading();
+            //    }
+            //    else
+            //    {
+            //        currerntPosition = Game.PlayerPed.CurrentVehicle.Position;
+            //    }
+
+            //    tickCount = 0;
+            //}
+
             if (this.tickCount % 25 == 0)
             {
                 DriveToWaypoint();
                 tickCount = 0;
             }
+
+            // Screen.ShowSubtitle($"CT: {tickCount}, DTW: {this.tickCount % 25 == 0}, POS: {this.tickCount % 250 == 0}");
         }
 
         #endregion
