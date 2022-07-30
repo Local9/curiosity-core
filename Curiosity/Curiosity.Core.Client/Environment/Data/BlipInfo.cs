@@ -2,97 +2,81 @@
 {
     public static class BlipInfo
     {
-        public static int GetBlipSpriteForVehicle(int vehicle)
+        static Dictionary<string, int> _blips = new()
         {
-            uint model = (uint)GetEntityModel(vehicle);
-            Dictionary<uint, int> sprites = new Dictionary<uint, int>()
-            {
-                { (uint)GetHashKey("taxi"), 56 },
-                //
-                { (uint)GetHashKey("nightshark"), 225 },
-                //
-                { (uint)GetHashKey("rhino"), 421 },
-                //
-                { (uint)GetHashKey("lazer"), 424 },
-                { (uint)GetHashKey("besra"), 424 },
-                { (uint)GetHashKey("hydra"), 424 },
-                //
-                { (uint)GetHashKey("insurgent"), 426 },
-                { (uint)GetHashKey("insurgent2"), 426 },
-                { (uint)GetHashKey("insurgent3"), 426 },
-                //
-                { (uint)GetHashKey("limo2"), 460 },
-                //
-                { (uint)GetHashKey("blazer5"), 512 },
-                //
-                { (uint)GetHashKey("phantom2"), 528 },
-                { (uint)GetHashKey("boxville5"), 529 },
-                { (uint)GetHashKey("ruiner2"), 530 },
-                { (uint)GetHashKey("dune4"), 531 },
-                { (uint)GetHashKey("dune5"), 531 },
-                { (uint)GetHashKey("wastelander"), 532 },
-                { (uint)GetHashKey("voltic2"), 533 },
-                { (uint)GetHashKey("technical2"), 534 },
-                { (uint)GetHashKey("technical3"), 534 },
-                { (uint)GetHashKey("technical"), 534 },
-                //
-                { (uint)GetHashKey("apc"), 558 },
-                { (uint)GetHashKey("oppressor"), 559 },
-                { (uint)GetHashKey("oppressor2"), 559 },
-                { (uint)GetHashKey("halftrack"), 560 },
-                { (uint)GetHashKey("dune3"), 561 },
-                { (uint)GetHashKey("tampa3"), 562 },
-                { (uint)GetHashKey("trailersmall2"), 563 },
-                //
-                { (uint)GetHashKey("alphaz1"), 572 },
-                { (uint)GetHashKey("bombushka"), 573 },
-                { (uint)GetHashKey("havok"), 574 },
-                { (uint)GetHashKey("howard"), 575 },
-                { (uint)GetHashKey("hunter"), 576 },
-                { (uint)GetHashKey("microlight"), 577 },
-                { (uint)GetHashKey("mogul"), 578 },
-                { (uint)GetHashKey("molotok"), 579 },
-                { (uint)GetHashKey("nokota"), 580 },
-                { (uint)GetHashKey("pyro"), 581 },
-                { (uint)GetHashKey("rogue"), 582 },
-                { (uint)GetHashKey("starling"), 583 },
-                { (uint)GetHashKey("seabreeze"), 584 },
-                { (uint)GetHashKey("tula"), 585 },
-                //
-                { (uint)GetHashKey("avenger"), 589 },
-                //
-                { (uint)GetHashKey("stromberg"), 595 },
-                { (uint)GetHashKey("deluxo"), 596 },
-                { (uint)GetHashKey("thruster"), 597 },
-                { (uint)GetHashKey("khanjali"), 598 },
-                { (uint)GetHashKey("riot2"), 599 },
-                { (uint)GetHashKey("volatol"), 600 },
-                { (uint)GetHashKey("barrage"), 601 },
-                { (uint)GetHashKey("akula"), 602 },
-                { (uint)GetHashKey("chernobog"), 603 },
-            };
+            { "akula", 602 },
+            { "avenger", 589 },
+            { "besra", 424 },
+            { "blazer5", 512 },
+            { "chernobog", 603 },
+            { "taxi", 56 },
+            { "nightshark", 225 },
+            { "rhino", 421 },
+            { "lazer", 424 },
+            { "hydra", 424 },
+            { "insurgent", 426 },
+            { "insurgent2", 426 },
+            { "insurgent3", 426 },
+            { "limo2", 460 },
+            { "phantom2", 528 },
+            { "boxville5", 529 },
+            { "ruiner2", 530 },
+            { "dune4", 531 },
+            { "dune5", 531 },
+            { "wastelander", 532 },
+            { "voltic2", 533 },
+            { "technical2", 534 },
+            { "technical3", 534 },
+            { "technical", 534 },
+            { "apc", 558 },
+            { "oppressor", 559 },
+            { "oppressor2", 559 },
+            { "halftrack", 560 },
+            { "dune3", 561 },
+            { "tampa3", 562 },
+            { "trailersmall2", 563 },
+            { "alphaz1", 572 },
+            { "bombushka", 573 },
+            { "havok", 574 },
+            { "howard", 575 },
+            { "hunter", 576 },
+            { "microlight", 577 },
+            { "mogul", 578 },
+            { "molotok", 579 },
+            { "nokota", 580 },
+            { "pyro", 581 },
+            { "rogue", 582 },
+            { "starling", 583 },
+            { "seabreeze", 584 },
+            { "tula", 585 },
+            { "stromberg", 595 },
+            { "deluxo", 596 },
+            { "thruster", 597 },
+            { "khanjali", 598 },
+            { "riot2", 599 },
+            { "volatol", 600 },
+            { "barrage", 601 },
+        };
 
-            if (sprites.ContainsKey(model))
-            {
-                return sprites[model];
-            }
-            else if (IsThisModelABike(model))
-            {
+        public static int GetBlipSprite(this Model model)
+        {
+            string modelName = $"{model}";
+            if (_blips.ContainsKey(modelName))
+                return _blips[modelName];
+
+            if (model.IsBike)
                 return 348;
-            }
-            else if (IsThisModelABoat(model))
-            {
+
+            if (model.IsBoat)
                 return 427;
-            }
-            else if (IsThisModelAHeli(model))
-            {
+
+            if (model.IsHelicopter)
                 return 422;
-            }
-            else if (IsThisModelAPlane(model))
-            {
+
+            if (model.IsPlane)
                 return 423;
-            }
-            return 225;
+
+            return 255;
         }
     }
 }

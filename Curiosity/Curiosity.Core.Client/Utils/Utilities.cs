@@ -52,7 +52,7 @@ namespace Curiosity.Core.Client.Utils
                     }
                 }
 
-                int blipSprite = BlipInfo.GetBlipSpriteForVehicle(vehicle);
+                int blipSprite = pVehicle.Model.GetBlipSprite();
                 if (GetBlipSprite(blip) != blipSprite)
                 {
                     SetBlipSprite(blip, blipSprite);

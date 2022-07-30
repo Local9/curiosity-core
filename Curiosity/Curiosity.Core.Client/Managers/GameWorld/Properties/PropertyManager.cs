@@ -61,6 +61,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             foreach(Building building in _buildings)
             {
                     building.CreateBuilding();
+
+                
             }
         }
 
