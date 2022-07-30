@@ -165,8 +165,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     break;
             }
 
-            // BuildingBlip.Color = BLIP_COLOR_BLACK;
-
             blipManager.AddBlip(buildingBlip);
 
             if (IsOwnedByPlayer && !BuildingType.Equals(eBuildingType.Garage))
