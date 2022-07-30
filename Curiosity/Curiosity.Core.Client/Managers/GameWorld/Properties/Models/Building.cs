@@ -38,7 +38,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
         public void CreateBuilding()
         {
-            // SetupBlip(); Need to change the creation to happen after we know if we own it or not.
+            SetupBlip();
             // CreateForSaleSign();
         }
 
