@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         UIMenuListItem uiLstCompanions;
 
         UIMenuItem uiItemRemoveCompanion = new UIMenuItem("Remove Companions", "This will remove all companions.");
-        UIMenuItem uiStartAutoDrive = new UIMenuItem("Start Auto Drive", "Vehicle will drive to the waypoint you have set.");
+        UIMenuItem uiStartAutoDrive = new UIMenuItem("Start Auto Drive", "Vehicle will drive to the waypoint you set on the map.");
 
         List<Companion> companions;
         List<SupporterModel> playerModels;

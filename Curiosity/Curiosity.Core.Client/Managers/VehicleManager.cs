@@ -965,6 +965,8 @@ namespace Curiosity.Core.Client.Managers
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidObjects);
             if (this.USE_BLINKERS)
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.UseBlinkers);
+            if (this.AVOID_VEHICLES)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidEmptyVehicles);
 
             Game.PlayerPed.VehicleDrivingFlags = vehicleDrivingFlags;
             return vehicleDrivingFlags;
