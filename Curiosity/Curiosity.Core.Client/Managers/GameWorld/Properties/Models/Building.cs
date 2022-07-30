@@ -88,7 +88,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
         public async Task PlayEnterApartmentCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
         {
-            _hideHud = true;
+            Cache.Player.DisableHud();
             ToggleDoors(true);
             Game.PlayerPed.Task.GoTo(Lobby.AsVector(), true, 7000);
             Camera scriptCamera = World.CreateCamera(EnteranceCamera1.Position, EnteranceCamera1.Rotation, EnteranceCamera1.FieldOfView);
@@ -99,12 +99,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             interpCamera.Shake(cameraShake, cameraShakeAmplitude);
             await BaseScript.Delay(duration);
             ToggleDoors(false);
-            _hideHud = false;
+            Cache.Player.EnableHud();
         }
 
         public async Task PlayExitApartmentCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
         {
-            _hideHud = true;
+            Cache.Player.DisableHud();
             Game.PlayerPed.Position = Lobby.AsVector();
             Game.PlayerPed.Heading = Exit.W;
             ToggleDoors(true);
@@ -119,7 +119,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             World.DestroyAllCameras();
             World.RenderingCamera = null;
             ToggleDoors(false);
-            _hideHud = false;
+            Cache.Player.EnableHud();
         }
 
 
