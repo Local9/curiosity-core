@@ -39,7 +39,7 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "scale")]
         public Position Scale = new Position(1f, 1f, 1f);
-        
+
         [DataMember(Name = "color")]
         public CuriosityColor Color;
 

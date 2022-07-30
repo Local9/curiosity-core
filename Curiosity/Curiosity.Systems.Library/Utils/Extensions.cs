@@ -77,14 +77,14 @@ namespace Curiosity.Systems.Library.Utils
                 values.RemoveLast();
             }
         }
-        
+
         /// <summary>
-         /// Will get the string value for a given enums value, this will
-         /// only work if you assign the StringValue attribute to
-         /// the items in your enum.
-         /// </summary>
-         /// <param name="value"></param>
-         /// <returns></returns>
+        /// Will get the string value for a given enums value, this will
+        /// only work if you assign the StringValue attribute to
+        /// the items in your enum.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string GetStringValue(this Enum value)
         {
             // Get the type

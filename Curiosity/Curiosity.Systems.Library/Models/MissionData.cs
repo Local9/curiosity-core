@@ -40,7 +40,7 @@ namespace Curiosity.Systems.Library.Entity
             {
                 missionInformation += "\n---- NPCs ----";
 
-                foreach(KeyValuePair<int, MissionDataPed> ped in NetworkPeds)
+                foreach (KeyValuePair<int, MissionDataPed> ped in NetworkPeds)
                 {
                     missionInformation += $"\n{ped.Value}";
                 }

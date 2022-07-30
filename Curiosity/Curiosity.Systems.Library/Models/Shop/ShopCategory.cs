@@ -8,7 +8,7 @@ namespace Curiosity.Systems.Library.Models.Shop
     {
         [DataMember(Name = "shopCategoryId")]
         public int ShopCategoryID;
-        
+
         [DataMember(Name = "shopCategoryDescription")]
         public string ShopCategoryDescription;
 
