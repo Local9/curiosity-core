@@ -15,12 +15,12 @@
 
         public void Lock()
         {
-            DoorControl((uint)_hash, Position.X, Position.Y, Position.Z, true, 0f, 50f, 0f);
+
         }
 
         public void Unlock()
         {
-            DoorControl((uint)_hash, Position.X, Position.Y, Position.Z, false, 0f, 50f, 0f);
+
         }
     }
 }
