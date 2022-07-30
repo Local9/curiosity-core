@@ -11,16 +11,19 @@
             Model = model;
             Position = position;
             _hash = GetHashKey(model);
+
+            AddDoorToSystem((uint)_hash, (uint)_hash, position.X, position.Y, position.Z, false, true, true);
+            Lock();
         }
 
         public void Lock()
         {
-
+            DoorSystemSetDoorState((uint)_hash, 1, true, true);
         }
 
         public void Unlock()
         {
-
+            DoorSystemSetDoorState((uint)_hash, 0, true, true);
         }
     }
 }
