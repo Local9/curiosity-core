@@ -104,6 +104,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     PluginManager.MenuPool.CloseAllMenus();
                     PluginManager.Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
                     MenuBuyApartment.RefreshIndex();
+                    Cache.Player.EnableHud();
                 }
             };
         }
