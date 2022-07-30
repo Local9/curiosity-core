@@ -46,14 +46,13 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet.Door2 = new Door("hei_prop_dt1_20_mph_door_r", new Vector3(-260.6575f, -969.2133f, 31.60706f)); // Front Door Right
             _ThreeAltaStreet.Door3 = new Door("hei_prop_dt1_20_mp_gar2", new Vector3(-282.5465f, -995.163f, 24.68051f)); // Garage Door
             _ThreeAltaStreet.SaleSign = new SaleSign(PROP_SALE_SIGN, new Quaternion(-252.6184f, -970.720764f, 30.22f, -20.0f));
-            _ThreeAltaStreet.Garage = new();
-            _ThreeAltaStreet.Garage.CarEnterance = new Quaternion(-279.7589f, -995.9545f, 24.5305f, 74.48383f);
-            _ThreeAltaStreet.Garage.CarExit = new Quaternion(-271.5633f, -999.2233f, 26.0224f, 249.66f);
-            _ThreeAltaStreet.Garage.FootEnterance = new Quaternion(-279.7421f, -992.0921f, 23.30595f, 74.48383f);
-            _ThreeAltaStreet.Garage.FootExit = new Quaternion(-286.7632f, -993.5939f, 23.13706f, 239.0284f);
-            _ThreeAltaStreet.Garage.GarageType = eGarageType.Ten;
-            _ThreeAltaStreet.Garage.Door = eFrontDoor.StandardDoor;
-            _ThreeAltaStreet.Garage.Waypoint = new Quaternion(-292.5203f, -991.2855f, 23.47978f, 250.2265f);
+            _ThreeAltaStreet.GarageCarEnterance = new Quaternion(-279.7589f, -995.9545f, 24.5305f, 74.48383f);
+            _ThreeAltaStreet.GarageCarExit = new Quaternion(-271.5633f, -999.2233f, 26.0224f, 249.66f);
+            _ThreeAltaStreet.GarageFootEnterance = new Quaternion(-279.7421f, -992.0921f, 23.30595f, 74.48383f);
+            _ThreeAltaStreet.GarageFootExit = new Quaternion(-286.7632f, -993.5939f, 23.13706f, 239.0284f);
+            _ThreeAltaStreet.GarageType = eGarageType.Ten;
+            _ThreeAltaStreet.GarageDoor = eFrontDoor.StandardDoor;
+            _ThreeAltaStreet.GarageWaypoint = new Quaternion(-292.5203f, -991.2855f, 23.47978f, 250.2265f);
             _ThreeAltaStreet.Apartments.Add(_ThreeAltaStreet10);
 
             _buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
@@ -86,11 +85,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                             break;
                     }
 
-                    if (bd.Garage is not null)
-                    {
-                        if (bd.Garage.Door == eFrontDoor.StandardDoor)
-                            bd.Door3.Lock();
-                    }
+                    if (bd.GarageDoor == eFrontDoor.StandardDoor)
+                        bd.Door3.Lock();
                 }
             }
             catch (Exception ex)

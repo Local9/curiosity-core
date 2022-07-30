@@ -32,7 +32,16 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public Door Door3 { get; set; }
         public Blip BuildingBlip { get; set; }
         public Blip SaleSignBlip { get; set; }
-        public Garage Garage { get; set; }
+        // Garage
+        public eGarageType GarageType { get; set; }
+        public Quaternion GarageCarEnterance { get; set; }
+        public Quaternion GarageCarExit { get; set; }
+        public Quaternion GarageFootEnterance { get; set; }
+        public Quaternion GarageFootExit { get; set; }
+        public eFrontDoor GarageDoor { get; set; }
+        public Quaternion GarageWaypoint { get; set; }
+
+        public bool IsOwnedByPlayer = false;
 
         public bool BuildingSetup { get; set; }
 
@@ -47,11 +56,11 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             // Blips need to be added to the master handler
             BlipManager blipManager = BlipManager.ManagerInstance;
 
-            BlipData blipData = new();
+            BlipData buildingBlip = new();
 
-            blipData.Positions.Add(Enterance.ToPosition());
-            blipData.IsShortRange = true;
-            blipData.Category = 10; // 10 - Property / 11 = Owned Property
+            buildingBlip.Positions.Add(Enterance.ToPosition());
+            buildingBlip.IsShortRange = true;
+            buildingBlip.Category = IsOwnedByPlayer ? 11 : 10; // 10 - Property / 11 = Owned Property
 
             // Need to know what ones the player owns?
             // Local KVP Store?
@@ -59,14 +68,54 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             switch (BuildingType)
             {
                 case eBuildingType.Apartment:
-                    blipData.Sprite = (int)BlipSprite.SafehouseForSale;
-                    blipData.Name = Game.GetGXTEntry("MP_PROP_SALE1");
+                    buildingBlip.Sprite = IsOwnedByPlayer ? (int)BlipSprite.Safehouse : (int)BlipSprite.SafehouseForSale;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("CELL_2630") : Game.GetGXTEntry("MP_PROP_SALE1");
+                    break;
+                case eBuildingType.Office:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 475 : 476;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_475") : Game.GetGXTEntry("MP_PROP_SALE2");
+                    break;
+                case eBuildingType.Clubhouse:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? (int)BlipSprite.Business : (int)BlipSprite.BusinessForSale;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("PM_SPAWN_CLUBH") : Game.GetGXTEntry("BLIP_373");
+                    break;
+                case eBuildingType.Nightclub:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 614 : 375;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("CELL_CLUB") : Game.GetGXTEntry("BLIP_375");
+                    break;
+                case eBuildingType.Bunker:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 557 : 375;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_557") : Game.GetGXTEntry("BLIP_375");
+                    break;
+                case eBuildingType.Garage:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 357 : 369;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_357") : Game.GetGXTEntry("MP_PROP_SALE0");
+                    break;
+                case eBuildingType.Hanger:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 359 : 372;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_359") : Game.GetGXTEntry("BLIP_372");
+                    break;
+                case eBuildingType.Warehouse:
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 473 : 474;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_473") : Game.GetGXTEntry("BLIP_474");
                     break;
             }
 
             // BuildingBlip.Color = BLIP_COLOR_BLACK;
 
-            blipManager.AddBlip(blipData);
+            blipManager.AddBlip(buildingBlip);
+
+            if (IsOwnedByPlayer && !BuildingType.Equals(eBuildingType.Garage))
+            {
+                BlipData garageBlip = new();
+                garageBlip.Positions.Add(GarageCarEnterance.ToPosition());
+                garageBlip.IsShortRange = true;
+                garageBlip.Sprite = 357;
+                garageBlip.Name = Game.GetGXTEntry("BLIP_357");
+                buildingBlip.Category = 11;
+
+                blipManager.AddBlip(garageBlip);
+            }
         }
 
         public void ToggleDoors(bool unlock = false)

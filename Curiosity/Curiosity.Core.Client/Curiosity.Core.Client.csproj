@@ -117,7 +117,6 @@
     <Compile Include="Managers\GameWorld\Properties\Models\Building.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\BuildingCamera.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Door.cs" />
-    <Compile Include="Managers\GameWorld\Properties\Models\Garage.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\SaleSign.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyHelper.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
