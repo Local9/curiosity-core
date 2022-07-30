@@ -105,6 +105,9 @@
     <Compile Include="Managers\GameWorld\Properties\Enums\eFrontDoor.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eGarageType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Apartment.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\ApartmentType\HighEndApartment.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\ApartmentType\LowEndApartment.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\ApartmentType\MediumEndApartment.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Building.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\BuildingCamera.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Door.cs" />
