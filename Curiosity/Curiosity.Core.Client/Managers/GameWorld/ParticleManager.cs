@@ -27,7 +27,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld
 
                 if (particle.Name == "scr_xm_orbital_blast")
                 {
-                    foreach(Player player in PluginManager.Instance.PlayerList)
+                    foreach (Player player in PluginManager.Instance.PlayerList)
                     {
                         if (player.Character.Exists())
                         {

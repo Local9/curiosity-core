@@ -46,7 +46,7 @@ namespace Curiosity.Core.Client.Scripts
             Vector3 pos = ped.Position;
             List<SoundEmitter> lst = new();
 
-            foreach(SoundEmitter soundEmitter in GetEmitters)
+            foreach (SoundEmitter soundEmitter in GetEmitters)
             {
                 if (pos.Distance(soundEmitter.Position.AsVector()) < 10f && !lst.Contains(soundEmitter))
                     lst.Add(soundEmitter);

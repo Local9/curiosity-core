@@ -2,7 +2,6 @@
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Police;
-using NativeUI;
 using Newtonsoft.Json;
 
 namespace Curiosity.Core.Client.Managers.UI

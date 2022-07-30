@@ -47,7 +47,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             // Need to know what ones the player owns?
             // Local KVP Store?
 
-            switch(BuildingType)
+            switch (BuildingType)
             {
                 case eBuildingType.Apartment:
                     BuildingBlip.Sprite = BlipSprite.SafehouseForSale;

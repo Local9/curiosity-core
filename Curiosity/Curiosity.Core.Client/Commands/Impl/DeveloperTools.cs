@@ -200,7 +200,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 Vector3 pos = Game.PlayerPed.Position;
 
                 if (!particleEffectsAsset.StartNonLoopedAtCoord(arguments[1], pos))
-                    particleEffectsAsset.CreateEffectAtCoord(arguments[1], pos);                
+                    particleEffectsAsset.CreateEffectAtCoord(arguments[1], pos);
 
                 particleEffectsAsset.MarkAsNoLongerNeeded();
             }

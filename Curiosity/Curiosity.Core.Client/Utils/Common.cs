@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Utils
         public static void ActivateInteriorEntitySets(Vector3 position, params string[] entities)
         {
             int interior = GetInteriorAtCoords(position.X, position.Y, position.Z);
-            foreach(string ent in entities)
+            foreach (string ent in entities)
             {
                 ActivateInteriorEntitySet(interior, ent);
             }

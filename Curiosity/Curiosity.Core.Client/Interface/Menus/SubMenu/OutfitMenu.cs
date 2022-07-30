@@ -19,7 +19,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             List<dynamic> dynList = new();
 
-            foreach(Outfit outfit in configuration.Outfits())
+            foreach (Outfit outfit in configuration.Outfits())
             {
                 if (Cache.Character.IsMale == outfit.IsMale)
                     dynList.Add(outfit);
@@ -50,7 +50,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 await Cache.PlayerPed.FadeOut();
 
                 Outfit outfit = (Outfit)listItem.Items[newIndex];
-                foreach(OutfitComponent component in outfit.Components)
+                foreach (OutfitComponent component in outfit.Components)
                 {
                     SetPedComponentVariation(PlayerPedId(), component.Component, component.Drawable, component.Texture, 0);
                 }

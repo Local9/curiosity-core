@@ -58,9 +58,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
             _buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
 
-            foreach(Building building in _buildings)
+            foreach (Building building in _buildings)
             {
-                    building.CreateBuilding();
+                building.CreateBuilding();
             }
         }
 
@@ -72,11 +72,11 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             {
                 Vehicle[] closestVehicles = Game.PlayerPed.GetNearbyVehicles(20f);
 
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     Scaleform scaleform = VehicleExtensions.CarStatScaleform;
 
-                    switch(i)
+                    switch (i)
                     {
                         case 0:
                             scaleform = VehicleExtensions.CarStatScaleform;
@@ -114,7 +114,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

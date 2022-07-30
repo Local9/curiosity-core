@@ -2,11 +2,6 @@
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Scripts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 {
@@ -34,9 +29,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
         static List<SoundEmitter> _soundEmitters;
 
-        static Prop _closestProp = null;        
+        static Prop _closestProp = null;
         static Scaleform _scaleform;
-        
+
         static List<Model> _radioModels;
         static bool _isRadioOn;
         static int _radioChannel;
@@ -91,7 +86,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             Vector3 position = Game.PlayerPed.Position;
             Prop[] nearbyProps = World.GetAllProps();
             _closestProp = World.GetClosest<Prop>(position, nearbyProps);
-            
+
             // await TellyTick();
             await RadioTick();
             // await BongTick(); // Needs performance edits to work in C#
@@ -127,7 +122,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
             SetRadioToStationIndex(_radioChannel);
 
-            foreach(SoundEmitter em in _soundEmitters)
+            foreach (SoundEmitter em in _soundEmitters)
                 SetEmitterRadioStation(em.Name, radioStationName);
         }
 
