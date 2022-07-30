@@ -87,6 +87,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
             MenuBuyApartment.OnItemSelect += (sender, selectedItem, index) =>
             {
+                if (selectedItem != exitMenu)
+                {
+                    NotificationManager.GetModule().Error($"Sorry this feature is currently not enabled");
+                    return;
+                }
+
                 if (selectedItem == exitMenu)
                 {
                     MenuBuyApartment.Visible = false;
