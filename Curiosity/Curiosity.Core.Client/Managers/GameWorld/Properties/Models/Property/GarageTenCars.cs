@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models.Property
 {
-    internal class GarageTenCars : Garage
+    internal class GarageTenCars
     {
         public Vector3 Interior = new Vector3(222.592f, -968.1f, -99f);
         public Vector3 Elevator = new Vector3(238.7097f, -1004.8488f, -99.9999f);
