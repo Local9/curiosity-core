@@ -1166,7 +1166,7 @@ namespace Curiosity.Core.Client.Managers
                 if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                 {
                     Vector5 position = await VehicleGenerationPositions.GetNearestParkingSpot();
-                    if (!position.Vector3.IsZero)
+                    if (!position.Vector3.IsZero && Game.PlayerPed.IsInRangeOf(position.Vector3, 50f))
                     {
                         vehicleItem.X = position.Vector3.X;
                         vehicleItem.Y = position.Vector3.Y;
