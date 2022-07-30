@@ -72,7 +72,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
 
                 foreach (var bd in _buildings)
                 {
-                    bd.SaleSign.CreateForSaleSign();
+                    // bd.CreateForSaleSign(); // Prop keeps being deleted.. why?! dunno
 
                     switch (bd.FrontDoor)
                     {

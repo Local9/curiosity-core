@@ -1,5 +1,6 @@
 ﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
+using Curiosity.Systems.Library.Enums;
 
 namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 {
@@ -8,6 +9,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         private const BlipColor BLIP_COLOR_BLACK = (BlipColor)40;
         private const BlipColor BLIP_COLOR_WHITE = (BlipColor)4;
         private bool _hideHud;
+
+        private Prop _propForSaleSign;
 
         public string Name { get; set; }
         public Quaternion Enterance { get; set; }
@@ -35,7 +38,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public void CreateBuilding()
         {
             SetupBlip();
-            SaleSign.CreateForSaleSign();
+            // CreateForSaleSign();
         }
 
         void SetupBlip()
@@ -84,6 +87,23 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     Door1.Lock();
                     break;
             }
+        }
+
+        public async void CreateForSaleSign()
+        {
+            if (_propForSaleSign is not null) return;
+            Model propModel = SaleSign.Model;
+            _propForSaleSign = await World.CreateProp(propModel, SaleSign.Position.AsVector(), true, false);
+            _propForSaleSign.IsPersistent = true;
+            _propForSaleSign.IsPositionFrozen = true;
+            _propForSaleSign.Heading = SaleSign.Position.W;
+            propModel.MarkAsNoLongerNeeded();
+        }
+
+        public void DeleteForSaleSign()
+        {
+            if (_propForSaleSign?.Exists() ?? false)
+                _propForSaleSign.Dispose();
         }
 
         public async Task PlayEnterApartmentCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
