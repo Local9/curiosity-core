@@ -102,7 +102,7 @@
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
     <Compile Include="Managers\GameWorld\Properties\Data\BuildingData.cs" />
-    <Compile Include="Managers\GameWorld\Properties\Data\VechileGenerationPositions.cs" />
+    <Compile Include="Utils\VehicleGenerationPositions.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eApartmentType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eBuildingType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eFrontDoor.cs" />

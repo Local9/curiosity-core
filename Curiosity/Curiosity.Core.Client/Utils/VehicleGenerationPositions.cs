@@ -1,9 +1,189 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
+using System.Linq;
 
-namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
+namespace Curiosity.Core.Client.Utils
 {
-    internal static class VechileGenerationPositions
+    internal static class VehicleGenerationPositions
     {
+        public static Vector5 GetNearestParkingSpot()
+        {
+            Vector3 pos = Game.PlayerPed.Position;
+            List<Vector5> parkingPosition = GetParkingSpotByZone();
+            List<Vector5> closestPositions = parkingPosition.OrderBy(x => Math.Abs(x.Vector3.DistanceToSquared(pos))).ToList();
+            if (closestPositions.Count > 0)
+                return closestPositions.FirstOrDefault();
+            return Vector5.Zero;
+        }
+
+        public static List<Vector5> GetParkingSpotByZone()
+        {
+            Vector3 pos = Game.PlayerPed.Position;
+            string zone = GetNameOfZone(pos.X, pos.Y, pos.Z);
+            switch (zone)
+            {
+                case "DOWNT":
+                case "VINE":
+                    return VehicleGenerationPositions.DOWNT;
+                case "GALLI":
+                case "CHIL":
+                    return VehicleGenerationPositions.CHIL;
+                case "DESRT":
+                case "GREATC":
+                    return VehicleGenerationPositions.DESRT;
+                case "CMSW":
+                case "PALCOV":
+                    return VehicleGenerationPositions.CMSW;
+                case "PBOX":
+                    return VehicleGenerationPositions.PBOX;
+                case "SKID":
+                    return VehicleGenerationPositions.SKID;
+                case "TEXTI":
+                    return VehicleGenerationPositions.TEXTI;
+                case "LEGSQU":
+                    return VehicleGenerationPositions.LEGSQU;
+                case "CANNY":
+                    return VehicleGenerationPositions.CANNY;
+                case "DTVINE":
+                    return VehicleGenerationPositions.DTVINE;
+                case "EAST_V":
+                    return VehicleGenerationPositions.EAST_V;
+                case "MIRR":
+                    return VehicleGenerationPositions.MIRR;
+                case "WVINE":
+                    return VehicleGenerationPositions.WVINE;
+                case "ALTA":
+                    return VehicleGenerationPositions.ALTA;
+                case "HAWICK":
+                    return VehicleGenerationPositions.HAWICK;
+                case "RICHM":
+                    return VehicleGenerationPositions.RICHM;
+                case "golf":
+                    return VehicleGenerationPositions.golf;
+                case "ROCKF":
+                    return VehicleGenerationPositions.ROCKF;
+                case "CCREAK":
+                    return VehicleGenerationPositions.CCREAK;
+                case "RGLEN":
+                    return VehicleGenerationPositions.RGLEN;
+                case "OBSERV":
+                    return VehicleGenerationPositions.OBSERV;
+                case "DAVIS":
+                    return VehicleGenerationPositions.DAVIS;
+                case "STRAW":
+                    return VehicleGenerationPositions.STRAW;
+                case "CHAMH":
+                    return VehicleGenerationPositions.CHAMH;
+                case "RANCHO":
+                    return VehicleGenerationPositions.RANCHO;
+                case "BANNING":
+                    return VehicleGenerationPositions.BANNING;
+                case "ELYSIAN":
+                    return VehicleGenerationPositions.ELYSIAN;
+                case "TERMINA":
+                    return VehicleGenerationPositions.TERMINA;
+                case "ZP_ORT":
+                    return VehicleGenerationPositions.ZP_ORT;
+                case "LMESA":
+                    return VehicleGenerationPositions.LMESA;
+                case "CYPRE":
+                    return VehicleGenerationPositions.CYPRE;
+                case "EBURO":
+                    return VehicleGenerationPositions.EBURO;
+                case "MURRI":
+                    return VehicleGenerationPositions.MURRI;
+                case "VESP":
+                    return VehicleGenerationPositions.VESP;
+                case "BEACH":
+                    return VehicleGenerationPositions.BEACH;
+                case "VCANA":
+                    return VehicleGenerationPositions.VCANA;
+                case "DELSOL":
+                    return VehicleGenerationPositions.DELSOL;
+                case "DELBE":
+                    return VehicleGenerationPositions.DELBE;
+                case "DELPE":
+                    return VehicleGenerationPositions.DELPE;
+                case "LOSPUER":
+                    return VehicleGenerationPositions.LOSPUER;
+                case "STAD":
+                    return VehicleGenerationPositions.STAD;
+                case "KOREAT":
+                    return VehicleGenerationPositions.KOREAT;
+                case "AIRP":
+                    return VehicleGenerationPositions.AIRP;
+                case "MORN":
+                    return VehicleGenerationPositions.MORN;
+                case "PBLUFF":
+                    return VehicleGenerationPositions.PBLUFF;
+                case "BHAMCA":
+                    return VehicleGenerationPositions.BHAMCA;
+                case "CHU":
+                    return VehicleGenerationPositions.CHU;
+                case "TONGVAH":
+                    return VehicleGenerationPositions.TONGVAH;
+                case "TONGVAV":
+                    return VehicleGenerationPositions.TONGVAV;
+                case "TATAMO":
+                    return VehicleGenerationPositions.TATAMO;
+                case "PALHIGH":
+                    return VehicleGenerationPositions.PALHIGH;
+                case "NOOSE":
+                    return VehicleGenerationPositions.NOOSE;
+                case "MOVIE":
+                    return VehicleGenerationPositions.MOVIE;
+                case "SanAnd":
+                    return VehicleGenerationPositions.SanAnd;
+                case "ALAMO":
+                    return VehicleGenerationPositions.ALAMO;
+                case "JAIL":
+                    return VehicleGenerationPositions.JAIL;
+                case "RTRAK":
+                    return VehicleGenerationPositions.RTRAK;
+                case "SANCHIA":
+                    return VehicleGenerationPositions.SANCHIA;
+                case "WINDF":
+                    return VehicleGenerationPositions.WINDF;
+                case "PALMPOW":
+                    return VehicleGenerationPositions.PALMPOW;
+                case "HUMLAB":
+                    return VehicleGenerationPositions.HUMLAB;
+                case "ZQ_UAR":
+                    return VehicleGenerationPositions.ZQ_UAR;
+                case "PALETO":
+                    return VehicleGenerationPositions.PALETO;
+                case "PALFOR":
+                    return VehicleGenerationPositions.PALFOR;
+                case "PROCOB":
+                    return VehicleGenerationPositions.PROCOB;
+                case "HARMO":
+                    return VehicleGenerationPositions.HARMO;
+                case "SANDY":
+                    return VehicleGenerationPositions.SANDY;
+                case "ZANCUDO":
+                    return VehicleGenerationPositions.ZANCUDO;
+                case "SLAB":
+                    return VehicleGenerationPositions.SLAB;
+                case "NCHU":
+                    return VehicleGenerationPositions.NCHU;
+                case "GRAPES":
+                    return VehicleGenerationPositions.GRAPES;
+                case "MTGORDO":
+                    return VehicleGenerationPositions.MTGORDO;
+                case "MTCHIL":
+                    return VehicleGenerationPositions.MTCHIL;
+                case "GALFISH":
+                    return VehicleGenerationPositions.GALFISH;
+                case "LAGO":
+                    return VehicleGenerationPositions.LAGO;
+                case "ARMYB":
+                    return VehicleGenerationPositions.ARMYB;
+                case "BURTON":
+                    return VehicleGenerationPositions.BURTON;
+                default:
+                    return new List<Vector5>();
+            }
+        }
+
         public static List<Vector5> PBOX =
             new()
             {

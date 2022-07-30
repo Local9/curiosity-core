@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Settings;
@@ -1146,7 +1147,6 @@ namespace Curiosity.Core.Client.Managers
                     return new { success = false };
                 }
 
-
                 if (vehicleItem is null)
                 {
                     vehModel.MarkAsNoLongerNeeded();
@@ -1161,16 +1161,38 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 float velocity = 0;
+                float heading = vehicleItem.Heading;
+
+                if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                {
+                    Vector5 position = VehicleGenerationPositions.GetNearestParkingSpot();
+                    if (position != Vector5.Zero)
+                    {
+                        vehicleItem.X = position.Vector3.X;
+                        vehicleItem.Y = position.Vector3.Y;
+                        vehicleItem.Z = position.Vector3.Z;
+                        heading = position.Vector2.ToHeading();
+                    }
+                }
 
                 Vector3 returnedSpawnPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
+
+                if (returnedSpawnPosition.IsPositionOccupied())
+                {
+                    Vehicle _closest = World.GetClosest<Vehicle>(returnedSpawnPosition);
+                    if (_closest is not null)
+                    {
+                        if (!_closest.IsPersistent)
+                            _closest.Dispose();
+                    }
+                }
+
                 API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
                 Vector3 postionSpawn = returnedSpawnPosition; // create vehicles in a controlled location
                 postionSpawn.Z = postionSpawn.Z - 50f;
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     postionSpawn.Z = postionSpawn.Z + 0.5f;
-
-                float heading = vehicleItem.Heading;
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
@@ -1360,3 +1382,4 @@ namespace Curiosity.Core.Client.Managers
         }
     }
 }
+

@@ -1,3 +1,4 @@
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Systems.Library.Models;
 using System.Linq;
 
@@ -39,6 +40,21 @@ namespace Curiosity.Core.Client.Extensions
         public static Position ToPosition(this Quaternion quarternion)
         {
             return new Position(quarternion.X, quarternion.Y, quarternion.Z);
+        }
+
+        public static bool IsPositionOccupied(this Vector3 vector3, float radius = 5f)
+        {
+            return API.IsPositionOccupied(vector3.X, vector3.Y, vector3.Z, radius, false, true, false, false, false, 0, false);
+        }
+
+        public static float ToHeading(this Vector2 vector2)
+        {
+            return vector2.X;
+        }
+
+        public static Quaternion ToQuaternion(this Vector5 vector5)
+        {
+            return new Quaternion(vector5.Vector3.X, vector5.Vector3.Y, vector5.Vector3.Z, vector5.Vector2.ToHeading());
         }
 
         public static float Distance(this Position position, Position target, bool useZ = false)

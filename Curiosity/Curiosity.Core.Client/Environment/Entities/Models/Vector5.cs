@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Core.Client.Environment.Entities.Models
 {
-    internal class Vector5
+    public class Vector5
     {
         public Vector3 Vector3 { get; set; }
         public Vector2 Vector2 { get; set; }
@@ -10,5 +10,7 @@
             Vector3 = vector3;
             Vector2 = vector2;
         }
+
+        public static Vector5 Zero => new Vector5(Vector3.Zero, Vector2.Zero);
     }
 }
