@@ -202,10 +202,10 @@
                 //    return (int)BlipSprite.WeaponizedTampa;
                 case -1881846085: // "trailersmall2":
                     return 563; // (int)BlipSprite.WeaponizedTrailer;
-                case 540101442: // "zr380":
-                case -1106120762: // "zr3802":
-                case -1478704292: // "zr3803":
-                    return 262; // (int)BlipSprite.ZR380;
+                //case 540101442: // "zr380":
+                //case -1106120762: // "zr3802":
+                //case -1478704292: // "zr3803":
+                //    return 262; // (int)BlipSprite.ZR380;
                 case -210308634: // winky
                     return 745;
                 case -808457413: // patriot
