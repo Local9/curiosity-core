@@ -53,8 +53,11 @@
     <Compile Include="Enums\DispatchType.cs" />
     <Compile Include="Enums\eCameraPosition.cs" />
     <Compile Include="Enums\eCameraRotationMode.cs" />
+    <Compile Include="Enums\eClothingType.cs" />
+    <Compile Include="Enums\ePedVariation.cs" />
     <Compile Include="Enums\ePlayerJobs.cs" />
     <Compile Include="Enums\ePoliceTicketType.cs" />
+    <Compile Include="Enums\ePropVariation.cs" />
     <Compile Include="Enums\eTaskTypeIndex.cs" />
     <Compile Include="Enums\PedConfigFlag.cs" />
     <Compile Include="Enums\PopulationType.cs" />

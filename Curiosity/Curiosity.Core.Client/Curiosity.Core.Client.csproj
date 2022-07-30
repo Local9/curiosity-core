@@ -67,6 +67,8 @@
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Environment\Data\BlipInfo.cs" />
     <Compile Include="Environment\Data\DeathHash.cs" />
+    <Compile Include="Environment\Entities\Models\Clothing.cs" />
+    <Compile Include="Environment\Entities\Models\ClothingSet.cs" />
     <Compile Include="Environment\Entities\Models\Colour.cs" />
     <Compile Include="Environment\Entities\Models\Map.cs" />
     <Compile Include="Environment\Entities\Models\Config\PoliceConfigFile.cs" />
