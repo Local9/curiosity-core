@@ -6,29 +6,34 @@ namespace Curiosity.Core.Client.Utils
 {
     public static class Common
     {
-        public static Scaleform CarStatScaleform = new Scaleform("MP_CAR_STATS_01");
-        public static Scaleform CarStatScaleform2 = new Scaleform("MP_CAR_STATS_02");
-        public static Scaleform CarStatScaleform3 = new Scaleform("MP_CAR_STATS_03");
-        public static Scaleform CarStatScaleform4 = new Scaleform("MP_CAR_STATS_04");
-        public static Scaleform CarStatScaleform5 = new Scaleform("MP_CAR_STATS_05");
-        public static Scaleform CarStatScaleform6 = new Scaleform("MP_CAR_STATS_06");
-        public static Scaleform CarStatScaleform7 = new Scaleform("MP_CAR_STATS_07");
-        public static Scaleform CarStatScaleform8 = new Scaleform("MP_CAR_STATS_08");
-        public static Scaleform CarStatScaleform9 = new Scaleform("MP_CAR_STATS_09");
-        public static Scaleform CarStatScaleform10 = new Scaleform("MP_CAR_STATS_10");
 
-        public static void DrawCarStats(this Vehicle vehicle, Scaleform scaleform)
+        public static void LoadMissingMapObjects()
         {
-            Vector3 scale = new Vector3(6.0f, 3.5f, 1.0f);
+            ActivateInteriorEntitySets(new Vector3(-1155.31005f, -1518.5699f, 10.6300001f), "swap_clean_apt", "layer_whiskey", "layer_sextoys_a", "swap_mrJam_A", "swap_sofa_A"); // Floyd Apartment
+            ActivateInteriorEntitySets(new Vector3(-802.31097f, 175.05599f, 72.84459f), "V_Michael_bed_tidy", "V_Michael_L_Items", "V_Michael_S_Items", "V_Michael_D_Items", "V_Michael_M_Items", "Michael_premier", "V_Michael_plane_ticket"); // Michael House
+            ActivateInteriorEntitySets(new Vector3(-9.96562f, -1438.54003f, 31.101499f), "V_57_FranklinStuff"); // Franklin Aunt House
+            ActivateInteriorEntitySets(new Vector3(0.91675f, 528.48498f, 174.628005f), "franklin_settled", "franklin_unpacking", "bong_and_wine", "progress_flyer", "progress_tshirt", "progress_tux", "unlocked"); // Franklin House
 
-            if (vehicle.IsOnScreen && Game.PlayerPed.IsInRangeOf(vehicle.Position, 100.0f))
+            // Stilts Apartment kitchen window
+            ActivateInteriorEntitySets(new Vector3(-172.983001f, 494.032989f, 137.654006f), "Stilts_Kitchen_Window"); // 3655 Wild Oats
+            ActivateInteriorEntitySets(new Vector3(340.941009f, 437.17999f, 149.389999f), "Stilts_Kitchen_Window"); // 2044 North Conker
+            ActivateInteriorEntitySets(new Vector3(373.0230102f, 416.1050109f, 145.70100402f), "Stilts_Kitchen_Window");// 2045 North Conker
+            ActivateInteriorEntitySets(new Vector3(-676.1270141f, 588.6119995f, 145.16999816f), "Stilts_Kitchen_Window"); // 2862 Hillcrest Avenue
+            ActivateInteriorEntitySets(new Vector3(-763.10699462f, 615.90600585f, 144.139999f), "Stilts_Kitchen_Window"); // 2868 Hillcrest Avenue
+            ActivateInteriorEntitySets(new Vector3(-857.79797363f, 682.56298828f, 152.6529998f), "Stilts_Kitchen_Window"); // 2874 Hillcrest Avenue
+            ActivateInteriorEntitySets(new Vector3(-572.60998535f, 653.13000488f, 145.63000488f), "Stilts_Kitchen_Window"); // 2117 Milton Road
+            ActivateInteriorEntitySets(new Vector3(120.5f, 549.952026367f, 184.09700012207f), "Stilts_Kitchen_Window"); // 3677 Whispymound Drive
+            ActivateInteriorEntitySets(new Vector3(-1288f, 440.74798583f, 97.694602966f), "Stilts_Kitchen_Window"); // 2113 Mad Wayne Thunder Drive
+        }
+
+        public static void ActivateInteriorEntitySets(Vector3 position, params string[] entities)
+        {
+            int interior = GetInteriorAtCoords(position.X, position.Y, position.Z);
+            foreach(string ent in entities)
             {
-                scaleform.CallFunction("SET_VEHICLE_INFOR_AND_STATS", vehicle.LocalizedName, Game.GetGXTEntry("MP_PROP_CAR0"), "MPCarHUD", GetMakeNameFromVehicleModel((uint)vehicle.Model.Hash), Game.GetGXTEntry("FMMC_VEHST_0"), Game.GetGXTEntry("FMMC_VEHST_1"),
-                    Game.GetGXTEntry("FMMC_VEHST_2"), Game.GetGXTEntry("FMMC_VEHST_3"), GetVehicleEstimatedMaxSpeed(vehicle.Handle) * 100.0F, vehicle.MaxBraking * 100.0F, vehicle.Acceleration * 100.0F, vehicle.MaxTraction * 100.0f);
-                Vector3 adjustedPosition = vehicle.Position;
-                adjustedPosition.Z += 3f;
-                scaleform.Render3D(adjustedPosition, GameplayCamera.Rotation, scale);
+                ActivateInteriorEntitySet(interior, ent);
             }
+            RefreshInterior(interior);
         }
 
         public static Dictionary<int, string> WorldCompassDirection = new()

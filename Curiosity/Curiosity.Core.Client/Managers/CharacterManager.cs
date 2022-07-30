@@ -354,6 +354,8 @@ namespace Curiosity.Core.Client.Managers
             CancelMusicEvent($"{Instance.ClientMusicEvent.Start}");
             CancelMusicEvent($"{Instance.ClientMusicEvent.Stop}");
 
+            Common.LoadMissingMapObjects();
+
             Instance.DiscordRichPresence.Status = $"Roaming around...";
             Instance.DiscordRichPresence.Commit();
 
