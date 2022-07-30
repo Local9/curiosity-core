@@ -884,7 +884,7 @@ namespace Curiosity.Core.Client.Managers
         long WAIT_TIME = 5;
         int START_SPEED = 100;
 
-        bool ALLOW_CROSSING_MEDIAN = true;
+        bool ALLOW_CROSSING_MEDIAN = false;
         bool STOP_AT_DESTINATION = true;
         bool STOP_AT_TRAFFIC_LIGHTS = true;
         bool FOLLOW_TRAFFIC = true;
