@@ -105,6 +105,7 @@
     <Compile Include="Managers\GameWorld\Properties\Enums\eFrontDoor.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eGarageType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Apartment.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Models\Property\Garage.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Property\GarageSixCars.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Property\GarageTenCars.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Property\GarageTwoCars.cs" />
