@@ -9,6 +9,7 @@
         Office,
         Bunker,
         Nightclub,
-        Warehouse
+        Warehouse,
+        Facility
     }
 }

@@ -132,7 +132,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             switch (BuildingType)
             {
                 case eBuildingType.Apartment:
-                    buildingBlip.Sprite = IsOwnedByPlayer ? (int)BlipSprite.Safehouse : (int)BlipSprite.SafehouseForSale;
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 40 : 350;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("CELL_2630") : Game.GetGXTEntry("MP_PROP_SALE1");
                     break;
                 case eBuildingType.Office:
@@ -140,7 +140,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_475") : Game.GetGXTEntry("MP_PROP_SALE2");
                     break;
                 case eBuildingType.Clubhouse:
-                    buildingBlip.Sprite = IsOwnedByPlayer ? (int)BlipSprite.Business : (int)BlipSprite.BusinessForSale;
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 374 : 375;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("PM_SPAWN_CLUBH") : Game.GetGXTEntry("BLIP_373");
                     break;
                 case eBuildingType.Nightclub:
@@ -273,9 +273,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             Cache.Player.EnableHud();
         }
 
-
-
-        private void DisableExterior()
+        public async Task OnDisableExteriorAsync()
         {
             uint hashKey;
             // GetHashKey("mpsv_lp0_31"); == 79
