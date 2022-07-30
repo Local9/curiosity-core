@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Systems.Library.Enums
 {
-    internal enum ePedVariation
+    public enum ePedVariation
     {
         None = -1,
         Face,

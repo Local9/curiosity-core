@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Systems.Library.Enums
 {
-    internal enum ePropVariation
+    public enum ePropVariation
     {
         None = -1,
         Helmet,

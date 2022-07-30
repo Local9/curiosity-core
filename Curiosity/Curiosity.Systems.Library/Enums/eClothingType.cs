@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Systems.Library.Enums
 {
-    internal enum eClothingType
+    public enum eClothingType
     {
         None = -1,
         CapBackward,
