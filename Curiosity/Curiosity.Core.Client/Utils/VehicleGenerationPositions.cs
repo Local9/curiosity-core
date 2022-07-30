@@ -5,7 +5,7 @@ namespace Curiosity.Core.Client.Utils
 {
     internal static class VehicleGenerationPositions
     {
-        public static Vector5 GetNearestParkingSpot()
+        public static async Task<Vector5> GetNearestParkingSpot()
         {
             Vector3 pos = Game.PlayerPed.Position;
             List<Vector5> parkingPosition = GetParkingSpotByZone();

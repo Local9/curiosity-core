@@ -3,6 +3,7 @@ using Curiosity.Core.Client.Commands;
 using Curiosity.Core.Client.Commands.Impl;
 using Curiosity.Core.Client.Discord;
 using Curiosity.Core.Client.Environment.Entities;
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
@@ -106,6 +107,8 @@ namespace Curiosity.Core.Client
         private async Task Load()
         {
             DiscordRichPresence.Commit();
+
+            Vector5 position = await VehicleGenerationPositions.GetNearestParkingSpot();
 
             MP_STUN_GUN = API.GetHashKey("WEAPON_STUNGUN_MP");
 

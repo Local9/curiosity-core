@@ -49,7 +49,7 @@ namespace Curiosity.Core.Client.Extensions
 
         public static float ToHeading(this Vector2 vector2)
         {
-            return vector2.X;
+            return GetHeadingFromVector_2d(vector2.X, vector2.Y);
         }
 
         public static Quaternion ToQuaternion(this Vector5 vector5)

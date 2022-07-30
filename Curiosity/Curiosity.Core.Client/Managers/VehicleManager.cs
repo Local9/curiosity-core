@@ -1165,7 +1165,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                 {
-                    Vector5 position = VehicleGenerationPositions.GetNearestParkingSpot();
+                    Vector5 position = await VehicleGenerationPositions.GetNearestParkingSpot();
                     if (position != Vector5.Zero)
                     {
                         vehicleItem.X = position.Vector3.X;
@@ -1189,10 +1189,6 @@ namespace Curiosity.Core.Client.Managers
 
                 API.ClearAreaOfEverything(returnedSpawnPosition.X, returnedSpawnPosition.Y, returnedSpawnPosition.Z, 4f, false, false, false, false);
                 Vector3 postionSpawn = returnedSpawnPosition; // create vehicles in a controlled location
-                postionSpawn.Z = postionSpawn.Z - 50f;
-
-                if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
-                    postionSpawn.Z = postionSpawn.Z + 0.5f;
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
