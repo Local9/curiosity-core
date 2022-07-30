@@ -1140,6 +1140,18 @@ namespace Curiosity.Core.Client.Managers
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading, distance, (uint)vehModel.Hash);
                 await BaseScript.Delay(0);
 
+                Vector3 returnedSpawnPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
+
+                if (returnedSpawnPosition.IsPositionOccupied())
+                {
+                    Vehicle _closest = World.GetClosest<Vehicle>(returnedSpawnPosition);
+                    if (_closest is not null)
+                    {
+                        if (!_closest.IsPersistent)
+                            _closest.Dispose();
+                    }
+                }
+
                 if (API.IsAnyVehicleNearPoint(vehicleItem.X, vehicleItem.Y, vehicleItem.Z, distance) && vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                 {
                     Notify.Info("Either you're currently in a vehicle, or your current location is blocked by another vehicle.");
@@ -1172,18 +1184,6 @@ namespace Curiosity.Core.Client.Managers
                         vehicleItem.Y = position.Vector3.Y;
                         vehicleItem.Z = position.Vector3.Z;
                         heading = position.Vector2.ToHeading();
-                    }
-                }
-
-                Vector3 returnedSpawnPosition = new Vector3(vehicleItem.X, vehicleItem.Y, vehicleItem.Z);
-
-                if (returnedSpawnPosition.IsPositionOccupied())
-                {
-                    Vehicle _closest = World.GetClosest<Vehicle>(returnedSpawnPosition);
-                    if (_closest is not null)
-                    {
-                        if (!_closest.IsPersistent)
-                            _closest.Dispose();
                     }
                 }
 
