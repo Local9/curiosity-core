@@ -1,7 +1,11 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
 using Curiosity.Systems.Library.Enums;
+using NativeUI;
+using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 {
@@ -12,6 +16,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         private bool _hideHud;
 
         private Prop _propForSaleSign;
+
+        public UIMenu MenuBuyApartment;
+        public UIMenu MenuApartment;
+        public UIMenu MenuGarage;
+
+        UIMenuItem exitMenu = new UIMenuItem("Close Menu");
 
         public string Name { get; set; }
         public Quaternion Enterance { get; set; }
@@ -41,15 +51,46 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public eFrontDoor GarageDoor { get; set; }
         public Quaternion GarageWaypoint { get; set; }
 
-        public bool IsOwnedByPlayer = false;
+        public bool IsOwnedByPlayer => Apartments.Where(x => x.IsOwnedByPlayer).FirstOrDefault() is not null;
 
         public bool BuildingSetup { get; set; }
 
         public void CreateBuilding()
         {
             SetupBlip();
-            // CreateForSaleSign();
+            CreateForSaleSign();
+
+            MenuBuyApartment = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"));
+            MenuBuyApartment.SetBannerType(new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0)));
+            MenuBuyApartment.MouseEdgeEnabled = false;
+            InteractionMenu.MenuPool.Add(MenuBuyApartment);
+
+            foreach(Apartment apartment in Apartments)
+            {
+                UIMenuItem menuItem = new UIMenuItem(Game.GetGXTEntry(apartment.Name), Game.GetGXTEntry(apartment.Description));
+                if (!apartment.IsOwnedByPlayer)
+                {
+                    menuItem.SetRightLabel($"${apartment.Price:N0}");
+                }
+                MenuBuyApartment.AddItem(menuItem);
+            }
+
+            MenuBuyApartment.AddItem(exitMenu);
+
+            MenuBuyApartment.OnItemSelect += (sender, selectedItem, index) =>
+            {
+                if (selectedItem == exitMenu)
+                {
+                    MenuBuyApartment.Visible = false;
+                    World.DestroyAllCameras();
+                    World.RenderingCamera = null;
+                    Game.PlayerPed.IsPositionFrozen = false;
+                    Game.PlayerPed.FadeIn(false);
+                }
+            };
         }
+
+        public bool IsCloseToSaleSign => Game.PlayerPed.IsInRangeOf(SaleSign.Position.AsVector(), 3f);
 
         void SetupBlip()
         {
@@ -150,10 +191,22 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         {
             if (_propForSaleSign is not null) return;
             Model propModel = SaleSign.Model;
-            _propForSaleSign = await World.CreateProp(propModel, SaleSign.Position.AsVector(), true, false);
-            _propForSaleSign.IsPersistent = true;
-            _propForSaleSign.IsPositionFrozen = true;
-            _propForSaleSign.Heading = SaleSign.Position.W;
+
+            while (!propModel.IsLoaded)
+            {
+                await propModel.Request(100);
+            }
+
+            int propHandle = CreateObject(propModel.Hash, SaleSign.Position.X, SaleSign.Position.Y, SaleSign.Position.Z, false, true, false);
+
+            if (DoesEntityExist(propHandle))
+            {
+                _propForSaleSign = new Prop(propHandle);
+                _propForSaleSign.IsPersistent = true;
+                _propForSaleSign.IsPositionFrozen = true;
+                _propForSaleSign.Heading = SaleSign.Position.W;
+            }
+
             propModel.MarkAsNoLongerNeeded();
         }
 

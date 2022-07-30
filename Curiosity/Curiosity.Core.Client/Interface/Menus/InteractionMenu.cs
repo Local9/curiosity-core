@@ -17,6 +17,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         PlayerOptionsManager playerOptionsManager = PlayerOptionsManager.GetModule();
 
         public static MenuPool MenuPool;
+
         private UIMenu menuMain;
         private int currentIndex;
 
@@ -61,7 +62,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             MenuInstance = this;
 
-            MenuPool = new MenuPool();
+            MenuPool = PluginManager.MenuPool;
             MenuPool.MouseEdgeEnabled = false;
 
             menuMain = new UIMenu("Interaction Menu", "Player Interactions");

@@ -68,7 +68,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         public override void Begin()
         {
-            _MenuPool = new MenuPool();
+            _MenuPool = PluginManager.MenuPool;
 
             // create menu
             mainMenu = new UIMenu("Vehicle Mod Menu", "Modify your vehicle");

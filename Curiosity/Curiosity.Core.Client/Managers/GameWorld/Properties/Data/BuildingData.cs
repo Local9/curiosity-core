@@ -5,7 +5,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
 {
     internal static class BuildingData
     {
-        static List<Building> _buildings = new();
+        public static List<Building> Buildings = new();
         static bool _saleSignsCreated;
         const string PROP_SALE_SIGN = "prop_forsale_dyn_01";
 
@@ -55,9 +55,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet.GarageWaypoint = new Quaternion(-292.5203f, -991.2855f, 23.47978f, 250.2265f);
             _ThreeAltaStreet.Apartments.Add(_ThreeAltaStreet10);
 
-            _buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
+            Buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
 
-            foreach (Building building in _buildings)
+            foreach (Building building in Buildings)
             {
                 building.CreateBuilding();
             }
@@ -69,9 +69,9 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             {
                 if (_saleSignsCreated) return;
 
-                foreach (var bd in _buildings)
+                foreach (var bd in Buildings)
                 {
-                    // bd.CreateForSaleSign(); // Prop keeps being deleted.. why?! dunno
+                    bd.CreateForSaleSign();
 
                     switch (bd.FrontDoor)
                     {

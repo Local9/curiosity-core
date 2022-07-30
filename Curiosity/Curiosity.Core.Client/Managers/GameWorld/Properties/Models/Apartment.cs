@@ -25,6 +25,8 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public Quaternion GarageMenuPosition { get; set; }
         public eApartmentType ApartmentType { get; set; }
 
+        public bool IsOwnedByPlayer { get; set; }
+
         private Vector3 _interiorCoords => Wardrobe.AsVector();
         private int _interiorId;
 

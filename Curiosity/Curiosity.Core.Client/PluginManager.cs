@@ -8,6 +8,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Events;
+using NativeUI;
 using System.Linq;
 using System.Reflection;
 
@@ -16,6 +17,8 @@ namespace Curiosity.Core.Client
     public class PluginManager : BaseScript
     {
         public const string DECOR_PED_OWNER = "PED_OWNER";
+
+        public static MenuPool MenuPool;
 
         private bool IsAfkKickEnabled = false;
         private int MP_STUN_GUN;
@@ -72,6 +75,8 @@ namespace Curiosity.Core.Client
             API.TriggerMusicEvent(mes);
 
             API.DisplayPlayerNameTagsOnBlips(true);
+
+            MenuPool = new MenuPool();
 
             Load();
         }
