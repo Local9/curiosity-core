@@ -42,7 +42,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet57.GarageFilePath = "3_alta_st_apt_57";
             _ThreeAltaStreet57.EnteranceCamera = new BuildingCamera(new Vector3(-280.7289f, -941.7155f, 93.1571f), new Vector3(-3.944601f, -0.000007488258f, -50.81424f), 50.0f);
             _ThreeAltaStreet57.ExitCamera = new BuildingCamera(new Vector3(-279.6175f, -938.8705f, 93.05049f), new Vector3(0.4648432f, -0.000004936041f, -163.8833f), 50.0f);
-            _ThreeAltaStreet57.IsOwnedByPlayer = true;
 
             Building _ThreeAltaStreet = new();
             _ThreeAltaStreet.Name = "3 Alta St";
