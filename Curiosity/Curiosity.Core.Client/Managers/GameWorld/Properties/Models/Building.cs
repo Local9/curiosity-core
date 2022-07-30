@@ -184,7 +184,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                 garageBlip.IsShortRange = true;
                 garageBlip.Sprite = 357;
                 garageBlip.Name = Game.GetGXTEntry("BLIP_357");
-                buildingBlip.Category = 11;
+                garageBlip.Category = 11;
 
                 blipManager.AddBlip(garageBlip);
             }
