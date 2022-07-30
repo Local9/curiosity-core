@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Environment.Entities.Models;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
 using Curiosity.Systems.Library.Enums;
 
@@ -37,15 +38,20 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
         public void CreateBuilding()
         {
-            SetupBlip();
+            // SetupBlip(); Need to change the creation to happen after we know if we own it or not.
             // CreateForSaleSign();
         }
 
         void SetupBlip()
         {
-            BuildingBlip = World.CreateBlip(Enterance.AsVector());
-            BuildingBlip.IsShortRange = true;
-            SetBlipCategory(BuildingBlip.Handle, 10); // 10 - Property / 11 = Owned Property
+            // Blips need to be added to the master handler
+            BlipManager blipManager = BlipManager.ManagerInstance;
+
+            BlipData blipData = new();
+
+            blipData.Positions.Add(Enterance.ToPosition());
+            blipData.IsShortRange = true;
+            blipData.Category = 10; // 10 - Property / 11 = Owned Property
 
             // Need to know what ones the player owns?
             // Local KVP Store?
@@ -53,12 +59,14 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             switch (BuildingType)
             {
                 case eBuildingType.Apartment:
-                    BuildingBlip.Sprite = BlipSprite.SafehouseForSale;
-                    BuildingBlip.Name = Game.GetGXTEntry("MP_PROP_SALE1");
+                    blipData.Sprite = (int)BlipSprite.SafehouseForSale;
+                    blipData.Name = Game.GetGXTEntry("MP_PROP_SALE1");
                     break;
             }
 
             // BuildingBlip.Color = BLIP_COLOR_BLACK;
+
+            blipManager.AddBlip(blipData);
         }
 
         public void ToggleDoors(bool unlock = false)

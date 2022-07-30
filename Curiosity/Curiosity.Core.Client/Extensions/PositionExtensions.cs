@@ -36,6 +36,11 @@ namespace Curiosity.Core.Client.Extensions
             return new Position(vector.X, vector.Y, vector.Z);
         }
 
+        public static Position ToPosition(this Quaternion quarternion)
+        {
+            return new Position(quarternion.X, quarternion.Y, quarternion.Z);
+        }
+
         public static float Distance(this Position position, Position target, bool useZ = false)
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);

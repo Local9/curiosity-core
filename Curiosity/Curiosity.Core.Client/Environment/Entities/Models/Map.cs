@@ -17,14 +17,6 @@
         public Vector3 Vector3 => new(X, Y, Z);
     }
 
-    public class Quaternion
-    {
-        public float X;
-        public float Y;
-        public float Z;
-        public float W;
-    }
-
     public class MapObject
     {
         public string Type;
