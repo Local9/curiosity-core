@@ -36,13 +36,14 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
         }
 
-        private void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
             if (Game.PlayerPed.IsInVehicle())
             {
                 Vehicle veh = Game.PlayerPed.CurrentVehicle;
                 if (veh.Mods.HasNeonLights)
                 {
+                    checkboxItem.Enabled = false;
                     veh.Mods.NeonLightsColor = GetColorFromIndex(uiLstUnderglowColor.Index);
                     if (checkboxItem == uiChkUnderglowLeft)
                     {
@@ -62,6 +63,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     }
                 }
             }
+            await BaseScript.Delay(500);
+            checkboxItem.Enabled = true;
         }
 
         private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)

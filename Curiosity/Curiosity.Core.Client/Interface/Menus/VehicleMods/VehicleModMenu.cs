@@ -127,9 +127,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             mainMenu.OnCheckboxChange += MainMenu_OnCheckboxChange;
         }
 
-        private void MainMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
+        private async void MainMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+            checkboxItem.Enabled = false;
 
             if (checkboxItem == uiChkBulletProofTires)
             {
@@ -177,6 +179,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                     RemoveVehicleMod(vehicle.Handle, 20);
                 }
             }
+            await BaseScript.Delay(500);
+            checkboxItem.Enabled = true;
         }
 
         private void MainMenu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -249,11 +253,15 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         private void CloseModMenu()
         {
             Instance.DetachTickHandler(OnMenuCreate);
+            Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
 
             mainMenu.InstructionalButtons.Clear();
 
             if (mainMenu.Visible)
                 mainMenu.Visible = false;
+
+            PluginManager.ProcessMouse = false;
+            PluginManager.MenuPool.CloseAllMenus();
         }
 
         private async void SaveVehicle()
@@ -375,15 +383,14 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             }
 
             Instance.AttachTickHandler(OnMenuCreate);
+            Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
+            PluginManager.ProcessMouse = true;
         }
 
         private async Task OnMenuCreate()
         {
             try
             {
-                _MenuPool.ProcessMenus();
-                _MenuPool.ProcessMouse();
-
                 if (!_MenuPool.IsAnyMenuOpen() && mainMenu is not null) // KEEP IT FUCKING OPEN
                     mainMenu.Visible = true;
             }

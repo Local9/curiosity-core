@@ -297,14 +297,6 @@ namespace Curiosity.Core.Client.Interface.Menus
             }
         }
 
-        private async Task OnMenuDisplay()
-        {
-            MenuPool.ProcessMenus();
-            MenuPool.ProcessMouse();
-
-            MenuPool.MouseEdgeEnabled = false;
-        }
-
         [TickHandler(SessionWait = true)]
         private async Task OnMenuControls()
         {
@@ -324,6 +316,7 @@ namespace Curiosity.Core.Client.Interface.Menus
                             if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)))
                             {
                                 menuMain.Visible = false;
+                                PluginManager.ProcessMouse = menuMain.Visible;
                                 MenuPool.CloseAllMenus();
                             }
                         }
@@ -340,8 +333,9 @@ namespace Curiosity.Core.Client.Interface.Menus
                                 {
                                     if (!MenuPool.IsAnyMenuOpen())
                                     {
-                                        Instance.AttachTickHandler(OnMenuDisplay);
+                                        Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
                                         menuMain.Visible = !menuMain.Visible;
+                                        PluginManager.ProcessMouse = menuMain.Visible;
                                     }
                                     break;
                                 }
@@ -354,8 +348,9 @@ namespace Curiosity.Core.Client.Interface.Menus
                             {
                                 if (!MenuPool.IsAnyMenuOpen())
                                 {
-                                    Instance.AttachTickHandler(OnMenuDisplay);
+                                    Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
                                     menuMain.Visible = !menuMain.Visible;
+                                    PluginManager.ProcessMouse = menuMain.Visible;
                                 }
                             }
                         }

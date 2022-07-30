@@ -19,6 +19,7 @@ namespace Curiosity.Core.Client
         public const string DECOR_PED_OWNER = "PED_OWNER";
 
         public static MenuPool MenuPool;
+        public static bool ProcessMouse = false;
 
         private bool IsAfkKickEnabled = false;
         private int MP_STUN_GUN;
@@ -79,6 +80,13 @@ namespace Curiosity.Core.Client
             MenuPool = new MenuPool();
 
             Load();
+        }
+
+        public static async Task OnMenuDisplay()
+        {
+            MenuPool.ProcessMenus();
+            if (ProcessMouse)
+                MenuPool.ProcessMouse();
         }
 
         private void OnResourceStart(string resourceName)

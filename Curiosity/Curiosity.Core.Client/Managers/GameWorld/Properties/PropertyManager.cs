@@ -14,6 +14,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 
         public override async void Begin()
         {
+            await Session.Loading();
             BuildingData.Init();
         }
 
@@ -53,7 +54,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
                         await ScreenInterface.FadeOut();
                         Game.PlayerPed.FadeOut();
                         Game.PlayerPed.IsPositionFrozen = true;
-                        building.MenuBuyApartment.Visible = true;
+                        building.OpenBuyMenu();
                         World.RenderingCamera = World.CreateCamera(building.Camera.Position, building.Camera.Rotation, building.Camera.FieldOfView);
                         Cache.Player.DisableHud();
                         await ScreenInterface.FadeIn();

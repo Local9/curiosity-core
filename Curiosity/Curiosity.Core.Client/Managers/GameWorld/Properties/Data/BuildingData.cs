@@ -68,6 +68,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet.GarageDoor = eFrontDoor.StandardDoor;
             _ThreeAltaStreet.GarageWaypoint = new Quaternion(-292.5203f, -991.2855f, 23.47978f, 250.2265f);
             _ThreeAltaStreet.Apartments.Add(_ThreeAltaStreet10);
+            _ThreeAltaStreet.Apartments.Add(_ThreeAltaStreet57);
 
             Buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
 

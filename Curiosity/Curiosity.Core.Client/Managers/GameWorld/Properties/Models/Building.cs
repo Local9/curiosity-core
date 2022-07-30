@@ -55,17 +55,25 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
         public bool BuildingSetup { get; set; }
 
-        public void CreateBuilding()
+        public async void CreateBuilding()
         {
             SetupBlip();
             CreateForSaleSign();
+            await BaseScript.Delay(0);
 
+            CreateMenu();
+        }
+
+        void CreateMenu()
+        {
             MenuBuyApartment = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"));
             MenuBuyApartment.SetBannerType(new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0)));
             MenuBuyApartment.MouseEdgeEnabled = false;
-            InteractionMenu.MenuPool.Add(MenuBuyApartment);
+            MenuBuyApartment.MouseControlsEnabled = false;
 
-            foreach(Apartment apartment in Apartments)
+            PluginManager.MenuPool.Add(MenuBuyApartment);
+
+            foreach (Apartment apartment in Apartments)
             {
                 UIMenuItem menuItem = new UIMenuItem(Game.GetGXTEntry(apartment.Name), Game.GetGXTEntry(apartment.Description));
                 if (!apartment.IsOwnedByPlayer)
@@ -86,8 +94,23 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     World.RenderingCamera = null;
                     Game.PlayerPed.IsPositionFrozen = false;
                     Game.PlayerPed.FadeIn(false);
+                    PluginManager.MenuPool.MouseEdgeEnabled = true;
+                    PluginManager.MenuPool.CloseAllMenus();
+                    PluginManager.Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
+                    MenuBuyApartment.RefreshIndex();
                 }
             };
+        }
+
+        public void OpenBuyMenu()
+        {
+            if (MenuBuyApartment is null) CreateMenu();
+
+            PluginManager.MenuPool.MouseEdgeEnabled = false;
+            MenuBuyApartment.Visible = true;
+            PluginManager.Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
+
+            Logger.Info($"Menu State: {MenuBuyApartment.Visible}");
         }
 
         public bool IsCloseToSaleSign => Game.PlayerPed.IsInRangeOf(SaleSign.Position.AsVector(), 3f);

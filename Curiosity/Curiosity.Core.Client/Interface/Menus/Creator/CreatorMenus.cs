@@ -171,6 +171,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 menuMain.InstructionalButtons.Clear();
 
                 _MenuPool.CloseAllMenus();
+
+                PluginManager.MenuPool.MouseEdgeEnabled = true;
             }
             catch (Exception ex)
             {
@@ -229,6 +231,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
             PluginManager.Instance.AttachTickHandler(OnMenuCreate);
+
+            PluginManager.MenuPool.MouseEdgeEnabled = false;
 
             menuMain.Visible = true;
         }
