@@ -147,7 +147,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     buildingBlip.Sprite = IsOwnedByPlayer ? 614 : 375;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("CELL_CLUB") : Game.GetGXTEntry("BLIP_375");
                     break;
-                case eBuildingType.Bunker:
+                case eBuildingType.Bunker: // animation
                     buildingBlip.Sprite = IsOwnedByPlayer ? 557 : 375;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_557") : Game.GetGXTEntry("BLIP_375");
                     break;
@@ -155,13 +155,17 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     buildingBlip.Sprite = IsOwnedByPlayer ? 357 : 369;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_357") : Game.GetGXTEntry("MP_PROP_SALE0");
                     break;
-                case eBuildingType.Hanger:
+                case eBuildingType.Hanger: // animation?
                     buildingBlip.Sprite = IsOwnedByPlayer ? 359 : 372;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_359") : Game.GetGXTEntry("BLIP_372");
                     break;
                 case eBuildingType.Warehouse:
                     buildingBlip.Sprite = IsOwnedByPlayer ? 473 : 474;
                     buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_473") : Game.GetGXTEntry("BLIP_474");
+                    break;
+                case eBuildingType.Facility: // animation
+                    buildingBlip.Sprite = IsOwnedByPlayer ? 590 : 375;
+                    buildingBlip.Name = IsOwnedByPlayer ? Game.GetGXTEntry("BLIP_590") : Game.GetGXTEntry("BLIP_474");
                     break;
             }
 
@@ -178,6 +182,22 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
                 blipManager.AddBlip(garageBlip);
             }
+        }
+
+        internal void SetAsGarage()
+        {
+            Enterance = new Quaternion(GarageCarEnterance.X, GarageCarEnterance.Y, GarageCarEnterance.Z, 0F);
+            Exit = Quaternion.Zero;
+            Lobby = Quaternion.Zero;
+            EnteranceCamera1 = null;
+            EnteranceCamera2 = null;
+            BuildingType = eBuildingType.Garage;
+            FrontDoor = eFrontDoor.NoDoor;
+            Door1 = null;
+            Door2 = null;
+            GarageDoor = eFrontDoor.NoDoor;
+            Door3 = null;
+            GarageWaypoint = Quaternion.Zero;
         }
 
         public void ToggleDoors(bool unlock = false)

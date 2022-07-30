@@ -18,7 +18,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public Door Door { get; set; }
         public Quaternion DoorPosition { get; set; }
         // To be decided
-        public string GarageFile { get; set; }
+        public string GarageFilePath { get; set; }
         public string IPL { get; set; }
         public BuildingCamera AptStyleCam { get; set; }
         public Quaternion GarageElevatorPosition { get; set; }
@@ -72,6 +72,23 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             Game.PlayerPed.Task.GoTo(DoorPosition.AsVector(), true, 3500);
             await BaseScript.Delay(3500);
             Door.Lock();
+        }
+
+        internal void SetAsGarage()
+        {
+            Bed = Quaternion.Zero;
+            DoorPosition = Quaternion.Zero;
+            Enterance = Quaternion.Zero;
+            Exit = Quaternion.Zero;
+            Wardrobe = Quaternion.Zero;
+            IPL = String.Empty;
+            AptStyleCam = null;
+            EnteranceCamera = null;
+            ExitCamera = null;
+            GarageElevatorPosition = Quaternion.Zero;
+            GarageMenuPosition = Quaternion.Zero;
+            ApartmentType = eApartmentType.Other;
+            Door = null;
         }
     }
 }

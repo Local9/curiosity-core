@@ -24,7 +24,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet10.Enterance = new Quaternion(-262.9719f, -965.5146f, 76.23132f, 0f);
             _ThreeAltaStreet10.Exit = new Quaternion(-264.0814f, -967.5364f, 76.23132f, 0f);
             _ThreeAltaStreet10.Wardrobe = new Quaternion(-265.4738f, -947.6708f, 70.03869f, 160.6728f);
-            _ThreeAltaStreet10.GarageFile = "3_alta_st_apt_10";
+            _ThreeAltaStreet10.GarageFilePath = "3_alta_st_apt_10";
             _ThreeAltaStreet10.EnteranceCamera = new BuildingCamera(new Vector3(-262.6027f, -966.4926f, 77.74511f), new Vector3(0.1007454f, -0.000003034903f, 134.0962f), 50.0f);
             _ThreeAltaStreet10.ExitCamera = new BuildingCamera(new Vector3(-263.5748f, -969.6506f, 77.6988f), new Vector3(-0.05672785f, -0.0000001992695f, 10.8675f), 50.0f);
 
@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet57.Enterance = new Quaternion(-281.0908f, -943.2817f, 92.5108f, 0f);
             _ThreeAltaStreet57.Exit = new Quaternion(-279.2097f, -940.9369f, 92.5108f, 0f);
             _ThreeAltaStreet57.Wardrobe = new Quaternion(-277.6365f, -960.4476f, 85.31431f, 345.1764f);
-            _ThreeAltaStreet57.GarageFile = "3_alta_st_apt_57";
+            _ThreeAltaStreet57.GarageFilePath = "3_alta_st_apt_57";
             _ThreeAltaStreet57.EnteranceCamera = new BuildingCamera(new Vector3(-280.7289f, -941.7155f, 93.1571f), new Vector3(-3.944601f, -0.000007488258f, -50.81424f), 50.0f);
             _ThreeAltaStreet57.ExitCamera = new BuildingCamera(new Vector3(-279.6175f, -938.8705f, 93.05049f), new Vector3(0.4648432f, -0.000004936041f, -163.8833f), 50.0f);
 
@@ -71,6 +71,27 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet.Apartments.Add(_ThreeAltaStreet57);
 
             Buildings.Add(_ThreeAltaStreet); // Move all of this into a JSON file
+
+            Apartment _0120MurrietaHeightsGrg = new();
+            _0120MurrietaHeightsGrg.Id = 24;
+            _0120MurrietaHeightsGrg.Name = "MP_PROP_24";
+            _0120MurrietaHeightsGrg.Description = "MP_PROP_24DES";
+            _0120MurrietaHeightsGrg.Price = 150000;
+            _0120MurrietaHeightsGrg.GarageFilePath = "0120_murrieta_heights";
+            _0120MurrietaHeightsGrg.SetAsGarage();
+
+            Building _0120MurrietaHeights = new();
+            _0120MurrietaHeights.Name = "0120 Murrieta Heights";
+            _0120MurrietaHeights.GarageCarEnterance = new Quaternion(966.7083F, -1019.782F, 40.12651F, 0f);
+            _0120MurrietaHeights.GarageFootEnterance = new Quaternion(963.7991F, -1022.556F, 39.84747F, 88.24952F);
+            _0120MurrietaHeights.GarageCarExit = new Quaternion(970.2502F, -1019.784F, 40.18027F, 270.5528F);
+            _0120MurrietaHeights.Camera = new BuildingCamera(new Vector3(979.8295F, -1042.648F, 45.68815F), new Vector3(0.3886027F, -0.00000005336208F, 48.74495F), 50.0F);
+            _0120MurrietaHeights.GarageType = eGarageType.Ten;
+            _0120MurrietaHeights.SaleSign = new SaleSign(PROP_SALE_SIGN, new Quaternion(965.572F, -1011.164F, 40.04047F, 0F));
+            _0120MurrietaHeights.SetAsGarage();
+            _0120MurrietaHeights.Apartments.Add(_0120MurrietaHeightsGrg);
+
+            Buildings.Add(_0120MurrietaHeights);
 
             foreach (Building building in Buildings)
             {
