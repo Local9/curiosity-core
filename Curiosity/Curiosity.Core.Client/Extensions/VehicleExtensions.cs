@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Interface;
+﻿using Curiosity.Core.Client.Environment.Data;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Linq;
@@ -318,18 +319,9 @@ namespace Curiosity.Core.Client.Extensions
 
             API.EndTextCommandSetBlipName(blip.Handle);
 
-            long vehicleHash = vehicle.Model.Hash;
-
             if (!setBlip)
             {
-                if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
-                {
-                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
-                }
-                else if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
-                {
-                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
-                }
+                blip.Sprite = (BlipSprite)vehicle.Model.GetBlipSprite();
             }
 
             blip.Scale = 0.85f;
