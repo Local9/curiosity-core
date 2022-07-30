@@ -935,7 +935,7 @@ namespace Curiosity.Core.Client.Managers
 
             VehicleDrivingFlags vehicleDrivingFlags = SetupFlags();
 
-            Game.PlayerPed.Task.DriveTo(vehicle, position, 5f, 30f, (int)vehicleDrivingFlags);
+            Game.PlayerPed.Task.DriveTo(vehicle, position, 10f, 30f, (int)vehicleDrivingFlags);
         }
 
         public void DisableAutodrive()
@@ -963,6 +963,8 @@ namespace Curiosity.Core.Client.Managers
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidVehicles);
             if (this.AVOID_OBJECTS)
                 vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.AvoidObjects);
+            if (this.USE_BLINKERS)
+                vehicleDrivingFlags = (VehicleDrivingFlags)(vehicleDrivingFlags | VehicleDrivingFlags.UseBlinkers);
 
             Game.PlayerPed.VehicleDrivingFlags = vehicleDrivingFlags;
             return vehicleDrivingFlags;
