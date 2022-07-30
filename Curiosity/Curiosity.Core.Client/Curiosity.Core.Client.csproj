@@ -72,6 +72,7 @@
     <Compile Include="Environment\Entities\Models\Config\PoliceConfigFile.cs" />
     <Compile Include="Environment\Entities\Models\SoundEmitter.cs" />
     <Compile Include="Environment\Entities\Models\SpeedCamera.cs" />
+    <Compile Include="Environment\Entities\Models\Vector5.cs" />
     <Compile Include="Environment\Entities\WorldPlayer.cs" />
     <Compile Include="Exceptions\CitizenFxException.cs" />
     <Compile Include="Extensions\Native\NUIMarker.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Managers\GameEvents\GameEventPlayerKilledPlayerManager.cs" />
     <Compile Include="Managers\GameWorld\JailManager.cs" />
     <Compile Include="Managers\GameWorld\ParticleManager.cs" />
+    <Compile Include="Managers\GameWorld\Properties\Data\VechileGenerationPositions.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eApartmentType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eBuildingType.cs" />
     <Compile Include="Managers\GameWorld\Properties\Enums\eFrontDoor.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Managers\GameWorld\Properties\Models\Door.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\Garage.cs" />
     <Compile Include="Managers\GameWorld\Properties\Models\SaleSign.cs" />
+    <Compile Include="Managers\GameWorld\Properties\PropertyHelper.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyManager.cs" />
     <Compile Include="Managers\GameWorld\Properties\PropertyPropManager.cs" />
     <Compile Include="Managers\GameWorld\RandomEventManager.cs" />
@@ -285,7 +288,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Managers\GameWorld\Properties\Data\" />
     <Folder Include="Managers\Minigames\" />
     <Folder Include="Managers\Supporter\" />
   </ItemGroup>
