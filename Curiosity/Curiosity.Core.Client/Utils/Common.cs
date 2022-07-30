@@ -504,5 +504,18 @@ namespace Curiosity.Core.Client.Utils
                 return min;
             return val.CompareTo(max) > 0 ? max : val;
         }
+
+        public static async void StartScreenFx(string name, int duration, bool looped, bool stopAfterDuration)
+        {
+            AnimpostfxPlay(name, duration, looped);
+            await BaseScript.Delay(duration);
+            if (stopAfterDuration)
+                StopScreenFx(name);
+        }
+
+        public static void StopScreenFx(string name)
+        {
+            AnimpostfxStop(name);
+        }
     }
 }
