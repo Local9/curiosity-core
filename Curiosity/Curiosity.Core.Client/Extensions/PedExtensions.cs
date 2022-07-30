@@ -40,5 +40,23 @@
                 await BaseScript.Delay(10);
             }
         }
+
+        public static Vehicle[] GetNearbyVehicles(this Ped ped, float radius)
+        {
+            Vehicle[] vehicles = World.GetAllVehicles();
+            var result = new List<Vehicle>();
+            Vehicle ignore = ped.CurrentVehicle;
+            int ignoreHandle = Vehicle.Exists(ignore) ? ignore.Handle : 0;
+            foreach (Vehicle vehicle in vehicles)
+            {
+                if (vehicle.Handle == ignoreHandle)
+                {
+                    continue;
+                }
+                if (Game.PlayerPed.IsInRangeOf(vehicle.Position, radius))
+                    result.Add(vehicle);
+            }
+            return result.ToArray();
+        }
     }
 }
