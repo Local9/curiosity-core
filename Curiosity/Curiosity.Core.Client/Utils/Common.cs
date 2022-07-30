@@ -6,6 +6,31 @@ namespace Curiosity.Core.Client.Utils
 {
     public static class Common
     {
+        public static Scaleform CarStatScaleform = new Scaleform("MP_CAR_STATS_01");
+        public static Scaleform CarStatScaleform2 = new Scaleform("MP_CAR_STATS_02");
+        public static Scaleform CarStatScaleform3 = new Scaleform("MP_CAR_STATS_03");
+        public static Scaleform CarStatScaleform4 = new Scaleform("MP_CAR_STATS_04");
+        public static Scaleform CarStatScaleform5 = new Scaleform("MP_CAR_STATS_05");
+        public static Scaleform CarStatScaleform6 = new Scaleform("MP_CAR_STATS_06");
+        public static Scaleform CarStatScaleform7 = new Scaleform("MP_CAR_STATS_07");
+        public static Scaleform CarStatScaleform8 = new Scaleform("MP_CAR_STATS_08");
+        public static Scaleform CarStatScaleform9 = new Scaleform("MP_CAR_STATS_09");
+        public static Scaleform CarStatScaleform10 = new Scaleform("MP_CAR_STATS_10");
+
+        public static void DrawCarStats(this Vehicle vehicle, Scaleform scaleform)
+        {
+            Vector3 scale = new Vector3(6.0f, 3.5f, 1.0f);
+
+            if (vehicle.IsOnScreen && Game.PlayerPed.IsInRangeOf(vehicle.Position, 100.0f))
+            {
+                scaleform.CallFunction("SET_VEHICLE_INFOR_AND_STATS", vehicle.LocalizedName, Game.GetGXTEntry("MP_PROP_CAR0"), "MPCarHUD", GetMakeNameFromVehicleModel((uint)vehicle.Model.Hash), Game.GetGXTEntry("FMMC_VEHST_0"), Game.GetGXTEntry("FMMC_VEHST_1"),
+                    Game.GetGXTEntry("FMMC_VEHST_2"), Game.GetGXTEntry("FMMC_VEHST_3"), GetVehicleEstimatedMaxSpeed(vehicle.Handle) * 100.0F, vehicle.MaxBraking * 100.0F, vehicle.Acceleration * 100.0F, vehicle.MaxTraction * 100.0f);
+                Vector3 adjustedPosition = vehicle.Position;
+                adjustedPosition.Z += 3f;
+                scaleform.Render3D(adjustedPosition, GameplayCamera.Rotation, scale);
+            }
+        }
+
         public static Dictionary<int, string> WorldCompassDirection = new()
         {
             { 0, "N" },
