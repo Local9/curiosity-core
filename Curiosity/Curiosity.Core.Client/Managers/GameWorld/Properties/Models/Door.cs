@@ -16,6 +16,15 @@
             Lock();
         }
 
+        public Door(int model, Vector3 position)
+        {
+            Position = position;
+            _hash = model;
+
+            AddDoorToSystem((uint)_hash, (uint)_hash, position.X, position.Y, position.Z, false, true, true);
+            Lock();
+        }
+
         public void Lock()
         {
             DoorSystemSetDoorState((uint)_hash, 1, true, true);

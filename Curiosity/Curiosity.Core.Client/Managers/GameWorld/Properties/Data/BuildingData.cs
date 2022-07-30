@@ -14,7 +14,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             await Session.Loading();
 
             Apartment _ThreeAltaStreet10 = new();
-
             _ThreeAltaStreet10.Id = 5;
             _ThreeAltaStreet10.Name = "MP_PROP_5";
             _ThreeAltaStreet10.Description = "MP_PROP_5DES";
@@ -28,6 +27,21 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
             _ThreeAltaStreet10.GarageFile = "3_alta_st_apt_10";
             _ThreeAltaStreet10.EnteranceCamera = new BuildingCamera(new Vector3(-262.6027f, -966.4926f, 77.74511f), new Vector3(0.1007454f, -0.000003034903f, 134.0962f), 50.0f);
             _ThreeAltaStreet10.ExitCamera = new BuildingCamera(new Vector3(-263.5748f, -969.6506f, 77.6988f), new Vector3(-0.05672785f, -0.0000001992695f, 10.8675f), 50.0f);
+
+            Apartment _ThreeAltaStreet57 = new();
+            _ThreeAltaStreet57.Id = 6;
+            _ThreeAltaStreet57.Name = "MP_PROP_6";
+            _ThreeAltaStreet57.Description = "MP_PROP_6DES";
+            _ThreeAltaStreet57.Price = 223000;
+            _ThreeAltaStreet57.Bed = new Quaternion(-284.4262f, -958.5359f, 86.3036f, 0f);
+            _ThreeAltaStreet57.DoorPosition = new Quaternion(-278.4184f, -937.9305f, 91.51087f, 0f);
+            _ThreeAltaStreet57.Door = new Door("hei_v_ilev_fh_heistdoor2", new Vector3(-278.5412f, -940.6227f, 92.62472f));
+            _ThreeAltaStreet57.Enterance = new Quaternion(-281.0908f, -943.2817f, 92.5108f, 0f);
+            _ThreeAltaStreet57.Exit = new Quaternion(-279.2097f, -940.9369f, 92.5108f, 0f);
+            _ThreeAltaStreet57.Wardrobe = new Quaternion(-277.6365f, -960.4476f, 85.31431f, 345.1764f);
+            _ThreeAltaStreet57.GarageFile = "3_alta_st_apt_57";
+            _ThreeAltaStreet57.EnteranceCamera = new BuildingCamera(new Vector3(-280.7289f, -941.7155f, 93.1571f), new Vector3(-3.944601f, -0.000007488258f, -50.81424f), 50.0f);
+            _ThreeAltaStreet57.ExitCamera = new BuildingCamera(new Vector3(-279.6175f, -938.8705f, 93.05049f), new Vector3(0.4648432f, -0.000004936041f, -163.8833f), 50.0f);
 
             Building _ThreeAltaStreet = new();
             _ThreeAltaStreet.Name = "3 Alta St";
