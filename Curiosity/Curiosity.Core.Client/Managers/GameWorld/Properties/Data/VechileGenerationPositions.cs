@@ -2869,7 +2869,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> LEGSQ =
+        public static List<Vector5> LEGSQU =
             new()
             {
                 new Vector5(
@@ -3103,7 +3103,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> DTVIN =
+        public static List<Vector5> DTVINE =
             new()
             {
                 new Vector5(
@@ -8087,7 +8087,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> HAWIC =
+        public static List<Vector5> HAWICK =
             new()
             {
                 new Vector5(
@@ -12715,7 +12715,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> OBSER =
+        public static List<Vector5> OBSERV =
             new()
             {
                 new Vector5(
@@ -16269,7 +16269,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> RANCH =
+        public static List<Vector5> RANCHO =
             new()
             {
                 new Vector5(
@@ -17998,7 +17998,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> BANNI =
+        public static List<Vector5> BANNING =
             new()
             {
                 new Vector5(
@@ -18219,7 +18219,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> ELYSI =
+        public static List<Vector5> ELYSIAN =
             new()
             {
                 new Vector5(
@@ -19084,7 +19084,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> TERMI =
+        public static List<Vector5> TERMINA =
             new()
             {
                 new Vector5(
@@ -20213,7 +20213,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> ZP_OR =
+        public static List<Vector5> ZP_ORT =
             new()
             {
                 new Vector5(
@@ -24770,7 +24770,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> DELSO =
+        public static List<Vector5> DELSOL =
             new()
             {
                 new Vector5(
@@ -28013,7 +28013,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> LOSPU =
+        public static List<Vector5> LOSPUER =
             new()
             {
                 new Vector5(
@@ -28964,7 +28964,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> KOREA =
+        public static List<Vector5> KOREAT =
             new()
             {
                 new Vector5(
@@ -33743,7 +33743,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> PBLUf =
+        public static List<Vector5> PBLUFF =
             new()
             {
                 new Vector5(
@@ -34464,7 +34464,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> BHAMC =
+        public static List<Vector5> BHAMCA =
             new()
             {
                 new Vector5(
@@ -36530,7 +36530,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 new Vector5(new Vector3(983.4254f, 2175.691f, 50.50909f), new Vector2(0f, 8.0f))
             };
 
-        public static List<Vector5> SANCH =
+        public static List<Vector5> SANCHIA =
             new()
             {
                 new Vector5(
@@ -36652,7 +36652,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> WINDf =
+        public static List<Vector5> WINDF =
             new()
             {
                 new Vector5(
@@ -36697,7 +36697,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> PALMP =
+        public static List<Vector5> PALMPOW =
             new()
             {
                 new Vector5(
@@ -37006,7 +37006,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> HUMLA =
+        public static List<Vector5> HUMLAB =
             new()
             {
                 new Vector5(
@@ -37195,7 +37195,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> ZQ_UA =
+        public static List<Vector5> ZQ_UAR =
             new()
             {
                 new Vector5(
@@ -37256,7 +37256,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> PALET =
+        public static List<Vector5> PALETO =
             new()
             {
                 new Vector5(
@@ -38478,7 +38478,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> PALfO =
+        public static List<Vector5> PALFOR =
             new()
             {
                 new Vector5(
@@ -38663,7 +38663,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> PROCO =
+        public static List<Vector5> PROCOB =
             new()
             {
                 new Vector5(
@@ -39078,7 +39078,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> ZANCU =
+        public static List<Vector5> ZANCUDO =
             new()
             {
                 new Vector5(
@@ -39486,7 +39486,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> CCREA =
+        public static List<Vector5> CCREAK =
             new()
             {
                 new Vector5(
@@ -39637,7 +39637,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> GRAPE =
+        public static List<Vector5> GRAPES =
             new()
             {
                 new Vector5(
@@ -39738,7 +39738,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> MTGOR =
+        public static List<Vector5> MTGORDO =
             new()
             {
                 new Vector5(
@@ -39763,7 +39763,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> MTCHI =
+        public static List<Vector5> MTCHIL =
             new()
             {
                 new Vector5(
@@ -39924,7 +39924,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> GALFI =
+        public static List<Vector5> GALFISH =
             new()
             {
                 new Vector5(
@@ -40719,7 +40719,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Data
                 )
             };
 
-        public static List<Vector5> BURTO =
+        public static List<Vector5> BURTON =
             new()
             {
                 new Vector5(
