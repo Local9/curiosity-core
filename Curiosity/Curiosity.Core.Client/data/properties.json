@@ -1,0 +1,920 @@
+﻿[
+  {
+    "Name": "3 Alta St",
+    "Enterance": {
+      "X": -259.8061,
+      "Y": -969.4397,
+      "Z": 30.21999,
+      "W": 70.91596,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.2587441,
+        "Y": -0.965477,
+        "Z": 0.030096462,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Exit": {
+      "X": -261.1243,
+      "Y": -972.8566,
+      "Z": 30.21996,
+      "W": 203.0815,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.259117573,
+        "Y": -0.965380251,
+        "Z": 0.0299877189,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Lobby": {
+      "X": -263.679,
+      "Y": -966.7826,
+      "Z": 30.22428,
+      "W": 204.0962,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.263008028,
+        "Y": -0.964322567,
+        "Z": 0.0301473718,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Camera": {
+      "Position": {
+        "X": -215.2378,
+        "Y": -1071.639,
+        "Z": 32.85828,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": 22.62831,
+        "Y": 0.0,
+        "Z": 26.93762,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "EnteranceCamera1": {
+      "Position": {
+        "X": -261.2893,
+        "Y": -985.9326,
+        "Z": 34.31419,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": -15.94485,
+        "Y": 0.0,
+        "Z": 0.3253375,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "EnteranceCamera2": {
+      "Position": {
+        "X": -261.2893,
+        "Y": -985.9326,
+        "Z": 34.31419,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": 65.94485,
+        "Y": 0.0,
+        "Z": 0.3253375,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "GarageCamera1": {
+      "Position": {
+        "X": -288.8877,
+        "Y": -994.0138,
+        "Z": 24.12381,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": -3.488037,
+        "Y": -1.069198E-07,
+        "Z": -100.3268,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "GarageCamera2": {
+      "Position": {
+        "X": -298.3831,
+        "Y": -990.7642,
+        "Z": 24.12381,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": -3.879195,
+        "Y": -1.337085E-08,
+        "Z": -87.55238,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "BuildingType": 0,
+    "Apartments": [
+      {
+        "Id": 5,
+        "Name": "MP_PROP_5",
+        "Description": "MP_PROP_5DES",
+        "Price": 217000,
+        "Enterance": {
+          "X": -262.9719,
+          "Y": -965.5146,
+          "Z": 76.23132,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.2620324,
+            "Y": -0.96206516,
+            "Z": 0.0759589747,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Exit": {
+          "X": -264.0814,
+          "Y": -967.5364,
+          "Z": 76.23132,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.262552947,
+            "Y": -0.9619365,
+            "Z": 0.0757901147,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Bed": {
+          "X": -260.0051,
+          "Y": -949.0003,
+          "Z": 70.02404,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.263573319,
+            "Y": -0.9620241,
+            "Z": 0.07098503,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Wardrobe": {
+          "X": -265.4738,
+          "Y": -947.6708,
+          "Z": 70.03869,
+          "W": 160.6728,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": -0.2690681,
+            "Y": -0.960501552,
+            "Z": 0.0709869638,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "EnteranceCamera": {
+          "Position": {
+            "X": -262.6027,
+            "Y": -966.4926,
+            "Z": 77.74511,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "Rotation": {
+            "X": 0.1007454,
+            "Y": -3.034903E-06,
+            "Z": 134.0962,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "FieldOfView": 50.0
+        },
+        "ExitCamera": {
+          "Position": {
+            "X": -263.5748,
+            "Y": -969.6506,
+            "Z": 77.6988,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "Rotation": {
+            "X": -0.05672785,
+            "Y": -1.992695E-07,
+            "Z": 10.8675,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "FieldOfView": 50.0
+        },
+        "Door": {
+          "Model": "hei_v_ilev_fh_heistdoor2",
+          "Position": {
+            "X": -264.6448,
+            "Y": -967.7161,
+            "Z": 77.34515,
+            "IsNormalized": false,
+            "IsZero": false
+          }
+        },
+        "DoorPosition": {
+          "X": -264.7441,
+          "Y": -969.7109,
+          "Z": 76.23132,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.26262024,
+            "Y": -0.9619315,
+            "Z": 0.0756197646,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageFilePath": "3_alta_st_apt_10",
+        "IPL": null,
+        "AptStyleCam": null,
+        "GarageElevatorPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageMenuPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "ApartmentType": 0,
+      },
+      {
+        "Id": 6,
+        "Name": "MP_PROP_6",
+        "Description": "MP_PROP_6DES",
+        "Price": 223000,
+        "Enterance": {
+          "X": -281.0908,
+          "Y": -943.2817,
+          "Z": 92.5108,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.284329176,
+            "Y": -0.954149,
+            "Z": 0.0935765952,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Exit": {
+          "X": -279.2097,
+          "Y": -940.9369,
+          "Z": 92.5108,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.283220381,
+            "Y": -0.9544529,
+            "Z": 0.09383967,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Bed": {
+          "X": -284.4262,
+          "Y": -958.5359,
+          "Z": 86.3036,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.283416539,
+            "Y": -0.955133259,
+            "Z": 0.08599724,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Wardrobe": {
+          "X": -277.6365,
+          "Y": -960.4476,
+          "Z": 85.31431,
+          "W": 345.1764,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": -0.276694536,
+            "Y": -0.957189,
+            "Z": 0.085024856,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "EnteranceCamera": {
+          "Position": {
+            "X": -280.7289,
+            "Y": -941.7155,
+            "Z": 93.1571,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "Rotation": {
+            "X": -3.944601,
+            "Y": -7.488258E-06,
+            "Z": -50.81424,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "FieldOfView": 50.0
+        },
+        "ExitCamera": {
+          "Position": {
+            "X": -279.6175,
+            "Y": -938.8705,
+            "Z": 93.05049,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "Rotation": {
+            "X": 0.4648432,
+            "Y": -4.936041E-06,
+            "Z": -163.8833,
+            "IsNormalized": false,
+            "IsZero": false
+          },
+          "FieldOfView": 50.0
+        },
+        "Door": {
+          "Model": "hei_v_ilev_fh_heistdoor2",
+          "Position": {
+            "X": -278.5412,
+            "Y": -940.6227,
+            "Z": 92.62472,
+            "IsNormalized": false,
+            "IsZero": false
+          }
+        },
+        "DoorPosition": {
+          "X": -278.4184,
+          "Y": -937.9305,
+          "Z": 91.51087,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 3.14159274,
+          "Axis": {
+            "X": -0.283333719,
+            "Y": -0.9544891,
+            "Z": 0.093126446,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageFilePath": "3_alta_st_apt_57",
+        "IPL": null,
+        "AptStyleCam": null,
+        "GarageElevatorPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageMenuPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "ApartmentType": 0,
+      }
+    ],
+    "ExteriorIndex": 5,
+    "SaleSign": {
+      "Model": "prop_forsale_dyn_01",
+      "Position": {
+        "X": -252.6184,
+        "Y": -970.720764,
+        "Z": 30.22,
+        "W": -20.0,
+        "IsIdentity": false,
+        "IsNormalized": false,
+        "Angle": 6.28318548,
+        "Axis": {
+          "X": -0.25173533,
+          "Y": -0.9673274,
+          "Z": 0.03011436,
+          "IsNormalized": true,
+          "IsZero": false
+        }
+      }
+    },
+    "FrontDoor": 2,
+    "Door1": {
+      "Model": "hei_prop_dt1_20_mph_door_l",
+      "Position": {
+        "X": -263.461,
+        "Y": -970.5215,
+        "Z": 31.60709,
+        "IsNormalized": false,
+        "IsZero": false
+      }
+    },
+    "Door2": {
+      "Model": "hei_prop_dt1_20_mph_door_r",
+      "Position": {
+        "X": -260.6575,
+        "Y": -969.2133,
+        "Z": 31.60706,
+        "IsNormalized": false,
+        "IsZero": false
+      }
+    },
+    "Door3": {
+      "Model": "hei_prop_dt1_20_mp_gar2",
+      "Position": {
+        "X": -282.5465,
+        "Y": -995.163,
+        "Z": 24.68051,
+        "IsNormalized": false,
+        "IsZero": false
+      }
+    },
+    "BuildingBlip": null,
+    "SaleSignBlip": null,
+    "GarageType": 2,
+    "GarageCarEnterance": {
+      "X": -279.7589,
+      "Y": -995.9545,
+      "Z": 24.5305,
+      "W": 74.48383,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.270353079,
+        "Y": -0.9624694,
+        "Z": 0.0237057563,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageCarExit": {
+      "X": -271.5633,
+      "Y": -999.2233,
+      "Z": 26.0224,
+      "W": 249.66,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.26217863,
+        "Y": -0.9646923,
+        "Z": 0.0251231212,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageFootEnterance": {
+      "X": -279.7421,
+      "Y": -992.0921,
+      "Z": 23.30595,
+      "W": 74.48383,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.271320045,
+        "Y": -0.9622237,
+        "Z": 0.02260429,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageFootExit": {
+      "X": -286.7632,
+      "Y": -993.5939,
+      "Z": 23.13706,
+      "W": 239.0284,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.2772248,
+        "Y": -0.960544646,
+        "Z": 0.0223674681,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageDoor": 1,
+    "GarageWaypoint": {
+      "X": -292.5203,
+      "Y": -991.2855,
+      "Z": 23.47978,
+      "W": 250.2265,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": -0.282953233,
+        "Y": -0.958864868,
+        "Z": 0.0227118582,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "BuildingSetup": false,
+    "IsCloseToSaleSign": false
+  },
+  {
+    "Name": "0120 Murrieta Heights",
+    "Enterance": {
+      "X": 966.7083,
+      "Y": -1019.782,
+      "Z": 40.12651,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 3.14159274,
+      "Axis": {
+        "X": 0.687688947,
+        "Y": -0.7254441,
+        "Z": 0.0285448655,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Exit": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Lobby": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "Camera": {
+      "Position": {
+        "X": 979.8295,
+        "Y": -1042.648,
+        "Z": 45.68815,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "Rotation": {
+        "X": 0.3886027,
+        "Y": -5.336208E-08,
+        "Z": 48.74495,
+        "IsNormalized": false,
+        "IsZero": false
+      },
+      "FieldOfView": 50.0
+    },
+    "EnteranceCamera1": null,
+    "EnteranceCamera2": null,
+    "GarageCamera1": null,
+    "GarageCamera2": null,
+    "BuildingType": 2,
+    "Apartments": [
+      {
+        "Id": 24,
+        "Name": "MP_PROP_24",
+        "Description": "MP_PROP_24DES",
+        "Price": 150000,
+        "Enterance": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Exit": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Bed": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "Wardrobe": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "EnteranceCamera": null,
+        "ExitCamera": null,
+        "Door": null,
+        "DoorPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageFilePath": "0120_murrieta_heights",
+        "IPL": "",
+        "AptStyleCam": null,
+        "GarageElevatorPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "GarageMenuPosition": {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "W": 0.0,
+          "IsIdentity": false,
+          "IsNormalized": false,
+          "Angle": 0.0,
+          "Axis": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "IsNormalized": true,
+            "IsZero": false
+          }
+        },
+        "ApartmentType": 5,
+      }
+    ],
+    "ExteriorIndex": 0,
+    "SaleSign": {
+      "Model": "prop_forsale_dyn_01",
+      "Position": {
+        "X": 965.572,
+        "Y": -1011.164,
+        "Z": 40.04047,
+        "W": 0.0,
+        "IsIdentity": false,
+        "IsNormalized": false,
+        "Angle": 3.14159274,
+        "Axis": {
+          "X": 0.6903312,
+          "Y": -0.722927,
+          "Z": 0.0286267474,
+          "IsNormalized": true,
+          "IsZero": false
+        }
+      }
+    },
+    "FrontDoor": 0,
+    "Door1": null,
+    "Door2": null,
+    "Door3": null,
+    "BuildingBlip": null,
+    "SaleSignBlip": null,
+    "GarageType": 2,
+    "GarageCarEnterance": {
+      "X": 966.7083,
+      "Y": -1019.782,
+      "Z": 40.12651,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 3.14159274,
+      "Axis": {
+        "X": 0.687688947,
+        "Y": -0.7254441,
+        "Z": 0.0285448655,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageCarExit": {
+      "X": 970.2502,
+      "Y": -1019.784,
+      "Z": 40.18027,
+      "W": 270.5528,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 0.689012051,
+        "Y": -0.7241879,
+        "Z": 0.02853356,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageFootEnterance": {
+      "X": 963.7991,
+      "Y": -1022.556,
+      "Z": 39.84747,
+      "W": 88.24952,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 0.685614765,
+        "Y": -0.7274125,
+        "Z": 0.02834617,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageFootExit": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "GarageDoor": 0,
+    "GarageWaypoint": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 0.0,
+      "IsIdentity": false,
+      "IsNormalized": false,
+      "Angle": 0.0,
+      "Axis": {
+        "X": 1.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "IsNormalized": true,
+        "IsZero": false
+      }
+    },
+    "BuildingSetup": false,
+    "IsCloseToSaleSign": false
+  }
+]

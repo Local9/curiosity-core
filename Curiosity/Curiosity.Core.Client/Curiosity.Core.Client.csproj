@@ -283,6 +283,7 @@
     <Content Include="data\durty\soundEmitters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="data\properties.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
