@@ -85,9 +85,18 @@ namespace Curiosity.Core.Client
 
         public static async Task OnMenuDisplay()
         {
-            MenuPool.ProcessMenus();
-            if (ProcessMouse)
-                MenuPool.ProcessMouse();
+            try
+            {
+                if (!MenuPool.IsAnyMenuOpen()) return;
+
+                MenuPool.ProcessMenus();
+                if (ProcessMouse)
+                    MenuPool.ProcessMouse();
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, "OnMenuDisplay");
+            }
         }
 
         private void OnResourceStart(string resourceName)
