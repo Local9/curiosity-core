@@ -11,6 +11,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         public void Create(UIMenu menu)
         {
             baseMenu = menu;
+            baseMenu.MouseControlsEnabled = false;
 
             baseMenu.OnCheckboxChange += (sender, item, _checked) =>
             {

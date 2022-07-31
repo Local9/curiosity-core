@@ -27,6 +27,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         internal void Create(UIMenu menu)
         {
             baseMenu = menu;
+            baseMenu.MouseControlsEnabled = false;
 
             menuPrimary = VehicleModMenu._MenuPool.AddSubMenu(menu, "Primary Colors");
             menuSecondary = VehicleModMenu._MenuPool.AddSubMenu(menu, "Secondary Colors");

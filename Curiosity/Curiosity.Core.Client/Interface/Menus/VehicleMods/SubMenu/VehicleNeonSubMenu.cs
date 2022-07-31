@@ -16,6 +16,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         internal void Create(UIMenu neonMenu)
         {
             menu = neonMenu;
+            menu.MouseControlsEnabled = false;
 
             var underglowColorsList = new List<dynamic>();
             for (int i = 0; i < 13; i++)
