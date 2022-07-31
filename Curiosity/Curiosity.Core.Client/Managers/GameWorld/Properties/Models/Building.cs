@@ -1,5 +1,6 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
 using Curiosity.Systems.Library.Enums;
@@ -11,10 +12,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 {
     internal class Building
     {
-        private const BlipColor BLIP_COLOR_BLACK = (BlipColor)40;
-        private const BlipColor BLIP_COLOR_WHITE = (BlipColor)4;
-        private bool _hideHud;
-
         private Prop _propForSaleSign;
 
         public UIMenu MenuBuyApartment;
@@ -48,8 +45,14 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         public Quaternion GarageCarExit { get; set; }
         public Quaternion GarageFootEnterance { get; set; }
         public Quaternion GarageFootExit { get; set; }
+        public Quaternion GarageElevator { get; set; }
+        public Quaternion GarageMenuPosition { get; set; }
         public eFrontDoor GarageDoor { get; set; }
         public Quaternion GarageWaypoint { get; set; }
+
+
+        BlipData garageBlip = new();
+        BlipData buildingBlip = new();
 
         public bool IsOwnedByPlayer => Apartments.Where(x => x.IsOwnedByPlayer).FirstOrDefault() is not null;
 
@@ -61,17 +64,38 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             CreateForSaleSign();
             await BaseScript.Delay(0);
 
-            CreateMenu();
+            CreateBuyMenu();
         }
 
-        void CreateMenu()
+        void CreateBuyMenu(bool rebuildMenu = false)
         {
-            MenuBuyApartment = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"));
-            MenuBuyApartment.SetBannerType(new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0)));
-            MenuBuyApartment.MouseEdgeEnabled = false;
-            MenuBuyApartment.MouseControlsEnabled = false;
+            if (!rebuildMenu)
+            {
+                MenuBuyApartment = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"));
+                MenuBuyApartment.SetBannerType(new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0)));
+                MenuBuyApartment.MouseEdgeEnabled = false;
+                MenuBuyApartment.MouseControlsEnabled = false;
+                PluginManager.MenuPool.Add(MenuBuyApartment);
 
-            PluginManager.MenuPool.Add(MenuBuyApartment);
+                MenuBuyApartment.OnItemSelect += (sender, selectedItem, index) =>
+                {
+                    if (selectedItem != exitMenu)
+                    {
+                        NotificationManager.GetModule().Error($"Sorry this feature is currently not enabled");
+                        return;
+                    }
+
+                    if (selectedItem == exitMenu)
+                    {
+                        MenuBuyApartment.Visible = false;
+                        MenuBuyApartment.RefreshIndex();
+                        ResetMenuOnClose();
+                    }
+                };
+            }
+
+            if (!rebuildMenu)
+                MenuBuyApartment.Clear();
 
             foreach (Apartment apartment in Apartments)
             {
@@ -84,34 +108,27 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             }
 
             MenuBuyApartment.AddItem(exitMenu);
+        }
 
-            MenuBuyApartment.OnItemSelect += (sender, selectedItem, index) =>
-            {
-                if (selectedItem != exitMenu)
-                {
-                    NotificationManager.GetModule().Error($"Sorry this feature is currently not enabled");
-                    return;
-                }
-
-                if (selectedItem == exitMenu)
-                {
-                    MenuBuyApartment.Visible = false;
-                    World.DestroyAllCameras();
-                    World.RenderingCamera = null;
-                    Game.PlayerPed.IsPositionFrozen = false;
-                    Game.PlayerPed.FadeIn(false);
-                    PluginManager.MenuPool.MouseEdgeEnabled = true;
-                    PluginManager.MenuPool.CloseAllMenus();
-                    PluginManager.Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
-                    MenuBuyApartment.RefreshIndex();
-                    Cache.Player.EnableHud();
-                }
-            };
+        public async void ResetMenuOnClose()
+        {
+            await ScreenInterface.FadeOut();
+            MenuBuyApartment.Visible = false;
+            World.DestroyAllCameras();
+            World.RenderingCamera = null;
+            Game.PlayerPed.IsPositionFrozen = false;
+            Game.PlayerPed.FadeIn(false);
+            PluginManager.MenuPool.MouseEdgeEnabled = true;
+            PluginManager.MenuPool.CloseAllMenus();
+            PluginManager.Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
+            MenuBuyApartment.RefreshIndex();
+            await ScreenInterface.FadeIn();
+            Cache.Player.EnableHud();
         }
 
         public void OpenBuyMenu()
         {
-            if (MenuBuyApartment is null) CreateMenu();
+            if (MenuBuyApartment is null) CreateBuyMenu();
 
             PluginManager.MenuPool.MouseEdgeEnabled = false;
             MenuBuyApartment.Visible = true;
@@ -121,13 +138,33 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         }
 
         public bool IsCloseToSaleSign => Game.PlayerPed.IsInRangeOf(SaleSign.Position.AsVector(), 3f);
+        
+        public bool IsInRangetOfGarageEnterance(float range)
+        {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                return Game.PlayerPed.CurrentVehicle.IsInRangeOf(GarageCarEnterance.AsVector(), range);
+            }
+            return Game.PlayerPed.IsInRangeOf(GarageFootEnterance.AsVector(), range);
+        }
 
-        void SetupBlip()
+        public bool IsInRangeOfEnterance(float range) => Game.PlayerPed.IsInRangeOf(GarageFootEnterance.AsVector(), range);
+        public bool IsInRangeOfGarageElevator(float range) => Game.PlayerPed.IsInRangeOf(GarageElevator.AsVector(), range);
+        public bool IsInRangeOfGarageMenu(float range) => Game.PlayerPed.IsInRangeOf(GarageMenuPosition.AsVector(), range);
+        public bool IsAtHome => IsInteriorScene();
+
+        public bool IsForSale => (int)BuildingBlip.Sprite == 350 || (int)BuildingBlip.Sprite == 476 || (int)BuildingBlip.Sprite == 369;
+
+        void SetupBlip(bool refresh = false)
         {
             // Blips need to be added to the master handler
             BlipManager blipManager = BlipManager.ManagerInstance;
 
-            BlipData buildingBlip = new();
+            if (refresh)
+            {
+                if (buildingBlip is not null) blipManager.RemoveBlip(buildingBlip.Name);
+                if (garageBlip is not null) blipManager.RemoveBlip(garageBlip.Name);
+            }
 
             buildingBlip.Positions.Add(Enterance.ToPosition());
             buildingBlip.IsShortRange = true;
@@ -180,7 +217,6 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
             if (IsOwnedByPlayer && !BuildingType.Equals(eBuildingType.Garage))
             {
-                BlipData garageBlip = new();
                 garageBlip.Positions.Add(GarageCarEnterance.ToPosition());
                 garageBlip.IsShortRange = true;
                 garageBlip.Sprite = 357;
@@ -278,6 +314,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             await BaseScript.Delay(duration);
             ToggleDoors(false);
             Cache.Player.EnableHud();
+            PluginManager.Instance.AttachTickHandler(OnDisableExteriorAsync);
         }
 
         public async Task PlayExitApartmentCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
@@ -298,6 +335,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             World.RenderingCamera = null;
             ToggleDoors(false);
             Cache.Player.EnableHud();
+            PluginManager.Instance.DetachTickHandler(OnDisableExteriorAsync);
         }
 
         public async Task OnDisableExteriorAsync()
