@@ -36,8 +36,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 for (var i = 0; i < liveryCount; i++)
                 {
                     var livery = GetLiveryName(veh.Handle, i);
-                    livery = GetLabelText(livery) != "NULL" ? GetLabelText(livery) : $"Livery #{i}";
-                    liveryList.Add(livery);
+                    string label = Game.GetGXTEntry(livery);
+                    if (label == "NULL" || string.IsNullOrEmpty(label))
+                       label = $"Livery #{i}/{liveryCount}";
+                    liveryList.Add(label);
                 }
 
                 liveryListItem = new UIMenuListItem("Set Livery", liveryList, GetVehicleLivery(veh.Handle), "Choose a livery for this vehicle.");
