@@ -153,7 +153,6 @@ namespace Curiosity.Core.Server.Managers
                 deferrals.defer();
                 await BaseScript.Delay(500);
 
-
                 int initRouting = 5000;
                 int playerHandle = int.Parse(player.Handle);
                 int routingId = initRouting + playerHandle;
@@ -163,8 +162,6 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.PLAYER_ROUTING, routingId, true);
                 player.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                 player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
-
-                deferrals.handover(new { config = ServerConfigManager.GetModule().GetLoadingConfig() });
 
                 string license = player.Identifiers["license"];
 
@@ -184,7 +181,7 @@ namespace Curiosity.Core.Server.Managers
                 await BaseScript.Delay(500);
                 ChatManager.OnLogMessage(msg);
 
-                deferrals.update("?? Checking users identity.");
+                deferrals.update("Checking users identity.");
 
                 if (string.IsNullOrEmpty(license)) // No License, No Gameplay
                 {
@@ -194,8 +191,6 @@ namespace Curiosity.Core.Server.Managers
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
                 }
-
-                deferrals.update("?? Checking users Discord information.");
 
                 if (string.IsNullOrEmpty(player.Name))
                 {
@@ -223,8 +218,12 @@ namespace Curiosity.Core.Server.Managers
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
                 }
-
+                await BaseScript.Delay(500);
+                deferrals.update("Checking users Discord information.");
+                await BaseScript.Delay(500);
                 bool isVerified = await discordClient.CheckDiscordIdIsInGuild(player);
+
+                await BaseScript.Delay(500);
 
                 if (!isVerified)
                 {
@@ -241,6 +240,15 @@ namespace Curiosity.Core.Server.Managers
 
                 await BaseScript.Delay(500);
 
+                if (string.IsNullOrEmpty(rulesTemplate))
+                {
+                    Logger.Error($"FAILED TO LOAD '{GetCurrentResourceName()}/data/cards/join-server.json'");
+                    deferrals.done($"Error when trying to joing the server, please ask the server owners to check the server log.");
+                }
+
+                await BaseScript.Delay(500);
+                deferrals.update("Requesting server rules...");
+
                 deferrals.presentCard(rulesTemplate, new Action<dynamic, string>(async (data, rawData) =>
                 {
                     if (data.acceptRules != "true")
@@ -249,6 +257,8 @@ namespace Curiosity.Core.Server.Managers
                         denyWithReason.Invoke("You must accept the servers rules to connect.");
                         return;
                     }
+
+                    deferrals.handover(new { config = ServerConfigManager.GetModule().GetLoadingConfig() });
 
                     await BaseScript.Delay(10);
 
@@ -262,32 +272,6 @@ namespace Curiosity.Core.Server.Managers
                         await BaseScript.Delay(0);
                         deferrals.done($"Sorry, there was an error when trying to load your account.");
                         RemoveFrom(license, true, true, true, true, true, true);
-                        return;
-                    }
-
-                    if (curiosityUser.IsBanned)
-                    {
-                        string banMessage = "Your user account is currently banned.";
-                        try
-                        {
-                            DateTime date = (DateTime)curiosityUser.BannedUntil;
-                            string dateStr = date.ToString("yyyy-MM-dd HH:mm");
-                            string time = $"Until {dateStr}";
-                            if (curiosityUser.IsBannedPerm)
-                                time = "Permanently";
-
-                            discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
-                            await BaseScript.Delay(0);
-                            deferrals.done(string.Format("{0} {1}", banMessage, time));
-                        }
-                        catch (Exception ex)
-                        {
-                            deferrals.done($"{banMessage}");
-                        }
-                        finally
-                        {
-                            RemoveFrom(license, true, true, true, true, true, true);
-                        }
                         return;
                     }
 
@@ -310,72 +294,72 @@ namespace Curiosity.Core.Server.Managers
                         return;
                     }
 
-                    if (sentLoading.ContainsKey(license))
-                    {
-                        sentLoading.TryRemove(license, out Player oldPlayer);
-                    }
-                    sentLoading.TryAdd(license, player);
+                    //if (sentLoading.ContainsKey(license))
+                    //{
+                    //    sentLoading.TryRemove(license, out Player oldPlayer);
+                    //}
+                    //sentLoading.TryAdd(license, player);
 
-                    if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
-                    {
-                        if (curiosityUser.IsStaff)
-                        {
-                            Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
-                        }
+                    //if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
+                    //{
+                    //    if (curiosityUser.IsStaff)
+                    //    {
+                    //        Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
+                    //    }
 
-                        if (!priority.TryAdd(license, curiosityUser.QueuePriority))
-                        {
-                            priority.TryGetValue(license, out int oldPriority);
-                            priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
-                        }
-                    }
+                    //    if (!priority.TryAdd(license, curiosityUser.QueuePriority))
+                    //    {
+                    //        priority.TryGetValue(license, out int oldPriority);
+                    //        priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
+                    //    }
+                    //}
 
-                    if (session.TryAdd(license, SessionState.Queue))
-                    {
-                        if (!priority.ContainsKey(license))
-                        {
-                            newQueue.Enqueue(license);
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
-                        }
-                        else
-                        {
-                            newPriorityQueue.Enqueue(license);
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
-                        }
-                    }
+                    //if (session.TryAdd(license, SessionState.Queue))
+                    //{
+                    //    if (!priority.ContainsKey(license))
+                    //    {
+                    //        newQueue.Enqueue(license);
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
+                    //    }
+                    //    else
+                    //    {
+                    //        newPriorityQueue.Enqueue(license);
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
+                    //    }
+                    //}
 
-                    if (!session[license].Equals(SessionState.Queue))
-                    {
-                        UpdateTimer(license);
-                        session.TryGetValue(license, out SessionState oldState);
-                        session.TryUpdate(license, SessionState.Loading, oldState);
-                        deferrals.done();
-                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
-                        return;
-                    }
+                    //if (!session[license].Equals(SessionState.Queue))
+                    //{
+                    //    UpdateTimer(license);
+                    //    session.TryGetValue(license, out SessionState oldState);
+                    //    session.TryUpdate(license, SessionState.Loading, oldState);
+                    //    deferrals.done();
+                    //    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                    //    return;
+                    //}
 
-                    bool inPriority = priority.ContainsKey(license);
-                    int dots = 0;
+                    //bool inPriority = priority.ContainsKey(license);
+                    //int dots = 0;
 
-                    while (session[license].Equals(SessionState.Queue))
-                    {
-                        if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
-                        {
-                            int count = inPriority ? inPriorityQueue : inQueue;
-                            string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
-                            deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
-                        }
-                        dots = dots > 2 ? 0 : dots + 1;
-                        if (player?.EndPoint is null)
-                        {
-                            UpdateTimer(license);
-                            deferrals.done($"{messages[Messages.Canceled]}");
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
-                            return;
-                        }
-                        RemoveFrom(license, false, false, true, false, false, false);
-                        await BaseScript.Delay(5000);
-                    }
+                    //while (session[license].Equals(SessionState.Queue))
+                    //{
+                    //    if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
+                    //    {
+                    //        int count = inPriority ? inPriorityQueue : inQueue;
+                    //        string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
+                    //        deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
+                    //    }
+                    //    dots = dots > 2 ? 0 : dots + 1;
+                    //    if (player?.EndPoint is null)
+                    //    {
+                    //        UpdateTimer(license);
+                    //        deferrals.done($"{messages[Messages.Canceled]}");
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                    //        return;
+                    //    }
+                    //    RemoveFrom(license, false, false, true, false, false, false);
+                    //    await BaseScript.Delay(5000);
+                    //}
                     await BaseScript.Delay(500);
 
                     deferrals.done();
