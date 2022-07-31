@@ -1,9 +1,7 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
-using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
-using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Drawing;
 using System.Linq;
@@ -138,7 +136,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         }
 
         public bool IsCloseToSaleSign => Game.PlayerPed.IsInRangeOf(SaleSign.Position.AsVector(), 3f);
-        
+
         public bool IsInRangetOfGarageEnterance(float range)
         {
             if (Game.PlayerPed.IsInVehicle())

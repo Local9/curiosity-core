@@ -1,6 +1,4 @@
-﻿using Curiosity.Core.Client.Interface.Modules;
-
-namespace Curiosity.Core.Client.Managers
+﻿namespace Curiosity.Core.Client.Managers
 {
     public class NoClipManager : Manager<NoClipManager>
     {
@@ -247,7 +245,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 API.DisablePlayerFiring(Game.Player.Handle, false);
 
-                
+
             }
             catch (Exception ex)
             {

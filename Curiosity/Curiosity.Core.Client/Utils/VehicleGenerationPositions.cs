@@ -11,8 +11,8 @@ namespace Curiosity.Core.Client.Utils
             Vector3 pos = Game.PlayerPed.Position;
             List<Vector5> parkingPosition = GetParkingSpotByZone();
             List<Vector5> closestPositions = parkingPosition.OrderBy(x => Math.Abs(x.Vector3.DistanceToSquared(pos))).ToList();
-            
-            foreach(Vector5 position in closestPositions)
+
+            foreach (Vector5 position in closestPositions)
             {
                 if (!position.Vector3.IsPositionOccupied())
                     return position;

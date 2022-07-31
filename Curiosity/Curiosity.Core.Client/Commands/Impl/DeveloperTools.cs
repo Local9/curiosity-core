@@ -1041,14 +1041,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     if (vehicleName.Contains(","))
                     {
-                        foreach(string vName in vehicleName.Split(','))
+                        foreach (string vName in vehicleName.Split(','))
                         {
                             await SpawnVehicle(vName);
                             await BaseScript.Delay(100);
                         }
                         return;
                     }
-                    
+
                     Vehicle vehicle = await SpawnVehicle(vehicleName);
                     Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                     return;
@@ -1141,7 +1141,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (b)
                     {
                         vehicle.CreateBlip();
-                        Cache.StaffVehicle = new State.VehicleState(vehicle);                            
+                        Cache.StaffVehicle = new State.VehicleState(vehicle);
 
                         Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
 

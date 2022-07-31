@@ -1,6 +1,4 @@
-﻿using Curiosity.Core.Client.Extensions;
-
-namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
+﻿namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 {
     internal class SaleSign
     {

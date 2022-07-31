@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             if (state == MenuState.ChangeForward && (newMenu == baseMenu))
             {
-                foreach(KeyValuePair<int, UIMenu> keyValuePair in _classMenus)
+                foreach (KeyValuePair<int, UIMenu> keyValuePair in _classMenus)
                 {
                     keyValuePair.Value.Clear();
                 }

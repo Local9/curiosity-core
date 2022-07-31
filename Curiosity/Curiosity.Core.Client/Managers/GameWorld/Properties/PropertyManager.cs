@@ -24,14 +24,14 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             BuildingData.SpawnForSaleSignsAndLockDoors();
             Ped ped = Game.PlayerPed;
 
-            foreach(Building building in BuildingData.Buildings)
+            foreach (Building building in BuildingData.Buildings)
             {
                 if (building.IsCloseToSaleSign)
                 {
                     if (menuPool.IsAnyMenuOpen()) return;
                     if (ped.IsInVehicle()) return;
 
-                    switch(building.BuildingType)
+                    switch (building.BuildingType)
                     {
                         case eBuildingType.Apartment:
                         case eBuildingType.Clubhouse:
@@ -63,7 +63,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
             }
         }
 
-        
+
 
         private async Task EnterApartment()
         {

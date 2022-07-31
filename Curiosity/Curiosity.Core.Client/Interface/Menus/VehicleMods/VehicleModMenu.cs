@@ -361,7 +361,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             bool hasExtras = false;
 
-            for(int i = 0; i < 20; i++)
+            for (int i = 0; i < 20; i++)
             {
                 if (vehicle.ExtraExists(i))
                     hasExtras = true;
