@@ -23,7 +23,7 @@ namespace Curiosity.Core.Server
 {
     public class PluginManager : BaseScript
     {
-        const string CURIOSITY_VERSION = "v2.0.0.3928";
+        const string CURIOSITY_VERSION = "v2.0.1.4974";
         private const string CONVAR_MISSING = "MISSING";
         private string SERVER_KEY;
 
