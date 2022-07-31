@@ -1266,7 +1266,7 @@ namespace Curiosity.Core.Client.Managers
                     previousVehicle = Cache.PersonalHelicopter.Vehicle;
 
                 if (Cache.PersonalPlane is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                    previousVehicle = Cache.PersonalBoat.Vehicle;
+                    previousVehicle = Cache.PersonalPlane.Vehicle;
 
                 if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     previousVehicle = Cache.PersonalTrailer.Vehicle;
