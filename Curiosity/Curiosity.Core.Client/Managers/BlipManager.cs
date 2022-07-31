@@ -35,7 +35,7 @@ namespace Curiosity.Core.Client.Managers
             AllBlips.Clear();
         }
 
-        public void RemoveAllBlips(string blipName)
+        public void RemoveBlip(string blipName)
         {
             BlipData blipData = AllBlips.Where(b => b.Key == blipName).Select(b => b.Value).FirstOrDefault();
 
