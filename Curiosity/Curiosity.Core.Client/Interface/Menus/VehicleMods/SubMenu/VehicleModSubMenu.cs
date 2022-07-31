@@ -88,6 +88,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                         continue;
                     }
 
+                    if (mod.ModType == VehicleModType.Livery) continue;
+
                     if (mod.ModType == VehicleModType.FrontWheel && uiLstWheelType is null)
                     {
                         if (!vehicle.Model.IsBoat && !vehicle.Model.IsHelicopter && !vehicle.Model.IsPlane && !vehicle.Model.IsBicycle && !vehicle.Model.IsTrain)
