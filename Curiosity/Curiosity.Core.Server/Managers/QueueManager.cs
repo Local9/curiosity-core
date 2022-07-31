@@ -150,6 +150,10 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
+                deferrals.defer();
+                await BaseScript.Delay(500);
+
+
                 int initRouting = 5000;
                 int playerHandle = int.Parse(player.Handle);
                 int routingId = initRouting + playerHandle;
@@ -177,10 +181,10 @@ namespace Curiosity.Core.Server.Managers
                 string msg = $"Player '{player.Name}' is connecting. Ping: {player.Ping}ms";
                 DiscordClient discordClient = DiscordClient.GetModule();
                 discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' is connecting. Ping: {player.Ping}ms");
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(500);
                 ChatManager.OnLogMessage(msg);
 
-                deferrals.update($"{messages[Messages.Gathering]}");
+                deferrals.update("?? Checking users identity.");
 
                 if (string.IsNullOrEmpty(license)) // No License, No Gameplay
                 {
@@ -190,6 +194,8 @@ namespace Curiosity.Core.Server.Managers
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
                 }
+
+                deferrals.update("?? Checking users Discord information.");
 
                 if (string.IsNullOrEmpty(player.Name))
                 {
@@ -224,140 +230,156 @@ namespace Curiosity.Core.Server.Managers
                 {
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Not verified on Discord.");
                     await BaseScript.Delay(0);
-                    deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
+                    
+                    ShowAdaptiveCard("data/cards/discord-unverified.json", deferrals);
+
                     RemoveFrom(license, true, true, true, true, true, true);
                     return;
                 }
 
-                await BaseScript.Delay(10);
+                string rulesTemplate = LoadResourceFile(GetCurrentResourceName(), "data/cards/join-server.json");
 
-                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
-
-                await BaseScript.Delay(10);
-
-                if (curiosityUser == null)
-                {
-                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Error loading Account.");
-                    await BaseScript.Delay(0);
-                    deferrals.done($"Sorry, there was an error when trying to load your account.");
-                    RemoveFrom(license, true, true, true, true, true, true);
-                    return;
-                }
-
-                if (curiosityUser.IsBanned)
-                {
-                    string banMessage = "Your user account is currently banned.";
-                    try
-                    {
-                        DateTime date = (DateTime)curiosityUser.BannedUntil;
-                        string dateStr = date.ToString("yyyy-MM-dd HH:mm");
-                        string time = $"Until {dateStr}";
-                        if (curiosityUser.IsBannedPerm)
-                            time = "Permanently";
-
-                        discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
-                        await BaseScript.Delay(0);
-                        deferrals.done(string.Format("{0} {1}", banMessage, time));
-                    }
-                    catch (Exception ex)
-                    {
-                        deferrals.done($"{banMessage}");
-                    }
-                    finally
-                    {
-                        RemoveFrom(license, true, true, true, true, true, true);
-                    }
-                    return;
-                }
-
-                if (!curiosityUser.IsStaff)
-                {
-                    if (PluginManager.IsMaintenanceActive)
-                    {
-                        deferrals.done($"Curiosity Queue Manager : This server is in a testing state, please make sure you are connecting to the correct server or use the links provided at {PluginManager.WebsiteUrl}.");
-                        RemoveFrom(license, true, true, true, true, true, true);
-                        return;
-                    }
-                }
-
-                if (PluginManager.IsSupporterAccess && !curiosityUser.IsSupporterAccess)
-                {
-                    Logger.Debug($"Queue Player not allowed access: {player.Name}#{curiosityUser.UserId} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
-                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': user is not a supporter, current role '{curiosityUser.Role}' [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}].");
-                    await BaseScript.Delay(0);
-                    deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
-                    return;
-                }
-
-                if (sentLoading.ContainsKey(license))
-                {
-                    sentLoading.TryRemove(license, out Player oldPlayer);
-                }
-                sentLoading.TryAdd(license, player);
-
-                if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
-                {
-                    if (curiosityUser.IsStaff)
-                    {
-                        Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
-                    }
-
-                    if (!priority.TryAdd(license, curiosityUser.QueuePriority))
-                    {
-                        priority.TryGetValue(license, out int oldPriority);
-                        priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
-                    }
-                }
-
-                if (session.TryAdd(license, SessionState.Queue))
-                {
-                    if (!priority.ContainsKey(license))
-                    {
-                        newQueue.Enqueue(license);
-                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
-                    }
-                    else
-                    {
-                        newPriorityQueue.Enqueue(license);
-                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
-                    }
-                }
-
-                if (!session[license].Equals(SessionState.Queue))
-                {
-                    UpdateTimer(license);
-                    session.TryGetValue(license, out SessionState oldState);
-                    session.TryUpdate(license, SessionState.Loading, oldState);
-                    deferrals.done();
-                    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
-                    return;
-                }
-
-                bool inPriority = priority.ContainsKey(license);
-                int dots = 0;
-
-                while (session[license].Equals(SessionState.Queue))
-                {
-                    if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
-                    {
-                        int count = inPriority ? inPriorityQueue : inQueue;
-                        string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
-                        deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
-                    }
-                    dots = dots > 2 ? 0 : dots + 1;
-                    if (player?.EndPoint is null)
-                    {
-                        UpdateTimer(license);
-                        deferrals.done($"{messages[Messages.Canceled]}");
-                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
-                        return;
-                    }
-                    RemoveFrom(license, false, false, true, false, false, false);
-                    await BaseScript.Delay(5000);
-                }
                 await BaseScript.Delay(500);
 
-                deferrals.done();
+                deferrals.presentCard(rulesTemplate, new Action<dynamic, string>(async (data, rawData) =>
+                {
+                    if (data.acceptRules != "true")
+                    {
+                        deferrals.done("You must accept the servers rules to connect.");
+                        denyWithReason.Invoke("You must accept the servers rules to connect.");
+                        return;
+                    }
+
+                    await BaseScript.Delay(10);
+
+                    CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
+
+                    await BaseScript.Delay(10);
+
+                    if (curiosityUser == null)
+                    {
+                        discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Error loading Account.");
+                        await BaseScript.Delay(0);
+                        deferrals.done($"Sorry, there was an error when trying to load your account.");
+                        RemoveFrom(license, true, true, true, true, true, true);
+                        return;
+                    }
+
+                    if (curiosityUser.IsBanned)
+                    {
+                        string banMessage = "Your user account is currently banned.";
+                        try
+                        {
+                            DateTime date = (DateTime)curiosityUser.BannedUntil;
+                            string dateStr = date.ToString("yyyy-MM-dd HH:mm");
+                            string time = $"Until {dateStr}";
+                            if (curiosityUser.IsBannedPerm)
+                                time = "Permanently";
+
+                            discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
+                            await BaseScript.Delay(0);
+                            deferrals.done(string.Format("{0} {1}", banMessage, time));
+                        }
+                        catch (Exception ex)
+                        {
+                            deferrals.done($"{banMessage}");
+                        }
+                        finally
+                        {
+                            RemoveFrom(license, true, true, true, true, true, true);
+                        }
+                        return;
+                    }
+
+                    if (!curiosityUser.IsStaff)
+                    {
+                        if (PluginManager.IsMaintenanceActive)
+                        {
+                            deferrals.done($"Curiosity Queue Manager : This server is in a testing state, please make sure you are connecting to the correct server or use the links provided at {PluginManager.WebsiteUrl}.");
+                            RemoveFrom(license, true, true, true, true, true, true);
+                            return;
+                        }
+                    }
+
+                    if (PluginManager.IsSupporterAccess && !curiosityUser.IsSupporterAccess)
+                    {
+                        Logger.Debug($"Queue Player not allowed access: {player.Name}#{curiosityUser.UserId} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
+                        discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': user is not a supporter, current role '{curiosityUser.Role}' [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}].");
+                        await BaseScript.Delay(0);
+                        deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
+                        return;
+                    }
+
+                    if (sentLoading.ContainsKey(license))
+                    {
+                        sentLoading.TryRemove(license, out Player oldPlayer);
+                    }
+                    sentLoading.TryAdd(license, player);
+
+                    if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
+                    {
+                        if (curiosityUser.IsStaff)
+                        {
+                            Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
+                        }
+
+                        if (!priority.TryAdd(license, curiosityUser.QueuePriority))
+                        {
+                            priority.TryGetValue(license, out int oldPriority);
+                            priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
+                        }
+                    }
+
+                    if (session.TryAdd(license, SessionState.Queue))
+                    {
+                        if (!priority.ContainsKey(license))
+                        {
+                            newQueue.Enqueue(license);
+                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
+                        }
+                        else
+                        {
+                            newPriorityQueue.Enqueue(license);
+                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
+                        }
+                    }
+
+                    if (!session[license].Equals(SessionState.Queue))
+                    {
+                        UpdateTimer(license);
+                        session.TryGetValue(license, out SessionState oldState);
+                        session.TryUpdate(license, SessionState.Loading, oldState);
+                        deferrals.done();
+                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                        return;
+                    }
+
+                    bool inPriority = priority.ContainsKey(license);
+                    int dots = 0;
+
+                    while (session[license].Equals(SessionState.Queue))
+                    {
+                        if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
+                        {
+                            int count = inPriority ? inPriorityQueue : inQueue;
+                            string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
+                            deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
+                        }
+                        dots = dots > 2 ? 0 : dots + 1;
+                        if (player?.EndPoint is null)
+                        {
+                            UpdateTimer(license);
+                            deferrals.done($"{messages[Messages.Canceled]}");
+                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                            return;
+                        }
+                        RemoveFrom(license, false, false, true, false, false, false);
+                        await BaseScript.Delay(5000);
+                    }
+                    await BaseScript.Delay(500);
+
+                    deferrals.done();
+                }));
             }
             catch (Exception ex)
             {
@@ -365,6 +387,13 @@ namespace Curiosity.Core.Server.Managers
                 deferrals.done($"Error in Queue");
                 return;
             }
+        }
+
+        private async void ShowAdaptiveCard(string cardLocation, dynamic deferrals)
+        {
+            string discordTemplate = LoadResourceFile(GetCurrentResourceName(), cardLocation);
+            await BaseScript.Delay(100);
+            deferrals.presentCard(discordTemplate);
         }
 
         private async Task QueueUpdate()
