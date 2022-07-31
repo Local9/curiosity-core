@@ -37,7 +37,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
             Vehicle veh = Game.PlayerPed.CurrentVehicle;
 
-            for (var extra = 0; extra < 14; extra++)
+            for (var extra = 0; extra < 20; extra++)
             {
                 // If this extra exists...
                 if (veh.ExtraExists(extra))
