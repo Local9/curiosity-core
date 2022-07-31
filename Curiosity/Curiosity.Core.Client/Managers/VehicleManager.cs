@@ -1349,8 +1349,8 @@ namespace Curiosity.Core.Client.Managers
                 if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
                 {
                     Cache.PersonalTrailer = null;
-                    Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
                     Cache.PersonalTrailer = new State.VehicleState(vehicle);
+                    Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
                 }
 
                 Blip blip = vehicle.CreateBlip(vehicleItem.SpawnTypeId);
