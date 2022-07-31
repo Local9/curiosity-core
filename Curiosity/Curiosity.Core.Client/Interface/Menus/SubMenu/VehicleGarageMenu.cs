@@ -8,6 +8,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class VehicleGarageMenu
     {
+        Dictionary<int, UIMenu> _classMenus = new();
+
         NotificationManager Notify => NotificationManager.GetModule();
         VehicleManager vehicleManager => VehicleManager.GetModule();
         UIMenu baseMenu;
@@ -19,16 +21,23 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             baseMenu = menu;
 
-            baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
+            // baseMenu.OnItemSelect += BaseMenu_OnItemSelect;
             baseMenu.OnMenuStateChanged += BaseMenu_OnMenuStateChanged;
         }
 
         private async void BaseMenu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.ChangeForward)
+            if (state == MenuState.ChangeForward && (newMenu == baseMenu))
             {
+                foreach(KeyValuePair<int, UIMenu> keyValuePair in _classMenus)
+                {
+                    keyValuePair.Value.Clear();
+                }
+
                 baseMenu.Clear();
                 baseMenu.AddItem(loadingItem);
+
+                _classMenus.Clear();
 
                 isLoading = true;
                 UpdateLoadingDisplay();
@@ -87,12 +96,39 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 goto END;
             }
 
-            foreach (VehicleItem vehicle in vehicles.OrderBy(x => x.Label))
+            foreach (VehicleItem vehicle in vehicles)
             {
-                UIMenuItem uIMenuItem = new UIMenuItem($"{vehicle.Label}");
-                uIMenuItem.SetRightLabel(vehicle.VehicleInfo.plateText);
-                uIMenuItem.ItemData = vehicle;
-                baseMenu.AddItem(uIMenuItem);
+                uint model = (uint)GetHashKey(vehicle.Hash);
+                int vehicleClass = GetVehicleClassFromName(model);
+                string label = Game.GetGXTEntry($"VEH_CLASS_{vehicleClass}");
+
+                if (_classMenus.ContainsKey(vehicleClass)) continue;
+
+                UIMenu classSubMenu = InteractionMenu.MenuPool.AddSubMenu(baseMenu, label);
+
+                foreach (VehicleItem subVehicle in vehicles.OrderBy(x => x.Label))
+                {
+                    uint subModel = (uint)GetHashKey(subVehicle.Hash);
+                    int subVehicleClass = GetVehicleClassFromName(subModel);
+
+                    if (subVehicleClass == vehicleClass)
+                    {
+                        string displayName = GetDisplayNameFromVehicleModel(subModel);
+                        string vehicleLabel = Game.GetGXTEntry($"{displayName}");
+
+                        if (displayName == "CARNOTFOUND")
+                            vehicleLabel = subVehicle.Label;
+
+                        UIMenuItem uIMenuItem = new UIMenuItem(vehicleLabel);
+                        uIMenuItem.SetRightLabel(subVehicle.VehicleInfo.plateText);
+                        uIMenuItem.ItemData = subVehicle;
+
+                        classSubMenu.AddItem(uIMenuItem);
+                    }
+                }
+
+                _classMenus.Add(vehicleClass, classSubMenu);
+                classSubMenu.OnItemSelect += BaseMenu_OnItemSelect;
             }
 
         END:
