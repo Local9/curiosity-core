@@ -101,27 +101,23 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             }
             else if (checkboxItem == uiChkTireSmoke)
             {
+                int r = 255;
+                int g = 255;
+                int b = 255;
+
+                ToggleVehicleMod(vehicle.Handle, 20, Checked);
+                if (!Checked)
+                    RemoveVehicleMod(vehicle.Handle, 20);
+
                 if (Checked)
                 {
-                    // Enable it.
-                    ToggleVehicleMod(vehicle.Handle, 20, true);
-                    // Get the selected color values.
-                    var r = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][0];
-                    var g = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][1];
-                    var b = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][2];
-                    // Set the color.
-                    SetVehicleTyreSmokeColor(vehicle.Handle, r, g, b);
+                    r = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][0];
+                    g = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][1];
+                    b = tireSmokeColors[tireSmokes[uiLstTireSmoke.Index]][2];
                 }
-                // If it should be disabled:
-                else
-                {
-                    // Set the smoke to white.
-                    SetVehicleTyreSmokeColor(vehicle.Handle, 255, 255, 255);
-                    // Disable it.
-                    ToggleVehicleMod(vehicle.Handle, 20, false);
-                    // Remove the mod.
-                    RemoveVehicleMod(vehicle.Handle, 20);
-                }
+
+                vehicle.Mods.TireSmokeColor = System.Drawing.Color.FromArgb(255, r, g, b);
+                Logger.Debug($"Set Tire Smoke Color; r: {r}, g: {g}, b: {b}");
             }
             await BaseScript.Delay(500);
             checkboxItem.Enabled = true;
@@ -182,7 +178,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 var b = tireSmokeColors[tireSmokes[newIndex]][2];
 
                 // Set the color.
-                SetVehicleTyreSmokeColor(vehicle.Handle, r, g, b);
+                vehicle.Mods.TireSmokeColor = System.Drawing.Color.FromArgb(255, r, g, b);
+                Logger.Debug($"Set Tire Smoke Color; r: {r}, g: {g}, b: {b}");
             }
         }
 
@@ -344,6 +341,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         {
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
             vehicle.Mods.InstallModKit();
+            SetVehicleModKit(vehicle.Handle, 0);
 
             if (mainMenu is null)
             {

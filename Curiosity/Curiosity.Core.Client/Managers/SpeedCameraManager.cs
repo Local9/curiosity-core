@@ -151,7 +151,7 @@ namespace Curiosity.Core.Client.Managers
             }
             else
             {
-                Logger.Debug($"{street}:{streetHash} is unknown, please inform the dev team.");
+                // Logger.Debug($"{street}:{streetHash} is unknown, please inform the dev team.");
             }
         }
 

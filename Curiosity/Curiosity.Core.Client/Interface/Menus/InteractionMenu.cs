@@ -317,7 +317,8 @@ namespace Curiosity.Core.Client.Interface.Menus
                             {
                                 menuMain.Visible = false;
                                 PluginManager.ProcessMouse = menuMain.Visible;
-                                MenuPool.CloseAllMenus();
+                                if (MenuPool.IsAnyMenuOpen())
+                                    MenuPool.CloseAllMenus();
                             }
                         }
                     }
@@ -368,7 +369,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "On Menu Open Tick");
+                Logger.Debug(ex, "On Menu Open Tick");
             }
         }
 

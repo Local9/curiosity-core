@@ -36,6 +36,26 @@
             }
         }
 
+        public static readonly List<VehicleColor> ChameleonPaint = new List<VehicleColor>()
+        {
+            new VehicleColor(223, "G9_PAINT01"),
+            new VehicleColor(224, "G9_PAINT02"),
+            new VehicleColor(225, "G9_PAINT03"),
+            new VehicleColor(226, "G9_PAINT04"),
+            new VehicleColor(227, "G9_PAINT05"),
+            new VehicleColor(228, "G9_PAINT06"),
+            new VehicleColor(229, "G9_PAINT07"),
+            new VehicleColor(230, "G9_PAINT08"),
+            new VehicleColor(231, "G9_PAINT09"),
+            new VehicleColor(232, "G9_PAINT10"),
+            new VehicleColor(233, "G9_PAINT11"),
+            new VehicleColor(234, "G9_PAINT12"),
+            new VehicleColor(235, "G9_PAINT13"),
+            new VehicleColor(236, "G9_PAINT14"),
+            new VehicleColor(237, "G9_PAINT15"),
+            new VehicleColor(238, "G9_PAINT16")
+        };
+
         public static readonly List<VehicleColor> ClassicColors = new List<VehicleColor>()
         {
             new VehicleColor(0, "BLACK"),

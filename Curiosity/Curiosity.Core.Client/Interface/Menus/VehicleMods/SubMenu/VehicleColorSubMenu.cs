@@ -14,6 +14,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         UIMenuListItem uiLstWheelColor;
         UIMenuListItem uiLstDashColor;
         UIMenuListItem uiLstTrimColor;
+        UIMenuListItem uiLstChameleon;
         UIMenuSliderItem uiSldEnveff = new UIMenuSliderItem("Enveff Scale", "This works on certain vehicles.", false);
         UIMenuItem uiItmChrome = new UIMenuItem("Chrome");
 
@@ -22,7 +23,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
         List<dynamic> metals = new List<dynamic>();
         List<dynamic> util = new List<dynamic>();
         List<dynamic> worn = new List<dynamic>();
+        List<dynamic> chameleon = new List<dynamic>();
         List<dynamic> wheelColors = new List<dynamic>() { "Default Alloy" };
+
+        int originalPrimaryIndex;
+        int originalSecondaryIndex;
 
         internal void Create(UIMenu menu)
         {
@@ -38,46 +43,56 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 int i = 0;
                 foreach (var vc in VehicleData.ClassicColors)
                 {
-                    classic.Add($"{GetLabelText(vc.label)} ({i + 1}/{VehicleData.ClassicColors.Count})");
+                    classic.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.ClassicColors.Count})");
                     i++;
                 }
 
                 i = 0;
                 foreach (var vc in VehicleData.MatteColors)
                 {
-                    matte.Add($"{GetLabelText(vc.label)} ({i + 1}/{VehicleData.MatteColors.Count})");
+                    matte.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.MatteColors.Count})");
                     i++;
                 }
 
                 i = 0;
                 foreach (var vc in VehicleData.MetalColors)
                 {
-                    metals.Add($"{GetLabelText(vc.label)} ({i + 1}/{VehicleData.MetalColors.Count})");
+                    metals.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.MetalColors.Count})");
                     i++;
                 }
 
                 i = 0;
                 foreach (var vc in VehicleData.UtilColors)
                 {
-                    util.Add($"{GetLabelText(vc.label)} ({i + 1}/{VehicleData.UtilColors.Count})");
+                    util.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.UtilColors.Count})");
                     i++;
                 }
 
                 i = 0;
                 foreach (var vc in VehicleData.WornColors)
                 {
-                    worn.Add($"{GetLabelText(vc.label)} ({i + 1}/{VehicleData.WornColors.Count})");
+                    worn.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.WornColors.Count})");
+                    i++;
+                }
+
+                i = 0;
+                chameleon.Add($"Remove {0}/{VehicleData.ChameleonPaint.Count}");
+                foreach (var vc in VehicleData.ChameleonPaint)
+                {
+                    chameleon.Add($"{Game.GetGXTEntry(vc.label)} ({i + 1}/{VehicleData.ChameleonPaint.Count})");
                     i++;
                 }
 
                 wheelColors.AddRange(classic);
             }
 
+            uiLstChameleon = new UIMenuListItem("Chameleon", chameleon, 0);
             uiLstDashColor = new UIMenuListItem("Dash Color", classic, 0);
             uiLstTrimColor = new UIMenuListItem("Trim Color", classic, 0);
             uiLstWheelColor = new UIMenuListItem("Wheel Color", wheelColors, 0);
 
             menu.AddItem(uiSldEnveff);
+            menu.AddItem(uiLstChameleon);
             menu.AddItem(uiItmChrome);
             menu.AddItem(uiLstDashColor);
             menu.AddItem(uiLstTrimColor);
@@ -91,6 +106,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 var matteList = new UIMenuListItem("Matte", matte, 0);
                 var metalList = new UIMenuListItem("Metals", metals, 0);
                 var utilList = new UIMenuListItem("Util", util, 0);
+                var utilChameleon = new UIMenuListItem("Chameleon", chameleon, 0);
                 var wornList = new UIMenuListItem("Worn", worn, 0);
 
                 if (i == 0)
@@ -130,9 +146,12 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
 
                     if (primaryColor == 120 && primaryColor == 120)
                     {
-                        SetVehicleColours(veh.Handle, 0, 0);
+                        SetVehicleColours(veh.Handle, originalPrimaryIndex, originalSecondaryIndex);
                         return;
                     }
+
+                    originalPrimaryIndex = primaryColor;
+                    originalPrimaryIndex = secondaryColor;
 
                     SetVehicleColours(veh.Handle, 120, 120);
                 }
@@ -257,6 +276,22 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     // sadly these native names are mixed up :/ but ofc it's impossible to fix due to backwards compatibility.
                     // this should actually be called SetVehicleInteriorColour
                     SetVehicleDashboardColour(veh.Handle, intColor);
+                }
+                else if (listItem == uiLstChameleon)
+                {
+                    int idx = newIndex - 1;
+
+                    if (idx >= 0)
+                    {
+                        VehicleData.VehicleColor vehicleColor = VehicleData.ChameleonPaint[newIndex - 1];
+                        SetVehicleColours(veh.Handle, vehicleColor.id, vehicleColor.id);
+                        Logger.Debug($"Setting Vehicle Chameleon Paint: {vehicleColor.id}: {vehicleColor.label}");
+                    }
+
+                    if (idx == -1)
+                    {
+                        SetVehicleColours(veh.Handle, 0, 0);
+                    }
                 }
             }
 
