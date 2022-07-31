@@ -1,4 +1,6 @@
-﻿namespace Curiosity.Core.Client.Managers
+﻿using Curiosity.Core.Client.Interface.Modules;
+
+namespace Curiosity.Core.Client.Managers
 {
     public class NoClipManager : Manager<NoClipManager>
     {
@@ -25,8 +27,12 @@
         };
 
         public bool IsEnabled { get; set; }
+        public bool IsHudEnabled { get; private set; } = true;
+        private bool HudEnabled { get; set; } = true;
 
         public float Speed { get; set; } = 1f;
+        public float Fov { get; set; } = 75f;
+        public float MaxFov { get; set; } = 130f;
 
         public Camera CurrentCamera { get; set; }
 
@@ -88,6 +94,8 @@
                         ped.IsVisible = true;
                         ped.Task.ClearAllImmediately();
 
+                        Cache.Player.EnableHud();
+
                         if (droneModel is not null)
                         {
                             if (droneModel.IsLoaded)
@@ -114,8 +122,9 @@
                 // Create camera on toggle
                 if (CurrentCamera == null)
                 {
-                    CurrentCamera = World.CreateCamera(ped.Position, GameplayCamera.Rotation, 75f);
+                    CurrentCamera = World.CreateCamera(ped.Position, GameplayCamera.Rotation, Fov);
                     CurrentCamera.AttachTo(ped, new Vector3(0f, 0f, 0.5f));
+                    ped.Rotation = Vector3.Zero;
                     World.RenderingCamera = CurrentCamera;
                     ped.IsPositionFrozen = true;
                     ped.IsCollisionEnabled = false;
@@ -135,11 +144,23 @@
                 }
 
                 // Speed Control
-                if (Game.IsControlPressed(2, Control.SelectPrevWeapon))
+                if (ControlHelper.IsControlPressed(Control.SelectNextWeapon, modifier: ControlModifier.Alt))
+                {
+                    Fov = Math.Min(Fov + 5f, MaxFov);
+                    if (Fov > MaxFov)
+                        Fov = MaxFov;
+                }
+                else if (ControlHelper.IsControlPressed(Control.SelectPrevWeapon, modifier: ControlModifier.Alt))
+                {
+                    Fov = Math.Max(0.1f, Fov - 5f);
+                    if (Fov < 0)
+                        Fov = 0;
+                }
+                else if (ControlHelper.IsControlPressed(Control.SelectPrevWeapon))
                 {
                     Speed = Math.Min(Speed + 0.1f, MaxSpeed);
                 }
-                else if (Game.IsControlPressed(2, Control.SelectNextWeapon))
+                else if (ControlHelper.IsControlPressed(Control.SelectNextWeapon))
                 {
                     Speed = Math.Max(0.1f, Speed - 0.1f);
                 }
@@ -193,6 +214,22 @@
                     ped.PositionNoOffset = ped.GetOffsetPosition(new Vector3(0f, 0f, multiplier * -Speed / 2));
                 }
 
+                // Down (Q)
+                if (Game.IsControlPressed(2, Control.Jump))
+                {
+                    if (!IsHudEnabled)
+                    {
+                        Cache.Player.EnableHud();
+                        IsHudEnabled = true;
+                    }
+                    else if (IsHudEnabled)
+                    {
+                        Cache.Player.DisableHud();
+                        IsHudEnabled = false;
+                    }
+                    await BaseScript.Delay(500);
+                }
+
 
                 // Disable controls
                 foreach (var ctrl in DisabledControls)
@@ -201,6 +238,7 @@
                 }
 
                 ped.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
+                CurrentCamera.FieldOfView = Fov;
 
                 if (droneProp is not null)
                 {
@@ -208,6 +246,8 @@
                         API.SetEntityLocallyInvisible(droneProp.Handle);
                 }
                 API.DisablePlayerFiring(Game.Player.Handle, false);
+
+                
             }
             catch (Exception ex)
             {
