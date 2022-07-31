@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Client.Environment.Entities;
+using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Exceptions;
 using Curiosity.Core.Client.Extensions;
@@ -1035,9 +1036,21 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
+                string vehicleName = arguments.ElementAt(0);
                 if (arguments.Count == 1)
                 {
-                    await SpawnVehicle(arguments);
+                    if (vehicleName.Contains(","))
+                    {
+                        foreach(string vName in vehicleName.Split(','))
+                        {
+                            await SpawnVehicle(vName);
+                            await BaseScript.Delay(100);
+                        }
+                        return;
+                    }
+                    
+                    Vehicle vehicle = await SpawnVehicle(vehicleName);
+                    Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                     return;
                 }
 
@@ -1046,7 +1059,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     while (numberOfVehicles > 0)
                     {
-                        await SpawnVehicle(arguments);
+                        await SpawnVehicle(vehicleName);
                         numberOfVehicles--;
                         await BaseScript.Delay(100);
                     }
@@ -1055,7 +1068,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
 
-            private static async Task SpawnVehicle(List<string> arguments)
+            private static async Task<Vehicle> SpawnVehicle(string vehicleModel)
             {
                 try
                 {
@@ -1071,18 +1084,18 @@ namespace Curiosity.Core.Client.Commands.Impl
                         del.Delete();
                     }
 
-                    Model vehModel = new Model(arguments.ElementAt(0));
+                    Model vehModel = new Model(vehicleModel);
 
                     if (!API.IsModelInCdimage((uint)vehModel.Hash))
                     {
-                        NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not loaded.");
-                        return;
+                        NotificationManager.GetModule().Error($"Model '{vehicleModel}' is not loaded.");
+                        return null;
                     }
 
                     if (!vehModel.IsValid)
                     {
-                        NotificationManager.GetModule().Error($"Model '{arguments.ElementAt(0)}' is not valid.");
-                        return;
+                        NotificationManager.GetModule().Error($"Model '{vehicleModel}' is not valid.");
+                        return null;
                     }
 
                     DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
@@ -1097,35 +1110,20 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (!vehModel.IsLoaded)
                     {
                         NotificationManager.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
-                        return;
+                        return null;
                     }
 
-                    if (arguments.Count >= 1 && arguments.Count < 5)
-                    {
-                        Vector3 pos = Game.PlayerPed.Position;
-                        pos.Z = pos.Z - 50f;
+                    Vector5 pos = await VehicleGenerationPositions.GetNearestUnoccupiedParkingSpot();
 
-                        vehicle = await World.CreateVehicle(vehModel, pos, Game.PlayerPed.Heading);
-                    }
-
-                    if (arguments.Count == 5)
-                    {
-                        float x = float.Parse(arguments.ElementAt(1));
-                        float y = float.Parse(arguments.ElementAt(2));
-                        float z = float.Parse(arguments.ElementAt(3));
-                        float h = float.Parse(arguments.ElementAt(4));
-
-                        Vector3 pos = new Vector3(x, y, z);
-
-                        vehicle = await World.CreateVehicle(vehModel, pos, h);
-                    }
+                    vehicle = await World.CreateVehicle(vehModel, pos.Vector3, pos.Vector2.ToHeading());
 
                     vehicle.IsPersistent = true;
                     vehicle.PreviouslyOwnedByPlayer = true;
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
 
-                    await vehicle.FadeOut();
+                    // await vehicle.FadeOut();
+                    vehicle.Opacity = 0;
                     vehicle.Repair();
 
                     await BaseScript.Delay(500);
@@ -1143,21 +1141,14 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (b)
                     {
                         vehicle.CreateBlip();
-                        Cache.StaffVehicle = new State.VehicleState(vehicle);
-
-                        if (arguments.Count == 1)
-                            Cache.PlayerPed.Task.WarpIntoVehicle(Cache.StaffVehicle.Vehicle, VehicleSeat.Driver);
+                        Cache.StaffVehicle = new State.VehicleState(vehicle);                            
 
                         Cache.Player.User.SendEvent("vehicle:log:staff", vehicle.NetworkId);
 
                         vehicle.IsPositionFrozen = false;
                         vehicle.IsCollisionEnabled = true;
 
-                        vehicle.Position = Common.GetRandomSpawnCoordsInRange(Game.PlayerPed.Position, 10f, 25f, out float heading, false);
-                        vehicle.Heading = heading;
-
                         vehicle.FadeIn();
-                        vehicle.Opacity = 255;
                         vehicle.ResetOpacity();
 
                         vehicle.Mods.InstallModKit();
@@ -1167,15 +1158,18 @@ namespace Curiosity.Core.Client.Commands.Impl
                         SetVehicleMod(vehicle.Handle, 15, 5, false);
                         SetVehicleMod(vehicle.Handle, 18, 1, false);
 
-                        return;
+                        return vehicle;
                     }
 
                     EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
                     vehicle.Delete();
+
+                    return null;
                 }
                 catch (Exception ex)
                 {
                     Logger.Error(ex, "Vehicle Spawn");
+                    return null;
                 }
             }
         }

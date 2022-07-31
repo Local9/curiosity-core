@@ -100,43 +100,24 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                     if (mod.ModCount > 0)
                     {
                         string name = mod.LocalizedModTypeName;
-                        UIMenu modSubmenu = VehicleModMenu._MenuPool.AddSubMenu(menu, $"{name}");
 
-                        UIMenuItem uIMenuItemRemove = new UIMenuItem($"Remove");
-                        uIMenuItemRemove.ItemData = new { mod = mod.ModType, variation = -1 };
-                        modSubmenu.AddItem(uIMenuItemRemove);
+                        List<object> lst = new();
 
-                        for (var i = 0; i < mod.ModCount; i++)
+                        lst.Add($"0/{mod.ModCount}");
+
+                        for (var i = 1; i <= mod.ModCount; i++)
                         {
-                            UIMenuItem uIMenuItem = new UIMenuItem($"{name} #{i + 1}");
-                            uIMenuItem.ItemData = new { mod = mod.ModType, variation = i };
-                            modSubmenu.AddItem(uIMenuItem);
+                            lst.Add($"{i}/{mod.ModCount}");
                         }
 
-                        modSubmenu.OnItemSelect += (sender, item, index) =>
-                        {
-                            vehicle = Game.PlayerPed.CurrentVehicle;
-                            vehicle.Mods.InstallModKit();
+                        int currentValue = GetVehicleMod(vehicle.Handle, (int)mod.ModType);
+                        if (currentValue == -1)
+                            currentValue = 0;
 
-                            var vehMod = item.ItemData?.mod;
-                            var variation = item.ItemData?.variation;
-                            bool customWheels = GetVehicleModVariation(vehicle.Handle, 23);
+                        UIMenuListItem uiListMod = new UIMenuListItem(name, lst, currentValue);
+                        uiListMod.ItemData = new { mod = mod.ModType };
+                        menu.AddItem(uiListMod);
 
-                            if (variation == -1)
-                            {
-                                RemoveVehicleMod(vehicle.Handle, (int)vehMod);
-                            }
-                            else
-                            {
-                                SetVehicleMod(vehicle.Handle, (int)vehMod, variation, customWheels);
-                            }
-
-                            Logger.Debug($"Vehicle Mod: {vehMod}:{variation}");
-                        };
-                    }
-                    else
-                    {
-                        Logger.Debug($"Vehicle Mod Ignored: {mod}");
                     }
                 }
 
@@ -145,6 +126,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                 menu.OnListChange += (sender, item, index) =>
                 {
                     vehicle = Game.PlayerPed.CurrentVehicle;
+                    vehicle.Mods.InstallModKit();
 
                     if (item == uiLstWheelType)
                     {
@@ -188,49 +170,29 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                         {
                             SetVehicleMod(vehicle.Handle, 24, -1, customWheels);
                         }
+                        return;
+                    }
+
+                    if (item.ItemData is not null)
+                    {
+                        var vehMod = item.ItemData?.mod;
+                        var variation = index - 1; // remove the fake option we added
+                        bool customWheels = GetVehicleModVariation(vehicle.Handle, 23);
+
+                        if (variation == -1)
+                        {
+                            RemoveVehicleMod(vehicle.Handle, (int)vehMod);
+                        }
+                        else
+                        {
+                            SetVehicleMod(vehicle.Handle, (int)vehMod, variation, customWheels);
+                        }
+
+                        Logger.Debug($"Vehicle Mod: {vehMod}:{variation}");
                     }
                 };
-
-                //int currentHeadlightColor = _GetHeadlightsColorFromVehicle(vehicle);
-                //if (currentHeadlightColor < 0 || currentHeadlightColor > 12)
-                //{
-                //    currentHeadlightColor = 13;
-                //}
-                //uiLstHeadlightColor.Index = currentHeadlightColor;
             }
 
-            //int currentTint = GetVehicleWindowTint(vehicle.Handle);
-            //if (currentTint == -1)
-            //{
-            //    currentTint = 4;
-            //}
-
-            //switch (currentTint)
-            //{
-            //    case 0:
-            //        currentTint = 1;
-            //        break;
-            //    case 1:
-            //        currentTint = 5;
-            //        break;
-            //    case 2:
-            //        currentTint = 4;
-            //        break;
-            //    case 3:
-            //        currentTint = 3;
-            //        break;
-            //    case 4:
-            //        currentTint = 0;
-            //        break;
-            //    case 5:
-            //        currentTint = 2;
-            //        break;
-            //    case 6:
-            //        currentTint = 6;
-            //        break;
-            //}
-
-            //uiLstWindowTint.Index = currentTint;
         }
     }
 }

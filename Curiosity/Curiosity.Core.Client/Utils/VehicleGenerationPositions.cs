@@ -1,10 +1,26 @@
 ﻿using Curiosity.Core.Client.Environment.Entities.Models;
+using Curiosity.Core.Client.Extensions;
 using System.Linq;
 
 namespace Curiosity.Core.Client.Utils
 {
     internal static class VehicleGenerationPositions
     {
+        public static async Task<Vector5> GetNearestUnoccupiedParkingSpot()
+        {
+            Vector3 pos = Game.PlayerPed.Position;
+            List<Vector5> parkingPosition = GetParkingSpotByZone();
+            List<Vector5> closestPositions = parkingPosition.OrderBy(x => Math.Abs(x.Vector3.DistanceToSquared(pos))).ToList();
+            
+            foreach(Vector5 position in closestPositions)
+            {
+                if (!position.Vector3.IsPositionOccupied())
+                    return position;
+            }
+
+            return Vector5.Zero;
+        }
+
         public static async Task<Vector5> GetNearestParkingSpot()
         {
             Vector3 pos = Game.PlayerPed.Position;
@@ -184,6 +200,7 @@ namespace Curiosity.Core.Client.Utils
             }
         }
 
+        #region ParkingSpots
         public static List<Vector5> PBOX =
             new()
             {
@@ -41264,5 +41281,6 @@ namespace Curiosity.Core.Client.Utils
                     new Vector2(-0.8013392f, -4.935227f)
                 )
             };
+        #endregion
     }
 }
