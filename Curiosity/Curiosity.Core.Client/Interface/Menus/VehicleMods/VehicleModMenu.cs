@@ -29,8 +29,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         private VehicleColorSubMenu vehicleColorSubMenu = new VehicleColorSubMenu();
         private UIMenu vehicleExtraMenu;
         private VehicleExtrasSubMenu vehicleExtrasSubMenu = new VehicleExtrasSubMenu();
-        private UIMenu vehicleLiveriesMenu;
-        private VehicleLiveriesSubMenu vehicleLiveriesSubMenu = new VehicleLiveriesSubMenu();
+
+        private UIMenuListItem uiLstLiveries;
 
         private UIMenuCheckboxItem uiChkXenonHeadlights;
         private UIMenuCheckboxItem uiChkTurbo;
@@ -69,62 +69,6 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         public override void Begin()
         {
             _MenuPool = PluginManager.MenuPool;
-
-            // create menu
-            mainMenu = new UIMenu("Vehicle Mod Menu", "Modify your vehicle");
-
-            _MenuPool.Add(mainMenu);
-
-            vehicleModMenu = _MenuPool.AddSubMenu(mainMenu, "Mods");
-            vehicleModSubMenu.Create(vehicleModMenu);
-
-            vehicleNeonMenu = _MenuPool.AddSubMenu(mainMenu, "Neon Kits");
-            vehicleNeonSubMenu.Create(vehicleNeonMenu);
-
-            vehicleColorMenu = _MenuPool.AddSubMenu(mainMenu, "Colors");
-            vehicleColorSubMenu.Create(vehicleColorMenu);
-
-            vehicleExtraMenu = _MenuPool.AddSubMenu(mainMenu, "Extras");
-            vehicleExtrasSubMenu.Create(vehicleExtraMenu);
-
-            vehicleLiveriesMenu = _MenuPool.AddSubMenu(mainMenu, "Liveries");
-            vehicleLiveriesSubMenu.Create(vehicleLiveriesMenu);
-
-            uiLstWindowTint = new UIMenuListItem("Window Tint", windowTints, 0);
-            uiLstWindowTint.Description = "Apply tint to your windows.";
-            mainMenu.AddItem(uiLstWindowTint);
-
-            uiChkCustomWheels = new UIMenuCheckboxItem("Custom Wheels", false);
-            uiChkCustomWheels.Description = "Add or remove ~y~custom~s~ wheels.";
-            mainMenu.AddItem(uiChkCustomWheels);
-
-            uiChkBulletProofTires = new UIMenuCheckboxItem("Bullet Proof Tires", false);
-            mainMenu.AddItem(uiChkBulletProofTires);
-
-            uiChkTurbo = new UIMenuCheckboxItem("Turbo", false);
-            mainMenu.AddItem(uiChkTurbo);
-
-            uiChkXenonHeadlights = new UIMenuCheckboxItem("Xenon Headlights", false);
-            mainMenu.AddItem(uiChkXenonHeadlights);
-
-            uiLstHeadlightColor = new UIMenuListItem("Headlight Color", headlightColor, 0);
-            mainMenu.AddItem(uiLstHeadlightColor);
-
-            uiChkTireSmoke = new UIMenuCheckboxItem("Tire Smoke", false);
-            uiLstTireSmoke = new UIMenuListItem("Smoke Color", tireSmokes, 0);
-            mainMenu.AddItem(uiChkTireSmoke);
-            mainMenu.AddItem(uiLstTireSmoke);
-
-            miSaveVehicle = new UIMenuItem("Save", "~s~This will cost you ~g~$5000~s~ to save.");
-            mainMenu.AddItem(miSaveVehicle);
-
-            miCloseMenu = new UIMenuItem("Close");
-            mainMenu.AddItem(miCloseMenu);
-
-            mainMenu.OnMenuStateChanged += MainMenu_OnMenuStateChanged;
-            mainMenu.OnItemSelect += MainMenu_OnItemSelect;
-            mainMenu.OnListChange += MainMenu_OnListChange;
-            mainMenu.OnCheckboxChange += MainMenu_OnCheckboxChange;
         }
 
         private async void MainMenu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
@@ -187,7 +131,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
         {
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
 
-            if (listItem == uiLstWindowTint)
+            if (listItem == uiLstLiveries)
+            {
+                vehicle.Mods.Livery = newIndex - 1;
+            }
+            else if (listItem == uiLstWindowTint)
             {
                 switch (newIndex)
                 {
@@ -256,6 +204,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
 
             mainMenu.InstructionalButtons.Clear();
+            mainMenu.Clear();
 
             if (mainMenu.Visible)
                 mainMenu.Visible = false;
@@ -382,9 +331,108 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 return;
             }
 
+            CreateMenu();
+
             Instance.AttachTickHandler(OnMenuCreate);
             Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
             PluginManager.ProcessMouse = true;
+            PluginManager.MenuPool.MouseEdgeEnabled = false;
+            mainMenu.MouseControlsEnabled = false;
+        }
+
+        private void CreateMenu()
+        {
+            Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+            vehicle.Mods.InstallModKit();
+
+            if (mainMenu is null)
+            {
+                // create menu
+                mainMenu = new UIMenu("Vehicle Mod Menu", "Modify your vehicle");
+                _MenuPool.Add(mainMenu);
+            }
+
+            vehicleModMenu = _MenuPool.AddSubMenu(mainMenu, "Mods");
+            vehicleModSubMenu.Create(vehicleModMenu);
+
+            vehicleNeonMenu = _MenuPool.AddSubMenu(mainMenu, "Neon Kits");
+            vehicleNeonSubMenu.Create(vehicleNeonMenu);
+
+            vehicleColorMenu = _MenuPool.AddSubMenu(mainMenu, "Colors");
+            vehicleColorSubMenu.Create(vehicleColorMenu);
+
+            bool hasExtras = false;
+
+            for(int i = 0; i < 20; i++)
+            {
+                if (vehicle.ExtraExists(i))
+                    hasExtras = true;
+            }
+
+            if (hasExtras)
+            {
+                vehicleExtraMenu = _MenuPool.AddSubMenu(mainMenu, "Extras");
+                vehicleExtrasSubMenu.Create(vehicleExtraMenu);
+            }
+
+            List<dynamic> liveryList = new();
+
+            foreach (VehicleMod mod in vehicle.Mods.GetAllMods())
+            {
+                if (mod.ModType != VehicleModType.Livery) continue;
+                liveryList.Add("Remove");
+
+                for (int i = 0; i < mod.ModCount; i++)
+                {
+                    string label = vehicle.Mods.GetLocalizedLiveryName(i);
+                    liveryList.Add(label);
+                }
+            }
+
+            int currentValue = GetVehicleMod(vehicle.Handle, (int)VehicleModType.Livery);
+            if (currentValue == -1)
+                currentValue = 0;
+            if (currentValue > 0)
+                ++currentValue;
+
+            uiLstLiveries = new UIMenuListItem("Livery", liveryList, currentValue);
+            mainMenu.AddItem(uiLstLiveries);
+
+            uiLstWindowTint = new UIMenuListItem("Window Tint", windowTints, 0);
+            uiLstWindowTint.Description = "Apply tint to your windows.";
+            mainMenu.AddItem(uiLstWindowTint);
+
+            uiChkCustomWheels = new UIMenuCheckboxItem("Custom Wheels", false);
+            uiChkCustomWheels.Description = "Add or remove ~y~custom~s~ wheels.";
+            mainMenu.AddItem(uiChkCustomWheels);
+
+            uiChkBulletProofTires = new UIMenuCheckboxItem("Bullet Proof Tires", false);
+            mainMenu.AddItem(uiChkBulletProofTires);
+
+            uiChkTurbo = new UIMenuCheckboxItem("Turbo", false);
+            mainMenu.AddItem(uiChkTurbo);
+
+            uiChkXenonHeadlights = new UIMenuCheckboxItem("Xenon Headlights", false);
+            mainMenu.AddItem(uiChkXenonHeadlights);
+
+            uiLstHeadlightColor = new UIMenuListItem("Headlight Color", headlightColor, 0);
+            mainMenu.AddItem(uiLstHeadlightColor);
+
+            uiChkTireSmoke = new UIMenuCheckboxItem("Tire Smoke", false);
+            uiLstTireSmoke = new UIMenuListItem("Smoke Color", tireSmokes, 0);
+            mainMenu.AddItem(uiChkTireSmoke);
+            mainMenu.AddItem(uiLstTireSmoke);
+
+            miSaveVehicle = new UIMenuItem("Save", "~s~This will cost you ~g~$5000~s~ to save.");
+            mainMenu.AddItem(miSaveVehicle);
+
+            miCloseMenu = new UIMenuItem("Close");
+            mainMenu.AddItem(miCloseMenu);
+
+            mainMenu.OnMenuStateChanged += MainMenu_OnMenuStateChanged;
+            mainMenu.OnItemSelect += MainMenu_OnItemSelect;
+            mainMenu.OnListChange += MainMenu_OnListChange;
+            mainMenu.OnCheckboxChange += MainMenu_OnCheckboxChange;
         }
 
         private async Task OnMenuCreate()
