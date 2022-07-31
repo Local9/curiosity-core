@@ -203,11 +203,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             Instance.DetachTickHandler(OnMenuCreate);
             Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
 
-            mainMenu.InstructionalButtons.Clear();
-            mainMenu.Clear();
-
             if (mainMenu.Visible)
                 mainMenu.Visible = false;
+
+            mainMenu.InstructionalButtons.Clear();
+            mainMenu.Clear();
 
             PluginManager.ProcessMouse = false;
             PluginManager.MenuPool.CloseAllMenus();
