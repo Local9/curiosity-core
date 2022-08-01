@@ -1,5 +1,8 @@
-﻿using Curiosity.Core.Client.Interface.Menus.VehicleMods;
+﻿using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Interface.Menus.VehicleMods;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Models;
 using NativeUI;
 
 namespace Curiosity.Core.Client.Interface.Menus.SubMenu
@@ -13,10 +16,14 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private UIMenu menuVehicleRemote;
         private VehicleRemoteMenu _VehicleRemoteMenu = new VehicleRemoteMenu();
+        public EventSystem EventSystem => EventSystem.GetModule();
+        public NotificationManager Notify => NotificationManager.GetModule();
 
         static List<dynamic> lockList = new List<dynamic>() { "Allow Everyone", "Lock for Everyone", "Passengers Only" };
         UIMenuListItem uiVehicleLock = new UIMenuListItem("Lock", lockList, 0);
         UIMenuItem uiOpenModMenu = new UIMenuItem("Modify Vehicle");
+        UIMenuItem uiPayOffSpeedingTickets = new UIMenuItem("Pay off all speeding tickets", "~s~This will pay all of your speeding tickets, if you have the money to do so.");
+        UIMenuItem uiPayOffOutstandingSpeedingTickets = new UIMenuItem("Pay off outstanding speeding tickets", "~s~This will pay all of your ~b~Outstanding~s~ speeding tickets, if you have the money to do so.");
 
         UIMenuCheckboxItem uiChkInverseTorque;
 
@@ -53,6 +60,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 driftVehicleHashes.Add(sultanRS);
             }
 
+
             menuVehicleDoors = InteractionMenu.MenuPool.AddSubMenu(menu, "Doors");
             _VehicleDoorMenu.CreateMenu(menuVehicleDoors);
 
@@ -68,8 +76,11 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.AddItem(uiChkDriftTires);
             menu.AddItem(uiChkInverseTorque);
             menu.AddItem(uiVehicleLock);
+            menu.AddItem(uiPayOffSpeedingTickets);
+            menu.AddItem(uiPayOffOutstandingSpeedingTickets);
             menu.AddItem(uiOpenModMenu);
 
+            menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnListChange += Menu_OnListChange;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
@@ -87,6 +98,24 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.MouseEdgeEnabled = false;
 
             return menu;
+        }
+
+        private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            selectedItem.Enabled = false;
+            if (selectedItem == uiPayOffSpeedingTickets)
+            {
+                await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay:all");
+            }
+            else if (selectedItem == uiPayOffOutstandingSpeedingTickets)
+            {
+                await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay:overdue");
+
+                Notify.SendNui(eNotification.NOTIFICATION_INFO, "<b>Please wait, processing tickets</b>. You do not need to click the button again, please wait and you'll be notified when it is completed.");
+            }
+
+            await BaseScript.Delay(5000);
+            selectedItem.Enabled = true;
         }
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
