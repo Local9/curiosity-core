@@ -139,6 +139,7 @@ namespace Curiosity.Core.Server.Managers
                 int characterId = curiosityUser.Character.CharacterId;
 
                 ulong ticketCost = await Database.Store.PoliceDatabase.GetTotalTicketCost(characterId);
+                ticketCost = (ulong)(ticketCost * 1.1);
 
                 if (cash < ticketCost || ticketCost == 0)
                 {
@@ -168,6 +169,7 @@ namespace Curiosity.Core.Server.Managers
                 int characterId = curiosityUser.Character.CharacterId;
 
                 ulong ticketCost = await Database.Store.PoliceDatabase.GetTotalOverdueTicketCost(characterId);
+                ticketCost = (ulong)(ticketCost * 1.1);
 
                 if (cash < ticketCost || ticketCost == 0)
                 {
