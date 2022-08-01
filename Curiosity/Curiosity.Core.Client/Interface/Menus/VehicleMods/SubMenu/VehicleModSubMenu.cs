@@ -68,7 +68,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
             // get the vehicle they are sat in
             Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
             // check it
-            if (vehicle is not null && vehicle.Exists() && !vehicle.IsDead && currentVehicle != vehicle)
+            if (vehicle is not null && vehicle.Exists() && !vehicle.IsDead)
             {
                 menu.Clear();
                 uiLstWheelType = null;
