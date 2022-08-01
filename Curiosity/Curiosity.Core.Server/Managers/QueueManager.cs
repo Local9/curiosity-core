@@ -34,6 +34,8 @@ namespace Curiosity.Core.Server.Managers
     {
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
 
+        static ConcurrentDictionary<string, long> _activeConnection = new();
+
         static Regex regex = new Regex(@"^[ :A-Za-z0-9-_.#\[\]]{1,32}$");
         static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff|n1gg3|n1g|n1gg3r|user|pc)\b");
 
@@ -94,6 +96,9 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Player player = PluginManager.PlayersList[metadata.Sender];
 
+                    string license2 = player.Identifiers["license2"];
+                    _activeConnection.TryRemove(license2, out long gameTime);
+
                     string license = player.Identifiers["license"];
                     if (!session.ContainsKey(license))
                     {
@@ -146,6 +151,35 @@ namespace Curiosity.Core.Server.Managers
             Logger.Debug($"[QueueManager] End");
         }
 
+        [TickHandler]
+        private async Task OnConnectionClearAsync()
+        {
+            PlayerList players = PluginManager.PlayersList;
+            Dictionary<string, long> connecting = new(_activeConnection);
+            foreach(KeyValuePair<string, long> kvp in connecting)
+            {
+                if (players.Count() == 0) _activeConnection.Clear();
+
+                if ((GetGameTimer() - kvp.Value) > 120000)
+                {
+                    _activeConnection.TryRemove(kvp.Key, out long gameTime);
+                    continue;
+                }
+
+                string license = kvp.Key;
+                foreach(Player player in players)
+                {
+                    string license2 = player.Identifiers["license"];
+                    if (kvp.Key != license2)
+                    {
+                        _activeConnection.TryRemove(kvp.Key, out long gameTime);
+                    }
+                }
+            }
+
+            await BaseScript.Delay(20000);
+        }
+
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
             try
@@ -164,6 +198,19 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set(StateBagKey.SERVER_HANDLE, player.Handle, true);
 
                 string license = player.Identifiers["license"];
+                string license2 = player.Identifiers["license2"];
+
+                long gameTime = GetGameTimer();
+
+                if (_activeConnection.ContainsKey(license2) && PluginManager.IsLive)
+                {
+                    long time = _activeConnection[license2];
+                    long timeLeft = 120 - ((GetGameTimer() - time) / 1000);
+                    deferrals.done($"Account with matching license is already connecting. Please try again later or in {timeLeft} seconds.");
+                    return;
+                }
+
+                _activeConnection.AddOrUpdate(license2, gameTime, (key, oldValue) => oldValue = gameTime);
 
                 while (!PluginManager.ServerReady)
                 {
@@ -233,6 +280,25 @@ namespace Curiosity.Core.Server.Managers
                     ShowAdaptiveCard("data/cards/discord-unverified.json", deferrals);
 
                     RemoveFrom(license, true, true, true, true, true, true);
+                    return;
+                }
+
+                // check if account active
+                bool isActive = false;
+                ulong discordId = ulong.Parse(player.Identifiers["discord"]);
+                foreach(KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    if (kvp.Value.DiscordId == discordId)
+                    {
+                        isActive = true;
+                    }
+                }
+
+                if (isActive && PluginManager.IsLive)
+                {
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
+                    await BaseScript.Delay(0);
+                    deferrals.done($"Account is already active and playing on the server.");
                     return;
                 }
 
