@@ -110,8 +110,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             else if (selectedItem == uiPayOffOutstandingSpeedingTickets)
             {
                 await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay:overdue");
-
-                Notify.SendNui(eNotification.NOTIFICATION_INFO, "<b>Please wait, processing tickets</b>. You do not need to click the button again, please wait and you'll be notified when it is completed.");
             }
 
             await BaseScript.Delay(5000);

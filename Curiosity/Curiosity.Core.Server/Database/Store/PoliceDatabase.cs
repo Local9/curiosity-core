@@ -148,6 +148,33 @@ namespace Curiosity.Core.Server.Database.Store
             return false;
         }
 
+        internal static async Task<bool> PayAllOverdueTickets(int characterId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@pCharacterId", characterId },
+                };
+
+            string myQuery = "call upCharacterTicketsOverduePaid(@pCharacterId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                    throw new Exception("Unable to update tickets");
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    return kv["Result"].ToBoolean();
+                }
+            }
+
+            return false;
+        }
+
         internal async static Task<ulong> GetTotalTicketCost(int characterId)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
@@ -156,6 +183,33 @@ namespace Curiosity.Core.Server.Database.Store
                 };
 
             string myQuery = "call selCharacterTicketCost(@pCharacterId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await BaseScript.Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                    throw new Exception("No Tickets.");
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    return kv["TotalTicketValue"].ToUnsignedLong();
+                }
+            }
+
+            return 0;
+        }
+
+        internal async static Task<ulong> GetTotalOverdueTicketCost(int characterId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@pCharacterId", characterId },
+                };
+
+            string myQuery = "call selCharacterTicketCostOverdue(@pCharacterId);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {

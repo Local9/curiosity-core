@@ -140,7 +140,7 @@ namespace Curiosity.Core.Server.Managers
 
                 ulong ticketCost = await Database.Store.PoliceDatabase.GetTotalTicketCost(characterId);
 
-                if (cash < ticketCost)
+                if (cash < ticketCost || ticketCost == 0)
                 {
                     SendNotification(metadata.Sender, $"You do not have enough money to pay off your tickets. Total Cost: ${ticketCost:N0}", eNotification.NOTIFICATION_ERROR);
                     return null;
@@ -164,41 +164,27 @@ namespace Curiosity.Core.Server.Managers
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                List<PoliceTicket> tickets = await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
-                List<PoliceTicket> cpTickets = new(tickets);
-                ulong totalPaid = 0;
-                ulong totalUnpaid = 0;
+                ulong cash = curiosityUser.Character.Cash;
+                int characterId = curiosityUser.Character.CharacterId;
 
-                foreach(PoliceTicket ticket in cpTickets)
+                ulong ticketCost = await Database.Store.PoliceDatabase.GetTotalOverdueTicketCost(characterId);
+
+                if (cash < ticketCost || ticketCost == 0)
                 {
-                    if (ticket.PaymentOverdue)
-                    {
-                        ulong ticketValue = (ulong)(ticket.TicketValue * 1.1);
-                        if (curiosityUser.Character.Cash >= ticketValue)
-                        {
-                            bool updatedTicket = await Database.Store.PoliceDatabase.PayTicket(curiosityUser.Character.CharacterId, ticket.Id);
-                            await BaseScript.Delay(0);
-                            if (updatedTicket)
-                            {
-                                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (long)ticketValue * -1);
-                                totalPaid += ticketValue;
-                            }
-                            await BaseScript.Delay(10);
-                        }
-
-                        if (curiosityUser.Character.Cash < (ulong)ticket.TicketValue)
-                        {
-                            totalUnpaid += (ulong)ticket.TicketValue;
-                        }
-                    }
+                    SendNotification(metadata.Sender, $"You do not have enough money to pay off your overdue tickets. Total Cost: ${ticketCost:N0}", eNotification.NOTIFICATION_ERROR);
+                    return null;
                 }
 
+                bool allPaid = await Database.Store.PoliceDatabase.PayAllOverdueTickets(characterId);
+                if (allPaid)
+                {
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, (long)ticketCost * -1);
+                    await BaseScript.Delay(0);
+                    SendNotification(metadata.Sender, $"All Overdue Tickets paid. Total Cost: ${ticketCost:N0}", eNotification.NOTIFICATION_SUCCESS);
+                    return null;
+                }
 
-                if (totalPaid > 0)
-                    SendNotification(metadata.Sender, $"Paid ${totalPaid:N0} on Overdue tickets, with ${totalUnpaid:N0} remaining as you are low on funds. Please refresh your tickets to see the remaining.", eNotification.NOTIFICATION_SUCCESS);
-
-                if (totalPaid == 0)
-                    SendNotification(metadata.Sender, $"No outstanding tickets where paid.", eNotification.NOTIFICATION_SUCCESS);
+                SendNotification(metadata.Sender, $"There was an error while trying to pay off all of your overdue tickets, please try again later.", eNotification.NOTIFICATION_ERROR);
 
                 return null;
             }));
