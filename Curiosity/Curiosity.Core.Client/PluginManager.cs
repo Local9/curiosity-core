@@ -139,7 +139,7 @@ namespace Curiosity.Core.Client
             MP_STUN_GUN = API.GetHashKey("WEAPON_STUNGUN_MP");
 
             Logger.Info("[Curiosity]: Loading managers, please wait...");
-            Logger.Info("[Curiosity]: Version: 2.0.1.4974");
+            Logger.Info("[Curiosity]: Version: 2.0.1.4988");
             Logger.Info($"[Curiosity]: Client Time {DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm")}");
 
             try
