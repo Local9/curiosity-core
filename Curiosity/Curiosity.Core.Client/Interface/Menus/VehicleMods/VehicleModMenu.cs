@@ -197,6 +197,13 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
         private void CloseModMenu()
         {
+            if (Game.PlayerPed.IsInVehicle())
+                Game.PlayerPed.CurrentVehicle.IsPositionFrozen = false;
+
+            Game.PlayerPed.IsPositionFrozen = false;
+
+            Game.PlayerPed.SetConfigFlag(292, false);
+
             Instance.DetachTickHandler(OnMenuCreate);
             Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
 
@@ -335,6 +342,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             PluginManager.ProcessMouse = true;
             PluginManager.MenuPool.MouseEdgeEnabled = false;
             mainMenu.MouseControlsEnabled = false;
+
+            Game.PlayerPed.CurrentVehicle.IsPositionFrozen = true;
+            Game.PlayerPed.IsPositionFrozen = true;
+            Game.PlayerPed.SetConfigFlag(292, true);
         }
 
         private void CreateMenu()
@@ -439,6 +450,10 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             {
                 if (!_MenuPool.IsAnyMenuOpen() && mainMenu is not null) // KEEP IT FUCKING OPEN
                     mainMenu.Visible = true;
+
+                Game.DisableControlThisFrame(0, Control.VehicleExit);
+                Game.DisableControlThisFrame(1, Control.VehicleExit);
+                Game.DisableControlThisFrame(2, Control.VehicleExit);
             }
             catch (KeyNotFoundException ex)
             {
