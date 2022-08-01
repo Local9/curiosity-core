@@ -205,7 +205,7 @@ namespace Curiosity.Core.Server.Managers
                 if (_activeConnection.ContainsKey(license2) && PluginManager.IsLive)
                 {
                     long time = _activeConnection[license2];
-                    long timeLeft = 120 - ((GetGameTimer() - time) / 1000);
+                    long timeLeft = 130 - ((GetGameTimer() - time) / 1000);
                     deferrals.done($"Account with matching license is already connecting. Please try again later or in {timeLeft} seconds.");
                     return;
                 }
