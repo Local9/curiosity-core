@@ -97,7 +97,6 @@ namespace Curiosity.Core.Client.Managers.Milo
                 Instance.DiscordRichPresence.Status = $"Drifting on the Tuner Track...";
 
                 RequestIpl("tr_tuner_meetup");
-                RequestIpl("tr_tuner_race_line");
 
                 ActivateInteriorEntitySet(interiorId, "entity_set_meet_lights");
                 ActivateInteriorEntitySet(interiorId, "entity_set_meet_lights_cheap");
@@ -110,7 +109,6 @@ namespace Curiosity.Core.Client.Managers.Milo
                 Instance.DiscordRichPresence.Status = $"Roaming Los Santos...";
 
                 RemoveIpl("tr_tuner_meetup");
-                RemoveIpl("tr_tuner_race_line");
 
                 DeactivateInteriorEntitySet(interiorId, "entity_set_meet_lights");
                 DeactivateInteriorEntitySet(interiorId, "entity_set_meet_lights_cheap");
