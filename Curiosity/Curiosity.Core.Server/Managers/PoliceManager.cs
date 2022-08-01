@@ -130,6 +130,36 @@ namespace Curiosity.Core.Server.Managers
                 return await Database.Store.PoliceDatabase.GetTickets(curiosityUser.Character.CharacterId);
             }));
 
+            EventSystem.Attach("police:suspect:ticket:pay:all", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                ulong cash = curiosityUser.Character.Cash;
+                int characterId = curiosityUser.Character.CharacterId;
+
+                ulong ticketCost = await Database.Store.PoliceDatabase.GetTotalTicketCost(characterId);
+
+                if (cash < ticketCost)
+                {
+                    SendNotification(metadata.Sender, $"You do not have enough money to pay off your tickets. Total Cost: ${ticketCost:N0}", eNotification.NOTIFICATION_ERROR);
+                    return null;
+                }
+
+                bool allPaid = await Database.Store.PoliceDatabase.PayAllTickets(characterId);
+                if (allPaid)
+                {
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, (long)ticketCost * -1);
+                    await BaseScript.Delay(0);
+                    SendNotification(metadata.Sender, $"All Tickets paid. Total Cost: ${ticketCost:N0}", eNotification.NOTIFICATION_SUCCESS);
+                    return null;
+                }
+
+                SendNotification(metadata.Sender, $"There was an error while trying to pay off all of your tickets, please try again later.", eNotification.NOTIFICATION_ERROR);
+
+                return null;
+            }));
+
             EventSystem.Attach("police:suspect:ticket:pay:overdue", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;

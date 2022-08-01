@@ -48,6 +48,17 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 return $"{exportMessage}";
             }));
+
+            Instance.AttachNuiHandler("PayAllTickets", new AsyncEventCallback(async metadata =>
+            {
+                ExportMessage exportMessage = new ExportMessage();
+
+                exportMessage = await EventSystem.Request<ExportMessage>("police:suspect:ticket:pay:all");
+
+                Logger.Debug($"{exportMessage}");
+
+                return $"{exportMessage}";
+            }));
         }
     }
 }
