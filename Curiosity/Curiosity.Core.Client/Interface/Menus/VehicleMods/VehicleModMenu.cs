@@ -404,8 +404,11 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             if (currentValue > 0)
                 ++currentValue;
 
-            uiLstLiveries = new UIMenuListItem("Livery", liveryList, currentValue);
-            mainMenu.AddItem(uiLstLiveries);
+            if (liveryList.Count > 0)
+            {
+                uiLstLiveries = new UIMenuListItem("Livery", liveryList, currentValue);
+                mainMenu.AddItem(uiLstLiveries);
+            }
 
             uiLstWindowTint = new UIMenuListItem("Window Tint", windowTints, 0);
             uiLstWindowTint.Description = "Apply tint to your windows.";
