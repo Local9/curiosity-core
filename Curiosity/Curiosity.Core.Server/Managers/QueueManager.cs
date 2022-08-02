@@ -33,8 +33,7 @@ namespace Curiosity.Core.Server.Managers
     public class QueueManager : Manager<QueueManager>
     {
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
-
-        static ConcurrentDictionary<string, long> _activeConnection = new();
+        DiscordClient discordClient = DiscordClient.GetModule();
 
         static Regex regex = new Regex(@"^[ :A-Za-z0-9-_.#\[\]]{1,32}$");
         static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff|n1gg3|n1g|n1gg3r|user|pc)\b");
@@ -96,8 +95,24 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Player player = PluginManager.PlayersList[metadata.Sender];
 
-                    string license2 = player.Identifiers["license2"];
-                    _activeConnection.TryRemove(license2, out long gameTime);
+                    // check if account active
+                    bool isActive = false;
+                    ulong discordId = ulong.Parse(player.Identifiers["discord"]);
+                    foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                    {
+                        if (kvp.Value.DiscordId == discordId)
+                        {
+                            isActive = true;
+                        }
+                    }
+
+                    if (isActive && PluginManager.IsLive)
+                    {
+                        discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
+                        await BaseScript.Delay(0);
+                        player.Drop($"Account is already active and playing on the server.");
+                        return false;
+                    }
 
                     string license = player.Identifiers["license"];
                     if (!session.ContainsKey(license))
@@ -105,6 +120,7 @@ namespace Curiosity.Core.Server.Managers
                         session.TryAdd(license, SessionState.Active);
                         return false;
                     }
+
                     session.TryGetValue(license, out SessionState oldState);
                     session.TryUpdate(license, SessionState.Active, oldState);
                     if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
@@ -151,35 +167,6 @@ namespace Curiosity.Core.Server.Managers
             Logger.Debug($"[QueueManager] End");
         }
 
-        [TickHandler]
-        private async Task OnConnectionClearAsync()
-        {
-            PlayerList players = PluginManager.PlayersList;
-            Dictionary<string, long> connecting = new(_activeConnection);
-            foreach(KeyValuePair<string, long> kvp in connecting)
-            {
-                if (players.Count() == 0) _activeConnection.Clear();
-
-                if ((GetGameTimer() - kvp.Value) > 120000)
-                {
-                    _activeConnection.TryRemove(kvp.Key, out long gameTime);
-                    continue;
-                }
-
-                string license = kvp.Key;
-                foreach(Player player in players)
-                {
-                    string license2 = player.Identifiers["license"];
-                    if (kvp.Key != license2)
-                    {
-                        _activeConnection.TryRemove(kvp.Key, out long gameTime);
-                    }
-                }
-            }
-
-            await BaseScript.Delay(20000);
-        }
-
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
             try
@@ -200,18 +187,6 @@ namespace Curiosity.Core.Server.Managers
                 string license = player.Identifiers["license"];
                 string license2 = player.Identifiers["license2"];
 
-                long gameTime = GetGameTimer();
-
-                if (_activeConnection.ContainsKey(license2) && PluginManager.IsLive)
-                {
-                    long time = _activeConnection[license2];
-                    long timeLeft = 130 - ((GetGameTimer() - time) / 1000);
-                    deferrals.done($"Account with matching license is already connecting. Please try again later or in {timeLeft} seconds.");
-                    return;
-                }
-
-                _activeConnection.AddOrUpdate(license2, gameTime, (key, oldValue) => oldValue = gameTime);
-
                 while (!PluginManager.ServerReady)
                 {
                     await BaseScript.Delay(500);
@@ -223,7 +198,6 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 string msg = $"Player '{player.Name}' is connecting. Ping: {player.Ping}ms";
-                DiscordClient discordClient = DiscordClient.GetModule();
                 discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}' is connecting. Ping: {player.Ping}ms");
                 await BaseScript.Delay(500);
                 ChatManager.OnLogMessage(msg);
@@ -365,75 +339,75 @@ namespace Curiosity.Core.Server.Managers
                         return;
                     }
 
-                    deferrals.update("Adding user to queue...");
+                    //deferrals.update("Adding user to queue...");
 
-                    if (sentLoading.ContainsKey(license))
-                    {
-                        sentLoading.TryRemove(license, out Player oldPlayer);
-                    }
-                    sentLoading.TryAdd(license, player);
+                    //if (sentLoading.ContainsKey(license))
+                    //{
+                    //    sentLoading.TryRemove(license, out Player oldPlayer);
+                    //}
+                    //sentLoading.TryAdd(license, player);
 
-                    if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
-                    {
-                        if (curiosityUser.IsStaff)
-                        {
-                            Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
-                        }
+                    //if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
+                    //{
+                    //    if (curiosityUser.IsStaff)
+                    //    {
+                    //        Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
+                    //    }
 
-                        if (!priority.TryAdd(license, curiosityUser.QueuePriority))
-                        {
-                            priority.TryGetValue(license, out int oldPriority);
-                            priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
-                        }
-                    }
+                    //    if (!priority.TryAdd(license, curiosityUser.QueuePriority))
+                    //    {
+                    //        priority.TryGetValue(license, out int oldPriority);
+                    //        priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
+                    //    }
+                    //}
 
-                    if (session.TryAdd(license, SessionState.Queue))
-                    {
-                        if (!priority.ContainsKey(license))
-                        {
-                            newQueue.Enqueue(license);
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
-                        }
-                        else
-                        {
-                            newPriorityQueue.Enqueue(license);
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
-                        }
-                    }
+                    //if (session.TryAdd(license, SessionState.Queue))
+                    //{
+                    //    if (!priority.ContainsKey(license))
+                    //    {
+                    //        newQueue.Enqueue(license);
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
+                    //    }
+                    //    else
+                    //    {
+                    //        newPriorityQueue.Enqueue(license);
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
+                    //    }
+                    //}
 
-                    if (!session[license].Equals(SessionState.Queue))
-                    {
-                        UpdateTimer(license);
-                        session.TryGetValue(license, out SessionState oldState);
-                        session.TryUpdate(license, SessionState.Loading, oldState);
-                        deferrals.done();
-                        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
-                        return;
-                    }
+                    //if (!session[license].Equals(SessionState.Queue))
+                    //{
+                    //    UpdateTimer(license);
+                    //    session.TryGetValue(license, out SessionState oldState);
+                    //    session.TryUpdate(license, SessionState.Loading, oldState);
+                    //    deferrals.done();
+                    //    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                    //    return;
+                    //}
 
-                    bool inPriority = priority.ContainsKey(license);
-                    int dots = 0;
+                    //bool inPriority = priority.ContainsKey(license);
+                    //int dots = 0;
 
-                    while (session[license].Equals(SessionState.Queue))
-                    {
-                        if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
-                        {
-                            int count = inPriority ? inPriorityQueue : inQueue;
-                            string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
-                            deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
-                        }
-                        dots = dots > 2 ? 0 : dots + 1;
-                        if (player?.EndPoint is null)
-                        {
-                            UpdateTimer(license);
-                            deferrals.done($"{messages[Messages.Canceled]}");
-                            if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
-                            return;
-                        }
-                        RemoveFrom(license, false, false, true, false, false, false);
-                        await BaseScript.Delay(5000);
-                    }
-                    await BaseScript.Delay(500);
+                    //while (session[license].Equals(SessionState.Queue))
+                    //{
+                    //    if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
+                    //    {
+                    //        int count = inPriority ? inPriorityQueue : inQueue;
+                    //        string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
+                    //        deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
+                    //    }
+                    //    dots = dots > 2 ? 0 : dots + 1;
+                    //    if (player?.EndPoint is null)
+                    //    {
+                    //        UpdateTimer(license);
+                    //        deferrals.done($"{messages[Messages.Canceled]}");
+                    //        if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                    //        return;
+                    //    }
+                    //    RemoveFrom(license, false, false, true, false, false, false);
+                    //    await BaseScript.Delay(5000);
+                    //}
+                    //await BaseScript.Delay(500);
 
                     deferrals.done();
                 }));
