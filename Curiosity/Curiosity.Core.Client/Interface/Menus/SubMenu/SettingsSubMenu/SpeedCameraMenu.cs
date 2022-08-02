@@ -44,8 +44,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
             menu.AddItem(chkEnableCameraDebugging);
             menu.AddItem(chkEnableSpeedCameraDebugging);
-            menu.AddItem(miSetCameraStart);
-            menu.AddItem(miSetCameraEnd);
+            //menu.AddItem(miSetCameraStart);
+            //menu.AddItem(miSetCameraEnd);
             menu.AddItem(miAdjustWidth);
             menu.AddItem(miAdjustClosedPointZ);
             menu.AddItem(miSetCameraAdd);
@@ -161,17 +161,18 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
 
             if (raycastResult.DitHit && noClipManager.IsEnabled)
             {
-                World.DrawMarker(MarkerType.DebugSphere, raycastResult.HitPosition, Vector3.Zero, Vector3.Zero, new Vector3(0.25f), System.Drawing.Color.FromArgb(255, 255, 0, 0));
+                Vector3 position = raycastResult.HitPosition;
+                World.DrawMarker(MarkerType.DebugSphere, position, Vector3.Zero, Vector3.Zero, new Vector3(0.25f), System.Drawing.Color.FromArgb(255, 255, 0, 0));
 
                 if (Game.IsControlJustPressed(0, Control.Jump))
                 {
                     if (currentCamera == null)
                     {
-                        AddNewCamera(raycastResult.HitPosition);
+                        AddNewCamera(position);
                     }
                     else if (currentCamera is not null)
                     {
-                        AddEndPointToCamera(raycastResult.HitPosition + new Vector3(Vector2.Zero, 3f));
+                        AddEndPointToCamera(position + new Vector3(Vector2.Zero, 3f));
                     }
 
                     await BaseScript.Delay(500);
@@ -189,7 +190,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
+                string msg = $"[{camera.Direction}]";
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                    msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -203,7 +206,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
+                string msg = $"[{camera.Direction}]";
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                    msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -217,7 +222,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
+                string msg = $"[{camera.Direction}]";
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                    msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -231,7 +238,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
                 GetStreetNameAtCoord(camera.Start.X, camera.Start.Y, camera.Start.Z, ref streetHash, ref crossingRoad);
                 string street = GetStreetNameFromHashKey(streetHash);
 
-                string msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
+                string msg = $"[{camera.Direction}]";
+                if (PoliceConfig.SpeedLimits.ContainsKey($"{streetHash}"))
+                    msg = $"[{camera.Direction}] ({camera.Limit ?? PoliceConfig.SpeedLimits[$"{streetHash}"]}) {streetHash} : {street}";
 
                 ScreenInterface.Draw3DText(camera.Center, msg);
 
@@ -269,9 +278,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu.SettingsSubMenu
             }
 
             currentCamera.AddEnd(position ?? Game.PlayerPed.Position);
-            currentPoints.Add(currentCamera);
+            SpeedCamera speedCamera = currentCamera;
+            currentPoints.Add(speedCamera);
+            NotificationManager.Success($"End point added<br />{speedCamera.End.Vector3}");
             currentCamera = null;
-            NotificationManager.Success($"End point added<br />{currentCamera.End.Vector3}");
         }
 
         void StoreCamera()
