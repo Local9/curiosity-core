@@ -248,7 +248,7 @@
             if (model.IsTrain)
                 return 795; // radar_train
 
-            return 255;
+            return 225;
         }
     }
 }
