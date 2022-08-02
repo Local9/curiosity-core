@@ -106,13 +106,13 @@ namespace Curiosity.Core.Server.Managers
                         }
                     }
 
-                    if (isActive && PluginManager.IsLive)
-                    {
-                        discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
-                        await BaseScript.Delay(0);
-                        player.Drop($"Account is already active and playing on the server.");
-                        return false;
-                    }
+                    //if (isActive && PluginManager.IsLive)
+                    //{
+                    //    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
+                    //    await BaseScript.Delay(0);
+                    //    player.Drop($"Account is already active and playing on the server.");
+                    //    return false;
+                    //}
 
                     string license = player.Identifiers["license"];
                     if (!session.ContainsKey(license))
