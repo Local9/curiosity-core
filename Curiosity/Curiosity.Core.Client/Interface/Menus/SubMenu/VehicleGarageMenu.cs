@@ -119,6 +119,9 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                         if (displayName == "CARNOTFOUND")
                             vehicleLabel = subVehicle.Label;
 
+                        if (string.IsNullOrEmpty(vehicleLabel))
+                            vehicleLabel = subVehicle.Label;
+
                         UIMenuItem uIMenuItem = new UIMenuItem(vehicleLabel);
                         uIMenuItem.SetRightLabel(subVehicle.VehicleInfo.plateText);
                         uIMenuItem.ItemData = subVehicle;

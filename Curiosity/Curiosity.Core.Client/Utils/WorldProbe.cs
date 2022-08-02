@@ -9,8 +9,8 @@
         {
             PluginManager.Instance.AttachTickHandler(new Func<Task>(async () =>
             {
-                CrossairRaycastResult = await GamePlayCamCrosshairRaycast(ignoredEntity: Game.PlayerPed);
-                CrossairRenderingRaycastResult = await CrosshairRaycast(ignoredEntity: Game.PlayerPed);
+                CrossairRaycastResult = await GamePlayCamCrosshairRaycast();
+                CrossairRenderingRaycastResult = await CrosshairRaycast();
 
                 await Task.FromResult(0);
             }));
