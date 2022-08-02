@@ -394,6 +394,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 for (int i = 0; i < mod.ModCount; i++)
                 {
                     string label = vehicle.Mods.GetLocalizedLiveryName(i);
+                    if (string.IsNullOrEmpty(label))
+                        label = $"Livery {i + 1}/{mod.ModCount}";
                     liveryList.Add(label);
                 }
             }
