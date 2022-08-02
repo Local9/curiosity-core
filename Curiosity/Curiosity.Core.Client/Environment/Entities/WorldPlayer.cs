@@ -85,7 +85,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 _blip = player.Character.AttachBlip();
                 _blipHandle = _blip.Handle;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer, IsPassive);
                 SetBlipCategory(_blipHandle, 7);
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, player.Handle);
@@ -159,7 +159,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 _blip = PlayerPed.AttachBlip();
                 _blipHandle = _blip.Handle;
-                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
+                Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer, IsPassive);
                 SetBlipCategory(_blipHandle, 7);
                 SetBlipPriority(_blipHandle, 11);
                 SetBlipNameToPlayerName(_blipHandle, Player.Handle);
@@ -212,11 +212,10 @@ namespace Curiosity.Core.Client.Environment.Entities
                 _sameGroup = GroupId == ClientGroupId;
                 if (!IsHidden)
                 {
-                    Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer);
+                    Utilities.SetCorrectBlipSprite(PedHandle, _blipHandle, IsWanted, _sameGroup, IsOfficer, IsPassive);
                     UpdateBlipString();
                 }
-
-                if (IsHidden)
+                else if (IsHidden)
                 {
                     if (_blip != null)
                         _blip.Delete();

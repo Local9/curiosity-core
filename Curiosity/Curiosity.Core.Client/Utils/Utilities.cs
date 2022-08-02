@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Utils
             return model;
         }
 
-        public static void SetCorrectBlipSprite(int ped, int blip, bool isWanted, bool isFriendly, bool isOfficer = false)
+        public static void SetCorrectBlipSprite(int ped, int blip, bool isWanted, bool isFriendly, bool isOfficer = false, bool isPassive = false)
         {
             SetBlipCrew(blip, isFriendly);
             bool visible = IsEntityVisible(ped);
@@ -76,7 +76,11 @@ namespace Curiosity.Core.Client.Utils
             }
             else
             {
-                if (IsEntityDead(ped))
+                if (isPassive)
+                {
+                    SetBlipSprite(blip, 163);
+                }
+                else if (IsEntityDead(ped))
                 {
                     ShowHeadingIndicatorOnBlip(blip, false);
                     SetBlipSprite(blip, (int)BlipSprite.Dead);
