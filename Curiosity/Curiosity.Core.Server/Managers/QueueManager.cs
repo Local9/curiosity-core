@@ -87,7 +87,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.EventRegistry["onResourceStop"] += new Action<string>(OnResourceStop);
 
             Instance.AttachTickHandler(SetupTimer);
-            Instance.AttachTickHandler(QueueUpdate);
+            // Instance.AttachTickHandler(QueueUpdate);
 
             EventSystem.Attach("user:queue:active", new AsyncEventCallback(async metadata =>
             {
@@ -493,7 +493,7 @@ namespace Curiosity.Core.Server.Managers
             await Task.FromResult(1000);
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task QueueCycle()
         {
             while (true)
