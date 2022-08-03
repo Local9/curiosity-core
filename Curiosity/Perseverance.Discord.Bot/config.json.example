@@ -4,8 +4,8 @@
   "database": {
     "server": "127.0.0.1",
     "port": "3306",
-    "db": "curiosity",
-    "user": "root",
-    "password": "Lander11"
+    "db": "database",
+    "user": "user",
+    "password": "password"
   }
 }
