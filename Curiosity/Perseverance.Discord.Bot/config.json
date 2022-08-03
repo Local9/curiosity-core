@@ -1,0 +1,11 @@
+﻿{
+  "token": "",
+  "guild": 0,
+  "database": {
+    "server": "127.0.0.1",
+    "port": "3306",
+    "db": "curiosity",
+    "user": "root",
+    "password": "Lander11"
+  }
+}
