@@ -132,10 +132,11 @@ namespace Curiosity.Core.Client.Managers
             SendNui(eNotification.NOTIFICATION_ERROR, message, position, playSound: playSound);
         }
 
-        internal void CustomNUI(string message, bool blink = true, bool saveToBrief = true, int bgColor = 2)
+        public void ShowNotification(string message, bool blink = true, bool saveToBrief = true, int bgColor = 2)
         {
-            API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~
-            foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
+            string[] strings = Screen.StringToArray(message);
+            API.SetNotificationTextEntry("CELL_EMAIL_BCON");
+            foreach (string s in strings)
             {
                 API.AddTextComponentSubstringPlayerName(s);
             }
