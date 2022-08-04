@@ -1,17 +1,21 @@
-﻿using DSharpPlus;
+﻿global using Newtonsoft.Json;
+global using DSharpPlus;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Logging;
+using Perseverance.Discord.Bot.AutomateScripts;
 using Perseverance.Discord.Bot.Config;
 using Perseverance.Discord.Bot.Entities;
 using Perseverance.Discord.Bot.SlashCommands;
+using DSharpPlus.Entities;
 
 namespace Perseverance
 {
     class Program
     {
         public readonly EventId BotEventId = new EventId(42, "Perseverance-Discord-Bot");
-
-        public DiscordClient Client { get; set; }
+        public static ulong CURIOSITY_BOT_TEXT_CHANNEL { get; private set; }
+        public static DiscordClient Client { get; private set; }
+        public static Configuration Configuration { get; private set; }
 
         static void Main(string[] args)
         {
@@ -21,16 +25,19 @@ namespace Perseverance
 
         async Task RunBotAsync()
         {
-            Configuration _config = await ApplicationConfig.GetConfig();
+            Configuration = await ApplicationConfig.GetConfig();
 
             Client = new(new DiscordConfiguration()
             {
-                Token = _config.Token,
+                Token = Configuration.Token,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged,
                 AutoReconnect = true,
                 MinimumLogLevel = LogLevel.Debug
             });
+
+            if (Configuration.Channels.ContainsKey("error"))
+                CURIOSITY_BOT_TEXT_CHANNEL = Configuration.Channels["error"];
 
             var slash = Client.UseSlashCommands();
             slash.RegisterCommands<BasicCommands>();
@@ -40,6 +47,9 @@ namespace Perseverance
             Client.ClientErrored += Client_ClientErrored;
 
             await Client.ConnectAsync();
+
+            GameServerStatus gameServerStatus = new GameServerStatus();
+
             await Task.Delay(-1);
         }
 
@@ -59,6 +69,12 @@ namespace Perseverance
         {
             sender.Logger.LogError(BotEventId, e.Exception, "Exception occured");
             return Task.CompletedTask;
+        }
+
+        public async static void SendMessage(ulong channelId, string message)
+        {
+            DiscordChannel discordChannel = await Client.GetChannelAsync(channelId);
+            discordChannel.SendMessageAsync(message);
         }
     }
 }

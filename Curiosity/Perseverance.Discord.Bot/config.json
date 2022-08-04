@@ -1,11 +1,20 @@
 ﻿{
   "token": "NjU2MTgwNjc2ODk0MTMwMjMw.Xfe6Fw.hchVti1HDFxpbY641b5ZZ3_6Mf4",
   "guild": 379980052709900288,
+  "channels": {
+    "error": 667119337424814080
+  },
   "database": {
     "server": "127.0.0.1",
     "port": "3306",
     "db": "curiosity",
     "user": "root",
     "password": "Lander11"
-  }
+  },
+  "servers": [
+    {
+      "label": "LifeV",
+      "ip": "5.9.0.85:30120"
+    }
+  ]
 }

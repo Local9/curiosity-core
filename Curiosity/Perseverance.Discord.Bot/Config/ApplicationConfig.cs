@@ -9,8 +9,6 @@ namespace Perseverance.Discord.Bot.Config
 
         public static async Task<Configuration> GetConfig()
         {
-            if (_configuration is not null) return _configuration;
-
             string json = string.Empty;
             using (FileStream fs = File.OpenRead("config.json"))
             using (StreamReader sr = new StreamReader(fs))
@@ -26,7 +24,7 @@ namespace Perseverance.Discord.Bot.Config
 
             // AND HOW WILL THIS EVER BE NULL?! I'M THROWING AN ERROR IF NOTHING RETURNS!
             // Fucking stupid, really fucking stupid
-            return _configuration ?? new();
+            return _configuration;
         }
     }
 
