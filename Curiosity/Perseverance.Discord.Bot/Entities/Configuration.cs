@@ -25,13 +25,13 @@ namespace Perseverance.Discord.Bot.Entities
         public string Server { get; private set; }
         
         [JsonProperty("port")]
-        public string Port { get; private set; }
+        public uint Port { get; private set; }
 
         [JsonProperty("db")]
-        public string DataBase { get; private set; }
+        public string Database { get; private set; }
 
         [JsonProperty("user")]
-        public string User { get; private set; }
+        public string Username { get; private set; }
         
         [JsonProperty("password")]
         public string Password { get; private set; }
