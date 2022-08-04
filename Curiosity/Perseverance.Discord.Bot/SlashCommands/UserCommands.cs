@@ -8,9 +8,9 @@ namespace Perseverance.Discord.Bot.SlashCommands
     public class UserCommands : ApplicationCommandModule
     {
         [SlashCommand("whois", "Get information about a user")]
-        public async Task PingCommand(InteractionContext ctx, [Option("user", "User to lookup")] DiscordUser user)
+        public async Task WhoIsCommand(InteractionContext ctx, [Option("user", "User to lookup")] DiscordUser user)
         {
-            DatabaseUser databaseUser = await Database.Store.DatabaseUser.GetUserAsync(user.Id);
+            DatabaseUser databaseUser = await Database.Store.DatabaseUser.GetAsync(user.Id);
             string message = $"User '{user.Username}' not found.";
 
             if (databaseUser is not null)
