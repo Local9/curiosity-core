@@ -41,6 +41,7 @@ namespace Perseverance
 
             var slash = Client.UseSlashCommands();
             slash.RegisterCommands<BasicCommands>();
+            slash.RegisterCommands<UserCommands>();
 
             Client.Ready += Client_Ready;
             Client.GuildAvailable += Client_GuildAvailable;

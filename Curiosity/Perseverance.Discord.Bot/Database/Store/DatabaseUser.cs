@@ -29,5 +29,10 @@ namespace Perseverance.Discord.Bot.Database.Store
             DatabaseUser user = await DapperDatabase<DatabaseUser>.GetSingleAsync(SQL_USER_GET, dynamicParameters);
             return user;
         }
+
+        public override string ToString()
+        {
+            return $"User: {Username}\nJoined: {DateCreated:yyyy-MM-dd HH:mm}\nLast Seen: {LastSeen:yyyy-MM-dd HH:mm}";
+        }
     }
 }
