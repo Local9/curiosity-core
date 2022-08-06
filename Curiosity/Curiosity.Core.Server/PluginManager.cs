@@ -466,31 +466,33 @@ namespace Curiosity.Core.Server
                 {
                     try
                     {
-                        if (Players[kvp.Key] is null)
-                        {
-                            int playerHandle = kvp.Key;
-                            int staffVehicle = kvp.Value.StaffVehicle;
-                            int playerVehicle = kvp.Value.PersonalVehicle;
-                            int playerBoat = kvp.Value.PersonalBoat;
-                            int playerTrailer = kvp.Value.PersonalTrailer;
-                            int playerPlane = kvp.Value.PersonalPlane;
-                            int playerHelicopter = kvp.Value.PersonalHelicopter;
+                        Player player = Players[kvp.Key];
 
-                            ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
+                        if (player != null) continue;
+                        if (player.EndPoint != string.Empty) continue;
 
-                            if (staffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(staffVehicle);
-                            await Delay(100);
-                            if (playerVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
-                            await Delay(100);
-                            if (playerBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
-                            await Delay(100);
-                            if (playerTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
-                            await Delay(100);
-                            if (playerPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
-                            await Delay(100);
-                            if (playerHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
-                            await Delay(100);
-                        }
+                        int playerHandle = kvp.Key;
+                        int staffVehicle = kvp.Value.StaffVehicle;
+                        int playerVehicle = kvp.Value.PersonalVehicle;
+                        int playerBoat = kvp.Value.PersonalBoat;
+                        int playerTrailer = kvp.Value.PersonalTrailer;
+                        int playerPlane = kvp.Value.PersonalPlane;
+                        int playerHelicopter = kvp.Value.PersonalHelicopter;
+
+                        ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
+
+                        if (staffVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(staffVehicle);
+                        await Delay(100);
+                        if (playerVehicle > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                        await Delay(100);
+                        if (playerBoat > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                        await Delay(100);
+                        if (playerTrailer > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                        await Delay(100);
+                        if (playerPlane > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                        await Delay(100);
+                        if (playerHelicopter > 0) EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
+                        await Delay(100);
                     }
                     catch (Exception ex)
                     {

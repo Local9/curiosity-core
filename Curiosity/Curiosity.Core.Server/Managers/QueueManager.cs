@@ -95,25 +95,6 @@ namespace Curiosity.Core.Server.Managers
                 {
                     Player player = PluginManager.PlayersList[metadata.Sender];
 
-                    // check if account active
-                    bool isActive = false;
-                    ulong discordId = ulong.Parse(player.Identifiers["discord"]);
-                    foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
-                    {
-                        if (kvp.Value.DiscordId == discordId)
-                        {
-                            isActive = true;
-                        }
-                    }
-
-                    //if (isActive && PluginManager.IsLive)
-                    //{
-                    //    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
-                    //    await BaseScript.Delay(0);
-                    //    player.Drop($"Account is already active and playing on the server.");
-                    //    return false;
-                    //}
-
                     string license = player.Identifiers["license"];
                     if (!session.ContainsKey(license))
                     {
@@ -270,9 +251,15 @@ namespace Curiosity.Core.Server.Managers
 
                 if (isActive && PluginManager.IsLive)
                 {
-                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Account is already active.");
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Queue: A account with matching Discord information has already been found on the server and has been removed.");
                     await BaseScript.Delay(0);
-                    deferrals.done($"Account is already active and playing on the server.");
+                    deferrals.done($"Queue: A account with matching Discord information has already been found on the server and has been removed.");
+
+                    KeyValuePair<int, CuriosityUser> curiosityUser = PluginManager.ActiveUsers.Where(x => x.Value.DiscordId == discordId).FirstOrDefault();
+                    Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.Value.DiscordId).FirstOrDefault();
+                    matchingPlayer.Drop($"A player with a matching Discord ID has tried to connect, you have been disconnected.");
+                    PluginManager.ActiveUsers.TryRemove(curiosityUser.Key, out CuriosityUser value);
+
                     return;
                 }
 
