@@ -1,6 +1,4 @@
-﻿using DSharpPlus.Entities;
-using Perseverance.Discord.Bot.Database.Store;
-using Perseverance.Discord.Bot.Entities;
+﻿using Perseverance.Discord.Bot.Database.Store;
 using Timer = System.Timers.Timer;
 
 namespace Perseverance.Discord.Bot.AutomateScripts
@@ -14,7 +12,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
         {
             _timer = new Timer();
             _timer.Elapsed += Timer_Elapsed;
-            _timer.Interval = (1000 * 30);
+            _timer.Interval = (1000 * 60) * 60; // 60 Minutes
             _timer.Enabled = true;
 
             _discordClient = Program.Client;

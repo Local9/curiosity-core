@@ -26,6 +26,9 @@ namespace Perseverance.Discord.Bot.Config
             // Fucking stupid, really fucking stupid
             return _configuration;
         }
+
+        public static List<ulong> GetDonatorRoles => _configuration.DonatorRoleList;
+        public static Dictionary<string, ulong> DonatorRoles => _configuration.DonatorRoles;
     }
 
 }

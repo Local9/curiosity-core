@@ -7,6 +7,9 @@ using Perseverance.Discord.Bot.Config;
 using Perseverance.Discord.Bot.Entities;
 using Perseverance.Discord.Bot.SlashCommands;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
+using Perseverance.Discord.Bot.Entities.Enums;
+using Perseverance.Discord.Bot.Database.Store;
 
 namespace Perseverance
 {
@@ -46,12 +49,55 @@ namespace Perseverance
             Client.Ready += Client_Ready;
             Client.GuildAvailable += Client_GuildAvailable;
             Client.ClientErrored += Client_ClientErrored;
+            // Users
+            Client.GuildMemberUpdated += Client_GuildMemberUpdated;
 
             await Client.ConnectAsync();
 
             GameServerStatus gameServerStatus = new GameServerStatus();
 
             await Task.Delay(-1);
+        }
+
+        private async Task<Task> Client_GuildMemberUpdated(DiscordClient sender, GuildMemberUpdateEventArgs e)
+        {
+            if (e.Member.IsBot)
+                return Task.CompletedTask;
+
+            List<DiscordRole> rolesAfter = e.RolesAfter.ToList();
+            List<DiscordRole> rolesBefore = e.RolesBefore.ToList();
+
+            bool isDonator = false;
+            int userRoleId = 1;
+
+            bool isLifeSupporter = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["life"]).Any();
+            bool isLevel3 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level3"]).Any();
+            bool isLevel2 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level2"]).Any();
+            bool isLevel1 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level1"]).Any();
+
+            if (isLifeSupporter)
+                userRoleId = (int)Role.DONATOR_LIFE;
+            else if (isLevel3)
+                userRoleId = (int)Role.DONATOR_LEVEL_3;
+            else if (isLevel2)
+                userRoleId = (int)Role.DONATOR_LEVEL_2;
+            else if (isLevel1)
+                userRoleId = (int)Role.DONATOR_LEVEL_1;
+
+            DatabaseUser user = await DatabaseUser.GetAsync(e.Member.Id);
+
+            if (!isDonator)
+            {
+                // remove DB Role
+                user.RemoveRole();
+                return Task.CompletedTask;
+            }
+
+            // add DB Role
+            user.SetRole(userRoleId);
+            
+            
+            return Task.CompletedTask;
         }
 
         private Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)

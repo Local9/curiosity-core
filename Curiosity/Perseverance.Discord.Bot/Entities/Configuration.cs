@@ -12,11 +12,16 @@ namespace Perseverance.Discord.Bot.Entities
         [JsonProperty("channels")]
         public Dictionary<string, ulong> Channels { get; private set; }
 
+        [JsonProperty("donatorRoles")]
+        public Dictionary<string, ulong> DonatorRoles { get; private set; }
+
         [JsonProperty("database")]
         public DatabaseInstance DatabaseInstance { get; private set; }
 
         [JsonProperty("servers")]
         public List<Server> Servers { get; private set; }
+
+        public List<ulong> DonatorRoleList => DonatorRoles.Values.ToList();
     }
 
     public struct DatabaseInstance
