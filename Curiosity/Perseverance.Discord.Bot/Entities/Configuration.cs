@@ -7,7 +7,7 @@ namespace Perseverance.Discord.Bot.Entities
         public string Token { get; private set; }
         
         [JsonProperty("guild")]
-        public long Guild { get; private set; }
+        public ulong Guild { get; private set; }
 
         [JsonProperty("channels")]
         public Dictionary<string, ulong> Channels { get; private set; }

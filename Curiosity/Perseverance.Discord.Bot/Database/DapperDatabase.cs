@@ -108,7 +108,7 @@ namespace Perseverance.Discord.Bot.Database
             sb.Append($"Query: {query}\n");
             sb.Append($"Exception Message: {exceptionMessage}\n");
             sb.Append($"Time Elapsed: {elapsedMilliseconds}ms");
-            Program.SendMessage(Program.CURIOSITY_BOT_TEXT_CHANNEL, sb.ToString());
+            Program.SendMessage(Program.BOT_TEXT_CHANNEL, sb.ToString());
         }
 
         private static void SetupTypeMap()

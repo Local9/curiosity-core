@@ -1,22 +1,22 @@
-﻿global using Newtonsoft.Json;
-global using DSharpPlus;
+﻿global using DSharpPlus;
+global using Newtonsoft.Json;
+using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Logging;
 using Perseverance.Discord.Bot.AutomateScripts;
 using Perseverance.Discord.Bot.Config;
 using Perseverance.Discord.Bot.Entities;
+using Perseverance.Discord.Bot.Logic;
 using Perseverance.Discord.Bot.SlashCommands;
-using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
-using Perseverance.Discord.Bot.Entities.Enums;
-using Perseverance.Discord.Bot.Database.Store;
 
 namespace Perseverance
 {
     class Program
     {
         public readonly EventId BotEventId = new EventId(42, "Perseverance-Discord-Bot");
-        public static ulong CURIOSITY_BOT_TEXT_CHANNEL { get; private set; }
+        public static ulong BOT_TEXT_CHANNEL { get; private set; }
+        public static ulong BOT_GUILD_ID { get; private set; }
         public static DiscordClient Client { get; private set; }
         public static Configuration Configuration { get; private set; }
 
@@ -40,7 +40,9 @@ namespace Perseverance
             });
 
             if (Configuration.Channels.ContainsKey("error"))
-                CURIOSITY_BOT_TEXT_CHANNEL = Configuration.Channels["error"];
+                BOT_GUILD_ID = Configuration.Channels["error"];
+
+            BOT_GUILD_ID = Configuration.Guild;
 
             var slash = Client.UseSlashCommands();
             slash.RegisterCommands<BasicCommands>();
@@ -59,44 +61,13 @@ namespace Perseverance
             await Task.Delay(-1);
         }
 
-        private async Task<Task> Client_GuildMemberUpdated(DiscordClient sender, GuildMemberUpdateEventArgs e)
+        private Task Client_GuildMemberUpdated(DiscordClient sender, GuildMemberUpdateEventArgs e)
         {
             if (e.Member.IsBot)
                 return Task.CompletedTask;
 
-            List<DiscordRole> rolesAfter = e.RolesAfter.ToList();
-            List<DiscordRole> rolesBefore = e.RolesBefore.ToList();
+            DiscordMemberLogic.UpdateDonationRole(e.Member);
 
-            bool isDonator = false;
-            int userRoleId = 1;
-
-            bool isLifeSupporter = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["life"]).Any();
-            bool isLevel3 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level3"]).Any();
-            bool isLevel2 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level2"]).Any();
-            bool isLevel1 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level1"]).Any();
-
-            if (isLifeSupporter)
-                userRoleId = (int)Role.DONATOR_LIFE;
-            else if (isLevel3)
-                userRoleId = (int)Role.DONATOR_LEVEL_3;
-            else if (isLevel2)
-                userRoleId = (int)Role.DONATOR_LEVEL_2;
-            else if (isLevel1)
-                userRoleId = (int)Role.DONATOR_LEVEL_1;
-
-            DatabaseUser user = await DatabaseUser.GetAsync(e.Member.Id);
-
-            if (!isDonator)
-            {
-                // remove DB Role
-                user.RemoveRole();
-                return Task.CompletedTask;
-            }
-
-            // add DB Role
-            user.SetRole(userRoleId);
-            
-            
             return Task.CompletedTask;
         }
 
