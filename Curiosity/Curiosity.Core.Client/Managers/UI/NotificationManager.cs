@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Managers
 
             EventSystem.Attach("system:notification:basic", new EventCallback(metadata =>
             {
-                CustomNUI(metadata.Find<string>(0));
+                ShowNotification(metadata.Find<string>(0));
                 return null;
             }));
 
