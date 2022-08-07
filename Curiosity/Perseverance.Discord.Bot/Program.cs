@@ -56,7 +56,8 @@ namespace Perseverance
 
             await Client.ConnectAsync();
 
-            GameServerStatus gameServerStatus = new GameServerStatus();
+            GameServerStatus gameServerStatus = new();
+            DonationProcessor donationProcessor = new();
 
             await Task.Delay(-1);
         }
