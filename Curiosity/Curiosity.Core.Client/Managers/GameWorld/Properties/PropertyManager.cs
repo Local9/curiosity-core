@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Managers.GameWorld.Properties.Data;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Enums;
 using Curiosity.Core.Client.Managers.GameWorld.Properties.Models;
 using NativeUI;
+using System.Drawing;
 
 namespace Curiosity.Core.Client.Managers.GameWorld.Properties
 {
@@ -60,24 +61,46 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
                         await ScreenInterface.FadeIn();
                     }
                 }
+
+                if (building.IsInRangetOfGarageEnterance(10.0f))
+                {
+                    Vector3 markerPos = building.GarageFootEnterance.AsVector();
+                    Vector3 scale = Vector3.One;
+
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        markerPos = building.GarageCarEnterance.AsVector();
+                        markerPos -= new Vector3(0.0f, 0.0f, 0.5f);
+                        scale = new Vector3(4f, 4f, 1f);
+                    }
+
+                    World.DrawMarker(MarkerType.VerticalCylinder, markerPos, Vector3.Zero, Vector3.Zero, scale, Color.FromArgb(255, 255, 255, 255));
+                }
+
+                if (building.IsInRangetOfGarageEnterance(5.0f))
+                {
+                    if (menuPool.IsAnyMenuOpen()) return;
+                    Screen.DisplayHelpTextThisFrame(Game.GetGXTEntry("MP_PROP_BUZZ1B"));
+                    
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        if (Game.PlayerPed.IsInVehicle())
+                        {
+                            Vehicle currentVehicle = Game.PlayerPed.CurrentVehicle;
+                            // need to check player owns the vehicle
+                            return;
+                        }
+
+                        await ScreenInterface.FadeOut();
+                        Game.PlayerPed.FadeOut();
+                        Game.PlayerPed.IsPositionFrozen = true;
+                        building.OpenGarageMenu();
+                        World.RenderingCamera = World.CreateCamera(building.Camera.Position, building.Camera.Rotation, building.Camera.FieldOfView);
+                        Cache.Player.DisableHud();
+                        await ScreenInterface.FadeIn();
+                    }
+                }
             }
-        }
-
-
-
-        private async Task EnterApartment()
-        {
-            //_transition = true;
-            //Audio.PlaySoundAt(Game.PlayerPed.Position, "DOOR_BUZZ", "MP_PLAYER_APARTMENT");
-            //await building.PlayEnterApartmentCamera(3000, true, true, CameraShake.Hand, 0.4f);
-            //Apartment apartment = building.Apartments[0];
-            //apartment.SetInteriorActive();
-            //Game.PlayerPed.Position = apartment.Enterance.AsVector();
-            //// DOOR SCRIPT
-            //await apartment.PlayEnteranceCutscene();
-            //World.DestroyAllCameras();
-            //World.RenderingCamera = null;
-            //_transition = false;
         }
     }
 }
