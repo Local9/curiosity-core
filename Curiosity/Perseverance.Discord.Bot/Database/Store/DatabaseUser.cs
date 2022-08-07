@@ -29,6 +29,15 @@ namespace Perseverance.Discord.Bot.Database.Store
         [Description("roleId")]
         public Role Role { get; private set; }
 
+        public bool IsStaff => Role == Role.ADMINISTRATOR
+            || Role == Role.MODERATOR
+            || Role == Role.COMMUNITY_MANAGER
+            || Role == Role.DEVELOPER
+            || Role == Role.HEAD_ADMIN
+            || Role == Role.HELPER
+            || Role == Role.PROJECT_MANAGER
+            || Role == Role.SENIOR_ADMIN;
+
         internal static async Task<DatabaseUser> GetAsync(ulong discordId)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();

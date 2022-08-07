@@ -34,7 +34,7 @@ namespace Perseverance
             {
                 Token = Configuration.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged,
+                Intents = DiscordIntents.All,
                 AutoReconnect = true,
                 MinimumLogLevel = LogLevel.Debug
             });

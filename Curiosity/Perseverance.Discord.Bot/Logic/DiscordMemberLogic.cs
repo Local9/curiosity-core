@@ -36,6 +36,7 @@ namespace Perseverance.Discord.Bot.Logic
             DatabaseUser user = await DatabaseUser.GetAsync(discordMember.Id);
             int currentRole = (int)user.Role;
 
+            if (user.IsStaff) return;
             if (userRoleId == currentRole) return;
 
             if (!isDonator)
