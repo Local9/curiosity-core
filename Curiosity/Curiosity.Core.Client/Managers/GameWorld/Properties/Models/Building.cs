@@ -12,11 +12,12 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
     {
         private Prop _propForSaleSign;
 
-        public UIMenu MenuBuyApartment;
+        public UIMenu MenuBuyProperty;
         public UIMenu MenuApartment;
         public UIMenu MenuGarage;
 
         UIMenuItem exitMenu = new UIMenuItem("Close Menu");
+        UIResRectangle _menuBanner = new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0));
 
         public string Name { get; set; }
         public Quaternion Enterance { get; set; }
@@ -69,13 +70,13 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
         {
             if (!rebuildMenu)
             {
-                MenuBuyApartment = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"));
-                MenuBuyApartment.SetBannerType(new UIResRectangle(PointF.Empty, new SizeF(0, 0), Color.FromArgb(0, 0, 0, 0)));
-                MenuBuyApartment.MouseEdgeEnabled = false;
-                MenuBuyApartment.MouseControlsEnabled = false;
-                PluginManager.MenuPool.Add(MenuBuyApartment);
+                MenuBuyProperty = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"), new PointF(0, -107));
+                MenuBuyProperty.SetBannerType(_menuBanner);
+                MenuBuyProperty.MouseEdgeEnabled = false;
+                MenuBuyProperty.MouseControlsEnabled = false;
+                PluginManager.MenuPool.Add(MenuBuyProperty);
 
-                MenuBuyApartment.OnItemSelect += (sender, selectedItem, index) =>
+                MenuBuyProperty.OnItemSelect += (sender, selectedItem, index) =>
                 {
                     if (selectedItem != exitMenu)
                     {
@@ -85,15 +86,15 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
 
                     if (selectedItem == exitMenu)
                     {
-                        MenuBuyApartment.Visible = false;
-                        MenuBuyApartment.RefreshIndex();
+                        MenuBuyProperty.Visible = false;
+                        MenuBuyProperty.RefreshIndex();
                         ResetMenuOnClose();
                     }
                 };
             }
 
             if (!rebuildMenu)
-                MenuBuyApartment.Clear();
+                MenuBuyProperty.Clear();
 
             foreach (Apartment apartment in Apartments)
             {
@@ -102,37 +103,110 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                 {
                     menuItem.SetRightLabel($"${apartment.Price:N0}");
                 }
-                MenuBuyApartment.AddItem(menuItem);
+                MenuBuyProperty.AddItem(menuItem);
             }
 
-            MenuBuyApartment.AddItem(exitMenu);
+            MenuBuyProperty.AddItem(exitMenu);
+        }
+
+        void CreateGarageMenu(bool rebuildMenu = false)
+        {
+            if (!rebuildMenu)
+            {
+                MenuGarage = new UIMenu("", Game.GetGXTEntry("MP_PROP_GEN0"), new PointF(0, -107));
+                MenuGarage.SetBannerType(_menuBanner);
+                MenuGarage.MouseEdgeEnabled = false;
+                MenuGarage.MouseControlsEnabled = false;
+                PluginManager.MenuPool.Add(MenuGarage);
+
+                MenuGarage.OnItemSelect += (sender, selectedItem, index) =>
+                {
+                    if (selectedItem != exitMenu)
+                    {
+                        NotificationManager.GetModule().Error($"Sorry this feature is currently not enabled");
+                        return;
+                    }
+
+                    if (selectedItem == exitMenu)
+                    {
+                        MenuGarage.Visible = false;
+                        MenuGarage.RefreshIndex();
+                        ResetMenuOnClose();
+                    }
+                };
+            }
+
+            if (!rebuildMenu)
+                MenuGarage.Clear();
+
+            foreach (Apartment apartment in Apartments)
+            {
+                UIMenuItem menuItem = new UIMenuItem(Game.GetGXTEntry(apartment.Name), Game.GetGXTEntry(apartment.Description));
+                if (!apartment.IsOwnedByPlayer)
+                {
+                    menuItem.SetRightLabel($"${apartment.Price:N0}");
+                }
+                MenuGarage.AddItem(menuItem);
+            }
+
+            MenuGarage.AddItem(exitMenu);
         }
 
         public async void ResetMenuOnClose()
         {
             await ScreenInterface.FadeOut();
-            MenuBuyApartment.Visible = false;
+            MenuBuyProperty.Visible = false;
+            MenuGarage.Visible = false;
             World.DestroyAllCameras();
             World.RenderingCamera = null;
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                    Game.PlayerPed.CurrentVehicle.IsPositionFrozen = false;
+            }
+
             Game.PlayerPed.IsPositionFrozen = false;
             Game.PlayerPed.FadeIn(false);
             PluginManager.MenuPool.MouseEdgeEnabled = true;
             PluginManager.MenuPool.CloseAllMenus();
             PluginManager.Instance.DetachTickHandler(PluginManager.OnMenuDisplay);
-            MenuBuyApartment.RefreshIndex();
+            MenuBuyProperty.RefreshIndex();
             await ScreenInterface.FadeIn();
             Cache.Player.EnableHud();
         }
 
         public void OpenBuyMenu()
         {
-            if (MenuBuyApartment is null) CreateBuyMenu();
+            if (MenuBuyProperty is null) CreateBuyMenu();
 
             PluginManager.MenuPool.MouseEdgeEnabled = false;
-            MenuBuyApartment.Visible = true;
+            MenuBuyProperty.Visible = true;
             PluginManager.Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
+            FreezeVehicle();
 
-            Logger.Info($"Menu State: {MenuBuyApartment.Visible}");
+            Logger.Info($"Menu State: {MenuBuyProperty.Visible}");
+        }
+
+        public void OpenGarageMenu()
+        {
+            if (MenuGarage is null) CreateGarageMenu();
+
+            PluginManager.MenuPool.MouseEdgeEnabled = false;
+            MenuGarage.Visible = true;
+            PluginManager.Instance.AttachTickHandler(PluginManager.OnMenuDisplay);
+            FreezeVehicle();
+
+            Logger.Info($"Menu State: {MenuGarage.Visible}");
+        }
+
+        void FreezeVehicle()
+        {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                    Game.PlayerPed.CurrentVehicle.IsPositionFrozen = true;
+            }
         }
 
         public bool IsCloseToSaleSign => Game.PlayerPed.IsInRangeOf(SaleSign.Position.AsVector(), 3f);
@@ -298,6 +372,20 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                 _propForSaleSign.Dispose();
         }
 
+        #region Enter / Exit Cutscenes
+
+        public async Task EnterApartment(Apartment apartment)
+        {
+            Audio.PlaySoundAt(Game.PlayerPed.Position, "DOOR_BUZZ", "MP_PLAYER_APARTMENT");
+            await PlayEnterApartmentCamera(3000, true, true, CameraShake.Hand, 0.4f);
+            apartment.SetInteriorActive();
+            Game.PlayerPed.Position = apartment.Enterance.AsVector();
+            // DOOR SCRIPT
+            await apartment.PlayEnteranceCutscene();
+            World.DestroyAllCameras();
+            World.RenderingCamera = null;
+        }
+
         public async Task PlayEnterApartmentCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
         {
             Cache.Player.DisableHud();
@@ -335,6 +423,56 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             Cache.Player.EnableHud();
             PluginManager.Instance.DetachTickHandler(OnDisableExteriorAsync);
         }
+
+        public async Task PlayEnterGarageCamera(int duration, bool easePosition, bool easeRotation, CameraShake cameraShake, float cameraShakeAmplitude)
+        {
+            Camera scriptCamera = World.CreateCamera(GarageCamera1.Position, EnteranceCamera2.Rotation, GarageCamera2.FieldOfView);
+            Camera interpCamera = World.CreateCamera(GarageCamera2.Position, EnteranceCamera1.Rotation, GarageCamera1.FieldOfView);
+            TaskSequence taskSequence = new TaskSequence();
+            
+            if (GarageDoor == eFrontDoor.StandardDoor)
+            {
+                Cache.Player.DisableHud();
+                Door3.Unlock();
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                    vehicle.Position = GarageCarExit.AsVector();
+                    vehicle.Heading = GarageCarExit.W;
+                    vehicle.PlaceOnGround();
+                    World.RenderingCamera = scriptCamera;
+                    await BaseScript.Delay(3000);
+                
+                    taskSequence.AddTask.DriveTo(vehicle, GarageCarEnterance.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
+                    taskSequence.AddTask.DriveTo(vehicle, GarageFootExit.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
+                    taskSequence.AddTask.DriveTo(vehicle, GarageWaypoint.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
+                }
+                else
+                {
+                    Game.PlayerPed.Position = GarageFootEnterance.AsVector();
+                    Game.PlayerPed.Heading = GarageCarExit.W - 180f;
+                    World.RenderingCamera = scriptCamera;
+                    
+                    taskSequence.AddTask.GoTo(GarageFootExit.AsVector(), false, duration);
+                    taskSequence.AddTask.GoTo(GarageWaypoint.AsVector(), false, duration);
+                }
+                Game.PlayerPed.Task.PerformSequence(taskSequence);
+                scriptCamera.InterpTo(interpCamera, duration, easePosition, easeRotation);
+                World.RenderingCamera = interpCamera;
+                interpCamera.Shake(cameraShake, cameraShakeAmplitude);
+                await BaseScript.Delay(duration);
+                taskSequence.Close();
+                taskSequence.Dispose();
+
+                Door3.Lock();
+            }
+            else
+            {
+                Audio.PlaySoundFromEntity(Game.PlayerPed, "GARAGE_DOOR_SCRIPTED_CLOSE");
+            }
+        }
+
+        #endregion
 
         public async Task OnDisableExteriorAsync()
         {
