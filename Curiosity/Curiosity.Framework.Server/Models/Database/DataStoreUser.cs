@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Curiosity.Framework.Server.Models.Database
 {
-    public partial class DataStoreUser
+    public class DataStoreUser
     {
         #region FIELDS
         [Description("userId")]
