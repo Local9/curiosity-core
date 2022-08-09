@@ -16,10 +16,10 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
         public override async void Begin()
         {
             await Session.Loading();
-            BuildingData.Init();
+            // BuildingData.Init();
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnPropertyManagerTickAsync()
         {
             BuildingData.SpawnForSaleSignsAndLockDoors();
