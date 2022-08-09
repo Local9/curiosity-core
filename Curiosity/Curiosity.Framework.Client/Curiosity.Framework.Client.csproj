@@ -76,9 +76,9 @@
     <Compile Include="Global.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripts\CharacterScript.cs" />
-    <Compile Include="Scripts\InitiationScript.cs" />
-    <Compile Include="Scripts\ScriptBase.cs" />
+    <Compile Include="Managers\CharacterScript.cs" />
+    <Compile Include="Managers\InitiationScript.cs" />
+    <Compile Include="Managers\Manager.cs" />
     <Compile Include="Session.cs" />
   </ItemGroup>
   <ItemGroup>

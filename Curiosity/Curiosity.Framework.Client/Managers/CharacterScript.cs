@@ -1,14 +1,15 @@
 ﻿using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Shared.Models;
 
-namespace Curiosity.Framework.Client.Scripts
+namespace Curiosity.Framework.Client.Managers
 {
-    internal class CharacterScript : ScriptBase
+    public class CharacterScript : Manager<CharacterScript>
     {
         public User _user = new();
 
         public async void Init()
         {
+            
             User user = await ClientGateway.Get<User>("user:active", Game.Player.ServerId);
             Logger.Trace($"User: {user}");
             if (user is null)
