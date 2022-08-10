@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Client.Extensions;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
@@ -129,7 +130,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             if (listItem == uiLstLiveries)
             {
-                vehicle.Mods.Livery = newIndex - 1;
+                SetVehicleLivery(vehicle.Handle, newIndex - 1);
+                SetVehicleMod(vehicle.Handle, (int)VehicleModType.Livery, newIndex - 1, GetVehicleModVariation(vehicle.Handle, 23));
             }
             else if (listItem == uiLstWindowTint)
             {
@@ -390,20 +392,26 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             List<dynamic> liveryList = new();
 
-            int getLiveryMod = GetNumVehicleMods(vehicle.Handle, 48);
+            int numLiveryMods = GetNumVehicleMods(vehicle.Handle, (int)VehicleModType.Livery);
 
-            if(getLiveryMod > 0)
+            if(numLiveryMods > 0)
             {
                 int liveryCount = GetVehicleLiveryCount(vehicle.Handle);
                 Logger.Debug($"{liveryCount} Liveries found for {vehicle.DisplayName}.");
+                Logger.Debug($"{numLiveryMods} Liveries found for {vehicle.DisplayName}.");
                 liveryList.Add("Remove");
 
+                int total = numLiveryMods;
 
-                for (int i = 0; i < liveryCount; i++)
+                for (int i = 0; i < numLiveryMods; i++)
                 {
-                    string label = Game.GetGXTEntry(GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i));
+                    string label = GetLabelText(GetLiveryName(vehicle.Handle, i));
+                    
+                    if (label == "NULL")
+                        label = GetLabelText(GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i));
+
                     if (string.IsNullOrEmpty(label))
-                        label = $"Livery {i + 1}/{liveryCount}";
+                        label = $"Livery {i + 1}/{total}";
                     liveryList.Add(label);
                 }
             }
