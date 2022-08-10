@@ -72,29 +72,35 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuInventory = MenuPool.AddSubMenu(menuMain, "Inventory", "Player inventory, e.g. Health Kits and Repair Kits which can be bought in the store");
             _MenuInventory.CreateMenu(menuInventory);
+            menuInventory.ParentItem.SetRightLabel(">>>");
 
             menuGarage = MenuPool.AddSubMenu(menuMain, "Garage", "Quick access for your owned vehicles. Buy more in the store.");
-            menuGarage.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
             _vehicleGarageMenu.CreateMenu(menuGarage);
+            menuGarage.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
 
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles", "Current vehicle options.");
-            menuVehicle.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
             _VehicleMenu.CreateMenu(menuVehicle);
+            menuVehicle.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
 
             menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs", "Curiosity Jobs, all other jobs please press F5.");
             _JobMenu.CreateMenu(menuJobs);
+            menuInventory.ParentItem.SetRightLabel(">>>");
 
             menuOutfits = MenuPool.AddSubMenu(menuMain, "Outfits", "Character Outfits.");
             _MenuOutfits.CreateMenuAsync(menuOutfits);
+            menuOutfits.ParentItem.SetRightLabel(">>>");
 
             menuSettings = MenuPool.AddSubMenu(menuMain, "Settings", "User Settings");
             _MenuSettings.CreateMenu(menuSettings);
+            menuSettings.ParentItem.SetRightLabel(">>>");
 
             menuSupporter = MenuPool.AddSubMenu(menuMain, "Supporter", "Supporter options and settings, more information on patreon.com/lifev");
             _MenuSupporter.CreateMenu(menuSupporter);
+            menuSupporter.ParentItem.SetRightLabel(">>>");
 
             menuCustomRaces = MenuPool.AddSubMenu(menuMain, "Races", "Initiate a custom race");
             _MenuCustomRaces.CreateMenu(menuCustomRaces);
+            menuCustomRaces.ParentItem.SetRightLabel(">>>");
 
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
