@@ -105,6 +105,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 if (_classMenus.ContainsKey(vehicleClass)) continue;
 
                 UIMenu classSubMenu = InteractionMenu.MenuPool.AddSubMenu(baseMenu, label);
+                classSubMenu.ParentItem.SetRightLabel(">>>");
 
                 foreach (VehicleItem subVehicle in vehicles.OrderBy(x => x.Label))
                 {
