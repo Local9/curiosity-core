@@ -76,11 +76,13 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuGarage = MenuPool.AddSubMenu(menuMain, "Garage", "Quick access for your owned vehicles. Buy more in the store.");
             _vehicleGarageMenu.CreateMenu(menuGarage);
-            menuGarage.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
+            menuGarage.ParentItem.SetRightLabel(">>>");
+            menuGarage.ParentItem.SetLeftBadge(UIMenuItem.BadgeStyle.Car);
 
             menuVehicle = MenuPool.AddSubMenu(menuMain, "Vehicles", "Current vehicle options.");
             _VehicleMenu.CreateMenu(menuVehicle);
-            menuVehicle.ParentItem.SetRightBadge(UIMenuItem.BadgeStyle.Car);
+            menuVehicle.ParentItem.SetRightLabel(">>>");
+            menuVehicle.ParentItem.SetLeftBadge(UIMenuItem.BadgeStyle.Car);
 
             menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs", "Curiosity Jobs, all other jobs please press F5.");
             _JobMenu.CreateMenu(menuJobs);
