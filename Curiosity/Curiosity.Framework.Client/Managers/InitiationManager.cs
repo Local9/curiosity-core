@@ -8,7 +8,16 @@ namespace Curiosity.Framework.Client.Managers
 
         public override void Begin()
         {
-            // Added text entries for Chameleon paints mod
+            AddChameleonPaintLabels();
+
+            MP_STUN_GUN = GetHashKey("WEAPON_STUNGUN_MP");
+
+            DecorRegister("PED_OWNER", 3);
+            DecorRegister("Player_Vehicle", 3); // Required to allow the Vehicles radio to work correctly.
+        }
+
+        private static void AddChameleonPaintLabels()
+        {
             AddTextEntry("G9_PAINT05", "Vice City"); // 0x03235520
             AddTextEntry("G9_PAINT13", "Kamen Rider"); // 0x06019DB0
             AddTextEntry("G9_PAINT14", "Chromatic Aberration"); // 0x0FAFB10C
@@ -25,11 +34,6 @@ namespace Curiosity.Framework.Client.Managers
             AddTextEntry("G9_PAINT06", "Synthwave Nights"); // 0xBE32CB2C
             AddTextEntry("G9_PAINT07", "Four Seasons"); // 0xD07D6FC1
             AddTextEntry("G9_PAINT04", "Sprunk Extreme"); // 0xF175B1C5
-
-            MP_STUN_GUN = API.GetHashKey("WEAPON_STUNGUN_MP");
-
-            API.DecorRegister("PED_OWNER", 3);
-            API.DecorRegister("Player_Vehicle", 3);
         }
 
         [TickHandler]
