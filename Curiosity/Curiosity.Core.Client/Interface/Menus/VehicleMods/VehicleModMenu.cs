@@ -404,14 +404,14 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 }
             }
 
-            int currentValue = GetVehicleMod(vehicle.Handle, (int)VehicleModType.Livery);
-            if (currentValue == -1)
-                currentValue = 0;
-            if (currentValue > 0)
-                ++currentValue;
-
             if (liveryList.Count > 0)
             {
+                int currentValue = GetVehicleMod(vehicle.Handle, (int)VehicleModType.Livery);
+                if (currentValue == -1)
+                    currentValue = 0;
+                if (currentValue > 0)
+                    ++currentValue;
+
                 uiLstLiveries = new UIMenuListItem("Livery", liveryList, currentValue);
                 mainMenu.AddItem(uiLstLiveries);
             }
