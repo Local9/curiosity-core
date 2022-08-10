@@ -401,7 +401,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
                 for (int i = 0; i < liveryCount; i++)
                 {
-                    string label = GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i);
+                    string label = Game.GetGXTEntry(GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i));
                     if (string.IsNullOrEmpty(label))
                         label = $"Livery {i + 1}/{liveryCount}";
                     liveryList.Add(label);
