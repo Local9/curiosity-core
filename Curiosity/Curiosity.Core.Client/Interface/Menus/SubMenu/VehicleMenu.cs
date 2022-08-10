@@ -63,12 +63,15 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             menuVehicleDoors = InteractionMenu.MenuPool.AddSubMenu(menu, "Doors");
             _VehicleDoorMenu.CreateMenu(menuVehicleDoors);
+            menuVehicleDoors.ParentItem.SetRightLabel(">>>");
 
             menuVehicleWindows = InteractionMenu.MenuPool.AddSubMenu(menu, "Windows");
             _VehicleWindowMenu.CreateMenu(menuVehicleWindows);
+            menuVehicleWindows.ParentItem.SetRightLabel(">>>");
 
             menuVehicleRemote = InteractionMenu.MenuPool.AddSubMenu(menu, "Vehicle Remote Functions");
             _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
+            menuVehicleRemote.ParentItem.SetRightLabel(">>>");
 
             uiChkDriftTires = new UIMenuCheckboxItem("Enable Drift Tires", driftTiresEnabled);
             uiChkInverseTorque = new UIMenuCheckboxItem("Enable Inverse Torque", VehicleManager.EnableInverseTorque);

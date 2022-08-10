@@ -32,6 +32,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
             playerListMenu = InteractionMenu.MenuPool.AddSubMenu(m, "Nearby Players");
             _playerListMenu.CreateMenu(playerListMenu);
+            playerListMenu.ParentItem.SetRightLabel(">>>");
 
             menu.AddItem(miDisableNotifications);
 
