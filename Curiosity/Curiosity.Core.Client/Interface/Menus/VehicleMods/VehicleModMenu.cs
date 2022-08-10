@@ -390,17 +390,20 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             List<dynamic> liveryList = new();
 
-            foreach (VehicleMod mod in vehicle.Mods.GetAllMods())
+            int getLiveryMod = GetNumVehicleMods(vehicle.Handle, 48);
+
+            if(getLiveryMod > 0)
             {
-                Logger.Debug($"{mod.ModCount} Liveries found for {vehicle.DisplayName}.");
-                if (mod.ModType != VehicleModType.Livery) continue;
+                int liveryCount = GetVehicleLiveryCount(vehicle.Handle);
+                Logger.Debug($"{liveryCount} Liveries found for {vehicle.DisplayName}.");
                 liveryList.Add("Remove");
 
-                for (int i = 0; i < mod.ModCount; i++)
+
+                for (int i = 0; i < liveryCount; i++)
                 {
-                    string label = vehicle.Mods.GetLocalizedLiveryName(i);
+                    string label = GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i);
                     if (string.IsNullOrEmpty(label))
-                        label = $"Livery {i + 1}/{mod.ModCount}";
+                        label = $"Livery {i + 1}/{liveryCount}";
                     liveryList.Add(label);
                 }
             }
