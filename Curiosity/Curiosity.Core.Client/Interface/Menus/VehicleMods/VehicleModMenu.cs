@@ -363,12 +363,15 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             vehicleModMenu = _MenuPool.AddSubMenu(mainMenu, "Mods");
             vehicleModSubMenu.Create(vehicleModMenu);
+            vehicleModMenu.ParentItem.SetRightLabel(">>>");
 
             vehicleNeonMenu = _MenuPool.AddSubMenu(mainMenu, "Neon Kits");
             vehicleNeonSubMenu.Create(vehicleNeonMenu);
+            vehicleNeonMenu.ParentItem.SetRightLabel(">>>");
 
             vehicleColorMenu = _MenuPool.AddSubMenu(mainMenu, "Colors");
             vehicleColorSubMenu.Create(vehicleColorMenu);
+            vehicleColorMenu.ParentItem.SetRightLabel(">>>");
 
             bool hasExtras = false;
 
@@ -382,6 +385,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
             {
                 vehicleExtraMenu = _MenuPool.AddSubMenu(mainMenu, "Extras");
                 vehicleExtrasSubMenu.Create(vehicleExtraMenu);
+                vehicleExtraMenu.ParentItem.SetRightLabel(">>>");
             }
 
             List<dynamic> liveryList = new();
