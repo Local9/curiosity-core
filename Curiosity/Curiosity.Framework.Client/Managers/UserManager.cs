@@ -3,7 +3,7 @@ using Curiosity.Framework.Shared.Models;
 
 namespace Curiosity.Framework.Client.Managers
 {
-    public class CharacterScript : Manager<CharacterScript>
+    public class UserManager : Manager<UserManager>
     {
         public User _user = new();
 

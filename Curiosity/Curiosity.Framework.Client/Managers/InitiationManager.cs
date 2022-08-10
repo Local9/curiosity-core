@@ -2,7 +2,7 @@
 
 namespace Curiosity.Framework.Client.Managers
 {
-    public class InitiationScript : Manager<InitiationScript>
+    public class InitiationManager : Manager<InitiationManager>
     {
         private int MP_STUN_GUN;
 
@@ -34,7 +34,7 @@ namespace Curiosity.Framework.Client.Managers
         [TickHandler]
         private async Task OnGeneralTickAsync()
         {
-            int vehicleWeapon = -1553120962;
+            int vehicleWeapon = -1553120962; // Vehicle Collision with Peds
             API.SetWeaponDamageModifierThisFrame((uint)vehicleWeapon, 0.0f);
             API.SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0.0f);
             API.SetWeaponDamageModifierThisFrame((uint)MP_STUN_GUN, 0.0f);
@@ -45,10 +45,9 @@ namespace Curiosity.Framework.Client.Managers
             Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
-            API.SetTextChatEnabled(false);
-            API.DisablePlayerVehicleRewards(Game.Player.Handle);
-
-            Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death            
+            API.SetTextChatEnabled(false); // Disable default GTA Chat
+            API.DisablePlayerVehicleRewards(Game.Player.Handle); // Remove any vehicle weapons
+            Game.Player.SetRunSpeedMultThisFrame(1f); // Force the players speed       
         }
     }
 }
