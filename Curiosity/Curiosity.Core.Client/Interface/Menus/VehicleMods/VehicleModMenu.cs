@@ -395,6 +395,8 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 if (mod.ModType != VehicleModType.Livery) continue;
                 liveryList.Add("Remove");
 
+                Logger.Debug($"{mod.ModCount} Liveries found for {vehicle.DisplayName}.");
+
                 for (int i = 0; i < mod.ModCount; i++)
                 {
                     string label = vehicle.Mods.GetLocalizedLiveryName(i);
