@@ -86,7 +86,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuJobs = MenuPool.AddSubMenu(menuMain, "Jobs", "Curiosity Jobs, all other jobs please press F5.");
             _JobMenu.CreateMenu(menuJobs);
-            menuInventory.ParentItem.SetRightLabel(">>>");
+            menuJobs.ParentItem.SetRightLabel(">>>");
 
             menuOutfits = MenuPool.AddSubMenu(menuMain, "Outfits", "Character Outfits.");
             _MenuOutfits.CreateMenuAsync(menuOutfits);
