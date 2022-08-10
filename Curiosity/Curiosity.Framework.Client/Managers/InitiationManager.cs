@@ -8,6 +8,7 @@ namespace Curiosity.Framework.Client.Managers
 
         public override void Begin()
         {
+            // Added text entries for Chameleon paints mod
             AddTextEntry("G9_PAINT05", "Vice City"); // 0x03235520
             AddTextEntry("G9_PAINT13", "Kamen Rider"); // 0x06019DB0
             AddTextEntry("G9_PAINT14", "Chromatic Aberration"); // 0x0FAFB10C
