@@ -205,7 +205,7 @@ namespace Curiosity.Framework.Server.Managers
 
                 User userResult = client.User;
 
-                if (userResult is null)
+                if (userResult == null)
                 {
                     string strDiscordId = client.Player?.Identifiers["discord"] ?? string.Empty;
                     ulong discordId;

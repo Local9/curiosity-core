@@ -23,6 +23,7 @@ namespace Curiosity.Framework.Client.Events
             {
                 try
                 {
+                    Logger.Debug($"ProcessInboundAsync: {serialized}");
                     await ProcessInboundAsync(new ServerId(), serialized);
                 }
                 catch (Exception ex)
@@ -35,6 +36,7 @@ namespace Curiosity.Framework.Client.Events
             {
                 try
                 {
+                    Logger.Debug($"ProcessOutbound: {serialized}");
                     ProcessOutbound(serialized);
                 }
                 catch (Exception ex)

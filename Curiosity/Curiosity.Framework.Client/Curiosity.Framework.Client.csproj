@@ -80,6 +80,7 @@
     <Compile Include="Managers\InitiationManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="Utils\ScreenInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

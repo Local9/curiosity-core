@@ -40,6 +40,8 @@ namespace Curiosity.Framework.Client
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
+
+            OnLoadAsync();
         }
 
         private async Task OnLoadAsync()
