@@ -3,7 +3,6 @@ using Lusive.Events;
 using Lusive.Events.Message;
 using Lusive.Events.Serialization;
 using Lusive.Events.Serialization.Implementations;
-using System.Linq;
 using System.Security.Cryptography;
 
 namespace Curiosity.Framework.Server.Events
