@@ -59,7 +59,7 @@ namespace Curiosity.Framework.Client.Events
                 while (_signature == null)
                     await BaseScript.Delay(0);
 
-                //Client.Logger.Debug($"[{message}] Halted {stopwatch.Elapsed.TotalMilliseconds}ms due to signature retrieval.");
+                // Logger.Debug($"[{message}] Halted {stopwatch.Elapsed.TotalMilliseconds}ms due to signature retrieval.");
             }
 
             message.Signature = _signature;
