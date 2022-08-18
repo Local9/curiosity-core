@@ -7,14 +7,14 @@ namespace Curiosity.Framework.Client.Managers
 {
     public class UserManager : Manager<UserManager>
     {
-        public User _user;
+        public CuriosityUser _user;
 
         public async override void Begin()
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
             await BaseScript.Delay(5000);
-            
-            User user = await ClientGateway.Get<User>("user:active", Game.Player.ServerId);
+
+            CuriosityUser user = await ClientGateway.Get<CuriosityUser>("user:active", Game.Player.ServerId);
             Logger.Trace($"User: {user}");
             if (user is null)
             {

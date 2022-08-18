@@ -23,7 +23,7 @@ namespace Curiosity.Framework.Server.Managers
             Event("playerDropped", new Action<Player, string>(OnPlayerDropped));
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
-            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
+            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<CuriosityUser>>(OnUserActiveAsync));
         }
 
         private async void OnPlayerConnectingAsync([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
@@ -197,13 +197,13 @@ namespace Curiosity.Framework.Server.Managers
         }
 
         // return the user from sessions with the characters
-        private async Task<User> OnUserActiveAsync(ClientId client, int serverId)
+        private async Task<CuriosityUser> OnUserActiveAsync(ClientId client, int serverId)
         {
             try
             {
                 if (client.Handle != serverId) return null;
 
-                User userResult = client.User;
+                CuriosityUser userResult = client.User;
 
                 if (userResult == null)
                 {
@@ -228,12 +228,14 @@ namespace Curiosity.Framework.Server.Managers
                     
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
 
-                    userResult = new User()
+                    userResult = new CuriosityUser()
                     {
                         Handle = client.Handle,
                         UserID = user.UserID,
                         Username = client.Player.Name
                     };
+
+                    clientId.StoreUser = user;
 
                     Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
                     Logger.Trace($"Number of Sessions: {UserSessions.Count}");

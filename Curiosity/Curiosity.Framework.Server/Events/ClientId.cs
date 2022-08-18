@@ -1,8 +1,8 @@
-﻿using Curiosity.Framework.Shared.Models;
+﻿using Curiosity.Framework.Server.Models.Database;
+using Curiosity.Framework.Shared.Models;
 using Lusive.Events;
 using Lusive.Events.Attributes;
 using Lusive.Snowflake;
-using System.Linq;
 
 namespace Curiosity.Framework.Server.Events
 {
@@ -12,7 +12,11 @@ namespace Curiosity.Framework.Server.Events
         public SnowflakeId Id { get; set; }
         public int UserId { get; set; }
         public int Handle { get; set; }
-        public User User { get; set; }
+        public CuriosityUser User { get; set; }
+
+        [Ignore]
+        [JsonIgnore]
+        public DataStoreUser StoreUser { get; set; }
 
         [Ignore]
         [JsonIgnore]
