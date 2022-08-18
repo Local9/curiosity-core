@@ -1,11 +1,10 @@
-﻿using Newtonsoft.Json;
-
-namespace Perseverance.Discord.Bot.Entities
-{    public struct Configuration
+﻿namespace Perseverance.Discord.Bot.Entities
+{
+    public struct Configuration
     {
         [JsonProperty("token")]
         public string Token { get; private set; }
-        
+
         [JsonProperty("guild")]
         public ulong Guild { get; private set; }
 
@@ -28,7 +27,7 @@ namespace Perseverance.Discord.Bot.Entities
     {
         [JsonProperty("server")]
         public string Server { get; private set; }
-        
+
         [JsonProperty("port")]
         public uint Port { get; private set; }
 
@@ -37,7 +36,7 @@ namespace Perseverance.Discord.Bot.Entities
 
         [JsonProperty("user")]
         public string Username { get; private set; }
-        
+
         [JsonProperty("password")]
         public string Password { get; private set; }
     }
@@ -47,7 +46,7 @@ namespace Perseverance.Discord.Bot.Entities
 
         [JsonProperty("label")]
         public string Label { get; private set; }
-        
+
         [JsonProperty("ip")]
         public string IP { get; private set; }
 

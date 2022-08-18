@@ -1,6 +1,6 @@
 ﻿namespace Perseverance.Discord.Bot.Entities
 {
-    struct CitizenFxPlayers
+    struct CitizenFxPlayer
     {
         [JsonProperty("endpoint")]
         public string Endpoint { get; set; }
@@ -16,5 +16,10 @@
 
         [JsonProperty("ping")]
         public int Ping { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }
 }

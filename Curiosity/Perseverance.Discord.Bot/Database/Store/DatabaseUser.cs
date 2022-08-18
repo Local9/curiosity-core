@@ -13,7 +13,7 @@ namespace Perseverance.Discord.Bot.Database.Store
 
         [Description("userId")]
         public int UserId { get; private set; }
-        
+
         [Description("username")]
         public string Username { get; private set; }
 

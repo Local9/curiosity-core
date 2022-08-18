@@ -47,10 +47,12 @@ namespace Perseverance
             var slash = Client.UseSlashCommands();
             slash.RegisterCommands<BasicCommands>();
             slash.RegisterCommands<UserCommands>();
+            slash.RegisterCommands<ServerCommands>();
 
             Client.Ready += Client_Ready;
             Client.GuildAvailable += Client_GuildAvailable;
             Client.ClientErrored += Client_ClientErrored;
+            Client.MessageCreated += Client_MessageCreated;
             // Users
             Client.GuildMemberUpdated += Client_GuildMemberUpdated;
 
@@ -60,6 +62,22 @@ namespace Perseverance
             DonationProcessor donationProcessor = new();
 
             await Task.Delay(-1);
+        }
+
+        private Task Client_MessageCreated(DiscordClient sender, MessageCreateEventArgs e)
+        {
+            // if message contains !ip
+            if (e.Message.Content.Contains("!ip"))
+            {
+                e.Message.RespondAsync("Please use the Slash Command `/server`");
+            }
+
+            if (e.Message.Content.Contains("lv!"))
+            {
+                e.Message.RespondAsync("Please check my new slash commands! 🥳");
+            }
+
+            return Task.CompletedTask;
         }
 
         private Task Client_GuildMemberUpdated(DiscordClient sender, GuildMemberUpdateEventArgs e)

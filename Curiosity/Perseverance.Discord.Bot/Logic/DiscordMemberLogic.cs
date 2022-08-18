@@ -10,7 +10,7 @@ namespace Perseverance.Discord.Bot.Logic
     internal static class DiscordMemberLogic
     {
         public static Configuration Configuration { get; private set; }
-        
+
         public static async Task UpdateDonationRole(DiscordMember discordMember)
         {
             Configuration = await ApplicationConfig.GetConfig();
@@ -51,7 +51,7 @@ namespace Perseverance.Discord.Bot.Logic
 
             // add DB Role
             user.SetRole(userRoleId);
-            
+
             DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
             embedBuilder.Color = DiscordColor.Green;
             embedBuilder.Title = "Thank you from Life V";
@@ -60,9 +60,9 @@ namespace Perseverance.Discord.Bot.Logic
             embedBuilder.AddField("Role", user.Role.GetDescription(), true);
             embedBuilder.WithTimestamp(DateTime.Now);
             embedBuilder.WithFooter("https://lifev.net");
-            
+
             DiscordEmbed embed = embedBuilder.Build();
-            
+
             await discordMember.SendMessageAsync(embed);
         }
     }

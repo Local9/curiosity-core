@@ -34,7 +34,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                     {
                         serverInformation = await Utils.HttpTools.GetUrlResultAsync($"http://{server}/info.json");
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         await _discordClient.UpdateStatusAsync(activity);
                         return;
@@ -42,7 +42,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
 
                     string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server}/players.json");
 
-                    List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(players);
+                    List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players);
                     CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
                     activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
 

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Perseverance.Discord.Bot.Entities;
+﻿using Perseverance.Discord.Bot.Entities;
 
 namespace Perseverance.Discord.Bot.Config
 {
@@ -29,6 +28,7 @@ namespace Perseverance.Discord.Bot.Config
 
         public static List<ulong> GetDonatorRoles => _configuration.DonatorRoleList;
         public static Dictionary<string, ulong> DonatorRoles => _configuration.DonatorRoles;
+        public static List<Server> Servers => _configuration.Servers;
     }
 
 }
