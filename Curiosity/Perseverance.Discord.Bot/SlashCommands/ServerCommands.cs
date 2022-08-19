@@ -106,5 +106,58 @@ namespace Perseverance.Discord.Bot.SlashCommands
 
             await ctx.CreateResponseAsync(embedBuilder);
         }
+
+        [SlashCommand("top", "Get top players on the server based on Skill Experience.")]
+        public async Task TopCommand(InteractionContext ctx, [Option("Skill", "Skill to look up.")] string skill)
+        {
+            try
+            {
+                // return message
+                string message = string.Empty;
+                List<string> topSkills = await Database.Store.DatabaseSkill.GetSkillsTopAsync();
+
+                if (!topSkills.Contains(skill))
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    {
+                        Content = $"Skill {skill} is not in the top list.\n\nExpected: {string.Join(", ", topSkills)}"
+                    });
+                    return;
+                }
+
+                Dictionary<string, string> topPlayers = await Database.Store.DatabaseSkill.GetSkillsTopPlayers(skill);
+
+                if (topPlayers.Count == 0)
+                {
+                    await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    {
+                        Content = $"No players found for {skill}."
+                    });
+                    return;
+                }
+
+                string topUsers = "```autohotkey";
+                topUsers += "\nRank | Name";
+                int count = 1;
+
+                foreach (KeyValuePair<string, string> kvp in topPlayers)
+                {
+                    topUsers += $"\n[{count:00}]    > {kvp.Key}";
+                    topUsers += $"\n              Experience: {kvp.Value:#,###,##0}";
+                    count++;
+                };
+
+                topUsers += "```";
+
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DSharpPlus.Entities.DiscordInteractionResponseBuilder()
+                {
+                    Content = topUsers
+                });
+            }
+            catch (Exception ex)
+            {
+                Program.SendMessage(Program.BOT_TEXT_CHANNEL, $"CRITICAL EXCEPTION [TopCommand]\n{ex.Message}\n{ex.StackTrace}");
+            }
+        }
     }
 }

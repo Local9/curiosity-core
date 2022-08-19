@@ -58,6 +58,29 @@ namespace Perseverance.Discord.Bot.Database
             return null;
         }
 
+        public static async Task<Dictionary<string, string>> GetDictionaryAsync(string query, DynamicParameters args = null)
+        {
+            var watch = Stopwatch.StartNew();
+            try
+            {
+                using (var conn = new MySqlConnection(ConnectionString()))
+                {
+                    SetupTypeMap();
+
+                    return (await conn.QueryAsync<KeyValuePair<string, string>>(query, args)).ToDictionary(pair => pair.Key, pair => pair.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                SqlExceptionHandler(query, ex.Message, watch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                watch.Stop();
+            }
+            return null;
+        }
+
         public static async Task<T> GetSingleAsync(string query, DynamicParameters args = null)
         {
             var watch = Stopwatch.StartNew();
