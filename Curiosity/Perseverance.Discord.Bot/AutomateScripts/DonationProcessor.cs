@@ -28,6 +28,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                 List<DatabaseUser> users = await DatabaseUser.GetDonatorsAsync();
                 DiscordGuild discordGuild = await _discordClient.GetGuildAsync(Program.BOT_GUILD_ID);
 
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[DonationProcessor] Running");
 
                 foreach (DatabaseUser databaseUser in users)
                 {
@@ -35,6 +36,8 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                     DiscordMember member = await discordGuild.GetMemberAsync(discordId);
                     await DiscordMemberLogic.UpdateDonationRole(member);
                 }
+
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[DonationProcessor] Completed");
             }
             catch (Exception ex)
             {
