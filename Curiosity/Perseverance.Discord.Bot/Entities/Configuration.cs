@@ -50,6 +50,6 @@
         [JsonProperty("ip")]
         public string IP { get; private set; }
 
-        // public override string ToString() => IP;
+        public override string ToString() => IP;
     }
 }
