@@ -42,10 +42,10 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
 
-        [SlashCommand("gaming", "A button to connect to the Life V Gaming Network Discord.")]
+        [SlashCommand("gaming", "A button to connect to the Life V Network Gaming Discord.")]
         public async Task GamingCommand(InteractionContext ctx)
         {
-            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://gaming.lifev.net", $"Click to join the 'Life V Gaming Network Discord'");
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://gaming.lifev.net", $"Click to join the 'Life V Network Gaming Discord'");
 
             DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
             message.AddComponents(discordButtonComponent);
