@@ -191,13 +191,13 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
                 if (vehicleState.eVehicleStateType is eVehicleStateType.Vehicle)
                     Cache.PersonalVehicle = null;
-                else if (vehicleState.eVehicleStateType is eVehicleStateType.Vehicle)
+                else if (vehicleState.eVehicleStateType is eVehicleStateType.Trailer)
                     Cache.PersonalTrailer = null;
-                else if (vehicleState.eVehicleStateType is eVehicleStateType.Vehicle)
+                else if (vehicleState.eVehicleStateType is eVehicleStateType.Plane)
                     Cache.PersonalPlane = null;
-                else if (vehicleState.eVehicleStateType is eVehicleStateType.Vehicle)
+                else if (vehicleState.eVehicleStateType is eVehicleStateType.Helicopter)
                     Cache.PersonalHelicopter = null;
-                else if (vehicleState.eVehicleStateType is eVehicleStateType.Vehicle)
+                else if (vehicleState.eVehicleStateType is eVehicleStateType.Boat)
                     Cache.PersonalBoat = null;
 
                 await BaseScript.Delay(500);
