@@ -138,6 +138,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
                 }
 
                 string topUsers = "```autohotkey";
+                topUsers += $"\nSkill | {skill}";
                 topUsers += "\nRank | Name";
                 int count = 1;
 
