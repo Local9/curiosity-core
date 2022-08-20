@@ -40,6 +40,8 @@ namespace Perseverance.Discord.Bot.Logic
             if (userRoleId == currentRole) return;
 
             isDonator = userRoleId > 1;
+            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
+            DiscordEmbed embed;
 
             eRole newRole = (eRole)userRoleId;
             Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from {currentRole.GetDescription()} to {newRole.GetDescription()}");
@@ -48,13 +50,25 @@ namespace Perseverance.Discord.Bot.Logic
             {
                 // remove DB Role
                 user.RemoveRole();
+
+                embedBuilder.Color = DiscordColor.Orange;
+                embedBuilder.Title = "Thank you from Life V";
+                embedBuilder.Description = "Thank you, we're sad to see your support end. Please let us know what we can do to improve and earn your support again in the future.";
+                embedBuilder.AddField("User", user.Username, true);
+                embedBuilder.AddField("Role", user.Role.GetDescription(), true);
+                embedBuilder.WithTimestamp(DateTime.Now);
+                embedBuilder.WithFooter("https://lifev.net");
+
+                embed = embedBuilder.Build();
+
+                await discordMember.SendMessageAsync(embed);
+
                 return;
             }
 
             // add DB Role
             user.SetRole(userRoleId);
 
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
             embedBuilder.Color = DiscordColor.Green;
             embedBuilder.Title = "Thank you from Life V";
             embedBuilder.Description = "Thank you for your support, if your status on the server has not updated, please try reconnecting.";
@@ -63,7 +77,7 @@ namespace Perseverance.Discord.Bot.Logic
             embedBuilder.WithTimestamp(DateTime.Now);
             embedBuilder.WithFooter("https://lifev.net");
 
-            DiscordEmbed embed = embedBuilder.Build();
+            embed = embedBuilder.Build();
 
             await discordMember.SendMessageAsync(embed);
         }
