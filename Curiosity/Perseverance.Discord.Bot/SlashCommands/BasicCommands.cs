@@ -20,22 +20,15 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent($"pong! {timeSpan.Milliseconds}ms"));
         }
         
-        [SlashCommand("connect", "Information to connect to the main server")]
+        [SlashCommand("connect", "A button to connect to the Life V Worlds server.")]
         public async Task ConnectCommand(InteractionContext ctx)
         {
-            List<Server> servers = ApplicationConfig.Servers;
-            Server server = servers[0];
-            // return an embed message
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
-            embedBuilder.Color = DiscordColor.Green;
-            embedBuilder.Title = $"{server.Label}";
-            embedBuilder.Description = $"You can connect to the server using the following;";
-            embedBuilder.AddField("URL", $"http://connect.lifev.net", false);
-            embedBuilder.AddField("Console IP", $"`connect {server.IP}`", false);
-            embedBuilder.WithTimestamp(DateTime.Now);
-            embedBuilder.WithFooter("lifev.net");
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://connect.lifev.net", $"Click to join the 'Life V Worlds Server'");
 
-            await ctx.CreateResponseAsync(embedBuilder);
+            DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
+            message.AddComponents(discordButtonComponent);
+
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
 
         [SlashCommand("wiki", "Information from our wiki @ wiki.lifev.net")]
@@ -90,16 +83,12 @@ namespace Perseverance.Discord.Bot.SlashCommands
             CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
             TextInfo textInfo = cultureInfo.TextInfo;
 
-            // return an embed message
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
-            embedBuilder.Color = DiscordColor.Green;
-            embedBuilder.Title = $"{textInfo.ToTitleCase(wiki)}";
-            embedBuilder.Description = $"Please fine below the URL to your query;";
-            embedBuilder.AddField("URL", $"{url}", false);
-            embedBuilder.WithTimestamp(DateTime.Now);
-            embedBuilder.WithFooter("lifev.net");
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent(url, $"Open Wiki Page for '{textInfo.ToTitleCase(wiki)}'");
 
-            await ctx.CreateResponseAsync(embedBuilder);
+            DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
+            message.AddComponents(discordButtonComponent);
+
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
 
     }
