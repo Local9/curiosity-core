@@ -108,7 +108,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.CreateResponseAsync(embedBuilder);
         }
 
-        [SlashCommand("top", "Get top players on the server based on Skill Experience.")]
+        [SlashCommand("top", "Get top players on the server based on Skill Experience who have been active in the last 30 days.")]
         public async Task TopCommand(InteractionContext ctx, [Option("Skill", "Skill to look up.")] string skill)
         {
             try
