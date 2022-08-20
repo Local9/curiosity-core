@@ -130,8 +130,11 @@ namespace Curiosity.Core.Server.Managers
                             var npwd = Instance.ExportDictionary["npwd"];
                             string discord = player.Identifiers["discord"];
                             npwd.newPlayerAdvanced(metadata.Sender, discord, player.Name, discord);
+                            Logger.Debug($"Player triggered NPWD for {player.Name}#{playerHandle}");
                         }
                     }
+
+                    Logger.Debug($"{msg}");
 
                     //if (PluginManager.IsDebugging)
                     //    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");

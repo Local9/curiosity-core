@@ -382,6 +382,8 @@ namespace Curiosity.Core.Client.Managers
 
             Notify.CanSendNotification = true;
 
+            EventSystem.Send("user:queue:active");
+
             TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
             CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
         }
