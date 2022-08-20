@@ -2,7 +2,7 @@
 
 namespace Perseverance.Discord.Bot.Entities.Enums
 {
-    internal enum Role : int
+    internal enum eRole : int
     {
         [Description("Unknown")]
         UNDEFINED = 0,

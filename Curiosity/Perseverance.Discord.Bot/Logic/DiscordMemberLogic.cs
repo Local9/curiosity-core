@@ -25,13 +25,13 @@ namespace Perseverance.Discord.Bot.Logic
             bool isLevel1 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level1"]).Any();
 
             if (isLifeSupporter)
-                userRoleId = (int)Role.DONATOR_LIFE;
+                userRoleId = (int)eRole.DONATOR_LIFE;
             else if (isLevel3)
-                userRoleId = (int)Role.DONATOR_LEVEL_3;
+                userRoleId = (int)eRole.DONATOR_LEVEL_3;
             else if (isLevel2)
-                userRoleId = (int)Role.DONATOR_LEVEL_2;
+                userRoleId = (int)eRole.DONATOR_LEVEL_2;
             else if (isLevel1)
-                userRoleId = (int)Role.DONATOR_LEVEL_1;
+                userRoleId = (int)eRole.DONATOR_LEVEL_1;
 
             DatabaseUser user = await DatabaseUser.GetAsync(discordMember.Id);
             int currentRole = (int)user.Role;
@@ -39,7 +39,7 @@ namespace Perseverance.Discord.Bot.Logic
             if (user.IsStaff) return;
             if (userRoleId == currentRole) return;
 
-            Role newRole = (Role)userRoleId;
+            eRole newRole = (eRole)userRoleId;
             Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from {currentRole.GetDescription()} to {newRole.GetDescription()}");
 
             if (!isDonator)

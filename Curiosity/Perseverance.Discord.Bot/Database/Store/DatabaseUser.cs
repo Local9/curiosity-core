@@ -27,16 +27,16 @@ namespace Perseverance.Discord.Bot.Database.Store
         public DateTime LastSeen { get; private set; }
 
         [Description("roleId")]
-        public Role Role { get; private set; }
+        public eRole Role { get; private set; }
 
-        public bool IsStaff => Role == Role.ADMINISTRATOR
-            || Role == Role.MODERATOR
-            || Role == Role.COMMUNITY_MANAGER
-            || Role == Role.DEVELOPER
-            || Role == Role.HEAD_ADMIN
-            || Role == Role.HELPER
-            || Role == Role.PROJECT_MANAGER
-            || Role == Role.SENIOR_ADMIN;
+        public bool IsStaff => Role == eRole.ADMINISTRATOR
+            || Role == eRole.MODERATOR
+            || Role == eRole.COMMUNITY_MANAGER
+            || Role == eRole.DEVELOPER
+            || Role == eRole.HEAD_ADMIN
+            || Role == eRole.HELPER
+            || Role == eRole.PROJECT_MANAGER
+            || Role == eRole.SENIOR_ADMIN;
 
         internal static async Task<DatabaseUser> GetAsync(ulong discordId)
         {
@@ -63,7 +63,7 @@ namespace Perseverance.Discord.Bot.Database.Store
             dynamicParameters.Add("pRoleId", roleId);
             bool result = await DapperDatabase<DatabaseUser>.ExecuteAsync(SQL_USER_SET_ROLE, dynamicParameters);
             if (result)
-                Role = (Role)roleId;
+                Role = (eRole)roleId;
         }
 
         public override string ToString()
