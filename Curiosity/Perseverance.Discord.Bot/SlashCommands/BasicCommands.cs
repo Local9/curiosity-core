@@ -42,6 +42,8 @@ namespace Perseverance.Discord.Bot.SlashCommands
                     url = $"{url}Police";
                     break;
                 case "firefighter":
+                case "firefighting":
+                case "fire":
                     url = $"{url}Fire_Fighter";
                     break;
                 case "emt":
@@ -56,7 +58,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
                     url = $"{url}Piloting";
                     break;
                 case "bus":
-                case "busdriver":
+                case "bus driver":
                     url = $"{url}Bus_Driver";
                     break;
                 case "fisher":
@@ -66,13 +68,15 @@ namespace Perseverance.Discord.Bot.SlashCommands
                 case "bitcoin":
                     url = $"{url}Bitcoin";
                     break;
-                case "drugdealing":
+                case "drug dealing":
+                case "drug":
                     url = $"{url}Drug_Dealing";
                     break;
                 case "drifting":
                     url = $"{url}Drifting";
                     break;
                 case "firststeps":
+                case "first steps":
                     url = $"{url}First_Steps";
                     break;
                 default:
