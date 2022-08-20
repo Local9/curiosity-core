@@ -17,7 +17,7 @@ namespace Perseverance.Discord.Bot.Logic
             List<DiscordRole> rolesAfter = discordMember.Roles.ToList();
 
             bool isDonator = false;
-            int userRoleId = 1;
+            eRole userRoleId = eRole.USER;
 
             bool isLifeSupporter = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["life"]).Any();
             bool isLevel3 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level3"]).Any();
@@ -25,21 +25,21 @@ namespace Perseverance.Discord.Bot.Logic
             bool isLevel1 = rolesAfter.Where(x => x.Id == Configuration.DonatorRoles["level1"]).Any();
 
             if (isLifeSupporter)
-                userRoleId = (int)eRole.DONATOR_LIFE;
+                userRoleId = eRole.DONATOR_LIFE;
             else if (isLevel3)
-                userRoleId = (int)eRole.DONATOR_LEVEL_3;
+                userRoleId = eRole.DONATOR_LEVEL_3;
             else if (isLevel2)
-                userRoleId = (int)eRole.DONATOR_LEVEL_2;
+                userRoleId = eRole.DONATOR_LEVEL_2;
             else if (isLevel1)
-                userRoleId = (int)eRole.DONATOR_LEVEL_1;
+                userRoleId = eRole.DONATOR_LEVEL_1;
 
             DatabaseUser user = await DatabaseUser.GetAsync(discordMember.Id);
-            int currentRole = (int)user.Role;
+            eRole currentRole = (eRole)user.Role;
 
             if (user.IsStaff) return;
             if (userRoleId == currentRole) return;
 
-            isDonator = userRoleId > 1;
+            isDonator = userRoleId == eRole.DONATOR_LIFE || userRoleId == eRole.DONATOR_LEVEL_3 || userRoleId == eRole.DONATOR_LEVEL_2 || userRoleId == eRole.DONATOR_LEVEL_1;
             DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
             DiscordEmbed embed;
 
@@ -67,7 +67,7 @@ namespace Perseverance.Discord.Bot.Logic
             }
 
             // add DB Role
-            user.SetRole(userRoleId);
+            user.SetRole((int)userRoleId);
 
             embedBuilder.Color = DiscordColor.Green;
             embedBuilder.Title = "Thank you from Life V";
