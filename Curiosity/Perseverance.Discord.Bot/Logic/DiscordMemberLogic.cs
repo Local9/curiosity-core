@@ -11,7 +11,7 @@ namespace Perseverance.Discord.Bot.Logic
     {
         public static Configuration Configuration { get; private set; }
 
-        public static async Task UpdateDonationRole(DiscordMember discordMember)
+        public static async Task<string> UpdateDonationRole(DiscordMember discordMember)
         {
             Configuration = await ApplicationConfig.GetConfig();
             List<DiscordRole> rolesAfter = discordMember.Roles.ToList();
@@ -36,8 +36,17 @@ namespace Perseverance.Discord.Bot.Logic
             DatabaseUser user = await DatabaseUser.GetAsync(discordMember.Id);
             eRole currentRole = (eRole)user.Role;
 
-            if (user.IsStaff) return;
-            if (userRoleId == currentRole) return;
+            if (user.IsStaff)
+            {
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} is a staff member, no roles will be changed.");
+                return $"{discordMember.Mention} is a staff member, no roles will be changed.";
+            }
+            
+            if (userRoleId == currentRole)
+            {
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.");
+                return $"{discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.";
+            }
 
             isDonator = userRoleId == eRole.DONATOR_LIFE || userRoleId == eRole.DONATOR_LEVEL_3 || userRoleId == eRole.DONATOR_LEVEL_2 || userRoleId == eRole.DONATOR_LEVEL_1;
             DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
@@ -75,10 +84,12 @@ namespace Perseverance.Discord.Bot.Logic
                 embed = embedBuilder.Build();
 
                 await discordMember.SendMessageAsync(embed);
+                return $"{discordMember.Mention} - Change to their supporting role from '{currentRole.GetDescription()}' to '{newRole.GetDescription()}'.";
             }
             catch (Exception ex)
             {
                 Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] Unable to message {discordMember?.Mention}, {user.Username}.");
+                return $"Unable to message {discordMember?.Mention}, {user.Username}.";
             }
         }
     }

@@ -28,11 +28,11 @@ namespace Perseverance.Discord.Bot.SlashCommands
         public async Task DonateCommand(InteractionContext ctx, [Option("user", "User to lookup")] DiscordUser user)
         {
             DiscordMember member = await ctx.Guild.GetMemberAsync(user.Id);
-            DiscordMemberLogic.UpdateDonationRole(member);
+            string message = await DiscordMemberLogic.UpdateDonationRole(member);
 
             await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DSharpPlus.Entities.DiscordInteractionResponseBuilder()
             {
-                Content = "Donation status checked."
+                Content = message
             });
         }
     }
