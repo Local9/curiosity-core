@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using Perseverance.Discord.Bot.Database.Store;
 using Perseverance.Discord.Bot.Logic;
+using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace Perseverance.Discord.Bot.AutomateScripts
@@ -10,17 +11,17 @@ namespace Perseverance.Discord.Bot.AutomateScripts
         static Timer _timer;
         static DiscordClient _discordClient;
 
-        public DonationProcessor()
+        public DonationProcessor(DiscordClient discordClient)
         {
             _timer = new Timer();
-            _timer.Elapsed += Timer_Elapsed;
+            _timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
             _timer.Interval = (1000 * 60) * 60; // 60 Minutes
             _timer.Enabled = true;
 
-            _discordClient = Program.Client;
+            _discordClient = discordClient;
         }
 
-        private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             try
             {

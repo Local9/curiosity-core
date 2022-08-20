@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using Perseverance.Discord.Bot.Entities;
+using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace Perseverance.Discord.Bot.AutomateScripts
@@ -8,22 +9,27 @@ namespace Perseverance.Discord.Bot.AutomateScripts
     {
         static Timer _timer;
         static DiscordClient _discordClient;
-
-        public GameServerStatus()
+        static List<Server> servers;
+        
+        public GameServerStatus(DiscordClient client)
         {
             _timer = new Timer();
-            _timer.Elapsed += Timer_Elapsed;
+            _timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
             _timer.Interval = (1000 * 30);
             _timer.Enabled = true;
 
-            _discordClient = Program.Client;
+            _discordClient = client;
+
+            servers = Program.Configuration.Servers;
+
+            Console.WriteLine($"[SERVER STATUS] Monitoring: {servers.Count}");
         }
 
-        private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             try
             {
-                List<Server> servers = Program.Configuration.Servers;
+                Console.WriteLine($"[SERVER STATUS] Checking Status");
                 string serverInformation = string.Empty;
                 foreach (Server server in servers)
                 {
@@ -32,21 +38,24 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                     activity.ActivityType = ActivityType.ListeningTo;
                     try
                     {
-                        serverInformation = await Utils.HttpTools.GetUrlResultAsync($"http://{server}/info.json");
+                        serverInformation = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/info.json");
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [GameServerStatus]\n{ex.Message}\n{ex.StackTrace}");
                         await _discordClient.UpdateStatusAsync(activity);
                         return;
                     }
 
-                    string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server}/players.json");
+                    string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/players.json");
 
                     List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players);
                     CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
                     activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
 
                     await _discordClient.UpdateStatusAsync(activity);
+
+                    Console.WriteLine($"[SERVER STATUS] {activity.Name}");
                 }
             }
             catch (Exception ex)

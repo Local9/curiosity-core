@@ -20,6 +20,8 @@ namespace Perseverance
         public static DiscordClient Client { get; private set; }
         public static Configuration Configuration { get; private set; }
 
+        static GameServerStatus _gameServerStatus;
+
         static void Main(string[] args)
         {
             Program prog = new Program();
@@ -58,8 +60,10 @@ namespace Perseverance
 
             await Client.ConnectAsync();
 
-            GameServerStatus gameServerStatus = new();
-            DonationProcessor donationProcessor = new();
+            _gameServerStatus = new(Client);
+            // DonationProcessor donationProcessor = new();
+
+            SendMessage(BOT_ERROR_TEXT_CHANNEL, $"Perseverance Discord Bot has started");
 
             await Task.Delay(-1);
         }
@@ -69,12 +73,12 @@ namespace Perseverance
             // if message contains !ip
             if (e.Message.Content.Contains("!ip"))
             {
-                e.Message.RespondAsync("Please use the Slash Command `/server`");
+                e.Message.RespondAsync("Please use the Slash Command `/server connect`");
             }
 
             if (e.Message.Content.Contains("lv!"))
             {
-                e.Message.RespondAsync("Please check my new slash commands! 🥳");
+                e.Message.RespondAsync("Please check out my new slash commands! 🥳");
             }
 
             return Task.CompletedTask;
