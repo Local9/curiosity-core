@@ -29,7 +29,6 @@ namespace Perseverance.Discord.Bot.AutomateScripts
         {
             try
             {
-                Console.WriteLine($"[SERVER STATUS] Checking Status");
                 string serverInformation = string.Empty;
                 foreach (Server server in servers)
                 {
@@ -54,8 +53,6 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                     activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
 
                     await _discordClient.UpdateStatusAsync(activity);
-
-                    Console.WriteLine($"[SERVER STATUS] {activity.Name}");
                 }
             }
             catch (Exception ex)

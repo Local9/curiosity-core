@@ -21,6 +21,7 @@ namespace Perseverance
         public static Configuration Configuration { get; private set; }
 
         static GameServerStatus _gameServerStatus;
+        static DonationProcessor _donationProcessor;
 
         static void Main(string[] args)
         {
@@ -61,7 +62,7 @@ namespace Perseverance
             await Client.ConnectAsync();
 
             _gameServerStatus = new(Client);
-            // DonationProcessor donationProcessor = new();
+            _donationProcessor = new(Client);
 
             SendMessage(BOT_ERROR_TEXT_CHANNEL, $"Perseverance Discord Bot has started");
 
