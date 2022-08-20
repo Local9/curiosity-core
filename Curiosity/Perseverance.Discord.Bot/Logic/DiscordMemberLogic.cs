@@ -48,7 +48,7 @@ namespace Perseverance.Discord.Bot.Logic
 
             if (!isDonator)
             {
-                    user.RemoveRole();
+                user.RemoveRole();
             }
             else
             {
