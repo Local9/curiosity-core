@@ -251,14 +251,15 @@ namespace Curiosity.Core.Server.Managers
 
                 if (isActive && PluginManager.IsLive)
                 {
-                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}': Queue: A account with matching Discord information has already been found on the server and has been removed.");
+                    discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Queue: An account with matching Discord information has already been found on the server and has been removed.");
                     await BaseScript.Delay(0);
-                    deferrals.done($"Queue: A account with matching Discord information has already been found on the server and has been removed.");
+                    deferrals.done($"Queue: An account with matching Discord information has already been found on the server and has been removed.");
 
                     KeyValuePair<int, CuriosityUser> curiosityUser = PluginManager.ActiveUsers.Where(x => x.Value.DiscordId == discordId).FirstOrDefault();
                     Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.Value.DiscordId).FirstOrDefault();
                     matchingPlayer.Drop($"A player with a matching Discord ID has tried to connect, you have been disconnected.");
-                    PluginManager.ActiveUsers.TryRemove(curiosityUser.Key, out CuriosityUser value);
+                    if (!PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
+                        discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Failed to remove matching session from server.");
 
                     return;
                 }
