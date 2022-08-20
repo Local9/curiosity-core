@@ -29,6 +29,11 @@ namespace Perseverance.Discord.Bot.SlashCommands
         {
             DiscordMember member = await ctx.Guild.GetMemberAsync(user.Id);
             DiscordMemberLogic.UpdateDonationRole(member);
+
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DSharpPlus.Entities.DiscordInteractionResponseBuilder()
+            {
+                Content = "Donation status checked."
+            });
         }
     }
 }
