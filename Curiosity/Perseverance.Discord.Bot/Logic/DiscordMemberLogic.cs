@@ -45,6 +45,12 @@ namespace Perseverance.Discord.Bot.Logic
             if (userRoleId == currentRole)
             {
                 Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.");
+                
+                if (currentRole is eRole.USER)
+                {
+                    return $"{discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change. If you would like to know how to support, please visit: <https://pateron.com/lifev>";
+                }
+
                 return $"{discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.";
             }
 
