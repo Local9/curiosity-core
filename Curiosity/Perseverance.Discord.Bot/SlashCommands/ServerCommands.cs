@@ -1,6 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Perseverance.Discord.Bot.Config;
+using Perseverance.Discord.Bot.Database.Store;
 using Perseverance.Discord.Bot.Entities;
 
 namespace Perseverance.Discord.Bot.SlashCommands
@@ -125,9 +126,9 @@ namespace Perseverance.Discord.Bot.SlashCommands
                     return;
                 }
 
-                Dictionary<string, string> topPlayers = await Database.Store.DatabaseSkill.GetSkillsTopPlayers(skill);
+                IEnumerable<DatabaseSkill> topPlayers = await Database.Store.DatabaseSkill.GetSkillsTopPlayers(5, skill);
 
-                if (topPlayers.Count == 0)
+                if (topPlayers.ToList().Count == 0)
                 {
                     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                     {
@@ -140,10 +141,10 @@ namespace Perseverance.Discord.Bot.SlashCommands
                 topUsers += "\nRank | Name";
                 int count = 1;
 
-                foreach (KeyValuePair<string, string> kvp in topPlayers)
+                foreach (DatabaseSkill databaseSkill in topPlayers)
                 {
-                    topUsers += $"\n[{count:00}]    > {kvp.Key}";
-                    topUsers += $"\n              Experience: {kvp.Value:#,###,##0}";
+                    topUsers += $"\n[{count:00}]    > {databaseSkill.Username}";
+                    topUsers += $"\n              Experience: {databaseSkill.Experience:#,###,##0}";
                     count++;
                 };
 
@@ -156,7 +157,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
             }
             catch (Exception ex)
             {
-                Program.SendMessage(Program.BOT_TEXT_CHANNEL, $"CRITICAL EXCEPTION [TopCommand]\n{ex.Message}\n{ex.StackTrace}");
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [TopCommand]\n{ex.Message}\n{ex.StackTrace}");
             }
         }
     }

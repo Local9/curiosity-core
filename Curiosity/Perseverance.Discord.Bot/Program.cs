@@ -15,7 +15,7 @@ namespace Perseverance
     class Program
     {
         public readonly EventId BotEventId = new EventId(42, "Perseverance-Discord-Bot");
-        public static ulong BOT_TEXT_CHANNEL { get; private set; }
+        public static ulong BOT_ERROR_TEXT_CHANNEL { get; private set; }
         public static ulong BOT_GUILD_ID { get; private set; }
         public static DiscordClient Client { get; private set; }
         public static Configuration Configuration { get; private set; }
@@ -40,7 +40,7 @@ namespace Perseverance
             });
 
             if (Configuration.Channels.ContainsKey("error"))
-                BOT_GUILD_ID = Configuration.Channels["error"];
+                BOT_ERROR_TEXT_CHANNEL = Configuration.Channels["error"];
 
             BOT_GUILD_ID = Configuration.Guild;
 

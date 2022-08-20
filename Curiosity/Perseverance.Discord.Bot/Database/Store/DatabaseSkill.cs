@@ -7,19 +7,7 @@ namespace Perseverance.Discord.Bot.Database.Store
     {
         const string SQL_GET_TOP = "select Top from curiosity.cur_skill where Top is not null;";
         
-        const string SQL_GET_TOP_PLAYERS = "select u.username as Key, cs.Value " +
-            "from curiosity.user u " +
-            "inner join curiosity.character c on u.userId = c.userId " +
-            "inner join curiosity.cur_skill_character cs on c.characterId = cs.characterId " +
-            "inner join curiosity.cur_skill s on cs.skillId = s.skillId " +
-            "where " +
-            "u.bannedPerm = 0 " +
-            "and u.userId not in (14, 15) " +
-            "and s.top = pSkill " +
-            "and c.serverId = 5 " +
-            "-- and datediff(NOW(), u.lastSeen) <= 30 " +
-            "order by cs.Value desc " +
-            "LIMIT 10;";
+        const string SQL_GET_TOP_PLAYERS = "call selServerTopPlayer(@pServerId, @pSkillTop);";
 
         #region Fields
         [Description("SkillId")]
@@ -33,6 +21,14 @@ namespace Perseverance.Discord.Bot.Database.Store
         
         [Description("Top")]
         public string Top { get; set; }
+
+        #region TOP
+        [Description("Username")]
+        public string Username { get; set; }
+
+        [Description("Experience")]
+        public ulong Experience { get; set; }
+        #endregion
         #endregion
 
         internal static async Task<List<string>> GetSkillsTopAsync()
@@ -41,13 +37,14 @@ namespace Perseverance.Discord.Bot.Database.Store
             return result;
         }
 
-        internal static async Task<Dictionary<string, string>> GetSkillsTopPlayers(string skill)
+        internal static async Task<IEnumerable<DatabaseSkill>> GetSkillsTopPlayers(int serverId, string skill)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("pSkill", skill);
-            Dictionary<string, string> result = await DapperDatabase<Dictionary<string, string>>.GetDictionaryAsync(SQL_GET_TOP_PLAYERS, dynamicParameters);
+            dynamicParameters.Add("pServerId", serverId);
+            dynamicParameters.Add("pSkillTop", skill);
+            IEnumerable<DatabaseSkill> result = await DapperDatabase<DatabaseSkill>.GetListAsync(SQL_GET_TOP_PLAYERS, dynamicParameters);
             if (result == null)
-                return new Dictionary<string, string>();
+                return Enumerable.Empty<DatabaseSkill>();
             return result;
         }
     }

@@ -37,7 +37,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
             }
             catch (Exception ex)
             {
-                Program.SendMessage(Program.BOT_TEXT_CHANNEL, $"CRITICAL EXCEPTION [DonationProcessor]\n{ex.Message}\n{ex.StackTrace}");
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [DonationProcessor]\n{ex.Message}\n{ex.StackTrace}");
             }
         }
     }

@@ -40,7 +40,7 @@ namespace Perseverance.Discord.Bot.Logic
             if (userRoleId == currentRole) return;
 
             Role newRole = (Role)userRoleId;
-            Program.SendMessage(Program.BOT_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from {currentRole.GetDescription()} to {newRole.GetDescription()}");
+            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from {currentRole.GetDescription()} to {newRole.GetDescription()}");
 
             if (!isDonator)
             {
