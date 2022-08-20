@@ -20,10 +20,32 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent($"pong! {timeSpan.Milliseconds}ms"));
         }
         
-        [SlashCommand("connect", "A button to connect to the Life V Worlds server.")]
+        [SlashCommand("connect", "A button to connect to the Life V Worlds FiveM server.")]
         public async Task ConnectCommand(InteractionContext ctx)
         {
-            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://connect.lifev.net", $"Click to join the 'Life V Worlds Server'");
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://connect.lifev.net", $"Click to join the 'Life V Worlds FiveM Server'");
+
+            DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
+            message.AddComponents(discordButtonComponent);
+
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
+        }
+
+        [SlashCommand("forums", "A button to connect to the Life V Forums.")]
+        public async Task ForumCommand(InteractionContext ctx)
+        {
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://forums.lifev.net", $"Click to visit the 'Life V Forums'");
+
+            DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
+            message.AddComponents(discordButtonComponent);
+
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
+        }
+
+        [SlashCommand("gaming", "A button to connect to the Life V Gaming Network Discord.")]
+        public async Task GamingCommand(InteractionContext ctx)
+        {
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://gaming.lifev.net", $"Click to join the 'Life V Gaming Network Discord'");
 
             DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
             message.AddComponents(discordButtonComponent);
