@@ -44,16 +44,29 @@ namespace Perseverance.Discord.Bot.Logic
             DiscordEmbed embed;
 
             eRole newRole = (eRole)userRoleId;
-            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from '{currentRole.GetDescription()}' to '{newRole.GetDescription()}'");
+            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} - Change to their database role from '{currentRole.GetDescription()}' to '{newRole.GetDescription()}'");
 
             if (!isDonator)
             {
-                // remove DB Role
-                user.RemoveRole();
+                    user.RemoveRole();
+            }
+            else
+            {
+                user.SetRole((int)userRoleId);
+            }
 
-                embedBuilder.Color = DiscordColor.Orange;
+            try
+            {
+                embedBuilder.Color = isDonator ? DiscordColor.Green : DiscordColor.Orange;
                 embedBuilder.Title = "Thank you from Life V";
-                embedBuilder.Description = "Thank you, we're sad to see your support end. Please let us know what we can do to improve and earn your support again in the future.";
+                if (!isDonator)
+                {
+                    embedBuilder.Description = "Thank you, we're sad to see your support end. Please let us know what we can do to improve and earn your support again in the future.";
+                }
+                else
+                {
+                    embedBuilder.Description = "Thank you for giving us your support.";
+                }
                 embedBuilder.AddField("User", user.Username, true);
                 embedBuilder.AddField("Role", user.Role.GetDescription(), true);
                 embedBuilder.WithTimestamp(DateTime.Now);
@@ -62,24 +75,11 @@ namespace Perseverance.Discord.Bot.Logic
                 embed = embedBuilder.Build();
 
                 await discordMember.SendMessageAsync(embed);
-
-                return;
             }
-
-            // add DB Role
-            user.SetRole((int)userRoleId);
-
-            embedBuilder.Color = DiscordColor.Green;
-            embedBuilder.Title = "Thank you from Life V";
-            embedBuilder.Description = "Thank you for your support, if your status on the server has not updated, please try reconnecting.";
-            embedBuilder.AddField("User", user.Username, true);
-            embedBuilder.AddField("Role", user.Role.GetDescription(), true);
-            embedBuilder.WithTimestamp(DateTime.Now);
-            embedBuilder.WithFooter("https://lifev.net");
-
-            embed = embedBuilder.Build();
-
-            await discordMember.SendMessageAsync(embed);
+            catch (Exception ex)
+            {
+                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] Unable to message {discordMember?.Mention}, {user.Username}.");
+            }
         }
     }
 }
