@@ -38,13 +38,13 @@ namespace Perseverance.Discord.Bot.Logic
 
             if (user.IsStaff)
             {
-                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} is a staff member, no roles will be changed.");
+                // Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} is a staff member, no roles will be changed.");
                 return $"{discordMember.Mention} is a staff member, no roles will be changed.";
             }
             
             if (userRoleId == currentRole)
             {
-                Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.");
+                // Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Mention} role has not changed from {currentRole.GetDescription()}, nothing to change.");
                 
                 if (currentRole is eRole.USER)
                 {
