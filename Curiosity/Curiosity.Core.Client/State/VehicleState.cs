@@ -2,6 +2,15 @@
 
 namespace Curiosity.Core.Client.State
 {
+    public enum eVehicleStateType
+    {
+        Vehicle,
+        Boat,
+        Plane,
+        Helicopter,
+        Trailer
+    }
+
     public class VehicleState
     {
         // Creation
@@ -14,6 +23,8 @@ namespace Curiosity.Core.Client.State
         public bool CruiseReverse;
         public float LastSpeed;
         public float CruiseSpeed;
+
+        public eVehicleStateType eVehicleStateType;
 
         public async void ToggleLock(bool lockDoors)
         {

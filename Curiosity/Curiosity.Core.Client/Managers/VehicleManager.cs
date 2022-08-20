@@ -1318,6 +1318,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Cache.PersonalVehicle = null;
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                    Cache.PersonalVehicle.eVehicleStateType = eVehicleStateType.Vehicle;
                     Cache.PlayerPed.SetIntoVehicle(vehicle, VehicleSeat.Driver);
                     Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
 
@@ -1329,6 +1330,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Cache.PersonalPlane = null;
                     Cache.PersonalPlane = new State.VehicleState(vehicle);
+                    Cache.PersonalPlane.eVehicleStateType = eVehicleStateType.Plane;
                     Cache.Player.User.SendEvent("vehicle:log:player:plane", vehicle.NetworkId);
                 }
 
@@ -1336,6 +1338,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Cache.PersonalBoat = null;
                     Cache.PersonalBoat = new State.VehicleState(vehicle);
+                    Cache.PersonalBoat.eVehicleStateType = eVehicleStateType.Boat;
                     Cache.Player.User.SendEvent("vehicle:log:player:boat", vehicle.NetworkId);
                 }
 
@@ -1343,6 +1346,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Cache.PersonalHelicopter = null;
                     Cache.PersonalHelicopter = new State.VehicleState(vehicle);
+                    Cache.PersonalHelicopter.eVehicleStateType = eVehicleStateType.Helicopter;
                     Cache.Player.User.SendEvent("vehicle:log:player:helicopter", vehicle.NetworkId);
                 }
 
@@ -1350,6 +1354,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Cache.PersonalTrailer = null;
                     Cache.PersonalTrailer = new State.VehicleState(vehicle);
+                    Cache.PersonalTrailer.eVehicleStateType = eVehicleStateType.Trailer;
                     Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
                 }
 
