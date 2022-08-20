@@ -1,8 +1,8 @@
 ﻿{
-  "token": "NjU2MTgwNjc2ODk0MTMwMjMw.Xfe6Fw.hchVti1HDFxpbY641b5ZZ3_6Mf4",
-  "guild": 379980052709900288,
+  "token": "NTkwMTI2OTMwMDY2NDA3NDI0.XfaXaw.Xr3GyRt2YGMC6Pidx4Tlurz2n34",
+  "guild": 539819693549289482,
   "channels": {
-    "error": 667119337424814080
+    "error": 773248492939247626
   },
   "donatorRoles": {
     "life": 541955570601558036,
@@ -11,11 +11,11 @@
     "level3": 588444129722105856
   },
   "database": {
-    "server": "127.0.0.1",
+    "server": "5.9.0.85",
     "port": 3306,
     "db": "curiosity",
-    "user": "root",
-    "password": "Lander11"
+    "user": "discord_b0t",
+    "password": "rRce4SVSmqNQ9AWhZCL8sd4tN"
   },
   "servers": [
     {

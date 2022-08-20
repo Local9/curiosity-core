@@ -44,7 +44,7 @@ namespace Perseverance.Discord.Bot.Logic
             DiscordEmbed embed;
 
             eRole newRole = (eRole)userRoleId;
-            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from {currentRole.GetDescription()} to {newRole.GetDescription()}");
+            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[ROLE CHANGE] {discordMember.Username} has changed their database role from '{currentRole.GetDescription()}' to '{newRole.GetDescription()}'");
 
             if (!isDonator)
             {
