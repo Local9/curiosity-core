@@ -2,6 +2,7 @@
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
+using Curiosity.Framework.Shared.Diagnostics;
 using Curiosity.Framework.Shared.Models;
 using System.Net;
 using System.Net.Http;
@@ -205,6 +206,8 @@ namespace Curiosity.Framework.Server.Managers
 
                 User userResult = client.User;
 
+                Logger.Trace($"User with server handle '{client.Handle}' is updating their session state.");
+
                 if (userResult == null)
                 {
                     string strDiscordId = client.Player?.Identifiers["discord"] ?? string.Empty;
@@ -235,13 +238,22 @@ namespace Curiosity.Framework.Server.Managers
                         Username = client.Player.Name
                     };
 
+                    foreach(DataStoreCharacter dataStoreCharacter in user.Characters)
+                    {
+                        Character character = new();
+                        character.CharacterId = dataStoreCharacter.CharacterId;
+                        character.Cash = dataStoreCharacter.Cash;
+                        character.CharacterJson = dataStoreCharacter.CharacterJson;
+                        userResult.Characters.Add(character);
+                    }
+
                     clientId.StoreUser = user;
 
-                    Logger.Trace($"User {user.Username}#{user.UserID} is newly added to the User Sessions");
+                    Logger.Trace($"User {userResult.Username}#{userResult.UserID} is newly added to the User Sessions.");
                     Logger.Trace($"Number of Sessions: {UserSessions.Count}");
                 }
 
-                Logger.Trace($"{userResult}");
+                Logger.Trace($"User {userResult.Username}#{userResult.UserID} is now active.");
 
                 return userResult;
             }

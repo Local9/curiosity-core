@@ -14,37 +14,44 @@
         public static void Info(string msg)
         {
             if (ShowOutput("info"))
-                Format($"[INFO] {msg}");
+                Format($"^6[INFO] {msg}");
         }
 
         public static void Trace(string msg)
         {
             if (ShowOutput("trace"))
-                Format($"[TRACE] {msg}");
+                Format($"^2[TRACE] {msg}");
         }
 
         public static void Warning(string msg)
         {
             if (ShowOutput("warn"))
-                Format($"[WARN] {msg}");
+                Format($"^3[WARN] {msg}");
         }
 
         public static void Debug(string msg)
         {
             if (ShowOutput("debug"))
-                Format($"[DEBUG] {msg}");
+                Format($"^4[DEBUG] {msg}");
+        }
+
+        public static void Debug(string msg, object obj)
+        {
+            if (!ShowOutput("debug")) return;
+            Format($"^4[DEBUG] {msg}");
+            Format($"^4[DEBUG] {JsonConvert.SerializeObject(obj, Formatting.None)}");
         }
 
         public static void Error(string msg)
         {
             if (ShowOutput("error"))
-                Format($"[ERROR] {msg}");
+                Format($"^1[ERROR] {msg}");
         }
 
         public static void Error(Exception ex, string msg)
         {
             if (ShowOutput("error"))
-                Format($"[ERROR] {msg}\r\n{ex}");
+                Format($"^1[ERROR] {msg}\r\n{ex}");
         }
 
         static void Format(string msg)
@@ -54,12 +61,12 @@
 
         public static void CriticalError(string msg)
         {
-            Format($"[CRITICAL ERROR] {msg}");
+            Format($"^1[CRITICAL ERROR] {msg}");
         }
 
         public static void CriticalError(Exception ex, string msg)
         {
-            Format($"[CRITICAL ERROR] {msg}\r\n{ex}");
+            Format($"^1[CRITICAL ERROR] {msg}\r\n{ex}");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Curiosity.Framework.Client.Managers
             await BaseScript.Delay(5000);
 
             User user = await ClientGateway.Get<User>("user:active", Game.Player.ServerId);
-            Logger.Trace($"User: {user}");
+            
             if (user is null)
             {
                 Logger.Error($"No user was returned from the server.");
@@ -28,7 +28,7 @@ namespace Curiosity.Framework.Client.Managers
             _user = user;
 
             Screen.LoadingPrompt.Hide();
-            Logger.Debug($"User: {_user.Username}");
+            Logger.Trace($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
     }
 }

@@ -10,12 +10,6 @@ namespace Curiosity.Framework.Shared.Models
         public int Handle { get; set; }
         public int UserID { get; set; }
         public string? Username { get; set; }
-        public IEnumerable<Character> Characters { get; set; } = Enumerable.Empty<Character>();
-
-        [Ignore]
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
+        public List<Character> Characters { get; set; } = new List<Character>();
     }
 }
