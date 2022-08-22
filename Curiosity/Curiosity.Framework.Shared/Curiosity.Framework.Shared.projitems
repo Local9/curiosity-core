@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eBusySpinnerType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Character.cs" />

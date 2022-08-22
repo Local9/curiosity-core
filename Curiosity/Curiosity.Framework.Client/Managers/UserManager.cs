@@ -11,14 +11,18 @@ namespace Curiosity.Framework.Client.Managers
         public User _user;
         Quaternion _cityHall = new Quaternion(-542.1675f, -216.1688f, -206.1688f, 0f);
 
+        Quaternion _characterCreatorSpawn = new Quaternion(405.9247f, -997.2114f, -100.00024f, 86.36787f);
         Quaternion _characterCreator = new Quaternion(402.8664f, -996.4108f, -100.00027f, -185.0f);
-        Quaternion _characterCreatorSpawn = new Quaternion(402.8841f, -996.4642f, -99.00024f, 86.36787f);
 
-        Camera _camera;
-        Vector3 _cameraStartPosition = new Vector3(402.8664f, -997.5515f, -98.5f);
-        Vector3 _cameraStartRotation = new Vector3(-185f, 0f, 0f);
-        float _cameraStartFov = 50.0f;
-        Vector3 _cameraPointAtCoord = new Vector3(402.8664f, -996.4108f, -98.5f);
+        public static RotatablePosition[] _cameraViews { get; } =
+        {
+            new RotatablePosition(402.8294f, -1002.45f, -98.80403f, 357.6219f, -7f, 0f),
+            new RotatablePosition(402.8294f, -998.8467f, -98.80403f, 357.1697f, -7f, 0f),
+            new RotatablePosition(402.8294f, -997.967f, -98.35f, 357.1697f, -7f, 0f)
+        };
+
+        AnimationQueue _animationQueue;
+        MugshotBoardAttachment mugshotBoardAttachment = new();
 
         public async override void Begin()
         {
@@ -69,6 +73,7 @@ namespace Curiosity.Framework.Client.Managers
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
 
+            Game.PlayerPed.IsPositionFrozen = false;
             Game.PlayerPed.Position = new Vector3(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z);
             Game.PlayerPed.Heading = _characterCreatorSpawn.W;
 
@@ -77,17 +82,39 @@ namespace Curiosity.Framework.Client.Managers
             Game.PlayerPed.SetDefaultVariation();
 
             Game.PlayerPed.IsInvincible = true;
-            Game.PlayerPed.IsPositionFrozen = true;
 
             Game.PlayerPed.IsVisible = true;
+
+            mugshotBoardAttachment.Attach(Game.PlayerPed, _user);
 
             Instance.SoundEngine.Enable();
             await LoadTransition.OnDownAsync();
 
-            _camera = World.CreateCamera(_cameraStartPosition, _cameraStartRotation, _cameraStartFov);
-            _camera.PointAt(_cameraPointAtCoord);
-            _camera.IsActive = true;
-            RenderScriptCams(true, false, 0, true, false);
+            _user.CameraQueue.View(new CameraBuilder()
+                .WithMotionBlur(.5f)
+                .WithInterpolation(_cameraViews[0], _cameraViews[1], 5000)
+                );
+
+            _animationQueue = new AnimationQueue(Game.PlayerPed.Handle);
+            await _animationQueue.PlayDirectInQueue(new AnimationBuilder()
+                .Select("mp_character_creation@customise@male_a", "intro")
+                );
+            
+            _animationQueue.AddToQueue(new AnimationBuilder()
+                .Select("mp_character_creation@customise@male_a", "loop")
+                .WithFlags(AnimationFlags.Loop)
+                .SkipTask()
+                ).PlayQueue();
+
+            var gameTime = GetGameTimer();
+            while (true)
+            {
+                await BaseScript.Delay(100);
+                if (GetGameTimer() - gameTime > 3000)
+                {
+                    break;
+                }
+            }
 
             DisplayHud(false);
             DisplayRadar(false);
