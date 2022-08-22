@@ -237,8 +237,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Curiosity_v2", "Curiosity_v
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Curiosity_v3", "Curiosity_v3", "{0ED57BCB-C5A0-468F-80D9-000023F24DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Framework.Client", "Curiosity.Framework.Client\Curiosity.Framework.Client.csproj", "{E1180AE2-809C-469B-BB4C-830DDEA32E8D}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Curiosity.Framework.Shared", "Curiosity.Framework.Shared\Curiosity.Framework.Shared.shproj", "{07185EFC-0D4F-4F96-9F33-053D4DE65A1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curiosity.Framework.Server", "Curiosity.Framework.Server\Curiosity.Framework.Server.csproj", "{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B}"
@@ -253,7 +251,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events", "_vendor\manups4e-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "_vendor\manups4e-fx-events\src\generator\Generator.csproj", "{30AB7546-CE13-4813-B868-0E22FE104DB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perseverance.Discord.Bot", "Perseverance.Discord.Bot\Perseverance.Discord.Bot.csproj", "{E43A9268-8C6E-4068-971E-289B0CF868BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perseverance.Discord.Bot", "Perseverance.Discord.Bot\Perseverance.Discord.Bot.csproj", "{E43A9268-8C6E-4068-971E-289B0CF868BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Framework.Client", "Curiosity.Framework.Client2\Curiosity.Framework.Client.csproj", "{39E309BD-3ABD-4D09-AB36-BCABC89309D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -743,14 +743,6 @@ Global
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C}.SERVER|Any CPU.Build.0 = Debug|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.CLIENT|Any CPU.ActiveCfg = CLIENT|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.CLIENT|Any CPU.Build.0 = CLIENT|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.Debug|Any CPU.ActiveCfg = CLIENT|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.Debug|Any CPU.Build.0 = CLIENT|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.SERVER|Any CPU.ActiveCfg = CLIENT|Any CPU
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D}.SERVER|Any CPU.Build.0 = CLIENT|Any CPU
 		{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B}.CLIENT|Any CPU.ActiveCfg = SERVER|Any CPU
 		{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B}.CLIENT|Any CPU.Build.0 = SERVER|Any CPU
 		{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B}.Debug|Any CPU.ActiveCfg = SERVER|Any CPU
@@ -799,6 +791,14 @@ Global
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.SERVER|Any CPU.Build.0 = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.CLIENT|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.CLIENT|Any CPU.Build.0 = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.SERVER|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -901,7 +901,6 @@ Global
 		{3C739044-41BB-4E04-B695-B941D345784E} = {65C81C7E-4FDA-4A38-852D-FAAD70445BEB}
 		{8F57C378-40F7-49FF-8221-6C235118021F} = {C496E343-4195-426E-917C-F1C60ED2902C}
 		{799E4D31-791D-4492-BAC4-2DAF4A12BD4C} = {C496E343-4195-426E-917C-F1C60ED2902C}
-		{E1180AE2-809C-469B-BB4C-830DDEA32E8D} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 		{07185EFC-0D4F-4F96-9F33-053D4DE65A1A} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 		{B5A91B51-37D8-4B0B-A9DB-DBDA468F800B} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 		{F5614594-90FD-4F4C-9C68-C9DC90060F8D} = {3071C9CF-1F86-4F06-BF24-FB1B9EB1DAF9}
@@ -910,13 +909,14 @@ Global
 		{8E20E5F2-AF0A-4976-B896-E33FF6FDB96C} = {3071C9CF-1F86-4F06-BF24-FB1B9EB1DAF9}
 		{30AB7546-CE13-4813-B868-0E22FE104DB4} = {3071C9CF-1F86-4F06-BF24-FB1B9EB1DAF9}
 		{E43A9268-8C6E-4068-971E-289B0CF868BC} = {B408851E-C7C4-4CF2-B9C2-D7762399DE8C}
+		{39E309BD-3ABD-4D09-AB36-BCABC89309D5} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{07185efc-0d4f-4f96-9f33-053d4de65a1a}*SharedItemsImports = 13
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{39e309bd-3abd-4d09-ab36-bcabc89309d5}*SharedItemsImports = 5
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{b5a91b51-37d8-4b0b-a9db-dbda468f800b}*SharedItemsImports = 5
-		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{e1180ae2-809c-469b-bb4c-830ddea32e8d}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
