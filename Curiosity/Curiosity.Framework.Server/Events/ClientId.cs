@@ -12,7 +12,7 @@ namespace Curiosity.Framework.Server.Events
         public SnowflakeId Id { get; set; }
         public int UserId { get; set; }
         public int Handle { get; set; }
-        public CuriosityUser User { get; set; }
+        public User User { get; set; }
 
         [Ignore]
         [JsonIgnore]

@@ -168,7 +168,7 @@ namespace Curiosity.Framework.Server
             return Instance.Players[handle];
         }
 
-        public static CuriosityUser GetUserFromId(string handle)
+        public static User GetUserFromId(string handle)
         {
             if (int.TryParse(handle, out int iHandle))
                 return ToClient(iHandle).User;

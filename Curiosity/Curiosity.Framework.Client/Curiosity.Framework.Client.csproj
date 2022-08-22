@@ -90,6 +90,12 @@
       <Project>{8e20e5f2-af0a-4976-b896-e33ff6fdb96c}</Project>
       <Name>Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\_vendor\manups4e-fx-events\src\generator\Generator.csproj">
+      <Project>{30ab7546-ce13-4813-b868-0e22fe104db4}</Project>
+      <Name>Generator</Name>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj">
       <Project>{f5614594-90fd-4f4c-9c68-c9dc90060f8d}</Project>
       <Name>ScaleformUI</Name>

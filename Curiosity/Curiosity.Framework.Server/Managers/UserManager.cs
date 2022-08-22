@@ -23,7 +23,7 @@ namespace Curiosity.Framework.Server.Managers
             Event("playerDropped", new Action<Player, string>(OnPlayerDropped));
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
-            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<CuriosityUser>>(OnUserActiveAsync));
+            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
         }
 
         private async void OnPlayerConnectingAsync([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
@@ -197,13 +197,13 @@ namespace Curiosity.Framework.Server.Managers
         }
 
         // return the user from sessions with the characters
-        private async Task<CuriosityUser> OnUserActiveAsync(ClientId client, int serverId)
+        private async Task<User> OnUserActiveAsync(ClientId client, int serverId)
         {
             try
             {
                 if (client.Handle != serverId) return null;
 
-                CuriosityUser userResult = client.User;
+                User userResult = client.User;
 
                 if (userResult == null)
                 {
@@ -228,7 +228,7 @@ namespace Curiosity.Framework.Server.Managers
                     
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
 
-                    userResult = new CuriosityUser()
+                    userResult = new User()
                     {
                         Handle = client.Handle,
                         UserID = user.UserID,
