@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.5631" ExcludeAssets="runtime" />
+    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.5820" ExcludeAssets="runtime" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" ExcludeAssets="runtime" />
   </ItemGroup>
 
