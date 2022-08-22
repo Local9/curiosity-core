@@ -21,7 +21,11 @@ namespace Curiosity.Framework.Shared.Models
         [Ignore]
         [JsonIgnore]
         public CameraViewmodelQueue CameraQueue { get; set; } = new CameraViewmodelQueue();
-        
+
+        [Ignore]
+        [JsonIgnore]
+        public Character ActiveCharacter { get; set; }
+
 #endif
     }
 }

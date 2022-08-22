@@ -2,6 +2,7 @@
 using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
+using Curiosity.Framework.Shared.Extensions;
 using Curiosity.Framework.Shared.Models;
 
 namespace Curiosity.Framework.Client.Managers
@@ -12,7 +13,7 @@ namespace Curiosity.Framework.Client.Managers
         Quaternion _cityHall = new Quaternion(-542.1675f, -216.1688f, -206.1688f, 0f);
 
         Quaternion _characterCreatorSpawn = new Quaternion(405.9247f, -997.2114f, -100.00024f, 86.36787f);
-        Quaternion _characterCreator = new Quaternion(402.8664f, -996.4108f, -100.00027f, -185.0f);
+        Quaternion _characterCreator = new Quaternion(402.8841f, -996.4642f, -100.00024f, -185.0f);
 
         public static RotatablePosition[] _cameraViews { get; } =
         {
@@ -67,6 +68,8 @@ namespace Curiosity.Framework.Client.Managers
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
 
+            _user.ActiveCharacter = new Character();
+
             Model model = "mp_m_freemode_01";
             await Game.Player.ChangeModel(model);
             model.MarkAsNoLongerNeeded();
@@ -114,6 +117,17 @@ namespace Curiosity.Framework.Client.Managers
                 {
                     break;
                 }
+            }
+
+            if (Game.PlayerPed.IsInRangeOf(_characterCreator.AsVector(), 1f))
+            {
+                Game.PlayerPed.Position = _characterCreator.AsVector();
+                Game.PlayerPed.Heading = _characterCreator.W;
+            }
+
+            while (!_user.ActiveCharacter.IsRegistered)
+            {
+                await BaseScript.Delay(100);
             }
 
             DisplayHud(false);
