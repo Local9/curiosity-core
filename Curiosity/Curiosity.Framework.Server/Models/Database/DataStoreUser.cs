@@ -64,7 +64,7 @@ namespace Curiosity.Framework.Server.Models.Database
                 if (success)
                 {
                     user = await DapperDatabase<DataStoreUser>.GetSingleAsync(SQL_USER_GET, dynamicParameters);
-                    
+
                     await Common.MoveToMainThread();
                 }
             }

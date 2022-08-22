@@ -2,7 +2,6 @@
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
-using Curiosity.Framework.Shared.Diagnostics;
 using Curiosity.Framework.Shared.Models;
 using System.Net;
 using System.Net.Http;
@@ -228,7 +227,7 @@ namespace Curiosity.Framework.Server.Managers
                     }
 
                     ClientId clientId = new ClientId(serverId);
-                    
+
                     UserSessions.AddOrUpdate(client.Handle, clientId, (key, oldValue) => oldValue = clientId);
 
                     userResult = new User()
@@ -238,7 +237,7 @@ namespace Curiosity.Framework.Server.Managers
                         Username = client.Player.Name
                     };
 
-                    foreach(DataStoreCharacter dataStoreCharacter in user.Characters)
+                    foreach (DataStoreCharacter dataStoreCharacter in user.Characters)
                     {
                         Character character = new();
                         character.CharacterId = dataStoreCharacter.CharacterId;

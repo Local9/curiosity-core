@@ -2,7 +2,7 @@
 
 namespace Curiosity.Framework.Client.Extensions
 {
-    internal class DecoratorExtension
+    internal class DecoratorExtensions
     {
         public static void Set(int handle, string property, object value)
         {

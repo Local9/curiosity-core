@@ -1,5 +1,4 @@
 ﻿using Curiosity.Framework.Server.Events;
-using Curiosity.Framework.Shared.Models;
 using System.Collections.Concurrent;
 
 namespace Curiosity.Framework.Server.Managers

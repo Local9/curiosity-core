@@ -16,7 +16,7 @@ namespace Curiosity.Framework.Client.Managers
 
         protected Manager()
         {
-            
+
         }
 
         public virtual void Begin()

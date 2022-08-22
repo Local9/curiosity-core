@@ -11,13 +11,17 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\TickHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\EventLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Diagnostics\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eBusySpinnerType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Identifiers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Position.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Vector5.cs" />
   </ItemGroup>
 </Project>

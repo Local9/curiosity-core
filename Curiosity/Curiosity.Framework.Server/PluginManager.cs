@@ -4,7 +4,6 @@ using Curiosity.Framework.Server.Managers;
 using Curiosity.Framework.Shared.Models;
 using Lusive.Snowflake;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Reflection;
 
 namespace Curiosity.Framework.Server

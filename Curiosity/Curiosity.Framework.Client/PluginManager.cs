@@ -2,7 +2,6 @@
 using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Managers;
 using Lusive.Snowflake;
-using System.Linq;
 using System.Reflection;
 
 namespace Curiosity.Framework.Client
