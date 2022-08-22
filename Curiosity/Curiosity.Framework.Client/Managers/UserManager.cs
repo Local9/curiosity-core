@@ -13,10 +13,13 @@ namespace Curiosity.Framework.Client.Managers
         {
             await BaseScript.Delay(5000);
             ScreenInterface.StartLoadingMessage("PM_WAIT");
-            await BaseScript.Delay(5000);
+            OnRequestCharactersAsync();
+        }
 
+        public async Task OnRequestCharactersAsync()
+        {
             User user = await ClientGateway.Get<User>("user:active", Game.Player.ServerId);
-            
+
             if (user is null)
             {
                 Logger.Error($"No user was returned from the server.");
