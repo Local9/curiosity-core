@@ -253,7 +253,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "_vendor\manups
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perseverance.Discord.Bot", "Perseverance.Discord.Bot\Perseverance.Discord.Bot.csproj", "{E43A9268-8C6E-4068-971E-289B0CF868BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Framework.Client", "Curiosity.Framework.Client2\Curiosity.Framework.Client.csproj", "{39E309BD-3ABD-4D09-AB36-BCABC89309D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curiosity.Framework.Client", "Curiosity.Framework.Client\Curiosity.Framework.Client.csproj", "{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -791,14 +791,14 @@ Global
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
 		{E43A9268-8C6E-4068-971E-289B0CF868BC}.SERVER|Any CPU.Build.0 = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.CLIENT|Any CPU.ActiveCfg = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.CLIENT|Any CPU.Build.0 = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5}.SERVER|Any CPU.Build.0 = Debug|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.CLIENT|Any CPU.ActiveCfg = CLIENT|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.CLIENT|Any CPU.Build.0 = CLIENT|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.SERVER|Any CPU.ActiveCfg = Debug|Any CPU
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88}.SERVER|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -909,14 +909,14 @@ Global
 		{8E20E5F2-AF0A-4976-B896-E33FF6FDB96C} = {3071C9CF-1F86-4F06-BF24-FB1B9EB1DAF9}
 		{30AB7546-CE13-4813-B868-0E22FE104DB4} = {3071C9CF-1F86-4F06-BF24-FB1B9EB1DAF9}
 		{E43A9268-8C6E-4068-971E-289B0CF868BC} = {B408851E-C7C4-4CF2-B9C2-D7762399DE8C}
-		{39E309BD-3ABD-4D09-AB36-BCABC89309D5} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
+		{384621C9-9A1B-40BB-AA65-60B3F7AC2F88} = {0ED57BCB-C5A0-468F-80D9-000023F24DE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{07185efc-0d4f-4f96-9f33-053d4de65a1a}*SharedItemsImports = 13
-		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{39e309bd-3abd-4d09-ab36-bcabc89309d5}*SharedItemsImports = 5
+		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{384621c9-9a1b-40bb-aa65-60b3f7ac2f88}*SharedItemsImports = 5
 		Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems*{b5a91b51-37d8-4b0b-a9db-dbda468f800b}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
