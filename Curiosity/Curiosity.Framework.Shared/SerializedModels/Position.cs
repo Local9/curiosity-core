@@ -1,6 +1,9 @@
-﻿namespace Curiosity.Framework.Shared.Models
+﻿using Lusive.Events.Attributes;
+
+namespace Curiosity.Framework.Shared.SerializedModels
 {
-    public class Position
+    [Serialization]
+    public partial class Position
     {
         public float X { get; set; }
         public float Y { get; set; }
@@ -57,7 +60,8 @@
         }
     }
 
-    public class RotatablePosition
+    [Serialization]
+    public partial class RotatablePosition
     {
         public float X { get; set; }
         public float Y { get; set; }

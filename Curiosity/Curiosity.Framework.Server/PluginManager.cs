@@ -1,7 +1,7 @@
 ﻿using Curiosity.Framework.Server.Attributes;
 using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Managers;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Shared.SerializedModels;
 using Lusive.Snowflake;
 using System.Collections.Concurrent;
 using System.Reflection;

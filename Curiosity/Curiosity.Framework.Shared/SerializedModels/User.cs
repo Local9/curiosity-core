@@ -6,7 +6,7 @@ using Lusive.Events.Attributes;
 
 #nullable enable
 
-namespace Curiosity.Framework.Shared.Models
+namespace Curiosity.Framework.Shared.SerializedModels
 {
     [Serialization]
     public partial class User

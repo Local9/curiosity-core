@@ -2,7 +2,7 @@
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Shared.SerializedModels;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;

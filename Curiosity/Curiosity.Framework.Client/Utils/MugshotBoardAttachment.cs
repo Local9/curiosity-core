@@ -1,5 +1,6 @@
-﻿using Curiosity.Framework.Shared.Enums;
-using Curiosity.Framework.Shared.Models;
+﻿using Curiosity.Framework.Shared;
+using Curiosity.Framework.Shared.Enums;
+using Curiosity.Framework.Shared.SerializedModels;
 
 namespace Curiosity.Framework.Client.Utils
 {
@@ -7,7 +8,7 @@ namespace Curiosity.Framework.Client.Utils
     {
         public bool IsAttached { get; set; }
 
-        public async Task Attach(Ped ped, User user, string topLine = "", string subTopLine = "", string mainLine = "", int importedColor = 1, int rankNumber = 1, int rankColor = 1)
+        public async Task Attach(Ped ped, User user, string topLine = "", string subTopLine = "", string mainLine = "", int importedColor = 0, int rankNumber = 1, int rankColor = 0)
         {
             while (IsAttached)
             {
@@ -16,14 +17,16 @@ namespace Curiosity.Framework.Client.Utils
 
             IsAttached = true;
 
-            if (string.IsNullOrEmpty(topLine))
-            {
-                topLine = "New Character";
-            }
+            string gameLabel = Game.GetGXTEntry(topLine);
+            string boardTopLine = topLine;
+
+            if (!string.IsNullOrEmpty(gameLabel))
+                topLine = gameLabel;
 
             if (string.IsNullOrEmpty(mainLine))
             {
-                mainLine = $"{user.UserID:D10}";
+                long randomNumber = Common.GetRandomLong(9999999999);
+                mainLine = $"{randomNumber:D10}";
             }
 
             World.GetAllProps()

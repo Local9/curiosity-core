@@ -1,5 +1,5 @@
 ﻿using Curiosity.Framework.Server.Models.Database;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Shared.SerializedModels;
 using Lusive.Events;
 using Lusive.Events.Attributes;
 using Lusive.Snowflake;

@@ -1,6 +1,9 @@
-﻿namespace Curiosity.Framework.Shared.Models
+﻿using Lusive.Events.Attributes;
+
+namespace Curiosity.Framework.Shared.SerializedModels
 {
-    internal class Vector5
+    [Serialization]
+    public partial class Vector5
     {
         public Vector3 Vector3 { get; set; }
         public Vector2 Vector2 { get; set; }

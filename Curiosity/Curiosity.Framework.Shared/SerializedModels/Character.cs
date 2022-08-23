@@ -1,6 +1,6 @@
 ﻿using Lusive.Events.Attributes;
 
-namespace Curiosity.Framework.Shared.Models
+namespace Curiosity.Framework.Shared.SerializedModels
 {
     [Serialization]
     public partial class Character
@@ -10,5 +10,13 @@ namespace Curiosity.Framework.Shared.Models
         public int CharacterId { get; internal set; }
         public ulong Cash { get; internal set; }
         public string CharacterJson { get; internal set; }
+
+#if CLIENT
+        [Ignore]
+        public async Task OnUpdateCharacterAsync()
+        {
+            
+        }
+#endif
     }
 }

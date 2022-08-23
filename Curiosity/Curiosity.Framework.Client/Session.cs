@@ -1,4 +1,4 @@
-﻿using Curiosity.Framework.Shared.Models;
+﻿using Curiosity.Framework.Shared.SerializedModels;
 
 namespace Curiosity.Framework.Client
 {

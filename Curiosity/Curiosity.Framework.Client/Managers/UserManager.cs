@@ -3,7 +3,7 @@ using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Extensions;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Shared.SerializedModels;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -64,9 +64,40 @@ namespace Curiosity.Framework.Client.Managers
             Logger.Trace($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
 
+        void SetupCharacterCreator()
+        {
+            RequestAnimDict("mp_character_creation@lineup@male_a");
+            RequestAnimDict("mp_character_creation@lineup@male_b");
+            RequestAnimDict("mp_character_creation@lineup@female_a");
+            RequestAnimDict("mp_character_creation@lineup@female_b");
+            RequestAnimDict("mp_character_creation@customise@male_a");
+            RequestAnimDict("mp_character_creation@customise@female_a");
+
+            if (N_0x544810ed9db6bbe6() != true)
+                return;
+            
+            RequestScriptAudioBank("Mugshot_Character_Creator", false);
+            RequestScriptAudioBank("DLC_GTAO/MUGSHOT_ROOM", false);
+        }
+
+        async Task OnLoadCharacterCreatorInteriorAsync()
+        {
+            if (IsValidInterior(94722))
+                LoadInterior(94722);
+
+            while (!IsInteriorReady(94722))
+                await BaseScript.Delay(1000);
+        }
+
         public async Task OnCreateNewCharacter()
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
+
+            await OnLoadCharacterCreatorInteriorAsync();
+            SetupCharacterCreator();
+
+            DisplayHud(false);
+            DisplayRadar(false);
 
             _user.ActiveCharacter = new Character();
 
@@ -83,12 +114,13 @@ namespace Curiosity.Framework.Client.Managers
             await Common.MoveToMainThread();
 
             Game.PlayerPed.SetDefaultVariation();
+            Game.PlayerPed.SetRandomFacialMood();
 
             Game.PlayerPed.IsInvincible = true;
-
             Game.PlayerPed.IsVisible = true;
+            Game.PlayerPed.BlockPermanentEvents = true;
 
-            mugshotBoardAttachment.Attach(Game.PlayerPed, _user);
+            mugshotBoardAttachment.Attach(Game.PlayerPed, _user, topLine: "FACE_N_CHAR");
 
             Instance.SoundEngine.Enable();
             await LoadTransition.OnDownAsync();
@@ -129,9 +161,6 @@ namespace Curiosity.Framework.Client.Managers
             {
                 await BaseScript.Delay(100);
             }
-
-            DisplayHud(false);
-            DisplayRadar(false);
         }
     }
 }

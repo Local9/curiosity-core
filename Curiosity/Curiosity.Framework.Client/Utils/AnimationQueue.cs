@@ -1,7 +1,7 @@
 ﻿using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Extensions;
-using Curiosity.Framework.Shared.Models;
+using Curiosity.Framework.Shared.SerializedModels;
 
 namespace Curiosity.Framework.Client.Utils
 {

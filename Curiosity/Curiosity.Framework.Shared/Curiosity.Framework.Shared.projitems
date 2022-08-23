@@ -19,10 +19,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Character.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Identifiers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Position.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Vector5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Character.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Identifiers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Position.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Vector5.cs" />
   </ItemGroup>
 </Project>
