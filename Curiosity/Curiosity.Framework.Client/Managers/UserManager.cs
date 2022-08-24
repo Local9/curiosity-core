@@ -17,8 +17,8 @@ namespace Curiosity.Framework.Client.Managers
 
         public static RotatablePosition[] _cameraViews { get; } =
         {
-            new RotatablePosition(402.8294f, -1002.45f, -98.80403f, 357.6219f, -7f, 0f),
-            new RotatablePosition(402.8294f, -998.8467f, -98.80403f, 357.1697f, -7f, 0f),
+            new RotatablePosition(402.7553f, -1000.622f, -98.48412f, -6.716503f, 0f, -0.276376f),
+            new RotatablePosition(402.7391f, -1003.981f, -98.43439f, -3.589798f, 0f, -0.276381f),
             new RotatablePosition(402.8294f, -997.967f, -98.35f, 357.1697f, -7f, 0f)
         };
 
@@ -128,6 +128,7 @@ namespace Curiosity.Framework.Client.Managers
             _user.CameraQueue.View(new CameraBuilder()
                 .WithMotionBlur(.5f)
                 .WithInterpolation(_cameraViews[0], _cameraViews[1], 5000)
+                .WithFieldOfView(36.95373f)
                 );
 
             _animationQueue = new AnimationQueue(Game.PlayerPed.Handle);

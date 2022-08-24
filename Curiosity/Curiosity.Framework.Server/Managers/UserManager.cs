@@ -13,6 +13,7 @@ namespace Curiosity.Framework.Server.Managers
     {
         long _lastTimeCleanupRan = 0;
         const int TWO_MINUTES = (1000 * 60) * 2;
+        const int BASE_LOGIN_BUCKET = 5000;
 
         public override void Begin()
         {
@@ -202,6 +203,8 @@ namespace Curiosity.Framework.Server.Managers
             try
             {
                 if (client.Handle != serverId) return null;
+
+                SetPlayerRoutingBucket($"{client.Handle}", BASE_LOGIN_BUCKET + client.Handle);
 
                 User userResult = client.User;
 
