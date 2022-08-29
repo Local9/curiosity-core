@@ -42,6 +42,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                     {
                         if (ex.Message.Contains($"404"))
                         {
+                            Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[DonationProcessor] Member '{databaseUser.Username}' was not found, roles removed.");
                             await databaseUser.RemoveRole();
                         }
                     }
