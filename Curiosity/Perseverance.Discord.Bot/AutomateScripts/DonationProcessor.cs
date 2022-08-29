@@ -33,8 +33,18 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                 foreach (DatabaseUser databaseUser in users)
                 {
                     ulong discordId = databaseUser.DiscordId;
-                    DiscordMember member = await discordGuild.GetMemberAsync(discordId);
-                    await DiscordMemberLogic.UpdateDonationRole(member);
+                    try
+                    {
+                        DiscordMember member = await discordGuild.GetMemberAsync(discordId);
+                        await DiscordMemberLogic.UpdateDonationRole(member);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.Message.Contains($"404"))
+                        {
+                            await databaseUser.RemoveRole();
+                        }
+                    }
                 }
 
                 Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"[DonationProcessor] Completed");
