@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Managers.Milo;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System.Linq;
 using System.Text;
 
 namespace Curiosity.Core.Client.Managers
@@ -336,11 +337,17 @@ namespace Curiosity.Core.Client.Managers
                 await player.Character.PostLoad();
             }
 
+            await BaseScript.Delay(0);
+            EventSystem.Send("character:routing:base");
+            await BaseScript.Delay(0);
+
             Logger.Info("[Character] Complete Loading...");
 
             TriggerMusicEvent($"{Instance.ClientMusicEvent.Stop}");
 
-            PopulateNow();
+            if (PluginManager.Instance.PlayerList.Count() == 0)
+                PopulateNow();
+            
             if (Screen.Fading.IsFadedOut && !Screen.Fading.IsFadingOut)
             {
                 Screen.Fading.FadeIn(2500);
@@ -361,10 +368,6 @@ namespace Curiosity.Core.Client.Managers
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
-
-            await BaseScript.Delay(0);
-            EventSystem.Send("character:routing:base");
-            await BaseScript.Delay(0);
 
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
