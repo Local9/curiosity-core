@@ -148,13 +148,8 @@ namespace Curiosity.Core.Server.Managers
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
 
-                int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
-
-                if (currentBucket != 0)
-                {
-                    API.SetPlayerRoutingBucket(player.Handle, 0);
-                    u.RoutingBucket = 0;
-                }
+                API.SetPlayerRoutingBucket(player.Handle, 0);
+                u.RoutingBucket = 0;
 
                 player.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, -1, true);
                 player.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, -1, true);
