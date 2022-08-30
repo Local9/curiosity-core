@@ -354,113 +354,117 @@ namespace Curiosity.Core.Client.Commands.Impl
                         // if (companions.Count > 4) return;
 
                         string pedHash = arguments.ElementAt(1);
+                        int number = int.Parse(arguments.ElementAt(2));
 
-                        if (pedHash == "jug")
+                        for (int i = 0; i < number; i++)
                         {
-                            pedHash = "u_m_y_juggernaut_01";
-                        }
-
-                        Model companionModel = await Utilities.LoadModel(pedHash);
-
-                        Vector3 offset = new Vector3(2f, 0f, 0f);
-                        Vector3 spawn = Cache.PlayerPed.GetOffsetPosition(offset);
-                        float groundZ = spawn.Z;
-                        Vector3 groundNormal = Vector3.Zero;
-
-                        if (GetGroundZAndNormalFor_3dCoord(spawn.X, spawn.Y, spawn.Z, ref groundZ, ref groundNormal))
-                        {
-                            spawn.Z = groundZ;
-                        }
-
-                        Ped companionPed = await World.CreatePed(companionModel, spawn, Game.PlayerPed.Heading);
-                        companionModel.MarkAsNoLongerNeeded();
-
-                        if (companionPed.IsInGroup)
-                            companionPed.LeaveGroup();
-
-                        PedGroup playerPedGroup = Cache.PedGroup;
-
-                        if (playerPedGroup is not null)
-                            Logger.Debug($"Current ped group is {playerPedGroup.Handle}");
-
-                        if (playerPedGroup is null)
-                            playerPedGroup = new PedGroup();
-
-                        if (!playerPedGroup.Contains(Game.PlayerPed))
-                        {
-                            playerPedGroup.Add(Game.PlayerPed, true);
-                            Logger.Debug($"Added player as group leader");
-                        }
-
-                        if (!playerPedGroup.Contains(companionPed))
-                        {
-                            playerPedGroup.Add(companionPed, false);
-                            Logger.Debug($"Added companion as group member");
-                        }
-
-                        SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
-                        SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
-
-                        companionPed.NeverLeavesGroup = true;
-                        companionPed.CanSufferCriticalHits = false;
-                        companionPed.Health = companionPed.MaxHealth;
-                        companionPed.Armor = 200;
-                        companionPed.DropsWeaponsOnDeath = false;
-
-                        companionPed.Accuracy = 100;
-
-                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
-                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableHurt, true);
-                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableShockingEvents, true);
-                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreBeingOnFire, true);
-                        companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreSeenMelee, true);
-
-                        if (pedHash == "u_m_y_juggernaut_01")
-                        {
-                            int type = Utility.RANDOM.Next(3);
-                            if (type == 0)
+                            if (pedHash == "jug")
                             {
-                                SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
-                                SetPedComponentVariation(companionPed.Handle, 0, 0, 1, 0);
-                                SetPedComponentVariation(companionPed.Handle, 3, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 8, 0, 1, 0);
-                                SetPedComponentVariation(companionPed.Handle, 10, 0, 1, 0);
+                                pedHash = "u_m_y_juggernaut_01";
                             }
-                            else if (type == 1)
+
+                            Model companionModel = await Utilities.LoadModel(pedHash);
+
+                            Vector3 offset = new Vector3(2f, 0f, 0f);
+                            Vector3 spawn = Cache.PlayerPed.GetOffsetPosition(offset);
+                            float groundZ = spawn.Z;
+                            Vector3 groundNormal = Vector3.Zero;
+
+                            if (GetGroundZAndNormalFor_3dCoord(spawn.X, spawn.Y, spawn.Z, ref groundZ, ref groundNormal))
                             {
-                                SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
-                                SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
-                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                                spawn.Z = groundZ;
+                            }
+
+                            Ped companionPed = await World.CreatePed(companionModel, spawn, Game.PlayerPed.Heading);
+                            companionModel.MarkAsNoLongerNeeded();
+
+                            if (companionPed.IsInGroup)
+                                companionPed.LeaveGroup();
+
+                            PedGroup playerPedGroup = Game.PlayerPed.PedGroup;
+
+                            if (playerPedGroup is not null)
+                                Logger.Debug($"Current ped group is {playerPedGroup.Handle}");
+
+                            if (playerPedGroup is null)
+                                playerPedGroup = new PedGroup();
+
+                            if (!playerPedGroup.Contains(Game.PlayerPed))
+                            {
+                                playerPedGroup.Add(Game.PlayerPed, true);
+                                Logger.Debug($"Added player as group leader");
+                            }
+
+                            if (!playerPedGroup.Contains(companionPed))
+                            {
+                                playerPedGroup.Add(companionPed, false);
+                                Logger.Debug($"Added companion as group member");
+                            }
+
+                            SetPedToInformRespectedFriends(companionPed.Handle, 20f, 20);
+                            SetPedToInformRespectedFriends(Game.PlayerPed.Handle, 20f, 20);
+
+                            companionPed.NeverLeavesGroup = true;
+                            companionPed.CanSufferCriticalHits = false;
+                            companionPed.Health = companionPed.MaxHealth;
+                            companionPed.Armor = 200;
+                            companionPed.DropsWeaponsOnDeath = false;
+
+                            companionPed.Accuracy = 100;
+
+                            companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DieWhenRagdoll, false);
+                            companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableHurt, true);
+                            companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_DisableShockingEvents, true);
+                            companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreBeingOnFire, true);
+                            companionPed.SetConfigFlag((int)ePedConfigFlags.CPED_CONFIG_FLAG_IgnoreSeenMelee, true);
+
+                            if (pedHash == "u_m_y_juggernaut_01")
+                            {
+                                int type = Utility.RANDOM.Next(3);
+                                if (type == 0)
+                                {
+                                    SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                                    SetPedComponentVariation(companionPed.Handle, 0, 0, 1, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 3, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 8, 0, 1, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 10, 0, 1, 0);
+                                }
+                                else if (type == 1)
+                                {
+                                    SetPedPropIndex(companionPed.Handle, 0, 0, 0, false);
+                                    SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                                }
+                                else
+                                {
+                                    ClearPedProp(companionPed.Handle, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
+                                    SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                                }
+
+                                companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
+                                companionPed.Health = 5000;
+                                companionPed.CanRagdoll = false;
+                                companionPed.IsMeleeProof = true;
+                                companionPed.FiringPattern = FiringPattern.FullAuto;
                             }
                             else
                             {
-                                ClearPedProp(companionPed.Handle, 0);
-                                SetPedComponentVariation(companionPed.Handle, 0, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 3, 0, 1, 0);
-                                SetPedComponentVariation(companionPed.Handle, 4, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 5, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 8, 0, 0, 0);
-                                SetPedComponentVariation(companionPed.Handle, 10, 0, 0, 0);
+                                companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
                             }
 
-                            companionPed.Weapons.Give(WeaponHash.Minigun, 999, false, true);
-                            companionPed.Health = 5000;
-                            companionPed.CanRagdoll = false;
-                            companionPed.IsMeleeProof = true;
-                            companionPed.FiringPattern = FiringPattern.FullAuto;
+                            companions.Add(companionPed);
                         }
-                        else
-                        {
-                            companionPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, false, true);
-                        }
-
-                        companions.Add(companionPed);
 
                         PluginManager.Instance.AttachTickHandler(OnCleanUpGuards);
                     }
