@@ -362,7 +362,9 @@ namespace Curiosity.Core.Client.Managers
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
 
+            await BaseScript.Delay(0);
             EventSystem.Send("character:routing:base");
+            await BaseScript.Delay(0);
 
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
@@ -381,8 +383,6 @@ namespace Curiosity.Core.Client.Managers
             BaseScript.TriggerEvent("playerSpawned", spawn);
 
             Notify.CanSendNotification = true;
-
-            EventSystem.Send("user:queue:active");
 
             TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
             CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
