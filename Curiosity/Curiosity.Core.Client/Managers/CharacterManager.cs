@@ -399,27 +399,34 @@ namespace Curiosity.Core.Client.Managers
 
         private static void CreatePlayerGroup()
         {
-            PedGroup pedGroup;
+            int playerPedHandle = Game.PlayerPed.Handle;
+            int groupHandle = GetPedGroupIndex(playerPedHandle);
 
-            if (Cache.PlayerPed.IsInGroup)
+            Logger.Debug($"Ped Group Handle: {groupHandle}");
+
+            if (groupHandle < 0)
             {
-                pedGroup = Cache.PlayerPed.PedGroup;
-                Logger.Debug($"Player already in a group: Player Group: {Cache.PlayerPed.PedGroup.Handle}");
-                goto SetupGroup;
+                Logger.Debug($"Creating Ped Group");
+                groupHandle = CreateGroup(-1);
+
+                if (groupHandle == 0)
+                {
+                    Logger.Error($"Failed to create ped group");
+                    return;
+                }
+                Logger.Success($"Created Ped Group Handle: {groupHandle}");
             }
 
-            pedGroup = new PedGroup();
+            SetPedAsGroupMember(playerPedHandle, groupHandle);
+            SetPedAsGroupLeader(playerPedHandle, groupHandle);
+            
+            SetGroupFormation(groupHandle, (int)FormationType.Default);
+            SetGroupSeparationRange(groupHandle, 300f);
+            SetGroupFormationSpacing(groupHandle, 1f, 0.9f, 3f);
 
-        SetupGroup:
-            pedGroup.Add(Cache.PlayerPed, true);
-            Cache.PedGroup = pedGroup;
-
-            pedGroup.FormationType = FormationType.Default;
-            pedGroup.SeparationRange = 300f;
-            SetGroupFormationSpacing(pedGroup.Handle, 1f, 0.9f, 3f);
-
-            if (Cache.PlayerPed.PedGroup is not null)
-                Logger.Debug($"Player Group: {Cache.PlayerPed.PedGroup.Handle}");
+            int pedHandle = GetPedAsGroupLeader(groupHandle);
+            Logger.Debug($"Ped Handle: {pedHandle}");
+            Logger.Debug($"Player Ped Handle: {playerPedHandle}");
         }
 
         private void MoveToCityHall()
