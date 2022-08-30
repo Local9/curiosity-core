@@ -233,9 +233,14 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Debug($"Character Registered: {player.Character.MarkedAsRegistered}");
 
+            bool baseCalled = false;
+
             if (player.Character.MarkedAsRegistered)
             {
                 await BaseScript.Delay(1000);
+
+                EventSystem.Send("character:routing:base");
+                baseCalled = true;
 
                 CayoPericoManager cayoPericoManager = CayoPericoManager.GetModule();
 
@@ -338,7 +343,8 @@ namespace Curiosity.Core.Client.Managers
             }
 
             await BaseScript.Delay(0);
-            EventSystem.Send("character:routing:base");
+            if (!baseCalled)
+                EventSystem.Send("character:routing:base");
             await BaseScript.Delay(0);
 
             Logger.Info("[Character] Complete Loading...");
