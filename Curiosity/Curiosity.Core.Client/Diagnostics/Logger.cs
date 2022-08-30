@@ -14,37 +14,32 @@ namespace Curiosity.Core.Client.Diagnostics
 
         public static void Info(string msg)
         {
-            WriteLine("INFO", msg, ConsoleColor.White);
+            WriteLine("^6[INFO]", msg, ConsoleColor.White);
         }
 
         public static void Success(string msg)
         {
-            WriteLine("SUCCESS", msg, ConsoleColor.Green);
+            WriteLine("^2[SUCCESS]", msg, ConsoleColor.Green);
         }
 
         public static void Warn(string msg)
         {
-            WriteLine("WARN", msg, ConsoleColor.Yellow);
+            WriteLine("^3[WARN]", msg, ConsoleColor.Yellow);
         }
 
         public static void Error(string msg)
         {
-            WriteLine("ERROR", msg, ConsoleColor.Red);
+            WriteLine("^1[ERROR]", msg, ConsoleColor.Red);
         }
 
         public static void Error(Exception ex, string msg = "")
         {
-            WriteLine("ERROR", $"{msg}\r\n{ex}", ConsoleColor.Red);
-        }
-
-        public static void Verbose(string msg)
-        {
-            WriteLine("VERBOSE", msg, ConsoleColor.DarkGray);
+            WriteLine("^1[ERROR]", $"{msg}\r\n{ex}", ConsoleColor.Red);
         }
 
         public async static void Debug(string msg)
         {
-            if (!IsDebugEnabled) return;
+            // if (!IsDebugEnabled) return;
 
             if (Cache.Player != null)
             {
@@ -61,13 +56,13 @@ namespace Curiosity.Core.Client.Diagnostics
 
                 if (Cache.Player.User.Role != Role.DEVELOPER) return;
 
-                WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+                WriteLine("^4[DEBUG]", msg, ConsoleColor.DarkGray);
             }
         }
 
         public async static void Debug(Exception ex, string msg)
         {
-            if (!IsDebugEnabled) return;
+            // if (!IsDebugEnabled) return;
 
             if (Cache.Player != null)
             {
@@ -84,7 +79,7 @@ namespace Curiosity.Core.Client.Diagnostics
 
                 if (Cache.Player.User.Role == Role.DEVELOPER) return;
 
-                WriteLine("DEBUG", $"{msg}\r\n{ex}", ConsoleColor.DarkGray);
+                WriteLine("^4[DEBUG]", $"{msg}\r\n{ex}", ConsoleColor.DarkGray);
             }
         }
 
@@ -92,7 +87,7 @@ namespace Curiosity.Core.Client.Diagnostics
         {
             try
             {
-                var m = $"[{title}] {msg}";
+                var m = $"{title} {msg}";
                 CitizenFX.Core.Debug.WriteLine(m);
             }
             catch (Exception ex)
