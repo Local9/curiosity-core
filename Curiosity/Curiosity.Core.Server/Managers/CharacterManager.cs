@@ -211,7 +211,7 @@ namespace Curiosity.Core.Server.Managers
 
                 }
 
-                // Logger.Debug($"{player.Name}:{API.GetPlayerRoutingBucket(player.Handle)}");
+                Logger.Debug($"{player.Name}: World: #{API.GetPlayerRoutingBucket(player.Handle)}");
 
                 return null;
             }));
