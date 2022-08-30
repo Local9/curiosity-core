@@ -74,7 +74,7 @@ namespace Perseverance
             // if message contains !ip
             if (e.Message.Content.Contains("!ip"))
             {
-                e.Message.RespondAsync("Please use the Slash Command `/server connect`");
+                e.Message.RespondAsync("Please use the Slash Command `/connect`");
             }
 
             if (e.Message.Content.Contains("lv!"))
