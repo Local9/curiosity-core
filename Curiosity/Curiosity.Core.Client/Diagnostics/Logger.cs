@@ -39,7 +39,7 @@ namespace Curiosity.Core.Client.Diagnostics
 
         public async static void Debug(string msg)
         {
-            // if (!IsDebugEnabled) return;
+            if (!IsDebugEnabled) return;
 
             if (Cache.Player != null)
             {
@@ -62,7 +62,7 @@ namespace Curiosity.Core.Client.Diagnostics
 
         public async static void Debug(Exception ex, string msg)
         {
-            // if (!IsDebugEnabled) return;
+            if (!IsDebugEnabled) return;
 
             if (Cache.Player != null)
             {
