@@ -1,4 +1,5 @@
-﻿using ScaleformUI;
+﻿using CitizenFX.Core.UI;
+using ScaleformUI;
 
 namespace Curiosity.Framework.Client.Interface
 {
@@ -9,6 +10,24 @@ namespace Curiosity.Framework.Client.Interface
         public Hud()
         {
             MenuPool = new MenuPool();
+        }
+
+        internal static async Task FadeOut(int duration)
+        {
+            Screen.Fading.FadeOut(duration);
+            while (Screen.Fading.IsFadingOut)
+            {
+                await BaseScript.Delay(0);
+            }
+        }
+
+        internal static async Task FadeIn(int duration)
+        {
+            Screen.Fading.FadeIn(duration);
+            while (Screen.Fading.IsFadingIn)
+            {
+                await BaseScript.Delay(0);
+            }
         }
     }
 }
