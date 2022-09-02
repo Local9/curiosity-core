@@ -15,6 +15,8 @@ namespace Curiosity.Framework.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
+        public Interface.Hud Hud;
+
         //   public readonly DiscordRichPresence DiscordRichPresence =
         //new DiscordRichPresence(
         //    GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset", 0),
@@ -29,6 +31,7 @@ namespace Curiosity.Framework.Client
         public PluginManager()
         {
             Instance = this;
+            Hud = new();
             ClientGateway = new ClientGateway();
 
             SoundEngine = new SoundEngine();
@@ -47,7 +50,6 @@ namespace Curiosity.Framework.Client
         {
             try
             {
-
                 List<MethodInfo> managers = Assembly.GetExecutingAssembly().GetExportedTypes()
                     .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                     .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList();
