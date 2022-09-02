@@ -11,20 +11,20 @@ namespace Curiosity.Framework.Shared.SerializedModels
     [Serialization]
     public partial class User
     {
-        public int Handle { get; set; }
-        public int UserID { get; set; }
-        public string? Username { get; set; }
-        public List<Character> Characters { get; set; } = new List<Character>();
+        public int Handle { get; internal set; }
+        public int UserID { get; internal set; }
+        public string? Username { get; internal set; }
+        public List<Character> Characters { get; internal set; } = new();
 
 #if CLIENT
 
         [Ignore]
         [JsonIgnore]
-        public CameraViewmodelQueue CameraQueue { get; set; } = new CameraViewmodelQueue();
+        public CameraViewmodelQueue CameraQueue { get; internal set; } = new CameraViewmodelQueue();
 
         [Ignore]
         [JsonIgnore]
-        public Character ActiveCharacter { get; set; }
+        public Character ActiveCharacter { get; internal set; }
 
 #endif
     }

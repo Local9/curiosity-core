@@ -43,10 +43,6 @@
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj" />
     <ProjectReference Include="..\_vendor\snowflake\src\Snowflake.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
   
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
 

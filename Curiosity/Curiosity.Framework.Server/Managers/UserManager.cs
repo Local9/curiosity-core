@@ -244,8 +244,8 @@ namespace Curiosity.Framework.Server.Managers
                     {
                         Character character = new();
                         character.CharacterId = dataStoreCharacter.CharacterId;
-                        character.Cash = dataStoreCharacter.Cash;
-                        character.CharacterJson = dataStoreCharacter.CharacterJson;
+                        //character.Cash = dataStoreCharacter.Cash;
+                        //character.CharacterJson = dataStoreCharacter.CharacterJson;
                         userResult.Characters.Add(character);
                     }
 

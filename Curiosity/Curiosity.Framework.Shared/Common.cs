@@ -15,5 +15,14 @@
             return (Math.Abs(longRand % max));
         }
 
+        public static float Normalize(float value, float min, float max)
+        {
+            return (value - min) / (max - min);
+        }
+
+        public static float Denormalize(float normalized, float min, float max)
+        {
+            return (normalized * (max - min) + min);
+        }
     }
 }

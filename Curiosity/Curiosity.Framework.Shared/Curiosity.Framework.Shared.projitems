@@ -20,9 +20,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Character.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterSkin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Identifiers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Position.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Vector5.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Datasets\" />
   </ItemGroup>
 </Project>

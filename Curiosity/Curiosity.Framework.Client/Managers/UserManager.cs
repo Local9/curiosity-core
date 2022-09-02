@@ -1,5 +1,8 @@
-﻿using Curiosity.Framework.Client.Events;
+﻿using CitizenFX.Core.UI;
+using Curiosity.Framework.Client.Datasets;
+using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Extensions;
+using Curiosity.Framework.Client.Interface;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.SerializedModels;
@@ -11,10 +14,13 @@ namespace Curiosity.Framework.Client.Managers
     public class UserManager : Manager<UserManager>
     {
         public User _user;
+        Ped _playerPed = Game.PlayerPed;
         Quaternion _cityHall = new Quaternion(-542.1675f, -216.1688f, -206.1688f, 0f);
 
         Quaternion _characterCreatorSpawn = new Quaternion(405.9247f, -997.2114f, -100.00024f, 86.36787f);
-        Quaternion _characterCreator = new Quaternion(402.8841f, -996.4642f, -100.00024f, -185.0f);
+
+        // Character Data
+        CharacterSkin _characterSkin;
 
         // cameras
         const string DEFAULT_SCRIPTED_CAMERA = "DEFAULT_SCRIPTED_CAMERA";
@@ -26,12 +32,16 @@ namespace Curiosity.Framework.Client.Managers
         UIMenu _menuDetails = new UIMenu("", "", true);
         UIMenu _menuAppearance = new UIMenu("", "", true);
         UIMenu _menuApparel = new UIMenu("", "", true);
+        UIMenu _menuAdvancedApparel = new UIMenu("", "", true);
         UIMenu _menuStats = new UIMenu("", "", true);
 
         // Lists
         List<dynamic> _arcSop = new List<dynamic> { "Standard", "High", "Low" };
         List<dynamic> _occ = new List<dynamic> { "Standard", "Great", "Tight" };
         List<dynamic> _nas = new List<dynamic> { "Standard", "Great", "Small" };
+
+        List<dynamic> _lstParentMother = CharacterCreatorData.FacesMother;
+        List<dynamic> _lstParentFather = CharacterCreatorData.FacesFather;
 
         // Menu List Items
 
@@ -48,14 +58,13 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuListItem _mLstChinShape = null;
         UIMenuListItem _mListNeck = null;
 
-        public static RotatablePosition[] _cameraViews { get; } =
-        {
-            new RotatablePosition(402.7553f, -1000.622f, -98.48412f, -6.716503f, 0f, -0.276376f),
-            new RotatablePosition(402.7391f, -1003.981f, -98.43439f, -3.589798f, 0f, -0.276381f),
-            new RotatablePosition(402.8294f, -997.967f, -98.35f, 357.1697f, -7f, 0f)
-        };
+        // heritageWindow
+        UIMenuHeritageWindow _heritageWindow;
+        UIMenuListItem _mliParentMother;
+        UIMenuListItem _mliParentFather;
+        UIMenuSliderItem _msiResemblance;
+        UIMenuSliderItem _msiSkinBlend;
 
-        AnimationQueue _animationQueue;
         MugshotBoardAttachment mugshotBoardAttachment = new();
 
         public async override void Begin()
@@ -88,7 +97,9 @@ namespace Curiosity.Framework.Client.Managers
 
             // lets act as if we don't have a character for now
 
-            OnCreateNewCharacter();
+            CreateCharacterClass();
+
+            OnCreateNewCharacter(_characterSkin);
 
             // goto character selection
             // if new character make one
@@ -111,6 +122,9 @@ namespace Curiosity.Framework.Client.Managers
             
             RequestScriptAudioBank("Mugshot_Character_Creator", false);
             RequestScriptAudioBank("DLC_GTAO/MUGSHOT_ROOM", false);
+
+            if (_characterSkin is null)
+                CreateCharacterClass();
         }
 
         async Task OnLoadCharacterCreatorInteriorAsync()
@@ -122,7 +136,7 @@ namespace Curiosity.Framework.Client.Managers
                 await BaseScript.Delay(1000);
         }
 
-        public async Task OnCreateNewCharacter()
+        public async Task OnCreateNewCharacter(CharacterSkin characterSkin, bool reload = false)
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
 
@@ -134,32 +148,32 @@ namespace Curiosity.Framework.Client.Managers
 
             _user.ActiveCharacter = new Character();
 
-            Model model = "mp_m_freemode_01";
-            await Game.Player.ChangeModel(model);
-            model.MarkAsNoLongerNeeded();
-
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
 
-            Ped playerPed = Game.PlayerPed;
+            _playerPed = Game.PlayerPed;
 
-            playerPed.IsPositionFrozen = false;
-            playerPed.Position = new Vector3(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z);
-            playerPed.Heading = _characterCreatorSpawn.W;
+            _playerPed.Position = new Vector3(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z);
+            _playerPed.Heading = _characterCreatorSpawn.W;
 
             await Common.MoveToMainThread();
 
-            playerPed.SetDefaultVariation();
-            playerPed.SetRandomFacialMood();
+            _playerPed.SetDefaultVariation();
+            _playerPed.SetRandomFacialMood();
 
-            playerPed.IsInvincible = true;
-            playerPed.IsVisible = true;
-            playerPed.BlockPermanentEvents = true;
+            _playerPed.IsInvincible = true;
+            _playerPed.IsVisible = true;
+            _playerPed.BlockPermanentEvents = true;
 
             // swap this out
-            mugshotBoardAttachment.Attach(playerPed, _user, topLine: "FACE_N_CHAR");
+            mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
             Instance.SoundEngine.Enable();
-            await LoadTransition.OnDownAsync();
+            
+            if (!reload)
+                await LoadTransition.OnDownAsync();
+
+            if (Screen.Fading.IsFadedOut)
+                await Interface.Hud.FadeIn(800);
 
             RenderScriptCams(true, true, 0, false, false);
 
@@ -192,9 +206,9 @@ namespace Curiosity.Framework.Client.Managers
 
             cam.Delete();
 
-            await playerPed.TaskWalkInToCharacterCreationRoom(GetLineupOrCreationAnimation(true, false, playerPed.Gender));
-
-            OnCharacterCreationMenuAsync(playerPed.Gender);
+            Gender gender = (Gender)_characterSkin.Gender;
+            await _playerPed.TaskWalkInToCharacterCreationRoom(GetLineupOrCreationAnimation(true, false, gender));
+            OnCharacterCreationMenuAsync(gender);
         }
 
         public async void OnCharacterCreationMenuAsync(Gender gender)
@@ -207,9 +221,36 @@ namespace Curiosity.Framework.Client.Managers
                 ControlDisablingEnabled = true
             };
             Interface.Hud.MenuPool.Add(_menuBase);
+
+            #region Character Sex
+            Logger.Debug($"Character Sex Selected: {gender}");
             UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { "Male", "Female" }, (int)gender, "Select character sex");
             _menuBase.AddItem(mLstCharacterSex);
-            
+
+            mLstCharacterSex.OnListChanged += async (item, index) =>
+            {
+                Interface.Hud.MenuPool.CloseAllMenus();
+                Screen.Effects.Start(ScreenEffect.MpCelebWin);
+                await Interface.Hud.FadeOut(1000);
+                _menuBase.Clear();
+                await BaseScript.Delay(1000);
+                Screen.Effects.Stop(ScreenEffect.MpCelebWin);
+
+                Gender newGender = (Gender)index;
+
+                Logger.Debug($"Character Sex: {newGender}");
+
+                CreateCharacterClass(false, false, newGender);
+
+                Logger.Debug($"Character Skin Sex: {_characterSkin.Gender}");
+
+                Instance.DetachTickHandler(OnCharacterCreationWarningAsync);
+                Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
+
+                OnCreateNewCharacter(_characterSkin, true);
+            };
+            #endregion
+
             _menuParents = Interface.Hud.MenuPool.AddSubMenu(
                     _menuBase,
                     GetLabelText("FACE_HERI"),
@@ -234,6 +275,12 @@ namespace Curiosity.Framework.Client.Managers
                 GetLabelText("FACE_APPA_H")
             );
             _menuApparel.ControlDisablingEnabled = true;
+            _menuAdvancedApparel = Interface.Hud.MenuPool.AddSubMenu(
+                _menuBase,
+                $"Adv. {GetLabelText("FACE_APPA")}",
+                GetLabelText("FACE_APPA_H")
+            );
+            _menuAdvancedApparel.ControlDisablingEnabled = true;
             _menuStats = Interface.Hud.MenuPool.AddSubMenu(
                 _menuBase,
                 GetLabelText("FACE_STATS"),
@@ -244,6 +291,12 @@ namespace Curiosity.Framework.Client.Managers
                 Control.LookLeftRight,
                 "Look Right/Left"
             );
+
+            InstructionalButton btnRandomise = new InstructionalButton(
+                Control.Context,
+                "Randomise"
+            );
+
             InstructionalButton btnLookLeft = new InstructionalButton(
                 Control.FrontendLb,
                 "Look Left"
@@ -265,12 +318,96 @@ namespace Curiosity.Framework.Client.Managers
             _menuBase.InstructionalButtons.Add(btnLookLeft);
             _menuParents.InstructionalButtons.Add(btnLookRight);
             _menuParents.InstructionalButtons.Add(btnLookLeft);
+            _menuParents.InstructionalButtons.Add(btnRandomise);
             _menuAppearance.InstructionalButtons.Add(btnLookRight);
             _menuAppearance.InstructionalButtons.Add(btnLookLeft);
             _menuAppearance.InstructionalButtons.Add(button5);
             _menuDetails.InstructionalButtons.Add(btnLookRight);
             _menuDetails.InstructionalButtons.Add(btnLookLeft);
             _menuDetails.InstructionalButtons.Add(button4);
+
+            #region Parents
+
+            _heritageWindow = new UIMenuHeritageWindow(
+                    _characterSkin.Face.Mother,
+                    _characterSkin.Face.Father
+                );
+            _menuParents.AddWindow(_heritageWindow);
+            List<dynamic> lista = new List<dynamic>();
+            for (int i = 0; i < 101; i++)
+                lista.Add(i);
+            _mliParentMother = new UIMenuListItem("Mother", _lstParentMother, _characterSkin.Face.Mother);
+            _mliParentFather = new UIMenuListItem("Father", _lstParentFather, _characterSkin.Face.Father);
+            
+            _msiResemblance = new UIMenuSliderItem(GetLabelText("FACE_H_DOM"), "", true)
+            {
+                Multiplier = 2,
+                Value = (int)Math.Round(_characterSkin.Face.Resemblance * 100)
+            };
+            
+            _msiSkinBlend = new UIMenuSliderItem(GetLabelText("FACE_H_STON"), "", true)
+            {
+                Multiplier = 2,
+                Value = (int)Math.Round(_characterSkin.Face.SkinBlend * 100)
+            };
+
+            _menuParents.AddItem(_mliParentMother);
+            _menuParents.AddItem(_mliParentFather);
+            _menuParents.AddItem(_msiResemblance);
+            _menuParents.AddItem(_msiSkinBlend);
+
+            _menuParents.OnListChange += (_sender, _listItem, _newIndex) =>
+            {
+                if (_listItem == _mliParentMother)
+                {
+                    _characterSkin.Face.Mother = _newIndex;
+                    _heritageWindow.Index(_characterSkin.Face.Mother, _characterSkin.Face.Father);
+                }
+                else if (_listItem == _mliParentFather)
+                {
+                    _characterSkin.Face.Father = _newIndex;
+                    _heritageWindow.Index(_characterSkin.Face.Mother, _characterSkin.Face.Father);
+                }
+
+                UpdateFace(Game.PlayerPed.Handle, _characterSkin);
+            };
+            
+            _menuParents.OnSliderChange += async (_sender, _item, _newIndex) =>
+            {
+                if (_item == _msiResemblance)
+                    _characterSkin.Face.Resemblance = _newIndex / 100f;
+                else if (_item == _msiSkinBlend)
+                    _characterSkin.Face.SkinBlend = _newIndex / 100f;
+
+                UpdateFace(Game.PlayerPed.Handle, _characterSkin);
+            };
+
+            #endregion
+
+            #region Facial Details
+            #endregion
+
+            #region Save and Exit
+
+            UIMenuItem miSaveAndExit = new UIMenuItem("Save Character", "This will save the character and throw you into the deepend.", HudColor.HUD_COLOUR_FREEMODE_DARK, HudColor.HUD_COLOUR_FREEMODE);
+            miSaveAndExit.SetRightBadge(BadgeIcon.TICK);
+            _menuBase.AddItem(miSaveAndExit);
+            miSaveAndExit.Activated += async (selectedItem, index) =>
+            {
+                await Interface.Hud.FadeOut(800);
+                _menuBase.Visible = false;
+                Interface.Hud.MenuPool.CloseAllMenus();
+                Game.PlayerPed.Detach();
+
+                RemoveAnimDict("mp_character_creation@lineup@male_a");
+                RemoveAnimDict("mp_character_creation@lineup@male_b");
+                RemoveAnimDict("mp_character_creation@lineup@female_a");
+                RemoveAnimDict("mp_character_creation@lineup@female_b");
+                RemoveAnimDict("mp_character_creation@customise@male_a");
+                RemoveAnimDict("mp_character_creation@customise@female_a");
+            };
+
+            #endregion
 
             Instance.AttachTickHandler(OnCharacterCreationWarningAsync);
             Instance.AttachTickHandler(OnCharacterCreationMenuControlsAsync);
@@ -286,6 +423,7 @@ namespace Curiosity.Framework.Client.Managers
 
         int _frontendLeftBumper = (int)Control.FrontendLb; // 205
         int _frontendRightBumper = (int)Control.FrontendRb; // 206
+        int _context = (int)Control.Context; // 206
 
         bool IsControlLeftBumperPressed => (IsControlPressed(0, _frontendLeftBumper) || IsDisabledControlPressed(0, _frontendLeftBumper)) && IsInputDisabled(2)
             || (IsControlPressed(2, _frontendLeftBumper) || IsDisabledControlPressed(2, _frontendLeftBumper)) && !IsInputDisabled(2);
@@ -293,17 +431,25 @@ namespace Curiosity.Framework.Client.Managers
         bool IsControlRightBumperPressed => (IsControlPressed(0, _frontendRightBumper) || IsDisabledControlPressed(0, _frontendRightBumper)) && IsInputDisabled(2)
                     || (IsControlPressed(2, _frontendRightBumper) || IsDisabledControlPressed(2, _frontendRightBumper)) && !IsInputDisabled(2);
 
+        bool IsControlContextPressed => (IsControlPressed(0, _context) || IsDisabledControlPressed(0, _context)) && IsInputDisabled(2)
+            || (IsControlPressed(2, _context) || IsDisabledControlPressed(2, _context)) && !IsInputDisabled(2);
+
         public async Task OnCharacterCreationMenuControlsAsync()
         {
-            Ped playerPed = Game.PlayerPed;
+            _playerPed = Game.PlayerPed;
             if (_menuBase.Visible || _menuDetails.Visible || _menuAppearance.Visible || _menuParents.Visible)
             {
-                if (IsControlLeftBumperPressed)
+                if (IsControlContextPressed)
+                {
+                    RandomiseCharacterParents();
+                    await BaseScript.Delay(500);
+                }
+                else if (IsControlLeftBumperPressed)
                 {
                     if (!_isPedLookingLeft)
                     {
                         _isPedLookingLeft = true;
-                        playerPed.TaskLookLeft(GetLineupOrCreationAnimation(true, false, playerPed.Gender));
+                        _playerPed.TaskLookLeft(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
                     }
                 }
                 else if (IsControlRightBumperPressed)
@@ -311,15 +457,15 @@ namespace Curiosity.Framework.Client.Managers
                     if (!_isPedLookingRight)
                     {
                         _isPedLookingRight = true;
-                        playerPed.TaskLookRight(GetLineupOrCreationAnimation(true, false, playerPed.Gender));
+                        _playerPed.TaskLookRight(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
                     }
                 }
                 else
                 {
                     if (_isPedLookingRight)
-                        playerPed.TaskStopLookingRight(GetLineupOrCreationAnimation(true, false, playerPed.Gender));
+                        _playerPed.TaskStopLookingRight(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
                     else if (_isPedLookingLeft)
-                        playerPed.TaskStopLookingLeft(GetLineupOrCreationAnimation(true, false, playerPed.Gender));
+                        _playerPed.TaskStopLookingLeft(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
                     
                     _isPedLookingLeft = _isPedLookingRight = false;
                 }
@@ -386,6 +532,118 @@ namespace Curiosity.Framework.Client.Managers
                 return gender == Gender.Male ? "mp_character_creation@lineup@male_a" : "mp_character_creation@lineup@female_a";
 
             return "mp_character_creation@lineup@male_a";
+        }
+
+        async void CreateCharacterClass(bool randomise = false, bool randomGender = true, Gender gender = Gender.Male)
+        {
+            if (!randomise)
+            {
+                if (_characterSkin is null)
+                    _characterSkin = new();
+
+                if (randomGender)
+                    _characterSkin.Gender = Common.RANDOM.Next(2);
+                else
+                    _characterSkin.Gender = (int)gender;
+
+                Logger.Debug($"Skin Gender: {_characterSkin.Gender}");
+
+                _characterSkin.Model = (uint)(_characterSkin.Gender == 0 ? PedHash.FreemodeMale01 : PedHash.FreemodeFemale01);
+                Model model = (int)_characterSkin.Model;
+                await model.Request(1000);
+                Game.Player.ChangeModel(model);
+                model.MarkAsNoLongerNeeded();
+                await Common.MoveToMainThread();
+            }
+
+            _playerPed = Game.PlayerPed;
+            RandomiseCharacterParents();
+        }
+
+        private void RandomiseCharacterParents()
+        {
+            _characterSkin.Face.SkinBlend = GetRandomFloatInRange(.5f, 1f);
+            _characterSkin.Face.Resemblance = GetRandomFloatInRange(.5f, 1f);
+            _characterSkin.Face.Mother = Common.RANDOM.Next(CharacterCreatorData.FacesMother.Count);
+            _characterSkin.Face.Father = Common.RANDOM.Next(CharacterCreatorData.FacesFather.Count);
+            _characterSkin.Face.Features = Enumerable.Repeat(Common.Normalize(0f, -1, 1), 20).ToArray();
+
+            if (_heritageWindow is not null)
+                _heritageWindow.Index(_characterSkin.Face.Mother, _characterSkin.Face.Father);
+
+            if (_mliParentMother is not null) // TODO: Update Scaleform to allow List Update when Visible from Code Behind
+                _mliParentMother.Index = _characterSkin.Face.Mother;
+
+            if (_mliParentFather is not null) // TODO: Update Scaleform to allow List Update when Visible from Code Behind
+                _mliParentFather.Index = _characterSkin.Face.Father;
+
+            if (_msiResemblance is not null) // TODO: Update Scaleform to allow Slider Update when Visible from Code Behind
+                _msiResemblance.Value = (int)Math.Round(_characterSkin.Face.Resemblance * 100);
+
+            if (_msiSkinBlend is not null) // TODO: Update Scaleform to allow Slider Update when Visible from Code Behind
+                _msiSkinBlend.Value = (int)Math.Round(_characterSkin.Face.SkinBlend * 100);
+
+            UpdateFace(_playerPed.Handle, _characterSkin);
+        }
+
+        public static void UpdateFace(int Handle, CharacterSkin skin)
+        {
+            SetPedHeadBlendData(
+                Handle,
+                skin.Face.Mother,
+                skin.Face.Father,
+                0,
+                skin.Face.Mother,
+                skin.Face.Father,
+                0,
+                skin.Face.Resemblance,
+                skin.Face.SkinBlend,
+                0f,
+                false
+            );
+            
+            //SetPedHeadOverlay(Handle, 0, skin.blemishes.style, skin.blemishes.opacity);
+            //SetPedHeadOverlay(
+            //    Handle,
+            //    1,
+            //    skin.facialHair.beard.style,
+            //    skin.facialHair.beard.opacity
+            //);
+            //SetPedHeadOverlayColor(
+            //    Handle,
+            //    1,
+            //    1,
+            //    skin.facialHair.beard.color[0],
+            //    skin.facialHair.beard.color[1]
+            //);
+            //SetPedHeadOverlay(
+            //    Handle,
+            //    2,
+            //    skin.facialHair.eyebrow.style,
+            //    skin.facialHair.eyebrow.opacity
+            //);
+            //SetPedHeadOverlayColor(
+            //    Handle,
+            //    2,
+            //    1,
+            //    skin.facialHair.eyebrow.color[0],
+            //    skin.facialHair.eyebrow.color[1]
+            //);
+            //SetPedHeadOverlay(Handle, 3, skin.ageing.style, skin.ageing.opacity);
+            //SetPedHeadOverlay(Handle, 4, skin.makeup.style, skin.makeup.opacity);
+            //SetPedHeadOverlay(Handle, 5, skin.blusher.style, skin.blusher.opacity);
+            //SetPedHeadOverlayColor(Handle, 5, 2, skin.blusher.color[0], skin.blusher.color[1]);
+            //SetPedHeadOverlay(Handle, 6, skin.complexion.style, skin.complexion.opacity);
+            //SetPedHeadOverlay(Handle, 7, skin.skinDamage.style, skin.skinDamage.opacity);
+            //SetPedHeadOverlay(Handle, 8, skin.lipstick.style, skin.lipstick.opacity);
+            //SetPedHeadOverlayColor(Handle, 8, 2, skin.lipstick.color[0], skin.lipstick.color[1]);
+            //SetPedHeadOverlay(Handle, 9, skin.freckles.style, skin.freckles.opacity);
+            //SetPedEyeColor(Handle, skin.eye.style);
+            //SetPedComponentVariation(Handle, 2, skin.hair.style, 0, 0);
+            //SetPedHairColor(Handle, skin.hair.color[0], skin.hair.color[1]);
+            //SetPedPropIndex(Handle, 2, skin.ears.style, skin.ears.color, false);
+            //for (int i = 0; i < skin.face.tratti.Length; i++)
+            //    SetPedFaceFeature(Handle, i, skin.face.tratti[i]);
         }
     }
 }
