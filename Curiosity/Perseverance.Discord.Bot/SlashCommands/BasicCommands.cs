@@ -53,53 +53,72 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
 
+        public enum Wiki
+        {
+            Police,
+            FireFighter,
+            EMT,
+            Trucking,
+            Piloting,
+            BusDriver,
+            Fishing,
+            Bitcoin,
+            DrugDealing,
+            Drifting,
+            FirstSteps,
+            Start,
+            GettingStarted,
+            Donate,
+            Patreon,
+            Tebex
+        }
+
         [SlashCommand("wiki", "Information from our wiki @ wiki.lifev.net")]
-        public async Task WikiCommand(InteractionContext ctx, [Option("wiki", "Wiki Page.")] string wiki)
+        public async Task WikiCommand(InteractionContext ctx, [Option("wiki", "Wiki Page.")] Wiki wiki)
         {
             string url = "https://wiki.lifev.net/index.php?title=Guide:";
 
-            switch (wiki.ToLower())
+            switch (wiki)
             {
-                case "police":
+                case Wiki.Police:
                     url = $"{url}Police";
                     break;
-                case "firefighter":
-                case "firefighting":
-                case "fire":
+                case Wiki.FireFighter:
                     url = $"{url}Fire_Fighter";
                     break;
-                case "emt":
+                case Wiki.EMT:
                     url = $"{url}EMT";
                     break;
-                case "trucking":
-                case "truck":
+                case Wiki.Trucking:
                     url = $"{url}Trucking";
                     break;
-                case "piloting":
-                case "pilot":
+                case Wiki.Piloting:
                     url = $"{url}Piloting";
                     break;
-                case "bus":
-                case "bus driver":
+                case Wiki.BusDriver:
                     url = $"{url}Bus_Driver";
                     break;
-                case "fisher":
-                case "fishing":
+                case Wiki.Fishing:
                     url = $"{url}Fisher";
                     break;
-                case "bitcoin":
+                case Wiki.Bitcoin:
                     url = $"{url}Bitcoin";
                     break;
-                case "drug dealing":
-                case "drug":
+                case Wiki.DrugDealing:
                     url = $"{url}Drug_Dealing";
                     break;
-                case "drifting":
+                case Wiki.Drifting:
                     url = $"{url}Drifting";
                     break;
-                case "firststeps":
-                case "first steps":
+                case Wiki.Start:
+                case Wiki.FirstSteps:
+                case Wiki.GettingStarted:
                     url = $"{url}First_Steps";
+                    break;
+                case Wiki.Donate:
+                case Wiki.Patreon:
+                case Wiki.Tebex:
+                    url = $"{url}Donate";
                     break;
                 default:
                     await ctx.CreateResponseAsync($"'{wiki}' is unknown, please check <https://wiki.lifev.net> to see if the page exists.");
@@ -109,7 +128,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
             CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
             TextInfo textInfo = cultureInfo.TextInfo;
 
-            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent(url, $"Open Wiki Page for '{textInfo.ToTitleCase(wiki)}'");
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent(url, $"Open Wiki Page for '{textInfo.ToTitleCase(wiki.ToString())}'");
 
             DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
             message.AddComponents(discordButtonComponent);
