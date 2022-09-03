@@ -6,6 +6,7 @@ using Curiosity.Framework.Client.Interface;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.SerializedModels;
+using Newtonsoft.Json.Linq;
 using ScaleformUI;
 using System.Drawing;
 
@@ -36,27 +37,27 @@ namespace Curiosity.Framework.Client.Managers
         UIMenu _menuStats = new UIMenu("", "", true);
 
         // Lists
-        List<dynamic> _arcSop = new List<dynamic> { "Standard", "High", "Low" };
-        List<dynamic> _occ = new List<dynamic> { "Standard", "Great", "Tight" };
-        List<dynamic> _nas = new List<dynamic> { "Standard", "Great", "Small" };
+        List<dynamic> _lstEyebrows = new List<dynamic> { "Standard", "High", "Low" };
+        List<dynamic> _lstEyes = new List<dynamic> { "Standard", "Great", "Tight" };
+        List<dynamic> _lstNose = new List<dynamic> { "Standard", "Great", "Small" };
 
         List<dynamic> _lstParentMother = CharacterCreatorData.FacesMother;
         List<dynamic> _lstParentFather = CharacterCreatorData.FacesFather;
 
         // Menu List Items
 
-        UIMenuListItem _mLstBrow = null;
+        UIMenuListItem _mLstEyeBrowProfile = null;
         UIMenuListItem _mLstEyes = null;
-        UIMenuListItem _mLstNose = null;
-        UIMenuListItem _mLstNosePro = null;
-        UIMenuListItem _mLstNosePun = null;
-        UIMenuListItem _mLstCheek = null;
+        UIMenuListItem _mLstNosePosition = null;
+        UIMenuListItem _mLstNoseProfile = null;
+        UIMenuListItem _mLstNoseThickness = null;
+        UIMenuListItem _mLstCheekBones = null;
         UIMenuListItem _mLstCheekShape = null;
-        UIMenuListItem _mLstLips = null;
-        UIMenuListItem _mListJaw = null;
-        UIMenuListItem _mLstChin = null;
+        UIMenuListItem _mLstLipThickness = null;
+        UIMenuListItem _mLstJawProfile = null;
+        UIMenuListItem _mLstChinProfile = null;
         UIMenuListItem _mLstChinShape = null;
-        UIMenuListItem _mListNeck = null;
+        UIMenuListItem _mListNeckThickness = null;
 
         // heritageWindow
         UIMenuHeritageWindow _heritageWindow;
@@ -261,6 +262,7 @@ namespace Curiosity.Framework.Client.Managers
             _menuAdvancedApparel = Interface.Hud.MenuPool.AddSubMenu(_menuBase, $"Adv. {GetLabelText("FACE_APPA")}", GetLabelText("FACE_APPA_H"));
             _menuAdvancedApparel.ControlDisablingEnabled = true;
             _menuStats = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_STATS"), GetLabelText("FACE_MM_H5"));
+            _menuStats.ControlDisablingEnabled = true;
 
             InstructionalButton btnLookLeftOrRight = new InstructionalButton(Control.LookLeftRight, "Look Right/Left");
             InstructionalButton btnRandomise = new InstructionalButton(Control.FrontendDelete, "Randomise");
@@ -337,13 +339,219 @@ namespace Curiosity.Framework.Client.Managers
             #endregion
 
             #region Facial Details
+            
+            _mLstEyeBrowProfile = new UIMenuListItem(GetLabelText("FACE_F_BROW"), _lstEyebrows, 0);
+            _mLstEyes = new UIMenuListItem(GetLabelText("FACE_F_EYES"), _lstEyes, 0);
+            _mLstNosePosition = new UIMenuListItem(GetLabelText("FACE_F_NOSE"), _lstNose, 0);
+
+            _mLstNoseProfile = new UIMenuListItem(GetLabelText("FACE_F_NOSEP"), new List<dynamic>() { "Standard", "Short", "Long" }, 0);
+            _mLstNoseThickness = new UIMenuListItem(GetLabelText("FACE_F_NOSET"), new List<dynamic>() { "Standard", "Point Up", "Point Down" }, 0);
+            _mLstCheekBones = new UIMenuListItem(GetLabelText("FACE_F_CHEEK"), new List<dynamic>() { "Standard", "In", "Out" }, 0);
+            _mLstCheekShape = new UIMenuListItem(GetLabelText("FACE_F_CHEEKS"), new List<dynamic>() { "Standard", "Gaunt", "Puffed" }, 0);
+            _mLstLipThickness = new UIMenuListItem(GetLabelText("FACE_F_LIPS"), new List<dynamic>() { "Standard", "Thin", "Thick" }, 0);
+            _mLstJawProfile = new UIMenuListItem(GetLabelText("FACE_F_JAW"), new List<dynamic>() { "Standard", "Narrow", "Wide" }, 0);
+            _mLstChinProfile = new UIMenuListItem(GetLabelText("FACE_F_CHIN"), new List<dynamic>() { "Standard", "In", "Out" }, 0);
+            _mLstChinShape = new UIMenuListItem(GetLabelText("FACE_F_CHINS"), new List<dynamic>() { "Standard", "Squared", "Pointed" }, 0);
+            _mListNeckThickness = new UIMenuListItem($"Neck", new List<dynamic>() { "Standard", "Thin", "Thick" }, 0);
+
+            UIMenuGridPanel GridEyeBrowProfile =
+                    new(
+                        GetLabelText("FACE_F_UP_B"),
+                        GetLabelText("FACE_F_IN_B"),
+                        GetLabelText("FACE_F_OUT_B"),
+                        GetLabelText("FACE_F_DOWN_B"),
+                        new PointF(_characterSkin.Face.Features[7], _characterSkin.Face.Features[6])
+                    );
+            
+            UIMenuGridPanel GridEyes =
+                new(
+                    GetLabelText("FACE_F_SQUINT"),
+                    GetLabelText("FACE_F_WIDE_E"),
+                    new PointF(_characterSkin.Face.Features[11], 0)
+                );
+            
+            UIMenuGridPanel GridNosePosition =
+                new(
+                    GetLabelText("FACE_F_UP_N"),
+                    GetLabelText("FACE_F_NAR_N"),
+                    GetLabelText("FACE_F_WIDE_N"),
+                    GetLabelText("FACE_F_DOWN_N"),
+                    new PointF(_characterSkin.Face.Features[0], _characterSkin.Face.Features[1])
+                );
+            
+            UIMenuGridPanel GridNoseProfile =
+                new(
+                    GetLabelText("FACE_F_CROOK"),
+                    GetLabelText("FACE_F_SHORT"),
+                    GetLabelText("FACE_F_LONG"),
+                    GetLabelText("FACE_F_CURV"),
+                    new PointF(_characterSkin.Face.Features[2], _characterSkin.Face.Features[3])
+                );
+            
+            UIMenuGridPanel GridNoseThickness =
+                new(
+                    GetLabelText("FACE_F_TIPU"),
+                    GetLabelText("FACE_F_BRL"),
+                    GetLabelText("FACE_F_BRR"),
+                    GetLabelText("FACE_F_TIPD"),
+                    new PointF(_characterSkin.Face.Features[5], _characterSkin.Face.Features[4])
+                );
+            
+            UIMenuGridPanel GridCheekBones =
+                new(
+                    GetLabelText("FACE_F_UP_CHEE"),
+                    GetLabelText("FACE_F_IN_C"),
+                    GetLabelText("FACE_F_OUT_C"),
+                    GetLabelText("FACE_F_DOWN_C"),
+                    new PointF(_characterSkin.Face.Features[9], _characterSkin.Face.Features[8])
+                );
+            
+            UIMenuGridPanel GridCheekShape =
+                new(
+                    GetLabelText("FACE_F_GAUNT"),
+                    GetLabelText("FACE_F_PUFF"),
+                    new PointF(_characterSkin.Face.Features[10], 0)
+                );
+            
+            UIMenuGridPanel GridLips =
+                new(
+                    GetLabelText("FACE_F_THIN"),
+                    GetLabelText("FACE_F_FAT"),
+                    new PointF(_characterSkin.Face.Features[12], 0)
+                );
+            
+            UIMenuGridPanel GridJawProfile =
+                new(
+                    GetLabelText("FACE_F_RND"),
+                    GetLabelText("FACE_F_NAR_J"),
+                    GetLabelText("FACE_F_WIDE_J"),
+                    GetLabelText("FACE_F_SQ_J"),
+                    new PointF(_characterSkin.Face.Features[13], _characterSkin.Face.Features[14])
+                );
+            
+            UIMenuGridPanel GridChinProfile =
+                new(
+                    GetLabelText("FACE_F_UP_CHIN"),
+                    GetLabelText("FACE_F_IN_CH"),
+                    GetLabelText("FACE_F_OUT_CH"),
+                    GetLabelText("FACE_F_DOWN_CH"),
+                    new PointF(_characterSkin.Face.Features[16], _characterSkin.Face.Features[15])
+                );
+            
+            UIMenuGridPanel GridChinShape =
+                new(
+                    GetLabelText("FACE_F_RDD"),
+                    GetLabelText("FACE_F_SQ_CH"),
+                    GetLabelText("FACE_F_PTD"),
+                    GetLabelText("FACE_F_BUM"),
+                    new PointF(_characterSkin.Face.Features[18], _characterSkin.Face.Features[17])
+                );
+
+            UIMenuGridPanel GridNeck =
+                new(
+                    GetLabelText("FACE_F_NAR_N"),
+                    GetLabelText("FACE_F_WIDE_N"),
+                    new PointF(_characterSkin.Face.Features[19], 0)
+                );
+
+            _mLstEyeBrowProfile.AddPanel(GridEyeBrowProfile);
+            _mLstEyes.AddPanel(GridEyes);
+            _mLstNosePosition.AddPanel(GridNosePosition);
+            _mLstNoseProfile.AddPanel(GridNoseProfile);
+            _mLstNoseThickness.AddPanel(GridNoseThickness);
+            _mLstCheekBones.AddPanel(GridCheekBones);
+            _mLstCheekShape.AddPanel(GridCheekShape);
+            _mLstLipThickness.AddPanel(GridLips);
+            _mLstJawProfile.AddPanel(GridJawProfile);
+            _mLstChinProfile.AddPanel(GridChinProfile);
+            _mLstChinShape.AddPanel(GridChinShape);
+            _mListNeckThickness.AddPanel(GridNeck);
+            _menuDetails.AddItem(_mLstEyeBrowProfile);
+            _menuDetails.AddItem(_mLstEyes);
+            _menuDetails.AddItem(_mLstNosePosition);
+            _menuDetails.AddItem(_mLstNoseProfile);
+            _menuDetails.AddItem(_mLstNoseThickness);
+            _menuDetails.AddItem(_mLstCheekBones);
+            _menuDetails.AddItem(_mLstCheekShape);
+            _menuDetails.AddItem(_mLstLipThickness);
+            _menuDetails.AddItem(_mLstJawProfile);
+            _menuDetails.AddItem(_mLstChinProfile);
+            _menuDetails.AddItem(_mLstChinShape);
+            _menuDetails.AddItem(_mListNeckThickness);
+
+            _menuDetails.OnGridPanelChange += (menu, panel, value) =>
+            {
+                if (menu == _mLstEyeBrowProfile)
+                {
+                    _characterSkin.Face.Features[7] = Common.Denormalize(value.X, -1f, 1f);
+                    _characterSkin.Face.Features[6] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstEyes)
+                {
+                    _characterSkin.Face.Features[11] = Common.Denormalize(-value.X, -1f, 1f);
+                }
+                else if (menu == _mLstNosePosition)
+                {
+                    _characterSkin.Face.Features[0] = Common.Denormalize(value.X, -1f, 1f);
+                    _characterSkin.Face.Features[1] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstNoseProfile)
+                {
+                    _characterSkin.Face.Features[2] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[3] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstNoseThickness)
+                {
+                    _characterSkin.Face.Features[5] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[4] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstCheekBones)
+                {
+                    _characterSkin.Face.Features[9] = Common.Denormalize(value.X, -1f, 1f);
+                    _characterSkin.Face.Features[8] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstCheekShape)
+                {
+                    _characterSkin.Face.Features[10] = Common.Denormalize(-value.X, -1f, 1f);
+                }
+                else if (menu == _mListNeckThickness)
+                {
+                    _characterSkin.Face.Features[19] = Common.Denormalize(value.X, -1f, 1f);
+                }
+                else if (menu == _mLstLipThickness)
+                {
+                    _characterSkin.Face.Features[12] = Common.Denormalize(-value.X, -1f, 1f);
+                }
+                else if (menu == _mLstJawProfile)
+                {
+                    _characterSkin.Face.Features[13] = Common.Denormalize(value.X, -1f, 1f);
+                    _characterSkin.Face.Features[14] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstChinProfile)
+                {
+                    _characterSkin.Face.Features[16] = Common.Denormalize(value.X, -1f, 1f);
+                    _characterSkin.Face.Features[15] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                else if (menu == _mLstChinShape)
+                {
+                    _characterSkin.Face.Features[17] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[18] = Common.Denormalize(value.Y, -1f, 1f);
+                }
+                UpdateFace(_playerPed.Handle, _characterSkin);
+            };
+
             #endregion
 
             #region Save and Exit
 
-            UIMenuItem miSaveAndExit = new UIMenuItem("Save Character", "This will save the character and throw you into the deepend.", HudColor.HUD_COLOUR_FREEMODE_DARK, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuItem miSaveAndExit = new UIMenuItem(
+                "Save Character",
+                "This will save the character and throw you into the deepend.",
+                HudColor.HUD_COLOUR_FREEMODE_DARK, HudColor.HUD_COLOUR_FREEMODE);
+            
             miSaveAndExit.SetRightBadge(BadgeIcon.TICK);
             _menuBase.AddItem(miSaveAndExit);
+            
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
                 await Interface.Hud.FadeOut(800);
@@ -361,7 +569,6 @@ namespace Curiosity.Framework.Client.Managers
 
             #endregion
 
-            Instance.AttachTickHandler(OnCharacterCreationWarningAsync);
             Instance.AttachTickHandler(OnCharacterCreationMenuControlsAsync);
 
             if (!_menuBase.Visible)
@@ -556,7 +763,7 @@ namespace Curiosity.Framework.Client.Managers
                 0f,
                 false
             );
-            
+
             //SetPedHeadOverlay(Handle, 0, skin.blemishes.style, skin.blemishes.opacity);
             //SetPedHeadOverlay(
             //    Handle,
@@ -597,8 +804,8 @@ namespace Curiosity.Framework.Client.Managers
             //SetPedComponentVariation(Handle, 2, skin.hair.style, 0, 0);
             //SetPedHairColor(Handle, skin.hair.color[0], skin.hair.color[1]);
             //SetPedPropIndex(Handle, 2, skin.ears.style, skin.ears.color, false);
-            //for (int i = 0; i < skin.face.tratti.Length; i++)
-            //    SetPedFaceFeature(Handle, i, skin.face.tratti[i]);
+            for (int i = 0; i < skin.Face.Features.Length; i++)
+                SetPedFaceFeature(Handle, i, skin.Face.Features[i]);
         }
     }
 }
