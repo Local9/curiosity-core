@@ -86,6 +86,11 @@ namespace Curiosity.Framework.Client.Utils
             IsAttached = false;
         }
 
+        internal void Reset()
+        {
+            IsAttached = false;
+        }
+
         private int CreateScaleformHandle(string name, int model)
         {
             var handle = 0;

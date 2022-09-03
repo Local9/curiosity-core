@@ -172,9 +172,6 @@ namespace Curiosity.Framework.Client.Managers
             if (!reload)
                 await LoadTransition.OnDownAsync();
 
-            if (Screen.Fading.IsFadedOut)
-                await Interface.Hud.FadeIn(800);
-
             RenderScriptCams(true, true, 0, false, false);
 
             _mainCamera = new Camera(CreateCam(DEFAULT_SCRIPTED_CAMERA, true));
@@ -202,7 +199,7 @@ namespace Curiosity.Framework.Client.Managers
             cam.InterpTo(_mainCamera, 5000, 1, 1);
 
             Interface.Hud.FadeIn(800);
-            await BaseScript.Delay(3000);
+            await BaseScript.Delay(2500);
 
             cam.Delete();
 
@@ -224,7 +221,7 @@ namespace Curiosity.Framework.Client.Managers
 
             #region Character Sex
             Logger.Debug($"Character Sex Selected: {gender}");
-            UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { "Male", "Female" }, (int)gender, "Select character sex");
+            UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { "Male", "Female" }, (int)gender, "Select character sex, any changes will be lost.");
             _menuBase.AddItem(mLstCharacterSex);
 
             mLstCharacterSex.OnListChanged += async (item, index) =>
@@ -233,8 +230,10 @@ namespace Curiosity.Framework.Client.Managers
                 Screen.Effects.Start(ScreenEffect.MpCelebWin);
                 await Interface.Hud.FadeOut(1000);
                 _menuBase.Clear();
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(1500);
                 Screen.Effects.Stop(ScreenEffect.MpCelebWin);
+
+                mugshotBoardAttachment.Reset();
 
                 Gender newGender = (Gender)index;
 
@@ -251,69 +250,25 @@ namespace Curiosity.Framework.Client.Managers
             };
             #endregion
 
-            _menuParents = Interface.Hud.MenuPool.AddSubMenu(
-                    _menuBase,
-                    GetLabelText("FACE_HERI"),
-                    GetLabelText("FACE_MM_H3")
-                );
+            _menuParents = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_HERI"), GetLabelText("FACE_MM_H3"));
             _menuParents.ControlDisablingEnabled = true;
-            _menuDetails = Interface.Hud.MenuPool.AddSubMenu(
-                _menuBase,
-                GetLabelText("FACE_FEAT"),
-                GetLabelText("FACE_MM_H4")
-            );
+            _menuDetails = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_FEAT"), GetLabelText("FACE_MM_H4"));
             _menuDetails.ControlDisablingEnabled = true;
-            _menuAppearance = Interface.Hud.MenuPool.AddSubMenu(
-                _menuBase,
-                GetLabelText("FACE_APP"),
-                GetLabelText("FACE_MM_H6")
-            );
+            _menuAppearance = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APP"), GetLabelText("FACE_MM_H6"));
             _menuAppearance.ControlDisablingEnabled = true;
-            _menuApparel = Interface.Hud.MenuPool.AddSubMenu(
-                _menuBase,
-                GetLabelText("FACE_APPA"),
-                GetLabelText("FACE_APPA_H")
-            );
+            _menuApparel = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APPA"), GetLabelText("FACE_APPA_H"));
             _menuApparel.ControlDisablingEnabled = true;
-            _menuAdvancedApparel = Interface.Hud.MenuPool.AddSubMenu(
-                _menuBase,
-                $"Adv. {GetLabelText("FACE_APPA")}",
-                GetLabelText("FACE_APPA_H")
-            );
+            _menuAdvancedApparel = Interface.Hud.MenuPool.AddSubMenu(_menuBase, $"Adv. {GetLabelText("FACE_APPA")}", GetLabelText("FACE_APPA_H"));
             _menuAdvancedApparel.ControlDisablingEnabled = true;
-            _menuStats = Interface.Hud.MenuPool.AddSubMenu(
-                _menuBase,
-                GetLabelText("FACE_STATS"),
-                GetLabelText("FACE_MM_H5")
-            );
+            _menuStats = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_STATS"), GetLabelText("FACE_MM_H5"));
 
-            InstructionalButton btnLookLeftOrRight = new InstructionalButton(
-                Control.LookLeftRight,
-                "Look Right/Left"
-            );
-
-            InstructionalButton btnRandomise = new InstructionalButton(
-                Control.Context,
-                "Randomise"
-            );
-
-            InstructionalButton btnLookLeft = new InstructionalButton(
-                Control.FrontendLb,
-                "Look Left"
-            );
-            InstructionalButton btnLookRight = new InstructionalButton(
-                Control.FrontendRb,
-                "Look Right"
-            );
-            InstructionalButton button4 = new InstructionalButton(
-                InputGroup.INPUTGROUP_LOOK,
-                "Change details"
-            );
-            InstructionalButton button5 = new InstructionalButton(
-                InputGroup.INPUTGROUP_LOOK,
-                "Manage Panels",
-                ScaleformUI.PadCheck.Keyboard
-            );
+            InstructionalButton btnLookLeftOrRight = new InstructionalButton(Control.LookLeftRight, "Look Right/Left");
+            InstructionalButton btnRandomise = new InstructionalButton(Control.FrontendDelete, "Randomise");
+            InstructionalButton btnLookLeft = new InstructionalButton(Control.FrontendLb, "Look Left");
+            InstructionalButton btnLookRight = new InstructionalButton(Control.FrontendRb, "Look Right");
+            InstructionalButton button4 = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change details");
+            InstructionalButton button5 = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Manage Panels", ScaleformUI.PadCheck.Keyboard);
+            
             _menuBase.InstructionalButtons.Add(btnLookRight);
             _menuBase.InstructionalButtons.Add(btnLookLeft);
             _menuParents.InstructionalButtons.Add(btnLookRight);
@@ -328,10 +283,7 @@ namespace Curiosity.Framework.Client.Managers
 
             #region Parents
 
-            _heritageWindow = new UIMenuHeritageWindow(
-                    _characterSkin.Face.Mother,
-                    _characterSkin.Face.Father
-                );
+            _heritageWindow = new UIMenuHeritageWindow(_characterSkin.Face.Mother, _characterSkin.Face.Father);
             _menuParents.AddWindow(_heritageWindow);
             List<dynamic> lista = new List<dynamic>();
             for (int i = 0; i < 101; i++)
@@ -414,6 +366,9 @@ namespace Curiosity.Framework.Client.Managers
 
             if (!_menuBase.Visible)
                 _menuBase.Visible = true;
+
+            if (Screen.LoadingPrompt.IsActive)
+                Screen.LoadingPrompt.Hide();
         }
 
         float _gridPanelCoordX;
@@ -423,7 +378,7 @@ namespace Curiosity.Framework.Client.Managers
 
         int _frontendLeftBumper = (int)Control.FrontendLb; // 205
         int _frontendRightBumper = (int)Control.FrontendRb; // 206
-        int _context = (int)Control.Context; // 206
+        int _frontendDelete = (int)Control.FrontendDelete; // 206
 
         bool IsControlLeftBumperPressed => (IsControlPressed(0, _frontendLeftBumper) || IsDisabledControlPressed(0, _frontendLeftBumper)) && IsInputDisabled(2)
             || (IsControlPressed(2, _frontendLeftBumper) || IsDisabledControlPressed(2, _frontendLeftBumper)) && !IsInputDisabled(2);
@@ -431,15 +386,15 @@ namespace Curiosity.Framework.Client.Managers
         bool IsControlRightBumperPressed => (IsControlPressed(0, _frontendRightBumper) || IsDisabledControlPressed(0, _frontendRightBumper)) && IsInputDisabled(2)
                     || (IsControlPressed(2, _frontendRightBumper) || IsDisabledControlPressed(2, _frontendRightBumper)) && !IsInputDisabled(2);
 
-        bool IsControlContextPressed => (IsControlPressed(0, _context) || IsDisabledControlPressed(0, _context)) && IsInputDisabled(2)
-            || (IsControlPressed(2, _context) || IsDisabledControlPressed(2, _context)) && !IsInputDisabled(2);
+        bool IsControlFrontendDeletePressed => (IsControlPressed(0, _frontendDelete) || IsDisabledControlPressed(0, _frontendDelete)) && IsInputDisabled(2)
+            || (IsControlPressed(2, _frontendDelete) || IsDisabledControlPressed(2, _frontendDelete)) && !IsInputDisabled(2);
 
         public async Task OnCharacterCreationMenuControlsAsync()
         {
             _playerPed = Game.PlayerPed;
             if (_menuBase.Visible || _menuDetails.Visible || _menuAppearance.Visible || _menuParents.Visible)
             {
-                if (IsControlContextPressed)
+                if (IsControlFrontendDeletePressed && _menuParents.Visible)
                 {
                     RandomiseCharacterParents();
                     await BaseScript.Delay(500);
@@ -490,13 +445,13 @@ namespace Curiosity.Framework.Client.Managers
                     "All changes will be lost and you will be returned to character selection.",
                     new List<InstructionalButton>()
                     {
-                        new InstructionalButton(Control.FrontendCancel, "No"),
+                        new InstructionalButton(Control.FrontendDelete, "No"),
                         new InstructionalButton(Control.FrontendAccept, "Yes"),
                     }
                 );
                 ScaleformUI.ScaleformUI.Warning.OnButtonPressed += async (action) =>
                 {
-                    if (action.GamepadButton == Control.FrontendCancel)
+                    if (action.GamepadButton == Control.FrontendDelete)
                     { 
                         // TODO: Deal with pause menu
                         Instance.DetachTickHandler(OnCharacterCreationWarningAsync);
