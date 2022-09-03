@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core.UI;
 using ScaleformUI;
 
-namespace Curiosity.Framework.Client.Interface
+namespace Curiosity.Framework.Client.GameInterface
 {
     public class Hud
     {
