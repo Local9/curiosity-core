@@ -563,7 +563,7 @@ namespace Curiosity.Framework.Client.Managers
                         {
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Alte":
+                                case "High":
                                     _characterSkin.Face.Features[6] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -577,7 +577,7 @@ namespace Curiosity.Framework.Client.Managers
                                             0.00001f
                                         );
                                     break;
-                                case "Basse":
+                                case "Low":
                                     _characterSkin.Face.Features[6] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -619,7 +619,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexEyes != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Grandi":
+                                case "Great":
                                     _characterSkin.Face.Features[11] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -634,7 +634,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Stretti":
+                                case "Tight":
                                     _characterSkin.Face.Features[11] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -672,7 +672,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexNosePosition != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Piccolo":
+                                case "Small":
                                     _characterSkin.Face.Features[0] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -687,7 +687,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Grande":
+                                case "Great":
                                     _characterSkin.Face.Features[0] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -726,7 +726,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexNoseProfile != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Breve":
+                                case "Short":
                                     _characterSkin.Face.Features[2] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -741,7 +741,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Lungo":
+                                case "Long":
                                     _characterSkin.Face.Features[2] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -780,7 +780,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexNoseThickness != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Punta su":
+                                case "Point Up":
                                     _characterSkin.Face.Features[5] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -795,7 +795,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Punta giù":
+                                case "Point Down":
                                     _characterSkin.Face.Features[5] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -834,7 +834,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexCheekbones != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "In dentro":
+                                case "In":
                                     _characterSkin.Face.Features[8] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -849,7 +849,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "In fuori":
+                                case "Out":
                                     _characterSkin.Face.Features[8] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -888,7 +888,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexCheekShape != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Paffute":
+                                case "Gaunt":
                                     _characterSkin.Face.Features[10] = 0.00001f;
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -899,7 +899,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Magre":
+                                case "Puffed":
                                     _characterSkin.Face.Features[10] = 0.999999f;
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -927,66 +927,13 @@ namespace Curiosity.Framework.Client.Managers
                     _characterSkin.Face.Features[10] = Common.Denormalize(-var.X, -1, 1);
                 }
 
-                if (_listItem == _mLstNeckThickness)
-                {
-                    if (!(IsControlPressed(0, 24) || IsDisabledControlPressed(0, 24)))
-                        if (oldIndexNeckThickness != _newIndex)
-                            switch (_listItem.Items[_newIndex])
-                            {
-                                case "Stretto":
-                                    _characterSkin.Face.Features[19] = Common.Denormalize(
-                                        0f,
-                                        -1f,
-                                        1
-                                    );
-                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
-                                        new PointF(
-                                            0.00001f,
-                                            (_listItem.Panels[0] as UIMenuGridPanel)
-                                                .CirclePosition
-                                                .Y
-                                        );
-
-                                    break;
-                                case "Largo":
-                                    _characterSkin.Face.Features[19] = Common.Denormalize(1, -1, 1);
-                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
-                                        new PointF(
-                                            0.999999f,
-                                            (_listItem.Panels[0] as UIMenuGridPanel)
-                                                .CirclePosition
-                                                .Y
-                                        );
-
-                                    break;
-                                case "Standard":
-                                    _characterSkin.Face.Features[19] = Common.Denormalize(
-                                        0.5f,
-                                        -1,
-                                        1
-                                    );
-                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
-                                        new PointF(
-                                            0.5f,
-                                            (_listItem.Panels[0] as UIMenuGridPanel)
-                                                .CirclePosition
-                                                .Y
-                                        );
-
-                                    break;
-                            }
-
-                    PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
-                    _characterSkin.Face.Features[19] = Common.Denormalize(var.X, -1, 1);
-                }
-
                 if (_listItem == _mLstLipThickness)
                 {
                     if (!(IsControlPressed(0, 24) || IsDisabledControlPressed(0, 24)))
                         if (OldIndexLipThickness != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Sottili":
+                                case "Thin":
                                     _characterSkin.Face.Features[12] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -1001,7 +948,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Carnose":
+                                case "Thick":
                                     _characterSkin.Face.Features[12] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -1039,7 +986,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexJawProfile != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Stretta":
+                                case "Narrow":
                                     _characterSkin.Face.Features[14] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -1054,7 +1001,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "Larga":
+                                case "Wide":
                                     _characterSkin.Face.Features[14] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -1093,7 +1040,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexChinProfile != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "In dentro":
+                                case "In":
                                     _characterSkin.Face.Features[15] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -1108,7 +1055,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "In fuori":
+                                case "Out":
                                     _characterSkin.Face.Features[15] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -1147,7 +1094,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (oldIndexChinShape != _newIndex)
                             switch (_listItem.Items[_newIndex])
                             {
-                                case "Squadrato":
+                                case "Squared":
                                     _characterSkin.Face.Features[17] = Common.Denormalize(
                                         0f,
                                         -1f,
@@ -1162,7 +1109,7 @@ namespace Curiosity.Framework.Client.Managers
                                         );
 
                                     break;
-                                case "A punta":
+                                case "Pointed":
                                     _characterSkin.Face.Features[17] = Common.Denormalize(1, -1, 1);
                                     (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
                                         new PointF(
@@ -1193,6 +1140,59 @@ namespace Curiosity.Framework.Client.Managers
                     PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
                     _characterSkin.Face.Features[18] = Common.Denormalize(-var.X, -1, 1);
                     _characterSkin.Face.Features[17] = Common.Denormalize(var.Y, -1, 1);
+                }
+
+                if (_listItem == _mLstNeckThickness)
+                {
+                    if (!(IsControlPressed(0, 24) || IsDisabledControlPressed(0, 24)))
+                        if (oldIndexNeckThickness != _newIndex)
+                            switch (_listItem.Items[_newIndex])
+                            {
+                                case "Thin":
+                                    _characterSkin.Face.Features[19] = Common.Denormalize(
+                                        0f,
+                                        -1f,
+                                        1
+                                    );
+                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
+                                        new PointF(
+                                            0.00001f,
+                                            (_listItem.Panels[0] as UIMenuGridPanel)
+                                                .CirclePosition
+                                                .Y
+                                        );
+
+                                    break;
+                                case "Thick":
+                                    _characterSkin.Face.Features[19] = Common.Denormalize(1, -1, 1);
+                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
+                                        new PointF(
+                                            0.999999f,
+                                            (_listItem.Panels[0] as UIMenuGridPanel)
+                                                .CirclePosition
+                                                .Y
+                                        );
+
+                                    break;
+                                case "Standard":
+                                    _characterSkin.Face.Features[19] = Common.Denormalize(
+                                        0.5f,
+                                        -1,
+                                        1
+                                    );
+                                    (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition =
+                                        new PointF(
+                                            0.5f,
+                                            (_listItem.Panels[0] as UIMenuGridPanel)
+                                                .CirclePosition
+                                                .Y
+                                        );
+
+                                    break;
+                            }
+
+                    PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
+                    _characterSkin.Face.Features[19] = Common.Denormalize(var.X, -1, 1);
                 }
 
                 UpdateFace(_playerPed.Handle, _characterSkin);
