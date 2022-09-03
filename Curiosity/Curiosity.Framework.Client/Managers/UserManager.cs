@@ -193,7 +193,7 @@ namespace Curiosity.Framework.Client.Managers
             SetCamDofMaxNearInFocusDistanceBlendLevel(cam.Handle, 1f);
             cam.InterpTo(_mainCamera, 5000, 1, 1);
 
-            Interface.Hud.FadeIn(800);
+            GameInterface.Hud.FadeIn(800);
             await BaseScript.Delay(2500);
 
             cam.Delete();
@@ -205,14 +205,14 @@ namespace Curiosity.Framework.Client.Managers
 
         public async void OnCharacterCreationMenuAsync(Gender gender)
         {
-            await Interface.Hud.FadeIn(800);
+            await GameInterface.Hud.FadeIn(800);
             Point offset = new Point(50, 50);
-            Interface.Hud.MenuPool.MouseEdgeEnabled = false;
+            GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
             _menuBase = new("Character Creator", "Create a new Character", offset)
             {
                 ControlDisablingEnabled = true
             };
-            Interface.Hud.MenuPool.Add(_menuBase);
+            GameInterface.Hud.MenuPool.Add(_menuBase);
 
             #region Character Sex
             Logger.Debug($"Character Sex Selected: {gender}");
@@ -221,9 +221,9 @@ namespace Curiosity.Framework.Client.Managers
 
             mLstCharacterSex.OnListChanged += async (item, index) =>
             {
-                Interface.Hud.MenuPool.CloseAllMenus();
+                GameInterface.Hud.MenuPool.CloseAllMenus();
                 Screen.Effects.Start(ScreenEffect.MpCelebWin);
-                await Interface.Hud.FadeOut(1000);
+                await GameInterface.Hud.FadeOut(1000);
                 _menuBase.Clear();
                 await BaseScript.Delay(1500);
                 Screen.Effects.Stop(ScreenEffect.MpCelebWin);
@@ -245,17 +245,17 @@ namespace Curiosity.Framework.Client.Managers
             };
             #endregion
 
-            _menuParents = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_HERI"), GetLabelText("FACE_MM_H3"));
+            _menuParents = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_HERI"), GetLabelText("FACE_MM_H3"));
             _menuParents.ControlDisablingEnabled = true;
-            _menuDetails = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_FEAT"), GetLabelText("FACE_MM_H4"));
+            _menuDetails = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_FEAT"), GetLabelText("FACE_MM_H4"));
             _menuDetails.ControlDisablingEnabled = true;
-            _menuAppearance = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APP"), GetLabelText("FACE_MM_H6"));
+            _menuAppearance = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APP"), GetLabelText("FACE_MM_H6"));
             _menuAppearance.ControlDisablingEnabled = true;
-            _menuApparel = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APPA"), GetLabelText("FACE_APPA_H"));
+            _menuApparel = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APPA"), GetLabelText("FACE_APPA_H"));
             _menuApparel.ControlDisablingEnabled = true;
-            _menuAdvancedApparel = Interface.Hud.MenuPool.AddSubMenu(_menuBase, $"Adv. {GetLabelText("FACE_APPA")}", GetLabelText("FACE_APPA_H"));
+            _menuAdvancedApparel = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, $"Adv. {GetLabelText("FACE_APPA")}", GetLabelText("FACE_APPA_H"));
             _menuAdvancedApparel.ControlDisablingEnabled = true;
-            _menuStats = Interface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_STATS"), GetLabelText("FACE_MM_H5"));
+            _menuStats = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_STATS"), GetLabelText("FACE_MM_H5"));
             _menuStats.ControlDisablingEnabled = true;
 
             InstructionalButton btnLookLeftOrRight = new InstructionalButton(Control.LookLeftRight, "Look Right/Left");
@@ -276,6 +276,32 @@ namespace Curiosity.Framework.Client.Managers
             _menuDetails.InstructionalButtons.Add(btnLookRight);
             _menuDetails.InstructionalButtons.Add(btnLookLeft);
             _menuDetails.InstructionalButtons.Add(button4);
+
+            #region Menu Change States
+
+            GameInterface.Hud.MenuPool.OnMenuStateChanged += async (_oldMenu, _newMenu, _state) =>
+            {
+                switch (_state)
+                {
+                    case MenuState.ChangeForward:
+                        if (_newMenu == _menuParents || _newMenu == _menuDetails || _newMenu == _menuAppearance)
+                            AnimateGameplayCamZoom(true, _mainCamera);
+
+                        // Add menu settings for Apperance
+                        break;
+                    case MenuState.ChangeBackward when _oldMenu == _menuParents || _oldMenu == _menuDetails || _oldMenu == _menuAppearance:
+                        AnimateGameplayCamZoom(false, _mainCamera);
+                        break;
+                    case MenuState.ChangeBackward:
+                        if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
+                        {
+                            _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
+                        }
+                        break;
+                }
+            };
+
+            #endregion
 
             #region Parents
 
@@ -876,9 +902,9 @@ namespace Curiosity.Framework.Client.Managers
             
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
-                await Interface.Hud.FadeOut(800);
+                await GameInterface.Hud.FadeOut(800);
                 _menuBase.Visible = false;
-                Interface.Hud.MenuPool.CloseAllMenus();
+                GameInterface.Hud.MenuPool.CloseAllMenus();
                 Game.PlayerPed.Detach();
 
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
@@ -967,7 +993,7 @@ namespace Curiosity.Framework.Client.Managers
 
             if (_menuBase.Visible && _menuBase.HasControlJustBeenPressed(UIMenu.MenuControls.Back))
             {
-                Interface.Hud.MenuPool.CloseAllMenus();
+                GameInterface.Hud.MenuPool.CloseAllMenus();
                 ScaleformUI.ScaleformUI.Warning.ShowWarningWithButtons(
                     "Cancel Character Creation",
                     "Are you sure you want to Cancel Character Creation?",
@@ -990,13 +1016,13 @@ namespace Curiosity.Framework.Client.Managers
                     }
                     else if (action.GamepadButton == Control.FrontendAccept)
                     {
-                        await Interface.Hud.FadeOut(1000);
+                        await GameInterface.Hud.FadeOut(1000);
 
                         Instance.DetachTickHandler(OnCharacterCreationWarningAsync);
                         Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
 
                         _menuBase.Visible = false;
-                        Interface.Hud.MenuPool.CloseAllMenus();
+                        GameInterface.Hud.MenuPool.CloseAllMenus();
                         
                         RenderScriptCams(false, false, 300, false, false);
                     }
@@ -1128,6 +1154,45 @@ namespace Curiosity.Framework.Client.Managers
             //SetPedPropIndex(Handle, 2, skin.ears.style, skin.ears.color, false);
             for (int i = 0; i < skin.Face.Features.Length; i++)
                 SetPedFaceFeature(Handle, i, skin.Face.Features[i]);
+        }
+
+        private static Camera ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
+
+        async void AnimateGameplayCamZoom(bool toggle, Camera ncam)
+        {
+            if (toggle)
+            {
+                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
+                ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
+                ncamm.Position = new Vector3(402.6746f, -1000.129f, -98.46554f);
+                ncamm.Rotation = new Vector3(0.861356f, 0f, -2.348183f);
+                _playerPed.IsVisible = true;
+                ncamm.FieldOfView = 10.00255f;
+                ncamm.IsActive = true;
+                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
+                ncam.InterpTo(ncamm, 300, 1, 1);
+                Game.PlaySound("Zoom_In", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
+                while (ncam.IsInterpolating)
+                    await BaseScript.Delay(0);
+            }
+            else
+            {
+                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
+                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
+                ncamm.InterpTo(ncam, 300, 1, 1);
+                ncamm.Delete();
+                Game.PlaySound("Zoom_Out", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
+                while (ncam.IsInterpolating)
+                    await BaseScript.Delay(0);
+            }
+        }
+
+        static void SetGenericeCameraSettings(int cameraHandle, float fParam1, float fParam2, float dofLens, float dofBlend)
+        {
+            N_0xf55e4046f6f831dc(cameraHandle, fParam1);
+            N_0xe111a7c0d200cbc5(cameraHandle, fParam2);
+            SetCamDofFnumberOfLens(cameraHandle, dofLens);
+            SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
         }
     }
 }
