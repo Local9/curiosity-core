@@ -15,7 +15,7 @@ namespace Curiosity.Framework.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
-        public Interface.Hud Hud;
+        public GameInterface.Hud Hud;
 
         //   public readonly DiscordRichPresence DiscordRichPresence =
         //new DiscordRichPresence(
