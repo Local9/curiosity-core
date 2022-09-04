@@ -300,7 +300,7 @@
             GetLabelText("FACE_E_C_8")
         };
 
-        public static List<dynamic> EyeMakup = new List<dynamic>()
+        public static List<dynamic> Makeup = new List<dynamic>()
         {
             GetLabelText("FACE_F_P_OFF"),
             GetLabelText("CC_MKUP_0"),

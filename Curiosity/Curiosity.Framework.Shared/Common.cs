@@ -24,5 +24,8 @@
         {
             return (normalized * (max - min) + min);
         }
+
+        // Denormalize a value with min and max
+
     }
 }

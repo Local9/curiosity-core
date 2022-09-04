@@ -11,5 +11,14 @@
 
         [JsonProperty("face")]
         public Face Face { get; internal set; } = new();
+
+        [JsonProperty("age")]
+        public A2 Age;
+
+        [JsonProperty("hair")]
+        public Hair Hair;
+
+        [JsonProperty("ears")]
+        public Ears Ears;
     }
 }

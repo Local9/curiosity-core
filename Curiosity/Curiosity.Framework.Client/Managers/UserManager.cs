@@ -28,7 +28,7 @@ namespace Curiosity.Framework.Client.Managers
         // Menu Items
         UIMenu _menuBase = new UIMenu("", "", true);
         UIMenu _menuParents = new UIMenu("", "", true);
-        UIMenu _menuDetails = new UIMenu("", "", true);
+        UIMenu _menuFeatures = new UIMenu("", "", true);
         UIMenu _menuAppearance = new UIMenu("", "", true);
         UIMenu _menuApparel = new UIMenu("", "", true);
         UIMenu _menuAdvancedApparel = new UIMenu("", "", true);
@@ -247,8 +247,8 @@ namespace Curiosity.Framework.Client.Managers
 
             _menuParents = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_HERI"), GetLabelText("FACE_MM_H3"));
             _menuParents.ControlDisablingEnabled = true;
-            _menuDetails = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_FEAT"), GetLabelText("FACE_MM_H4"));
-            _menuDetails.ControlDisablingEnabled = true;
+            _menuFeatures = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_FEAT"), GetLabelText("FACE_MM_H4"));
+            _menuFeatures.ControlDisablingEnabled = true;
             _menuAppearance = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APP"), GetLabelText("FACE_MM_H6"));
             _menuAppearance.ControlDisablingEnabled = true;
             _menuApparel = GameInterface.Hud.MenuPool.AddSubMenu(_menuBase, GetLabelText("FACE_APPA"), GetLabelText("FACE_APPA_H"));
@@ -263,19 +263,24 @@ namespace Curiosity.Framework.Client.Managers
             InstructionalButton btnLookLeft = new InstructionalButton(Control.FrontendLb, "Look Left");
             InstructionalButton btnLookRight = new InstructionalButton(Control.FrontendRb, "Look Right");
             InstructionalButton button4 = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change details");
-            InstructionalButton button5 = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Manage Panels", ScaleformUI.PadCheck.Keyboard);
+            InstructionalButton btnMouse = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Manage Panels", ScaleformUI.PadCheck.Keyboard);
             
             _menuBase.InstructionalButtons.Add(btnLookRight);
             _menuBase.InstructionalButtons.Add(btnLookLeft);
+
             _menuParents.InstructionalButtons.Add(btnLookRight);
             _menuParents.InstructionalButtons.Add(btnLookLeft);
             _menuParents.InstructionalButtons.Add(btnRandomise);
+
             _menuAppearance.InstructionalButtons.Add(btnLookRight);
             _menuAppearance.InstructionalButtons.Add(btnLookLeft);
-            _menuAppearance.InstructionalButtons.Add(button5);
-            _menuDetails.InstructionalButtons.Add(btnLookRight);
-            _menuDetails.InstructionalButtons.Add(btnLookLeft);
-            _menuDetails.InstructionalButtons.Add(button4);
+            _menuAppearance.InstructionalButtons.Add(btnMouse);
+            _menuAppearance.InstructionalButtons.Add(btnRandomise);
+
+            _menuFeatures.InstructionalButtons.Add(btnLookRight);
+            _menuFeatures.InstructionalButtons.Add(btnLookLeft);
+            _menuFeatures.InstructionalButtons.Add(button4);
+            _menuFeatures.InstructionalButtons.Add(btnRandomise);
 
             #region Menu Change States
 
@@ -284,19 +289,18 @@ namespace Curiosity.Framework.Client.Managers
                 switch (_state)
                 {
                     case MenuState.ChangeForward:
-                        if (_newMenu == _menuParents || _newMenu == _menuDetails || _newMenu == _menuAppearance)
+                        if (_newMenu == _menuParents || _newMenu == _menuFeatures || _newMenu == _menuAppearance)
                             AnimateGameplayCamZoom(true, _mainCamera);
 
-                        // Add menu settings for Apperance
+                        if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
+                            _playerPed.TaskCreaClothes(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
                         break;
-                    case MenuState.ChangeBackward when _oldMenu == _menuParents || _oldMenu == _menuDetails || _oldMenu == _menuAppearance:
+                    case MenuState.ChangeBackward when _oldMenu == _menuParents || _oldMenu == _menuFeatures || _oldMenu == _menuAppearance:
                         AnimateGameplayCamZoom(false, _mainCamera);
                         break;
                     case MenuState.ChangeBackward:
                         if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
-                        {
                             _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
-                        }
                         break;
                 }
             };
@@ -398,7 +402,7 @@ namespace Curiosity.Framework.Client.Managers
 
             UIMenuGridPanel GridEyeBrowProfile = new(_detailBrowUp, GetLabelText("FACE_F_IN_B"), GetLabelText("FACE_F_OUT_B"), _detailBrowDown,
                 new PointF(_characterSkin.Face.Features[7], _characterSkin.Face.Features[6]));
-            UIMenuGridPanel GridEyes = new(_detailEyeSquint, _detailEyeWideOpen, new PointF(_characterSkin.Face.Features[11], 0));
+            UIMenuGridPanel GridEyes = new(_detailEyeWideOpen, _detailEyeSquint, new PointF(_characterSkin.Face.Features[11], 0));
             UIMenuGridPanel GridNose = new(GetLabelText("FACE_F_UP_N"), _detailNoseNarrow, _detailNoseWide, GetLabelText("FACE_F_DOWN_N"),
                 new PointF(_characterSkin.Face.Features[0], _characterSkin.Face.Features[1]));
             UIMenuGridPanel GridNoseProfile = new(GetLabelText("FACE_F_CROOK"), _detailNoseProfileShort, _detailNoseProfileLong, GetLabelText("FACE_F_CURV"),
@@ -407,8 +411,8 @@ namespace Curiosity.Framework.Client.Managers
                 new PointF(_characterSkin.Face.Features[5], _characterSkin.Face.Features[4]));
             UIMenuGridPanel GridCheekBones = new(GetLabelText("FACE_F_UP_CHEE"), _detailCheekBoneIn, _detailCheekBoneOut, GetLabelText("FACE_F_DOWN_C"),
                 new PointF(_characterSkin.Face.Features[9], _characterSkin.Face.Features[8]));
-            UIMenuGridPanel GridCheekShape = new(_detailCheekShapeGaunt, _detailCheekShapePuffed, new PointF(_characterSkin.Face.Features[10], 0));
-            UIMenuGridPanel GridLips = new(_detailLipThin, _detailLipThick, new PointF(_characterSkin.Face.Features[12], 0));
+            UIMenuGridPanel GridCheekShape = new(_detailCheekShapePuffed, _detailCheekShapeGaunt, new PointF(_characterSkin.Face.Features[10], 0));
+            UIMenuGridPanel GridLips = new(_detailLipThick, _detailLipThin, new PointF(_characterSkin.Face.Features[12], 0));
             UIMenuGridPanel GridJawProfile = new(GetLabelText("FACE_F_RND"), _detailJawNarrow, _detailJawWide, GetLabelText("FACE_F_SQ_J"),
                 new PointF(_characterSkin.Face.Features[13], _characterSkin.Face.Features[14]));
             UIMenuGridPanel GridChinProfile = new(GetLabelText("FACE_F_UP_CHIN"), _detailChinIn, _detailChinOut, GetLabelText("FACE_F_DOWN_CH"),
@@ -429,20 +433,20 @@ namespace Curiosity.Framework.Client.Managers
             _mLstChinProfile.AddPanel(GridChinProfile);
             _mLstChinShape.AddPanel(GridChinShape);
             _mLstNeckThickness.AddPanel(GridNeck);
-            _menuDetails.AddItem(_mLstEyeBrowProfile);
-            _menuDetails.AddItem(_mLstEyes);
-            _menuDetails.AddItem(_mLstNose);
-            _menuDetails.AddItem(_mLstNoseProfile);
-            _menuDetails.AddItem(_mLstNoseTip);
-            _menuDetails.AddItem(_mLstCheekBones);
-            _menuDetails.AddItem(_mLstCheekShape);
-            _menuDetails.AddItem(_mLstLipThickness);
-            _menuDetails.AddItem(_mLstJawProfile);
-            _menuDetails.AddItem(_mLstChinProfile);
-            _menuDetails.AddItem(_mLstChinShape);
-            _menuDetails.AddItem(_mLstNeckThickness);
+            _menuFeatures.AddItem(_mLstEyeBrowProfile);
+            _menuFeatures.AddItem(_mLstEyes);
+            _menuFeatures.AddItem(_mLstNose);
+            _menuFeatures.AddItem(_mLstNoseProfile);
+            _menuFeatures.AddItem(_mLstNoseTip);
+            _menuFeatures.AddItem(_mLstCheekBones);
+            _menuFeatures.AddItem(_mLstCheekShape);
+            _menuFeatures.AddItem(_mLstLipThickness);
+            _menuFeatures.AddItem(_mLstJawProfile);
+            _menuFeatures.AddItem(_mLstChinProfile);
+            _menuFeatures.AddItem(_mLstChinShape);
+            _menuFeatures.AddItem(_mLstNeckThickness);
 
-            _menuDetails.OnGridPanelChange += (menu, panel, value) =>
+            _menuFeatures.OnGridPanelChange += (menu, panel, value) =>
             {
                 if (menu == _mLstEyeBrowProfile)
                 {
@@ -451,7 +455,7 @@ namespace Curiosity.Framework.Client.Managers
                 }
                 else if (menu == _mLstEyes)
                 {
-                    _characterSkin.Face.Features[11] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[11] = Common.Denormalize(value.X, -1f, 1f);
                 }
                 else if (menu == _mLstNose)
                 {
@@ -475,7 +479,7 @@ namespace Curiosity.Framework.Client.Managers
                 }
                 else if (menu == _mLstCheekShape)
                 {
-                    _characterSkin.Face.Features[10] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[10] = Common.Denormalize(value.X, -1f, 1f);
                 }
                 else if (menu == _mLstNeckThickness)
                 {
@@ -483,7 +487,7 @@ namespace Curiosity.Framework.Client.Managers
                 }
                 else if (menu == _mLstLipThickness)
                 {
-                    _characterSkin.Face.Features[12] = Common.Denormalize(-value.X, -1f, 1f);
+                    _characterSkin.Face.Features[12] = Common.Denormalize(value.X, -1f, 1f);
                 }
                 else if (menu == _mLstJawProfile)
                 {
@@ -516,7 +520,7 @@ namespace Curiosity.Framework.Client.Managers
             int _oldIndexChinShape = 0;
             int _oldIndexNeckThickness = 0;
 
-            _menuDetails.OnListChange += async (_sender, _listItem, _newIndex) =>
+            _menuFeatures.OnListChange += (_sender, _listItem, _newIndex) =>
             {
                 string itemValue = $"{_listItem.Items[_newIndex]}";
                 
@@ -556,12 +560,12 @@ namespace Curiosity.Framework.Client.Managers
                     {
                         if (_oldIndexEyes != _newIndex)
                         {
-                            if (itemValue == _detailEyeSquint)
+                            if (itemValue == _detailEyeWideOpen)
                             {
                                 _characterSkin.Face.Features[11] = Common.Denormalize(0f, -1f, 1);
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.00001f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
                             }
-                            else if (itemValue == _detailEyeWideOpen)
+                            else if (itemValue == _detailEyeSquint)
                             {
                                 _characterSkin.Face.Features[11] = Common.Denormalize(1, -1, 1);
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.999999f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
@@ -576,7 +580,7 @@ namespace Curiosity.Framework.Client.Managers
                         }
                     }
                     PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
-                    _characterSkin.Face.Features[11] = Common.Denormalize(-var.X, -1, 1);
+                    _characterSkin.Face.Features[11] = Common.Denormalize(var.X, -1, 1);
                 }
 
                 if (_listItem == _mLstNose)
@@ -708,12 +712,12 @@ namespace Curiosity.Framework.Client.Managers
                     {
                         if (_oldIndexCheekShape != _newIndex)
                         {
-                            if (itemValue == _detailCheekShapeGaunt)
+                            if (itemValue == _detailCheekShapePuffed)
                             {
                                 _characterSkin.Face.Features[10] = 0.00001f;
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.00001f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
                             }
-                            else if (itemValue == _detailCheekShapePuffed)
+                            else if (itemValue == _detailCheekShapeGaunt)
                             {
                                 _characterSkin.Face.Features[10] = 0.999999f;
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.999999f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
@@ -729,7 +733,7 @@ namespace Curiosity.Framework.Client.Managers
                     }
 
                     PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
-                    _characterSkin.Face.Features[10] = Common.Denormalize(-var.X, -1, 1);
+                    _characterSkin.Face.Features[10] = Common.Denormalize(var.X, -1f, 1f);
                 }
 
                 if (_listItem == _mLstLipThickness)
@@ -738,12 +742,12 @@ namespace Curiosity.Framework.Client.Managers
                     {
                         if (_oldIndexLipThickness != _newIndex)
                         {
-                            if (itemValue == _detailLipThin)
+                            if (itemValue == _detailLipThick)
                             {
                                 _characterSkin.Face.Features[12] = Common.Denormalize(0f, -1f, 1);
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.00001f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
                             }
-                            else if (itemValue == _detailLipThick)
+                            else if (itemValue == _detailLipThin)
                             {
                                 _characterSkin.Face.Features[12] = Common.Denormalize(1, -1, 1);
                                 (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(0.999999f, (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition.Y);
@@ -759,7 +763,7 @@ namespace Curiosity.Framework.Client.Managers
                     }
 
                     PointF var = (_listItem.Panels[0] as UIMenuGridPanel).CirclePosition;
-                    _characterSkin.Face.Features[12] = Common.Denormalize(-var.X, -1, 1);
+                    _characterSkin.Face.Features[12] = Common.Denormalize(var.X, -1, 1);
                 }
 
                 if (_listItem == _mLstJawProfile)
@@ -947,11 +951,19 @@ namespace Curiosity.Framework.Client.Managers
         public async Task OnCharacterCreationMenuControlsAsync()
         {
             _playerPed = Game.PlayerPed;
-            if (_menuBase.Visible || _menuDetails.Visible || _menuAppearance.Visible || _menuParents.Visible)
+            if (_menuBase.Visible || _menuFeatures.Visible || _menuAppearance.Visible || _menuParents.Visible)
             {
-                if (IsControlFrontendDeletePressed && _menuParents.Visible)
+                if (IsControlFrontendDeletePressed)
                 {
-                    RandomiseCharacterParents();
+                    if (_menuParents.Visible)
+                        RandomiseCharacterParents(true);
+
+                    if (_menuFeatures.Visible)
+                        RandomiseCharacterFeatures(true);
+
+                    if (_menuAppearance.Visible)
+                        RandomiseCharacterAppearance(true);
+
                     await BaseScript.Delay(500);
                 }
                 else if (IsControlLeftBumperPressed)
@@ -980,9 +992,788 @@ namespace Curiosity.Framework.Client.Managers
                     _isPedLookingLeft = _isPedLookingRight = false;
                 }
             }
-            if (!IsInputDisabled(2))
+
+            if (!IsUsingKeyboard(2))
             {
-                // Grid Coord Requests for Facial Updates
+                if (_menuFeatures.Visible)
+                {
+                    if (_mLstEyeBrowProfile.Selected)
+                    {
+                        PointF var = (_mLstEyeBrowProfile.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5) || IsControlPressed(2, 4) || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3) || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[7] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[7] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (IsControlPressed(2, 4) || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[6] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (IsControlPressed(2, 3) || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[6] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstEyeBrowProfile.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstEyes.Selected)
+                    {
+                        PointF var = (_mLstEyes.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[11] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[11] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+                            (_mLstEyes.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                .5f
+                            );
+                        }
+                    }
+
+                    if (_mLstCheekShape.Selected)
+                    {
+                        PointF var = (_mLstCheekShape.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[10] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[10] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+                            (_mLstCheekShape.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                .5f
+                            );
+                        }
+                    }
+
+                    if (_mLstCheekBones.Selected)
+                    {
+                        PointF var = (_mLstCheekBones.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5) || IsControlPressed(2, 4) || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3) || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[9] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[9] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (IsControlPressed(2, 4) || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[8] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (IsControlPressed(2, 3) || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2))
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[8] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstCheekBones.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstLipThickness.Selected)
+                    {
+                        PointF var = (_mLstLipThickness.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[12] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[12] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+                            (_mLstLipThickness.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                .5f
+                            );
+                        }
+                    }
+
+                    if (_mLstNeckThickness.Selected)
+                    {
+                        PointF var = (_mLstNeckThickness.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[19] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[19] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+                            (_mLstNeckThickness.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                .5f
+                            );
+                        }
+                    }
+
+                    if (_mLstNose.Selected)
+                    {
+                        PointF var = (_mLstNose.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[0] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[0] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[1] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[1] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstNose.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstNoseProfile.Selected)
+                    {
+                        PointF var = (_mLstNoseProfile.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[2] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[2] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[3] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[3] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstNoseProfile.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstNoseTip.Selected)
+                    {
+                        PointF var = (_mLstNoseTip.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[5] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[5] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[4] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[4] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstNoseTip.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstCheekShape.Selected)
+                    {
+                        PointF var = (_mLstCheekShape.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[9] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[9] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[8] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[8] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstCheekShape.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstJawProfile.Selected)
+                    {
+                        PointF var = (_mLstJawProfile.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[13] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[13] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[14] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[14] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstJawProfile.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstChinProfile.Selected)
+                    {
+                        PointF var = (_mLstChinProfile.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[16] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[16] = Common.Denormalize(_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[15] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[15] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstChinProfile.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    if (_mLstChinShape.Selected)
+                    {
+                        PointF var = (_mLstChinShape.Panels[0] as UIMenuGridPanel).CirclePosition;
+                        _gridPanelCoordX = var.X;
+                        _gridPanelCoordY = var.Y;
+
+                        if (
+                            IsControlPressed(2, 6)
+                            || IsDisabledControlPressed(2, 6)
+                            || IsControlPressed(2, 5)
+                            || IsDisabledControlPressed(2, 5)
+                            || IsControlPressed(2, 4)
+                            || IsDisabledControlPressed(2, 4)
+                            || IsControlPressed(2, 3)
+                            || IsDisabledControlPressed(2, 3)
+                        )
+                        {
+                            if (
+                                IsControlPressed(2, 6)
+                                || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX += 0.03f;
+                                if (_gridPanelCoordX > 1f)
+                                    _gridPanelCoordX = 1f;
+                            }
+
+                            _characterSkin.Face.Features[18] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 5)
+                                || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordX -= 0.03f;
+                                if (_gridPanelCoordX < 0)
+                                    _gridPanelCoordX = 0;
+                            }
+
+                            _characterSkin.Face.Features[18] = Common.Denormalize(-_gridPanelCoordX, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 4)
+                                || IsDisabledControlPressed(2, 4) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY += 0.03f;
+                                if (_gridPanelCoordY > 1f)
+                                    _gridPanelCoordY = 1f;
+                            }
+
+                            _characterSkin.Face.Features[17] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+
+                            if (
+                                IsControlPressed(2, 3)
+                                || IsDisabledControlPressed(2, 3) && !IsInputDisabled(2)
+                            )
+                            {
+                                _gridPanelCoordY -= 0.03f;
+                                if (_gridPanelCoordY < 0)
+                                    _gridPanelCoordY = 0;
+                            }
+
+                            _characterSkin.Face.Features[17] = Common.Denormalize(_gridPanelCoordY, -1, 1);
+                            (_mLstChinShape.Panels[0] as UIMenuGridPanel).CirclePosition = new PointF(
+                                _gridPanelCoordX,
+                                _gridPanelCoordY
+                            );
+                        }
+                    }
+
+                    UpdateFace(_playerPed.Handle, _characterSkin);
+                }
             }
         }
 
@@ -1067,16 +1858,16 @@ namespace Curiosity.Framework.Client.Managers
             }
 
             _playerPed = Game.PlayerPed;
-            RandomiseCharacterParents();
+            SetupCharacter();
         }
 
-        private void RandomiseCharacterParents()
+        private void RandomiseCharacterParents(bool update = false)
         {
             _characterSkin.Face.SkinBlend = GetRandomFloatInRange(.5f, 1f);
             _characterSkin.Face.Resemblance = GetRandomFloatInRange(.5f, 1f);
             _characterSkin.Face.Mother = Common.RANDOM.Next(CharacterCreatorData.FacesMother.Count);
             _characterSkin.Face.Father = Common.RANDOM.Next(CharacterCreatorData.FacesFather.Count);
-            _characterSkin.Face.Features = Enumerable.Repeat(Common.Normalize(0f, -1, 1), 20).ToArray();
+            RandomiseCharacterFeatures();
 
             if (_heritageWindow is not null)
                 _heritageWindow.Index(_characterSkin.Face.Mother, _characterSkin.Face.Father);
@@ -1093,11 +1884,77 @@ namespace Curiosity.Framework.Client.Managers
             if (_msiSkinBlend is not null) // TODO: Update Scaleform to allow Slider Update when Visible from Code Behind
                 _msiSkinBlend.Value = (int)Math.Round(_characterSkin.Face.SkinBlend * 100);
 
+            if (update)
+                UpdateFace(_playerPed.Handle, _characterSkin);
+        }
+
+        private void RandomiseCharacterFeatures(bool update = false)
+        {
+            float[] featureArray = new float[20];
+
+            for(int i = 0; i < 20; i++)
+            {
+                featureArray[i] = Common.Normalize((float)Common.RANDOM.NextDouble(), -1, 1);
+            }
+
+            _characterSkin.Face.Features = featureArray;
+
+            if (update)
+                UpdateFace(_playerPed.Handle, _characterSkin);
+        }
+
+        private void RandomiseCharacterAppearance(bool update = false)
+        {
+            bool isMale = (Gender)_characterSkin.Gender == Gender.Male;
+
+            _characterSkin.Age = new(Common.RANDOM.Next(0, CharacterCreatorData.Ageing.Count), (float)Common.RANDOM.NextDouble());
+
+            if (isMale)
+            {
+                _characterSkin.Face.Beard = new(Common.RANDOM.Next(0, CharacterCreatorData.Beards.Count), (float)Common.RANDOM.NextDouble(),
+                    new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+            }
+
+            if (!isMale)
+            {
+                _characterSkin.Face.Blusher = new(Common.RANDOM.Next(0, CharacterCreatorData.BlusherFemale.Count), (float)Common.RANDOM.NextDouble(),
+                    new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+                _characterSkin.Face.Lipstick = new(Common.RANDOM.Next(0, CharacterCreatorData.Lipstick.Count), (float)Common.RANDOM.NextDouble(),
+                    new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+            }
+
+            _characterSkin.Face.Blemishes = new(Common.RANDOM.Next(0, CharacterCreatorData.Blemishes.Count), (float)Common.RANDOM.NextDouble());
+            _characterSkin.Face.Makeup = new(0, 1f);
+
+            _characterSkin.Face.Eyebrow = new(Common.RANDOM.Next(0, CharacterCreatorData.Eyebrows.Count), (float)Common.RANDOM.NextDouble(),
+                new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+
+            _characterSkin.Face.Complexion = new(Common.RANDOM.Next(0, CharacterCreatorData.Complexions.Count), (float)Common.RANDOM.NextDouble());
+            _characterSkin.Face.SkinDamage = new(Common.RANDOM.Next(0, CharacterCreatorData.SkinDamage.Count), (float)Common.RANDOM.NextDouble());
+            _characterSkin.Face.Freckles = new(Common.RANDOM.Next(0, CharacterCreatorData.MolesAndFreckles.Count), (float)Common.RANDOM.NextDouble());
+
+            int hairCount = isMale ? CharacterCreatorData.HairMale.Count : CharacterCreatorData.HairFemale.Count;
+            _characterSkin.Hair = new(Common.RANDOM.Next(0, hairCount), new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+
+            _characterSkin.Face.Eye = new(Common.RANDOM.Next(0, CharacterCreatorData.EyeColours.Count));
+            _characterSkin.Ears = new(255, 0);
+
+            if (update)
+                UpdateFace(_playerPed.Handle, _characterSkin);
+        }
+
+        private void SetupCharacter()
+        {
+            RandomiseCharacterParents();
+            RandomiseCharacterAppearance();
+
             UpdateFace(_playerPed.Handle, _characterSkin);
         }
 
         public static void UpdateFace(int Handle, CharacterSkin skin)
         {
+            bool isMale = (Gender)skin.Gender == Gender.Male;
+
             SetPedHeadBlendData(
                 Handle,
                 skin.Face.Mother,
@@ -1112,46 +1969,35 @@ namespace Curiosity.Framework.Client.Managers
                 false
             );
 
-            //SetPedHeadOverlay(Handle, 0, skin.blemishes.style, skin.blemishes.opacity);
-            //SetPedHeadOverlay(
-            //    Handle,
-            //    1,
-            //    skin.facialHair.beard.style,
-            //    skin.facialHair.beard.opacity
-            //);
-            //SetPedHeadOverlayColor(
-            //    Handle,
-            //    1,
-            //    1,
-            //    skin.facialHair.beard.color[0],
-            //    skin.facialHair.beard.color[1]
-            //);
-            //SetPedHeadOverlay(
-            //    Handle,
-            //    2,
-            //    skin.facialHair.eyebrow.style,
-            //    skin.facialHair.eyebrow.opacity
-            //);
-            //SetPedHeadOverlayColor(
-            //    Handle,
-            //    2,
-            //    1,
-            //    skin.facialHair.eyebrow.color[0],
-            //    skin.facialHair.eyebrow.color[1]
-            //);
-            //SetPedHeadOverlay(Handle, 3, skin.ageing.style, skin.ageing.opacity);
-            //SetPedHeadOverlay(Handle, 4, skin.makeup.style, skin.makeup.opacity);
-            //SetPedHeadOverlay(Handle, 5, skin.blusher.style, skin.blusher.opacity);
-            //SetPedHeadOverlayColor(Handle, 5, 2, skin.blusher.color[0], skin.blusher.color[1]);
-            //SetPedHeadOverlay(Handle, 6, skin.complexion.style, skin.complexion.opacity);
-            //SetPedHeadOverlay(Handle, 7, skin.skinDamage.style, skin.skinDamage.opacity);
-            //SetPedHeadOverlay(Handle, 8, skin.lipstick.style, skin.lipstick.opacity);
-            //SetPedHeadOverlayColor(Handle, 8, 2, skin.lipstick.color[0], skin.lipstick.color[1]);
-            //SetPedHeadOverlay(Handle, 9, skin.freckles.style, skin.freckles.opacity);
-            //SetPedEyeColor(Handle, skin.eye.style);
-            //SetPedComponentVariation(Handle, 2, skin.hair.style, 0, 0);
-            //SetPedHairColor(Handle, skin.hair.color[0], skin.hair.color[1]);
-            //SetPedPropIndex(Handle, 2, skin.ears.style, skin.ears.color, false);
+            SetPedHeadOverlay(Handle, 0, skin.Face.Blemishes.Style, skin.Face.Blemishes.Opacity);
+           
+            if (isMale)
+            {
+                SetPedHeadOverlay(Handle, 1, skin.Face.Beard.Style, skin.Face.Beard.Opacity);
+                SetPedHeadOverlayColor(Handle, 1, 1, skin.Face.Beard.Color[0], skin.Face.Beard.Color[1]);
+            }
+
+            SetPedHeadOverlay(Handle, 2, skin.Face.Eyebrow.Style, skin.Face.Eyebrow.Opacity);
+            SetPedHeadOverlayColor(Handle, 2, 1, skin.Face.Eyebrow.Color[0], skin.Face.Eyebrow.Color[1]);
+            SetPedHeadOverlay(Handle, 3, skin.Age.Style, skin.Age.Opacity);
+
+            if (!isMale)
+            {
+                SetPedHeadOverlay(Handle, 4, skin.Face.Makeup.Style, skin.Face.Makeup.Opacity);
+                SetPedHeadOverlay(Handle, 5, skin.Face.Blusher.Style, skin.Face.Blusher.Opacity);
+                SetPedHeadOverlayColor(Handle, 5, 2, skin.Face.Blusher.Color[0], skin.Face.Blusher.Color[1]);
+                SetPedHeadOverlay(Handle, 8, skin.Face.Lipstick.Style, skin.Face.Lipstick.Opacity);
+                SetPedHeadOverlayColor(Handle, 8, 2, skin.Face.Lipstick.Color[0], skin.Face.Lipstick.Color[1]);
+            }
+
+            SetPedHeadOverlay(Handle, 6, skin.Face.Complexion.Style, skin.Face.Complexion.Opacity);
+            SetPedHeadOverlay(Handle, 7, skin.Face.SkinDamage.Style, skin.Face.SkinDamage.Opacity);
+            SetPedHeadOverlay(Handle, 9, skin.Face.Freckles.Style, skin.Face.Freckles.Opacity);
+            SetPedEyeColor(Handle, skin.Face.Eye.Style);
+            SetPedComponentVariation(Handle, 2, skin.Hair.Style, 0, 0);
+            SetPedHairColor(Handle, skin.Hair.Color[0], skin.Hair.Color[1]);
+            SetPedPropIndex(Handle, 2, skin.Ears.Style, skin.Ears.Color, false);
+
             for (int i = 0; i < skin.Face.Features.Length; i++)
                 SetPedFaceFeature(Handle, i, skin.Face.Features[i]);
         }
@@ -1167,7 +2013,7 @@ namespace Curiosity.Framework.Client.Managers
                 ncamm.Position = new Vector3(402.6746f, -1000.129f, -98.46554f);
                 ncamm.Rotation = new Vector3(0.861356f, 0f, -2.348183f);
                 _playerPed.IsVisible = true;
-                ncamm.FieldOfView = 10.00255f;
+                ncamm.FieldOfView = 15.00255f;
                 ncamm.IsActive = true;
                 SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
                 ncam.InterpTo(ncamm, 300, 1, 1);
