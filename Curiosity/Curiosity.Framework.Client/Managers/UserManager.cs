@@ -7,6 +7,7 @@ using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.SerializedModels;
 using ScaleformUI;
 using System.Drawing;
+using System.Xml.Linq;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -282,6 +283,223 @@ namespace Curiosity.Framework.Client.Managers
             _menuFeatures.InstructionalButtons.Add(button4);
             _menuFeatures.InstructionalButtons.Add(btnRandomise);
 
+            #region Appearance
+
+            UIMenuListItem _mlstAppearanceHair = new(GetLabelText("FACE_HAIR"), CharacterCreatorData.HairMale, _characterSkin.Hair.Style);
+            UIMenuListItem _mlstAppearanceEyeBrows = new(GetLabelText("FACE_F_EYEBR"), CharacterCreatorData.Eyebrows, _characterSkin.Face.Eyebrow.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuColorPanel _cpEyebrowColor1 = new("First Colour", ColorPanelType.Hair);
+            UIMenuColorPanel _cpEyebrowColor2 = new("Second Colour", ColorPanelType.Hair);
+            UIMenuPercentagePanel _ppEyebrowOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor1);
+            _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor2);
+            _mlstAppearanceEyeBrows.AddPanel(_ppEyebrowOpacity);
+            UIMenuListItem _mlstAppearanceBeard = new(GetLabelText("FACE_F_BEARD"), CharacterCreatorData.Beards, _characterSkin.Face.Beard.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuColorPanel _cpBeardColor1 = new("First Colour", ColorPanelType.Hair);
+            UIMenuColorPanel _cpBeardColor2 = new("Second Colour", ColorPanelType.Hair);
+            UIMenuPercentagePanel _ppBeardOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceBeard.AddPanel(_cpBeardColor1);
+            _mlstAppearanceBeard.AddPanel(_cpBeardColor2);
+            _mlstAppearanceBeard.AddPanel(_ppBeardOpacity);
+            UIMenuListItem _mlstAppearanceSkinBlemishes = new(GetLabelText("FACE_F_SKINB"), CharacterCreatorData.Blemishes, _characterSkin.Face.Blemishes.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppBlemOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceSkinBlemishes.AddPanel(_ppBlemOpacity);
+            UIMenuListItem _mlstAppearanceSkinAgeing = new(GetLabelText("FACE_F_SKINA"), CharacterCreatorData.Ageing, _characterSkin.Age.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppAgeOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceSkinAgeing.AddPanel(_ppAgeOpacity);
+            UIMenuListItem _mlstAppearanceSkinComplexion = new(GetLabelText("FACE_F_SKC"), CharacterCreatorData.Complexions, _characterSkin.Face.Complexion.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppCompexionOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceSkinComplexion.AddPanel(_ppCompexionOpacity);
+            UIMenuListItem _mlstAppearanceSkinMoles = new(GetLabelText("FACE_F_MOLE"), CharacterCreatorData.MolesAndFreckles, _characterSkin.Face.Freckles.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppFreckleOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceSkinMoles.AddPanel(_ppFreckleOpacity);
+            UIMenuListItem _mlstAppearanceSkinDamage = new(GetLabelText("FACE_F_SUND"), CharacterCreatorData.SkinDamage, _characterSkin.Face.SkinDamage.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppSkinDamageOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceSkinDamage.AddPanel(_ppSkinDamageOpacity);
+            UIMenuListItem _mlstAppearanceEyeColor = new(GetLabelText("FACE_APP_EYE"), CharacterCreatorData.EyeColours, _characterSkin.Face.Eye.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuListItem _mlstAppearanceEyeMakeup = new(GetLabelText("FACE_F_EYEM"), CharacterCreatorData.Makeup, _characterSkin.Face.Makeup.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuPercentagePanel _ppMakeupOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceEyeMakeup.AddPanel(_ppMakeupOpacity);
+            UIMenuListItem _mlstAppearanceBlusher = new(GetLabelText("FACE_F_BLUSH"), CharacterCreatorData.BlusherFemale, _characterSkin.Face.Blusher.Style,
+                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuColorPanel _cpBlushColor1 = new("First Colour", ColorPanelType.Makeup);
+            UIMenuColorPanel _cpBlushColor2 = new("Second Colour", ColorPanelType.Makeup);
+            UIMenuPercentagePanel _ppBlushOpacity = new("Opacity", "0%", "100%");
+            _mlstAppearanceBlusher.AddPanel(_cpBlushColor1);
+            _mlstAppearanceBlusher.AddPanel(_cpBlushColor2);
+            _mlstAppearanceBlusher.AddPanel(_ppBlushOpacity);
+            UIMenuListItem _mlstAppearanceLipStick = new(GetLabelText("FACE_F_LIPST"), CharacterCreatorData.Lipstick, _characterSkin.Face.Lipstick.Style,
+                "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            UIMenuColorPanel _cpLipColor1 = new UIMenuColorPanel("First Colour", ColorPanelType.Makeup);
+            UIMenuColorPanel _cpLipColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Makeup);
+            UIMenuPercentagePanel _ppLipOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            _mlstAppearanceLipStick.AddPanel(_cpLipColor1);
+            _mlstAppearanceLipStick.AddPanel(_cpLipColor2);
+            _mlstAppearanceLipStick.AddPanel(_ppLipOpacity);
+
+            _menuAppearance.OnColorPanelChange += (_menu, _panel, _index) =>
+            {
+                if (_menu == _mlstAppearanceHair)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Hair.Color[0] = _index;
+                    else if (_panel == _menu.Panels[1])
+                        _characterSkin.Hair.Color[1] = _index;
+                }
+                else if (_menu == _mlstAppearanceEyeBrows)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Eyebrow.Color[0] = _index;
+                    else if (_panel == _menu.Panels[1])
+                        _characterSkin.Face.Eyebrow.Color[1] = _index;
+                }
+                else if (_menu == _mlstAppearanceBeard)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Beard.Color[0] = _index;
+                    else if (_panel == _menu.Panels[1])
+                        _characterSkin.Face.Beard.Color[1] = _index;
+                }
+                else if (_menu == _mlstAppearanceBlusher)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Blusher.Color[0] = _index;
+                    else if (_panel == _menu.Panels[1])
+                        _characterSkin.Face.Blusher.Color[1] = _index;
+                }
+                else if (_menu == _mlstAppearanceLipStick)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Lipstick.Color[0] = _index;
+                    else if (_panel == _menu.Panels[1])
+                        _characterSkin.Face.Lipstick.Color[1] = _index;
+                }
+                UpdateFace(_playerPed.Handle, _characterSkin);
+            };
+
+            _menuAppearance.OnPercentagePanelChange += (_menu, _panel, _index) =>
+            {
+                var pct = _index / 100;
+                if (_menu == _mlstAppearanceEyeBrows)
+                {
+                    if (_panel == _menu.Panels[2])
+                        _characterSkin.Face.Eyebrow.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceBeard)
+                {
+                    if (_panel == _menu.Panels[2])
+                        _characterSkin.Face.Beard.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceBlusher)
+                {
+                    if (_panel == _menu.Panels[2])
+                        _characterSkin.Face.Blusher.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceLipStick)
+                {
+                    if (_panel == _menu.Panels[2])
+                        _characterSkin.Face.Lipstick.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceSkinBlemishes)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Blemishes.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceSkinAgeing)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Age.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceSkinComplexion)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Complexion.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceSkinMoles)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Freckles.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceSkinDamage)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.SkinDamage.Opacity = pct;
+                }
+                else if (_menu == _mlstAppearanceEyeMakeup)
+                {
+                    if (_panel == _menu.Panels[0])
+                        _characterSkin.Face.Makeup.Opacity = pct;
+                }
+                UpdateFace(_playerPed.Handle, _characterSkin);
+            };
+
+            _menuAppearance.OnListChange += (_sender, _listItem, _newIndex) =>
+            {
+                if (_listItem == _mlstAppearanceHair)
+                    _characterSkin.Hair.Style = _newIndex;
+                else if (_listItem == _mlstAppearanceEyeBrows)
+                    _characterSkin.Face.Eyebrow.Style = _newIndex;
+                else if (_listItem == _mlstAppearanceBeard)
+                    _characterSkin.Face.Beard.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceBlusher)
+                    _characterSkin.Face.Blusher.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceLipStick)
+                    _characterSkin.Face.Lipstick.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceSkinBlemishes)
+                    _characterSkin.Face.Blemishes.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceSkinAgeing)
+                    _characterSkin.Age.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceSkinComplexion)
+                    _characterSkin.Face.Complexion.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceSkinMoles)
+                    _characterSkin.Face.Freckles.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceSkinDamage)
+                    _characterSkin.Face.SkinDamage.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+                else if (_listItem == _mlstAppearanceEyeColor)
+                    _characterSkin.Face.Eye.Style = _newIndex;
+                else if (_listItem == _mlstAppearanceEyeMakeup)
+                    _characterSkin.Face.Makeup.Style =
+                        (string)_listItem.Items[_newIndex] == GetLabelText("FACE_F_P_OFF")
+                            ? 255
+                            : _newIndex - 1;
+
+                UpdateFace(_playerPed.Handle, _characterSkin);
+            };
+
+            #endregion
+
             #region Menu Change States
 
             GameInterface.Hud.MenuPool.OnMenuStateChanged += async (_oldMenu, _newMenu, _state) =>
@@ -293,7 +511,53 @@ namespace Curiosity.Framework.Client.Managers
                             AnimateGameplayCamZoom(true, _mainCamera);
 
                         if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
-                            _playerPed.TaskCreaClothes(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
+                            _playerPed.TaskCreatorClothes(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
+
+                        if (_newMenu == _menuAppearance)
+                        {
+                            _menuAppearance.Clear();
+
+                            List<dynamic> hairList = _characterSkin.IsMale ? CharacterCreatorData.HairMale : CharacterCreatorData.HairFemale;
+                            _mlstAppearanceHair = new(GetLabelText("FACE_HAIR"), hairList, _characterSkin.Hair.Style);
+                            _menuAppearance.AddItem(_mlstAppearanceHair);
+                            _menuAppearance.AddItem(_mlstAppearanceEyeBrows);
+                            
+                            if (_characterSkin.IsMale)
+                                _menuAppearance.AddItem(_mlstAppearanceBeard);
+                            
+                            _menuAppearance.AddItem(_mlstAppearanceSkinBlemishes);
+                            _menuAppearance.AddItem(_mlstAppearanceSkinAgeing);
+                            _menuAppearance.AddItem(_mlstAppearanceSkinComplexion);
+                            _menuAppearance.AddItem(_mlstAppearanceSkinMoles);
+                            _menuAppearance.AddItem(_mlstAppearanceSkinDamage);
+                            _menuAppearance.AddItem(_mlstAppearanceEyeColor);
+                            _menuAppearance.AddItem(_mlstAppearanceEyeMakeup);
+                            _menuAppearance.AddItem(_mlstAppearanceLipStick);
+
+                            UIMenuColorPanel HairColor1 = new UIMenuColorPanel("First Colour", ColorPanelType.Hair);
+                            UIMenuColorPanel HairColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Hair);
+                            _mlstAppearanceHair.AddPanel(HairColor1);
+                            _mlstAppearanceHair.AddPanel(HairColor2);
+                            
+                            HairColor1.CurrentSelection = _characterSkin.Hair.Color[0];
+                            HairColor2.CurrentSelection = _characterSkin.Hair.Color[1];
+
+                            _cpEyebrowColor1.CurrentSelection = _characterSkin.Face.Eyebrow.Color[0];
+                            _cpEyebrowColor2.CurrentSelection = _characterSkin.Face.Eyebrow.Color[1];
+                            _ppEyebrowOpacity.Percentage = _characterSkin.Face.Eyebrow.Opacity * 100;
+                            _cpBeardColor1.CurrentSelection = _characterSkin.Face.Beard.Color[0];
+                            _cpBeardColor2.CurrentSelection = _characterSkin.Face.Beard.Color[1];
+                            _ppBeardOpacity.Percentage = _characterSkin.Face.Beard.Opacity * 100;
+                            _ppBlemOpacity.Percentage = _characterSkin.Face.Blemishes.Opacity * 100;
+                            _ppAgeOpacity.Percentage = _characterSkin.Age.Opacity * 100;
+                            _ppCompexionOpacity.Percentage = _characterSkin.Face.Complexion.Opacity * 100;
+                            _ppFreckleOpacity.Percentage = _characterSkin.Face.Freckles.Opacity * 100;
+                            _ppSkinDamageOpacity.Percentage = _characterSkin.Face.SkinDamage.Opacity * 100;
+                            _ppMakeupOpacity.Percentage = _characterSkin.Face.Makeup.Opacity * 100;
+                            _cpLipColor1.CurrentSelection = _characterSkin.Face.Lipstick.Color[0];
+                            _cpLipColor2.CurrentSelection = _characterSkin.Face.Lipstick.Color[1];
+                            _ppLipOpacity.Percentage = _characterSkin.Face.Lipstick.Opacity * 100;
+                        }
                         break;
                     case MenuState.ChangeBackward when _oldMenu == _menuParents || _oldMenu == _menuFeatures || _oldMenu == _menuAppearance:
                         AnimateGameplayCamZoom(false, _mainCamera);
@@ -1980,16 +2244,11 @@ namespace Curiosity.Framework.Client.Managers
             SetPedHeadOverlay(Handle, 2, skin.Face.Eyebrow.Style, skin.Face.Eyebrow.Opacity);
             SetPedHeadOverlayColor(Handle, 2, 1, skin.Face.Eyebrow.Color[0], skin.Face.Eyebrow.Color[1]);
             SetPedHeadOverlay(Handle, 3, skin.Age.Style, skin.Age.Opacity);
-
-            if (!isMale)
-            {
-                SetPedHeadOverlay(Handle, 4, skin.Face.Makeup.Style, skin.Face.Makeup.Opacity);
-                SetPedHeadOverlay(Handle, 5, skin.Face.Blusher.Style, skin.Face.Blusher.Opacity);
-                SetPedHeadOverlayColor(Handle, 5, 2, skin.Face.Blusher.Color[0], skin.Face.Blusher.Color[1]);
-                SetPedHeadOverlay(Handle, 8, skin.Face.Lipstick.Style, skin.Face.Lipstick.Opacity);
-                SetPedHeadOverlayColor(Handle, 8, 2, skin.Face.Lipstick.Color[0], skin.Face.Lipstick.Color[1]);
-            }
-
+            SetPedHeadOverlay(Handle, 4, skin.Face.Makeup.Style, skin.Face.Makeup.Opacity);
+            SetPedHeadOverlay(Handle, 5, skin.Face.Blusher.Style, skin.Face.Blusher.Opacity);
+            SetPedHeadOverlayColor(Handle, 5, 2, skin.Face.Blusher.Color[0], skin.Face.Blusher.Color[1]);
+            SetPedHeadOverlay(Handle, 8, skin.Face.Lipstick.Style, skin.Face.Lipstick.Opacity);
+            SetPedHeadOverlayColor(Handle, 8, 2, skin.Face.Lipstick.Color[0], skin.Face.Lipstick.Color[1]);
             SetPedHeadOverlay(Handle, 6, skin.Face.Complexion.Style, skin.Face.Complexion.Opacity);
             SetPedHeadOverlay(Handle, 7, skin.Face.SkinDamage.Style, skin.Face.SkinDamage.Opacity);
             SetPedHeadOverlay(Handle, 9, skin.Face.Freckles.Style, skin.Face.Freckles.Opacity);

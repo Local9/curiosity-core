@@ -19,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Attributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterAttributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterSkin.cs" />

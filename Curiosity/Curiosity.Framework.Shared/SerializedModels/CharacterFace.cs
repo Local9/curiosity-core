@@ -19,33 +19,33 @@
         public float[] Features { get; internal set; }
 
         [JsonProperty("beard")]
-        public A3 Beard;
+        public A3 Beard = new A3();
 
         [JsonProperty("blemishes")]
-        public A2 Blemishes;
+        public A2 Blemishes = new A2();
 
         [JsonProperty("eyebrow")]
-        public A3 Eyebrow;
+        public A3 Eyebrow = new A3();
 
         [JsonProperty("makeup")]
-        public A2 Makeup;
+        public A2 Makeup = new A2();
 
         [JsonProperty("blusher")]
-        public A3 Blusher;
+        public A3 Blusher = new A3();
 
         [JsonProperty("complexion")]
-        public A2 Complexion;
+        public A2 Complexion = new A2();
 
         [JsonProperty("skinDamage")]
-        public A2 SkinDamage;
+        public A2 SkinDamage = new A2();
 
         [JsonProperty("lipstick")]
-        public A3 Lipstick;
+        public A3 Lipstick = new A3();
 
         [JsonProperty("freckles")]
-        public A2 Freckles;
+        public A2 Freckles = new A2();
 
         [JsonProperty("eye")]
-        public Eye Eye;
+        public Eye Eye = new Eye();
     }
 }

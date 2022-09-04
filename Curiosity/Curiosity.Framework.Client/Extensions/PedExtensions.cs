@@ -166,7 +166,7 @@ namespace Curiosity.Framework.Client.Extensions
             ClearSequenceTask(ref sequence);
         }
 
-        public static void TaskCreaClothes(this Ped ped, string animationDict)
+        public static void TaskCreatorClothes(this Ped ped, string animationDict)
         {
             int sequence = 0;
             OpenSequenceTask(ref sequence);
