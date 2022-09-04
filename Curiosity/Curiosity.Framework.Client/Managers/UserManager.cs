@@ -230,7 +230,6 @@ namespace Curiosity.Framework.Client.Managers
             GameInterface.Hud.MenuPool.Add(_menuBase);
 
             #region Character Sex
-            Logger.Debug($"Character Sex Selected: {gender}");
             UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { "Male", "Female" }, (int)gender, "Select character sex, any changes will be lost.");
             _menuBase.AddItem(mLstCharacterSex);
 
@@ -247,11 +246,7 @@ namespace Curiosity.Framework.Client.Managers
 
                 Gender newGender = (Gender)index;
 
-                Logger.Debug($"Character Sex: {newGender}");
-
                 await CreateCharacterClass(false, false, newGender);
-
-                Logger.Debug($"Character Skin Sex: {_characterSkin.Gender}");
 
                 Instance.DetachTickHandler(OnCharacterCreationWarningAsync);
                 Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
@@ -1331,7 +1326,6 @@ namespace Curiosity.Framework.Client.Managers
                 }
                 else if (item == hat)
                 {
-                    Logger.Debug("hat id = " + index);
                     if (index == 0)
                         ClearPedProp(id, 0);
                     else
