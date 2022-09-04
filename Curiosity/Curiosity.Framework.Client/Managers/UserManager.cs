@@ -3342,11 +3342,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 3;
                         textures[4] = 11;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET001")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[6] = 16;
+                        textures[6] = 1;
                         components[7] = 1;
                         textures[7] = 3;
                         components[8] = 3;
@@ -3424,11 +3421,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB8_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 41;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -3438,11 +3432,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 3;
                         textures[4] = 7;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET011")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[6] = 16;
+                        textures[6] = 11;
                         components[7] = 1;
                         textures[7] = 0;
                         components[8] = 3;
@@ -3475,11 +3466,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB5_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 38;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -3489,11 +3477,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 2;
                         textures[4] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET006")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[6] = 16;
+                        textures[6] = 6;
                         components[7] = 2;
                         textures[7] = 1;
                         components[8] = 3;
@@ -3535,11 +3520,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 0;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR4")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 16;
+                        textures[4] = 4;
                         components[6] = 2;
                         textures[6] = 5;
                         components[7] = 0;
@@ -3566,22 +3548,16 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 5;
                         components[6] = 1;
                         textures[6] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_0")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 0;
                         components[8] = 15;
                         textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB0_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 33;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -3617,11 +3593,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 9;
                         components[6] = 12;
                         textures[6] = 12;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 1;
                         components[8] = 15;
                         textures[8] = 0;
                         components[9] = 0;
@@ -3649,11 +3622,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_LTS_F_JBIB_1_4")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 43;
+                        textures[11] = 4;
                     }
                     break;
 
@@ -3697,11 +3667,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB1_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 32;
+                        textures[11] = 0;
                     }
                     break;
 
@@ -3716,11 +3683,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 1;
                         components[6] = 6;
                         textures[6] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_0")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 0;
                         components[8] = 15;
                         textures[8] = 0;
                         components[9] = 0;
@@ -3764,11 +3728,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 4;
                         components[6] = 12;
                         textures[6] = 4;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 1;
                         components[8] = 15;
                         textures[8] = 0;
                         components[9] = 0;
@@ -3784,11 +3745,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 4;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_0")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 27;
+                        textures[4] = 0;
                         components[6] = 11;
                         textures[6] = 1;
                         components[7] = 2;
@@ -3815,11 +3773,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 12;
                         components[6] = 12;
                         textures[6] = 12;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_2")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 2;
                         components[8] = 5;
                         textures[8] = 2;
                         components[9] = 0;
@@ -3908,11 +3863,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 15;
                         components[6] = 7;
                         textures[6] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 17;
+                        textures[7] = 1;
                         components[8] = 15;
                         textures[8] = 0;
                         components[9] = 0;
@@ -3940,11 +3892,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB1_1")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 32;
+                        textures[11] = 1;
                     }
                     break;
 
@@ -3976,16 +3925,10 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 4;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_LTS_F_LEGS_0_1")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_PILOT_F_FEET_0_0")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 30;
+                        textures[4] = 1;
+                        components[6] = 24;
+                        textures[6] = 0;
                         components[7] = 5;
                         textures[7] = 4;
                         components[8] = 3;
@@ -4006,29 +3949,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 4;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_2")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 24;
+                        textures[4] = 2;
                         components[6] = 10;
                         textures[6] = 0;
                         components[7] = 12;
                         textures[7] = 2;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS0_0")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 31;
+                        textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB2_2")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 31;
+                        textures[11] = 2;
                     }
                     else
                     {
@@ -4038,27 +3972,18 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 8;
                         textures[4] = 4;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_3")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH0_3")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[6] = 19;
+                        textures[6] = 3;
+                        components[7] = 10;
+                        textures[7] = 3;
                         components[8] = 13;
                         textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB4_8")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 35;
+                        textures[11] = 8;
                     }
                     break;
 
@@ -4071,27 +3996,18 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 4;
                         textures[4] = 2;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_5")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_2")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[6] = 20;
+                        textures[6] = 5;
+                        components[7] = 25;
+                        textures[7] = 2;
                         components[8] = 4;
                         textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_4")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 24;
+                        textures[11] = 4;
                     }
                     else
                     {
@@ -4125,27 +4041,18 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 4;
                         textures[4] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_7")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_2")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[6] = 20;
+                        textures[6] = 7;
+                        components[7] = 25;
+                        textures[7] = 2;
                         components[8] = 4;
                         textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_3")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 24;
+                        textures[11] = 3;
                     }
                     else
                     {
@@ -4153,16 +4060,10 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 5;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS0_0")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_2")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 23;
+                        textures[4] = 0;
+                        components[6] = 20;
+                        textures[6] = 2;
                         components[7] = 7;
                         textures[7] = 1;
                         components[8] = 13;
@@ -4171,11 +4072,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_9")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 24;
+                        textures[11] = 9;
                     }
                     break;
 
@@ -4186,29 +4084,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 12;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_0")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 24;
+                        textures[4] = 0;
                         components[6] = 10;
                         textures[6] = 0;
                         components[7] = 0;
                         textures[7] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS1_0")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 32;
+                        textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB0_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 29;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -4218,27 +4107,18 @@ namespace Curiosity.Framework.Client.Managers
                         textures[3] = 0;
                         components[4] = 8;
                         textures[4] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_4")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[6] = 19;
+                        textures[6] = 4;
                         components[7] = 6;
                         textures[7] = 1;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS0_1")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 23;
+                        textures[8] = 1;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_6")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 24;
+                        textures[11] = 6;
                     }
                     break;
 
@@ -4249,16 +4129,10 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 6;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_0")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_3")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 26;
+                        textures[4] = 0;
+                        components[6] = 20;
+                        textures[6] = 3;
                         components[7] = 0;
                         textures[7] = 0;
                         components[8] = 5;
@@ -4300,29 +4174,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 12;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_5")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 24;
+                        textures[4] = 5;
                         components[6] = 10;
                         textures[6] = 0;
                         components[7] = 0;
                         textures[7] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS1_0")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 32;
+                        textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB0_5")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 29;
+                        textures[11] = 5;
                     }
                     else
                     {
@@ -4330,11 +4195,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 6;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_8")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 24;
+                        textures[4] = 8;
                         components[6] = 0;
                         textures[6] = 0;
                         components[7] = 1;
@@ -4345,11 +4207,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB1_9")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 25;
+                        textures[11] = 9;
                     }
                     break;
 
@@ -4385,11 +4244,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[4] = 12;
                         components[6] = 8;
                         textures[6] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_0")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
+                        components[7] = 11;
+                        textures[7] = 0;
                         components[8] = 5;
                         textures[8] = 7;
                         components[9] = 0;
@@ -4408,32 +4264,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 12;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_0")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 24;
+                        textures[4] = 0;
                         components[6] = 10;
                         textures[6] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_TEETH1_2")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS4_1")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[7] = 27;
+                        textures[7] = 2;
+                        components[8] = 35;
+                        textures[8] = 1;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB1_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 30;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -4465,16 +4309,10 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 11;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_3")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_7")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 26;
+                        textures[4] = 3;
+                        components[6] = 22;
+                        textures[6] = 7;
                         components[7] = 11;
                         textures[7] = 2;
                         components[8] = 15;
@@ -4483,11 +4321,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB9_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 42;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -4495,35 +4330,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 5;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_6")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_5")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_0")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_0")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[4] = 27;
+                        textures[4] = 6;
+                        components[6] = 22;
+                        textures[6] = 5;
+                        components[7] = 14;
+                        textures[7] = 0;
+                        components[8] = 28;
+                        textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_6")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 31;
+                        textures[11] = 6;
                     }
                     break;
 
@@ -4534,32 +4354,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 1;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_11")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_8")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 26;
+                        textures[4] = 11;
+                        components[6] = 22;
+                        textures[6] = 8;
                         components[7] = 0;
                         textures[7] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS1_0")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 38;
+                        textures[8] = 0;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 35;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -4591,11 +4399,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 0;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS1_4")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
+                        components[4] = 27;
+                        textures[4] = 4;
                         components[6] = 1;
                         textures[6] = 9;
                         components[7] = 0;
@@ -4606,11 +4411,8 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_VAL_M_JBIB2_0")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 22;
+                        textures[11] = 0;
                     }
                     else
                     {
@@ -4618,35 +4420,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 5;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_10")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_10")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_2")
-                        );
-                        components[7] = Var1.drawable;
-                        textures[7] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_BUS2_F_ACCS0_1")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[4] = 27;
+                        textures[4] = 10;
+                        components[6] = 22;
+                        textures[6] = 6;
+                        components[7] = 14;
+                        textures[7] = 2;
+                        components[8] = 26;
+                        textures[8] = 1;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_3")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 31;
+                        textures[11] = 3;
                     }
                     break;
 
@@ -4657,32 +4444,20 @@ namespace Curiosity.Framework.Client.Managers
                         textures[1] = 0;
                         components[3] = 1;
                         textures[3] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_7")
-                        );
-                        components[4] = Var1.drawable;
-                        textures[4] = Var1.texture;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_6")
-                        );
-                        components[6] = Var1.drawable;
-                        textures[6] = Var1.texture;
+                        components[4] = 26;
+                        textures[4] = 7;
+                        components[6] = 23;
+                        textures[6] = 6;
                         components[7] = 0;
                         textures[7] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS6_3")
-                        );
-                        components[8] = Var1.drawable;
-                        textures[8] = Var1.texture;
+                        components[8] = 43;
+                        textures[8] = 3;
                         components[9] = 0;
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        Var1 = ShopPed.GetShopPedComponent(
-                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_3")
-                        );
-                        components[11] = Var1.drawable;
-                        textures[11] = Var1.texture;
+                        components[11] = 35;
+                        textures[11] = 3;
                     }
                     else
                     {
