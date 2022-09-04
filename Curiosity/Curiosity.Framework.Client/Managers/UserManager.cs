@@ -40,7 +40,7 @@ namespace Curiosity.Framework.Client.Managers
         List<dynamic> _lstParentFather = CharacterCreatorData.FacesFather;
 
         // Menu List Items
-
+        // Fetures
         UIMenuListItem _mLstEyeBrowProfile = null;
         UIMenuListItem _mLstEyes = null;
         UIMenuListItem _mLstNose = null;
@@ -53,7 +53,19 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuListItem _mLstChinProfile = null;
         UIMenuListItem _mLstChinShape = null;
         UIMenuListItem _mLstNeckThickness = null;
-
+        // Appearance
+        UIMenuListItem _mlstAppearanceHair;
+        UIMenuListItem _mlstAppearanceEyeBrows;
+        UIMenuListItem _mlstAppearanceBeard;
+        UIMenuListItem _mlstAppearanceSkinBlemishes;
+        UIMenuListItem _mlstAppearanceSkinAgeing;
+        UIMenuListItem _mlstAppearanceSkinComplexion;
+        UIMenuListItem _mlstAppearanceSkinMoles;
+        UIMenuListItem _mlstAppearanceSkinDamage;
+        UIMenuListItem _mlstAppearanceEyeColor;
+        UIMenuListItem _mlstAppearanceEyeMakeup;
+        UIMenuListItem _mlstAppearanceBlusher;
+        UIMenuListItem _mlstAppearanceLipStick;
         // heritageWindow
         UIMenuHeritageWindow _heritageWindow;
         UIMenuListItem _mliParentMother;
@@ -62,6 +74,7 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuSliderItem _msiSkinBlend;
 
         MugshotBoardAttachment mugshotBoardAttachment = new();
+        const int MAX_CREATOR_COLOR = 63;
 
         public async override void Begin()
         {
@@ -263,9 +276,11 @@ namespace Curiosity.Framework.Client.Managers
             InstructionalButton btnRandomise = new InstructionalButton(Control.FrontendDelete, "Randomise");
             InstructionalButton btnLookLeft = new InstructionalButton(Control.FrontendLb, "Look Left");
             InstructionalButton btnLookRight = new InstructionalButton(Control.FrontendRb, "Look Right");
-            InstructionalButton button4 = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change details");
+            InstructionalButton btnRightStickMouse = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change details");
+            InstructionalButton btnChangeOpacity = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change Opacity");
             InstructionalButton btnMouse = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Manage Panels", ScaleformUI.PadCheck.Keyboard);
-            
+            InstructionalButton btnTriggers = new InstructionalButton(InputGroup.INPUTGROUP_FRONTEND_TRIGGERS, "Change Color");
+
             _menuBase.InstructionalButtons.Add(btnLookRight);
             _menuBase.InstructionalButtons.Add(btnLookLeft);
 
@@ -275,71 +290,61 @@ namespace Curiosity.Framework.Client.Managers
 
             _menuAppearance.InstructionalButtons.Add(btnLookRight);
             _menuAppearance.InstructionalButtons.Add(btnLookLeft);
-            _menuAppearance.InstructionalButtons.Add(btnMouse);
+            _menuAppearance.InstructionalButtons.Add(btnChangeOpacity);
+            _menuAppearance.InstructionalButtons.Add(btnTriggers);
             _menuAppearance.InstructionalButtons.Add(btnRandomise);
 
             _menuFeatures.InstructionalButtons.Add(btnLookRight);
             _menuFeatures.InstructionalButtons.Add(btnLookLeft);
-            _menuFeatures.InstructionalButtons.Add(button4);
+            _menuFeatures.InstructionalButtons.Add(btnRightStickMouse);
             _menuFeatures.InstructionalButtons.Add(btnRandomise);
 
             #region Appearance
 
-            UIMenuListItem _mlstAppearanceHair = new(GetLabelText("FACE_HAIR"), CharacterCreatorData.HairMale, _characterSkin.Hair.Style);
-            UIMenuListItem _mlstAppearanceEyeBrows = new(GetLabelText("FACE_F_EYEBR"), CharacterCreatorData.Eyebrows, _characterSkin.Face.Eyebrow.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
-            UIMenuColorPanel _cpEyebrowColor1 = new("First Colour", ColorPanelType.Hair);
+            _mlstAppearanceHair = new(GetLabelText("FACE_HAIR"), CharacterCreatorData.HairMale, _characterSkin.Hair.Style);
+            _mlstAppearanceEyeBrows = new(GetLabelText("FACE_F_EYEBR"), CharacterCreatorData.Eyebrows, _characterSkin.Face.Eyebrow.Style);
+            UIMenuColorPanel _cpEyebrowColor1 = new("Colour", ColorPanelType.Hair);
             //UIMenuColorPanel _cpEyebrowColor2 = new("Second Colour", ColorPanelType.Hair);
             UIMenuPercentagePanel _ppEyebrowOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceEyeBrows.AddPanel(_ppEyebrowOpacity);
             _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor1);
             //_mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor2);
-            UIMenuListItem _mlstAppearanceBeard = new(GetLabelText("FACE_F_BEARD"), CharacterCreatorData.Beards, _characterSkin.Face.Beard.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
-            UIMenuColorPanel _cpBeardColor1 = new("First Colour", ColorPanelType.Hair);
-            UIMenuColorPanel _cpBeardColor2 = new("Second Colour", ColorPanelType.Hair);
+            _mlstAppearanceBeard = new(GetLabelText("FACE_F_BEARD"), CharacterCreatorData.Beards, _characterSkin.Face.Beard.Style);
+            UIMenuColorPanel _cpBeardColor1 = new("Colour", ColorPanelType.Hair);
+            //UIMenuColorPanel _cpBeardColor2 = new("Second Colour", ColorPanelType.Hair);
             UIMenuPercentagePanel _ppBeardOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceBeard.AddPanel(_ppBeardOpacity);
             _mlstAppearanceBeard.AddPanel(_cpBeardColor1);
             // _mlstAppearanceBeard.AddPanel(_cpBeardColor2);
-            UIMenuListItem _mlstAppearanceSkinBlemishes = new(GetLabelText("FACE_F_SKINB"), CharacterCreatorData.Blemishes, _characterSkin.Face.Blemishes.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceSkinBlemishes = new(GetLabelText("FACE_F_SKINB"), CharacterCreatorData.Blemishes, _characterSkin.Face.Blemishes.Style);
             UIMenuPercentagePanel _ppBlemOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceSkinBlemishes.AddPanel(_ppBlemOpacity);
-            UIMenuListItem _mlstAppearanceSkinAgeing = new(GetLabelText("FACE_F_SKINA"), CharacterCreatorData.Ageing, _characterSkin.Age.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceSkinAgeing = new(GetLabelText("FACE_F_SKINA"), CharacterCreatorData.Ageing, _characterSkin.Age.Style);
             UIMenuPercentagePanel _ppAgeOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceSkinAgeing.AddPanel(_ppAgeOpacity);
-            UIMenuListItem _mlstAppearanceSkinComplexion = new(GetLabelText("FACE_F_SKC"), CharacterCreatorData.Complexions, _characterSkin.Face.Complexion.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceSkinComplexion = new(GetLabelText("FACE_F_SKC"), CharacterCreatorData.Complexions, _characterSkin.Face.Complexion.Style);
             UIMenuPercentagePanel _ppCompexionOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceSkinComplexion.AddPanel(_ppCompexionOpacity);
-            UIMenuListItem _mlstAppearanceSkinMoles = new(GetLabelText("FACE_F_MOLE"), CharacterCreatorData.MolesAndFreckles, _characterSkin.Face.Freckles.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceSkinMoles = new(GetLabelText("FACE_F_MOLE"), CharacterCreatorData.MolesAndFreckles, _characterSkin.Face.Freckles.Style);
             UIMenuPercentagePanel _ppFreckleOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceSkinMoles.AddPanel(_ppFreckleOpacity);
-            UIMenuListItem _mlstAppearanceSkinDamage = new(GetLabelText("FACE_F_SUND"), CharacterCreatorData.SkinDamage, _characterSkin.Face.SkinDamage.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceSkinDamage = new(GetLabelText("FACE_F_SUND"), CharacterCreatorData.SkinDamage, _characterSkin.Face.SkinDamage.Style);
             UIMenuPercentagePanel _ppSkinDamageOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceSkinDamage.AddPanel(_ppSkinDamageOpacity);
-            UIMenuListItem _mlstAppearanceEyeColor = new(GetLabelText("FACE_APP_EYE"), CharacterCreatorData.EyeColours, _characterSkin.Face.Eye.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
-            UIMenuListItem _mlstAppearanceEyeMakeup = new(GetLabelText("FACE_F_EYEM"), CharacterCreatorData.Makeup, _characterSkin.Face.Makeup.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
+            _mlstAppearanceEyeColor = new(GetLabelText("FACE_APP_EYE"), CharacterCreatorData.EyeColours, _characterSkin.Face.Eye.Style);
+            _mlstAppearanceEyeMakeup = new(GetLabelText("FACE_F_EYEM"), CharacterCreatorData.Makeup, _characterSkin.Face.Makeup.Style);
             UIMenuPercentagePanel _ppMakeupOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceEyeMakeup.AddPanel(_ppMakeupOpacity);
-            UIMenuListItem _mlstAppearanceBlusher = new(GetLabelText("FACE_F_BLUSH"), CharacterCreatorData.BlusherFemale, _characterSkin.Face.Blusher.Style,
-                    "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
-            UIMenuColorPanel _cpBlushColor1 = new("First Colour", ColorPanelType.Makeup);
-            UIMenuColorPanel _cpBlushColor2 = new("Second Colour", ColorPanelType.Makeup);
+            _mlstAppearanceBlusher = new(GetLabelText("FACE_F_BLUSH"), CharacterCreatorData.BlusherFemale, _characterSkin.Face.Blusher.Style);
+            UIMenuColorPanel _cpBlushColor1 = new("Colour", ColorPanelType.Makeup);
+            //UIMenuColorPanel _cpBlushColor2 = new("Second Colour", ColorPanelType.Makeup);
             UIMenuPercentagePanel _ppBlushOpacity = new("Opacity", "0%", "100%");
             _mlstAppearanceBlusher.AddPanel(_ppBlushOpacity);
             _mlstAppearanceBlusher.AddPanel(_cpBlushColor1);
             //_mlstAppearanceBlusher.AddPanel(_cpBlushColor2);
-            UIMenuListItem _mlstAppearanceLipStick = new(GetLabelText("FACE_F_LIPST"), CharacterCreatorData.Lipstick, _characterSkin.Face.Lipstick.Style,
-                "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
-            UIMenuColorPanel _cpLipColor1 = new UIMenuColorPanel("First Colour", ColorPanelType.Makeup);
-            UIMenuColorPanel _cpLipColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Makeup);
+            _mlstAppearanceLipStick = new(GetLabelText("FACE_F_LIPST"), CharacterCreatorData.Lipstick, _characterSkin.Face.Lipstick.Style);
+            UIMenuColorPanel _cpLipColor1 = new UIMenuColorPanel("Colour", ColorPanelType.Makeup);
+            //UIMenuColorPanel _cpLipColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Makeup);
             UIMenuPercentagePanel _ppLipOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
             _mlstAppearanceLipStick.AddPanel(_ppLipOpacity);
             _mlstAppearanceLipStick.AddPanel(_cpLipColor1);
@@ -349,7 +354,7 @@ namespace Curiosity.Framework.Client.Managers
             {
                 if (_menu == _mlstAppearanceHair)
                 {
-                    if (_panel == _menu.Panels[1])
+                    if (_panel == _menu.Panels[0])
                         _characterSkin.Hair.Color[0] = _index;
                     //else if (_panel == _menu.Panels[2])
                     //    _characterSkin.Hair.Color[1] = _index;
@@ -1258,6 +1263,449 @@ namespace Curiosity.Framework.Client.Managers
                     
                     _isPedLookingLeft = _isPedLookingRight = false;
                 }
+            }
+
+            if (_menuAppearance.Visible)
+            {
+                int _frontendLeftTrigger = (int)Control.FrontendLt;
+                int _frontendRightTrigger = (int)Control.FrontendRt;
+
+                if (_mlstAppearanceHair.Selected)
+                {
+                    UIMenuColorPanel uIMenuColorPanel = (_mlstAppearanceHair.Panels[0] as UIMenuColorPanel);
+                    int color = uIMenuColorPanel.CurrentSelection;
+
+                    if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger)
+                        || IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger))
+                    {
+                        if (IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger) && !IsInputDisabled(2))
+                        {
+                            ++color;
+                            if (color > MAX_CREATOR_COLOR)
+                                color = 0;
+                        }
+
+                        if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger) && !IsInputDisabled(2))
+                        {
+                            --color;
+                            if (color < 0)
+                                color = MAX_CREATOR_COLOR;
+                        }
+
+                        _characterSkin.Hair.Color[0] = color;
+                        uIMenuColorPanel.CurrentSelection = color;
+
+                        await BaseScript.Delay(100);
+                    }
+                }
+
+                if (_mlstAppearanceEyeBrows.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceEyeBrows.Panels[0] as UIMenuPercentagePanel);
+                    UIMenuColorPanel uIMenuColorPanel = (_mlstAppearanceEyeBrows.Panels[1] as UIMenuColorPanel);
+                    int color = uIMenuColorPanel.CurrentSelection;
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger)
+                        || IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger)
+                        || IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger) && !IsInputDisabled(2))
+                        {
+                            ++color;
+                            if (color > MAX_CREATOR_COLOR)
+                                color = 0;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger) && !IsInputDisabled(2))
+                        {
+                            --color;
+                            if (color < 0)
+                                color = MAX_CREATOR_COLOR;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+                            
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Eyebrow.Color[0] = color;
+                        uIMenuColorPanel.CurrentSelection = color;
+                        _characterSkin.Face.Eyebrow.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceBeard.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceBeard.Panels[0] as UIMenuPercentagePanel);
+                    UIMenuColorPanel uIMenuColorPanel = (_mlstAppearanceBeard.Panels[1] as UIMenuColorPanel);
+                    int color = uIMenuColorPanel.CurrentSelection;
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger)
+                        || IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger)
+                        || IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger) && !IsInputDisabled(2))
+                        {
+                            ++color;
+                            if (color > MAX_CREATOR_COLOR)
+                                color = 0;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger) && !IsInputDisabled(2))
+                        {
+                            --color;
+                            if (color < 0)
+                                color = MAX_CREATOR_COLOR;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Beard.Color[0] = color;
+                        uIMenuColorPanel.CurrentSelection = color;
+                        _characterSkin.Face.Beard.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceBlusher.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceBlusher.Panels[0] as UIMenuPercentagePanel);
+                    UIMenuColorPanel uIMenuColorPanel = (_mlstAppearanceBlusher.Panels[1] as UIMenuColorPanel);
+                    int color = uIMenuColorPanel.CurrentSelection;
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger)
+                        || IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger)
+                        || IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger) && !IsInputDisabled(2))
+                        {
+                            ++color;
+                            if (color > MAX_CREATOR_COLOR)
+                                color = 0;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger) && !IsInputDisabled(2))
+                        {
+                            --color;
+                            if (color < 0)
+                                color = MAX_CREATOR_COLOR;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Blusher.Color[0] = color;
+                        uIMenuColorPanel.CurrentSelection = color;
+                        _characterSkin.Face.Blusher.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceLipStick.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceLipStick.Panels[0] as UIMenuPercentagePanel);
+                    UIMenuColorPanel uIMenuColorPanel = (_mlstAppearanceLipStick.Panels[1] as UIMenuColorPanel);
+                    int color = uIMenuColorPanel.CurrentSelection;
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger)
+                        || IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger)
+                        || IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, _frontendRightTrigger) || IsDisabledControlPressed(2, _frontendRightTrigger) && !IsInputDisabled(2))
+                        {
+                            ++color;
+                            if (color > MAX_CREATOR_COLOR)
+                                color = 0;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, _frontendLeftTrigger) || IsDisabledControlPressed(2, _frontendLeftTrigger) && !IsInputDisabled(2))
+                        {
+                            --color;
+                            if (color < 0)
+                                color = MAX_CREATOR_COLOR;
+
+                            await BaseScript.Delay(100);
+                        }
+
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Lipstick.Color[0] = color;
+                        uIMenuColorPanel.CurrentSelection = color;
+                        _characterSkin.Face.Lipstick.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceSkinBlemishes.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceSkinBlemishes.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Blemishes.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceSkinAgeing.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceSkinAgeing.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Age.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+                
+                if (_mlstAppearanceSkinComplexion.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceSkinComplexion.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Complexion.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceSkinMoles.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceSkinMoles.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Freckles.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceSkinDamage.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceSkinDamage.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.SkinDamage.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                if (_mlstAppearanceEyeMakeup.Selected)
+                {
+                    UIMenuPercentagePanel uIMenuPercentagePanel = (_mlstAppearanceEyeMakeup.Panels[0] as UIMenuPercentagePanel);
+                    float currentOpacity = uIMenuPercentagePanel.Percentage / 100;
+
+                    if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6)
+                        || IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5))
+                    {
+                        if (IsControlPressed(2, 6) || IsDisabledControlPressed(2, 6) && !IsInputDisabled(2))
+                        {
+                            currentOpacity += 0.01f;
+                            if (currentOpacity > 1f)
+                                currentOpacity = 1f;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        if (IsControlPressed(2, 5) || IsDisabledControlPressed(2, 5) && !IsInputDisabled(2))
+                        {
+                            currentOpacity -= 0.01f;
+                            if (currentOpacity < 0)
+                                currentOpacity = 0;
+
+                            await BaseScript.Delay(0);
+                        }
+
+                        _characterSkin.Face.Makeup.Opacity = currentOpacity;
+                        uIMenuPercentagePanel.Percentage = currentOpacity * 100;
+                    }
+                }
+
+                UpdateFace(_playerPed.Handle, _characterSkin);
             }
 
             if (!IsUsingKeyboard(2))
