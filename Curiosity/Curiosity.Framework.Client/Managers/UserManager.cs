@@ -4,6 +4,7 @@ using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
+using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
 using ScaleformUI;
 using System.Drawing;
@@ -213,7 +214,7 @@ namespace Curiosity.Framework.Client.Managers
             cam.Delete();
 
             Gender gender = (Gender)_characterSkin.Gender;
-            await _playerPed.TaskWalkInToCharacterCreationRoom(GetLineupOrCreationAnimation(true, false, gender));
+            await _playerPed.TaskWalkInToCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
             OnCharacterCreationMenuAsync(gender);
         }
 
@@ -516,7 +517,7 @@ namespace Curiosity.Framework.Client.Managers
                             AnimateGameplayCamZoom(true, _mainCamera);
 
                         if (_newMenu == _menuApparel || _newMenu == _menuAdvancedApparel)
-                            _playerPed.TaskCreatorClothes(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
+                            _playerPed.TaskCreatorClothes(GetLineupOrCreationAnimation(true, false));
 
                         if (_newMenu == _menuAppearance)
                         {
@@ -572,7 +573,7 @@ namespace Curiosity.Framework.Client.Managers
                         break;
                     case MenuState.ChangeBackward:
                         if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
-                            _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
+                            _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false));
                         break;
                 }
             };
@@ -1166,6 +1167,304 @@ namespace Curiosity.Framework.Client.Managers
 
             #endregion
 
+            #region Apparel Basic
+
+            var styleList = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+                styleList.Add(GetLabelText("FACE_A_STY_" + i));
+
+            var outfitList = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+                outfitList.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
+
+            List<dynamic> hatList = new() { GetLabelText("FACE_OFF") };
+
+            var glassesList = new List<dynamic>() { GetLabelText("FACE_OFF") };
+
+            if (_characterSkin.IsMale)
+            {
+                foreach (var _hat in CharacterCreatorData.HatsMale)
+                    hatList.Add(GetLabelText(_hat.label));
+                foreach (var _glas in CharacterCreatorData.GlassesMale)
+                    glassesList.Add(GetLabelText(_glas.label));
+            }
+            else
+            {
+                foreach (var _hat in CharacterCreatorData.HatsFemale)
+                    hatList.Add(GetLabelText(_hat.label));
+                foreach (var _glas in CharacterCreatorData.GlassesFemale)
+                    glassesList.Add(GetLabelText(_glas.label));
+            }
+
+            UIMenuListItem style = new(GetLabelText("FACE_APP_STY"), styleList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem outfit = new(GetLabelText("FACE_APP_OUT"), outfitList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem hat = new(GetLabelText("FACE_HAT"), hatList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem glasses = new(GetLabelText("FACE_GLS"), glassesList, 0, GetLabelText("FACE_APPA_H"));
+
+            //UIMenuListItem outfit = new UIMenuListItem(GetLabelText("FACE_APP_OUT"));
+            _menuApparel.AddItem(style);
+            _menuApparel.AddItem(outfit);
+            _menuApparel.AddItem(hat);
+            _menuApparel.AddItem(glasses);
+
+            int first = 0;
+            _menuApparel.OnListChange += (sender, item, index) =>
+            {
+                var id = _playerPed.Handle;
+                if (item == style)
+                {
+                    List<dynamic> list = new();
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if (i == 0)
+                            first = index * 8;
+                        list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
+                    }
+                    outfit.ChangeList(list, 0);
+                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
+                    var comp = new ComponentDrawables(
+                        aa[0][0],
+                        aa[0][1],
+                        aa[0][2],
+                        aa[0][3],
+                        aa[0][4],
+                        aa[0][5],
+                        aa[0][6],
+                        aa[0][7],
+                        aa[0][8],
+                        aa[0][9],
+                        aa[0][10],
+                        aa[0][11]
+                    );
+                    var text = new ComponentDrawables(
+                        aa[1][0],
+                        aa[1][1],
+                        aa[1][2],
+                        aa[1][3],
+                        aa[1][4],
+                        aa[1][5],
+                        aa[1][6],
+                        aa[1][7],
+                        aa[1][8],
+                        aa[1][9],
+                        aa[1][10],
+                        aa[1][11]
+                    );
+                    var _prop = new PropDrawables(
+                        GetPedPropIndex(id, 0),
+                        GetPedPropIndex(id, 1),
+                        GetPedPropIndex(id, 2),
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        GetPedPropTextureIndex(id, 0),
+                        GetPedPropTextureIndex(id, 1),
+                        GetPedPropTextureIndex(id, 2),
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                }
+                else if (item == outfit)
+                {
+                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, (index + first));
+                    var comp = new ComponentDrawables(
+                        aa[0][0],
+                        aa[0][1],
+                        aa[0][2],
+                        aa[0][3],
+                        aa[0][4],
+                        aa[0][5],
+                        aa[0][6],
+                        aa[0][7],
+                        aa[0][8],
+                        aa[0][9],
+                        aa[0][10],
+                        aa[0][11]
+                    );
+                    var text = new ComponentDrawables(
+                        aa[1][0],
+                        aa[1][1],
+                        aa[1][2],
+                        aa[1][3],
+                        aa[1][4],
+                        aa[1][5],
+                        aa[1][6],
+                        aa[1][7],
+                        aa[1][8],
+                        aa[1][9],
+                        aa[1][10],
+                        aa[1][11]
+                    );
+                    var _prop = new PropDrawables(
+                        GetPedPropIndex(id, 0),
+                        GetPedPropIndex(id, 1),
+                        GetPedPropIndex(id, 2),
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        GetPedPropTextureIndex(id, 0),
+                        GetPedPropTextureIndex(id, 1),
+                        GetPedPropTextureIndex(id, 2),
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                }
+                else if (item == hat)
+                {
+                    Logger.Debug("hat id = " + index);
+                    if (index == 0)
+                        ClearPedProp(id, 0);
+                    else
+                    {
+                        ShopPed.PedComponentData prop = new();
+                        if (_characterSkin.IsMale)
+                            prop = CharacterCreatorData.HatsMale[index - 1];
+                        else
+                            prop = CharacterCreatorData.HatsFemale[index - 1];
+                        var comp = new ComponentDrawables(
+                            GetPedDrawableVariation(id, 0),
+                            GetPedDrawableVariation(id, 1),
+                            GetPedDrawableVariation(id, 2),
+                            GetPedDrawableVariation(id, 3),
+                            GetPedDrawableVariation(id, 4),
+                            GetPedDrawableVariation(id, 5),
+                            GetPedDrawableVariation(id, 6),
+                            GetPedDrawableVariation(id, 7),
+                            GetPedDrawableVariation(id, 8),
+                            GetPedDrawableVariation(id, 9),
+                            GetPedDrawableVariation(id, 10),
+                            GetPedDrawableVariation(id, 11)
+                        );
+                        var text = new ComponentDrawables(
+                            GetPedTextureVariation(id, 0),
+                            GetPedTextureVariation(id, 1),
+                            GetPedTextureVariation(id, 2),
+                            GetPedTextureVariation(id, 3),
+                            GetPedTextureVariation(id, 4),
+                            GetPedTextureVariation(id, 5),
+                            GetPedTextureVariation(id, 6),
+                            GetPedTextureVariation(id, 7),
+                            GetPedTextureVariation(id, 8),
+                            GetPedTextureVariation(id, 9),
+                            GetPedTextureVariation(id, 10),
+                            GetPedTextureVariation(id, 11)
+                        );
+                        var _prop = new PropDrawables(
+                            prop.drawable,
+                            GetPedPropIndex(id, 1),
+                            GetPedPropIndex(id, 2),
+                            GetPedPropIndex(id, 3),
+                            GetPedPropIndex(id, 4),
+                            GetPedPropIndex(id, 5),
+                            GetPedPropIndex(id, 6),
+                            GetPedPropIndex(id, 7),
+                            GetPedPropIndex(id, 8)
+                        );
+                        var _proptxt = new PropDrawables(
+                            prop.texture,
+                            GetPedPropTextureIndex(id, 1),
+                            GetPedPropTextureIndex(id, 2),
+                            GetPedPropTextureIndex(id, 3),
+                            GetPedPropTextureIndex(id, 4),
+                            GetPedPropTextureIndex(id, 5),
+                            GetPedPropTextureIndex(id, 6),
+                            GetPedPropTextureIndex(id, 7),
+                            GetPedPropTextureIndex(id, 8)
+                        );
+                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                    }
+                }
+                else if (item == glasses)
+                {
+                    if (index == 0)
+                        ClearPedProp(id, 1);
+                    else
+                    {
+                        ShopPed.PedComponentData prop = new();
+                        if (_characterSkin.IsMale)
+                            prop = CharacterCreatorData.GlassesMale[index - 1];
+                        else
+                            prop = CharacterCreatorData.GlassesFemale[index - 1];
+
+                        var comp = new ComponentDrawables(
+                            GetPedDrawableVariation(id, 0),
+                            GetPedDrawableVariation(id, 1),
+                            GetPedDrawableVariation(id, 2),
+                            GetPedDrawableVariation(id, 3),
+                            GetPedDrawableVariation(id, 4),
+                            GetPedDrawableVariation(id, 5),
+                            GetPedDrawableVariation(id, 6),
+                            GetPedDrawableVariation(id, 7),
+                            GetPedDrawableVariation(id, 8),
+                            GetPedDrawableVariation(id, 9),
+                            GetPedDrawableVariation(id, 10),
+                            GetPedDrawableVariation(id, 11)
+                        );
+                        var text = new ComponentDrawables(
+                            GetPedTextureVariation(id, 0),
+                            GetPedTextureVariation(id, 1),
+                            GetPedTextureVariation(id, 2),
+                            GetPedTextureVariation(id, 3),
+                            GetPedTextureVariation(id, 4),
+                            GetPedTextureVariation(id, 5),
+                            GetPedTextureVariation(id, 6),
+                            GetPedTextureVariation(id, 7),
+                            GetPedTextureVariation(id, 8),
+                            GetPedTextureVariation(id, 9),
+                            GetPedTextureVariation(id, 10),
+                            GetPedTextureVariation(id, 11)
+                        );
+                        var _prop = new PropDrawables(
+                            GetPedPropIndex(id, 0),
+                            prop.drawable,
+                            GetPedPropIndex(id, 2),
+                            GetPedPropIndex(id, 3),
+                            GetPedPropIndex(id, 4),
+                            GetPedPropIndex(id, 5),
+                            GetPedPropIndex(id, 6),
+                            GetPedPropIndex(id, 7),
+                            GetPedPropIndex(id, 8)
+                        );
+                        var _proptxt = new PropDrawables(
+                            GetPedPropTextureIndex(id, 0),
+                            prop.texture,
+                            GetPedPropTextureIndex(id, 2),
+                            GetPedPropTextureIndex(id, 3),
+                            GetPedPropTextureIndex(id, 4),
+                            GetPedPropTextureIndex(id, 5),
+                            GetPedPropTextureIndex(id, 6),
+                            GetPedPropTextureIndex(id, 7),
+                            GetPedPropTextureIndex(id, 8)
+                        );
+                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                    }
+                }
+                UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
+                _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
+            };
+
+            #endregion
+
             #region Save and Exit
 
             UIMenuItem miSaveAndExit = new UIMenuItem(
@@ -1243,7 +1542,7 @@ namespace Curiosity.Framework.Client.Managers
                     if (!_isPedLookingLeft)
                     {
                         _isPedLookingLeft = true;
-                        _playerPed.TaskLookLeft(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
+                        _playerPed.TaskLookLeft(GetLineupOrCreationAnimation(true, false));
                     }
                 }
                 else if (IsControlRightBumperPressed)
@@ -1251,15 +1550,15 @@ namespace Curiosity.Framework.Client.Managers
                     if (!_isPedLookingRight)
                     {
                         _isPedLookingRight = true;
-                        _playerPed.TaskLookRight(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
+                        _playerPed.TaskLookRight(GetLineupOrCreationAnimation(true, false));
                     }
                 }
                 else
                 {
                     if (_isPedLookingRight)
-                        _playerPed.TaskStopLookingRight(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
+                        _playerPed.TaskStopLookingRight(GetLineupOrCreationAnimation(true, false));
                     else if (_isPedLookingLeft)
-                        _playerPed.TaskStopLookingLeft(GetLineupOrCreationAnimation(true, false, _playerPed.Gender));
+                        _playerPed.TaskStopLookingLeft(GetLineupOrCreationAnimation(true, false));
                     
                     _isPedLookingLeft = _isPedLookingRight = false;
                 }
@@ -2536,16 +2835,16 @@ namespace Curiosity.Framework.Client.Managers
             }
         }
 
-        string GetLineupOrCreationAnimation(bool lineup, bool alternateAnimation, Gender gender)
+        string GetLineupOrCreationAnimation(bool lineup, bool alternateAnimation)
         {
             if (lineup)
-                return gender == Gender.Male ? "mp_character_creation@customise@male_a" : "mp_character_creation@customise@female_a";
+                return _characterSkin.IsMale ? "mp_character_creation@customise@male_a" : "mp_character_creation@customise@female_a";
 
             if (!lineup && alternateAnimation)
-                return gender == Gender.Male ? "mp_character_creation@lineup@male_b" : "mp_character_creation@lineup@female_b";
+                return _characterSkin.IsMale ? "mp_character_creation@lineup@male_b" : "mp_character_creation@lineup@female_b";
             
             if (!lineup)
-                return gender == Gender.Male ? "mp_character_creation@lineup@male_a" : "mp_character_creation@lineup@female_a";
+                return _characterSkin.IsMale ? "mp_character_creation@lineup@male_a" : "mp_character_creation@lineup@female_a";
 
             return "mp_character_creation@lineup@male_a";
         }
@@ -2624,6 +2923,7 @@ namespace Curiosity.Framework.Client.Managers
             bool isMale = (Gender)_characterSkin.Gender == Gender.Male;
 
             _characterSkin.Age = new(Common.RANDOM.Next(0, CharacterCreatorData.Ageing.Count), (float)Common.RANDOM.NextDouble());
+            if (_mlstAppearanceSkinAgeing is not null) _mlstAppearanceSkinAgeing.Index = _characterSkin.Age.Style;
 
             if (isMale)
             {
@@ -2740,6 +3040,3854 @@ namespace Curiosity.Framework.Client.Managers
             N_0xe111a7c0d200cbc5(cameraHandle, fParam2);
             SetCamDofFnumberOfLens(cameraHandle, dofLens);
             SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
+        }
+
+        public static void UpdateDress(int Handle, CharacterOutfit dress)
+        {
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Face,
+                dress.ComponentDrawables.Face,
+                dress.ComponentTextures.Face,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Mask,
+                dress.ComponentDrawables.Mask,
+                dress.ComponentTextures.Mask,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Torso,
+                dress.ComponentDrawables.Torso,
+                dress.ComponentTextures.Torso,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Leg,
+                dress.ComponentDrawables.Leg,
+                dress.ComponentTextures.Leg,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.BagOrParachute,
+                dress.ComponentDrawables.BagOrParachute,
+                dress.ComponentTextures.BagOrParachute,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Shoes,
+                dress.ComponentDrawables.Shoes,
+                dress.ComponentTextures.Shoes,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Accessory,
+                dress.ComponentDrawables.Accessory,
+                dress.ComponentTextures.Accessory,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Undershirt,
+                dress.ComponentDrawables.Undershirt,
+                dress.ComponentTextures.Undershirt,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Kevlar,
+                dress.ComponentDrawables.Kevlar,
+                dress.ComponentTextures.Kevlar,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Badge,
+                dress.ComponentDrawables.Badge,
+                dress.ComponentTextures.Badge,
+                2
+            );
+            SetPedComponentVariation(
+                Handle,
+                (int)ePedComponents.Torso_2,
+                dress.ComponentDrawables.Torso_2,
+                dress.ComponentTextures.Torso_2,
+                2
+            );
+            if (dress.PropDrawables.HatOrMask == -1)
+                ClearPedProp(Handle, 0);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.HatOrMask,
+                    dress.PropDrawables.HatOrMask,
+                    dress.PropTextures.HatOrMask,
+                    false
+                );
+            if (dress.PropDrawables.Ears == -1)
+                ClearPedProp(Handle, 2);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Ears,
+                    dress.PropDrawables.Ears,
+                    dress.PropTextures.Ears,
+                    false
+                );
+            if (dress.PropDrawables.Glasses == -1)
+                ClearPedProp(Handle, 1);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Glasses,
+                    dress.PropDrawables.Glasses,
+                    dress.PropTextures.Glasses,
+                    true
+                );
+            if (dress.PropDrawables.Unk_3 == -1)
+                ClearPedProp(Handle, 3);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Unk_3,
+                    dress.PropDrawables.Unk_3,
+                    dress.PropTextures.Unk_3,
+                    true
+                );
+            if (dress.PropDrawables.Unk_4 == -1)
+                ClearPedProp(Handle, 4);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Unk_4,
+                    dress.PropDrawables.Unk_4,
+                    dress.PropTextures.Unk_4,
+                    true
+                );
+            if (dress.PropDrawables.Unk_5 == -1)
+                ClearPedProp(Handle, 5);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Unk_5,
+                    dress.PropDrawables.Unk_5,
+                    dress.PropTextures.Unk_5,
+                    true
+                );
+            if (dress.PropDrawables.Watches == -1)
+                ClearPedProp(Handle, 6);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Watches,
+                    dress.PropDrawables.Watches,
+                    dress.PropTextures.Watches,
+                    true
+                );
+            if (dress.PropDrawables.Bracelets == -1)
+                ClearPedProp(Handle, 7);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Bracelets,
+                    dress.PropDrawables.Bracelets,
+                    dress.PropTextures.Bracelets,
+                    true
+                );
+            if (dress.PropDrawables.Unk_8 == -1)
+                ClearPedProp(Handle, 8);
+            else
+                SetPedPropIndex(
+                    Handle,
+                    (int)ePedProps.Unk_8,
+                    dress.PropDrawables.Unk_8,
+                    dress.PropTextures.Unk_8,
+                    true
+                );
+        }
+
+        static int[][] GetCharacterOutfitSettings(bool isMale, int iParam1)
+        {
+            ShopPed.PedComponentData Var1;
+
+            var components = new int[12];
+            var textures = new int[12];
+
+            for (int i = 0; i < 12; i++)
+            {
+                components[i] = -1;
+                textures[i] = -1;
+            }
+
+            switch (iParam1)
+            {
+                case 56:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 6;
+                        components[6] = 0;
+                        textures[6] = 10;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 1;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 9;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 9;
+                        components[6] = 13;
+                        textures[6] = 12;
+                        components[7] = 1;
+                        textures[7] = 2;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 9;
+                        textures[11] = 9;
+                    }
+                    break;
+
+                case 57:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 1;
+                        textures[4] = 15;
+                        components[6] = 1;
+                        textures[6] = 9;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 11;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 2;
+                        textures[3] = 0;
+                        components[4] = 2;
+                        textures[4] = 2;
+                        components[6] = 2;
+                        textures[6] = 14;
+                        components[7] = 5;
+                        textures[7] = 4;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 2;
+                        textures[11] = 6;
+                    }
+                    break;
+
+                case 58:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 2;
+                        components[6] = 0;
+                        textures[6] = 10;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 1;
+                        textures[8] = 5;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 15;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 3;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 11;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET001")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 3;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 10;
+                    }
+                    break;
+
+                case 59:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 1;
+                        textures[4] = 0;
+                        components[6] = 1;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 0;
+                        textures[11] = 2;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 8;
+                        components[6] = 15;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 4;
+                        textures[8] = 13;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 1;
+                        textures[11] = 5;
+                    }
+                    break;
+
+                case 60:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        components[4] = 1;
+                        textures[4] = 14;
+                        components[6] = 1;
+                        textures[6] = 4;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB8_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 2;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 7;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET011")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 2;
+                        textures[11] = 15;
+                    }
+                    break;
+
+                case 61:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 8;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 4;
+                        components[6] = 4;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB5_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 3;
+                        textures[3] = 0;
+                        components[4] = 2;
+                        textures[4] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET006")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 2;
+                        textures[7] = 1;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 11;
+                    }
+                    break;
+
+                case 62:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 3;
+                        components[6] = 1;
+                        textures[6] = 8;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 3;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR4")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 2;
+                        textures[6] = 5;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 0;
+                        textures[11] = 11;
+                    }
+                    break;
+
+                case 63:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 5;
+                        components[6] = 1;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB0_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 2;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 8;
+                        components[6] = 6;
+                        textures[6] = 2;
+                        components[7] = 6;
+                        textures[7] = 2;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 2;
+                        textures[11] = 7;
+                    }
+                    break;
+
+                case 0:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 15;
+                        textures[4] = 9;
+                        components[6] = 12;
+                        textures[6] = 12;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 0;
+                        textures[11] = 2;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 3;
+                        textures[3] = 0;
+                        components[4] = 11;
+                        textures[4] = 10;
+                        components[6] = 7;
+                        textures[6] = 6;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_LTS_F_JBIB_1_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 1:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 7;
+                        textures[4] = 15;
+                        components[6] = 1;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 1;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 1;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 8;
+                        components[6] = 4;
+                        textures[6] = 2;
+                        components[7] = 1;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB1_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 2:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 5;
+                        textures[4] = 1;
+                        components[6] = 6;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 1;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 3;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 15;
+                        components[6] = 3;
+                        textures[6] = 15;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 1;
+                    }
+                    break;
+
+                case 3:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 7;
+                        textures[4] = 4;
+                        components[6] = 12;
+                        textures[6] = 4;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 5;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 11;
+                        textures[6] = 1;
+                        components[7] = 2;
+                        textures[7] = 4;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 5;
+                        textures[11] = 9;
+                    }
+                    break;
+
+                case 4:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        components[4] = 5;
+                        textures[4] = 12;
+                        components[6] = 12;
+                        textures[6] = 12;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 5;
+                        textures[8] = 2;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 12;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 3;
+                        textures[3] = 0;
+                        components[4] = 11;
+                        textures[4] = 0;
+                        components[6] = 3;
+                        textures[6] = 1;
+                        components[7] = 1;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 12;
+                    }
+                    break;
+
+                case 5:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 15;
+                        textures[4] = 12;
+                        components[6] = 6;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 0;
+                        textures[8] = 2;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 1;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 1;
+                        components[6] = 4;
+                        textures[6] = 1;
+                        components[7] = 2;
+                        textures[7] = 1;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 5;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 6:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 1;
+                        textures[4] = 15;
+                        components[6] = 7;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 0;
+                        textures[11] = 2;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 11;
+                        textures[4] = 14;
+                        components[6] = 3;
+                        textures[6] = 8;
+                        components[7] = 2;
+                        textures[7] = 2;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB1_1")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 7:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        components[4] = 12;
+                        textures[4] = 7;
+                        components[6] = 7;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 5;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_LTS_F_LEGS_0_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_PILOT_F_FEET_0_0")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 5;
+                        textures[7] = 4;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 4;
+                        textures[11] = 14;
+                    }
+                    break;
+
+                case 8:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        components[7] = 12;
+                        textures[7] = 2;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS0_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB2_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 4;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH0_3")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 13;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB4_8")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 9:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 2;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_5")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 4;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 9;
+                        textures[4] = 15;
+                        components[6] = 6;
+                        textures[6] = 0;
+                        components[7] = 4;
+                        textures[7] = 3;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 13;
+                        textures[11] = 6;
+                    }
+                    break;
+
+                case 10:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_7")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 4;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_2")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 7;
+                        textures[7] = 1;
+                        components[8] = 13;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_9")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 11:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS1_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB0_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_4")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 6;
+                        textures[7] = 1;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS0_1")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_6")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 12:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 5;
+                        textures[8] = 2;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 4;
+                        textures[11] = 14;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 9;
+                        textures[4] = 6;
+                        components[6] = 14;
+                        textures[6] = 11;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 13;
+                        textures[8] = 3;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 8;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 13:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_5")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS1_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB0_5")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 0;
+                        textures[6] = 0;
+                        components[7] = 1;
+                        textures[7] = 0;
+                        components[8] = 13;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB1_9")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 14:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        components[4] = 4;
+                        textures[4] = 0;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 5;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 4;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 12;
+                        components[6] = 8;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 5;
+                        textures[8] = 7;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 8;
+                        textures[11] = 1;
+                    }
+                    break;
+
+                case 15:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_TEETH1_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS4_1")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB1_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 9;
+                        textures[4] = 8;
+                        components[6] = 6;
+                        textures[6] = 0;
+                        components[7] = 6;
+                        textures[7] = 0;
+                        components[8] = 0;
+                        textures[8] = 10;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 6;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 16:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_3")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_7")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 11;
+                        textures[7] = 2;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB9_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_6")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_5")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_6")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 17:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_11")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS1_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 8;
+                        textures[4] = 11;
+                        components[6] = 7;
+                        textures[6] = 0;
+                        components[7] = 9;
+                        textures[7] = 0;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 4;
+                        textures[11] = 14;
+                    }
+                    break;
+
+                case 18:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS1_4")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 1;
+                        textures[6] = 9;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_VAL_M_JBIB2_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_10")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_10")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUS2_F_ACCS0_1")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 19:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_7")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_6")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS6_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 1;
+                        components[6] = 6;
+                        textures[6] = 0;
+                        components[7] = 2;
+                        textures[7] = 0;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 13;
+                        textures[11] = 7;
+                    }
+                    break;
+
+                case 20:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 8;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_TEETH0_3")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB5_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 3;
+                        textures[6] = 10;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB3_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 21:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_6")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_0")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS1_1")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_11")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_4")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_3")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_6")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB4_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 22:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 7;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB11_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_7")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_1")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 4;
+                        textures[7] = 2;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_1")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_6")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 23:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET0_11")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_VAL_M_ACCS2_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_6")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 7;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_5")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB2_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 24:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 15;
+                        textures[4] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_FEET0_5")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_JBIB1_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 15;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS0_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET009")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 2;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_JBIB2_10")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 25:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR2_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 1;
+                        textures[6] = 3;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 1;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 15;
+                        textures[6] = 1;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_JBIB1_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 26:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR0_7")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_FEET0_6")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_JBIB1_5")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR107")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET008")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB5_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 27:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 15;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR2_11")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 5;
+                        textures[6] = 3;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 15;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 15;
+                        textures[3] = 0;
+                        components[4] = 12;
+                        textures[4] = 14;
+                        components[6] = 3;
+                        textures[6] = 13;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_JBIB2_9")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 28:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR0_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_FEET0_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH1_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_JBIB1_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 9;
+                        textures[3] = 0;
+                        components[4] = 14;
+                        textures[4] = 8;
+                        components[6] = 13;
+                        textures[6] = 5;
+                        components[7] = 4;
+                        textures[7] = 3;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 9;
+                        textures[11] = 3;
+                    }
+                    break;
+
+                case 29:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR2_3")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_FEET0_4")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 5;
+                        textures[11] = 7;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 15;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET001")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 9;
+                        textures[7] = 0;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_JBIB2_6")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 30:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 15;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR0_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 1;
+                        textures[6] = 7;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_TEETH0_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 15;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR104")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET007")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 3;
+                        textures[7] = 1;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 11;
+                        textures[11] = 10;
+                    }
+                    break;
+
+                case 31:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 6;
+                        textures[4] = 10;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_FEET0_6")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB11_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_LOWR10")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_FEET003")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH0_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_ACCS0_4")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB0_5")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 32:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS0_5")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET1_10")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH0_12")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_ACCS3_13")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_5")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS0_4")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 0;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 13;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 33:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_LEGS1_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_ACCS1_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI2_M_JBIB2_1")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_4")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_0")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_TEETH0_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB3_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 34:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS0_7")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_2")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_10")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 6;
+                        textures[8] = 11;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB2_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS0_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 1;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS2_5")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 35:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 10;
+                        textures[4] = 0;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 4;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB5_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        components[4] = 6;
+                        textures[4] = 0;
+                        components[6] = 13;
+                        textures[6] = 0;
+                        components[7] = 6;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS0_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 36:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        components[4] = 10;
+                        textures[4] = 0;
+                        components[6] = 11;
+                        textures[6] = 12;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH0_11")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB3_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 7;
+                        textures[4] = 2;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_9")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 1;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS1_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB4_10")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 37:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS1_8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 12;
+                        textures[7] = 2;
+                        components[8] = 10;
+                        textures[8] = 2;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB0_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        components[4] = 6;
+                        textures[4] = 2;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_7")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 6;
+                        textures[7] = 4;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS2_9")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 6;
+                        textures[11] = 2;
+                    }
+                    break;
+
+                case 38:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        components[4] = 10;
+                        textures[4] = 2;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_14")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 4;
+                        textures[8] = 2;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB5_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 6;
+                        textures[3] = 0;
+                        components[4] = 7;
+                        textures[4] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_0")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 6;
+                        textures[7] = 0;
+                        components[8] = 13;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB1_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 39:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS1_8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET1_6")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_13")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 6;
+                        textures[8] = 12;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB2_9")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS0_4")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_TEETH0_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB3_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 40:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 15;
+                        components[6] = 2;
+                        textures[6] = 6;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 0;
+                        textures[8] = 3;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 3;
+                        textures[11] = 15;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        components[4] = 2;
+                        textures[4] = 0;
+                        components[6] = 10;
+                        textures[6] = 2;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 7;
+                    }
+                    break;
+
+                case 41:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 5;
+                        textures[4] = 6;
+                        components[6] = 2;
+                        textures[6] = 6;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 1;
+                        textures[11] = 0;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        components[4] = 2;
+                        textures[4] = 2;
+                        components[6] = 10;
+                        textures[6] = 2;
+                        components[7] = 3;
+                        textures[7] = 3;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 11;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 42:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 15;
+                        textures[4] = 8;
+                        components[6] = 2;
+                        textures[6] = 13;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 9;
+                        textures[11] = 4;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        components[4] = 12;
+                        textures[4] = 8;
+                        components[6] = 10;
+                        textures[6] = 3;
+                        components[7] = 3;
+                        textures[7] = 4;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 10;
+                    }
+                    break;
+
+                case 43:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 8;
+                        textures[3] = 0;
+                        components[4] = 14;
+                        textures[4] = 1;
+                        components[6] = 2;
+                        textures[6] = 13;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB5_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 7;
+                        textures[3] = 0;
+                        components[4] = 14;
+                        textures[4] = 9;
+                        components[6] = 11;
+                        textures[6] = 0;
+                        components[7] = 2;
+                        textures[7] = 4;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 10;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 44:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 7;
+                        textures[4] = 4;
+                        components[6] = 7;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 0;
+                        textures[8] = 7;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 5;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        components[4] = 14;
+                        textures[4] = 8;
+                        components[6] = 3;
+                        textures[6] = 1;
+                        components[7] = 3;
+                        textures[7] = 5;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 0;
+                    }
+                    break;
+
+                case 45:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 1;
+                        textures[3] = 0;
+                        components[4] = 3;
+                        textures[4] = 4;
+                        components[6] = 7;
+                        textures[6] = 15;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_ACCS4_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 7;
+                        textures[11] = 4;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 7;
+                        textures[3] = 0;
+                        components[4] = 10;
+                        textures[4] = 2;
+                        components[6] = 1;
+                        textures[6] = 13;
+                        components[7] = 1;
+                        textures[7] = 1;
+                        components[8] = 5;
+                        textures[8] = 9;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 10;
+                        textures[11] = 10;
+                    }
+                    break;
+
+                case 46:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_M_LOWR2_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 9;
+                        textures[6] = 7;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB6_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        components[4] = 12;
+                        textures[4] = 0;
+                        components[6] = 4;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 14;
+                        textures[11] = 4;
+                    }
+                    break;
+
+                case 47:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        components[4] = 6;
+                        textures[4] = 0;
+                        components[6] = 9;
+                        textures[6] = 0;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 9;
+                        textures[11] = 10;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 7;
+                        textures[3] = 0;
+                        components[4] = 2;
+                        textures[4] = 2;
+                        components[6] = 11;
+                        textures[6] = 1;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 1;
+                        textures[8] = 8;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 10;
+                        textures[11] = 7;
+                    }
+                    break;
+
+                case 48:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 11;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_9")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 11;
+                        textures[7] = 2;
+                        components[8] = 6;
+                        textures[8] = 12;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB7_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_0")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_9")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 6;
+                        textures[7] = 1;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_ACCS0_3")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_10")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 49:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS2_2")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_14")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_TEETH0_4")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB0_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_5")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 8;
+                        textures[6] = 3;
+                        components[7] = 2;
+                        textures[7] = 5;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 13;
+                        textures[11] = 8;
+                    }
+                    break;
+
+                case 50:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS0_11")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_6")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_4")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 4;
+                        textures[8] = 1;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_0")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_13")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_3")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_TEETH0_2")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_ACCS1_8")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB4_1")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 51:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 0;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS1_6")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 12;
+                        textures[6] = 15;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        components[8] = 15;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_VAL_M_JBIB2_1")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_8")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_FEET1_7")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 2;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB2_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 52:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_LEGS0_12")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 10;
+                        textures[6] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH4_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_ACCS1_12")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB0_3")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 7;
+                        textures[3] = 0;
+                        components[4] = 0;
+                        textures[4] = 14;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET0_4")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 1;
+                        textures[7] = 0;
+                        components[8] = 1;
+                        textures[8] = 8;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        components[11] = 10;
+                        textures[11] = 15;
+                    }
+                    break;
+
+                case 53:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS2_12")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_FEET0_2")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 12;
+                        textures[7] = 2;
+                        components[8] = 10;
+                        textures[8] = 14;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_4")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 5;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_5")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_7")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_3")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 0;
+                        textures[8] = 15;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB0_8")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 54:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS1_1")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_10")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_TEETH1_6")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_ACCS1_6")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_JBIB2_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 12;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_LEGS2_9")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_FEET1_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH0_1")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_JBIB2_11")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+
+                case 55:
+                    if (isMale)
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 14;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_LEGS0_10")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_M_FEET1_8")
+                        );
+                        components[6] = Var1.drawable;
+                        textures[6] = Var1.texture;
+                        components[7] = 0;
+                        textures[7] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_VAL_M_ACCS2_0")
+                        );
+                        components[8] = Var1.drawable;
+                        textures[8] = Var1.texture;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_M_JBIB1_2")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    else
+                    {
+                        components[1] = 0;
+                        textures[1] = 0;
+                        components[3] = 4;
+                        textures[3] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BUSI_F_LEGS1_9")
+                        );
+                        components[4] = Var1.drawable;
+                        textures[4] = Var1.texture;
+                        components[6] = 8;
+                        textures[6] = 8;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_BEACH_F_TEETH1_0")
+                        );
+                        components[7] = Var1.drawable;
+                        textures[7] = Var1.texture;
+                        components[8] = 3;
+                        textures[8] = 0;
+                        components[9] = 0;
+                        textures[9] = 0;
+                        components[10] = 0;
+                        textures[10] = 0;
+                        Var1 = ShopPed.GetShopPedComponent(
+                            (uint)Game.GenerateHash("DLC_MP_HIPS_F_JBIB2_8")
+                        );
+                        components[11] = Var1.drawable;
+                        textures[11] = Var1.texture;
+                    }
+                    break;
+            }
+            return new int[][]
+            {
+                new int[12]
+                {
+                    components[0],
+                    components[1],
+                    components[2],
+                    components[3],
+                    components[4],
+                    components[5],
+                    components[6],
+                    components[7],
+                    components[8],
+                    components[9],
+                    components[10],
+                    components[11]
+                },
+                new int[12]
+                {
+                    textures[0],
+                    textures[1],
+                    textures[2],
+                    textures[3],
+                    textures[4],
+                    textures[5],
+                    textures[6],
+                    textures[7],
+                    textures[8],
+                    textures[9],
+                    textures[10],
+                    textures[11]
+                }
+            };
         }
     }
 }

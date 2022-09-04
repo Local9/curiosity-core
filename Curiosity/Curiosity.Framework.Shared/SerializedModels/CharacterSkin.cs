@@ -26,6 +26,9 @@ namespace Curiosity.Framework.Shared.SerializedModels
         [JsonProperty("ears")]
         public Ears Ears = new Ears();
 
+        [JsonProperty("outfit")]
+        public CharacterOutfit CharacterOutfit = new();
+
 #if CLIENT
 
 #endif
