@@ -18,7 +18,7 @@
     [Serializable]
     public partial class A3 : A2
     {
-        public int[] Color = new int[2];
+        public int[] Color = new int[2] {0, 0};
 
         public A3() { }
 
@@ -34,7 +34,7 @@
     public partial class Hair
     {
         public int Style;
-        public int[] Color = new int[2];
+        public int[] Color = new int[2] { 0, 0 };
 
         public Hair() { }
 
