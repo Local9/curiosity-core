@@ -93,7 +93,7 @@ namespace Curiosity.Framework.Client.Managers
 
             // lets act as if we don't have a character for now
 
-            CreateCharacterClass();
+            await CreateCharacterClass();
 
             OnCreateNewCharacter(_characterSkin);
 
@@ -104,7 +104,7 @@ namespace Curiosity.Framework.Client.Managers
             Logger.Trace($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
 
-        void SetupCharacterCreator()
+        async void SetupCharacterCreator()
         {
             RequestAnimDict("mp_character_creation@lineup@male_a");
             RequestAnimDict("mp_character_creation@lineup@male_b");
@@ -120,7 +120,7 @@ namespace Curiosity.Framework.Client.Managers
             RequestScriptAudioBank("DLC_GTAO/MUGSHOT_ROOM", false);
 
             if (_characterSkin is null)
-                CreateCharacterClass();
+                await CreateCharacterClass();
         }
 
         async Task OnLoadCharacterCreatorInteriorAsync()
@@ -235,7 +235,7 @@ namespace Curiosity.Framework.Client.Managers
 
                 Logger.Debug($"Character Sex: {newGender}");
 
-                CreateCharacterClass(false, false, newGender);
+                await CreateCharacterClass(false, false, newGender);
 
                 Logger.Debug($"Character Skin Sex: {_characterSkin.Gender}");
 
@@ -289,19 +289,19 @@ namespace Curiosity.Framework.Client.Managers
             UIMenuListItem _mlstAppearanceEyeBrows = new(GetLabelText("FACE_F_EYEBR"), CharacterCreatorData.Eyebrows, _characterSkin.Face.Eyebrow.Style,
                     "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
             UIMenuColorPanel _cpEyebrowColor1 = new("First Colour", ColorPanelType.Hair);
-            UIMenuColorPanel _cpEyebrowColor2 = new("Second Colour", ColorPanelType.Hair);
+            //UIMenuColorPanel _cpEyebrowColor2 = new("Second Colour", ColorPanelType.Hair);
             UIMenuPercentagePanel _ppEyebrowOpacity = new("Opacity", "0%", "100%");
-            _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor1);
-            _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor2);
             _mlstAppearanceEyeBrows.AddPanel(_ppEyebrowOpacity);
+            _mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor1);
+            //_mlstAppearanceEyeBrows.AddPanel(_cpEyebrowColor2);
             UIMenuListItem _mlstAppearanceBeard = new(GetLabelText("FACE_F_BEARD"), CharacterCreatorData.Beards, _characterSkin.Face.Beard.Style,
                     "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
             UIMenuColorPanel _cpBeardColor1 = new("First Colour", ColorPanelType.Hair);
             UIMenuColorPanel _cpBeardColor2 = new("Second Colour", ColorPanelType.Hair);
             UIMenuPercentagePanel _ppBeardOpacity = new("Opacity", "0%", "100%");
-            _mlstAppearanceBeard.AddPanel(_cpBeardColor1);
-            _mlstAppearanceBeard.AddPanel(_cpBeardColor2);
             _mlstAppearanceBeard.AddPanel(_ppBeardOpacity);
+            _mlstAppearanceBeard.AddPanel(_cpBeardColor1);
+            // _mlstAppearanceBeard.AddPanel(_cpBeardColor2);
             UIMenuListItem _mlstAppearanceSkinBlemishes = new(GetLabelText("FACE_F_SKINB"), CharacterCreatorData.Blemishes, _characterSkin.Face.Blemishes.Style,
                     "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
             UIMenuPercentagePanel _ppBlemOpacity = new("Opacity", "0%", "100%");
@@ -333,54 +333,54 @@ namespace Curiosity.Framework.Client.Managers
             UIMenuColorPanel _cpBlushColor1 = new("First Colour", ColorPanelType.Makeup);
             UIMenuColorPanel _cpBlushColor2 = new("Second Colour", ColorPanelType.Makeup);
             UIMenuPercentagePanel _ppBlushOpacity = new("Opacity", "0%", "100%");
-            _mlstAppearanceBlusher.AddPanel(_cpBlushColor1);
-            _mlstAppearanceBlusher.AddPanel(_cpBlushColor2);
             _mlstAppearanceBlusher.AddPanel(_ppBlushOpacity);
+            _mlstAppearanceBlusher.AddPanel(_cpBlushColor1);
+            //_mlstAppearanceBlusher.AddPanel(_cpBlushColor2);
             UIMenuListItem _mlstAppearanceLipStick = new(GetLabelText("FACE_F_LIPST"), CharacterCreatorData.Lipstick, _characterSkin.Face.Lipstick.Style,
                 "Change your appearance, use the ~y~mouse~w~ to edit the panels.");
             UIMenuColorPanel _cpLipColor1 = new UIMenuColorPanel("First Colour", ColorPanelType.Makeup);
             UIMenuColorPanel _cpLipColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Makeup);
             UIMenuPercentagePanel _ppLipOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
-            _mlstAppearanceLipStick.AddPanel(_cpLipColor1);
-            _mlstAppearanceLipStick.AddPanel(_cpLipColor2);
             _mlstAppearanceLipStick.AddPanel(_ppLipOpacity);
+            _mlstAppearanceLipStick.AddPanel(_cpLipColor1);
+            //_mlstAppearanceLipStick.AddPanel(_cpLipColor2);
 
             _menuAppearance.OnColorPanelChange += (_menu, _panel, _index) =>
             {
                 if (_menu == _mlstAppearanceHair)
                 {
-                    if (_panel == _menu.Panels[0])
+                    if (_panel == _menu.Panels[1])
                         _characterSkin.Hair.Color[0] = _index;
-                    else if (_panel == _menu.Panels[1])
-                        _characterSkin.Hair.Color[1] = _index;
+                    //else if (_panel == _menu.Panels[2])
+                    //    _characterSkin.Hair.Color[1] = _index;
                 }
                 else if (_menu == _mlstAppearanceEyeBrows)
                 {
-                    if (_panel == _menu.Panels[0])
+                    if (_panel == _menu.Panels[1])
                         _characterSkin.Face.Eyebrow.Color[0] = _index;
-                    else if (_panel == _menu.Panels[1])
-                        _characterSkin.Face.Eyebrow.Color[1] = _index;
+                    //else if (_panel == _menu.Panels[2])
+                    //    _characterSkin.Face.Eyebrow.Color[1] = _index;
                 }
                 else if (_menu == _mlstAppearanceBeard)
                 {
-                    if (_panel == _menu.Panels[0])
+                    if (_panel == _menu.Panels[1])
                         _characterSkin.Face.Beard.Color[0] = _index;
-                    else if (_panel == _menu.Panels[1])
-                        _characterSkin.Face.Beard.Color[1] = _index;
+                    //else if (_panel == _menu.Panels[2])
+                    //    _characterSkin.Face.Beard.Color[1] = _index;
                 }
                 else if (_menu == _mlstAppearanceBlusher)
                 {
-                    if (_panel == _menu.Panels[0])
+                    if (_panel == _menu.Panels[1])
                         _characterSkin.Face.Blusher.Color[0] = _index;
-                    else if (_panel == _menu.Panels[1])
-                        _characterSkin.Face.Blusher.Color[1] = _index;
+                    //else if (_panel == _menu.Panels[2])
+                    //    _characterSkin.Face.Blusher.Color[1] = _index;
                 }
                 else if (_menu == _mlstAppearanceLipStick)
                 {
-                    if (_panel == _menu.Panels[0])
+                    if (_panel == _menu.Panels[1])
                         _characterSkin.Face.Lipstick.Color[0] = _index;
-                    else if (_panel == _menu.Panels[1])
-                        _characterSkin.Face.Lipstick.Color[1] = _index;
+                    //else if (_panel == _menu.Panels[2])
+                    //    _characterSkin.Face.Lipstick.Color[1] = _index;
                 }
                 UpdateFace(_playerPed.Handle, _characterSkin);
             };
@@ -390,22 +390,22 @@ namespace Curiosity.Framework.Client.Managers
                 var pct = _index / 100;
                 if (_menu == _mlstAppearanceEyeBrows)
                 {
-                    if (_panel == _menu.Panels[2])
+                    if (_panel == _menu.Panels[0])
                         _characterSkin.Face.Eyebrow.Opacity = pct;
                 }
                 else if (_menu == _mlstAppearanceBeard)
                 {
-                    if (_panel == _menu.Panels[2])
+                    if (_panel == _menu.Panels[0])
                         _characterSkin.Face.Beard.Opacity = pct;
                 }
                 else if (_menu == _mlstAppearanceBlusher)
                 {
-                    if (_panel == _menu.Panels[2])
+                    if (_panel == _menu.Panels[0])
                         _characterSkin.Face.Blusher.Opacity = pct;
                 }
                 else if (_menu == _mlstAppearanceLipStick)
                 {
-                    if (_panel == _menu.Panels[2])
+                    if (_panel == _menu.Panels[0])
                         _characterSkin.Face.Lipstick.Opacity = pct;
                 }
                 else if (_menu == _mlstAppearanceSkinBlemishes)
@@ -510,7 +510,7 @@ namespace Curiosity.Framework.Client.Managers
                         if (_newMenu == _menuParents || _newMenu == _menuFeatures || _newMenu == _menuAppearance)
                             AnimateGameplayCamZoom(true, _mainCamera);
 
-                        if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
+                        if (_newMenu == _menuApparel || _newMenu == _menuAdvancedApparel)
                             _playerPed.TaskCreatorClothes(GetLineupOrCreationAnimation(true, false, (Gender)_characterSkin.Gender));
 
                         if (_newMenu == _menuAppearance)
@@ -535,19 +535,22 @@ namespace Curiosity.Framework.Client.Managers
                             _menuAppearance.AddItem(_mlstAppearanceLipStick);
 
                             UIMenuColorPanel HairColor1 = new UIMenuColorPanel("First Colour", ColorPanelType.Hair);
-                            UIMenuColorPanel HairColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Hair);
+                            // UIMenuColorPanel HairColor2 = new UIMenuColorPanel("Second Colour", ColorPanelType.Hair);
                             _mlstAppearanceHair.AddPanel(HairColor1);
-                            _mlstAppearanceHair.AddPanel(HairColor2);
+                            // _mlstAppearanceHair.AddPanel(HairColor2);
                             
                             HairColor1.CurrentSelection = _characterSkin.Hair.Color[0];
-                            HairColor2.CurrentSelection = _characterSkin.Hair.Color[1];
+                            // HairColor2.CurrentSelection = _characterSkin.Hair.Color[1];
 
                             _cpEyebrowColor1.CurrentSelection = _characterSkin.Face.Eyebrow.Color[0];
-                            _cpEyebrowColor2.CurrentSelection = _characterSkin.Face.Eyebrow.Color[1];
+                            // _cpEyebrowColor2.CurrentSelection = _characterSkin.Face.Eyebrow.Color[1];
                             _ppEyebrowOpacity.Percentage = _characterSkin.Face.Eyebrow.Opacity * 100;
-                            _cpBeardColor1.CurrentSelection = _characterSkin.Face.Beard.Color[0];
-                            _cpBeardColor2.CurrentSelection = _characterSkin.Face.Beard.Color[1];
-                            _ppBeardOpacity.Percentage = _characterSkin.Face.Beard.Opacity * 100;
+                            if (_characterSkin.IsMale)
+                            {
+                                _cpBeardColor1.CurrentSelection = _characterSkin.Face.Beard.Color[0];
+                                //_cpBeardColor2.CurrentSelection = _characterSkin.Face.Beard.Color[1];
+                                _ppBeardOpacity.Percentage = _characterSkin.Face.Beard.Opacity * 100;
+                            }
                             _ppBlemOpacity.Percentage = _characterSkin.Face.Blemishes.Opacity * 100;
                             _ppAgeOpacity.Percentage = _characterSkin.Age.Opacity * 100;
                             _ppCompexionOpacity.Percentage = _characterSkin.Face.Complexion.Opacity * 100;
@@ -555,7 +558,7 @@ namespace Curiosity.Framework.Client.Managers
                             _ppSkinDamageOpacity.Percentage = _characterSkin.Face.SkinDamage.Opacity * 100;
                             _ppMakeupOpacity.Percentage = _characterSkin.Face.Makeup.Opacity * 100;
                             _cpLipColor1.CurrentSelection = _characterSkin.Face.Lipstick.Color[0];
-                            _cpLipColor2.CurrentSelection = _characterSkin.Face.Lipstick.Color[1];
+                            // _cpLipColor2.CurrentSelection = _characterSkin.Face.Lipstick.Color[1];
                             _ppLipOpacity.Percentage = _characterSkin.Face.Lipstick.Opacity * 100;
                         }
                         break;
@@ -2099,7 +2102,7 @@ namespace Curiosity.Framework.Client.Managers
             return "mp_character_creation@lineup@male_a";
         }
 
-        async void CreateCharacterClass(bool randomise = false, bool randomGender = true, Gender gender = Gender.Male)
+        async Task CreateCharacterClass(bool randomise = false, bool randomGender = true, Gender gender = Gender.Male)
         {
             if (!randomise)
             {
@@ -2123,6 +2126,7 @@ namespace Curiosity.Framework.Client.Managers
 
             _playerPed = Game.PlayerPed;
             SetupCharacter();
+            await BaseScript.Delay(1000);
         }
 
         private void RandomiseCharacterParents(bool update = false)
@@ -2176,7 +2180,7 @@ namespace Curiosity.Framework.Client.Managers
             if (isMale)
             {
                 _characterSkin.Face.Beard = new(Common.RANDOM.Next(0, CharacterCreatorData.Beards.Count), (float)Common.RANDOM.NextDouble(),
-                    new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+                    new int[2] { Common.RANDOM.Next(0, 63), 0 });
             }
 
             if (!isMale)
@@ -2191,14 +2195,14 @@ namespace Curiosity.Framework.Client.Managers
             _characterSkin.Face.Makeup = new(0, 1f);
 
             _characterSkin.Face.Eyebrow = new(Common.RANDOM.Next(0, CharacterCreatorData.Eyebrows.Count), (float)Common.RANDOM.NextDouble(),
-                new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+                new int[2] { Common.RANDOM.Next(0, 63), 0 });
 
             _characterSkin.Face.Complexion = new(Common.RANDOM.Next(0, CharacterCreatorData.Complexions.Count), (float)Common.RANDOM.NextDouble());
             _characterSkin.Face.SkinDamage = new(Common.RANDOM.Next(0, CharacterCreatorData.SkinDamage.Count), (float)Common.RANDOM.NextDouble());
             _characterSkin.Face.Freckles = new(Common.RANDOM.Next(0, CharacterCreatorData.MolesAndFreckles.Count), (float)Common.RANDOM.NextDouble());
 
             int hairCount = isMale ? CharacterCreatorData.HairMale.Count : CharacterCreatorData.HairFemale.Count;
-            _characterSkin.Hair = new(Common.RANDOM.Next(0, hairCount), new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
+            _characterSkin.Hair = new(Common.RANDOM.Next(0, hairCount), new int[2] { Common.RANDOM.Next(0, 63), 0 });
 
             _characterSkin.Face.Eye = new(Common.RANDOM.Next(0, CharacterCreatorData.EyeColours.Count));
             _characterSkin.Ears = new(255, 0);
@@ -2211,27 +2215,14 @@ namespace Curiosity.Framework.Client.Managers
         {
             RandomiseCharacterParents();
             RandomiseCharacterAppearance();
-
             UpdateFace(_playerPed.Handle, _characterSkin);
         }
 
-        public static void UpdateFace(int Handle, CharacterSkin skin)
+        public void UpdateFace(int Handle, CharacterSkin skin)
         {
             bool isMale = (Gender)skin.Gender == Gender.Male;
 
-            SetPedHeadBlendData(
-                Handle,
-                skin.Face.Mother,
-                skin.Face.Father,
-                0,
-                skin.Face.Mother,
-                skin.Face.Father,
-                0,
-                skin.Face.Resemblance,
-                skin.Face.SkinBlend,
-                0f,
-                false
-            );
+            SetPedHeadBlendData(Handle, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Resemblance,skin.Face.SkinBlend, 0f,false);
 
             SetPedHeadOverlay(Handle, 0, skin.Face.Blemishes.Style, skin.Face.Blemishes.Opacity);
            
@@ -2252,9 +2243,12 @@ namespace Curiosity.Framework.Client.Managers
             SetPedHeadOverlay(Handle, 6, skin.Face.Complexion.Style, skin.Face.Complexion.Opacity);
             SetPedHeadOverlay(Handle, 7, skin.Face.SkinDamage.Style, skin.Face.SkinDamage.Opacity);
             SetPedHeadOverlay(Handle, 9, skin.Face.Freckles.Style, skin.Face.Freckles.Opacity);
+            
             SetPedEyeColor(Handle, skin.Face.Eye.Style);
+            
             SetPedComponentVariation(Handle, 2, skin.Hair.Style, 0, 0);
             SetPedHairColor(Handle, skin.Hair.Color[0], skin.Hair.Color[1]);
+            
             SetPedPropIndex(Handle, 2, skin.Ears.Style, skin.Ears.Color, false);
 
             for (int i = 0; i < skin.Face.Features.Length; i++)
