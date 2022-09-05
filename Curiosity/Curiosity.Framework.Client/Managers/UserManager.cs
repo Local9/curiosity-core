@@ -3209,8 +3209,6 @@ namespace Curiosity.Framework.Client.Managers
 
         static int[][] GetCharacterOutfitSettings(bool isMale, int iParam1)
         {
-            ShopPed.PedComponentData Var1;
-
             var components = new int[12];
             var textures = new int[12];
 
