@@ -3212,6 +3212,8 @@ namespace Curiosity.Framework.Client.Managers
             var components = new int[12];
             var textures = new int[12];
 
+            Logger.Debug($"Outfit: {iParam1}");
+
             for (int i = 0; i < 12; i++)
             {
                 components[i] = -1;
@@ -4860,7 +4862,7 @@ namespace Curiosity.Framework.Client.Managers
                         components[10] = 0;
                         textures[10] = 0;
                         components[11] = 17;
-                        textures[11] = 7;
+                        textures[11] = 3;
                     }
                     else
                     {
@@ -5174,7 +5176,7 @@ namespace Curiosity.Framework.Client.Managers
                         textures[9] = 0;
                         components[10] = 0;
                         textures[10] = 0;
-                        components[11] = 11;
+                        components[11] = 28;
                         textures[11] = 0;
                     }
                     else
