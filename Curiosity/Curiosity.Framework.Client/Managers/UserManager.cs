@@ -501,6 +501,303 @@ namespace Curiosity.Framework.Client.Managers
 
             #endregion
 
+            #region Apparel Basic
+
+            var styleList = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+                styleList.Add(GetLabelText("FACE_A_STY_" + i));
+
+            var outfitList = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+                outfitList.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
+
+            List<dynamic> hatList = new() { GetLabelText("FACE_OFF") };
+
+            var glassesList = new List<dynamic>() { GetLabelText("FACE_OFF") };
+
+            if (_characterSkin.IsMale)
+            {
+                foreach (var _hat in CharacterCreatorData.HatsMale)
+                    hatList.Add(GetLabelText(_hat.label));
+                foreach (var _glas in CharacterCreatorData.GlassesMale)
+                    glassesList.Add(GetLabelText(_glas.label));
+            }
+            else
+            {
+                foreach (var _hat in CharacterCreatorData.HatsFemale)
+                    hatList.Add(GetLabelText(_hat.label));
+                foreach (var _glas in CharacterCreatorData.GlassesFemale)
+                    glassesList.Add(GetLabelText(_glas.label));
+            }
+
+            UIMenuListItem _mlstApparelStyle = new(GetLabelText("FACE_APP_STY"), styleList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem _mlstApparelOutfit = new(GetLabelText("FACE_APP_OUT"), outfitList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem _mlstApparelHat = new(GetLabelText("FACE_HAT"), hatList, 0, GetLabelText("FACE_APPA_H"));
+            UIMenuListItem _mlstApparelGlasses = new(GetLabelText("FACE_GLS"), glassesList, 0, GetLabelText("FACE_APPA_H"));
+
+            //UIMenuListItem outfit = new UIMenuListItem(GetLabelText("FACE_APP_OUT"));
+            _menuApparel.AddItem(_mlstApparelStyle);
+            _menuApparel.AddItem(_mlstApparelOutfit);
+            _menuApparel.AddItem(_mlstApparelHat);
+            _menuApparel.AddItem(_mlstApparelGlasses);
+
+            int first = 0;
+            _menuApparel.OnListChange += (sender, item, index) =>
+            {
+                var id = _playerPed.Handle;
+                if (item == _mlstApparelStyle)
+                {
+                    List<dynamic> list = new();
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if (i == 0)
+                            first = index * 8;
+                        list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
+                    }
+                    _mlstApparelOutfit.ChangeList(list, 0);
+                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
+                    var comp = new ComponentDrawables(
+                        aa[0][0],
+                        aa[0][1],
+                        aa[0][2],
+                        aa[0][3],
+                        aa[0][4],
+                        aa[0][5],
+                        aa[0][6],
+                        aa[0][7],
+                        aa[0][8],
+                        aa[0][9],
+                        aa[0][10],
+                        aa[0][11]
+                    );
+                    var text = new ComponentDrawables(
+                        aa[1][0],
+                        aa[1][1],
+                        aa[1][2],
+                        aa[1][3],
+                        aa[1][4],
+                        aa[1][5],
+                        aa[1][6],
+                        aa[1][7],
+                        aa[1][8],
+                        aa[1][9],
+                        aa[1][10],
+                        aa[1][11]
+                    );
+                    var _prop = new PropDrawables(
+                        GetPedPropIndex(id, 0),
+                        GetPedPropIndex(id, 1),
+                        GetPedPropIndex(id, 2),
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        GetPedPropTextureIndex(id, 0),
+                        GetPedPropTextureIndex(id, 1),
+                        GetPedPropTextureIndex(id, 2),
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                }
+                else if (item == _mlstApparelOutfit)
+                {
+                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, (index + first));
+                    var comp = new ComponentDrawables(
+                        aa[0][0],
+                        aa[0][1],
+                        aa[0][2],
+                        aa[0][3],
+                        aa[0][4],
+                        aa[0][5],
+                        aa[0][6],
+                        aa[0][7],
+                        aa[0][8],
+                        aa[0][9],
+                        aa[0][10],
+                        aa[0][11]
+                    );
+                    var text = new ComponentDrawables(
+                        aa[1][0],
+                        aa[1][1],
+                        aa[1][2],
+                        aa[1][3],
+                        aa[1][4],
+                        aa[1][5],
+                        aa[1][6],
+                        aa[1][7],
+                        aa[1][8],
+                        aa[1][9],
+                        aa[1][10],
+                        aa[1][11]
+                    );
+                    var _prop = new PropDrawables(
+                        GetPedPropIndex(id, 0),
+                        GetPedPropIndex(id, 1),
+                        GetPedPropIndex(id, 2),
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        GetPedPropTextureIndex(id, 0),
+                        GetPedPropTextureIndex(id, 1),
+                        GetPedPropTextureIndex(id, 2),
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                }
+                else if (item == _mlstApparelHat)
+                {
+                    if (index == 0)
+                        ClearPedProp(id, 0);
+                    else
+                    {
+                        ShopPed.PedComponentData prop = new();
+                        if (_characterSkin.IsMale)
+                            prop = CharacterCreatorData.HatsMale[index - 1];
+                        else
+                            prop = CharacterCreatorData.HatsFemale[index - 1];
+                        var comp = new ComponentDrawables(
+                            GetPedDrawableVariation(id, 0),
+                            GetPedDrawableVariation(id, 1),
+                            GetPedDrawableVariation(id, 2),
+                            GetPedDrawableVariation(id, 3),
+                            GetPedDrawableVariation(id, 4),
+                            GetPedDrawableVariation(id, 5),
+                            GetPedDrawableVariation(id, 6),
+                            GetPedDrawableVariation(id, 7),
+                            GetPedDrawableVariation(id, 8),
+                            GetPedDrawableVariation(id, 9),
+                            GetPedDrawableVariation(id, 10),
+                            GetPedDrawableVariation(id, 11)
+                        );
+                        var text = new ComponentDrawables(
+                            GetPedTextureVariation(id, 0),
+                            GetPedTextureVariation(id, 1),
+                            GetPedTextureVariation(id, 2),
+                            GetPedTextureVariation(id, 3),
+                            GetPedTextureVariation(id, 4),
+                            GetPedTextureVariation(id, 5),
+                            GetPedTextureVariation(id, 6),
+                            GetPedTextureVariation(id, 7),
+                            GetPedTextureVariation(id, 8),
+                            GetPedTextureVariation(id, 9),
+                            GetPedTextureVariation(id, 10),
+                            GetPedTextureVariation(id, 11)
+                        );
+                        var _prop = new PropDrawables(
+                            prop.drawable,
+                            GetPedPropIndex(id, 1),
+                            GetPedPropIndex(id, 2),
+                            GetPedPropIndex(id, 3),
+                            GetPedPropIndex(id, 4),
+                            GetPedPropIndex(id, 5),
+                            GetPedPropIndex(id, 6),
+                            GetPedPropIndex(id, 7),
+                            GetPedPropIndex(id, 8)
+                        );
+                        var _proptxt = new PropDrawables(
+                            prop.texture,
+                            GetPedPropTextureIndex(id, 1),
+                            GetPedPropTextureIndex(id, 2),
+                            GetPedPropTextureIndex(id, 3),
+                            GetPedPropTextureIndex(id, 4),
+                            GetPedPropTextureIndex(id, 5),
+                            GetPedPropTextureIndex(id, 6),
+                            GetPedPropTextureIndex(id, 7),
+                            GetPedPropTextureIndex(id, 8)
+                        );
+                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                    }
+                }
+                else if (item == _mlstApparelGlasses)
+                {
+                    if (index == 0)
+                        ClearPedProp(id, 1);
+                    else
+                    {
+                        ShopPed.PedComponentData prop = new();
+                        if (_characterSkin.IsMale)
+                            prop = CharacterCreatorData.GlassesMale[index - 1];
+                        else
+                            prop = CharacterCreatorData.GlassesFemale[index - 1];
+
+                        var comp = new ComponentDrawables(
+                            GetPedDrawableVariation(id, 0),
+                            GetPedDrawableVariation(id, 1),
+                            GetPedDrawableVariation(id, 2),
+                            GetPedDrawableVariation(id, 3),
+                            GetPedDrawableVariation(id, 4),
+                            GetPedDrawableVariation(id, 5),
+                            GetPedDrawableVariation(id, 6),
+                            GetPedDrawableVariation(id, 7),
+                            GetPedDrawableVariation(id, 8),
+                            GetPedDrawableVariation(id, 9),
+                            GetPedDrawableVariation(id, 10),
+                            GetPedDrawableVariation(id, 11)
+                        );
+                        var text = new ComponentDrawables(
+                            GetPedTextureVariation(id, 0),
+                            GetPedTextureVariation(id, 1),
+                            GetPedTextureVariation(id, 2),
+                            GetPedTextureVariation(id, 3),
+                            GetPedTextureVariation(id, 4),
+                            GetPedTextureVariation(id, 5),
+                            GetPedTextureVariation(id, 6),
+                            GetPedTextureVariation(id, 7),
+                            GetPedTextureVariation(id, 8),
+                            GetPedTextureVariation(id, 9),
+                            GetPedTextureVariation(id, 10),
+                            GetPedTextureVariation(id, 11)
+                        );
+                        var _prop = new PropDrawables(
+                            GetPedPropIndex(id, 0),
+                            prop.drawable,
+                            GetPedPropIndex(id, 2),
+                            GetPedPropIndex(id, 3),
+                            GetPedPropIndex(id, 4),
+                            GetPedPropIndex(id, 5),
+                            GetPedPropIndex(id, 6),
+                            GetPedPropIndex(id, 7),
+                            GetPedPropIndex(id, 8)
+                        );
+                        var _proptxt = new PropDrawables(
+                            GetPedPropTextureIndex(id, 0),
+                            prop.texture,
+                            GetPedPropTextureIndex(id, 2),
+                            GetPedPropTextureIndex(id, 3),
+                            GetPedPropTextureIndex(id, 4),
+                            GetPedPropTextureIndex(id, 5),
+                            GetPedPropTextureIndex(id, 6),
+                            GetPedPropTextureIndex(id, 7),
+                            GetPedPropTextureIndex(id, 8)
+                        );
+                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+                    }
+                }
+                UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
+                _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
+            };
+
+            #endregion
+
             #region Menu Change States
 
             GameInterface.Hud.MenuPool.OnMenuStateChanged += async (_oldMenu, _newMenu, _state) =>
@@ -513,6 +810,37 @@ namespace Curiosity.Framework.Client.Managers
 
                         if (_newMenu == _menuApparel || _newMenu == _menuAdvancedApparel)
                             _playerPed.TaskCreatorClothes(GetLineupOrCreationAnimation(true, false));
+
+                        if (_newMenu == _menuApparel)
+                        {
+                            // DIVIDE BY ZERO ERROR
+                            var hatList = new List<dynamic>();
+                            var glassesList = new List<dynamic>();
+
+                            var outfitList = new List<dynamic>();
+                            for (int i = 0; i < 8; i++)
+                                outfitList.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
+
+                            _mlstApparelOutfit.ChangeList(outfitList, 0);
+
+                            if (_characterSkin.IsMale)
+                            {
+                                foreach (var _hat in CharacterCreatorData.HatsMale)
+                                    hatList.Add(GetLabelText(_hat.label));
+                                foreach (var _glas in CharacterCreatorData.GlassesMale)
+                                    glassesList.Add(GetLabelText(_glas.label));
+                            }
+                            else
+                            {
+                                foreach (var _hat in CharacterCreatorData.HatsFemale)
+                                    hatList.Add(GetLabelText(_hat.label));
+                                foreach (var _glas in CharacterCreatorData.GlassesFemale)
+                                    glassesList.Add(GetLabelText(_glas.label));
+                            }
+
+                            _mlstApparelHat.ChangeList(hatList, 0);
+                            _mlstApparelGlasses.ChangeList(glassesList, 0);
+                        }
 
                         if (_newMenu == _menuAppearance)
                         {
@@ -1158,303 +1486,6 @@ namespace Curiosity.Framework.Client.Managers
                 }
 
                 UpdateFace(_playerPed.Handle, _characterSkin);
-            };
-
-            #endregion
-
-            #region Apparel Basic
-
-            var styleList = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
-                styleList.Add(GetLabelText("FACE_A_STY_" + i));
-
-            var outfitList = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
-                outfitList.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
-
-            List<dynamic> hatList = new() { GetLabelText("FACE_OFF") };
-
-            var glassesList = new List<dynamic>() { GetLabelText("FACE_OFF") };
-
-            if (_characterSkin.IsMale)
-            {
-                foreach (var _hat in CharacterCreatorData.HatsMale)
-                    hatList.Add(GetLabelText(_hat.label));
-                foreach (var _glas in CharacterCreatorData.GlassesMale)
-                    glassesList.Add(GetLabelText(_glas.label));
-            }
-            else
-            {
-                foreach (var _hat in CharacterCreatorData.HatsFemale)
-                    hatList.Add(GetLabelText(_hat.label));
-                foreach (var _glas in CharacterCreatorData.GlassesFemale)
-                    glassesList.Add(GetLabelText(_glas.label));
-            }
-
-            UIMenuListItem style = new(GetLabelText("FACE_APP_STY"), styleList, 0, GetLabelText("FACE_APPA_H"));
-            UIMenuListItem outfit = new(GetLabelText("FACE_APP_OUT"), outfitList, 0, GetLabelText("FACE_APPA_H"));
-            UIMenuListItem hat = new(GetLabelText("FACE_HAT"), hatList, 0, GetLabelText("FACE_APPA_H"));
-            UIMenuListItem glasses = new(GetLabelText("FACE_GLS"), glassesList, 0, GetLabelText("FACE_APPA_H"));
-
-            //UIMenuListItem outfit = new UIMenuListItem(GetLabelText("FACE_APP_OUT"));
-            _menuApparel.AddItem(style);
-            _menuApparel.AddItem(outfit);
-            _menuApparel.AddItem(hat);
-            _menuApparel.AddItem(glasses);
-
-            int first = 0;
-            _menuApparel.OnListChange += (sender, item, index) =>
-            {
-                var id = _playerPed.Handle;
-                if (item == style)
-                {
-                    List<dynamic> list = new();
-                    for (int i = 0; i < 8; i++)
-                    {
-                        if (i == 0)
-                            first = index * 8;
-                        list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
-                    }
-                    outfit.ChangeList(list, 0);
-                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
-                    var comp = new ComponentDrawables(
-                        aa[0][0],
-                        aa[0][1],
-                        aa[0][2],
-                        aa[0][3],
-                        aa[0][4],
-                        aa[0][5],
-                        aa[0][6],
-                        aa[0][7],
-                        aa[0][8],
-                        aa[0][9],
-                        aa[0][10],
-                        aa[0][11]
-                    );
-                    var text = new ComponentDrawables(
-                        aa[1][0],
-                        aa[1][1],
-                        aa[1][2],
-                        aa[1][3],
-                        aa[1][4],
-                        aa[1][5],
-                        aa[1][6],
-                        aa[1][7],
-                        aa[1][8],
-                        aa[1][9],
-                        aa[1][10],
-                        aa[1][11]
-                    );
-                    var _prop = new PropDrawables(
-                        GetPedPropIndex(id, 0),
-                        GetPedPropIndex(id, 1),
-                        GetPedPropIndex(id, 2),
-                        GetPedPropIndex(id, 3),
-                        GetPedPropIndex(id, 4),
-                        GetPedPropIndex(id, 5),
-                        GetPedPropIndex(id, 6),
-                        GetPedPropIndex(id, 7),
-                        GetPedPropIndex(id, 8)
-                    );
-                    var _proptxt = new PropDrawables(
-                        GetPedPropTextureIndex(id, 0),
-                        GetPedPropTextureIndex(id, 1),
-                        GetPedPropTextureIndex(id, 2),
-                        GetPedPropTextureIndex(id, 3),
-                        GetPedPropTextureIndex(id, 4),
-                        GetPedPropTextureIndex(id, 5),
-                        GetPedPropTextureIndex(id, 6),
-                        GetPedPropTextureIndex(id, 7),
-                        GetPedPropTextureIndex(id, 8)
-                    );
-                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
-                }
-                else if (item == outfit)
-                {
-                    int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, (index + first));
-                    var comp = new ComponentDrawables(
-                        aa[0][0],
-                        aa[0][1],
-                        aa[0][2],
-                        aa[0][3],
-                        aa[0][4],
-                        aa[0][5],
-                        aa[0][6],
-                        aa[0][7],
-                        aa[0][8],
-                        aa[0][9],
-                        aa[0][10],
-                        aa[0][11]
-                    );
-                    var text = new ComponentDrawables(
-                        aa[1][0],
-                        aa[1][1],
-                        aa[1][2],
-                        aa[1][3],
-                        aa[1][4],
-                        aa[1][5],
-                        aa[1][6],
-                        aa[1][7],
-                        aa[1][8],
-                        aa[1][9],
-                        aa[1][10],
-                        aa[1][11]
-                    );
-                    var _prop = new PropDrawables(
-                        GetPedPropIndex(id, 0),
-                        GetPedPropIndex(id, 1),
-                        GetPedPropIndex(id, 2),
-                        GetPedPropIndex(id, 3),
-                        GetPedPropIndex(id, 4),
-                        GetPedPropIndex(id, 5),
-                        GetPedPropIndex(id, 6),
-                        GetPedPropIndex(id, 7),
-                        GetPedPropIndex(id, 8)
-                    );
-                    var _proptxt = new PropDrawables(
-                        GetPedPropTextureIndex(id, 0),
-                        GetPedPropTextureIndex(id, 1),
-                        GetPedPropTextureIndex(id, 2),
-                        GetPedPropTextureIndex(id, 3),
-                        GetPedPropTextureIndex(id, 4),
-                        GetPedPropTextureIndex(id, 5),
-                        GetPedPropTextureIndex(id, 6),
-                        GetPedPropTextureIndex(id, 7),
-                        GetPedPropTextureIndex(id, 8)
-                    );
-                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
-                }
-                else if (item == hat)
-                {
-                    if (index == 0)
-                        ClearPedProp(id, 0);
-                    else
-                    {
-                        ShopPed.PedComponentData prop = new();
-                        if (_characterSkin.IsMale)
-                            prop = CharacterCreatorData.HatsMale[index - 1];
-                        else
-                            prop = CharacterCreatorData.HatsFemale[index - 1];
-                        var comp = new ComponentDrawables(
-                            GetPedDrawableVariation(id, 0),
-                            GetPedDrawableVariation(id, 1),
-                            GetPedDrawableVariation(id, 2),
-                            GetPedDrawableVariation(id, 3),
-                            GetPedDrawableVariation(id, 4),
-                            GetPedDrawableVariation(id, 5),
-                            GetPedDrawableVariation(id, 6),
-                            GetPedDrawableVariation(id, 7),
-                            GetPedDrawableVariation(id, 8),
-                            GetPedDrawableVariation(id, 9),
-                            GetPedDrawableVariation(id, 10),
-                            GetPedDrawableVariation(id, 11)
-                        );
-                        var text = new ComponentDrawables(
-                            GetPedTextureVariation(id, 0),
-                            GetPedTextureVariation(id, 1),
-                            GetPedTextureVariation(id, 2),
-                            GetPedTextureVariation(id, 3),
-                            GetPedTextureVariation(id, 4),
-                            GetPedTextureVariation(id, 5),
-                            GetPedTextureVariation(id, 6),
-                            GetPedTextureVariation(id, 7),
-                            GetPedTextureVariation(id, 8),
-                            GetPedTextureVariation(id, 9),
-                            GetPedTextureVariation(id, 10),
-                            GetPedTextureVariation(id, 11)
-                        );
-                        var _prop = new PropDrawables(
-                            prop.drawable,
-                            GetPedPropIndex(id, 1),
-                            GetPedPropIndex(id, 2),
-                            GetPedPropIndex(id, 3),
-                            GetPedPropIndex(id, 4),
-                            GetPedPropIndex(id, 5),
-                            GetPedPropIndex(id, 6),
-                            GetPedPropIndex(id, 7),
-                            GetPedPropIndex(id, 8)
-                        );
-                        var _proptxt = new PropDrawables(
-                            prop.texture,
-                            GetPedPropTextureIndex(id, 1),
-                            GetPedPropTextureIndex(id, 2),
-                            GetPedPropTextureIndex(id, 3),
-                            GetPedPropTextureIndex(id, 4),
-                            GetPedPropTextureIndex(id, 5),
-                            GetPedPropTextureIndex(id, 6),
-                            GetPedPropTextureIndex(id, 7),
-                            GetPedPropTextureIndex(id, 8)
-                        );
-                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
-                    }
-                }
-                else if (item == glasses)
-                {
-                    if (index == 0)
-                        ClearPedProp(id, 1);
-                    else
-                    {
-                        ShopPed.PedComponentData prop = new();
-                        if (_characterSkin.IsMale)
-                            prop = CharacterCreatorData.GlassesMale[index - 1];
-                        else
-                            prop = CharacterCreatorData.GlassesFemale[index - 1];
-
-                        var comp = new ComponentDrawables(
-                            GetPedDrawableVariation(id, 0),
-                            GetPedDrawableVariation(id, 1),
-                            GetPedDrawableVariation(id, 2),
-                            GetPedDrawableVariation(id, 3),
-                            GetPedDrawableVariation(id, 4),
-                            GetPedDrawableVariation(id, 5),
-                            GetPedDrawableVariation(id, 6),
-                            GetPedDrawableVariation(id, 7),
-                            GetPedDrawableVariation(id, 8),
-                            GetPedDrawableVariation(id, 9),
-                            GetPedDrawableVariation(id, 10),
-                            GetPedDrawableVariation(id, 11)
-                        );
-                        var text = new ComponentDrawables(
-                            GetPedTextureVariation(id, 0),
-                            GetPedTextureVariation(id, 1),
-                            GetPedTextureVariation(id, 2),
-                            GetPedTextureVariation(id, 3),
-                            GetPedTextureVariation(id, 4),
-                            GetPedTextureVariation(id, 5),
-                            GetPedTextureVariation(id, 6),
-                            GetPedTextureVariation(id, 7),
-                            GetPedTextureVariation(id, 8),
-                            GetPedTextureVariation(id, 9),
-                            GetPedTextureVariation(id, 10),
-                            GetPedTextureVariation(id, 11)
-                        );
-                        var _prop = new PropDrawables(
-                            GetPedPropIndex(id, 0),
-                            prop.drawable,
-                            GetPedPropIndex(id, 2),
-                            GetPedPropIndex(id, 3),
-                            GetPedPropIndex(id, 4),
-                            GetPedPropIndex(id, 5),
-                            GetPedPropIndex(id, 6),
-                            GetPedPropIndex(id, 7),
-                            GetPedPropIndex(id, 8)
-                        );
-                        var _proptxt = new PropDrawables(
-                            GetPedPropTextureIndex(id, 0),
-                            prop.texture,
-                            GetPedPropTextureIndex(id, 2),
-                            GetPedPropTextureIndex(id, 3),
-                            GetPedPropTextureIndex(id, 4),
-                            GetPedPropTextureIndex(id, 5),
-                            GetPedPropTextureIndex(id, 6),
-                            GetPedPropTextureIndex(id, 7),
-                            GetPedPropTextureIndex(id, 8)
-                        );
-                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
-                    }
-                }
-                UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
-                _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
             };
 
             #endregion
