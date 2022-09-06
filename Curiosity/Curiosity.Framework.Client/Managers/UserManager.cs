@@ -548,11 +548,10 @@ namespace Curiosity.Framework.Client.Managers
                 {
                     List<dynamic> list = new();
 
-                    int minNum = index * 8;
-                    int maxNum = minNum + 8;
-                    first = minNum;
+                    first = index * 8;
+                    int maxNum = first + 8;
 
-                    for (int i = minNum; i < maxNum; i++)
+                    for (int i = first; i < maxNum; i++)
                     {
                         list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
                     }
