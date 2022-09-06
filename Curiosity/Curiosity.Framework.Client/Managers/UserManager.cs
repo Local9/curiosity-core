@@ -559,8 +559,6 @@ namespace Curiosity.Framework.Client.Managers
                     
                     _mlstApparelOutfit.ChangeList(list, 0);
 
-                    Logger.Debug($"New List: {string.Join(",", list)}");
-
                     int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
                     var comp = new ComponentDrawables(
                         aa[0][0],
