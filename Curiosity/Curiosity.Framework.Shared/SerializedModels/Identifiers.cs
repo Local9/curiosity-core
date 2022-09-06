@@ -1,6 +1,6 @@
-﻿using Lusive.Events.Attributes;
+﻿#nullable enable
 
-#nullable enable
+using FxEvents.Shared.Attributes;
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {

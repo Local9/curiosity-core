@@ -1,5 +1,4 @@
 ﻿global using CitizenFX.Core;
-global using Curiosity.Framework.Shared.Diagnostics;
 global using Newtonsoft.Json;
 global using System;
 global using System.Collections.Generic;

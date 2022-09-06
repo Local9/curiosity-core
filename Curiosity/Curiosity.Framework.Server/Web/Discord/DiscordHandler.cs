@@ -40,7 +40,7 @@ namespace Curiosity.Framework.Server.Web.Discord
 
         public override void Begin()
         {
-            Logger.Trace($"INIT DISCORD CLIENT");
+            Logger.Info($"INIT DISCORD CLIENT");
         }
 
         public String StripUnicodeCharactersFromString(string inputValue)

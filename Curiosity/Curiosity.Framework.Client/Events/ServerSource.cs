@@ -1,4 +1,4 @@
-﻿using Lusive.Events;
+﻿using FxEvents.Shared.EventSubsystem;
 
 namespace Curiosity.Framework.Client.Events
 {

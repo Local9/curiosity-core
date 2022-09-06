@@ -1,14 +1,13 @@
 ﻿using CitizenFX.Core.UI;
 using Curiosity.Framework.Client.Datasets;
-using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
+using FxEvents;
 using ScaleformUI;
 using System.Drawing;
-using System.Xml.Linq;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -95,7 +94,7 @@ namespace Curiosity.Framework.Client.Managers
         {
             await LoadTransition.OnUpAsync();
 
-            User user = await ClientGateway.Get<User>("user:active", Game.Player.ServerId);
+            User user = await EventDispatcher.Get<User>("user:active", Game.Player.ServerId);
 
             if (user is null)
             {
@@ -115,7 +114,7 @@ namespace Curiosity.Framework.Client.Managers
             // if new character make one
             // else load selected character
 
-            Logger.Trace($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
+            Logger.Info($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
 
         async void SetupCharacterCreator()

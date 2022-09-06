@@ -54,7 +54,7 @@ namespace Curiosity.Framework.Client.Utils
 
                 if (entity == null || !entity.Exists())
                 {
-                    Logger.Info($"[AnimationQueue] Could not find entity #{Entity}");
+                    PluginManager.Instance.Logger.Info($"[AnimationQueue] Could not find entity #{Entity}");
 
                     return;
                 }

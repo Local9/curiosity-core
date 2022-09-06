@@ -1,4 +1,4 @@
-﻿using Curiosity.Framework.Client.Events;
+﻿using Logger;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -12,7 +12,7 @@ namespace Curiosity.Framework.Client.Managers
         }
 
         public PluginManager Instance => PluginManager.Instance;
-        public ClientGateway ClientGateway => Instance.ClientGateway;
+        public Log Logger => Instance.Logger;
 
         protected Manager()
         {

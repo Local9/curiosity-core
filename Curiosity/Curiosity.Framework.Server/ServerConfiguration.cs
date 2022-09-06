@@ -1,4 +1,5 @@
 ﻿using Curiosity.Framework.Server.Models;
+using Logger;
 
 namespace Curiosity.Framework.Server
 {
@@ -21,7 +22,8 @@ namespace Curiosity.Framework.Server
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, $"Server Configuration was unable to be loaded.");
+                Debug.WriteLine($"{Log.DARK_RED}Server Configuration was unable to be loaded.");
+                Debug.WriteLine($"{ex}");
                 return (ServerConfig)default!;
             }
         }

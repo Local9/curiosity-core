@@ -1,10 +1,12 @@
 ﻿using Curiosity.Framework.Server.Models;
 using Dapper;
+using Logger;
 using MySqlConnector;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using Debug = CitizenFX.Core.Debug;
 
 namespace Curiosity.Framework.Server.Database
 {
@@ -108,7 +110,7 @@ namespace Curiosity.Framework.Server.Database
             sb.Append($"Query: {query}\n");
             sb.Append($"Exception Message: {exceptionMessage}\n");
             sb.Append($"Time Elapsed: {elapsedMilliseconds}ms");
-            Logger.Error($"{sb}");
+            Debug.WriteLine($"{Log.DARK_RED}{sb}");
         }
 
         private static void SetupTypeMap()

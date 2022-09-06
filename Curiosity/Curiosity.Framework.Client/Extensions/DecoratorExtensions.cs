@@ -46,7 +46,7 @@ namespace Curiosity.Framework.Client.Extensions
             }
             else
             {
-                Logger.Info("[Decor] Could not set decor object due to it not being a supported type.");
+                PluginManager.Instance.Logger.Info("[Decor] Could not set decor object due to it not being a supported type.");
             }
         }
 

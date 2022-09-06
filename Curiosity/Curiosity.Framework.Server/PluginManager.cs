@@ -2,7 +2,7 @@
 using Curiosity.Framework.Server.Events;
 using Curiosity.Framework.Server.Managers;
 using Curiosity.Framework.Shared.SerializedModels;
-using Lusive.Snowflake;
+using Logger;
 using System.Collections.Concurrent;
 using System.Reflection;
 
@@ -13,8 +13,8 @@ namespace Curiosity.Framework.Server
         public static PluginManager Instance { get; private set; }
         public static PlayerList PlayerList;
         public static ConcurrentDictionary<int, ClientId> UserSessions = new();
-
-        public ServerGateway Events;
+        
+        public Log Logger;
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
@@ -31,10 +31,10 @@ namespace Curiosity.Framework.Server
                 int _ServerId = GetConvarInt("server_id", 0);
                 if (_ServerId == 0)
                 {
-                    Logger.CriticalError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    Logger.CriticalError("! Convar 'server_id' is not set or is not a number! !");
-                    Logger.CriticalError("!!! Please set this value and restart the server! !!!");
-                    Logger.CriticalError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Debug.WriteLine($"{Log.LIGHT_RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Debug.WriteLine($"{Log.LIGHT_RED}! Convar 'server_id' is not set or is not a number! !");
+                    Debug.WriteLine($"{Log.LIGHT_RED}!!! Please set this value and restart the server! !!!");
+                    Debug.WriteLine($"{Log.LIGHT_RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
                 return _ServerId;
             }
@@ -42,11 +42,12 @@ namespace Curiosity.Framework.Server
 
         public PluginManager()
         {
-            Logger.Trace($"CURIOSITY INITIATION");
             Instance = this;
-            Events = new ServerGateway();
+            Logger = new Log();
+            Logger.Info($"CURIOSITY INITIATION");
+            //Events = new ServerGateway();
 
-            SnowflakeGenerator.Create(1);
+            //SnowflakeGenerator.Create(1);
 
             Load();
         }
@@ -100,15 +101,15 @@ namespace Curiosity.Framework.Server
             bool databaseTest = await Database.DapperDatabase<bool>.GetSingleAsync("select 1;");
             if (databaseTest)
             {
-                Logger.Trace($"Database Connection Test Successful!");
+                Logger.Info($"Database Connection Test Successful!");
             }
             else
             {
-                Logger.CriticalError($"Database Connection Test Failed!");
+                Logger.Error($"Database Connection Test Failed!");
             }
 
             IsServerReady = !IsServerReady;
-            Logger.Trace($"CURIOSITY INITIATED: {loaded} Managers Initiated");
+            Logger.Info($"CURIOSITY INITIATED: {loaded} Managers Initiated");
         }
 
         public object LoadManager(Type type)

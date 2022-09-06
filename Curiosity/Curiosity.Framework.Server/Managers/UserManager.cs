@@ -3,6 +3,7 @@ using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
 using Curiosity.Framework.Shared.SerializedModels;
+using FxEvents;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -24,7 +25,7 @@ namespace Curiosity.Framework.Server.Managers
             Event("playerDropped", new Action<Player, string>(OnPlayerDropped));
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
-            ServerGateway.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
+            EventDispatcher.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
         }
 
         private async void OnPlayerConnectingAsync([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
@@ -146,7 +147,8 @@ namespace Curiosity.Framework.Server.Managers
             catch (Exception ex)
             {
                 DefferAndKick("connection:error", "Something went wrong while trying to connect to the server.", denyWithReason, deferrals);
-                Logger.CriticalError(ex, "OnPlayerConnectingAsync");
+                Logger.Fatal("OnPlayerConnectingAsync");
+                Logger.Fatal($"{ex}");
             }
         }
 
@@ -174,18 +176,19 @@ namespace Curiosity.Framework.Server.Managers
                 }
 
                 string msg = $"Player [{discordId}] '{user.Username}#{user.UserID}' is connecting to the server with {user.Characters.Count} character(s).";
-                Logger.Trace(msg);
+                Logger.Info(msg);
             }
             catch (Exception ex)
             {
                 player.Drop(ServerConfiguration.GetTranslation("connection:error", "Something went wrong while trying to connect to the server."));
-                Logger.CriticalError(ex, "OnPlayerJoiningAsync");
+                Logger.Fatal("OnPlayerJoiningAsync");
+                Logger.Fatal($"{ex}");
             }
         }
 
         private void OnPlayerDropped([FromSource] Player player, string reason)
         {
-            Logger.Trace($"Player '{player.Name}' dropped, reason; {reason}.");
+            Logger.Debug($"Player '{player.Name}' dropped, reason; {reason}.");
             int playerId = int.Parse(player.Handle);
             if (UserSessions.ContainsKey(playerId))
                 UserSessions.TryRemove(playerId, out ClientId user);
@@ -208,7 +211,7 @@ namespace Curiosity.Framework.Server.Managers
 
                 User userResult = client.User;
 
-                Logger.Trace($"User with server handle '{client.Handle}' is updating their session state.");
+                Logger.Debug($"User with server handle '{client.Handle}' is updating their session state.");
 
                 if (userResult == null)
                 {
@@ -251,18 +254,19 @@ namespace Curiosity.Framework.Server.Managers
 
                     clientId.StoreUser = user;
 
-                    Logger.Trace($"User {userResult.Username}#{userResult.UserID} is newly added to the User Sessions.");
-                    Logger.Trace($"Number of Sessions: {UserSessions.Count}");
+                    Logger.Debug($"User {userResult.Username}#{userResult.UserID} is newly added to the User Sessions.");
+                    Logger.Debug($"Number of Sessions: {UserSessions.Count}");
                 }
 
-                Logger.Trace($"User {userResult.Username}#{userResult.UserID} is now active.");
+                Logger.Info($"User {userResult.Username}#{userResult.UserID} is now active.");
 
                 return userResult;
             }
             catch (Exception ex)
             {
                 client.Player.Drop(ServerConfiguration.GetTranslation("connection:error", "Something went wrong while trying to connect to the server."));
-                Logger.CriticalError(ex, "OnPlayerJoiningAsync");
+                Logger.Fatal("OnPlayerJoiningAsync");
+                Logger.Fatal($"{ex}");
                 return null;
             }
         }

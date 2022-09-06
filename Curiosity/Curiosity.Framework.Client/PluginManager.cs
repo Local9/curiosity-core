@@ -1,7 +1,6 @@
 ﻿using Curiosity.Framework.Client.Engine;
-using Curiosity.Framework.Client.Events;
 using Curiosity.Framework.Client.Managers;
-using Lusive.Snowflake;
+using Logger;
 using System.Reflection;
 
 namespace Curiosity.Framework.Client
@@ -9,7 +8,7 @@ namespace Curiosity.Framework.Client
     public class PluginManager : BaseScript
     {
         public static PluginManager Instance { get; private set; }
-        public ClientGateway ClientGateway;
+        public Log Logger;
         internal SoundEngine SoundEngine;
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
@@ -32,11 +31,11 @@ namespace Curiosity.Framework.Client
         {
             Instance = this;
             Hud = new();
-            ClientGateway = new ClientGateway();
+            Logger = new Log();
 
             SoundEngine = new SoundEngine();
 
-            SnowflakeGenerator.Create(-1);
+            //SnowflakeGenerator.Create(-1);
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
@@ -175,7 +174,8 @@ namespace Curiosity.Framework.Client
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, $"AttachTickHandlers");
+                    Logger.Fatal($"AttachTickHandlers");
+                    Logger.Fatal($"{ex}");
                 }
             });
         }

@@ -1,4 +1,5 @@
 ﻿using Curiosity.Framework.Server.Events;
+using Logger;
 using System.Collections.Concurrent;
 
 namespace Curiosity.Framework.Server.Managers
@@ -16,7 +17,7 @@ namespace Curiosity.Framework.Server.Managers
 
         public void Event(string name, Delegate @delegate) => Instance.AddEventHandler(name, @delegate);
         public ExportDictionary Export => Instance.ExportDictionary;
-        public ServerGateway ServerGateway => Instance.Events;
+        public Log Logger => Instance.Logger;
 
         protected Manager()
         {

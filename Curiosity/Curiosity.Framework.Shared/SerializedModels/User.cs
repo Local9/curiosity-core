@@ -2,7 +2,7 @@
 using Curiosity.Framework.Client.Utils;
 #endif
 
-using Lusive.Events.Attributes;
+using FxEvents.Shared.Attributes;
 
 #nullable enable
 

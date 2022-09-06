@@ -1,4 +1,4 @@
-﻿using Lusive.Events.Attributes;
+﻿using FxEvents.Shared.Attributes;
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {
