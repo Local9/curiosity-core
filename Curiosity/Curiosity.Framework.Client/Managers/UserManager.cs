@@ -3226,7 +3226,6 @@ namespace Curiosity.Framework.Client.Managers
                 ClearPedProp(Handle, (int)ePedProps.Unk_5);
             }
             else
-            else
                 SetPedPropIndex(
                     Handle,
                     (int)ePedProps.Unk_5,
