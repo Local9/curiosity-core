@@ -76,10 +76,12 @@ namespace Curiosity.Framework.Client.Extensions
             TaskPerformSequence(ped.Handle, sequence);
             ClearSequenceTask(ref sequence);
             await BaseScript.Delay(2000);
+            ped.IsPositionFrozen = true;
         }
 
         public static async Task TaskPlayOutroOfCharacterCreationRoom(this Ped ped, string an)
         {
+            ped.IsPositionFrozen = false;
             int sequence = 0;
             OpenSequenceTask(ref sequence);
             TaskPlayAnim(0, an, "outro", 8.0f, -8.0f, -1, 512, 0, false, false, false);

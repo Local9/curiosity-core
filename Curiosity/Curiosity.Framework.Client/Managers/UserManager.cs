@@ -511,8 +511,7 @@ namespace Curiosity.Framework.Client.Managers
             for (int i = 0; i < 8; i++)
                 outfitList.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
 
-            List<dynamic> hatList = new() { GetLabelText("FACE_OFF") };
-
+            var hatList = new List<dynamic>() { GetLabelText("FACE_OFF") };
             var glassesList = new List<dynamic>() { GetLabelText("FACE_OFF") };
 
             if (_characterSkin.IsMale)
@@ -548,13 +547,20 @@ namespace Curiosity.Framework.Client.Managers
                 if (item == _mlstApparelStyle)
                 {
                     List<dynamic> list = new();
-                    for (int i = 0; i < 8; i++)
+
+                    int minNum = index * 8;
+                    int maxNum = minNum + 8;
+                    first = minNum;
+
+                    for (int i = minNum; i < maxNum; i++)
                     {
-                        if (i == 0)
-                            first = index * 8;
                         list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
                     }
+                    
                     _mlstApparelOutfit.ChangeList(list, 0);
+
+                    Logger.Debug($"New List: {string.Join(",", list)}");
+
                     int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
                     var comp = new ComponentDrawables(
                         aa[0][0],
@@ -666,7 +672,11 @@ namespace Curiosity.Framework.Client.Managers
                 else if (item == _mlstApparelHat)
                 {
                     if (index == 0)
-                        ClearPedProp(id, 0);
+                    {
+                        SetPedPropIndex(id, (int)ePedProps.HatOrMask, -1, -1, false);
+                        ClearPedProp(id, (int)ePedProps.HatOrMask);
+                        Logger.Debug($"Removing hat");
+                    }
                     else
                     {
                         ShopPed.PedComponentData prop = new();
@@ -730,7 +740,10 @@ namespace Curiosity.Framework.Client.Managers
                 else if (item == _mlstApparelGlasses)
                 {
                     if (index == 0)
-                        ClearPedProp(id, 1);
+                    {
+                        SetPedPropIndex(id, (int)ePedProps.Glasses, -1, -1, false);
+                        ClearPedProp(id, (int)ePedProps.Glasses);
+                    }
                     else
                     {
                         ShopPed.PedComponentData prop = new();
@@ -793,7 +806,7 @@ namespace Curiosity.Framework.Client.Managers
                     }
                 }
                 UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
-                _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
+                // _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
             };
 
             #endregion
@@ -814,8 +827,6 @@ namespace Curiosity.Framework.Client.Managers
                         if (_newMenu == _menuApparel)
                         {
                             // DIVIDE BY ZERO ERROR
-                            var hatList = new List<dynamic>();
-                            var glassesList = new List<dynamic>();
 
                             var outfitList = new List<dynamic>();
                             for (int i = 0; i < 8; i++)
@@ -823,20 +834,17 @@ namespace Curiosity.Framework.Client.Managers
 
                             _mlstApparelOutfit.ChangeList(outfitList, 0);
 
-                            if (_characterSkin.IsMale)
-                            {
-                                foreach (var _hat in CharacterCreatorData.HatsMale)
-                                    hatList.Add(GetLabelText(_hat.label));
-                                foreach (var _glas in CharacterCreatorData.GlassesMale)
-                                    glassesList.Add(GetLabelText(_glas.label));
-                            }
-                            else
-                            {
-                                foreach (var _hat in CharacterCreatorData.HatsFemale)
-                                    hatList.Add(GetLabelText(_hat.label));
-                                foreach (var _glas in CharacterCreatorData.GlassesFemale)
-                                    glassesList.Add(GetLabelText(_glas.label));
-                            }
+                            var hatList = new List<dynamic>() { GetLabelText("FACE_OFF") };
+                            var glassesList = new List<dynamic>() { GetLabelText("FACE_OFF") };
+                            
+                            var hats = _characterSkin.IsMale ? CharacterCreatorData.HatsMale : CharacterCreatorData.HatsFemale;
+                            var glasses = _characterSkin.IsMale ? CharacterCreatorData.GlassesMale : CharacterCreatorData.GlassesFemale;
+
+                            foreach (var _hat in hats)
+                                hatList.Add(GetLabelText(_hat.label));
+                                
+                            foreach (var _glas in glasses)
+                                glassesList.Add(GetLabelText(_glas.label));
 
                             _mlstApparelHat.ChangeList(hatList, 0);
                             _mlstApparelGlasses.ChangeList(glassesList, 0);
@@ -896,7 +904,11 @@ namespace Curiosity.Framework.Client.Managers
                         break;
                     case MenuState.ChangeBackward:
                         if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
+                        {
+                            _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
+                            await BaseScript.Delay(5000);
                             _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false));
+                        }
                         break;
                 }
             };
@@ -3146,8 +3158,11 @@ namespace Curiosity.Framework.Client.Managers
                 dress.ComponentTextures.Torso_2,
                 2
             );
-            if (dress.PropDrawables.HatOrMask == -1)
-                ClearPedProp(Handle, 0);
+            if (dress.PropDrawables.HatOrMask <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.HatOrMask, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.HatOrMask);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3156,8 +3171,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.HatOrMask,
                     false
                 );
-            if (dress.PropDrawables.Ears == -1)
-                ClearPedProp(Handle, 2);
+            if (dress.PropDrawables.Ears <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Ears, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Ears);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3166,8 +3184,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Ears,
                     false
                 );
-            if (dress.PropDrawables.Glasses == -1)
-                ClearPedProp(Handle, 1);
+            if (dress.PropDrawables.Glasses <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Glasses, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Glasses);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3176,8 +3197,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Glasses,
                     true
                 );
-            if (dress.PropDrawables.Unk_3 == -1)
-                ClearPedProp(Handle, 3);
+            if (dress.PropDrawables.Unk_3 <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Unk_3, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Unk_3);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3186,8 +3210,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_3,
                     true
                 );
-            if (dress.PropDrawables.Unk_4 == -1)
-                ClearPedProp(Handle, 4);
+            if (dress.PropDrawables.Unk_4 <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Unk_4, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Unk_4);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3196,8 +3223,12 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_4,
                     true
                 );
-            if (dress.PropDrawables.Unk_5 == -1)
-                ClearPedProp(Handle, 5);
+            if (dress.PropDrawables.Unk_5 <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Unk_5, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Unk_5);
+            }
+            else
             else
                 SetPedPropIndex(
                     Handle,
@@ -3206,8 +3237,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_5,
                     true
                 );
-            if (dress.PropDrawables.Watches == -1)
-                ClearPedProp(Handle, 6);
+            if (dress.PropDrawables.Watches <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Watches, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Watches);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3216,8 +3250,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Watches,
                     true
                 );
-            if (dress.PropDrawables.Bracelets == -1)
-                ClearPedProp(Handle, 7);
+            if (dress.PropDrawables.Bracelets <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Bracelets, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Bracelets);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3226,8 +3263,11 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Bracelets,
                     true
                 );
-            if (dress.PropDrawables.Unk_8 == -1)
-                ClearPedProp(Handle, 8);
+            if (dress.PropDrawables.Unk_8 <= 0)
+            {
+                SetPedPropIndex(Handle, (int)ePedProps.Unk_8, -1, -1, false);
+                ClearPedProp(Handle, (int)ePedProps.Unk_8);
+            }
             else
                 SetPedPropIndex(
                     Handle,
@@ -3242,8 +3282,6 @@ namespace Curiosity.Framework.Client.Managers
         {
             var components = new int[12];
             var textures = new int[12];
-
-            Logger.Debug($"Outfit: {iParam1}");
 
             for (int i = 0; i < 12; i++)
             {
