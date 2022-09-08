@@ -229,7 +229,11 @@ namespace Curiosity.Framework.Client.Managers
             GameInterface.Hud.MenuPool.Add(_menuBase);
 
             #region Character Sex
-            UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { "Male", "Female" }, (int)gender, "Select character sex, any changes will be lost.");
+
+            string male = GetLabelText("hash_51c60924_fjjdpzc_collision");
+            string female = GetLabelText("hash_2165a502_ifrwtom_collision");
+            
+            UIMenuListItem mLstCharacterSex = new UIMenuListItem("Sex", new List<dynamic> { male, female }, (int)gender, "Select character sex, any changes will be lost.");
             _menuBase.AddItem(mLstCharacterSex);
 
             mLstCharacterSex.OnListChanged += async (item, index) =>
