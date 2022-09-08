@@ -29,20 +29,28 @@ namespace Curiosity.Framework.Client
 
         public PluginManager()
         {
-            Instance = this;
-            Hud = new();
-            Logger = new Log();
+            try
+            {
+                Instance = this;
+                Hud = new();
+                Logger = new Log();
 
-            SoundEngine = new SoundEngine();
+                SoundEngine = new SoundEngine();
 
-            //SnowflakeGenerator.Create(-1);
+                //SnowflakeGenerator.Create(-1);
 
-            EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
-            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+                EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
+                EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
 
-            OnLoadAsync();
+                OnLoadAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{Log.DARK_RED}{ex.Message}");
+                Debug.WriteLine($"{Log.DARK_RED}{ex}");
+            }
         }
 
         private async Task OnLoadAsync()
