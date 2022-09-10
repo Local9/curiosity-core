@@ -37,8 +37,6 @@ namespace Curiosity.Framework.Client
 
                 SoundEngine = new SoundEngine();
 
-                //SnowflakeGenerator.Create(-1);
-
                 EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
                 EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
