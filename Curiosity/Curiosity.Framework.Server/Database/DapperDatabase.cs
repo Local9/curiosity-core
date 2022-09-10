@@ -34,7 +34,7 @@ namespace Curiosity.Framework.Server.Database
             mySqlConnectionStringBuilder.MinimumPoolSize = databaseConfig.MinimumPoolSize;
             mySqlConnectionStringBuilder.ConnectionTimeout = databaseConfig.ConnectionTimeout;
 
-            return _connectionString = $"{mySqlConnectionStringBuilder}";
+            return _connectionString = mySqlConnectionStringBuilder.ToString();
         }
 
         public static async Task<List<T>> GetListAsync(string query, DynamicParameters args = null)
