@@ -88,7 +88,7 @@ namespace Curiosity.Framework.Client.Extensions
             CloseSequenceTask(sequence);
             TaskPerformSequence(ped.Handle, sequence);
             ClearSequenceTask(ref sequence);
-            await BaseScript.Delay(5000);
+            await BaseScript.Delay(2500);
         }
 
         public static void TaskLookLeft(this Ped ped, string animationDict)

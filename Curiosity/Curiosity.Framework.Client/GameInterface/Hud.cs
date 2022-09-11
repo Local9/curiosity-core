@@ -53,6 +53,11 @@ namespace Curiosity.Framework.Client.GameInterface
             }
         }
 
+        internal static void ShowNotificationSuccess(string message, bool blink = true, bool saveToBrief = true)
+        {
+            ShowNotification(message, blink, saveToBrief, eHudColor.HUD_COLOUR_GREENLIGHT);
+        }
+
         internal static void ShowNotification(string message, bool blink = true, bool saveToBrief = true, eHudColor bgColor = eHudColor.HUD_COLOUR_BLACK)
         {
             string[] strings = Screen.StringToArray(message);

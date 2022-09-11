@@ -6,11 +6,8 @@ using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
-using FxEvents.Shared;
 using ScaleformUI;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -1706,7 +1703,7 @@ namespace Curiosity.Framework.Client.Managers
 
             #region Menu Stats
 
-            int StatMax = 100;
+            int StatMax = 101;
             UIMenuStatsItem stamina = new UIMenuStatsItem(GetLabelText("FACE_STAM"), GetLabelText("FACE_H_STA"), 0, HudColor.HUD_COLOUR_FREEMODE);
             UIMenuPercentagePanel maxstat = new("Remaining Points", "0", "100", StatMax);
             stamina.AddPanel(maxstat);
@@ -1829,21 +1826,21 @@ namespace Curiosity.Framework.Client.Managers
             
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
-                _playerPed.TaskPlayOutroOfCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
-                await GameInterface.Hud.FadeOut(800);
-                _menuBase.Visible = false;
-                mugshotBoardAttachment.IsAttached = false;
-                GameInterface.Hud.MenuPool.CloseAllMenus();
-                Game.PlayerPed.Detach();
-
                 _user.ActiveCharacter.Skin = _characterSkin;
                 _user.ActiveCharacter.IsRegistered = true;
                 bool isSaved = await _user.ActiveCharacter.OnSaveCharacterAsync();
 
                 if (isSaved)
                 {
-                    GameInterface.Hud.ShowNotification("Character Saved", bgColor: eHudColor.HUD_COLOUR_GREENLIGHT);
+                    GameInterface.Hud.ShowNotificationSuccess("Character Saved");
                 }
+
+                await _playerPed.TaskPlayOutroOfCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
+                await GameInterface.Hud.FadeOut(800);
+                _menuBase.Visible = false;
+                mugshotBoardAttachment.IsAttached = false;
+                GameInterface.Hud.MenuPool.CloseAllMenus();
+                Game.PlayerPed.Detach();
 
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
                 RemoveAnimDict("mp_character_creation@lineup@male_b");
@@ -1866,6 +1863,7 @@ namespace Curiosity.Framework.Client.Managers
                 Screen.LoadingPrompt.Hide();
         }
 
+        #region Control Ticks
         float _gridPanelCoordX;
         float _gridPanelCoordY;
         bool _isPedLookingLeft;
@@ -3200,6 +3198,10 @@ namespace Curiosity.Framework.Client.Managers
             }
         }
 
+        #endregion
+        
+        #region Animations
+
         string GetLineupOrCreationAnimation(bool isCreator, bool alternateAnimation)
         {
             if (isCreator)
@@ -3214,6 +3216,9 @@ namespace Curiosity.Framework.Client.Managers
             return "mp_character_creation@lineup@male_a";
         }
 
+        #endregion
+
+        #region Character Setup and Randomisation
         async Task CreateCharacterClass(bool randomise = false, bool randomGender = true, Gender gender = Gender.Male)
         {
             if (!randomise)
@@ -3370,46 +3375,7 @@ namespace Curiosity.Framework.Client.Managers
             for (int i = 0; i < skin.Face.Features.Length; i++)
                 SetPedFaceFeature(Handle, i, skin.Face.Features[i]);
         }
-
-        private static Camera ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
-
-        async void AnimateGameplayCamZoom(bool toggle, Camera ncam)
-        {
-            if (toggle)
-            {
-                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
-                ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
-                ncamm.Position = new Vector3(402.6746f, -1000.129f, -98.46554f);
-                ncamm.Rotation = new Vector3(0.861356f, 0f, -2.348183f);
-                _playerPed.IsVisible = true;
-                ncamm.FieldOfView = 15.00255f;
-                ncamm.IsActive = true;
-                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
-                ncam.InterpTo(ncamm, 300, 1, 1);
-                Game.PlaySound("Zoom_In", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
-                while (ncam.IsInterpolating)
-                    await BaseScript.Delay(0);
-            }
-            else
-            {
-                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
-                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
-                ncamm.InterpTo(ncam, 300, 1, 1);
-                ncamm.Delete();
-                Game.PlaySound("Zoom_Out", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
-                while (ncam.IsInterpolating)
-                    await BaseScript.Delay(0);
-            }
-        }
-
-        static void SetGenericeCameraSettings(int cameraHandle, float fParam1, float fParam2, float dofLens, float dofBlend)
-        {
-            N_0xf55e4046f6f831dc(cameraHandle, fParam1);
-            N_0xe111a7c0d200cbc5(cameraHandle, fParam2);
-            SetCamDofFnumberOfLens(cameraHandle, dofLens);
-            SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
-        }
-
+        
         public async void RandomDress()
         {
             int id = _playerPed.Handle;
@@ -3667,6 +3633,48 @@ namespace Curiosity.Framework.Client.Managers
                 );
         }
 
+        #endregion
+
+        private static Camera ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
+
+        async void AnimateGameplayCamZoom(bool toggle, Camera ncam)
+        {
+            if (toggle)
+            {
+                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
+                ncamm = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", false));
+                ncamm.Position = new Vector3(402.6746f, -1000.129f, -98.46554f);
+                ncamm.Rotation = new Vector3(0.861356f, 0f, -2.348183f);
+                _playerPed.IsVisible = true;
+                ncamm.FieldOfView = 15.00255f;
+                ncamm.IsActive = true;
+                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
+                ncam.InterpTo(ncamm, 300, 1, 1);
+                Game.PlaySound("Zoom_In", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
+                while (ncam.IsInterpolating)
+                    await BaseScript.Delay(0);
+            }
+            else
+            {
+                SetGenericeCameraSettings(ncamm.Handle, 3.8f, 1f, 1.2f, 1f);
+                SetGenericeCameraSettings(ncam.Handle, 3f, 1f, 1.2f, 1f);
+                ncamm.InterpTo(ncam, 300, 1, 1);
+                ncamm.Delete();
+                Game.PlaySound("Zoom_Out", "MUGSHOT_CHARACTER_CREATION_SOUNDS");
+                while (ncam.IsInterpolating)
+                    await BaseScript.Delay(0);
+            }
+        }
+
+        static void SetGenericeCameraSettings(int cameraHandle, float fParam1, float fParam2, float dofLens, float dofBlend)
+        {
+            N_0xf55e4046f6f831dc(cameraHandle, fParam1);
+            N_0xe111a7c0d200cbc5(cameraHandle, fParam2);
+            SetCamDofFnumberOfLens(cameraHandle, dofLens);
+            SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
+        }
+
+        #region character outfits
         static int[][] GetCharacterOutfitSettings(bool isMale, int iParam1)
         {
             var components = new int[12];
@@ -6594,5 +6602,6 @@ namespace Curiosity.Framework.Client.Managers
                 }
             };
         }
+        #endregion
     }
 }
