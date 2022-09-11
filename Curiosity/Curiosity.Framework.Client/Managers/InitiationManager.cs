@@ -40,9 +40,9 @@ namespace Curiosity.Framework.Client.Managers
         private async Task OnGeneralTickAsync()
         {
             int vehicleWeapon = -1553120962; // Vehicle Collision with Peds
-            API.SetWeaponDamageModifierThisFrame((uint)vehicleWeapon, 0.0f);
-            API.SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0.0f);
-            API.SetWeaponDamageModifierThisFrame((uint)MP_STUN_GUN, 0.0f);
+            SetWeaponDamageModifierThisFrame((uint)vehicleWeapon, 0.0f);
+            SetWeaponDamageModifierThisFrame((uint)WeaponHash.StunGun, 0.0f);
+            SetWeaponDamageModifierThisFrame((uint)MP_STUN_GUN, 0.0f);
 
             Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
             Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
@@ -50,9 +50,10 @@ namespace Curiosity.Framework.Client.Managers
             Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
-            API.SetTextChatEnabled(false); // Disable default GTA Chat
-            API.DisablePlayerVehicleRewards(Game.Player.Handle); // Remove any vehicle weapons
-            Game.Player.SetRunSpeedMultThisFrame(1f); // Force the players speed       
+
+            DisableMultiplayerChat(true);
+            SetTextChatEnabled(false); // Disable default GTA Chat
+            DisablePlayerVehicleRewards(Game.Player.Handle); // Remove any vehicle weapons       
         }
     }
 }
