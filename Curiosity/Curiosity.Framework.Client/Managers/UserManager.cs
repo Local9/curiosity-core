@@ -85,8 +85,6 @@ namespace Curiosity.Framework.Client.Managers
 
             ScreenInterface.StartLoadingMessage("PM_WAIT");
             OnRequestCharactersAsync();
-
-            DisableMultiplayerChat(true);
         }
 
         public async Task OnRequestCharactersAsync()
@@ -1825,9 +1823,14 @@ namespace Curiosity.Framework.Client.Managers
             
             miSaveAndExit.SetRightBadge(BadgeIcon.TICK);
             _menuBase.AddItem(miSaveAndExit);
+
+            bool isProcessing = false;
             
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
+                if (isProcessing) return;
+                isProcessing = true;
+
                 DisplayRadar(false);
                 DisplayHud(true);
 
@@ -1837,11 +1840,15 @@ namespace Curiosity.Framework.Client.Managers
 
                 if (!isSaved)
                 {
+                    isProcessing = false;
                     GameInterface.Hud.ShowNotificationError("Character Failed to save. If this continues, please open a support ticket.");
                     DisplayRadar(false);
                     DisplayHud(false);
                     return;
                 }
+
+                Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
+                Instance.DetachTickHandler(OnCharacterCreationWarningAsync);
 
                 GameInterface.Hud.ShowNotificationSuccess("Character Saved");
                 await BaseScript.Delay(1000);
@@ -1862,13 +1869,19 @@ namespace Curiosity.Framework.Client.Managers
                 RemoveAnimDict("mp_character_creation@customise@male_a");
                 RemoveAnimDict("mp_character_creation@customise@female_a");
 
-                Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
+                ReleaseNamedScriptAudioBank("Mugshot_Character_Creator");
+                ReleaseNamedScriptAudioBank("DLC_GTAO/MUGSHOT_ROOM");
 
-                Game.PlayerPed.Position = _cityHall.AsVector().GetGroundWithWaterTest();
+                Vector3 position = _cityHall.AsVector();
+
+                Game.PlayerPed.Position = position.GetGroundWithWaterTest();
                 Game.PlayerPed.IsPositionFrozen = true;
 
                 await BaseScript.Delay(1000);
                 await GameInterface.Hud.FadeIn(1000);
+                
+                DisplayRadar(true);
+                DisplayHud(true);
 
                 Game.PlayerPed.IsPositionFrozen = false;
             };
