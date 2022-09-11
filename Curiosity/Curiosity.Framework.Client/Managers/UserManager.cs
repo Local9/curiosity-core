@@ -155,6 +155,7 @@ namespace Curiosity.Framework.Client.Managers
             DisplayRadar(false);
 
             _user.ActiveCharacter = new Character();
+            _characterSkin = _user.ActiveCharacter.Skin;
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
 
@@ -1704,22 +1705,139 @@ namespace Curiosity.Framework.Client.Managers
 
             #endregion
 
+            #region Menu Stats
+
+            int StatMax = 100;
+            UIMenuStatsItem stamina = new UIMenuStatsItem(GetLabelText("FACE_STAM"), GetLabelText("FACE_H_STA"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat = new("Remaining Points", "0", "100", StatMax);
+            stamina.AddPanel(maxstat);
+
+            UIMenuStatsItem shooting = new UIMenuStatsItem(GetLabelText("FACE_SHOOT"), GetLabelText("FACE_H_SHO"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat1 = new("Remaining Points", "0", "100", StatMax);
+            shooting.AddPanel(maxstat1);
+
+            UIMenuStatsItem strength = new UIMenuStatsItem(GetLabelText("FACE_STR"), GetLabelText("FACE_H_STR"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat2 = new("Remaining Points", "0", "100", StatMax);
+            strength.AddPanel(maxstat2);
+
+            UIMenuStatsItem stealth = new UIMenuStatsItem(GetLabelText("FACE_STEALTH"), GetLabelText("FACE_H_STE"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat3 = new("Remaining Points", "0", "100", StatMax);
+            stealth.AddPanel(maxstat3);
+
+            UIMenuStatsItem flying = new UIMenuStatsItem(GetLabelText("FACE_FLY"), GetLabelText("FACE_H_FLY"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat4 = new("Remaining Points", "0", "100", StatMax);
+            flying.AddPanel(maxstat4);
+
+            UIMenuStatsItem driving = new UIMenuStatsItem(GetLabelText("FACE_DRIV"), GetLabelText("FACE_H_DRI"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat5 = new("Remaining Points", "0", "100", StatMax);
+            driving.AddPanel(maxstat5);
+
+            UIMenuStatsItem lungs = new UIMenuStatsItem(GetLabelText("FACE_LUNG"), GetLabelText("FACE_H_LCP"), 0, HudColor.HUD_COLOUR_FREEMODE);
+            UIMenuPercentagePanel maxstat6 = new("Remaining Points", "0", "100", StatMax);
+            lungs.AddPanel(maxstat6);
+
+            _menuStats.AddItem(stamina);
+            _menuStats.AddItem(shooting);
+            _menuStats.AddItem(strength);
+            _menuStats.AddItem(stealth);
+            _menuStats.AddItem(flying);
+            _menuStats.AddItem(driving);
+            _menuStats.AddItem(lungs);
+
+            int _stamina = 0,
+                _shooting = 0,
+                _strength = 0,
+                _stealth = 0,
+                _flying = 0,
+                _driving = 0,
+                _lungs = 0;
+
+            _menuStats.OnStatsItemChanged += (a, b, c) =>
+            {
+                var max = 0;
+                foreach (var item in a.MenuItems)
+                {
+                    max += (item as UIMenuStatsItem).Value;
+                }
+                StatMax = 100 - max;
+                foreach (var item in a.MenuItems)
+                {
+                    (item.Panels[0] as UIMenuPercentagePanel).Percentage = StatMax;
+                }
+                if (b == stamina)
+                {
+                    if (StatMax > 0)
+                        _stamina = c;
+                    else
+                        b.Value = _stamina;
+                }
+                else if (b == shooting)
+                {
+                    if (StatMax > 0)
+                        _shooting = c;
+                    else
+                        b.Value = _shooting;
+                }
+                else if (b == strength)
+                {
+                    if (StatMax > 0)
+                        _strength = c;
+                    else
+                        b.Value = _strength;
+                }
+                else if (b == stealth)
+                {
+                    if (StatMax > 0)
+                        _stealth = c;
+                    else
+                        b.Value = _stealth;
+                }
+                else if (b == flying)
+                {
+                    if (StatMax > 0)
+                        _flying = c;
+                    else
+                        b.Value = _flying;
+                }
+                else if (b == driving)
+                {
+                    if (StatMax > 0)
+                        _driving = c;
+                    else
+                        b.Value = _driving;
+                }
+                else if (b == lungs)
+                {
+                    if (StatMax > 0)
+                        _lungs = c;
+                    else
+                        b.Value = _lungs;
+                }
+                _user.ActiveCharacter.Stats = new(_stamina, _strength, _lungs, _stealth, _shooting, _driving, _flying);
+            };
+
+            #endregion
+
             #region Save and Exit
 
             UIMenuItem miSaveAndExit = new UIMenuItem(
-                "Save Character",
-                "This will save the character and throw you into the deepend.",
-                HudColor.HUD_COLOUR_FREEMODE_DARK, HudColor.HUD_COLOUR_FREEMODE);
+            "Save Character",
+            "This will save the character and throw you into the deepend.",
+            HudColor.HUD_COLOUR_FREEMODE_DARK, HudColor.HUD_COLOUR_FREEMODE);
             
             miSaveAndExit.SetRightBadge(BadgeIcon.TICK);
             _menuBase.AddItem(miSaveAndExit);
             
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
+                _playerPed.TaskPlayOutroOfCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
                 await GameInterface.Hud.FadeOut(800);
                 _menuBase.Visible = false;
+                mugshotBoardAttachment.IsAttached = false;
                 GameInterface.Hud.MenuPool.CloseAllMenus();
                 Game.PlayerPed.Detach();
+
+                _user.ActiveCharacter.Skin = _characterSkin;
 
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
                 RemoveAnimDict("mp_character_creation@lineup@male_b");
@@ -3074,15 +3192,15 @@ namespace Curiosity.Framework.Client.Managers
             }
         }
 
-        string GetLineupOrCreationAnimation(bool lineup, bool alternateAnimation)
+        string GetLineupOrCreationAnimation(bool isCreator, bool alternateAnimation)
         {
-            if (lineup)
+            if (isCreator)
                 return _characterSkin.IsMale ? "mp_character_creation@customise@male_a" : "mp_character_creation@customise@female_a";
 
-            if (!lineup && alternateAnimation)
+            if (!isCreator && alternateAnimation)
                 return _characterSkin.IsMale ? "mp_character_creation@lineup@male_b" : "mp_character_creation@lineup@female_b";
             
-            if (!lineup)
+            if (!isCreator)
                 return _characterSkin.IsMale ? "mp_character_creation@lineup@male_a" : "mp_character_creation@lineup@female_a";
 
             return "mp_character_creation@lineup@male_a";

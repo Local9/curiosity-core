@@ -17,6 +17,9 @@ namespace Curiosity.Framework.Shared.SerializedModels
         [JsonProperty("skin")]
         public CharacterSkin Skin { get; internal set; }
 
+        [JsonProperty("stats")]
+        public CharacterStats Stats { get; internal set; }
+
 #if CLIENT
         [Ignore]
         public async Task OnUpdateCharacterAsync()

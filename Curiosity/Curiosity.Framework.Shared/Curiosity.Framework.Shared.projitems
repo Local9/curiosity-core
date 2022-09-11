@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterOutfit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterSkin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterStats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\ComponentDrawables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Identifiers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Position.cs" />
