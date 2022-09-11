@@ -152,6 +152,7 @@ namespace Curiosity.Framework.Client.Managers
             DisplayRadar(false);
 
             _user.ActiveCharacter = new Character();
+            _user.ActiveCharacter.Stats = new CharacterStats();
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
 
@@ -1833,11 +1834,16 @@ namespace Curiosity.Framework.Client.Managers
                 _user.ActiveCharacter.IsRegistered = true;
                 bool isSaved = await _user.ActiveCharacter.OnSaveCharacterAsync();
 
-                if (isSaved)
+                if (!isSaved)
                 {
-                    GameInterface.Hud.ShowNotificationSuccess("Character Saved");
+                    GameInterface.Hud.ShowNotificationError("Character Failed to save. If this continues, please open a support ticket.");
+                    DisplayRadar(false);
+                    DisplayHud(false);
+                    return;
                 }
 
+                GameInterface.Hud.ShowNotificationSuccess("Character Saved");
+                await BaseScript.Delay(1000);
                 await _playerPed.TaskPlayOutroOfCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
                 await GameInterface.Hud.FadeOut(800);
                 _menuBase.Visible = false;
@@ -1851,8 +1857,6 @@ namespace Curiosity.Framework.Client.Managers
                 RemoveAnimDict("mp_character_creation@lineup@female_b");
                 RemoveAnimDict("mp_character_creation@customise@male_a");
                 RemoveAnimDict("mp_character_creation@customise@female_a");
-
-
             };
 
             #endregion

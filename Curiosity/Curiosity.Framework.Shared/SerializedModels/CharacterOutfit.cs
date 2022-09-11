@@ -3,8 +3,8 @@
     [Serializable]
     public partial class CharacterOutfit
     {
-        public string Name;
-        public string Description;
+        public string? Name;
+        public string? Description;
         public ComponentDrawables ComponentDrawables = new();
         public ComponentDrawables ComponentTextures = new();
         public PropDrawables PropDrawables = new();
