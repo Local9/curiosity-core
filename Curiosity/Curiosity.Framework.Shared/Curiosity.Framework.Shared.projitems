@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\TickHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Date.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\eHudColor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eBusySpinnerType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedComponents.cs" />

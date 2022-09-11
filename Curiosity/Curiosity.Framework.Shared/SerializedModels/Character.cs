@@ -1,4 +1,5 @@
-﻿using FxEvents.Shared.Attributes;
+﻿using FxEvents;
+using FxEvents.Shared.Attributes;
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {
@@ -25,6 +26,12 @@ namespace Curiosity.Framework.Shared.SerializedModels
         public async Task OnUpdateCharacterAsync()
         {
             
+        }
+
+        [Ignore]
+        public async Task<bool> OnSaveCharacterAsync()
+        {
+            return await EventDispatcher.Get<bool>("character:save", this);
         }
 #endif
     }

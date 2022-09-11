@@ -1837,6 +1837,13 @@ namespace Curiosity.Framework.Client.Managers
                 Game.PlayerPed.Detach();
 
                 _user.ActiveCharacter.Skin = _characterSkin;
+                _user.ActiveCharacter.IsRegistered = true;
+                bool isSaved = await _user.ActiveCharacter.OnSaveCharacterAsync();
+
+                if (isSaved)
+                {
+                    GameInterface.Hud.ShowNotification("Character Saved");
+                }
 
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
                 RemoveAnimDict("mp_character_creation@lineup@male_b");
@@ -1844,6 +1851,8 @@ namespace Curiosity.Framework.Client.Managers
                 RemoveAnimDict("mp_character_creation@lineup@female_b");
                 RemoveAnimDict("mp_character_creation@customise@male_a");
                 RemoveAnimDict("mp_character_creation@customise@female_a");
+
+
             };
 
             #endregion

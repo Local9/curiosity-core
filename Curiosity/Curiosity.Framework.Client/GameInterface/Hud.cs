@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.UI;
+using Curiosity.Framework.Shared.Enums;
 using ScaleformUI;
 
 namespace Curiosity.Framework.Client.GameInterface
@@ -50,6 +51,18 @@ namespace Curiosity.Framework.Client.GameInterface
                         break;
                 }
             }
+        }
+
+        internal static void ShowNotification(string message, bool blink = true, bool saveToBrief = true, eHudColor bgColor = eHudColor.HUD_COLOUR_BLACK)
+        {
+            string[] strings = Screen.StringToArray(message);
+            API.SetNotificationTextEntry("CELL_EMAIL_BCON");
+            foreach (string s in strings)
+            {
+                API.AddTextComponentSubstringPlayerName(s);
+            }
+            API.SetNotificationBackgroundColor((int)bgColor);
+            API.DrawNotification(blink, saveToBrief);
         }
     }
 }
