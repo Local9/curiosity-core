@@ -6,6 +6,7 @@ using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
+using FxEvents.Shared;
 using ScaleformUI;
 using System.Collections.Generic;
 using System.Drawing;
@@ -156,7 +157,7 @@ namespace Curiosity.Framework.Client.Managers
             _user.ActiveCharacter = new Character();
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
-            
+
             _playerPed = Game.PlayerPed;
 
             _playerPed.Position = new Vector3(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z);
@@ -175,19 +176,24 @@ namespace Curiosity.Framework.Client.Managers
             // swap this out
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
-            SetupCharacterAsync();
+            await SetupCharacterAsync();
 
             Instance.SoundEngine.Enable();
-
-            SetNuiFocus(false, false);
-            ShutdownLoadingScreen();
-            ShutdownLoadingScreenNui();
 
             SetTimecycleModifier("default");
             SetTimecycleModifierStrength(1f);
 
             if (!reload)
+            {
+                await LoadTransition.OnWaitAsync();
+
+                SetNuiFocus(false, false);
+                ShutdownLoadingScreen();
+                ShutdownLoadingScreenNui();
+
+                GameInterface.Hud.FadeIn(800);
                 await LoadTransition.OnDownAsync();
+            }
 
             RenderScriptCams(true, true, 0, false, false);
 
@@ -215,7 +221,9 @@ namespace Curiosity.Framework.Client.Managers
             SetCamDofMaxNearInFocusDistanceBlendLevel(cam.Handle, 1f);
             cam.InterpTo(_mainCamera, 5000, 1, 1);
 
-            GameInterface.Hud.FadeIn(800);
+            if (Screen.Fading.IsFadedOut)
+                GameInterface.Hud.FadeIn(800);
+
             await BaseScript.Delay(2500);
 
             cam.Delete();
@@ -3194,6 +3202,9 @@ namespace Curiosity.Framework.Client.Managers
             RandomiseCharacterAppearance();
             UpdateFace(_playerPed.Handle, _characterSkin);
             await Common.MoveToMainThread();
+            _playerPed.SetDefaultVariation();
+            _playerPed.SetRandomFacialMood();
+            await BaseScript.Delay(1000);
             RandomDress();
         }
 
@@ -3273,10 +3284,10 @@ namespace Curiosity.Framework.Client.Managers
             SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
         }
 
-        public void RandomDress()
+        public async void RandomDress()
         {
             int id = _playerPed.Handle;
-            int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, Common.RANDOM.Next(57));
+            int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, Common.RANDOM.Next(0, 64));
             var comp = new ComponentDrawables(
                 aa[0][0],
                 aa[0][1],
@@ -3328,6 +3339,7 @@ namespace Curiosity.Framework.Client.Managers
                 GetPedPropTextureIndex(id, 8)
             );
             _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+            await Common.MoveToMainThread();
             UpdateDress(id, _characterSkin.CharacterOutfit);
         }
 
