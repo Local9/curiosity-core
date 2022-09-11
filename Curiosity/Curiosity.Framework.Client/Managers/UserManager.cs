@@ -75,6 +75,7 @@ namespace Curiosity.Framework.Client.Managers
 
         MugshotBoardAttachment mugshotBoardAttachment = new();
         const int MAX_CREATOR_COLOR = 63;
+        float _finalHeading;
 
         public async override void Begin()
         {
@@ -172,6 +173,8 @@ namespace Curiosity.Framework.Client.Managers
             // swap this out
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
+            SetupCharacter();
+
             Instance.SoundEngine.Enable();
 
             SetNuiFocus(false, false);
@@ -218,6 +221,8 @@ namespace Curiosity.Framework.Client.Managers
             Gender gender = (Gender)_characterSkin.Gender;
             await _playerPed.TaskWalkInToCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
             OnCharacterCreationMenuAsync(gender);
+
+            _finalHeading = _playerPed.Heading;
         }
 
         public async void OnCharacterCreationMenuAsync(Gender gender)
@@ -282,6 +287,7 @@ namespace Curiosity.Framework.Client.Managers
             InstructionalButton btnChangeOpacity = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Change Opacity");
             InstructionalButton btnMouse = new InstructionalButton(InputGroup.INPUTGROUP_LOOK, "Manage Panels", ScaleformUI.PadCheck.Keyboard);
             InstructionalButton btnTriggers = new InstructionalButton(InputGroup.INPUTGROUP_FRONTEND_TRIGGERS, "Change Color");
+            InstructionalButton btnRotate = new InstructionalButton(InputGroup.INPUTGROUP_FRONTEND_TRIGGERS, "Rotate");
 
             _menuBase.InstructionalButtons.Add(btnLookRight);
             _menuBase.InstructionalButtons.Add(btnLookLeft);
@@ -295,6 +301,8 @@ namespace Curiosity.Framework.Client.Managers
             _menuAppearance.InstructionalButtons.Add(btnChangeOpacity);
             _menuAppearance.InstructionalButtons.Add(btnTriggers);
             _menuAppearance.InstructionalButtons.Add(btnRandomise);
+
+            _menuAdvancedApparel.InstructionalButtons.Add(btnRotate);
 
             _menuFeatures.InstructionalButtons.Add(btnLookRight);
             _menuFeatures.InstructionalButtons.Add(btnLookLeft);
@@ -503,6 +511,186 @@ namespace Curiosity.Framework.Client.Managers
                             : _newIndex - 1;
 
                 UpdateFace(_playerPed.Handle, _characterSkin);
+            };
+
+            #endregion
+
+            #region Advanced Apparel
+
+            string[] clothingCategoryNames = new string[10] { "Masks", "Upper Body", "Lower Body", "Bags & Parachutes", "Shoes", "Scarfs & Chains", "Shirt & Accessory", "Body Armor", "Badges & Logos", "Jackets" };
+
+            for (int i = 0; i < clothingCategoryNames.Length; i++)
+            {
+                int currentVariationIndex = 255;
+                int currentVariationTextureIndex = 255;
+                ePedComponents componentIndex = ePedComponents.Hair;
+
+                if (i == 0)
+                {
+                    componentIndex = ePedComponents.Mask;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Mask;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Mask;
+                }
+                else if (i == 1)
+                {
+                    componentIndex = ePedComponents.Torso;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Torso;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Torso;
+                }
+                else if (i == 2)
+                {
+                    componentIndex = ePedComponents.Leg;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Leg;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Leg;
+                }
+                else if (i == 3)
+                {
+                    componentIndex = ePedComponents.BagOrParachute;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.BagOrParachute;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.BagOrParachute;
+                }
+                else if (i == 4)
+                {
+                    componentIndex = ePedComponents.Shoes;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Shoes;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Shoes;
+                }
+                else if (i == 5)
+                {
+                    componentIndex = ePedComponents.Accessory;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Accessory;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Accessory;
+                }
+                else if (i == 6)
+                {
+                    componentIndex = ePedComponents.Undershirt;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Undershirt;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Undershirt;
+                }
+                else if (i == 7)
+                {
+                    componentIndex = ePedComponents.Kevlar;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Kevlar;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Kevlar;
+                }
+                else if (i == 8)
+                {
+                    componentIndex = ePedComponents.Badge;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Badge;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Badge;
+                }
+                else if (i == 9)
+                {
+                    componentIndex = ePedComponents.Torso_2;
+                    currentVariationIndex = _characterSkin.CharacterOutfit.ComponentDrawables.Torso_2;
+                    currentVariationTextureIndex = _characterSkin.CharacterOutfit.ComponentTextures.Torso_2;
+                }
+
+                int maxDrawables = GetNumberOfPedDrawableVariations(_playerPed.Handle, (int)componentIndex);
+                int maxTextures = GetNumberOfPedTextureVariations(_playerPed.Handle, i, currentVariationIndex);
+
+                List<dynamic> menuItemList = new List<dynamic>();
+
+                for (int x = 0; x < maxDrawables; x++)
+                {
+                    menuItemList.Add($"#{x}/{maxDrawables}");
+                }
+
+                UIMenuListItem mListItem = new UIMenuListItem(clothingCategoryNames[i], menuItemList, currentVariationIndex,
+                    $"Select a drawable using the arrow keys and press ~o~enter~s~ to cycle through all available textures. Currently selected texture: #{currentVariationTextureIndex + 1} (of {maxTextures}).");
+
+                _menuAdvancedApparel.AddItem(mListItem);
+            }
+
+            int _advMenuApparelIndex = 1;
+
+            _menuAdvancedApparel.OnIndexChange += (_sender, _newIndex) =>
+            {
+                if (_newIndex == 0) // Masks
+                    _advMenuApparelIndex = 1;
+                if (_newIndex == 1) // Upper Body
+                    _advMenuApparelIndex = 3;
+                if (_newIndex == 2) // Lower Body
+                    _advMenuApparelIndex = 4;
+                if (_newIndex == 3) // Bags & Parachutes
+                    _advMenuApparelIndex = 5;
+                if (_newIndex == 4) // Shoes
+                    _advMenuApparelIndex = 6;
+                if (_newIndex == 5) // Scarfs & Chains
+                    _advMenuApparelIndex = 7;
+                if (_newIndex == 6) // Shirt & Accessory
+                    _advMenuApparelIndex = 8;
+                if (_newIndex == 7) // Body Armor & Accessory
+                    _advMenuApparelIndex = 9;
+                if (_newIndex == 8) // Badges & Logos
+                    _advMenuApparelIndex = 10;
+                if (_newIndex == 9) // Shirt Overlay & Jackets
+                    _advMenuApparelIndex = 11;
+            };
+
+            _menuAdvancedApparel.OnListChange += (_sender, _listItem, _listIndex) => {
+                int textureIndex = GetPedTextureVariation(_playerPed.Handle, _advMenuApparelIndex);
+                int newTextureIndex = 0;
+                int maxTextures = GetNumberOfPedTextureVariations(_playerPed.Handle, _advMenuApparelIndex, _listItem.Index);
+
+                if (_advMenuApparelIndex == 1)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Mask = _listItem.Index;
+                else if (_advMenuApparelIndex == 3)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Torso = _listItem.Index;
+                else if (_advMenuApparelIndex == 4)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Leg = _listItem.Index;
+                else if (_advMenuApparelIndex == 5)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.BagOrParachute = _listItem.Index;
+                else if (_advMenuApparelIndex == 6)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Shoes = _listItem.Index;
+                else if (_advMenuApparelIndex == 7)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Accessory = _listItem.Index;
+                else if (_advMenuApparelIndex == 8)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Undershirt = _listItem.Index;
+                else if (_advMenuApparelIndex == 9)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Kevlar = _listItem.Index;
+                else if (_advMenuApparelIndex == 10)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Badge = _listItem.Index;
+                else if (_advMenuApparelIndex == 11)
+                    _characterSkin.CharacterOutfit.ComponentDrawables.Torso_2 = _listItem.Index;
+
+                UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
+
+                _listItem.Description = $"Select an item using the arrow keys and press ~o~enter~s~ to cycle through all available styles. Currently selected style: #{newTextureIndex + 1} (of {maxTextures}).";
+                _sender.UpdateDescription();
+            };
+
+            _menuAdvancedApparel.OnListSelect += (_sender, _listItem, _listIndex) =>
+            {
+                int textureIndex = GetPedTextureVariation(_playerPed.Handle, _advMenuApparelIndex);
+                int newTextureIndex = (GetNumberOfPedTextureVariations(_playerPed.Handle, _advMenuApparelIndex, _listItem.Index) - 1) < (textureIndex + 1) ? 0 : textureIndex + 1;
+                int maxTextures = GetNumberOfPedTextureVariations(_playerPed.Handle, _advMenuApparelIndex, _listItem.Index);
+
+                if (_advMenuApparelIndex == 1)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Mask = newTextureIndex;
+                else if (_advMenuApparelIndex == 3)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Torso = newTextureIndex;
+                else if (_advMenuApparelIndex == 4)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Leg = newTextureIndex;
+                else if (_advMenuApparelIndex == 5)
+                    _characterSkin.CharacterOutfit.ComponentTextures.BagOrParachute = newTextureIndex;
+                else if (_advMenuApparelIndex == 6)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Shoes = newTextureIndex;
+                else if (_advMenuApparelIndex == 7)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Accessory = newTextureIndex;
+                else if (_advMenuApparelIndex == 8)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Undershirt = newTextureIndex;
+                else if (_advMenuApparelIndex == 9)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Kevlar = newTextureIndex;
+                else if (_advMenuApparelIndex == 10)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Badge = newTextureIndex;
+                else if (_advMenuApparelIndex == 11)
+                    _characterSkin.CharacterOutfit.ComponentTextures.Torso_2 = newTextureIndex;
+
+                UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
+
+                _listItem.Description = $"Select an item using the arrow keys and press ~o~enter~s~ to cycle through all available styles. Currently selected style: #{newTextureIndex + 1} (of {maxTextures}).";
+                _sender.UpdateDescription();
             };
 
             #endregion
@@ -814,6 +1002,12 @@ namespace Curiosity.Framework.Client.Managers
 
             #endregion
 
+            #region Advanced Apparel
+
+
+
+            #endregion
+
             #region Menu Change States
 
             GameInterface.Hud.MenuPool.OnMenuStateChanged += async (_oldMenu, _newMenu, _state) =>
@@ -908,6 +1102,7 @@ namespace Curiosity.Framework.Client.Managers
                     case MenuState.ChangeBackward:
                         if (_oldMenu == _menuApparel || _oldMenu == _menuAdvancedApparel)
                         {
+                            _playerPed.Heading = _finalHeading;
                             _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
                             await BaseScript.Delay(5000);
                             _playerPed.TaskClothesALoop(GetLineupOrCreationAnimation(true, false));
