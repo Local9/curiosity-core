@@ -1826,6 +1826,9 @@ namespace Curiosity.Framework.Client.Managers
             
             miSaveAndExit.Activated += async (selectedItem, index) =>
             {
+                DisplayRadar(false);
+                DisplayHud(true);
+
                 _user.ActiveCharacter.Skin = _characterSkin;
                 _user.ActiveCharacter.IsRegistered = true;
                 bool isSaved = await _user.ActiveCharacter.OnSaveCharacterAsync();
