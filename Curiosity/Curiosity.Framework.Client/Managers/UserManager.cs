@@ -4,6 +4,7 @@ using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
+using Curiosity.Framework.Shared.Extensions;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
 using ScaleformUI;
@@ -1857,6 +1858,15 @@ namespace Curiosity.Framework.Client.Managers
                 RemoveAnimDict("mp_character_creation@lineup@female_b");
                 RemoveAnimDict("mp_character_creation@customise@male_a");
                 RemoveAnimDict("mp_character_creation@customise@female_a");
+
+                Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
+
+                Game.PlayerPed.Position = _cityHall.AsVector();
+                Game.PlayerPed.IsPositionFrozen = true;
+                
+                await GameInterface.Hud.FadeIn(1000);
+
+                Game.PlayerPed.IsPositionFrozen = false;
             };
 
             #endregion
