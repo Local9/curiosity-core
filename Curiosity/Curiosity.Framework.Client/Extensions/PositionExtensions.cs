@@ -46,5 +46,30 @@ namespace Curiosity.Framework.Client.Extensions
         {
             return new Quaternion(vector5.Vector3.X, vector5.Vector3.Y, vector5.Vector3.Z, vector5.Vector2.ToHeading());
         }
+
+        public static Vector3 GetGround(this Vector3 position)
+        {
+            var ray = World.Raycast(position, position - new Vector3(0, 0, 1000), IntersectOptions.Everything, Game.PlayerPed);
+            if (ray.DitHit)
+            {
+                return ray.HitPosition;
+            }
+            return position;
+        }
+
+        public static Vector3 GetGroundWithWaterTest(this Vector3 position)
+        {
+            float groundZ = position.Z;
+            if (GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref groundZ, false))
+                position = new Vector3(position.X, position.Y, groundZ);
+
+            float waterHeight = position.Z;
+
+            if (TestVerticalProbeAgainstAllWater(position.X, position.Y, position.Z, 1, ref waterHeight))
+            {
+                position.Z = waterHeight;
+            }
+            return position;
+        }
     }
 }
