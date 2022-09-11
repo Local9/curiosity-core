@@ -7,7 +7,9 @@ using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
 using ScaleformUI;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -173,7 +175,7 @@ namespace Curiosity.Framework.Client.Managers
             // swap this out
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
-            SetupCharacter();
+            SetupCharacterAsync();
 
             Instance.SoundEngine.Enable();
 
@@ -999,12 +1001,6 @@ namespace Curiosity.Framework.Client.Managers
                 UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
                 // _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
             };
-
-            #endregion
-
-            #region Advanced Apparel
-
-
 
             #endregion
 
@@ -3105,7 +3101,7 @@ namespace Curiosity.Framework.Client.Managers
             }
 
             _playerPed = Game.PlayerPed;
-            SetupCharacter();
+            SetupCharacterAsync();
             await BaseScript.Delay(1000);
         }
 
@@ -3192,11 +3188,13 @@ namespace Curiosity.Framework.Client.Managers
                 UpdateFace(_playerPed.Handle, _characterSkin);
         }
 
-        private void SetupCharacter()
+        private async Task SetupCharacterAsync()
         {
             RandomiseCharacterParents();
             RandomiseCharacterAppearance();
             UpdateFace(_playerPed.Handle, _characterSkin);
+            await Common.MoveToMainThread();
+            RandomDress();
         }
 
         public void UpdateFace(int Handle, CharacterSkin skin)
@@ -3273,6 +3271,64 @@ namespace Curiosity.Framework.Client.Managers
             N_0xe111a7c0d200cbc5(cameraHandle, fParam2);
             SetCamDofFnumberOfLens(cameraHandle, dofLens);
             SetCamDofMaxNearInFocusDistanceBlendLevel(cameraHandle, dofBlend);
+        }
+
+        public void RandomDress()
+        {
+            int id = _playerPed.Handle;
+            int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, Common.RANDOM.Next(57));
+            var comp = new ComponentDrawables(
+                aa[0][0],
+                aa[0][1],
+                aa[0][2],
+                aa[0][3],
+                aa[0][4],
+                aa[0][5],
+                aa[0][6],
+                aa[0][7],
+                aa[0][8],
+                aa[0][9],
+                aa[0][10],
+                aa[0][11]
+            );
+            var text = new ComponentDrawables(
+                aa[1][0],
+                aa[1][1],
+                aa[1][2],
+                aa[1][3],
+                aa[1][4],
+                aa[1][5],
+                aa[1][6],
+                aa[1][7],
+                aa[1][8],
+                aa[1][9],
+                aa[1][10],
+                aa[1][11]
+            );
+            var _prop = new PropDrawables(
+                GetPedPropIndex(id, 0),
+                GetPedPropIndex(id, 1),
+                GetPedPropIndex(id, 2),
+                GetPedPropIndex(id, 3),
+                GetPedPropIndex(id, 4),
+                GetPedPropIndex(id, 5),
+                GetPedPropIndex(id, 6),
+                GetPedPropIndex(id, 7),
+                GetPedPropIndex(id, 8)
+            );
+            var _proptxt = new PropDrawables(
+                GetPedPropTextureIndex(id, 0),
+                GetPedPropTextureIndex(id, 1),
+                GetPedPropTextureIndex(id, 2),
+                GetPedPropTextureIndex(id, 3),
+                GetPedPropTextureIndex(id, 4),
+                GetPedPropTextureIndex(id, 5),
+                GetPedPropTextureIndex(id, 6),
+                GetPedPropTextureIndex(id, 7),
+                GetPedPropTextureIndex(id, 8)
+            );
+            _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
+            UpdateDress(id, _characterSkin.CharacterOutfit);
         }
 
         public static void UpdateDress(int Handle, CharacterOutfit dress)
