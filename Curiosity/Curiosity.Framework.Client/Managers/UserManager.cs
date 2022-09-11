@@ -155,7 +155,6 @@ namespace Curiosity.Framework.Client.Managers
             DisplayRadar(false);
 
             _user.ActiveCharacter = new Character();
-            _characterSkin = _user.ActiveCharacter.Skin;
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
 
@@ -241,7 +240,7 @@ namespace Curiosity.Framework.Client.Managers
             await GameInterface.Hud.FadeIn(800);
             Point offset = new Point(50, 50);
             GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
-            _menuBase = new("Character Creator", "Create a new Character", offset)
+            _menuBase = new("New Character", "Create a new Character", offset)
             {
                 ControlDisablingEnabled = true
             };
@@ -313,7 +312,7 @@ namespace Curiosity.Framework.Client.Managers
             _menuAppearance.InstructionalButtons.Add(btnTriggers);
             _menuAppearance.InstructionalButtons.Add(btnRandomise);
 
-            _menuAdvancedApparel.InstructionalButtons.Add(btnRotate);
+            //_menuAdvancedApparel.InstructionalButtons.Add(btnRotate);
 
             _menuFeatures.InstructionalButtons.Add(btnLookRight);
             _menuFeatures.InstructionalButtons.Add(btnLookLeft);
