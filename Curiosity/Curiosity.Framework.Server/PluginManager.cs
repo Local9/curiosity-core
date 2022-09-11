@@ -45,10 +45,7 @@ namespace Curiosity.Framework.Server
             Instance = this;
             Logger = new Log();
             Logger.Info($"CURIOSITY INITIATION");
-            //Events = new ServerGateway();
-
-            //SnowflakeGenerator.Create(1);
-
+            Logger.Debug($"fxevents_debug_mode is enabled");
             Load();
         }
 
