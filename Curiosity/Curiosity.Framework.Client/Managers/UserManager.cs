@@ -1852,6 +1852,9 @@ namespace Curiosity.Framework.Client.Managers
                 GameInterface.Hud.MenuPool.CloseAllMenus();
                 Game.PlayerPed.Detach();
 
+                RenderScriptCams(false, true, 0, false, false);
+                World.DestroyAllCameras();
+
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
                 RemoveAnimDict("mp_character_creation@lineup@male_b");
                 RemoveAnimDict("mp_character_creation@lineup@female_a");
@@ -1861,9 +1864,10 @@ namespace Curiosity.Framework.Client.Managers
 
                 Instance.DetachTickHandler(OnCharacterCreationMenuControlsAsync);
 
-                Game.PlayerPed.Position = _cityHall.AsVector();
+                Game.PlayerPed.Position = _cityHall.AsVector().GetGroundWithWaterTest();
                 Game.PlayerPed.IsPositionFrozen = true;
-                
+
+                await BaseScript.Delay(1000);
                 await GameInterface.Hud.FadeIn(1000);
 
                 Game.PlayerPed.IsPositionFrozen = false;
