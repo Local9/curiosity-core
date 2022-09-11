@@ -1842,7 +1842,7 @@ namespace Curiosity.Framework.Client.Managers
 
                 if (isSaved)
                 {
-                    GameInterface.Hud.ShowNotification("Character Saved");
+                    GameInterface.Hud.ShowNotification("Character Saved", bgColor: eHudColor.HUD_COLOUR_GREENLIGHT);
                 }
 
                 RemoveAnimDict("mp_character_creation@lineup@male_a");
