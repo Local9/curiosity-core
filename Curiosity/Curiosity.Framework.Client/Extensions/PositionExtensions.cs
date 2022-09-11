@@ -59,17 +59,18 @@ namespace Curiosity.Framework.Client.Extensions
 
         public static Vector3 GetGroundWithWaterTest(this Vector3 position)
         {
+            Vector3 pos = position;
             float groundZ = position.Z;
             if (GetGroundZFor_3dCoord_2(position.X, position.Y, position.Z, ref groundZ, false))
-                position = new Vector3(position.X, position.Y, groundZ);
+                pos = new Vector3(position.X, position.Y, groundZ);
 
-            float waterHeight = position.Z;
+            float waterHeight = pos.Z;
 
-            if (TestVerticalProbeAgainstAllWater(position.X, position.Y, position.Z, 1, ref waterHeight))
+            if (TestVerticalProbeAgainstAllWater(pos.X, pos.Y, pos.Z, 1, ref waterHeight))
             {
-                position.Z = waterHeight;
+                pos.Z = waterHeight;
             }
-            return position;
+            return pos;
         }
     }
 }
