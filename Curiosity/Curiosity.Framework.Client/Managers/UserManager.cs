@@ -81,9 +81,6 @@ namespace Curiosity.Framework.Client.Managers
             ScreenInterface.StartLoadingMessage("PM_WAIT");
             await BaseScript.Delay(5000);
 
-            ShutdownLoadingScreen();
-            ShutdownLoadingScreenNui();
-
             ScreenInterface.StartLoadingMessage("PM_WAIT");
             OnRequestCharactersAsync();
 
@@ -109,7 +106,7 @@ namespace Curiosity.Framework.Client.Managers
             await CreateCharacterClass();
 
             OnCreateNewCharacter(_characterSkin);
-
+            
             // goto character selection
             // if new character make one
             // else load selected character
@@ -142,14 +139,12 @@ namespace Curiosity.Framework.Client.Managers
                 LoadInterior(94722);
 
             while (!IsInteriorReady(94722))
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(100);
         }
 
         public async Task OnCreateNewCharacter(CharacterSkin characterSkin, bool reload = false)
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
-
-            await OnLoadCharacterCreatorInteriorAsync();
             SetupCharacterCreator();
 
             DisplayHud(false);
@@ -158,12 +153,13 @@ namespace Curiosity.Framework.Client.Managers
             _user.ActiveCharacter = new Character();
 
             NetworkResurrectLocalPlayer(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z, _characterCreatorSpawn.W, true, false);
-
+            
             _playerPed = Game.PlayerPed;
 
             _playerPed.Position = new Vector3(_characterCreatorSpawn.X, _characterCreatorSpawn.Y, _characterCreatorSpawn.Z);
             _playerPed.Heading = _characterCreatorSpawn.W;
 
+            await OnLoadCharacterCreatorInteriorAsync();
             await Common.MoveToMainThread();
 
             _playerPed.SetDefaultVariation();
@@ -177,7 +173,14 @@ namespace Curiosity.Framework.Client.Managers
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
             Instance.SoundEngine.Enable();
-            
+
+            SetNuiFocus(false, false);
+            ShutdownLoadingScreen();
+            ShutdownLoadingScreenNui();
+
+            SetTimecycleModifier("default");
+            SetTimecycleModifierStrength(1f);
+
             if (!reload)
                 await LoadTransition.OnDownAsync();
 
@@ -2897,8 +2900,6 @@ namespace Curiosity.Framework.Client.Managers
                     _characterSkin.Gender = Common.RANDOM.Next(2);
                 else
                     _characterSkin.Gender = (int)gender;
-
-                Logger.Debug($"Skin Gender: {_characterSkin.Gender}");
 
                 _characterSkin.Model = (uint)(_characterSkin.Gender == 0 ? PedHash.FreemodeMale01 : PedHash.FreemodeFemale01);
                 Model model = (int)_characterSkin.Model;
