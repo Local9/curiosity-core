@@ -114,7 +114,7 @@ namespace Curiosity.Framework.Client.Managers
             Logger.Info($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
 
-        async void SetupCharacterCreator()
+        async Task SetupCharacterCreator()
         {
             RequestAnimDict("mp_character_creation@lineup@male_a");
             RequestAnimDict("mp_character_creation@lineup@male_b");
@@ -145,7 +145,7 @@ namespace Curiosity.Framework.Client.Managers
         public async Task OnCreateNewCharacter(CharacterSkin characterSkin, bool reload = false)
         {
             ScreenInterface.StartLoadingMessage("PM_WAIT");
-            SetupCharacterCreator();
+            await SetupCharacterCreator();
 
             DisplayHud(false);
             DisplayRadar(false);
@@ -172,8 +172,6 @@ namespace Curiosity.Framework.Client.Managers
 
             // swap this out
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
-
-            await SetupCharacterAsync();
 
             Instance.SoundEngine.Enable();
 
@@ -3320,11 +3318,14 @@ namespace Curiosity.Framework.Client.Managers
                 UpdateFace(_playerPed.Handle, _characterSkin);
         }
 
-        private void RandomiseCharacterAppearance(bool update = false)
+        private async void RandomiseCharacterAppearance(bool update = false)
         {
-            bool isMale = (Gender)_characterSkin.Gender == Gender.Male;
+            bool isMale = _characterSkin.IsMale;
 
             _characterSkin.Age = new(Common.RANDOM.Next(0, CharacterCreatorData.Ageing.Count), (float)Common.RANDOM.NextDouble());
+
+            await Common.MoveToMainThread();
+            
             if (_mlstAppearanceSkinAgeing is not null) _mlstAppearanceSkinAgeing.Index = _characterSkin.Age.Style;
 
             if (isMale)
@@ -3332,6 +3333,8 @@ namespace Curiosity.Framework.Client.Managers
                 _characterSkin.Face.Beard = new(Common.RANDOM.Next(0, CharacterCreatorData.Beards.Count), (float)Common.RANDOM.NextDouble(),
                     new int[2] { Common.RANDOM.Next(0, 63), 0 });
             }
+
+            await Common.MoveToMainThread();
 
             if (!isMale)
             {
@@ -3341,20 +3344,29 @@ namespace Curiosity.Framework.Client.Managers
                     new int[2] { Common.RANDOM.Next(0, 63), Common.RANDOM.Next(0, 63) });
             }
 
+            await Common.MoveToMainThread();
+
             _characterSkin.Face.Blemishes = new(Common.RANDOM.Next(0, CharacterCreatorData.Blemishes.Count), (float)Common.RANDOM.NextDouble());
             _characterSkin.Face.Makeup = new(0, 1f);
+
+            await Common.MoveToMainThread();
 
             _characterSkin.Face.Eyebrow = new(Common.RANDOM.Next(0, CharacterCreatorData.Eyebrows.Count), (float)Common.RANDOM.NextDouble(),
                 new int[2] { Common.RANDOM.Next(0, 63), 0 });
 
+            await Common.MoveToMainThread();
+
             _characterSkin.Face.Complexion = new(Common.RANDOM.Next(0, CharacterCreatorData.Complexions.Count), (float)Common.RANDOM.NextDouble());
+            await Common.MoveToMainThread();
             _characterSkin.Face.SkinDamage = new(Common.RANDOM.Next(0, CharacterCreatorData.SkinDamage.Count), (float)Common.RANDOM.NextDouble());
+            await Common.MoveToMainThread();
             _characterSkin.Face.Freckles = new(Common.RANDOM.Next(0, CharacterCreatorData.MolesAndFreckles.Count), (float)Common.RANDOM.NextDouble());
-
+            await Common.MoveToMainThread();
             int hairCount = isMale ? CharacterCreatorData.HairMale.Count : CharacterCreatorData.HairFemale.Count;
-            _characterSkin.Hair = new(Common.RANDOM.Next(0, hairCount), new int[2] { Common.RANDOM.Next(0, 63), 0 });
-
+            _characterSkin.Hair = new(Common.RANDOM.Next(1, hairCount), new int[2] { Common.RANDOM.Next(0, 63), 0 });
+            await Common.MoveToMainThread();
             _characterSkin.Face.Eye = new(Common.RANDOM.Next(0, CharacterCreatorData.EyeColours.Count));
+            await Common.MoveToMainThread();
             _characterSkin.Ears = new(255, 0);
 
             if (update)
@@ -3401,7 +3413,7 @@ namespace Curiosity.Framework.Client.Managers
             
             SetPedEyeColor(Handle, skin.Face.Eye.Style);
             
-            SetPedComponentVariation(Handle, 2, skin.Hair.Style, 0, 0);
+            SetPedComponentVariation(Handle, (int)ePedComponents.Hair, skin.Hair.Style, 0, 0);
             SetPedHairColor(Handle, skin.Hair.Color[0], skin.Hair.Color[1]);
             
             SetPedPropIndex(Handle, 2, skin.Ears.Style, skin.Ears.Color, false);
