@@ -16,3 +16,5 @@
 [submodule "Curiosity/_vendor/ScaleformUI"]
 	path = Curiosity/_vendor/ScaleformUI
 	url = https://github.com/Local9/ScaleformUI.git
+[submodule "Curiosity/_vender/fx-events"]
+	url = https://github.com/Local9/fx-events.git
