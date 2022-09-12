@@ -1,15 +1,26 @@
-﻿namespace Curiosity.Framework.Client.Managers.GameWorld
+﻿using ScaleformUI;
+
+namespace Curiosity.Framework.Client.Managers.GameWorld
 {
     public class WorldTimeManager : Manager<WorldTimeManager>
     {
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+
         public override void Begin()
         {
             NetworkClearClockTimeOverride();
-            int hour = 0;
-            int minute = 0;
-            int second = 0;
             NetworkGetGlobalMultiplayerClock(ref hour, ref minute, ref second);
             Logger.Debug($"NetworkGetGlobalMultiplayerClock - {hour:00}:{minute:00}:{second:00}");
+        }
+
+        [TickHandler]
+        private async Task OnShowClockAsync()
+        {            
+            NetworkGetGlobalMultiplayerClock(ref hour, ref minute, ref second);
+            Notifications.DrawText(0.35f, 0.7f, $"{hour:00}:{minute:00}:{second:00}");
+            Logger.Debug($"{hour:00}:{minute:00}:{second:00}");
         }
     }
 }
