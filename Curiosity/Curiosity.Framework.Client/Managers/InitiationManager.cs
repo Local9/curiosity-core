@@ -49,8 +49,7 @@ namespace Curiosity.Framework.Client.Managers
             Screen.Hud.HideComponentThisFrame(HudComponent.MpCash);
             Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
-
-
+            
             DisableMultiplayerChat(true);
             SetTextChatEnabled(false); // Disable default GTA Chat
             DisablePlayerVehicleRewards(Game.Player.Handle); // Remove any vehicle weapons       

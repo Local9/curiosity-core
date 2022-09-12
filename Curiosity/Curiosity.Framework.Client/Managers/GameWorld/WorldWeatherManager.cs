@@ -1,4 +1,6 @@
-﻿namespace Curiosity.Framework.Client.Managers.GameWorld
+﻿using ScaleformUI;
+
+namespace Curiosity.Framework.Client.Managers
 {
     public class WorldWeatherManager : Manager<WorldWeatherManager>
     {
