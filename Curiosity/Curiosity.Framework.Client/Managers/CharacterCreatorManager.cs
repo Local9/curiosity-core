@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace Curiosity.Framework.Client.Managers
 {
-    public class UserManager : Manager<UserManager>
+    public class CharacterCreatorManager : Manager<CharacterCreatorManager>
     {
         public User _user;
         Ped _playerPed = Game.PlayerPed;
