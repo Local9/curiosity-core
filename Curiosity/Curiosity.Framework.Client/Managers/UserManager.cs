@@ -3377,51 +3377,51 @@ namespace Curiosity.Framework.Client.Managers
 
         private async Task SetupCharacterAsync()
         {
+            _playerPed.SetDefaultVariation();
             RandomiseCharacterParents();
             RandomiseCharacterAppearance();
             UpdateFace(_playerPed.Handle, _characterSkin);
             await Common.MoveToMainThread();
-            _playerPed.SetDefaultVariation();
             _playerPed.SetRandomFacialMood();
             await BaseScript.Delay(1000);
             RandomDress();
         }
 
-        public void UpdateFace(int Handle, CharacterSkin skin)
+        public void UpdateFace(int handle, CharacterSkin skin)
         {
-            bool isMale = (Gender)skin.Gender == Gender.Male;
+            bool isMale = skin.IsMale;
 
-            SetPedHeadBlendData(Handle, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Resemblance,skin.Face.SkinBlend, 0f,false);
+            SetPedHeadBlendData(handle, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Resemblance,skin.Face.SkinBlend, 0f,false);
 
-            SetPedHeadOverlay(Handle, 0, skin.Face.Blemishes.Style, skin.Face.Blemishes.Opacity);
+            SetPedHeadOverlay(handle, 0, skin.Face.Blemishes.Style, skin.Face.Blemishes.Opacity);
            
             if (isMale)
             {
-                SetPedHeadOverlay(Handle, 1, skin.Face.Beard.Style, skin.Face.Beard.Opacity);
-                SetPedHeadOverlayColor(Handle, 1, 1, skin.Face.Beard.Color[0], skin.Face.Beard.Color[1]);
+                SetPedHeadOverlay(handle, 1, skin.Face.Beard.Style, skin.Face.Beard.Opacity);
+                SetPedHeadOverlayColor(handle, 1, 1, skin.Face.Beard.Color[0], skin.Face.Beard.Color[1]);
             }
 
-            SetPedHeadOverlay(Handle, 2, skin.Face.Eyebrow.Style, skin.Face.Eyebrow.Opacity);
-            SetPedHeadOverlayColor(Handle, 2, 1, skin.Face.Eyebrow.Color[0], skin.Face.Eyebrow.Color[1]);
-            SetPedHeadOverlay(Handle, 3, skin.Age.Style, skin.Age.Opacity);
-            SetPedHeadOverlay(Handle, 4, skin.Face.Makeup.Style, skin.Face.Makeup.Opacity);
-            SetPedHeadOverlay(Handle, 5, skin.Face.Blusher.Style, skin.Face.Blusher.Opacity);
-            SetPedHeadOverlayColor(Handle, 5, 2, skin.Face.Blusher.Color[0], skin.Face.Blusher.Color[1]);
-            SetPedHeadOverlay(Handle, 8, skin.Face.Lipstick.Style, skin.Face.Lipstick.Opacity);
-            SetPedHeadOverlayColor(Handle, 8, 2, skin.Face.Lipstick.Color[0], skin.Face.Lipstick.Color[1]);
-            SetPedHeadOverlay(Handle, 6, skin.Face.Complexion.Style, skin.Face.Complexion.Opacity);
-            SetPedHeadOverlay(Handle, 7, skin.Face.SkinDamage.Style, skin.Face.SkinDamage.Opacity);
-            SetPedHeadOverlay(Handle, 9, skin.Face.Freckles.Style, skin.Face.Freckles.Opacity);
+            SetPedHeadOverlay(handle, 2, skin.Face.Eyebrow.Style, skin.Face.Eyebrow.Opacity);
+            SetPedHeadOverlayColor(handle, 2, 1, skin.Face.Eyebrow.Color[0], skin.Face.Eyebrow.Color[1]);
+            SetPedHeadOverlay(handle, 3, skin.Age.Style, skin.Age.Opacity);
+            SetPedHeadOverlay(handle, 4, skin.Face.Makeup.Style, skin.Face.Makeup.Opacity);
+            SetPedHeadOverlay(handle, 5, skin.Face.Blusher.Style, skin.Face.Blusher.Opacity);
+            SetPedHeadOverlayColor(handle, 5, 2, skin.Face.Blusher.Color[0], skin.Face.Blusher.Color[1]);
+            SetPedHeadOverlay(handle, 8, skin.Face.Lipstick.Style, skin.Face.Lipstick.Opacity);
+            SetPedHeadOverlayColor(handle, 8, 2, skin.Face.Lipstick.Color[0], skin.Face.Lipstick.Color[1]);
+            SetPedHeadOverlay(handle, 6, skin.Face.Complexion.Style, skin.Face.Complexion.Opacity);
+            SetPedHeadOverlay(handle, 7, skin.Face.SkinDamage.Style, skin.Face.SkinDamage.Opacity);
+            SetPedHeadOverlay(handle, 9, skin.Face.Freckles.Style, skin.Face.Freckles.Opacity);
             
-            SetPedEyeColor(Handle, skin.Face.Eye.Style);
+            SetPedEyeColor(handle, skin.Face.Eye.Style);
             
-            SetPedComponentVariation(Handle, (int)ePedComponents.Hair, skin.Hair.Style, 0, 0);
-            SetPedHairColor(Handle, skin.Hair.Color[0], skin.Hair.Color[1]);
+            SetPedComponentVariation(handle, (int)ePedComponents.Hair, skin.Hair.Style, 0, 0);
+            SetPedHairColor(handle, skin.Hair.Color[0], skin.Hair.Color[1]);
             
-            SetPedPropIndex(Handle, 2, skin.Ears.Style, skin.Ears.Color, false);
+            SetPedPropIndex(handle, 2, skin.Ears.Style, skin.Ears.Color, false);
 
             for (int i = 0; i < skin.Face.Features.Length; i++)
-                SetPedFaceFeature(Handle, i, skin.Face.Features[i]);
+                SetPedFaceFeature(handle, i, skin.Face.Features[i]);
         }
         
         public async void RandomDress()
@@ -3495,80 +3495,80 @@ namespace Curiosity.Framework.Client.Managers
             UpdateDress(id, _characterSkin.CharacterOutfit);
         }
 
-        public static void UpdateDress(int _handle, CharacterOutfit dress)
+        public static void UpdateDress(int handle, CharacterOutfit dress)
         {
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Face,
                 dress.ComponentDrawables.Face,
                 dress.ComponentTextures.Face,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Mask,
                 dress.ComponentDrawables.Mask,
                 dress.ComponentTextures.Mask,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Torso,
                 dress.ComponentDrawables.Torso,
                 dress.ComponentTextures.Torso,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Leg,
                 dress.ComponentDrawables.Leg,
                 dress.ComponentTextures.Leg,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.BagOrParachute,
                 dress.ComponentDrawables.BagOrParachute,
                 dress.ComponentTextures.BagOrParachute,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Shoes,
                 dress.ComponentDrawables.Shoes,
                 dress.ComponentTextures.Shoes,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Accessory,
                 dress.ComponentDrawables.Accessory,
                 dress.ComponentTextures.Accessory,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Undershirt,
                 dress.ComponentDrawables.Undershirt,
                 dress.ComponentTextures.Undershirt,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Kevlar,
                 dress.ComponentDrawables.Kevlar,
                 dress.ComponentTextures.Kevlar,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Badge,
                 dress.ComponentDrawables.Badge,
                 dress.ComponentTextures.Badge,
                 2
             );
             SetPedComponentVariation(
-                _handle,
+                handle,
                 (int)ePedComponents.Torso_2,
                 dress.ComponentDrawables.Torso_2,
                 dress.ComponentTextures.Torso_2,
@@ -3576,17 +3576,17 @@ namespace Curiosity.Framework.Client.Managers
             );
             if (dress.PropDrawables.HatOrMask == -1)
             {
-                ClearPedStoredHatProp(_handle);
-                SetPedPropIndex(_handle, (int)ePedProps.HatOrMask, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.HatOrMask);
-                if (IsPedWearingHelmet(_handle))
+                ClearPedStoredHatProp(handle);
+                SetPedPropIndex(handle, (int)ePedProps.HatOrMask, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.HatOrMask);
+                if (IsPedWearingHelmet(handle))
                 {
-                    RemovePedHelmet(_handle, true);
+                    RemovePedHelmet(handle, true);
                 }
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.HatOrMask,
                     dress.PropDrawables.HatOrMask,
                     dress.PropTextures.HatOrMask,
@@ -3594,12 +3594,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Ears == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Ears, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Ears);
+                SetPedPropIndex(handle, (int)ePedProps.Ears, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Ears);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Ears,
                     dress.PropDrawables.Ears,
                     dress.PropTextures.Ears,
@@ -3607,12 +3607,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Glasses == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Glasses, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Glasses);
+                SetPedPropIndex(handle, (int)ePedProps.Glasses, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Glasses);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Glasses,
                     dress.PropDrawables.Glasses,
                     dress.PropTextures.Glasses,
@@ -3620,12 +3620,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Unk_3 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_3, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Unk_3);
+                SetPedPropIndex(handle, (int)ePedProps.Unk_3, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Unk_3);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Unk_3,
                     dress.PropDrawables.Unk_3,
                     dress.PropTextures.Unk_3,
@@ -3633,12 +3633,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Unk_4 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_4, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Unk_4);
+                SetPedPropIndex(handle, (int)ePedProps.Unk_4, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Unk_4);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Unk_4,
                     dress.PropDrawables.Unk_4,
                     dress.PropTextures.Unk_4,
@@ -3646,12 +3646,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Unk_5 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_5, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Unk_5);
+                SetPedPropIndex(handle, (int)ePedProps.Unk_5, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Unk_5);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Unk_5,
                     dress.PropDrawables.Unk_5,
                     dress.PropTextures.Unk_5,
@@ -3659,12 +3659,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Watches == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Watches, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Watches);
+                SetPedPropIndex(handle, (int)ePedProps.Watches, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Watches);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Watches,
                     dress.PropDrawables.Watches,
                     dress.PropTextures.Watches,
@@ -3672,12 +3672,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Bracelets == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Bracelets, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Bracelets);
+                SetPedPropIndex(handle, (int)ePedProps.Bracelets, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Bracelets);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Bracelets,
                     dress.PropDrawables.Bracelets,
                     dress.PropTextures.Bracelets,
@@ -3685,12 +3685,12 @@ namespace Curiosity.Framework.Client.Managers
                 );
             if (dress.PropDrawables.Unk_8 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_8, -1, -1, false);
-                ClearPedProp(_handle, (int)ePedProps.Unk_8);
+                SetPedPropIndex(handle, (int)ePedProps.Unk_8, -1, -1, false);
+                ClearPedProp(handle, (int)ePedProps.Unk_8);
             }
             else
                 SetPedPropIndex(
-                    _handle,
+                    handle,
                     (int)ePedProps.Unk_8,
                     dress.PropDrawables.Unk_8,
                     dress.PropTextures.Unk_8,
