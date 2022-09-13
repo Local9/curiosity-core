@@ -256,7 +256,6 @@ namespace Curiosity.Core.Server.Managers
                 {
                     discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Queue: An account with matching Discord information has already been found on the server and has been removed.");
                     await BaseScript.Delay(0);
-                    deferrals.done($"Queue: An account with matching Discord information has already been found on the server and has been removed. Please try connecting again, if you have any issues please open a ticket.");
 
                     KeyValuePair<int, CuriosityUser> curiosityUser = PluginManager.ActiveUsers.Where(x => x.Value.DiscordId == discordId).FirstOrDefault();
                     
@@ -267,15 +266,9 @@ namespace Curiosity.Core.Server.Managers
                         matchingPlayer.Drop($"A player with a matching Discord ID has tried to connect, you have been disconnected.");
                         RemoveFrom(matchingPlayer.Identifiers["license"], true, true, true, true, true, true);
                     }
-                    else
-                    {
-                        RemoveFrom(license, true, true, true, true, true, true);
-                    }
 
                     if (!PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
                         discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Failed to remove matching session from server.");
-
-                    return;
                 }
 
                 string rulesTemplate = LoadResourceFile(GetCurrentResourceName(), "data/cards/join-server.json");
