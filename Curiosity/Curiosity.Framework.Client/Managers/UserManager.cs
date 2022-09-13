@@ -754,7 +754,7 @@ namespace Curiosity.Framework.Client.Managers
                     {
                         list.Add(GetLabelText(CharacterCreatorData.GetOutfit(i, _characterSkin.IsMale)));
                     }
-                    
+
                     _mlstApparelOutfit.ChangeList(list, 0);
 
                     int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, first);
@@ -867,74 +867,77 @@ namespace Curiosity.Framework.Client.Managers
                 }
                 else if (item == _mlstApparelHat)
                 {
+                    ShopPed.PedComponentData prop = new();
+
                     if (index == 0)
                     {
                         SetPedPropIndex(id, (int)ePedProps.HatOrMask, -1, -1, false);
+                        ClearPedStoredHatProp(id);
                         ClearPedProp(id, (int)ePedProps.HatOrMask);
-                        Logger.Debug($"Removing hat");
                     }
                     else
                     {
-                        ShopPed.PedComponentData prop = new();
                         if (_characterSkin.IsMale)
                             prop = CharacterCreatorData.HatsMale[index - 1];
                         else
                             prop = CharacterCreatorData.HatsFemale[index - 1];
-                        var comp = new ComponentDrawables(
-                            GetPedDrawableVariation(id, 0),
-                            GetPedDrawableVariation(id, 1),
-                            GetPedDrawableVariation(id, 2),
-                            GetPedDrawableVariation(id, 3),
-                            GetPedDrawableVariation(id, 4),
-                            GetPedDrawableVariation(id, 5),
-                            GetPedDrawableVariation(id, 6),
-                            GetPedDrawableVariation(id, 7),
-                            GetPedDrawableVariation(id, 8),
-                            GetPedDrawableVariation(id, 9),
-                            GetPedDrawableVariation(id, 10),
-                            GetPedDrawableVariation(id, 11)
-                        );
-                        var text = new ComponentDrawables(
-                            GetPedTextureVariation(id, 0),
-                            GetPedTextureVariation(id, 1),
-                            GetPedTextureVariation(id, 2),
-                            GetPedTextureVariation(id, 3),
-                            GetPedTextureVariation(id, 4),
-                            GetPedTextureVariation(id, 5),
-                            GetPedTextureVariation(id, 6),
-                            GetPedTextureVariation(id, 7),
-                            GetPedTextureVariation(id, 8),
-                            GetPedTextureVariation(id, 9),
-                            GetPedTextureVariation(id, 10),
-                            GetPedTextureVariation(id, 11)
-                        );
-                        var _prop = new PropDrawables(
-                            prop.drawable,
-                            GetPedPropIndex(id, 1),
-                            GetPedPropIndex(id, 2),
-                            GetPedPropIndex(id, 3),
-                            GetPedPropIndex(id, 4),
-                            GetPedPropIndex(id, 5),
-                            GetPedPropIndex(id, 6),
-                            GetPedPropIndex(id, 7),
-                            GetPedPropIndex(id, 8)
-                        );
-                        var _proptxt = new PropDrawables(
-                            prop.texture,
-                            GetPedPropTextureIndex(id, 1),
-                            GetPedPropTextureIndex(id, 2),
-                            GetPedPropTextureIndex(id, 3),
-                            GetPedPropTextureIndex(id, 4),
-                            GetPedPropTextureIndex(id, 5),
-                            GetPedPropTextureIndex(id, 6),
-                            GetPedPropTextureIndex(id, 7),
-                            GetPedPropTextureIndex(id, 8)
-                        );
-                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
                     }
+
+                    var comp = new ComponentDrawables(
+                        GetPedDrawableVariation(id, 0),
+                        GetPedDrawableVariation(id, 1),
+                        GetPedDrawableVariation(id, 2),
+                        GetPedDrawableVariation(id, 3),
+                        GetPedDrawableVariation(id, 4),
+                        GetPedDrawableVariation(id, 5),
+                        GetPedDrawableVariation(id, 6),
+                        GetPedDrawableVariation(id, 7),
+                        GetPedDrawableVariation(id, 8),
+                        GetPedDrawableVariation(id, 9),
+                        GetPedDrawableVariation(id, 10),
+                        GetPedDrawableVariation(id, 11)
+                    );
+                    var text = new ComponentDrawables(
+                        GetPedTextureVariation(id, 0),
+                        GetPedTextureVariation(id, 1),
+                        GetPedTextureVariation(id, 2),
+                        GetPedTextureVariation(id, 3),
+                        GetPedTextureVariation(id, 4),
+                        GetPedTextureVariation(id, 5),
+                        GetPedTextureVariation(id, 6),
+                        GetPedTextureVariation(id, 7),
+                        GetPedTextureVariation(id, 8),
+                        GetPedTextureVariation(id, 9),
+                        GetPedTextureVariation(id, 10),
+                        GetPedTextureVariation(id, 11)
+                    );
+                    var _prop = new PropDrawables(
+                        (index == 0) ? -1 : prop.drawable,
+                        GetPedPropIndex(id, 1),
+                        GetPedPropIndex(id, 2),
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        (index == 0) ? -1 : prop.texture,
+                        GetPedPropTextureIndex(id, 1),
+                        GetPedPropTextureIndex(id, 2),
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
                 }
                 else if (item == _mlstApparelGlasses)
                 {
+                    ShopPed.PedComponentData prop = new();
                     if (index == 0)
                     {
                         SetPedPropIndex(id, (int)ePedProps.Glasses, -1, -1, false);
@@ -942,64 +945,63 @@ namespace Curiosity.Framework.Client.Managers
                     }
                     else
                     {
-                        ShopPed.PedComponentData prop = new();
                         if (_characterSkin.IsMale)
                             prop = CharacterCreatorData.GlassesMale[index - 1];
                         else
                             prop = CharacterCreatorData.GlassesFemale[index - 1];
-
-                        var comp = new ComponentDrawables(
-                            GetPedDrawableVariation(id, 0),
-                            GetPedDrawableVariation(id, 1),
-                            GetPedDrawableVariation(id, 2),
-                            GetPedDrawableVariation(id, 3),
-                            GetPedDrawableVariation(id, 4),
-                            GetPedDrawableVariation(id, 5),
-                            GetPedDrawableVariation(id, 6),
-                            GetPedDrawableVariation(id, 7),
-                            GetPedDrawableVariation(id, 8),
-                            GetPedDrawableVariation(id, 9),
-                            GetPedDrawableVariation(id, 10),
-                            GetPedDrawableVariation(id, 11)
-                        );
-                        var text = new ComponentDrawables(
-                            GetPedTextureVariation(id, 0),
-                            GetPedTextureVariation(id, 1),
-                            GetPedTextureVariation(id, 2),
-                            GetPedTextureVariation(id, 3),
-                            GetPedTextureVariation(id, 4),
-                            GetPedTextureVariation(id, 5),
-                            GetPedTextureVariation(id, 6),
-                            GetPedTextureVariation(id, 7),
-                            GetPedTextureVariation(id, 8),
-                            GetPedTextureVariation(id, 9),
-                            GetPedTextureVariation(id, 10),
-                            GetPedTextureVariation(id, 11)
-                        );
-                        var _prop = new PropDrawables(
-                            GetPedPropIndex(id, 0),
-                            prop.drawable,
-                            GetPedPropIndex(id, 2),
-                            GetPedPropIndex(id, 3),
-                            GetPedPropIndex(id, 4),
-                            GetPedPropIndex(id, 5),
-                            GetPedPropIndex(id, 6),
-                            GetPedPropIndex(id, 7),
-                            GetPedPropIndex(id, 8)
-                        );
-                        var _proptxt = new PropDrawables(
-                            GetPedPropTextureIndex(id, 0),
-                            prop.texture,
-                            GetPedPropTextureIndex(id, 2),
-                            GetPedPropTextureIndex(id, 3),
-                            GetPedPropTextureIndex(id, 4),
-                            GetPedPropTextureIndex(id, 5),
-                            GetPedPropTextureIndex(id, 6),
-                            GetPedPropTextureIndex(id, 7),
-                            GetPedPropTextureIndex(id, 8)
-                        );
-                        _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
                     }
+
+                    var comp = new ComponentDrawables(
+                        GetPedDrawableVariation(id, 0),
+                        GetPedDrawableVariation(id, 1),
+                        GetPedDrawableVariation(id, 2),
+                        GetPedDrawableVariation(id, 3),
+                        GetPedDrawableVariation(id, 4),
+                        GetPedDrawableVariation(id, 5),
+                        GetPedDrawableVariation(id, 6),
+                        GetPedDrawableVariation(id, 7),
+                        GetPedDrawableVariation(id, 8),
+                        GetPedDrawableVariation(id, 9),
+                        GetPedDrawableVariation(id, 10),
+                        GetPedDrawableVariation(id, 11)
+                    );
+                    var text = new ComponentDrawables(
+                        GetPedTextureVariation(id, 0),
+                        GetPedTextureVariation(id, 1),
+                        GetPedTextureVariation(id, 2),
+                        GetPedTextureVariation(id, 3),
+                        GetPedTextureVariation(id, 4),
+                        GetPedTextureVariation(id, 5),
+                        GetPedTextureVariation(id, 6),
+                        GetPedTextureVariation(id, 7),
+                        GetPedTextureVariation(id, 8),
+                        GetPedTextureVariation(id, 9),
+                        GetPedTextureVariation(id, 10),
+                        GetPedTextureVariation(id, 11)
+                    );
+                    var _prop = new PropDrawables(
+                        GetPedPropIndex(id, 0),
+                        GetPedPropIndex(id, 1),
+                        (index == 0) ? -1 : prop.drawable,
+                        GetPedPropIndex(id, 3),
+                        GetPedPropIndex(id, 4),
+                        GetPedPropIndex(id, 5),
+                        GetPedPropIndex(id, 6),
+                        GetPedPropIndex(id, 7),
+                        GetPedPropIndex(id, 8)
+                    );
+                    var _proptxt = new PropDrawables(
+                        GetPedPropTextureIndex(id, 0),
+                        GetPedPropTextureIndex(id, 1),
+                        (index == 0) ? -1 : prop.texture,
+                        GetPedPropTextureIndex(id, 3),
+                        GetPedPropTextureIndex(id, 4),
+                        GetPedPropTextureIndex(id, 5),
+                        GetPedPropTextureIndex(id, 6),
+                        GetPedPropTextureIndex(id, 7),
+                        GetPedPropTextureIndex(id, 8)
+                    );
+                    _characterSkin.CharacterOutfit = new("", "", comp, text, _prop, _proptxt);
                 }
                 UpdateDress(_playerPed.Handle, _characterSkin.CharacterOutfit);
                 // _playerPed.TaskEvidenceClothes(GetLineupOrCreationAnimation(true, false));
@@ -3424,6 +3426,18 @@ namespace Curiosity.Framework.Client.Managers
         
         public async void RandomDress()
         {
+            List<ShopPed.PedComponentData> _glasses = CharacterCreatorData.GlassesMale;
+            List<ShopPed.PedComponentData> _hats = CharacterCreatorData.HatsMale;
+
+            if (_characterSkin.IsMale)
+            {
+                _glasses = CharacterCreatorData.GlassesFemale;
+                _hats = CharacterCreatorData.HatsFemale;
+            }
+
+            ShopPed.PedComponentData _rndGlasses = _glasses[Common.RANDOM.Next(_glasses.Count)];
+            ShopPed.PedComponentData _rndHat = _hats[Common.RANDOM.Next(_hats.Count)];
+
             int id = _playerPed.Handle;
             int[][] aa = GetCharacterOutfitSettings(_characterSkin.IsMale, Common.RANDOM.Next(0, 64));
             var comp = new ComponentDrawables(
@@ -3455,9 +3469,9 @@ namespace Curiosity.Framework.Client.Managers
                 aa[1][11]
             );
             var _prop = new PropDrawables(
-                GetPedPropIndex(id, 0),
+                _rndHat.drawable,
                 GetPedPropIndex(id, 1),
-                GetPedPropIndex(id, 2),
+                _rndGlasses.drawable,
                 GetPedPropIndex(id, 3),
                 GetPedPropIndex(id, 4),
                 GetPedPropIndex(id, 5),
@@ -3466,9 +3480,9 @@ namespace Curiosity.Framework.Client.Managers
                 GetPedPropIndex(id, 8)
             );
             var _proptxt = new PropDrawables(
-                GetPedPropTextureIndex(id, 0),
+                _rndHat.texture,
                 GetPedPropTextureIndex(id, 1),
-                GetPedPropTextureIndex(id, 2),
+                _rndGlasses.texture,
                 GetPedPropTextureIndex(id, 3),
                 GetPedPropTextureIndex(id, 4),
                 GetPedPropTextureIndex(id, 5),
@@ -3560,10 +3574,10 @@ namespace Curiosity.Framework.Client.Managers
                 dress.ComponentTextures.Torso_2,
                 2
             );
-            if (dress.PropDrawables.HatOrMask <= 0)
+            if (dress.PropDrawables.HatOrMask == -1)
             {
                 ClearPedStoredHatProp(_handle);
-                SetPedPropIndex(_handle, (int)ePedProps.HatOrMask, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.HatOrMask, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.HatOrMask);
                 if (IsPedWearingHelmet(_handle))
                 {
@@ -3578,9 +3592,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.HatOrMask,
                     false
                 );
-            if (dress.PropDrawables.Ears <= 0)
+            if (dress.PropDrawables.Ears == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Ears, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Ears, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Ears);
             }
             else
@@ -3591,9 +3605,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Ears,
                     false
                 );
-            if (dress.PropDrawables.Glasses <= 0)
+            if (dress.PropDrawables.Glasses == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Glasses, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Glasses, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Glasses);
             }
             else
@@ -3604,9 +3618,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Glasses,
                     true
                 );
-            if (dress.PropDrawables.Unk_3 <= 0)
+            if (dress.PropDrawables.Unk_3 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_3, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Unk_3, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Unk_3);
             }
             else
@@ -3617,9 +3631,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_3,
                     true
                 );
-            if (dress.PropDrawables.Unk_4 <= 0)
+            if (dress.PropDrawables.Unk_4 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_4, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Unk_4, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Unk_4);
             }
             else
@@ -3630,9 +3644,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_4,
                     true
                 );
-            if (dress.PropDrawables.Unk_5 <= 0)
+            if (dress.PropDrawables.Unk_5 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_5, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Unk_5, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Unk_5);
             }
             else
@@ -3643,9 +3657,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Unk_5,
                     true
                 );
-            if (dress.PropDrawables.Watches <= 0)
+            if (dress.PropDrawables.Watches == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Watches, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Watches, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Watches);
             }
             else
@@ -3656,9 +3670,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Watches,
                     true
                 );
-            if (dress.PropDrawables.Bracelets <= 0)
+            if (dress.PropDrawables.Bracelets == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Bracelets, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Bracelets, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Bracelets);
             }
             else
@@ -3669,9 +3683,9 @@ namespace Curiosity.Framework.Client.Managers
                     dress.PropTextures.Bracelets,
                     true
                 );
-            if (dress.PropDrawables.Unk_8 <= 0)
+            if (dress.PropDrawables.Unk_8 == -1)
             {
-                SetPedPropIndex(_handle, (int)ePedProps.Unk_8, 0, 0, false);
+                SetPedPropIndex(_handle, (int)ePedProps.Unk_8, -1, -1, false);
                 ClearPedProp(_handle, (int)ePedProps.Unk_8);
             }
             else
