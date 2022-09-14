@@ -28,32 +28,32 @@ namespace Curiosity.Framework.Client.Managers
         Camera _mainCamera;
 
         // Menu Items
-        UIMenu _menuBase = new UIMenu("", "", true);
-        UIMenu _menuParents = new UIMenu("", "", true);
-        UIMenu _menuFeatures = new UIMenu("", "", true);
-        UIMenu _menuAppearance = new UIMenu("", "", true);
-        UIMenu _menuApparel = new UIMenu("", "", true);
-        UIMenu _menuAdvancedApparel = new UIMenu("", "", true);
-        UIMenu _menuStats = new UIMenu("", "", true);
+        UIMenu _menuBase;
+        UIMenu _menuParents;
+        UIMenu _menuFeatures;
+        UIMenu _menuAppearance;
+        UIMenu _menuApparel;
+        UIMenu _menuAdvancedApparel;
+        UIMenu _menuStats;
 
         // Lists
-        List<dynamic> _lstParentMother = CharacterCreatorData.FacesMother;
-        List<dynamic> _lstParentFather = CharacterCreatorData.FacesFather;
+        List<dynamic> _lstParentMother;
+        List<dynamic> _lstParentFather;
 
         // Menu List Items
         // Fetures
-        UIMenuListItem _mLstEyeBrowProfile = null;
-        UIMenuListItem _mLstEyes = null;
-        UIMenuListItem _mLstNose = null;
-        UIMenuListItem _mLstNoseProfile = null;
-        UIMenuListItem _mLstNoseTip = null;
-        UIMenuListItem _mLstCheekBones = null;
-        UIMenuListItem _mLstCheekShape = null;
-        UIMenuListItem _mLstLipThickness = null;
-        UIMenuListItem _mLstJawProfile = null;
-        UIMenuListItem _mLstChinProfile = null;
-        UIMenuListItem _mLstChinShape = null;
-        UIMenuListItem _mLstNeckThickness = null;
+        UIMenuListItem _mLstEyeBrowProfile;
+        UIMenuListItem _mLstEyes;
+        UIMenuListItem _mLstNose;
+        UIMenuListItem _mLstNoseProfile;
+        UIMenuListItem _mLstNoseTip;
+        UIMenuListItem _mLstCheekBones;
+        UIMenuListItem _mLstCheekShape;
+        UIMenuListItem _mLstLipThickness;
+        UIMenuListItem _mLstJawProfile;
+        UIMenuListItem _mLstChinProfile;
+        UIMenuListItem _mLstChinShape;
+        UIMenuListItem _mLstNeckThickness;
         // Appearance
         UIMenuListItem _mlstAppearanceHair;
         UIMenuListItem _mlstAppearanceEyeBrows;
@@ -74,7 +74,7 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuSliderItem _msiResemblance;
         UIMenuSliderItem _msiSkinBlend;
 
-        MugshotBoardAttachment mugshotBoardAttachment = new();
+        MugshotBoardAttachment mugshotBoardAttachment;
         const int MAX_CREATOR_COLOR = 63;
         float _finalHeading;
 
@@ -232,6 +232,19 @@ namespace Curiosity.Framework.Client.Managers
 
         public async void OnCharacterCreationMenuAsync(Gender gender)
         {
+            _menuBase = new UIMenu("", "", true);
+            _menuParents = new UIMenu("", "", true);
+            _menuFeatures = new UIMenu("", "", true);
+            _menuAppearance = new UIMenu("", "", true);
+            _menuApparel = new UIMenu("", "", true);
+            _menuAdvancedApparel = new UIMenu("", "", true);
+            _menuStats = new UIMenu("", "", true);
+
+            _lstParentMother = CharacterCreatorData.FacesMother;
+            _lstParentFather = CharacterCreatorData.FacesFather;
+
+            mugshotBoardAttachment = new();
+
             await GameInterface.Hud.FadeIn(800);
             Point offset = new Point(50, 50);
             GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
