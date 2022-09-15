@@ -209,6 +209,17 @@ namespace Curiosity.Core.Server.Managers
 
                 }
 
+                if (API.GetResourceState("npwd") == "started")
+                {
+                    if (Instance.ExportDictionary["npwd"] is not null)
+                    {
+                        var npwd = Instance.ExportDictionary["npwd"];
+                        string discord = player.Identifiers["discord"];
+                        npwd.newPlayerAdvanced(metadata.Sender, discord, player.Name, discord);
+                        Logger.Debug($"Player triggered NPWD for {player.Name}#{player.Handle}");
+                    }
+                }
+
                 Logger.Debug($"{player.Name}: World: #{API.GetPlayerRoutingBucket(player.Handle)}");
 
                 return null;

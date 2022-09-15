@@ -123,17 +123,6 @@ namespace Curiosity.Core.Server.Managers
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
                     player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
 
-                    if (API.GetResourceState("npwd") == "started")
-                    {
-                        if (Instance.ExportDictionary["npwd"] is not null)
-                        {
-                            var npwd = Instance.ExportDictionary["npwd"];
-                            string discord = player.Identifiers["discord"];
-                            npwd.newPlayerAdvanced(metadata.Sender, discord, player.Name, discord);
-                            Logger.Debug($"Player triggered NPWD for {player.Name}#{playerHandle}");
-                        }
-                    }
-
                     Logger.Debug($"{msg}");
 
                     //if (PluginManager.IsDebugging)
