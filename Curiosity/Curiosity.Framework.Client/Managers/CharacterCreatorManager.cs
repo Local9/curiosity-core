@@ -4,7 +4,6 @@ using Curiosity.Framework.Client.Extensions;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
-using Curiosity.Framework.Shared.Extensions;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
 using ScaleformUI;
@@ -73,6 +72,8 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuListItem _mliParentFather;
         UIMenuSliderItem _msiResemblance;
         UIMenuSliderItem _msiSkinBlend;
+
+        int[] _cutscenePeds = new int[7];
 
         MugshotBoardAttachment mugshotBoardAttachment;
         const int MAX_CREATOR_COLOR = 63;
@@ -171,6 +172,9 @@ namespace Curiosity.Framework.Client.Managers
             _playerPed.BlockPermanentEvents = true;
 
             // swap this out
+            if (mugshotBoardAttachment is null)
+                mugshotBoardAttachment = new();
+            
             mugshotBoardAttachment.Attach(_playerPed, _user, topLine: "FACE_N_CHAR");
 
             Instance.SoundEngine.Enable();
@@ -242,8 +246,6 @@ namespace Curiosity.Framework.Client.Managers
 
             _lstParentMother = CharacterCreatorData.FacesMother;
             _lstParentFather = CharacterCreatorData.FacesFather;
-
-            mugshotBoardAttachment = new();
 
             await GameInterface.Hud.FadeIn(800);
             Point offset = new Point(50, 50);
@@ -1867,6 +1869,7 @@ namespace Curiosity.Framework.Client.Managers
                 await BaseScript.Delay(1000);
                 await _playerPed.TaskPlayOutroOfCharacterCreationRoom(GetLineupOrCreationAnimation(true, false));
                 await GameInterface.Hud.FadeOut(800);
+                Game.PlayerPed.IsPositionFrozen = false;
                 _menuBase.Visible = false;
                 mugshotBoardAttachment.IsAttached = false;
                 GameInterface.Hud.MenuPool.CloseAllMenus();
@@ -1885,18 +1888,7 @@ namespace Curiosity.Framework.Client.Managers
                 ReleaseNamedScriptAudioBank("Mugshot_Character_Creator");
                 ReleaseNamedScriptAudioBank("DLC_GTAO/MUGSHOT_ROOM");
 
-                Vector3 position = _cityHall.AsVector();
-
-                Game.PlayerPed.Position = position.GetGroundWithWaterTest();
-                Game.PlayerPed.IsPositionFrozen = true;
-
-                await BaseScript.Delay(1000);
-                await GameInterface.Hud.FadeIn(1000);
-                
-                DisplayRadar(true);
-                DisplayHud(true);
-
-                Game.PlayerPed.IsPositionFrozen = false;
+                EnterLosSantosCutscene();
             };
 
             #endregion
@@ -1909,6 +1901,311 @@ namespace Curiosity.Framework.Client.Managers
             if (Screen.LoadingPrompt.IsActive)
                 Screen.LoadingPrompt.Hide();
         }
+
+        #region cutscene
+
+        async void EnterLosSantosCutscene()
+        {
+            DisplayRadar(false);
+            DisplayHud(false);
+            await GameInterface.Hud.FadeOut(800);
+
+            Model planeModel = "p_cs_mp_jet_01_s";
+            Model freemodeFemale = PedHash.FreemodeFemale01;
+            Model freemodeMale = PedHash.FreemodeMale01;
+            await planeModel.Request(1000);
+            await freemodeFemale.Request(1000);
+            await freemodeMale.Request(1000);
+            
+            int planeObject = CreateObject(planeModel.Hash, -1200f, -1490f, 142.385f, false, false, false);
+            SetEntityLodDist(planeObject, 3000);
+            SetEntityCleanupByEngine(planeObject, false);
+            SetEntityVisible(planeObject, false, false);
+
+            SetWidescreenBorders(true, -1);
+            SetUserRadioControlEnabled(false);
+
+            RequestPtfxAsset();
+
+            int particle1 = StartParticleFxLoopedOnEntity("scr_mp_intro_plane_exhaust", planeObject, -5.403f, -8f, -2.2f, 0f, 0f, 0f, 1f, false, false, false);
+            int particle2 = StartParticleFxLoopedOnEntity("scr_mp_intro_plane_exhaust", planeObject, 6.629f, -8f, -2.2f, 0f, 0f, 0f, 1f, false, false, false);
+
+            PrepareMusicEvent("FM_INTRO_START");
+            TriggerMusicEvent("FM_INTRO_START");
+
+            PreloadCloudHat("CONTRAILS");
+
+            int playbackFlag = (_characterSkin.IsMale) ? 31 : 103;
+            RequestCutsceneWithPlaybackList("MP_INTRO_CONCAT", playbackFlag, 8);
+
+            string streamingEntity = (_characterSkin.IsMale) ? "MP_Male_Character" : "MP_Female_Character";
+            SetCutsceneEntityStreamingFlags(streamingEntity, 0, 1);
+
+            for(int i = 0; i < 7; i++)
+            {
+                SetCutsceneEntityStreamingFlags($"MP_Plane_Passenger_{i+1}", 0, 1);
+            }
+            
+            while (!HasThisCutsceneLoaded("MP_INTRO_CONCAT"))
+            {
+                await BaseScript.Delay(0);
+            }
+
+            NewLoadSceneStartSphere(-1200f, -1490f, 142.385f, 1000, 0);
+            StartCutsceneAtCoords(-1196.088f, -1635.549f, 4.373935f - .5f, 0);
+            _playerPed.IsPositionFrozen = true;
+            _playerPed.IsInvincible = true;
+            _playerPed.IsVisible = false;
+            _playerPed.Position = new Vector3(-1196.088f, -1635.549f, 4.373935f - .5f);
+            await BaseScript.Delay(2500);
+
+            int maleIndex = GetEntityIndexOfCutsceneEntity("MP_Male_Character", (uint)PedHash.FreemodeMale01);
+            int femaleIndex = GetEntityIndexOfCutsceneEntity("MP_Female_Character", (uint)PedHash.FreemodeFemale01);
+            Ped scenePed;
+            if (_characterSkin.IsMale)
+            {
+                SetEntityVisible(GetPedIndexFromEntityIndex(femaleIndex), false, false);
+                scenePed = new (GetPedIndexFromEntityIndex(maleIndex));
+            }
+            else
+            {
+                SetEntityVisible(GetPedIndexFromEntityIndex(maleIndex), false, false);
+                scenePed = new(GetPedIndexFromEntityIndex(femaleIndex));
+            }
+
+            ClonePedToTarget(_playerPed.Handle, scenePed.Handle);
+            FinalizeHeadBlend(scenePed.Handle);
+
+            for (int i = 0; i < 7; i++)
+            {
+                PedHash passengerModel = (!IsFemaleCutscenePed(i) ? PedHash.FreemodeMale01 : PedHash.FreemodeFemale01);
+                int item = GetEntityIndexOfCutsceneEntity($"MP_Plane_Passenger_{i}", (uint)passengerModel);
+			    Ped otherped = new (GetPedIndexFromEntityIndex(item));
+                SetPlanePassengerPedComponent(otherped.Handle, i);
+            }
+
+            await GameInterface.Hud.FadeIn(800);
+            await BaseScript.Delay(15500);
+            _playerPed.Position = new Vector3(-1632.1977539062f, -2780.2680664062f, 13.9296875f); // move to LSIA
+            await BaseScript.Delay(11300);
+            await GameInterface.Hud.FadeOut(800);
+            StopCutsceneImmediately();
+            _playerPed.IsInvincible = false;
+            _playerPed.IsPositionFrozen = false;
+            _playerPed.IsVisible = true;
+            _playerPed.Position = new Vector3(-1042.0747070312f, -2744.8879394532f, 21.343627929688f); // move to LSIA DOORS
+            _playerPed.Heading = 330.40f;
+            RenderScriptCams(false, true, 500, true, true);
+            World.DestroyAllCameras();
+            await BaseScript.Delay(1000);
+
+            UnloadCloudHat("CONTRAILS", 0f);
+
+            SetWidescreenBorders(false, -1);
+            SetUserRadioControlEnabled(true);
+
+            await GameInterface.Hud.FadeIn(800);
+            
+            DisplayRadar(true);
+            DisplayHud(true);
+            
+            PrepareMusicEvent("AC_STOP");
+            TriggerMusicEvent("AC_STOP");
+
+            planeModel.MarkAsNoLongerNeeded();
+            if (DoesEntityExist(planeObject))
+                DeleteObject(ref planeObject);
+            if (DoesParticleFxLoopedExist(particle1))
+                StopParticleFxLooped(particle1, false);
+            if (DoesParticleFxLoopedExist(particle2))
+                StopParticleFxLooped(particle2, false);
+            if (HasPtfxAssetLoaded())
+                RemovePtfxAsset();
+
+            freemodeFemale.MarkAsNoLongerNeeded();
+            freemodeMale.MarkAsNoLongerNeeded();
+        }
+
+        bool IsFemaleCutscenePed(int pedIndex)
+        {
+            return (pedIndex == 3 || pedIndex == 4 || pedIndex == 5 || pedIndex == 6);
+        }
+
+        void SetPlanePassengerPedComponent(int handle, int passengerIndex)//Position - 0xC28C
+        {
+            switch (passengerIndex)
+            {
+                case 0:
+                    SetPedComponentVariation(handle, 0, 21, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 9, 0, 0);
+                    SetPedComponentVariation(handle, 3, 1, 0, 0);
+                    SetPedComponentVariation(handle, 4, 9, 0, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 4, 8, 0);
+                    SetPedComponentVariation(handle, 7, 0, 0, 0);
+                    SetPedComponentVariation(handle, 8, 15, 0, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 10, 0, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 1:
+                    SetPedComponentVariation(handle, 0, 13, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 5, 4, 0);
+                    SetPedComponentVariation(handle, 3, 1, 0, 0);
+                    SetPedComponentVariation(handle, 4, 10, 0, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 10, 0, 0);
+                    SetPedComponentVariation(handle, 7, 11, 2, 0);
+                    SetPedComponentVariation(handle, 8, 13, 6, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 10, 0, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 2:
+                    SetPedComponentVariation(handle, 0, 15, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 1, 4, 0);
+                    SetPedComponentVariation(handle, 3, 1, 0, 0);
+                    SetPedComponentVariation(handle, 4, 0, 1, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 1, 7, 0);
+                    SetPedComponentVariation(handle, 7, 0, 0, 0);
+                    SetPedComponentVariation(handle, 8, 2, 9, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 6, 0, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 3:
+                    SetPedComponentVariation(handle, 0, 14, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 5, 3, 0);
+                    SetPedComponentVariation(handle, 3, 3, 0, 0);
+                    SetPedComponentVariation(handle, 4, 1, 6, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 11, 5, 0);
+                    SetPedComponentVariation(handle, 7, 0, 0, 0);
+                    SetPedComponentVariation(handle, 8, 2, 0, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 3, 12, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 4:
+                    SetPedComponentVariation(handle, 0, 18, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 15, 3, 0);
+                    SetPedComponentVariation(handle, 3, 15, 0, 0);
+                    SetPedComponentVariation(handle, 4, 2, 5, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 4, 6, 0);
+                    SetPedComponentVariation(handle, 7, 4, 0, 0);
+                    SetPedComponentVariation(handle, 8, 3, 0, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 4, 0, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 5:
+                    SetPedComponentVariation(handle, 0, 27, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 7, 3, 0);
+                    SetPedComponentVariation(handle, 3, 11, 0, 0);
+                    SetPedComponentVariation(handle, 4, 4, 8, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 13, 14, 0);
+                    SetPedComponentVariation(handle, 7, 5, 3, 0);
+                    SetPedComponentVariation(handle, 8, 3, 0, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 2, 7, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+
+                case 6:
+                    SetPedComponentVariation(handle, 0, 16, 0, 0);
+                    SetPedComponentVariation(handle, 1, 0, 0, 0);
+                    SetPedComponentVariation(handle, 2, 15, 1, 0);
+                    SetPedComponentVariation(handle, 3, 3, 0, 0);
+                    SetPedComponentVariation(handle, 4, 5, 6, 0);
+                    SetPedComponentVariation(handle, 5, 0, 0, 0);
+                    SetPedComponentVariation(handle, 6, 2, 8, 0);
+                    SetPedComponentVariation(handle, 7, 0, 0, 0);
+                    SetPedComponentVariation(handle, 8, 2, 0, 0);
+                    SetPedComponentVariation(handle, 9, 0, 0, 0);
+                    SetPedComponentVariation(handle, 10, 0, 0, 0);
+                    SetPedComponentVariation(handle, 11, 3, 7, 0);
+                    ClearPedProp(handle, 0);
+                    ClearPedProp(handle, 1);
+                    ClearPedProp(handle, 2);
+                    ClearPedProp(handle, 3);
+                    ClearPedProp(handle, 4);
+                    ClearPedProp(handle, 5);
+                    ClearPedProp(handle, 6);
+                    ClearPedProp(handle, 7);
+                    ClearPedProp(handle, 8);
+                    break;
+            }
+        }
+
+        #endregion
 
         #region Control Ticks
         float _gridPanelCoordX;
