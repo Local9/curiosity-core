@@ -15,7 +15,6 @@ namespace Curiosity.Framework.Client.Managers
     {
         public User _user;
         Ped _playerPed = Game.PlayerPed;
-        Quaternion _cityHall = new Quaternion(-542.1675f, -216.1688f, -206.1688f, 0f);
 
         Quaternion _characterCreatorSpawn = new Quaternion(405.9247f, -997.2114f, -100.00024f, 86.36787f);
 
