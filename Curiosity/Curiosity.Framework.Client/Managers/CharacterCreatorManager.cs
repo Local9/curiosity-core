@@ -72,11 +72,11 @@ namespace Curiosity.Framework.Client.Managers
         UIMenuSliderItem _msiResemblance;
         UIMenuSliderItem _msiSkinBlend;
 
-        int[] _cutscenePeds = new int[7];
-
         MugshotBoardAttachment mugshotBoardAttachment;
         const int MAX_CREATOR_COLOR = 63;
         float _finalHeading;
+
+        List<float> mixValues = new List<float>() { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f };
 
         public async override void Begin()
         {
@@ -231,6 +231,24 @@ namespace Curiosity.Framework.Client.Managers
             OnCharacterCreationMenuAsync(gender);
 
             _finalHeading = _playerPed.Heading;
+        }
+
+        float GetMinimum()
+        {
+            return _characterSkin.IsMale ? 0.05f : 0.3f;
+        }
+
+        float GetMaximum()
+        {
+            return _characterSkin.IsMale ? 0.7f : 0.95f;
+        }
+
+        float ClampMix(float sliderFraction)
+        {
+            float min = GetMinimum();
+            float max = GetMaximum();
+
+            return (min + (sliderFraction * (max - min)));
         }
 
         public async void OnCharacterCreationMenuAsync(Gender gender)
@@ -1140,13 +1158,13 @@ namespace Curiosity.Framework.Client.Managers
             
             _msiResemblance = new UIMenuSliderItem(GetLabelText("FACE_H_DOM"), "", true)
             {
-                Multiplier = 2,
+                Multiplier = 10,
                 Value = (int)Math.Round(_characterSkin.Face.Resemblance * 100)
             };
             
             _msiSkinBlend = new UIMenuSliderItem(GetLabelText("FACE_H_STON"), "", true)
             {
-                Multiplier = 2,
+                Multiplier = 10,
                 Value = (int)Math.Round(_characterSkin.Face.SkinBlend * 100)
             };
 
@@ -1174,9 +1192,9 @@ namespace Curiosity.Framework.Client.Managers
             _menuParents.OnSliderChange += async (_sender, _item, _newIndex) =>
             {
                 if (_item == _msiResemblance)
-                    _characterSkin.Face.Resemblance = _newIndex / 100f;
+                    _characterSkin.Face.Resemblance = ClampMix(_newIndex / 100f);
                 else if (_item == _msiSkinBlend)
-                    _characterSkin.Face.SkinBlend = _newIndex / 100f;
+                    _characterSkin.Face.SkinBlend = ClampMix(_newIndex / 100f);
 
                 UpdateFace(Game.PlayerPed.Handle, _characterSkin);
             };
@@ -3700,7 +3718,7 @@ namespace Curiosity.Framework.Client.Managers
         {
             bool isMale = skin.IsMale;
 
-            SetPedHeadBlendData(handle, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Resemblance,skin.Face.SkinBlend, 0f,false);
+            SetPedHeadBlendData(handle, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Mother, skin.Face.Father, 0, skin.Face.Resemblance,skin.Face.SkinBlend, 0f, true);
 
             SetPedHeadOverlay(handle, 0, skin.Face.Blemishes.Style, skin.Face.Blemishes.Opacity);
            
