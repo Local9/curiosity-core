@@ -17,9 +17,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedProps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\eRole.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CameraInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CameraVector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterAttributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterFace.cs" />

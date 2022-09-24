@@ -15,5 +15,29 @@ namespace Curiosity.Framework.Client.Utils
             AddTextComponentSubstringPlayerName(textOutput);
             EndTextCommandBusyspinnerOn((int)eBusySpinnerType);
         }
+
+        public static void StopLoadingMessage()
+        {
+            BusyspinnerOff();
+        }
+
+        public static void CloseLoadingScreen()
+        {
+            SetNuiFocus(false, false);
+            ShutdownLoadingScreen();
+            ShutdownLoadingScreenNui();
+        }
+
+        public static void EnableHud()
+        {
+            DisplayHud(true);
+            DisplayRadar(true);
+        }
+
+        public static void DisableHud()
+        {
+            DisplayHud(false);
+            DisplayRadar(false);
+        }
     }
 }

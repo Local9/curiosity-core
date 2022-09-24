@@ -2,6 +2,7 @@
 using Curiosity.Framework.Server.Models;
 using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Server.Web.Discord.API;
+using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
 using System.Net;
@@ -240,7 +241,8 @@ namespace Curiosity.Framework.Server.Managers
                     {
                         Handle = client.Handle,
                         UserID = user.UserID,
-                        Username = client.Player.Name
+                        Username = client.Player.Name,
+                        Role = (eRole)user.RoleId,
                     };
 
                     foreach (DataStoreCharacter dataStoreCharacter in user.Characters)

@@ -1,4 +1,7 @@
-﻿using Curiosity.Framework.Client.Utils;
+﻿using Curiosity.Framework.Client.Extensions;
+using Curiosity.Framework.Client.Utils;
+using Curiosity.Framework.Shared.SerializedModels;
+using FxEvents;
 
 namespace Curiosity.Framework.Client.Managers.StaffTools
 {
@@ -231,6 +234,24 @@ namespace Curiosity.Framework.Client.Managers.StaffTools
                         IsHudEnabled = !IsHudEnabled;
                     }
                     await BaseScript.Delay(500);
+                }
+
+                if (Game.IsControlJustPressed(2, Control.ReplayStartStopRecording))
+                {
+                    CameraInformation cameraInfo = new();
+                    cameraInfo.Position = CurrentCamera.Position.ToCameraVector();
+                    cameraInfo.Rotation = CurrentCamera.Rotation.ToCameraVector();
+                    cameraInfo.Direction = CurrentCamera.Direction.ToCameraVector();
+                    cameraInfo.FieldOfView = CurrentCamera.FieldOfView;
+
+                    Logger.Debug($"Camera Position: {cameraInfo}");
+
+                    bool result = await EventDispatcher.Get<bool>("developer:position:camera:save", cameraInfo);
+
+                    if (result)
+                        GameInterface.Hud.ShowNotificationSuccess("Saved camera position.");
+                    else
+                        GameInterface.Hud.ShowNotificationError("Failed to save camera position.");
                 }
 
 

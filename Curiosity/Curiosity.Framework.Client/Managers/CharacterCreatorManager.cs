@@ -5,7 +5,6 @@ using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared;
 using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.SerializedModels;
-using FxEvents;
 using ScaleformUI;
 using System.Drawing;
 
@@ -13,7 +12,7 @@ namespace Curiosity.Framework.Client.Managers
 {
     public class CharacterCreatorManager : Manager<CharacterCreatorManager>
     {
-        public User _user;
+        private User _user;
         Ped _playerPed = Game.PlayerPed;
 
         Quaternion _characterCreatorSpawn = new Quaternion(405.9247f, -997.2114f, -100.00024f, 86.36787f);
@@ -78,38 +77,7 @@ namespace Curiosity.Framework.Client.Managers
 
         public async override void Begin()
         {
-            ScreenInterface.StartLoadingMessage("PM_WAIT");
-            await BaseScript.Delay(5000);
-
-            ScreenInterface.StartLoadingMessage("PM_WAIT");
-            OnRequestCharactersAsync();
-        }
-
-        public async Task OnRequestCharactersAsync()
-        {
-            await LoadTransition.OnUpAsync();
-
-            User user = await EventDispatcher.Get<User>("user:active", Game.Player.ServerId);
-
-            if (user is null)
-            {
-                Logger.Error($"No user was returned from the server.");
-                return;
-            }
-
-            _user = user;
-
-            // lets act as if we don't have a character for now
-
-            await CreateCharacterClass();
-
-            OnCreateNewCharacter(_characterSkin);
             
-            // goto character selection
-            // if new character make one
-            // else load selected character
-
-            Logger.Info($"User Database: [{user.Handle}] {user.Username}#{user.UserID} with {user.Characters.Count} Character(s).");
         }
 
         async Task SetupCharacterCreator()
@@ -147,6 +115,8 @@ namespace Curiosity.Framework.Client.Managers
 
             DisplayHud(false);
             DisplayRadar(false);
+
+            _user = Session.User;
 
             _user.ActiveCharacter = new Character();
             _user.ActiveCharacter.Stats = new CharacterStats();

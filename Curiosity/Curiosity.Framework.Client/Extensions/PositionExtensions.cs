@@ -20,6 +20,15 @@ namespace Curiosity.Framework.Client.Extensions
             return API.IsPositionOccupied(vector3.X, vector3.Y, vector3.Z, radius, false, true, false, false, false, 0, false);
         }
 
+        public static CameraVector ToCameraVector(this Vector3 vector3)
+        {
+            CameraVector cameraVector = new();
+            cameraVector.X = vector3.X;
+            cameraVector.Y = vector3.Y;
+            cameraVector.Z = vector3.Z;
+            return cameraVector;
+        }
+
         public static float ToHeading(this Vector2 vector2)
         {
             return GetHeadingFromVector_2d(vector2.X, vector2.Y);
