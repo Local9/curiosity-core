@@ -8,14 +8,15 @@ namespace Perseverance.Discord.Bot.SlashCommands
 {
     public enum eServerList
     {
-        Main
+        LifeVWorlds,
+        PoliceWorld
     }
 
     [SlashCommandGroup("server", "Server related commands.")]
     public class ServerCommands : ApplicationCommandModule
     {
         [SlashCommand("status", "Get server status")]
-        public async Task StatusCommand(InteractionContext ctx, [Option("server", "Server to get information from.")] eServerList serverIndex = eServerList.Main)
+        public async Task StatusCommand(InteractionContext ctx, [Option("server", "Server to get information from.")] eServerList serverIndex = eServerList.LifeVWorlds)
         {
             List<Server> servers = ApplicationConfig.Servers;
 
@@ -62,7 +63,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
         }
 
         [SlashCommand("connect", "Get server connect information")]
-        public async Task ConnectCommand(InteractionContext ctx, [Option("server", "Server to get information.")] eServerList serverIndex = eServerList.Main)
+        public async Task ConnectCommand(InteractionContext ctx, [Option("server", "Server to get information.")] eServerList serverIndex = eServerList.LifeVWorlds)
         {
             // Get server from config
             List<Server> servers = ApplicationConfig.Servers;
