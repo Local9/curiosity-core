@@ -50,6 +50,9 @@
         [JsonProperty("ip")]
         public string IP { get; private set; }
 
+        [JsonProperty("connect")]
+        public string Connect { get; private set; }
+
         public override string ToString() => IP;
     }
 }

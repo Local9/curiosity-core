@@ -20,11 +20,13 @@
   "servers": [
     {
       "label": "LifeV",
-      "ip": "5.9.0.85:30120"
+      "ip": "5.9.0.85:30120",
+      "connect": "https://connect.lifev.net"
     },
     {
       "label": "Police World",
-      "ip": "5.9.0.85:27016"
+      "ip": "5.9.0.85:27016",
+      "connect": "https://policeworld.lifev.net"
     }
   ]
 }
