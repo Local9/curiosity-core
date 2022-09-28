@@ -20,10 +20,38 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent($"pong! {timeSpan.Milliseconds}ms"));
         }
         
-        [SlashCommand("connect", "A button to connect to the Life V Worlds FiveM server.")]
-        public async Task ConnectCommand(InteractionContext ctx)
+        [SlashCommand("connect", "A button to help connect to the FiveM servers.")]
+        public async Task ConnectCommand(InteractionContext ctx, [Option("server", "Server to get information.")] eServerList serverIndex = eServerList.LifeVWorlds)
         {
-            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent($"http://connect.lifev.net", $"Click to join the 'Life V Worlds FiveM Server'");
+            // Get server from config
+            List<Server> servers = ApplicationConfig.Servers;
+
+            if (servers.Count == 0)
+            {
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                {
+                    Content = "No servers found in the config."
+                });
+                return;
+            }
+
+            // get server player information
+            Server server = servers[(int)serverIndex];
+
+            try
+            {
+                await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/info.json");
+            }
+            catch
+            {
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                {
+                    Content = "Server failed to respond, possible the server is currently offline."
+                });
+                return;
+            }
+
+            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent(server.Connect, $"Click to join the '{server.Label} FiveM Server'");
 
             DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
             message.AddComponents(discordButtonComponent);

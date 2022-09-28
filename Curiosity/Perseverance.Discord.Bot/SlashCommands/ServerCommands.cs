@@ -62,46 +62,7 @@ namespace Perseverance.Discord.Bot.SlashCommands
             await ctx.CreateResponseAsync(embedBuilder);
         }
 
-        [SlashCommand("connect", "Get server connect information")]
-        public async Task ConnectCommand(InteractionContext ctx, [Option("server", "Server to get information.")] eServerList serverIndex = eServerList.LifeVWorlds)
-        {
-            // Get server from config
-            List<Server> servers = ApplicationConfig.Servers;
-
-            if (servers.Count == 0)
-            {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                {
-                    Content = "No servers found in the config."
-                });
-                return;
-            }
-
-            // get server player information
-            Server server = servers[(int)serverIndex];
-
-            try
-            {
-                await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/info.json");
-            }
-            catch
-            {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                {
-                    Content = "Server failed to respond, possible the server is currently offline."
-                });
-                return;
-            }
-            
-            DiscordLinkButtonComponent discordButtonComponent = new DiscordLinkButtonComponent(server.Connect, $"Click to join the '{server.Label} FiveM Server'");
-
-            DiscordInteractionResponseBuilder message = new DiscordInteractionResponseBuilder();
-            message.AddComponents(discordButtonComponent);
-
-            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
-        }
-
-        [SlashCommand("top", "Get top players on the Life V World server based on Skill Experience who have been active in the last 30 days.")]
+        [SlashCommand("top", "Get top players Skill Experience who have been active in the last 30 days.")]
         public async Task TopCommand(InteractionContext ctx, [Option("Skill", "Skill to look up.")] string skill)
         {
             try
