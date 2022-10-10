@@ -451,7 +451,7 @@ namespace Curiosity.Core.Server
         private async Task OnUpdateGameTimerAsync()
         {
             GetGameTime = GetGameTimer();
-            await BaseScript.Delay(1);
+            await BaseScript.Delay(0);
         }
 
         private async Task SavePlayers(bool command = false)
