@@ -35,6 +35,7 @@ namespace Curiosity.Framework.Server
                     Debug.WriteLine($"{Log.LIGHT_RED}! Convar 'server_id' is not set or is not a number! !");
                     Debug.WriteLine($"{Log.LIGHT_RED}!!! Please set this value and restart the server! !!!");
                     Debug.WriteLine($"{Log.LIGHT_RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Debug.WriteLine($"{Log.LIGHT_RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
                 return _ServerId;
             }
