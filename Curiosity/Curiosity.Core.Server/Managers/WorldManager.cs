@@ -16,7 +16,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public static WorldManager WorldInstance;
 
-        long lastTimeWeatherUpdated = GetGameTimer();
+        long lastTimeWeatherUpdated = PluginManager.GetGameTime;
 
         PlayerList players => PluginManager.PlayersList;
 
@@ -222,13 +222,13 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnWeatherTick()
         {
-            if ((GetGameTimer() - (1000 * 60) * 48) > lastTimeWeatherUpdated)
+            if ((PluginManager.GetGameTime - (1000 * 60) * 48) > lastTimeWeatherUpdated)
             {
                 if (IsWeatherFrozen) return;
 
                 RandomiseWeather();
 
-                lastTimeWeatherUpdated = GetGameTimer();
+                lastTimeWeatherUpdated = PluginManager.GetGameTime;
             }
 
             await BaseScript.Delay(10000);

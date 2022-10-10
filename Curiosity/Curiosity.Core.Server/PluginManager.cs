@@ -61,6 +61,9 @@ namespace Curiosity.Core.Server
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
+
+        public static long GetGameTime = GetGameTimer();
+
         public static bool IsSupporterAccess
         {
             get
@@ -237,7 +240,7 @@ namespace Curiosity.Core.Server
 
                 // API.SetRoutingBucketEntityLockdownMode(0, "relaxed");
 
-                for(int i = 0; i <= 5; i++)
+                for (int i = 0; i <= 5; i++)
                 {
                     SetRoutingBucketPopulationEnabled(i, true);
                 }
@@ -431,7 +434,7 @@ namespace Curiosity.Core.Server
         {
             try
             {
-                if ((GetGameTimer() - (1000 * 60) * 5) > LastSave)
+                if ((GetGameTime - (1000 * 60) * 5) > LastSave)
                 {
                     SavePlayers();
 
@@ -442,6 +445,13 @@ namespace Curiosity.Core.Server
             {
                 Logger.Debug($"Possible user left while running");
             }
+        }
+
+        [TickHandler]
+        private async Task OnUpdateGameTimerAsync()
+        {
+            GetGameTime = GetGameTimer();
+            await BaseScript.Delay(1);
         }
 
         private async Task SavePlayers(bool command = false)
@@ -500,7 +510,7 @@ namespace Curiosity.Core.Server
                     }
                 }
 
-                LastSave = GetGameTimer();
+                LastSave = PluginManager.GetGameTime;
             }
 
             if (command)

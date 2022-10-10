@@ -552,7 +552,7 @@ namespace Curiosity.Core.Server.Managers
                         SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
                         if (!playerCullingReset.ContainsKey(attacker))
-                            playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                            playerCullingReset.Add(attacker, PluginManager.GetGameTime + TIME_TIL_CULLING_RESET);
 
                         string notificationTable = CreateBasicNotificationTable("Innocent Killed by Officer!", tableRows);
                         await BaseScript.Delay(0);
@@ -578,7 +578,7 @@ namespace Curiosity.Core.Server.Managers
                         SetEntityDistanceCullingRadius(attacker.Character.Handle, 15000f); // make the player visible
 
                         if (!playerCullingReset.ContainsKey(attacker))
-                            playerCullingReset.Add(attacker, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                            playerCullingReset.Add(attacker, PluginManager.GetGameTime + TIME_TIL_CULLING_RESET);
 
                         string notificationTable = CreateBasicNotificationTable("Player Killed", tableRows);
                         await BaseScript.Delay(0);
@@ -707,7 +707,7 @@ namespace Curiosity.Core.Server.Managers
                         SetEntityDistanceCullingRadius(player.Character.Handle, 15000f); // make the player visible
 
                         if (!playerCullingReset.ContainsKey(player))
-                            playerCullingReset.Add(player, GetGameTimer() + TIME_TIL_CULLING_RESET);
+                            playerCullingReset.Add(player, PluginManager.GetGameTime + TIME_TIL_CULLING_RESET);
 
                         string msg = $"<table width=\"300\"><thead><tr><th colspan=\"2\">Speeding Report</th></tr></thead>" +
                         $"<tbody><tr><td scope=\"row\" width=\"236\">" +
@@ -733,7 +733,7 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.Attach("mission:assistance:list", new EventCallback(metadata =>
             {
-                long gameTimer = GetGameTimer();
+                long gameTimer = PluginManager.GetGameTime;
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 List<GenericUserListItem> curiosityUsersRequesting = new();
                 List<CuriosityUser> users = GetUsersWhoArePolice();

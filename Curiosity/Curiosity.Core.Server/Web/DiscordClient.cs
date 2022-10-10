@@ -450,10 +450,10 @@ namespace Curiosity.Core.Server.Web
 
         async Task OnDelayCooldownTask()
         {
-            long gameTimer = API.GetGameTimer();
+            long gameTimer = PluginManager.GetGameTime;
             IsDelayRunnning = true;
 
-            while ((API.GetGameTimer() - gameTimer) < DelayMillis)
+            while ((PluginManager.GetGameTime - gameTimer) < DelayMillis)
             {
                 await BaseScript.Delay(1000);
             }

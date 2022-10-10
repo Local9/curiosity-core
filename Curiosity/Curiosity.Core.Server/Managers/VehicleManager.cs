@@ -308,12 +308,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                long gameTimer = GetGameTimer();
+                long gameTimer = PluginManager.GetGameTime;
                 while (!API.DoesEntityExist(vehicleId))
                 {
                     await BaseScript.Delay(100);
 
-                    if ((GetGameTimer() - 5000) > gameTimer) break;
+                    if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))
@@ -375,12 +375,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                long gameTimer = GetGameTimer();
+                long gameTimer = PluginManager.GetGameTime;
                 while (!API.DoesEntityExist(vehicleId))
                 {
                     await BaseScript.Delay(100);
 
-                    if ((GetGameTimer() - 5000) > gameTimer) break;
+                    if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))
@@ -439,12 +439,12 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
-                long gameTimer = GetGameTimer();
+                long gameTimer = PluginManager.GetGameTime;
                 while (!API.DoesEntityExist(vehicleId))
                 {
                     await BaseScript.Delay(100);
 
-                    if ((GetGameTimer() - 5000) > gameTimer) break;
+                    if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
                 }
 
                 if (!API.DoesEntityExist(vehicleId))
@@ -675,12 +675,12 @@ namespace Curiosity.Core.Server.Managers
         async Task SetCullingRadius(int vehicleNetworkId, int routingBucket)
         {
             int vehicleId = NetworkGetEntityFromNetworkId(vehicleNetworkId);
-            long gameTimer = GetGameTimer();
+            long gameTimer = PluginManager.GetGameTime;
             while (!API.DoesEntityExist(vehicleId))
             {
                 await BaseScript.Delay(100);
 
-                if ((GetGameTimer() - 5000) > gameTimer) break;
+                if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
             }
 
             if (!API.DoesEntityExist(vehicleId))

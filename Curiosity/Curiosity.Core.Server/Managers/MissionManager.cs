@@ -24,7 +24,7 @@ namespace Curiosity.Core.Server.Managers
                 Player player = PluginManager.PlayersList[metadata.Sender];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                long gameTimer = API.GetGameTimer();
+                long gameTimer = PluginManager.GetGameTime;
                 long cooldown = (gameTimer - curiosityUser.LastNotificationBackup);
                 bool canNowRequest = cooldown > TWO_MINUTES;
 

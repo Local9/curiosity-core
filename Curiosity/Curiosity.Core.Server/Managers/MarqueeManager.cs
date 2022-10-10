@@ -9,7 +9,7 @@ namespace Curiosity.Core.Server.Managers
 {
     public class MarqueeManager : Manager<MarqueeManager>
     {
-        long gameTimer = GetGameTimer();
+        long gameTimer = PluginManager.GetGameTime;
         int fiveMinutes = (1000 * 60) * 5;
         int marqueeMessageIndex = 0;
 
@@ -30,9 +30,8 @@ namespace Curiosity.Core.Server.Managers
         [TickHandler]
         private async Task OnMarqueeTask()
         {
-            if ((GetGameTimer() - fiveMinutes) > gameTimer)
+            if ((PluginManager.GetGameTime - fiveMinutes) > gameTimer)
             {
-                gameTimer = GetGameTimer();
                 string marqueeMessage = MarqueeMessages[marqueeMessageIndex];
                 EventSystem.GetModule().SendAll("ui:marquee", marqueeMessage);
 

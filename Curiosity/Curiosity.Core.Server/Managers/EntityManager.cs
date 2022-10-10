@@ -71,13 +71,13 @@ namespace Curiosity.Core.Server.Managers
                     int networkId = metadata.Find<int>(0);
                     int vehicleId = API.NetworkGetEntityFromNetworkId(networkId);
 
-                    long gameTimer = GetGameTimer();
+                    long gameTimer = PluginManager.GetGameTime;
 
                     while (!API.DoesEntityExist(vehicleId))
                     {
                         await BaseScript.Delay(100);
 
-                        if ((GetGameTimer() - 5000) > gameTimer) break;
+                        if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
                     }
 
                     if (!API.DoesEntityExist(vehicleId))
@@ -129,12 +129,12 @@ namespace Curiosity.Core.Server.Managers
                     int networkId = metadata.Find<int>(0);
                     int pedId = API.NetworkGetEntityFromNetworkId(networkId);
 
-                    long gameTimer = GetGameTimer();
+                    long gameTimer = PluginManager.GetGameTime;
                     while (!API.DoesEntityExist(pedId))
                     {
                         await BaseScript.Delay(100);
 
-                        if ((GetGameTimer() - 5000) > gameTimer) break;
+                        if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
                     }
 
                     if (!API.DoesEntityExist(pedId))
@@ -302,12 +302,12 @@ namespace Curiosity.Core.Server.Managers
                 return -1;
             }
 
-            long gameTimer = GetGameTimer();
+            long gameTimer = PluginManager.GetGameTime;
             while (!API.DoesEntityExist(objectId))
             {
                 await BaseScript.Delay(100);
 
-                if ((GetGameTimer() - 5000) > gameTimer) break;
+                if ((PluginManager.GetGameTime - 5000) > gameTimer) break;
             }
 
             if (!API.DoesEntityExist(objectId))

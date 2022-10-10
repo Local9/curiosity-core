@@ -10,7 +10,7 @@ namespace Curiosity.Core.Server.Managers.World
 
         public override void Begin()
         {
-            _gameTimer = GetGameTimer();
+            _gameTimer = PluginManager.GetGameTime;
         }
 
         // [TickHandler]
@@ -20,7 +20,7 @@ namespace Curiosity.Core.Server.Managers.World
             {
                 RandomEvent randomEvent = kvp.Value;
                 if (_activeEvents.ContainsKey(randomEvent.Name)) continue; // its active, don't try to re-make it
-                if ((GetGameTimer() - randomEvent.GameTimeActivated) < randomEvent.Cooldown) continue; // still to early
+                if ((PluginManager.GetGameTime - randomEvent.GameTimeActivated) < randomEvent.Cooldown) continue; // still to early
             }
         }
     }
