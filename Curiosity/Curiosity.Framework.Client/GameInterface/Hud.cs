@@ -76,7 +76,7 @@ namespace Curiosity.Framework.Client.GameInterface
             DrawNotification(blink, saveToBrief);
         }
 
-        internal MinimapAnchor GetMinimapAnchor()
+        internal static MinimapAnchor GetMinimapAnchor()
         {
             var safezone = GetSafeZoneSize();
             var aspectRatio = GetAspectRatio(false);
