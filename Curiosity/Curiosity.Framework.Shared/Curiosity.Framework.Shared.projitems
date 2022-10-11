@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PositionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Hud\MinimapAnchor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CameraInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CameraVector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\CharacterAttributes.cs" />
@@ -35,8 +36,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\PropDrawables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Vector5.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Datasets\" />
   </ItemGroup>
 </Project>

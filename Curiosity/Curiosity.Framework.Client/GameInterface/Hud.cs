@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core.UI;
 using Curiosity.Framework.Shared.Enums;
+using Curiosity.Framework.Shared.Models.Hud;
 using ScaleformUI;
 
 namespace Curiosity.Framework.Client.GameInterface
@@ -66,13 +67,41 @@ namespace Curiosity.Framework.Client.GameInterface
         internal static void ShowNotification(string message, bool blink = true, bool saveToBrief = true, eHudColor bgColor = eHudColor.HUD_COLOUR_BLACK)
         {
             string[] strings = Screen.StringToArray(message);
-            API.SetNotificationTextEntry("CELL_EMAIL_BCON");
+            SetNotificationTextEntry("CELL_EMAIL_BCON");
             foreach (string s in strings)
             {
-                API.AddTextComponentSubstringPlayerName(s);
+                AddTextComponentSubstringPlayerName(s);
             }
-            API.SetNotificationBackgroundColor((int)bgColor);
-            API.DrawNotification(blink, saveToBrief);
+            SetNotificationBackgroundColor((int)bgColor);
+            DrawNotification(blink, saveToBrief);
+        }
+
+        internal MinimapAnchor GetMinimapAnchor()
+        {
+            var safezone = GetSafeZoneSize();
+            var aspectRatio = GetAspectRatio(false);
+            var resolutionX = 0;
+            var resolutionY = 0;
+
+            GetActiveScreenResolution(ref resolutionX, ref resolutionY);
+
+            var scaleX = 1.0 / resolutionX;
+            var scaleY = 1.0 / resolutionY;
+
+            var anchor = new MinimapAnchor
+            {
+                Width = (float)(scaleX * (resolutionX / (4 * aspectRatio))),
+                Height = (float)(scaleY * (resolutionY / 5.674)),
+                X = (float)(scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
+                BottomY = 1.0 - scaleY * (resolutionY * (0.05f * (Math.Abs(safezone - 1.0) * 10)))
+            };
+
+            anchor.RightX = anchor.X + anchor.Width;
+            anchor.Y = (float)(anchor.BottomY - anchor.Height);
+            anchor.UnitX = (float)scaleX;
+            anchor.UnitY = (float)scaleY;
+
+            return anchor;
         }
     }
 }
