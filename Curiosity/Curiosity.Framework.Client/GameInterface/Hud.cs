@@ -2,6 +2,8 @@
 using Curiosity.Framework.Shared.Enums;
 using Curiosity.Framework.Shared.Models.Hud;
 using ScaleformUI;
+using System.Drawing;
+using Font = CitizenFX.Core.UI.Font;
 
 namespace Curiosity.Framework.Client.GameInterface
 {
@@ -93,7 +95,7 @@ namespace Curiosity.Framework.Client.GameInterface
                 Width = (float)(scaleX * (resolutionX / (4 * aspectRatio))),
                 Height = (float)(scaleY * (resolutionY / 5.674)),
                 X = (float)(scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
-                BottomY = 1.0 - scaleY * (resolutionY * (0.05f * (Math.Abs(safezone - 1.0) * 10)))
+                BottomY = (float)(1.0 - scaleY * (resolutionY * (0.05f * (Math.Abs(safezone - 1.0) * 10))))
             };
 
             anchor.RightX = anchor.X + anchor.Width;
@@ -102,6 +104,20 @@ namespace Curiosity.Framework.Client.GameInterface
             anchor.UnitY = (float)scaleY;
 
             return anchor;
+        }
+
+        internal static void DrawTextLegacy(string text, float scale, PointF position, Color color, bool centered = false, Font font = Font.ChaletLondon, Alignment alignment = Alignment.Left)
+        {
+            SetTextFont(0);
+            SetTextScale(scale, scale);
+            SetTextColour(color.R, color.G, color.B, color.A);
+            SetTextDropshadow(0, 0, 0, 0, 255);
+            SetTextOutline();
+            SetTextCentre(centered);
+
+            BeginTextCommandDisplayText("STRING");
+            AddTextComponentSubstringPlayerName(text);
+            EndTextCommandDisplayText(position.X, position.Y);
         }
     }
 }
