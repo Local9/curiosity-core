@@ -17,6 +17,7 @@ namespace Curiosity.Core.Server
     {
         const string CURIOSITY_VERSION = "v2.0.1.4988";
         private const string CONVAR_MISSING = "MISSING";
+        private const int FIVE_MINUTES = (1000 * 60) * 5;
         private string SERVER_KEY;
 
         public static PluginManager Instance { get; private set; }
@@ -434,7 +435,7 @@ namespace Curiosity.Core.Server
         {
             try
             {
-                if ((GetGameTime - (1000 * 60) * 5) > LastSave)
+                if ((GetGameTime - FIVE_MINUTES) > LastSave)
                 {
                     SavePlayers();
 
