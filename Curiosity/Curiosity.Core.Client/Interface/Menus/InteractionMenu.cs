@@ -27,7 +27,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenuListItem mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, 0);
 
         // private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
-        private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you.");
+        private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enable passive mode to opt-out of PvP.");
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
         private UIMenuItem miEditPed = new UIMenuItem("Customise Ped", "Change your look.");
         private UIMenuItem miOpenPda = new UIMenuItem("Open PDA", "Open the PDA to access the shop or your garage.");
@@ -148,6 +148,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             // BOTTOM
             miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
+            miPassive.Description = Cache.Character.IsPassive ? "Disabling passive mode will mean people can attack you." : "Enabling passive mode will mean people cannot attack you.";
             miPassive.Enabled = !playerOptionsManager.IsPassiveModeCooldownEnabled;
 
             miKillYourself.Enabled = playerOptionsManager.IsKillSelfEnabled;
