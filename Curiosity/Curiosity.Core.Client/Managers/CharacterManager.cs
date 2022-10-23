@@ -378,7 +378,6 @@ namespace Curiosity.Core.Client.Managers
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
             Game.PlayerPed.RelationshipGroup = Instance.PlayerRelationshipGroup;
-            Game.PlayerPed.IsInvincible = false;
 
             EventSystem.Send("user:job", "Unemployed");
 
@@ -394,6 +393,16 @@ namespace Curiosity.Core.Client.Managers
             TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
             CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
 
+            await BaseScript.Delay(3000);
+
+            Vector3 currentPosition = Game.PlayerPed.Position;
+            
+            while (Game.PlayerPed.IsInRangeOf(currentPosition, 5f))
+            {
+                await BaseScript.Delay(0);
+            }
+            Game.PlayerPed.IsInvincible = false;
+            
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(true);
         }
 
