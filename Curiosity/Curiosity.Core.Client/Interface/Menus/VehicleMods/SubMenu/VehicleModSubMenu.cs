@@ -113,8 +113,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu
                         }
 
                         int currentValue = GetVehicleMod(vehicle.Handle, (int)mod.ModType);
-                        if (currentValue == -1)
-                            currentValue = 0;
+                        currentValue = (currentValue == -1) ? 0 : currentValue += 1;
 
                         UIMenuListItem uiListMod = new UIMenuListItem(name, lst, currentValue);
                         uiListMod.ItemData = new { mod = mod.ModType };
