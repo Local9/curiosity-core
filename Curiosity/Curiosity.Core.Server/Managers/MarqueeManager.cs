@@ -35,6 +35,8 @@ namespace Curiosity.Core.Server.Managers
                 string marqueeMessage = MarqueeMessages[marqueeMessageIndex];
                 EventSystem.GetModule().SendAll("ui:marquee", marqueeMessage);
 
+                gameTimer = PluginManager.GetGameTime;
+
                 marqueeMessageIndex++;
                 if (marqueeMessageIndex >= MarqueeMessages.Count) marqueeMessageIndex = 0;
             }
