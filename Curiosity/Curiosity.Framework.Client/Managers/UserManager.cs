@@ -33,6 +33,7 @@ namespace Curiosity.Framework.Client.Managers
             Session.User = user;
 
             CharacterCreatorManager characterCreatorManager = CharacterCreatorManager.GetModule();
+            // characterCreatorManager.OnCreateNewCharacter(new CharacterSkin());
 
             Game.Player.ChangeModel(PedHash.FreemodeMale01);
             Game.PlayerPed.SetDefaultVariation();
@@ -40,8 +41,20 @@ namespace Curiosity.Framework.Client.Managers
             Game.PlayerPed.Position = new Vector3(0, 0, 0);
 
             LoadTransition.OnDownAsync();
-            
+
             GameInterface.Hud.FadeIn(1000);
+            ScreenInterface.EnableHud();
+
+            await BaseScript.Delay(3000);
+
+            Vehicle v = await World.CreateVehicle("tenf", Game.PlayerPed.Position + new Vector3(3f));
+            await BaseScript.Delay(3000);
+            DecorSetInt(v.Handle, "Player_Vehicle", -1);
+            while (!Game.PlayerPed.IsInVehicle())
+            {
+                Game.PlayerPed.Task.WarpIntoVehicle(v, VehicleSeat.Driver);
+                await BaseScript.Delay(100);
+            }
 
             Logger.Info($"User Database: [{_user.Handle}] {_user.Username}#{_user.UserID} with {_user.Characters.Count} Character(s).");
         }
