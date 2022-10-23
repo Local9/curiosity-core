@@ -104,6 +104,14 @@ namespace Curiosity.Core.Client.Managers
             Game.Player.State.Set(StateBagKey.PLAYER_PASSIVE, isPassive, true);
             Cache.Character.IsPassive = isPassive;
             IsPassive = isPassive;
+
+            if (isPassive)
+            {
+                NotificationManager.Info($"Passive Mode Enabled");
+                return;
+            }
+
+            NotificationManager.Info($"Passive Mode Disabled");
         }
 
         public async void TogglePlayerPassive(bool isPassive)
