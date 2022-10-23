@@ -374,8 +374,6 @@ namespace Curiosity.Core.Client.Managers
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
-
-            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(Cache.Character.IsPassive);
             Logger.Debug($"Character Passive State: {Cache.Character.IsPassive}");
             SetPedHelmet(Cache.PlayerPed.Handle, Cache.Character.AllowHelmet);
 
@@ -395,6 +393,8 @@ namespace Curiosity.Core.Client.Managers
 
             TriggerMusicEvent($"{MusicEvents.DEFAULT_STOP}");
             CancelMusicEvent($"{MusicEvents.DEFAULT_STOP}");
+
+            PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(true);
         }
 
         private static void CreatePlayerGroup()
