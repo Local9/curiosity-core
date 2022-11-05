@@ -246,13 +246,13 @@ namespace Curiosity.Core.Server.Managers
                     discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Queue: An account with matching Discord information has already been found on the server and has been removed.");
                     await BaseScript.Delay(0);
 
-                    KeyValuePair<int, CuriosityUser> curiosityUser = PluginManager.ActiveUsers.Where(x => x.Value.DiscordId == discordId).FirstOrDefault();
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers.Select(x => x.Value).Where(x => x.DiscordId == discordId).FirstOrDefault();
 
-                    if (curiosityUser.Value != null)
+                    if (curiosityUser!= null)
                     {
-                        RemoveFrom(curiosityUser.Value.License, true, true, true, true, true, true);
+                        RemoveFrom(curiosityUser.License, true, true, true, true, true, true);
 
-                        Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.Value.DiscordId).FirstOrDefault();
+                        Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.DiscordId).FirstOrDefault();
 
                         if (matchingPlayer != null)
                         {
