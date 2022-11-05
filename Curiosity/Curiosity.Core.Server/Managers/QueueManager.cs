@@ -247,17 +247,22 @@ namespace Curiosity.Core.Server.Managers
                     await BaseScript.Delay(0);
 
                     KeyValuePair<int, CuriosityUser> curiosityUser = PluginManager.ActiveUsers.Where(x => x.Value.DiscordId == discordId).FirstOrDefault();
-                    
-                    Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.Value.DiscordId).FirstOrDefault();
-                    
-                    if (matchingPlayer != null)
-                    {
-                        matchingPlayer.Drop($"A player with a matching Discord ID has tried to connect, you have been disconnected.");
-                        RemoveFrom(matchingPlayer.Identifiers["license"], true, true, true, true, true, true);
-                    }
 
-                    if (!PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
-                        discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Failed to remove matching session from server.");
+                    if (curiosityUser.Value != null)
+                    {
+                        RemoveFrom(curiosityUser.Value.License, true, true, true, true, true, true);
+
+                        Player matchingPlayer = PluginManager.PlayersList.Where(x => ulong.Parse(x.Identifiers["discord"]) == curiosityUser.Value.DiscordId).FirstOrDefault();
+
+                        if (matchingPlayer != null)
+                        {
+                            matchingPlayer.Drop($"A player with a matching Discord ID has tried to connect, you have been disconnected.");
+                            RemoveFrom(matchingPlayer.Identifiers["license"], true, true, true, true, true, true);
+                        }
+
+                        if (!PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
+                            discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Failed to remove matching session from server.");
+                    }
                 }
 
                 string rulesTemplate = LoadResourceFile(GetCurrentResourceName(), "data/cards/join-server.json");
@@ -399,7 +404,7 @@ namespace Curiosity.Core.Server.Managers
             catch (Exception ex)
             {
                 Logger.Error(ex, "Queue Error");
-                deferrals.done($"Error in Queue");
+                deferrals.done($"Error in Queue, please contact support.");
                 return;
             }
         }

@@ -47,7 +47,7 @@ namespace Curiosity.Framework.Client.Managers
 
             await BaseScript.Delay(3000);
 
-            Vehicle v = await World.CreateVehicle("tenf", Game.PlayerPed.Position + new Vector3(3f));
+            Vehicle v = await World.CreateVehicle("audirs6tk", Game.PlayerPed.Position + new Vector3(3f));
             await BaseScript.Delay(3000);
             DecorSetInt(v.Handle, "Player_Vehicle", -1);
             while (!Game.PlayerPed.IsInVehicle())
