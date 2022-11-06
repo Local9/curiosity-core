@@ -260,7 +260,7 @@ namespace Curiosity.Core.Server.Managers
                             RemoveFrom(matchingPlayer.Identifiers["license"], true, true, true, true, true, true);
                         }
 
-                        if (!PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
+                        if (PluginManager.ActiveUsers != null && !PluginManager.ActiveUsers.TryRemove(int.Parse(matchingPlayer.Handle), out CuriosityUser value))
                             discordClient.SendDiscordPlayerLogMessage($"[{discordId}] Player '{player.Name}': Failed to remove matching session from server.");
                     }
                 }
