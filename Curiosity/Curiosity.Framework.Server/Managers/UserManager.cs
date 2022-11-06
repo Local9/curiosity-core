@@ -260,6 +260,18 @@ namespace Curiosity.Framework.Server.Managers
                     Logger.Debug($"Number of Sessions: {UserSessions.Count}");
                 }
 
+                bool stateSetup = client.Player.State.Get("player:server:setup") ?? false;
+                if (!stateSetup)
+                {
+                    client.Player.State.Set("player:spawned", false, true);
+                    client.Player.State.Set("player:server:setup", true, true);
+                    Logger.Debug($"User {userResult.Username}#{userResult.UserID} is setup.");
+                }
+                else
+                {
+                    Logger.Debug($"User {userResult.Username}#{userResult.UserID} is already setup.");
+                }
+
                 Logger.Info($"User {userResult.Username}#{userResult.UserID} is now active.");
 
                 return userResult;

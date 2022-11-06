@@ -43,6 +43,10 @@
     <ProjectReference Include="..\_vendor\FxEvents\FxEvents\FxEvents.Client\FxEvents.Client.csproj" />
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
   
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
 

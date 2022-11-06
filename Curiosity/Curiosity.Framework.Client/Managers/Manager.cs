@@ -11,6 +11,7 @@ namespace Curiosity.Framework.Client.Managers
                        : null);
         }
 
+        public void Event(string name, Delegate @delegate) => Instance.AddEventHandler(name, @delegate);
         public PluginManager Instance => PluginManager.Instance;
         public Log Logger => Instance.Logger;
 
