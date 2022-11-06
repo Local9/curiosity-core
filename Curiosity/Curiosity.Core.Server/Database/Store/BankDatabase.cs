@@ -61,7 +61,13 @@ namespace Curiosity.Core.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    newValue = kv["return"].ToUnsignedLong();
+                    if (int.TryParse(kv["return"].ToString(), out int value)) {
+                        newValue = (ulong)value;
+                    }
+                    else if (ulong.TryParse(kv["return"].ToString(), out ulong value2))
+                    {
+                        newValue = value2;
+                    }
                 }
             }
 
