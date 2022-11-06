@@ -48,6 +48,8 @@ namespace Curiosity.Framework.Client.Utils
                 await BaseScript.Delay(100);
             }
 
+            GameInterface.Hud.FadeIn(1000);
+
             Instance.AttachTickHandler(OnCloudHatAsync);
 
             var timestamp = GetGameTimer();
@@ -69,6 +71,7 @@ namespace Curiosity.Framework.Client.Utils
             ClearDrawOrigin();
 
             Screen.LoadingPrompt.Hide();
+            ScreenInterface.EnableHud();
         }
 
         //public async Task DownWait()
