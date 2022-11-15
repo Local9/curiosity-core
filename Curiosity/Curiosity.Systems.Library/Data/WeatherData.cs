@@ -1,6 +1,7 @@
 ﻿using Curiosity.Systems.Library.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Curiosity.Systems.Library.Data
 {
@@ -22,6 +23,7 @@ namespace Curiosity.Systems.Library.Data
             { WeatherMonth.DECEMBER, WeatherSeason.WINTER },
         };
 
+        public readonly static List<int> SnowMonths = new List<int> { 11, 12 };
         public readonly static List<int> SnowDays = new List<int>() { 6, 9, 12, 15, 18, 21, 22, 23, 24, 25, 26, 27 };
         public readonly static List<int> HalloweenDays = new List<int>() { 30, 31 };
 
@@ -46,7 +48,8 @@ namespace Curiosity.Systems.Library.Data
 
         public static bool IsSnowDay()
         {
-            return SnowDays.Contains(DateTime.UtcNow.Day) && DateTime.UtcNow.Month == 12;
+            return SnowMonths.Contains(DateTime.UtcNow.Month);
+            //return SnowDays.Contains(DateTime.UtcNow.Day) && DateTime.UtcNow.Month == 12;
         }
 
         public static bool IsHalloween()
