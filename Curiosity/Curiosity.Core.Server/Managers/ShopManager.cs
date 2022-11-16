@@ -225,7 +225,7 @@ namespace Curiosity.Core.Server.Managers
 
                 AdjustWallet:
                     // if all pass, allow purchase, else fail
-                    int minusValue = (int)item.BuyValue * -1;
+                    long minusValue = (long)item.BuyValue * -1;
                     ulong newWalletValue = await Database.Store.BankDatabase.Adjust(characterId, minusValue);
                     curiosityUser.Character.Cash = newWalletValue;
 

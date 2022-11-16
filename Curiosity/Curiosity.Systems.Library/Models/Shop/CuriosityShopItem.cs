@@ -47,10 +47,10 @@ namespace Curiosity.Systems.Library.Models.Shop
         public int? CategoryId;
 
         [DataMember(Name = "buyValue")]
-        public long? BuyValue;
+        public ulong? BuyValue;
 
         [DataMember(Name = "buyBackValue")]
-        public long? BuyBackValue;
+        public ulong? BuyBackValue;
 
         [DataMember(Name = "numberInStock")]
         public int NumberInStock;
