@@ -138,8 +138,8 @@ namespace Curiosity.Core.Server.Database.Store
                 if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
                 {
                     i.ShopItemId = kv["ShopItemId"].ToInt();
-                    i.BuyValue = kv["BuyValue"].ToInt();
-                    i.BuyBackValue = kv["BuyBackValue"].ToInt();
+                    i.BuyValue = kv["BuyValue"].ToUnsignedLong();
+                    i.BuyBackValue = kv["BuyBackValue"].ToUnsignedLong();
                     i.IsStockManaged = kv["IsStockManaged"].ToBoolean();
                 }
 
@@ -182,8 +182,8 @@ namespace Curiosity.Core.Server.Database.Store
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
                 i.ShopItemId = kv["ShopItemId"].ToInt();
-                i.BuyValue = kv["BuyValue"].ToInt();
-                i.BuyBackValue = kv["BuyBackValue"].ToInt();
+                i.BuyValue = kv["BuyValue"].ToUnsignedLong();
+                i.BuyBackValue = kv["BuyBackValue"].ToUnsignedLong();
                 i.IsStockManaged = kv["IsStockManaged"].ToBoolean();
             }
 
