@@ -10,9 +10,9 @@ namespace Curiosity.Framework.Client
         public static PluginManager Instance { get; private set; }
         public Log Logger;
         internal SoundEngine SoundEngine;
-        public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
-        public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
-        public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
+        public Dictionary<Type, object> Managers { get; } = new();
+        public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new();
+        public List<Type> RegisteredTickHandlers { get; set; } = new();
 
         public GameInterface.Hud Hud;
 

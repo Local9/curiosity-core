@@ -307,8 +307,8 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.ItemId = int.Parse($"{kv[0]["ItemId"]}");
                     curiosityStoreItem.Label = $"{kv[0]["Label"]}";
                     curiosityStoreItem.Description = $"{kv[0]["Description"]}";
-                    curiosityStoreItem.BuyValue = long.Parse($"{kv[0]["BuyValue"]}");
-                    curiosityStoreItem.BuyBackValue = long.Parse($"{kv[0]["BuyBackValue"]}");
+                    curiosityStoreItem.BuyValue = ulong.Parse($"{kv[0]["BuyValue"]}");
+                    curiosityStoreItem.BuyBackValue = ulong.Parse($"{kv[0]["BuyBackValue"]}");
                     curiosityStoreItem.NumberInStock = int.Parse($"{kv[0]["NumberInStock"]}");
                     curiosityStoreItem.ItemPurchased = int.Parse($"{kv[0]["ItemPurchased"]}") == 1;
                     curiosityStoreItem.NumberOwned = int.Parse($"{kv[0]["NumberOwned"]}");
@@ -367,8 +367,8 @@ namespace Curiosity.Core.Server.Database.Store
                             curiosityStoreItem.ItemId = int.Parse($"{kv["ItemId"]}");
                             curiosityStoreItem.Label = $"{kv["Label"]}";
                             curiosityStoreItem.Description = $"{kv["Description"]}";
-                            curiosityStoreItem.BuyValue = long.Parse($"{kv["BuyValue"]}");
-                            curiosityStoreItem.BuyBackValue = long.Parse($"{kv["BuyBackValue"]}");
+                            curiosityStoreItem.BuyValue = ulong.Parse($"{kv["BuyValue"]}");
+                            curiosityStoreItem.BuyBackValue = ulong.Parse($"{kv["BuyBackValue"]}");
                             curiosityStoreItem.NumberInStock = int.Parse($"{kv["NumberInStock"]}");
                             curiosityStoreItem.ItemPurchased = int.Parse($"{kv["ItemPurchased"]}") == 1;
                             curiosityStoreItem.NumberOwned = int.Parse($"{kv["NumberOwned"]}");
