@@ -353,7 +353,7 @@ namespace Curiosity.Core.Client.Managers
 
             if (PluginManager.Instance.PlayerList.Count() == 0)
                 PopulateNow();
-            
+
             if (Screen.Fading.IsFadedOut && !Screen.Fading.IsFadingOut)
             {
                 Screen.Fading.FadeIn(2500);
@@ -396,13 +396,13 @@ namespace Curiosity.Core.Client.Managers
             await BaseScript.Delay(3000);
 
             Vector3 currentPosition = Game.PlayerPed.Position;
-            
+
             while (Game.PlayerPed.IsInRangeOf(currentPosition, 5f))
             {
                 await BaseScript.Delay(0);
             }
             Game.PlayerPed.IsInvincible = false;
-            
+
             PlayerOptionsManager.GetModule().SetPlayerPassiveOnStart(true);
         }
 
@@ -428,7 +428,7 @@ namespace Curiosity.Core.Client.Managers
 
             SetPedAsGroupMember(playerPedHandle, groupHandle);
             SetPedAsGroupLeader(playerPedHandle, groupHandle);
-            
+
             SetGroupFormation(groupHandle, (int)FormationType.Default);
             SetGroupSeparationRange(groupHandle, 300f);
             SetGroupFormationSpacing(groupHandle, 1f, 0.9f, 3f);

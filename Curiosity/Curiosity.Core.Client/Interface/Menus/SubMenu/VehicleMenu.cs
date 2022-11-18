@@ -201,7 +201,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                     Cache.PersonalBoat = null;
 
                 await BaseScript.Delay(500);
-                
+
                 UpdatePersonalVehicleList();
             }
         }

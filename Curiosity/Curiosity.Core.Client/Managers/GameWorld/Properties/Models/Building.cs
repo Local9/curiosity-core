@@ -429,7 +429,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
             Camera scriptCamera = World.CreateCamera(GarageCamera1.Position, EnteranceCamera2.Rotation, GarageCamera2.FieldOfView);
             Camera interpCamera = World.CreateCamera(GarageCamera2.Position, EnteranceCamera1.Rotation, GarageCamera1.FieldOfView);
             TaskSequence taskSequence = new TaskSequence();
-            
+
             if (GarageDoor == eFrontDoor.StandardDoor)
             {
                 Cache.Player.DisableHud();
@@ -442,7 +442,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     vehicle.PlaceOnGround();
                     World.RenderingCamera = scriptCamera;
                     await BaseScript.Delay(3000);
-                
+
                     taskSequence.AddTask.DriveTo(vehicle, GarageCarEnterance.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
                     taskSequence.AddTask.DriveTo(vehicle, GarageFootExit.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
                     taskSequence.AddTask.DriveTo(vehicle, GarageWaypoint.AsVector(), 0.1f, 5.0f, (int)DrivingStyle.Rushed);
@@ -452,7 +452,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties.Models
                     Game.PlayerPed.Position = GarageFootEnterance.AsVector();
                     Game.PlayerPed.Heading = GarageCarExit.W - 180f;
                     World.RenderingCamera = scriptCamera;
-                    
+
                     taskSequence.AddTask.GoTo(GarageFootExit.AsVector(), false, duration);
                     taskSequence.AddTask.GoTo(GarageWaypoint.AsVector(), false, duration);
                 }

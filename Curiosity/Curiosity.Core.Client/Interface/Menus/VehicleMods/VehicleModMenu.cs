@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Extensions;
+﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface.Menus.VehicleMods.SubMenu;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
@@ -394,7 +393,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
 
             int numLiveryMods = GetNumVehicleMods(vehicle.Handle, (int)VehicleModType.Livery);
 
-            if(numLiveryMods > 0)
+            if (numLiveryMods > 0)
             {
                 int liveryCount = GetVehicleLiveryCount(vehicle.Handle);
                 Logger.Debug($"{liveryCount} Liveries found for {vehicle.DisplayName}.");
@@ -406,7 +405,7 @@ namespace Curiosity.Core.Client.Interface.Menus.VehicleMods
                 for (int i = 0; i < numLiveryMods; i++)
                 {
                     string label = GetLabelText(GetLiveryName(vehicle.Handle, i));
-                    
+
                     if (label == "NULL")
                         label = GetLabelText(GetModTextLabel(vehicle.Handle, (int)VehicleModType.Livery, i));
 

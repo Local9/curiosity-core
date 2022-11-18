@@ -81,7 +81,7 @@ namespace Curiosity.Core.Client.Managers.GameWorld.Properties
                 {
                     if (menuPool.IsAnyMenuOpen()) return;
                     Screen.DisplayHelpTextThisFrame(Game.GetGXTEntry("MP_PROP_BUZZ1B"));
-                    
+
                     if (Game.IsControlJustPressed(0, Control.Context))
                     {
                         if (Game.PlayerPed.IsInVehicle())

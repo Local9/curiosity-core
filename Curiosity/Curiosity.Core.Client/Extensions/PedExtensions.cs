@@ -30,18 +30,18 @@
 
             if (ped.IsInVehicle())
                 vehicle = ped.CurrentVehicle;
-            
+
             if (fadeIn)
             {
                 Function.Call((Hash)0x1F4ED342ACEFE62D, ped.Handle, fadeIn, slow);
-                
+
                 if (vehicle is not null && fadeVehicle)
                     Function.Call((Hash)0x1F4ED342ACEFE62D, vehicle.Handle, fadeIn, slow);
             }
             else
             {
                 API.NetworkFadeOutEntity(ped.Handle, false, slow);
-                
+
                 if (vehicle is not null && fadeVehicle)
                     API.NetworkFadeOutEntity(vehicle.Handle, false, slow);
             }
