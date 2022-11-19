@@ -55,6 +55,8 @@ namespace Curiosity.Core.Client.Managers.UI
                     bool isWanted = player.State.Get(StateBagKey.PLAYER_POLICE_WANTED) ?? false;
                     bool isHidden = player.State.Get(StateBagKey.PLAYER_OFF_RADAR) ?? false;
 
+                    string strStaff = isStaff ? "STAFF" : string.Empty;
+
                     if (isHidden || !player.Character.IsVisible)
                     {
                         if (gamerTags.ContainsKey(player))
@@ -73,12 +75,12 @@ namespace Curiosity.Core.Client.Managers.UI
                         }
                         else
                         {
-                            gamerTags[player] = CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, string.Empty, 0);
+                            gamerTags[player] = CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, false, strStaff, 0);
                         }
                     }
                     else if (closeEnough)
                     {
-                        gamerTags.Add(player, CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, isStaff, string.Empty, 0));
+                        gamerTags.Add(player, CreateMpGamerTag(player.Character.Handle, $"{player.Name} [{player.ServerId}]", false, false, strStaff, 0));
                     }
 
                     if (closeEnough && gamerTags.ContainsKey(player))
