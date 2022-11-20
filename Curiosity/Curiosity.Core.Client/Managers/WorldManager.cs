@@ -315,10 +315,27 @@ namespace Curiosity.Core.Client.Managers
 
         void SetTrails()
         {
-            bool trails = World.Weather == Weather.Christmas;
-            Logger.Debug($"Trails: {trails}");
+            bool trails = (World.Weather == Weather.Christmas || World.Weather == Weather.Snowing || World.Weather == Weather.Blizzard);
+            Logger.Info($"Trails: {trails}");
+            Function.Call((Hash)0x4CC7F0FEA5283FE0, trails);
             SetForceVehicleTrails(trails);
             SetForcePedFootstepsTracks(trails);
+            ForceSnowPass(trails);
+
+            if (trails)
+            {
+                RequestScriptAudioBank("ICE_FOOTSTEPS", false);
+                RequestScriptAudioBank("SNOW_FOOTSTEPS", false);
+                SetDeepOceanScaler(0.1f);
+            }
+            else
+            {
+                SetDeepOceanScaler(0.0f);
+                Function.Call((Hash)0x7A2D8AD0A9EB9C3F, "ICE_FOOTSTEPS");
+                Function.Call((Hash)0x7A2D8AD0A9EB9C3F, "SNOW_FOOTSTEPS");
+                ReleaseScriptAudioBank();
+                // ReleaseScriptAudioBank("SNOW_FOOTSTEPS");
+            }
         }
 
         private string GetForecastText(WeatherType weather)
