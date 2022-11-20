@@ -257,7 +257,7 @@ namespace Curiosity.Core.Client.Managers
                     World.TransitionToWeather((Weather)weatherType, 1f);
                     Logger.Debug($"Force weather change: {(Weather)weatherType}");
 
-                    await BaseScript.Delay(5000);
+                    await BaseScript.Delay(2500);
 
                     SetTrails();
 
@@ -276,7 +276,7 @@ namespace Curiosity.Core.Client.Managers
                 ClearWeatherTypePersist();
                 World.TransitionToWeather((Weather)weatherType, 30f);
 
-                await BaseScript.Delay(5000);
+                await BaseScript.Delay(2500);
 
                 SetTrails();
 
