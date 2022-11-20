@@ -316,7 +316,7 @@ namespace Curiosity.Core.Client.Managers
         void SetTrails()
         {
             bool trails = (World.Weather == Weather.Christmas || World.Weather == Weather.Snowing || World.Weather == Weather.Blizzard);
-            Logger.Info($"Trails: {trails}");
+            Logger.Debug($"Trails: {trails}");
             Function.Call((Hash)0x4CC7F0FEA5283FE0, trails);
             SetForceVehicleTrails(trails);
             SetForcePedFootstepsTracks(trails);
