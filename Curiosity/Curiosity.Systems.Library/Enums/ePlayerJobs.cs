@@ -12,6 +12,9 @@
         FISHING,
         BUS_DRIVER,
         TRAIN_CONDUCTOR,
-        BEAT_COP
+        BEAT_COP,
+        FARMER,
+        MECHANIC,
+        TAXI
     }
 }
