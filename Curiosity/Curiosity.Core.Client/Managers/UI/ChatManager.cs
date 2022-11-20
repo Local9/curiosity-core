@@ -14,8 +14,6 @@ namespace Curiosity.Core.Client.Managers
         {
             EventSystem.Attach("chat:receive", new AsyncEventCallback(async metadata =>
             {
-                await Session.Loading();
-
                 JsonBuilder jsonBuilder = new JsonBuilder();
                 jsonBuilder.Add("operation", "CHAT");
                 jsonBuilder.Add("subOperation", "NEW_MESSAGE");
@@ -36,6 +34,29 @@ namespace Curiosity.Core.Client.Managers
 
                 return null;
             }));
+
+            Instance.ExportDictionary.Add("AddToSystemLog", new Func<string, bool>(
+                (message) =>
+                {
+                    JsonBuilder jsonBuilder = new JsonBuilder();
+                    jsonBuilder.Add("operation", "CHAT");
+                    jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+                    jsonBuilder.Add("message", new
+                    {
+                        role = "SERVER",
+                        channel = "system",
+                        activeJob = string.Empty,
+                        timestamp = DateTime.Now.ToString("HH:mm"),
+                        name = "System",
+                        message = message,
+                        showChat = !API.IsPauseMenuActive()
+                    });
+
+                    string nuiMessage = jsonBuilder.Build();
+
+                    API.SendNuiMessage(nuiMessage);
+                    return true;   
+                }));
 
             Instance.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
             {

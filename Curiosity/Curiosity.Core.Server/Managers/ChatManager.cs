@@ -109,6 +109,15 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            Instance.ExportDictionary.Add("AddToSystemLog", new Func<string, bool>(
+                (message) =>
+                {
+                    OnSystemMessage(message);
+
+                    return true;
+                }
+            ));
+
             Instance.ExportDictionary.Add("AddToServerLog", new Func<string, bool>(
                 (message) =>
                 {
@@ -149,6 +158,11 @@ namespace Curiosity.Core.Server.Managers
 
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
             user.Send("chat:receive", "[P-LOG]", "SERVER", message, "log", string.Empty);
+        }
+
+        public static void OnSystemMessage(string message)
+        {
+            EventSystem.GetModule().SendAll("chat:receive", "[S-LOG]", "SERVER", message, "system", string.Empty);
         }
 
         public static void OnLogMessage(string message)
