@@ -6,6 +6,8 @@ using NativeUI;
 
 namespace Curiosity.Core.Client.Managers
 {
+    public delegate void PlayerPassiveCooldownEvent(bool isPassiveCooldownActive);
+
     public class PlayerOptionsManager : Manager<PlayerOptionsManager>
     {
         DateTime passiveModeDisabled;
@@ -21,6 +23,8 @@ namespace Curiosity.Core.Client.Managers
         public bool WeaponsDisabled = false;
         public ePlayerJobs CurrentJob = ePlayerJobs.UNEMPLOYED;
         NotificationManager NotificationManager => NotificationManager.GetModule();
+        
+        public static event PlayerPassiveCooldownEvent OnPlayerPassiveCooldownEvent;
 
         int jobStateBagHandler = 0;
         int wantedStateBagHandler = 0;
@@ -189,6 +193,8 @@ namespace Curiosity.Core.Client.Managers
 
                 IsPassiveModeCooldownEnabled = false;
                 Interface.Notify.Info($"Passive Mode can now be changed.");
+
+                OnPlayerPassiveCooldownEvent?.Invoke(IsPassiveModeCooldownEnabled);
             }
             else
             {

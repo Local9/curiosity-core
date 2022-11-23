@@ -120,6 +120,14 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.RefreshIndex();
 
             MenuPool.Add(menuMain);
+
+            PlayerOptionsManager.OnPlayerPassiveCooldownEvent += PlayerOptionsManager_OnPlayerPassiveCooldownEvent;
+        }
+
+        private void PlayerOptionsManager_OnPlayerPassiveCooldownEvent(bool isPassiveCooldownActive)
+        {
+            miPassive.Enabled = !isPassiveCooldownActive;
+            miPassive.Text = playerOptionsManager.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
         }
 
         private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
@@ -199,9 +207,6 @@ namespace Curiosity.Core.Client.Interface.Menus
                     menuMain.SetBannerType(new Sprite("commonmenu", "interaction_bgd", new Point(0, 0), new Size(431, 107)));
 
                 await BaseScript.Delay(1000);
-
-                miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
-                miPassive.Enabled = !playerOptionsManager.IsPassiveModeCooldownEnabled;
                 return;
             }
 
