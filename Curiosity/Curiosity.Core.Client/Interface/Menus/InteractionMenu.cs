@@ -207,6 +207,9 @@ namespace Curiosity.Core.Client.Interface.Menus
                     menuMain.SetBannerType(new Sprite("commonmenu", "interaction_bgd", new Point(0, 0), new Size(431, 107)));
 
                 await BaseScript.Delay(1000);
+
+                miPassive.Text = playerOptionsManager.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
+                miPassive.Enabled = !playerOptionsManager.IsPassiveModeCooldownEnabled;
                 return;
             }
 
