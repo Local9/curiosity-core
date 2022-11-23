@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eDecorType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedProps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eRole.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\StateBagKey.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Base64Extensions.cs" />
