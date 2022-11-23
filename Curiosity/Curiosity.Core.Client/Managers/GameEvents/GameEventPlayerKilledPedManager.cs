@@ -37,6 +37,8 @@
                 SetLocalPlayerAsGhost(false);
                 
                 Game.Player.WantedLevel = 3;
+
+                Interface.Notify.Info($"Passive Mode Disabled<br />You killed a cop you fool.");
             }
         }
 
