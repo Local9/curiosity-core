@@ -147,8 +147,8 @@ namespace Curiosity.Core.Client.Interface.Menus
             // MID
 
             // BOTTOM
-            miPassive.Text = Cache.Character.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
-            miPassive.Description = Cache.Character.IsPassive ? "Disabling passive mode will mean people can attack you." : "Enabling passive mode will mean people cannot attack you.";
+            miPassive.Text = playerOptionsManager.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
+            miPassive.Description = playerOptionsManager.IsPassive ? "Disabling passive mode will mean people can attack you." : "Enabling passive mode will mean people cannot attack you.";
             miPassive.Enabled = !playerOptionsManager.IsPassiveModeCooldownEnabled;
 
             miKillYourself.Enabled = playerOptionsManager.IsKillSelfEnabled;

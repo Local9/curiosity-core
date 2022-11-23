@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core.UI;
 using Curiosity.Framework.Client.Extensions;
+using Curiosity.Framework.Client.Managers.Events;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
@@ -19,11 +20,11 @@ namespace Curiosity.Framework.Client.Managers
         Camera _camera;
         UIMenu _menu;
 
-        Ped _clonePed;
-
         public async override void Begin()
         {
             Event("onResourceStop", new Action<string>(OnResourceStop));
+
+            GtaEventsManager.PlayerJoined += OnPlayerJoined;
 
             _playerSpawned = Game.Player.State.Get("player:spawned") ?? false;
             if (!_playerSpawned)
@@ -35,7 +36,7 @@ namespace Curiosity.Framework.Client.Managers
                 ScreenInterface.CloseLoadingScreen();
                 ScreenInterface.StartLoadingMessage("PM_WAIT");
             }
-            
+
             // Get last position
             float x = GetResourceKvpFloat("pos:x");
             float y = GetResourceKvpFloat("pos:y");
@@ -44,6 +45,11 @@ namespace Curiosity.Framework.Client.Managers
             _heading = GetResourceKvpFloat("pos:h");
 
             OnRequestCharactersAsync();
+        }
+
+        private async void OnPlayerJoined()
+        {
+            
         }
 
         private void OnResourceStop(string resourceName)
@@ -156,17 +162,6 @@ namespace Curiosity.Framework.Client.Managers
 
             GameInterface.Hud.MenuPool.Add(_menu);
             GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
-
-            Vector3 camPos = GameplayCamera.Position;
-            _clonePed = await World.CreatePed(PedHash.FreemodeMale01, camPos);
-            _clonePed.IsPositionFrozen = true;
-            _clonePed.IsInvincible = true;
-            camPos = Vector3.Lerp(GameplayCamera.Position, Game.PlayerPed.Position, 0.5f);
-            _clonePed.Position = camPos + new Vector3(0, 0, -1f);
-            // _clonePed.Rotation = GameplayCamera.Rotation;
-            _clonePed.Heading = GameplayCamera.RelativeHeading + 180f;
-            NetworkSetEntityVisibleToNetwork(_clonePed.Handle, false);
-            ClonePedToTarget(Game.PlayerPed.Handle, _clonePed.Handle);
         }
 
         private async Task OnMouseControl()
@@ -192,16 +187,6 @@ namespace Curiosity.Framework.Client.Managers
             //SetInputExclusive(0, 238);
             //EnableControlAction(0, 241, true);
             //EnableControlAction(0, 242, true);
-
-            if (_clonePed is not null)
-            {
-                Vector3 camPos = GameplayCamera.Position;
-                camPos = Vector3.Lerp(GameplayCamera.Position, Game.PlayerPed.Position, 0.5f);
-                Vector3 offset = GetObjectOffsetFromCoords(camPos.X, camPos.Y, camPos.Z, GameplayCamera.RelativeHeading + 180f, -.5f, 0f, -0.5f);
-                _clonePed.Position = offset;
-                _clonePed.Rotation = -GameplayCamera.Rotation;
-                _clonePed.Heading = GameplayCamera.RelativeHeading + 180f;
-            }
 
             bool isMenuHovered = IsMenuHovered();
 
