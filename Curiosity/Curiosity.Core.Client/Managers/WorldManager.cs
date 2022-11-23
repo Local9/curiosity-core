@@ -102,7 +102,7 @@ namespace Curiosity.Core.Client.Managers
                 vehiclesToSuppress.Add(modelHash);
             }
 
-            ToggleDispatch(false); // turn off all dispatch
+            ToggleDispatch(true); // dispatch is enabled
             DistantCopCarSirens(false);
         }
 
@@ -437,6 +437,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!serverSpawned && !vehicle.LockStatus.Equals(VehicleLockStatus.LockedForPlayer))
                 {
                     vehicle.LockStatus = VehicleLockStatus.LockedForPlayer;
+                    SetVehicleIsConsideredByPlayer(vehicle.Handle, false);
 
                     if (vehicle.Driver == Game.PlayerPed && !vehicle.Model.IsTrain)
                     {

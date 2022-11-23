@@ -108,6 +108,8 @@ namespace Curiosity.Core.Client.Managers
                 Instance.DiscordRichPresence.SmallAssetText = "Police Officer";
                 Instance.DiscordRichPresence.Commit();
 
+                SetPoliceIgnorePlayer(PlayerPedId(), false);
+
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
                 await BaseScript.Delay(100);
@@ -125,6 +127,7 @@ namespace Curiosity.Core.Client.Managers
                 Instance.DetachTickHandler(OnDisablePoliceAndDispatch);
 
                 Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                SetPoliceIgnorePlayer(PlayerPedId(), false);
 
                 WasOfficer = false;
                 Instance.DiscordRichPresence.Status = "Roaming around";
@@ -134,7 +137,7 @@ namespace Curiosity.Core.Client.Managers
                 RemoveStateBagChangeHandler(isPassiveStateBagHandler);
                 RemoveStateBagChangeHandler(jobStateBagHandler);
 
-                ToggleDispatch(false);
+                ToggleDispatch(true);
 
                 await BaseScript.Delay(100);
             }
