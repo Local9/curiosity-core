@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eKnockOffVehicle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\eNmMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedComponents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedConfigFlags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedProps.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePedType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\ePopulationType.cs" />
