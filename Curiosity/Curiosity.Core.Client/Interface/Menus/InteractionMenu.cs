@@ -2,6 +2,7 @@
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
+using System.Drawing;
 
 namespace Curiosity.Core.Client.Interface.Menus
 {
@@ -142,10 +143,16 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.RefreshIndex();
             menuMain.CurrentSelection = currentIndex;
 
+            if (!playerOptionsManager.IsPassive)
+                menuMain.SetBannerType(new UIResRectangle(new Point(0, 0), new Size(431, 107), Color.FromArgb(255, 180, 0, 0)));
+
+            if (playerOptionsManager.IsPassive)
+                menuMain.SetBannerType(new Sprite("commonmenu", "interaction_bgd", new Point(0, 0), new Size(431, 107)));
+
             // TOP
             UpdateGpsMenuItem(true);
             // MID
-
+            
             // BOTTOM
             miPassive.Text = playerOptionsManager.IsPassive ? "Disable Passive Mode" : "Enable Passive Mode";
             miPassive.Description = playerOptionsManager.IsPassive ? "Disabling passive mode will mean people can attack you." : "Enabling passive mode will mean people cannot attack you.";
@@ -180,8 +187,16 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 if (playerOptionsManager.IsPassiveModeCooldownEnabled) return;
 
-                playerOptionsManager.TogglePlayerPassive(!Cache.Character.IsPassive);
+                bool isPassive = !Cache.Character.IsPassive;
+
+                playerOptionsManager.TogglePlayerPassive(isPassive);
                 miPassive.Enabled = false;
+
+                if (!isPassive)
+                    menuMain.SetBannerType(new UIResRectangle(new Point(0, 0), new Size(431, 107), Color.FromArgb(255, 180, 0, 0)));
+
+                if (isPassive)
+                    menuMain.SetBannerType(new Sprite("commonmenu", "interaction_bgd", new Point(0, 0), new Size(431, 107)));
 
                 await BaseScript.Delay(1000);
 
