@@ -88,7 +88,6 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
                 API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
                 API.NetworkSetFriendlyFireOption(true);
-                API.SetMaxWantedLevel(5);
                 Logger.Debug($"Passive Mode Disabled");
             }
 
@@ -97,7 +96,6 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
                 API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
                 API.NetworkSetFriendlyFireOption(false);
-                API.SetMaxWantedLevel(0);
                 Logger.Debug($"Passive Mode Enabled");
             }
 
