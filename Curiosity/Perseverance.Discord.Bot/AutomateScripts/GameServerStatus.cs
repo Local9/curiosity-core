@@ -44,7 +44,6 @@ namespace Perseverance.Discord.Bot.AutomateScripts
                 }
                 catch (Exception ex)
                 {
-                    // Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [GameServerStatus]\n{ex.Message}\n{ex.StackTrace}");
                     await _discordClient.UpdateStatusAsync(activity);
                     return;
                 }
