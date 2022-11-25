@@ -10,6 +10,7 @@ namespace Perseverance.Discord.Bot.AutomateScripts
         static Timer _timer;
         static DiscordClient _discordClient;
         static List<Server> servers;
+        static int serverIndex = 0;
         
         public GameServerStatus(DiscordClient client)
         {
@@ -30,30 +31,32 @@ namespace Perseverance.Discord.Bot.AutomateScripts
             try
             {
                 string serverInformation = string.Empty;
-                foreach (Server server in servers)
+                
+                Server server = servers[serverIndex];
+                serverIndex++;
+                
+                DiscordActivity activity = new();
+                activity.Name = "Server Offline";
+                activity.ActivityType = ActivityType.ListeningTo;
+                try
                 {
-                    DiscordActivity activity = new();
-                    activity.Name = "Server Offline";
-                    activity.ActivityType = ActivityType.ListeningTo;
-                    try
-                    {
-                        serverInformation = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/info.json");
-                    }
-                    catch (Exception ex)
-                    {
-                        // Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [GameServerStatus]\n{ex.Message}\n{ex.StackTrace}");
-                        await _discordClient.UpdateStatusAsync(activity);
-                        return;
-                    }
-
-                    string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/players.json");
-
-                    List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players);
-                    CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
-                    activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
-
-                    await _discordClient.UpdateStatusAsync(activity);
+                    serverInformation = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/info.json");
                 }
+                catch (Exception ex)
+                {
+                    // Program.SendMessage(Program.BOT_ERROR_TEXT_CHANNEL, $"CRITICAL EXCEPTION [GameServerStatus]\n{ex.Message}\n{ex.StackTrace}");
+                    await _discordClient.UpdateStatusAsync(activity);
+                    return;
+                }
+
+                string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/players.json");
+
+                List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players);
+                CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
+                activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
+
+                await _discordClient.UpdateStatusAsync(activity);
+
             }
             catch (Exception ex)
             {
