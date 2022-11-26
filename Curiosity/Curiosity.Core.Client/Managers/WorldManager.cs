@@ -331,8 +331,8 @@ namespace Curiosity.Core.Client.Managers
             else
             {
                 SetDeepOceanScaler(0.0f);
-                Function.Call((Hash)0x7A2D8AD0A9EB9C3F, "ICE_FOOTSTEPS");
-                Function.Call((Hash)0x7A2D8AD0A9EB9C3F, "SNOW_FOOTSTEPS");
+                ReleaseNamedScriptAudioBank("ICE_FOOTSTEPS");
+                ReleaseNamedScriptAudioBank("SNOW_FOOTSTEPS");
                 ReleaseScriptAudioBank();
                 // ReleaseScriptAudioBank("SNOW_FOOTSTEPS");
             }
