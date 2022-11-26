@@ -16,13 +16,8 @@ namespace Perseverance.Discord.Bot.Config
             if (string.IsNullOrEmpty(json))
                 throw new Exception("Unable to load config.json");
 
-            // This warning is FUCKING STUPID
-#pragma warning disable CS8601 // Possible null reference assignment.
             _configuration = JsonConvert.DeserializeObject<Configuration>(json);
-#pragma warning restore CS8601 // Possible null reference assignment.
 
-            // AND HOW WILL THIS EVER BE NULL?! I'M THROWING AN ERROR IF NOTHING RETURNS!
-            // Fucking stupid, really fucking stupid
             return _configuration;
         }
 
