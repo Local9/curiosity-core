@@ -50,7 +50,13 @@ namespace Perseverance.Discord.Bot.AutomateScripts
 
                 string players = await Utils.HttpTools.GetUrlResultAsync($"http://{server.IP}/players.json");
 
-                List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players);
+                if (string.IsNullOrEmpty(players))
+                {
+                    await _discordClient.UpdateStatusAsync(activity);
+                    return;
+                }
+
+                List<CitizenFxPlayer> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayer>>(players) ?? new();
                 CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
                 activity.Name = $"{lst.Count}/{info.Variables["sv_maxClients"]} players on {server.Label}";
 
