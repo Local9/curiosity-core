@@ -10,7 +10,7 @@
     public delegate void EntityDamagedEvent(int entity, int attacker, uint weaponHash, bool isMeleeDamage);
     public delegate void PlayerJoined();
 
-    public class GtaEventsManager : Manager<GtaEventsManager>
+    public class InternalGameEvents : Manager<InternalGameEvents>
     {
         public const string damageEventName = "DamageEvents";
 
