@@ -19,7 +19,7 @@ namespace Curiosity.Core.Client.Discord
             string serverAddress = API.GetCurrentServerEndpoint();
 
             API.SetDiscordRichPresenceAction(0, "Join Server", $"fivem://connect/{serverAddress}");
-            API.SetDiscordRichPresenceAction(1, "Visit Forums", "https://forums.lifev.net");
+            API.SetDiscordRichPresenceAction(1, "Visit Wiki", "https://wiki.lifev.net");
         }
 
         public void Commit()
