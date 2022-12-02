@@ -12,6 +12,7 @@ namespace Curiosity.Framework.Client.Managers.GameWorld
         {
             NetworkClearClockTimeOverride();
             NetworkGetGlobalMultiplayerClock(ref hour, ref minute, ref second);
+            NetworkOverrideClockTime(hour, minute, second);
             Logger.Debug($"BEGIN: NetworkGetGlobalMultiplayerClock - {hour:00}:{minute:00}:{second:00}");
         }
 
