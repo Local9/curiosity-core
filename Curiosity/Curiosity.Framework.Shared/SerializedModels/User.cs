@@ -3,13 +3,11 @@ using Curiosity.Framework.Client.Utils;
 #endif
 
 using Curiosity.Framework.Shared.Enums;
-using FxEvents.Shared.Attributes;
 
 #nullable enable
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serialization]
     public partial class User
     {
         public int Handle { get; internal set; }
@@ -20,7 +18,6 @@ namespace Curiosity.Framework.Shared.SerializedModels
 
 #if CLIENT
         
-        [Ignore]
         [JsonIgnore]
         public Character ActiveCharacter { get; internal set; }
 

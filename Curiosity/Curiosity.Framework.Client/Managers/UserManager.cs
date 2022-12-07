@@ -24,7 +24,7 @@ namespace Curiosity.Framework.Client.Managers
         {
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
-            GtaEventsManager.PlayerJoined += OnPlayerJoined;
+            InternalGameEvents.PlayerJoined += OnPlayerJoined;
 
             _playerSpawned = Game.Player.State.Get("player:spawned") ?? false;
             if (!_playerSpawned)
@@ -36,6 +36,7 @@ namespace Curiosity.Framework.Client.Managers
                 ScreenInterface.CloseLoadingScreen();
                 ScreenInterface.StartLoadingMessage("PM_WAIT");
             }
+            
 
             // Get last position
             float x = GetResourceKvpFloat("pos:x");
@@ -93,8 +94,66 @@ namespace Curiosity.Framework.Client.Managers
 
             Session.User = user;
 
-            CharacterCreatorManager characterCreatorManager = CharacterCreatorManager.GetModule();
-            // characterCreatorManager.OnCreateNewCharacter(new CharacterSkin());
+            //CharacterCreatorManager characterCreatorManager = CharacterCreatorManager.GetModule();
+            //characterCreatorManager.OnCreateNewCharacter(new CharacterSkin());
+
+            RegisterCommand("paint", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                if (!Game.PlayerPed.IsInVehicle())
+                {
+                    Logger.Debug($"Player is not in a vehicle");
+                    return;
+                }
+
+                if (args.Count == 0)
+                {
+                    Logger.Debug($"No color specified");
+                    return;
+                }
+
+                string paint = args[0].ToString();
+
+                if ("prim" != paint && "sec" != paint)
+                {
+                    Logger.Debug($"Invalid paint type specified: {paint}");
+                    return;
+                }
+
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                vehicle.Mods.InstallModKit();
+
+                int red = 0;
+                int green = 0;
+                int blue = 0;
+
+                if (int.TryParse(args[1].ToString(), out int _red))
+                    red = _red;
+                
+                if (int.TryParse(args[2].ToString(), out int _green))
+                    green = _green;
+                
+                if (int.TryParse(args[3].ToString(), out int _blue))
+                    blue = _blue;
+
+                Color color = Color.FromArgb(255, red, green, blue);
+
+                if ("prim" == paint)
+                {
+                    Logger.Debug($"Painting vehicle primary color to {color}");
+                    vehicle.Mods.CustomPrimaryColor = color;
+                    return;
+                }
+                if ("sec" == paint)
+                {
+                    Logger.Debug($"Setting secondary color to {color}");
+                    vehicle.Mods.CustomSecondaryColor = color;
+                    return;
+                }
+
+                Logger.Debug($"Invalid paint type specified");
+
+            }), false);
+
 
             await Game.Player.ChangeModel(PedHash.FreemodeMale01);
             Game.PlayerPed.SetDefaultVariation();
@@ -108,60 +167,61 @@ namespace Curiosity.Framework.Client.Managers
             if (vehicleHash == 0)
                 vehicleHash = GetHashKey("tenf");
 
-            //_vehicle = await World.CreateVehicle(vehicleHash, Game.PlayerPed.Position, Game.PlayerPed.Heading);
+            _vehicle = await World.CreateVehicle(vehicleHash, Game.PlayerPed.Position, Game.PlayerPed.Heading);
 
-            //if (_vehicle != null)
-            //{
-            //    if (_vehicle.Exists())
-            //    {
-            //        DecorSetInt(_vehicle.Handle, "Player_Vehicle", -1);
-            //        Game.PlayerPed.SetIntoVehicle(_vehicle, VehicleSeat.Driver);
-            //        Logger.Debug($"Vehicle Created");
-            //    }
-            //}
+            if (_vehicle != null)
+            {
+                if (_vehicle.Exists())
+                {
+                    DecorSetInt(_vehicle.Handle, "Player_Vehicle", -1);
+                    Game.PlayerPed.SetIntoVehicle(_vehicle, VehicleSeat.Driver);
+                    Logger.Debug($"Vehicle Created");
+                }
+            }
 
+            Screen.Fading.FadeIn(0);
 
             if (!_playerSpawned)
                 await LoadTransition.OnDownAsync();
 
             Game.Player.State.Set("player:spawned", true, true);
 
-            Logger.Info($"User Database: [{_user.Handle}] {_user.Username}#{_user.UserID} with {_user.Characters.Count} Character(s)");
+            //Logger.Info($"User Database: [{_user.Handle}] {_user.Username}#{_user.UserID} with {_user.Characters.Count} Character(s)");
 
-            // Test Code
-            //_camera = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", true));
-            //_camera.IsActive = true;
-            //_camera.StopShaking();
-            //PointCamAtCoord(_camera.Handle, _vehicle.Position.X, _vehicle.Position.Y, _vehicle.Position.Z);
-            //N_0xf55e4046f6f831dc(_camera.Handle, 3f);
-            //N_0xe111a7c0d200cbc5(_camera.Handle, 1f);
-            //SetCamDofFnumberOfLens(_camera.Handle, 1.2f);
-            //SetCamDofMaxNearInFocusDistanceBlendLevel(_camera.Handle, 1f);
-            //World.RenderingCamera = _camera;
-            //RenderScriptCams(true, true, 3000, true, false);
-            
-            //_camera.PointAt(_vehicle);
+            //// Test Code
+            ////_camera = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", true));
+            ////_camera.IsActive = true;
+            ////_camera.StopShaking();
+            ////PointCamAtCoord(_camera.Handle, _vehicle.Position.X, _vehicle.Position.Y, _vehicle.Position.Z);
+            ////N_0xf55e4046f6f831dc(_camera.Handle, 3f);
+            ////N_0xe111a7c0d200cbc5(_camera.Handle, 1f);
+            ////SetCamDofFnumberOfLens(_camera.Handle, 1.2f);
+            ////SetCamDofMaxNearInFocusDistanceBlendLevel(_camera.Handle, 1f);
+            ////World.RenderingCamera = _camera;
+            ////RenderScriptCams(true, true, 3000, true, false);
 
-            SetCursorLocation(0.5f, 0.5f);
-            SetCursorSprite(3);
+            ////_camera.PointAt(_vehicle);
 
-            Instance.AttachTickHandler(OnMouseControl);
-            Point offset = new Point(50, 50);
-            _menu = new UIMenu("Example", "Test", offset);
+            //SetCursorLocation(0.5f, 0.5f);
+            //SetCursorSprite(3);
 
-            UIMenuItem item1 = new UIMenuItem("Item 1");
-            UIMenuItem item2 = new UIMenuItem("Item 2");
-            _menu.AddItem(item1);
-            _menu.AddItem(item2);
+            //Instance.AttachTickHandler(OnMouseControl);
+            //Point offset = new Point(50, 50);
+            //_menu = new UIMenu("Example", "Test", offset);
 
-            _menu.OnItemSelect += (sender, item, index) =>
-            {
-                Screen.ShowNotification($"Selected item {index}");
-                Logger.Debug($"Item {index} selected");
-            };
+            //UIMenuItem item1 = new UIMenuItem("Item 1");
+            //UIMenuItem item2 = new UIMenuItem("Item 2");
+            //_menu.AddItem(item1);
+            //_menu.AddItem(item2);
 
-            GameInterface.Hud.MenuPool.Add(_menu);
-            GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
+            //_menu.OnItemSelect += (sender, item, index) =>
+            //{
+            //    Screen.ShowNotification($"Selected item {index}");
+            //    Logger.Debug($"Item {index} selected");
+            //};
+
+            //GameInterface.Hud.MenuPool.Add(_menu);
+            //GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
         }
 
         private async Task OnMouseControl()

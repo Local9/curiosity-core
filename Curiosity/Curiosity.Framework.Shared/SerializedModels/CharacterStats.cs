@@ -1,23 +1,13 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class CharacterStats
     {
-        [Ignore]
         string MP0_FLYING_ABILITY = "MP0_FLYING_ABILITY";
-        [Ignore]
         string MP0_LUNG_CAPACITY = "MP0_LUNG_CAPACITY";
-        [Ignore]
         string MP0_SHOOTING_ABILITY = "MP0_SHOOTING_ABILITY";
-        [Ignore]
         string MP0_STAMINA = "MP0_STAMINA";
-        [Ignore]
         string MP0_STEALTH_ABILITY = "MP0_STEALTH_ABILITY";
-        [Ignore]
         string MP0_STRENGTH = "MP0_STRENGTH";
-        [Ignore]
         string MP0_WHEELIE_ABILITY = "MP0_WHEELIE_ABILITY";
 
         int _stamina;
@@ -168,12 +158,10 @@ namespace Curiosity.Framework.Shared.SerializedModels
         }
 
 #if SERVER
-        [Ignore]
         void SetStatValue(string stat, int value) { }
 #endif
 
 #if CLIENT
-        [Ignore]
         void SetStatValue(string stat, int value)
         {
             uint hash = (uint)API.GetHashKey(stat);

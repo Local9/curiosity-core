@@ -1,10 +1,8 @@
 ﻿#nullable enable
 
-using FxEvents.Shared.Attributes;
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serialization]
     public partial class Identifiers
     {
         public string? Steam { get; set; }

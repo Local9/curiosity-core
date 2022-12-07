@@ -26,7 +26,14 @@ namespace Curiosity.Framework.Server.Managers
             Event("playerDropped", new Action<Player, string>(OnPlayerDropped));
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
+            Event("helloWorld", new Action(OnHelloWorld));
+
             EventDispatcher.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
+        }
+
+        private void OnHelloWorld()
+        {
+            Logger.Debug($"Hello World: {GetInvokingResource()}");
         }
 
         private async void OnPlayerConnectingAsync([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
@@ -144,6 +151,8 @@ namespace Curiosity.Framework.Server.Managers
                         deferrals.done();
                     }));
                 }
+
+                Logger.Debug($"Resource: {GetCurrentResourceName()} was invoked by {player.Name} ({player.Handle}) via {GetInvokingResource()}");
             }
             catch (Exception ex)
             {
@@ -208,7 +217,7 @@ namespace Curiosity.Framework.Server.Managers
             {
                 if (client.Handle != serverId) return null;
 
-                SetPlayerRoutingBucket($"{client.Handle}", BASE_LOGIN_BUCKET + client.Handle);
+                // SetPlayerRoutingBucket($"{client.Handle}", BASE_LOGIN_BUCKET + client.Handle);
 
                 User userResult = client.User;
 

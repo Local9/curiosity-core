@@ -1,8 +1,5 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class CameraInformation
     {
         [JsonProperty("position")]
@@ -19,7 +16,6 @@ namespace Curiosity.Framework.Shared.SerializedModels
 
         public CameraInformation() { }
 
-        [Ignore]
         public override string ToString()
         {
             return $"P: {Position}, R: {Rotation}, D: {Direction}, F: {FieldOfView}f";

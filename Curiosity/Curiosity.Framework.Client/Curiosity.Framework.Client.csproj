@@ -7,7 +7,7 @@
     <LangVersion>latest</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Configurations>Debug;Release;CLIENT</Configurations>
-    <BaseOutputPath>Y:\GTA\FXServer\curiosity\resources\[curiosity-framework]\curiosity</BaseOutputPath>
+    <BaseOutputPath></BaseOutputPath>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
@@ -39,7 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\_vendor\fx-events\src\generator\Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\_vendor\FxEvents\FxEvents\FxEvents.Client\FxEvents.Client.csproj" />
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj" />
   </ItemGroup>
@@ -49,5 +48,9 @@
   </ItemGroup>
   
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /f /r /y /i bin\CLIENT Y:\GTA\FXServer\curiosity\resources\[curiosity-framework]\curiosity\client" />
+  </Target>
 
 </Project>

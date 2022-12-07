@@ -1,6 +1,5 @@
 ﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class CharacterOutfit
     {
         public string? Name;

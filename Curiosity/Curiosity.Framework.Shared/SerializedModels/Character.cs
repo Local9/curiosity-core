@@ -1,9 +1,7 @@
 ﻿using FxEvents;
-using FxEvents.Shared.Attributes;
 
 namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serialization]
     public partial class Character
     {
         [JsonProperty("isActive")]
@@ -22,13 +20,11 @@ namespace Curiosity.Framework.Shared.SerializedModels
         public CharacterStats Stats { get; internal set; }
 
 #if CLIENT
-        [Ignore]
         public async Task OnUpdateCharacterAsync()
         {
             
         }
 
-        [Ignore]
         public async Task<bool> OnSaveCharacterAsync()
         {
             return await EventDispatcher.Get<bool>("character:save", this);

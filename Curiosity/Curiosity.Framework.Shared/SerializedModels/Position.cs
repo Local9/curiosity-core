@@ -1,8 +1,5 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serialization]
     public partial class Position
     {
         public float X { get; set; }
@@ -60,7 +57,6 @@ namespace Curiosity.Framework.Shared.SerializedModels
         }
     }
 
-    [Serialization]
     public partial class RotatablePosition
     {
         public float X { get; set; }

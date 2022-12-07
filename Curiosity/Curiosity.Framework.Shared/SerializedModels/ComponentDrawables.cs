@@ -1,6 +1,5 @@
 ﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class ComponentDrawables
     {
         [JsonProperty("face")]

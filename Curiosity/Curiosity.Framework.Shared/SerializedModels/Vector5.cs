@@ -1,8 +1,5 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serialization]
     public partial class Vector5
     {
         public Vector3 Vector3 { get; set; }

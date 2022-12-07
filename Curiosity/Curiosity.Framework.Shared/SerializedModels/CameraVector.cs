@@ -1,6 +1,4 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
     [Serializable]
     public partial class CameraVector
@@ -16,7 +14,6 @@ namespace Curiosity.Framework.Shared.SerializedModels
 
         public CameraVector() { }
 
-        [Ignore]
         public override string ToString()
         {
             return $"({X}f, {Y}f, {Z}f)";

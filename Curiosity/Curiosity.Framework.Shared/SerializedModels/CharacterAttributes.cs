@@ -1,6 +1,5 @@
 ﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class A2
     {
         public int Style;
@@ -15,7 +14,6 @@
         }
     }
 
-    [Serializable]
     public partial class A3 : A2
     {
         public int[] Color = new int[2] {0, 0};
@@ -30,7 +28,6 @@
         }
     }
 
-    [Serializable]
     public partial class Hair
     {
         public int Style;
@@ -45,7 +42,6 @@
         }
     }
 
-    [Serializable]
     public partial class Eye
     {
         public int Style;
@@ -58,7 +54,6 @@
         }
     }
 
-    [Serializable]
     public partial class Ears
     {
         public int Style;

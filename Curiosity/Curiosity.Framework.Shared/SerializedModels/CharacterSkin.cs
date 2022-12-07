@@ -1,14 +1,10 @@
-﻿using FxEvents.Shared.Attributes;
-
-namespace Curiosity.Framework.Shared.SerializedModels
+﻿namespace Curiosity.Framework.Shared.SerializedModels
 {
-    [Serializable]
     public partial class CharacterSkin
     {
         [JsonProperty("gender")]
         public int Gender { get; internal set; }
 
-        [Ignore]
         public bool IsMale => Gender == 0;
 
         [JsonProperty("model")]
