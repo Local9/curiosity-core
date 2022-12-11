@@ -27,13 +27,12 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
             _menu = new UIMenu(Game.Player.Name, "Interactive Menu", GameInterface.Hud.MenuOffset)
             {
                 EnableAnimation = false,
-                BuildingAnimation = MenuBuildingAnimation.NONE,
                 MouseControlsEnabled = false,
+                ControlDisablingEnabled = false,
+                MouseWheelControlEnabled = true,
+                BuildingAnimation = MenuBuildingAnimation.NONE,
                 Glare = true
             };
-            _menu.EnableAnimation = false;
-            _menu.BuildingAnimation = MenuBuildingAnimation.NONE;
-            _menu.MouseControlsEnabled = false;
 
             _menu.AddItem(_menuListGpsLocations);
             _menuListGpsLocations.SetLeftBadge(BadgeIcon.GLOBE_WHITE);

@@ -12,6 +12,14 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu.Sub
         internal void CreateMenu(UIMenu menu)
         {
             _menu = menu;
+
+            _menu.EnableAnimation = false;
+            _menu.MouseControlsEnabled = false;
+            _menu.ControlDisablingEnabled = false;
+            _menu.MouseWheelControlEnabled = true;
+            _menu.BuildingAnimation = MenuBuildingAnimation.NONE;
+            _menu.Glare = true;
+
             _menu.AddItem(_menuListMood);
             _menu.AddItem(_menuListWalkingStyle);
         }
