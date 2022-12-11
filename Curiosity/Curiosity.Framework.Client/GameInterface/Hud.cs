@@ -10,7 +10,8 @@ namespace Curiosity.Framework.Client.GameInterface
     public class Hud
     {
         public static MenuPool MenuPool;
-        
+        public static PointF MenuOffset => new PointF(25f, 25f);
+
         public Hud()
         {
             MenuPool = new MenuPool();
