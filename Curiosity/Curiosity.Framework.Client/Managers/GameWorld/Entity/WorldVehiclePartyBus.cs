@@ -9,9 +9,23 @@
 
         int _currentAnimation;
 
+        int _stateBagHandler;
+
         public WorldVehiclePartyBus(Vehicle vehicle) : base(vehicle)
         {
             Instance.AttachTickHandler(OnPartyBusAsync);
+            _stateBagHandler = AddStateBagChangeHandler("VEHICLE_ANIMATION", $"entity:{Vehicle.NetworkId}", new Action<string, string, dynamic, int, bool>(OnVehicleAnimationStateBagChange));
+        }
+
+        private void OnVehicleAnimationStateBagChange(string bag, string key, dynamic animation, int reserved, bool replicated)
+        {
+            // Instance.Logger.Debug($"bag: {bag}, key: {key}, animation: {animation}, reserved: {reserved}, replicated: {replicated}");
+            if (_partyBusScaleform is null) return;
+
+            string netId = bag.Split(':').Last();
+            if (Vehicle.NetworkId.ToString() != netId) return;
+
+            _partyBusScaleform.CallFunction("SHOW_ANIMATION", (int)animation, false);
         }
 
         public async Task OnPartyBusAsync()
@@ -60,14 +74,16 @@
                     SetTextRenderId(GetDefaultScriptRendertargetRenderId());
                 }
 
-                if (Game.IsControlJustPressed(0, Control.CharacterWheel))
+                if (Game.IsControlJustPressed(0, Control.CharacterWheel) && Game.PlayerPed == Vehicle.Driver)
                 {
                     _currentAnimation++;
                     
                     if (_currentAnimation > 3)
                         _currentAnimation = 0;
-                    
-                    _partyBusScaleform.CallFunction("SHOW_ANIMATION", _currentAnimation, false);
+
+                    Vehicle.State.Set("VEHICLE_ANIMATION", _currentAnimation, true);
+
+                    //_partyBusScaleform.CallFunction("SHOW_ANIMATION", _currentAnimation, false);
                 }
             }
             catch(Exception ex)

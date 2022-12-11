@@ -25,6 +25,21 @@ namespace Curiosity.Framework.Client.Managers.GameWorld
                         _worldVehicles.Add(vehicle.Handle, new WorldVehiclePartyBus(vehicle));
                 }
             }
+
+            Dictionary<int, WorldVehicle> worldVehicles = new(_worldVehicles);
+            foreach (KeyValuePair<int, WorldVehicle> worldVehicle in worldVehicles)
+            {
+                if (!worldVehicle.Value.Vehicle.Exists())
+                {
+                    WorldVehicle vehicle = worldVehicle.Value;
+
+                    if (vehicle.Vehicle.Model.Hash == HASH_PARTYBUS)
+                        vehicle = (WorldVehiclePartyBus)vehicle;
+
+                    vehicle.Dispose();
+                    _worldVehicles.Remove(worldVehicle.Key);
+                }
+            }
         }
     }
 }
