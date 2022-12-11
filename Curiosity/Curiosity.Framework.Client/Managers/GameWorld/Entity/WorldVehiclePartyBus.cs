@@ -6,6 +6,7 @@
         Prop _propBattlePartyBusScreenProp;
         int _namedRenderTargetId = -1;
         Scaleform _partyBusScaleform;
+        string _renderTargetName;
 
         int _currentAnimation;
 
@@ -14,7 +15,11 @@
         public WorldVehiclePartyBus(Vehicle vehicle) : base(vehicle)
         {
             Instance.AttachTickHandler(OnPartyBusAsync);
-            _stateBagHandler = AddStateBagChangeHandler("VEHICLE_ANIMATION", $"entity:{Vehicle.NetworkId}", new Action<string, string, dynamic, int, bool>(OnVehicleAnimationStateBagChange));
+
+            int networkId = Vehicle.NetworkId;
+            _renderTargetName = $"PBus_Screen";
+            
+            _stateBagHandler = AddStateBagChangeHandler("VEHICLE_ANIMATION", $"entity:{networkId}", new Action<string, string, dynamic, int, bool>(OnVehicleAnimationStateBagChange));
         }
 
         private void OnVehicleAnimationStateBagChange(string bag, string key, dynamic animation, int reserved, bool replicated)
@@ -73,18 +78,6 @@
                     DrawScaleformMovie(_partyBusScaleform.Handle, 0.4f, 0.045f, 0.8f, 0.09f, 255, 255, 255, 255, 0);
                     SetTextRenderId(GetDefaultScriptRendertargetRenderId());
                 }
-
-                if (Game.IsControlJustPressed(0, Control.CharacterWheel) && Game.PlayerPed == Vehicle.Driver)
-                {
-                    _currentAnimation++;
-                    
-                    if (_currentAnimation > 3)
-                        _currentAnimation = 0;
-
-                    Vehicle.State.Set("VEHICLE_ANIMATION", _currentAnimation, true);
-
-                    //_partyBusScaleform.CallFunction("SHOW_ANIMATION", _currentAnimation, false);
-                }
             }
             catch(Exception ex)
             {
@@ -96,10 +89,10 @@
         private void SetupNamedRenderTarget()
         {
             if (_namedRenderTargetId > 0) return;
+
+            if (IsNamedRendertargetRegistered(_renderTargetName)) return;
             
-            if (IsNamedRendertargetRegistered("PBus_Screen")) return;
-            
-            RegisterNamedRendertarget("PBus_Screen", false);
+            RegisterNamedRendertarget(_renderTargetName, false);
             
             if (IsNamedRendertargetLinked(_propBattlePartyBusScreen)) return;
             
@@ -107,7 +100,9 @@
             
             if (_namedRenderTargetId > -1) return;
             
-            _namedRenderTargetId = GetNamedRendertargetRenderId("PBus_Screen");
+            _namedRenderTargetId = GetNamedRendertargetRenderId(_renderTargetName);
+
+            Instance.Logger.Debug($"Named Render Target {_renderTargetName} Id: {_namedRenderTargetId}");
         }
 
         private async Task<bool> IsModelLoaded(uint hash)
@@ -124,7 +119,7 @@
             _partyBusScaleform.Dispose();
             _propBattlePartyBusScreenProp?.MarkAsNoLongerNeeded();
             _propBattlePartyBusScreenProp?.Delete();
-            ReleaseNamedRendertarget("PBus_Screen");
+            ReleaseNamedRendertarget(_renderTargetName);
             base.Dispose();
         }
     }
