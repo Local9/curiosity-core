@@ -69,6 +69,10 @@ namespace Curiosity.Framework.Client.Managers
             if (Game.PlayerPed.IsInVehicle())
             {
                 Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                Entity entity = vehicle.GetEntityAttachedTo();
+                entity?.Delete();
+
                 SetResourceKvpInt("vehicle:last:model", vehicle.Model.Hash);
             }
 
@@ -165,7 +169,7 @@ namespace Curiosity.Framework.Client.Managers
             int vehicleHash = GetResourceKvpInt("vehicle:last:model");
 
             if (vehicleHash == 0)
-                vehicleHash = GetHashKey("tenf");
+                vehicleHash = GetHashKey("pbus2");
 
             _vehicle = await World.CreateVehicle(vehicleHash, Game.PlayerPed.Position, Game.PlayerPed.Heading);
 
@@ -222,6 +226,8 @@ namespace Curiosity.Framework.Client.Managers
 
             //GameInterface.Hud.MenuPool.Add(_menu);
             //GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
+
+            Instance.AttachTickHandler(OnMouseControl);
         }
 
         private async Task OnMouseControl()
@@ -231,10 +237,27 @@ namespace Curiosity.Framework.Client.Managers
             //    return;
             //}
 
-            if (Game.IsControlJustPressed(0, Control.InteractionMenu))
+            if (Game.IsControlJustPressed(0, Control.MultiplayerInfo))
             {
-                _menu.Visible = !_menu.Visible;
-                await BaseScript.Delay(500);
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                    Entity entity = vehicle.GetEntityAttachedTo();
+                    entity?.Delete();
+                    vehicle.Delete();
+                }
+
+                _vehicle = await World.CreateVehicle("pbus2", Game.PlayerPed.Position, Game.PlayerPed.Heading);
+
+                if (_vehicle != null)
+                {
+                    if (_vehicle.Exists())
+                    {
+                        DecorSetInt(_vehicle.Handle, "Player_Vehicle", -1);
+                        Game.PlayerPed.SetIntoVehicle(_vehicle, VehicleSeat.Driver);
+                        Logger.Debug($"Vehicle Created");
+                    }
+                }
             }
 
             //ShowCursorThisFrame();
@@ -248,7 +271,7 @@ namespace Curiosity.Framework.Client.Managers
             //EnableControlAction(0, 241, true);
             //EnableControlAction(0, 242, true);
 
-            bool isMenuHovered = IsMenuHovered();
+            // bool isMenuHovered = IsMenuHovered();
 
             //if (Game.IsControlPressed(0, Control.CursorAccept) && !isMenuHovered)
             //{
