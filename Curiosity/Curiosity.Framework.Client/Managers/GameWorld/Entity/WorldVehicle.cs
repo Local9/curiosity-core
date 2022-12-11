@@ -12,7 +12,7 @@
 
         public virtual void Dispose()
         {
-            Vehicle?.Delete();
+            
         }
     }
 }

@@ -247,7 +247,7 @@ namespace Curiosity.Framework.Client.Managers
                     vehicle.Delete();
                 }
 
-                _vehicle = await World.CreateVehicle("pbus2", Game.PlayerPed.Position, Game.PlayerPed.Heading);
+                _vehicle = await World.CreateVehicle("tenf", Game.PlayerPed.Position, Game.PlayerPed.Heading);
 
                 if (_vehicle != null)
                 {
@@ -258,6 +258,8 @@ namespace Curiosity.Framework.Client.Managers
                         Logger.Debug($"Vehicle Created");
                     }
                 }
+
+                Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
             }
 
             //ShowCursorThisFrame();

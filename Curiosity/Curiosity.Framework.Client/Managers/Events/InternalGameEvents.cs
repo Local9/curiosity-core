@@ -1,4 +1,6 @@
-﻿namespace Curiosity.Framework.Client.Managers.Events
+﻿using CitizenFX.Core;
+
+namespace Curiosity.Framework.Client.Managers.Events
 {
     public delegate void VehicleDestroyedEvent(int vehicle, int attacker, uint weaponHash, bool isMeleeDamage, int vehicleDamageTypeFlag);
     public delegate void PedKilledByVehicleEvent(int ped, int vehicle);
@@ -9,6 +11,7 @@
     public delegate void VehicleDamagedEvent(int vehicle, int attacker, uint weaponHash, bool isMeleeDamage, int vehicleDamageTypeFlag);
     public delegate void EntityDamagedEvent(int entity, int attacker, uint weaponHash, bool isMeleeDamage);
     public delegate void PlayerJoined();
+    public delegate void PlayerKilledByPlayer(int victimPlayer, int killerPlayer, uint weaponHash, bool isMeleeDamage);
 
     public class InternalGameEvents : Manager<InternalGameEvents>
     {
@@ -28,6 +31,7 @@
         public static event VehicleDamagedEvent OnVehicleDamaged;
         public static event EntityDamagedEvent OnEntityDamaged;
         public static event PlayerJoined PlayerJoined;
+        public static event PlayerKilledByPlayer OnPlayerKilledByPlayer;
 
         /// <summary>
         /// Event gets triggered whenever a vehicle is destroyed.
@@ -140,6 +144,13 @@
             Logger.Debug($"[{damageEventName}:EntityDamaged] entity: {entity}, attacker: {attacker}, weaponHash: {weaponHash}, isMeleeDamage: {isMeleeDamage}");
         }
 
+        private void PlayerKilledByPlayer(int victimPlayer, int killerPlayer, uint weaponHash, bool isMeleeDamage)
+        {
+            OnPlayerKilledByPlayer?.Invoke(victimPlayer, killerPlayer, weaponHash, isMeleeDamage);
+            BaseScript.TriggerEvent(damageEventName + ":PlayerKilledByPlayer", victimPlayer, killerPlayer, weaponHash, isMeleeDamage);
+            Logger.Debug($"[{damageEventName}:PlayerKilledByPlayer] victimPlayer: {victimPlayer}, killerPlayer: {killerPlayer}, weaponHash: {weaponHash}, isMeleeDamage: {isMeleeDamage}");
+        }
+
         /// <summary>
         /// Used internally to trigger the other events.
         /// </summary>
@@ -180,6 +191,9 @@
                                 {
                                     // victim is a ped
                                     if (victim is Ped ped)
+                                    {
+                                        bool isVictimAPlayer = ped.IsPlayer;
+
                                         switch (attacker)
                                         {
                                             case Vehicle veh:
@@ -188,7 +202,11 @@
                                                 break;
                                             case Ped p when p.IsPlayer:
                                                 int player = NetworkGetPlayerIndexFromPed(p.Handle);
-                                                PedKilledByPlayer(ped.Handle, player, weaponHash, isMeleeDamage);
+                                                
+                                                if (isVictimAPlayer)
+                                                    PlayerKilledByPlayer(victim.Handle, player, weaponHash, isMeleeDamage);
+                                                else
+                                                    PedKilledByPlayer(ped.Handle, player, weaponHash, isMeleeDamage);
 
                                                 break;
                                             case Ped p:
@@ -200,6 +218,7 @@
 
                                                 break;
                                         }
+                                    }
                                     // victim is not a ped
                                     else
                                         EntityKilled(victim.Handle, attacker.Handle, weaponHash, isMeleeDamage);
