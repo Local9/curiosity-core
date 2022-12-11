@@ -237,7 +237,9 @@ namespace Curiosity.Framework.Client.Managers
             GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
             _menuBase = new("New Character", "Create a new Character", offset)
             {
-                ControlDisablingEnabled = true
+                ControlDisablingEnabled = true,
+                BuildingAnimation = MenuBuildingAnimation.NONE,
+                EnableAnimation = false
             };
             GameInterface.Hud.MenuPool.Add(_menuBase);
 
