@@ -15,6 +15,7 @@ namespace Curiosity.Framework.Client
         public List<Type> RegisteredTickHandlers { get; set; } = new();
 
         public GameInterface.Hud Hud;
+        public static Random Random => new(GetGameTimer());
 
         //   public readonly DiscordRichPresence DiscordRichPresence =
         //new DiscordRichPresence(

@@ -187,6 +187,8 @@ namespace Curiosity.Framework.Client.Managers
 
             if (!_playerSpawned)
                 await LoadTransition.OnDownAsync();
+            
+            Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
 
             Game.Player.State.Set("player:spawned", true, true);
 
@@ -259,7 +261,6 @@ namespace Curiosity.Framework.Client.Managers
                     }
                 }
 
-                Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
             }
 
             //ShowCursorThisFrame();
