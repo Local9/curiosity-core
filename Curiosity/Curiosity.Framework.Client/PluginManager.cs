@@ -17,6 +17,8 @@ namespace Curiosity.Framework.Client
         public GameInterface.Hud Hud;
         public static Random Random => new(GetGameTimer());
 
+        public static PlayerList PlayerList;
+
         //   public readonly DiscordRichPresence DiscordRichPresence =
         //new DiscordRichPresence(
         //    GetResourceMetadata(GetCurrentResourceName(), "discord_rich_presence_asset", 0),
@@ -35,13 +37,14 @@ namespace Curiosity.Framework.Client
                 Instance = this;
                 Hud = new();
                 Logger = new Log();
+                PlayerList = Players;
 
                 SoundEngine = new SoundEngine();
 
                 EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
                 EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
-                JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
+                // JsonConvert.DefaultSettings = () => new JsonSerializerSettings { MaxDepth = 128 };
 
                 OnLoadAsync();
             }

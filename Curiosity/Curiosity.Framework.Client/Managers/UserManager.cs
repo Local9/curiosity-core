@@ -4,7 +4,6 @@ using Curiosity.Framework.Client.Managers.Events;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
-using ScaleformUI;
 using System.Drawing;
 
 namespace Curiosity.Framework.Client.Managers
@@ -18,7 +17,6 @@ namespace Curiosity.Framework.Client.Managers
         float _heading = 0f;
 
         Camera _camera;
-        UIMenu _menu;
 
         public async override void Begin()
         {
@@ -192,119 +190,26 @@ namespace Curiosity.Framework.Client.Managers
 
             Game.Player.State.Set("player:spawned", true, true);
 
-            //Logger.Info($"User Database: [{_user.Handle}] {_user.Username}#{_user.UserID} with {_user.Characters.Count} Character(s)");
-
-            //// Test Code
-            ////_camera = new Camera(CreateCam("DEFAULT_SCRIPTED_CAMERA", true));
-            ////_camera.IsActive = true;
-            ////_camera.StopShaking();
-            ////PointCamAtCoord(_camera.Handle, _vehicle.Position.X, _vehicle.Position.Y, _vehicle.Position.Z);
-            ////N_0xf55e4046f6f831dc(_camera.Handle, 3f);
-            ////N_0xe111a7c0d200cbc5(_camera.Handle, 1f);
-            ////SetCamDofFnumberOfLens(_camera.Handle, 1.2f);
-            ////SetCamDofMaxNearInFocusDistanceBlendLevel(_camera.Handle, 1f);
-            ////World.RenderingCamera = _camera;
-            ////RenderScriptCams(true, true, 3000, true, false);
-
-            ////_camera.PointAt(_vehicle);
-
-            //SetCursorLocation(0.5f, 0.5f);
-            //SetCursorSprite(3);
-
-            //Instance.AttachTickHandler(OnMouseControl);
-            //Point offset = new Point(50, 50);
-            //_menu = new UIMenu("Example", "Test", offset);
-
-            //UIMenuItem item1 = new UIMenuItem("Item 1");
-            //UIMenuItem item2 = new UIMenuItem("Item 2");
-            //_menu.AddItem(item1);
-            //_menu.AddItem(item2);
-
-            //_menu.OnItemSelect += (sender, item, index) =>
-            //{
-            //    Screen.ShowNotification($"Selected item {index}");
-            //    Logger.Debug($"Item {index} selected");
-            //};
-
-            //GameInterface.Hud.MenuPool.Add(_menu);
-            //GameInterface.Hud.MenuPool.MouseEdgeEnabled = false;
-
-            Instance.AttachTickHandler(OnMouseControl);
+            Instance.AttachTickHandler(OnTestSomeShit);
         }
 
-        private async Task OnMouseControl()
+        private async Task OnTestSomeShit()
         {
-            //if (_camera is null)
-            //{
-            //    return;
-            //}
-
             if (Game.IsControlJustPressed(0, Control.MultiplayerInfo))
             {
-                if (Game.PlayerPed.IsInVehicle())
+                string myJson = @"{""name"":""John Smith"",""age"":33}";
+                Dictionary<string, object> stuff = JsonConvert.DeserializeObject<Dictionary<string, object>>(myJson);
+                Logger.Debug($"Name: {stuff["name"]}");
+
+                Dictionary<string, int> keyValuePairs = new Dictionary<string, int>()
                 {
-                    Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
-                    Entity entity = vehicle.GetEntityAttachedTo();
-                    entity?.Delete();
-                    vehicle.Delete();
-                }
+                    { "test", 1 },
+                    { "test2", 2 }
+                };
 
-                _vehicle = await World.CreateVehicle("tenf", Game.PlayerPed.Position, Game.PlayerPed.Heading);
-
-                if (_vehicle != null)
-                {
-                    if (_vehicle.Exists())
-                    {
-                        DecorSetInt(_vehicle.Handle, "Player_Vehicle", -1);
-                        Game.PlayerPed.SetIntoVehicle(_vehicle, VehicleSeat.Driver);
-                        Logger.Debug($"Vehicle Created");
-                    }
-                }
-
-            }
-
-            //ShowCursorThisFrame();
-            //DisableControlAction(0, 1, true);
-            //DisableControlAction(0, 2, true);
-            //DisableControlAction(2, 200, true);
-            //EnableControlAction(0, 237, true);
-            //EnableControlAction(0, 238, true);
-            //SetInputExclusive(0, 237);
-            //SetInputExclusive(0, 238);
-            //EnableControlAction(0, 241, true);
-            //EnableControlAction(0, 242, true);
-
-            // bool isMenuHovered = IsMenuHovered();
-
-            //if (Game.IsControlPressed(0, Control.CursorAccept) && !isMenuHovered)
-            //{
-            //    EnableControlAction(1, 1, true);
-            //    EnableControlAction(1, 2, true);
-            //    SetCursorSprite(4);
-            //    Vector3 pos = GameplayCamera.Position;
-            //    _camera.Position = pos;
-            //}
-            //else
-            //{
-            //    DisableControlAction(1, 1, true);
-            //    DisableControlAction(1, 2, true);
-
-            //    if (isMenuHovered)
-            //        SetCursorSprite(1);
-            //    else
-            //        SetCursorSprite(3);
-            //}
-        }
-
-        bool IsMenuHovered()
-        {
-            bool isHovered = false;
-            _menu.MenuItems.ForEach(a =>
-            {
-                if (a.Hovered)
-                    isHovered = true;
-            });
-            return isHovered;
+                string json = JsonConvert.SerializeObject(keyValuePairs);
+                Logger.Debug($"Sending test data to server: {json}");
+            }   
         }
     }
 }
