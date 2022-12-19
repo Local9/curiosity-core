@@ -49,6 +49,10 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
   
   <Import Project="..\Curiosity.Framework.Shared\Curiosity.Framework.Shared.projitems" Label="Shared" />
   

@@ -130,10 +130,10 @@ namespace Curiosity.Framework.Client.Managers
 
                 if (int.TryParse(args[1].ToString(), out int _red))
                     red = _red;
-                
+
                 if (int.TryParse(args[2].ToString(), out int _green))
                     green = _green;
-                
+
                 if (int.TryParse(args[3].ToString(), out int _blue))
                     blue = _blue;
 
@@ -185,7 +185,7 @@ namespace Curiosity.Framework.Client.Managers
 
             if (!_playerSpawned)
                 await LoadTransition.OnDownAsync();
-            
+
             Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
 
             Game.Player.State.Set("player:spawned", true, true);
@@ -193,22 +193,15 @@ namespace Curiosity.Framework.Client.Managers
             Instance.AttachTickHandler(OnTestSomeShit);
         }
 
+        int fov = 0;
+
         private async Task OnTestSomeShit()
         {
             if (Game.IsControlJustPressed(0, Control.MultiplayerInfo))
             {
-                string myJson = @"{""name"":""John Smith"",""age"":33}";
-                Dictionary<string, object> stuff = JsonConvert.DeserializeObject<Dictionary<string, object>>(myJson);
-                Logger.Debug($"Name: {stuff["name"]}");
-
-                Dictionary<string, int> keyValuePairs = new Dictionary<string, int>()
-                {
-                    { "test", 1 },
-                    { "test2", 2 }
-                };
-
-                string json = JsonConvert.SerializeObject(keyValuePairs);
-                Logger.Debug($"Sending test data to server: {json}");
+                ScaleformUI.ScaleformUI.RankBarInstance.SetScores(0, 800, 40, 500, 1);
+                await ScaleformUI.ScaleformUI.CountdownInstance.Start(hudColor: HudColor.HUD_COLOUR_ENEMY);
+                ScaleformUI.ScaleformUI.RankBarInstance.SetScores(0, 800, 500, 500, 1);
             }   
         }
     }

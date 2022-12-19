@@ -1,29 +1,17 @@
 ﻿using Curiosity.Framework.Server.Models.Database;
 using Curiosity.Framework.Shared.SerializedModels;
-using FxEvents.Shared.Attributes;
 using FxEvents.Shared.EventSubsystem;
 
 namespace Curiosity.Framework.Server.Events
 {
-    [Serialization]
     public partial class ClientId : ISource
     {
         public int UserId { get; set; }
         public int Handle { get; set; }
         public User User { get; set; }
-
-        [Ignore]
-        [JsonIgnore]
-        public DataStoreUser StoreUser { get; set; }
-
-        [Ignore]
-        [JsonIgnore]
-        public Player Player { get => PluginManager.PlayerList[Handle]; }
-
-        [Ignore]
-        [JsonIgnore]
-        public Ped Ped { get => Player.Character; }
-
+        internal DataStoreUser StoreUser { get; set; }
+        internal Player Player { get => PluginManager.PlayerList[Handle]; }
+        internal Ped Ped { get => Player.Character; }
         public static readonly ClientId Global = new(-1);
 
         public ClientId()
