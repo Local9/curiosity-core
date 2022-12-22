@@ -34,7 +34,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.6136" ExcludeAssets="runtime" />
+    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.6164" ExcludeAssets="runtime" />
+    <PackageReference Include="FxEvents.FiveM.Client" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" ExcludeAssets="Compile" GeneratePathProperty="true" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
@@ -43,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\_vendor\FxEvents\FxEvents\FxEvents.Client\FxEvents.Client.csproj" />
     <ProjectReference Include="..\_vendor\ScaleformUI\ScaleformUI_Csharp\ScaleformUI.csproj" />
   </ItemGroup>
 

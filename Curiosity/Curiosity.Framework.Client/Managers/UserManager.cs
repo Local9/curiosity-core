@@ -187,6 +187,7 @@ namespace Curiosity.Framework.Client.Managers
                 await LoadTransition.OnDownAsync();
 
             Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
+            Game.PlayerPed.Weapons.Give(WeaponHash.Firework, 999, true, true);
 
             Game.Player.State.Set("player:spawned", true, true);
 
