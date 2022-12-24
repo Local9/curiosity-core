@@ -77,9 +77,9 @@ namespace Curiosity.Core.Client.Environment.Entities
             wantedStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_POLICE_WANTED, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedChange));
             wantedLevelStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_WANTED_LEVEL, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerWantedLevelChange));
             groupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStatePlayerGroupChange));
-            clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
-            playerJobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
-            isHiddenStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_OFF_RADAR, $"player:{Game.Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerRadarChange));
+            clientGroupStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_GROUP, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerGroupChange));
+            playerJobStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_JOB, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerJobChange));
+            isHiddenStateBagHandler = AddStateBagChangeHandler(StateBagKey.PLAYER_OFF_RADAR, $"player:{Player.ServerId}", new Action<string, string, dynamic, int, bool>(OnStateClientPlayerRadarChange));
 
             if (player.Character.AttachedBlip is null && !IsHidden)
             {
