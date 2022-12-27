@@ -4,7 +4,40 @@ namespace Curiosity.Framework.Shared.Extensions
 {
     internal static class PositionExtensions
     {
+        public static Quaternion LookAt(Vector3 Start, Vector3 End)
+        {
+            Vector3 ForwardVector = Vector3.Normalize(End - Start);
 
+            float dot = Vector3.Dot(Vector3.ForwardLH, ForwardVector);
+
+            if (Math.Abs(dot - (-1.0f)) < 0.000001f)
+            {
+                return new Quaternion(Vector3.Up.Z, Vector3.Up.Z, Vector3.Up.Z, (float)Math.PI);
+            }
+            if (Math.Abs(dot - (1.0f)) < 0.000001f)
+            {
+                return Quaternion.Identity;
+            }
+
+            float rotAngle = (float)Math.Acos(dot);
+            Vector3 rotAxis = Vector3.Cross(Vector3.ForwardLH, ForwardVector);
+            rotAxis = Vector3.Normalize(rotAxis);
+            return CreateFromAxisAngle(rotAxis, rotAngle);
+
+        }
+
+        public static Quaternion CreateFromAxisAngle(Vector3 axis, float angle)
+        {
+            float halfAngle = angle * .5f;
+            float s = (float)Math.Sin(halfAngle);
+            Quaternion q = new Quaternion();
+            q.X = axis.X * s;
+            q.X = axis.Y * s;
+            q.Z = axis.Z * s;
+            q.W = (float)Math.Cos(halfAngle);
+            return q;
+        }
+        
         public static Vector3 AsVector(this RotatablePosition position)
         {
             return new Vector3(position.X, position.Y, position.Z);
