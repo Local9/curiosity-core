@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="CitizenFX.Core.Client" Version="1.0.6164" ExcludeAssets="runtime" />
-    <PackageReference Include="FxEvents.FiveM.Client" Version="1.0.1" />
+    <PackageReference Include="FxEvents.FiveM.Client" Version="1.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" ExcludeAssets="Compile" GeneratePathProperty="true" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
