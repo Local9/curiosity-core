@@ -211,7 +211,7 @@ namespace Curiosity.Framework.Server.Managers
         }
 
         // return the user from sessions with the characters
-        private async Task<User> OnUserActiveAsync(ClientId client, int serverId)
+        private async Task<User> OnUserActiveAsync([FromSource] ClientId client, int serverId)
         {
             try
             {

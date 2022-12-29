@@ -57,7 +57,7 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
             }
         }
 
-        [TickHandler]
+        // [TickHandler]
         private async Task OnInteractiveMenuAsync()
         {
             if (!Game.IsPaused && !IsPauseMenuRestarting() && IsScreenFadedIn() && !IsPlayerSwitchInProgress())
