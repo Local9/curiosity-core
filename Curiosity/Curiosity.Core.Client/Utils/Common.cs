@@ -81,7 +81,8 @@ namespace Curiosity.Core.Client.Utils
                 ScreenInterface.Draw3DText(end, $"END: {end}", 40f, distance + 10f, 0f);
 
                 ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.9f), $"DISTANCE: {distance}", 40f, distance + 10f, 0f);
-                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.7f), $"ROTATION: {rotation} / DIR: {compassNative}", 40f, distance + 10f, 0f);
+                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.7f), $"HEADING: {rotation} / COMPASS: {compassNative}", 40f, distance + 10f, 0f);
+
                 ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.5f), $"WIDTH: {width}", 40f, distance + 10f, 0f);
                 ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.3f), $"HEIGHT: {height}", 40f, distance + 10f, 0f);
             }
