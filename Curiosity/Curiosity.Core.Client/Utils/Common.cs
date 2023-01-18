@@ -1,6 +1,7 @@
 ﻿using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace Curiosity.Core.Client.Utils
 {
@@ -63,16 +64,26 @@ namespace Curiosity.Core.Client.Utils
                 if (setZStart) center.Z = start.Z;
 
                 float rotation = GetHeading(start, end);
+
+                string compassNative = GetCompassHeading((float)rotation);
+
                 float distance = start.Distance(end);
                 float height = (start.Z > end.Z) ? start.Z - end.Z : end.Z - start.Z;
 
                 Color colorTest = Color.FromArgb(120, !isEntityInAngledArea ? 255 : 0, isEntityInAngledArea ? 255 : 0, 0);
                 Color debugSphere = Color.FromArgb(80, 255, 77, 196);
-                World.DrawMarker((MarkerType)43, center, Vector3.Zero, new Vector3(Vector2.Zero, rotation), new Vector3(width, distance, height), colorTest);
+                
+                World.DrawMarker((MarkerType)43, center, Vector3.Zero, new Vector3(Vector2.Zero, (float)rotation), new Vector3(width, distance, height), colorTest);
                 World.DrawMarker(MarkerType.DebugSphere, start, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
                 World.DrawMarker(MarkerType.DebugSphere, end, Vector3.Zero, Vector3.Zero, new Vector3(0.5f), debugSphere);
+                
                 ScreenInterface.Draw3DText(start, $"START: {start}", 40f, distance + 10f, 0f);
                 ScreenInterface.Draw3DText(end, $"END: {end}", 40f, distance + 10f, 0f);
+
+                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.9f), $"DISTANCE: {distance}", 40f, distance + 10f, 0f);
+                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.7f), $"ROTATION: {rotation} / DIR: {compassNative}", 40f, distance + 10f, 0f);
+                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.5f), $"WIDTH: {width}", 40f, distance + 10f, 0f);
+                ScreenInterface.Draw3DText(center + new Vector3(0, 0, 0.3f), $"HEIGHT: {height}", 40f, distance + 10f, 0f);
             }
 
             return isEntityInAngledArea;
@@ -124,18 +135,26 @@ namespace Curiosity.Core.Client.Utils
             return "U";
         }
 
-        public static float GetHeading(Vector3 start, Vector3 end)
+        public static string GetCompassHeading(float heading)
         {
-            Vector2 eStart = new Vector2(start.X, start.Y);
-            Vector2 eEnd = new Vector2(end.X, end.Y);
-            return GetHeading(eStart, eEnd);
+            foreach (KeyValuePair<int, string> kvp in WorldCompassDirection)
+            {
+                float vehDirection = heading;
+                if (Math.Abs(vehDirection - kvp.Key) < 22.5)
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return "U";
         }
 
-        public static float GetHeading(Vector2 startFrom, Vector2 endAt)
+        public static float GetHeading(Vector3 start, Vector3 end)
         {
-            float dx = endAt.X - startFrom.X;
-            float dy = endAt.Y - startFrom.Y;
-            return GetHeadingFromVector_2d(dx, dy);
+            float dx = end.X - start.X;
+            float dy = start.Y - end.Y;
+            double val = (Math.Atan2(dx, dy) + Math.PI) * (180.0f / Math.PI);
+            return (float)val;
         }
 
         public static void Notification(string message, bool blink = false, bool saveToBrief = false)

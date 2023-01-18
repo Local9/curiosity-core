@@ -81,7 +81,7 @@
             }
             catch(Exception ex)
             {
-                Instance.Logger.Error($"{ex}");
+                PluginManager.Logger.Error($"{ex}");
                 Dispose();
             }
         }
@@ -102,7 +102,7 @@
             
             _namedRenderTargetId = GetNamedRendertargetRenderId(_renderTargetName);
 
-            Instance.Logger.Debug($"Named Render Target {_renderTargetName} Id: {_namedRenderTargetId}");
+            PluginManager.Logger.Debug($"Named Render Target {_renderTargetName} Id: {_namedRenderTargetId}");
         }
 
         private async Task<bool> IsModelLoaded(uint hash)

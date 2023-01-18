@@ -4,7 +4,11 @@ using Curiosity.Framework.Client.Managers.Events;
 using Curiosity.Framework.Client.Utils;
 using Curiosity.Framework.Shared.SerializedModels;
 using FxEvents;
+using FxEvents.Shared.TypeExtensions;
+using ScaleformUI;
+using ScaleformUI.Scaleforms.WebBrowser;
 using ScaleformUI.Scaleforms.WebBrowser.Data;
+using ScaleformUI.Scaleforms.WebBrowser.Model;
 using System.Drawing;
 
 namespace Curiosity.Framework.Client.Managers
@@ -19,6 +23,12 @@ namespace Curiosity.Framework.Client.Managers
 
         bool _toggle;
         bool _drawBrowser;
+
+        RelationshipGroup RelationshipGang1;
+        RelationshipGroup RelationshipGang2;
+        RelationshipGroup RelationshipPlayer;
+
+        int group = 0;
 
         ScaleformUI.Scaleforms.WebBrowser.WebBrowserHandler _webBrowser = new();
 
@@ -190,14 +200,14 @@ namespace Curiosity.Framework.Client.Managers
             if (!_playerSpawned)
                 await LoadTransition.OnDownAsync();
 
+            Game.PlayerPed.Weapons.Give(WeaponHash.Firework, 999, false, true);
             Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
-            Game.PlayerPed.Weapons.Give(WeaponHash.Firework, 999, true, true);
 
             Game.Player.State.Set("player:spawned", true, true);
 
             await _webBrowser.Load();
-            
-            _webBrowser.SetSkin(ScaleformUI.Scaleforms.WebBrowser.WebBrowserHandler.Skin.IFRUIT3);
+
+            _webBrowser.SetSkin(ScaleformUI.Scaleforms.WebBrowser.WebBrowserHandler.Skin.IFRUIT2);
             _webBrowser.SetMultiplayer(true);
             _webBrowser.SetWidescreen(GetIsWidescreen());
 
@@ -209,15 +219,47 @@ namespace Curiosity.Framework.Client.Managers
                 hangarCount++;
             }
 
+            int bunkerCount = 1;
+            while (bunkerCount <= 11)
+            {
+                await BaseScript.Delay(0);
+                _webBrowser.AddBunker(CreateBunker(bunkerCount));
+                bunkerCount++;
+            }
+
+            Instance.AttachTickHandler(OnSomeOtherShit);
             Instance.AttachTickHandler(OnTestSomeShit);
+
+            RelationshipGang1 = (uint)GetHashKey("GANG_1");
+            RelationshipGang2 = (uint)GetHashKey("GANG_2");
+            RelationshipPlayer = (uint)GetHashKey("PLAYER");
+
+            RelationshipGang1.SetRelationshipBetweenGroups(RelationshipGang2, Relationship.Hate, true);
+            
+            RelationshipPlayer.SetRelationshipBetweenGroups(RelationshipGang1, Relationship.Hate, true);
+            RelationshipPlayer.SetRelationshipBetweenGroups(RelationshipGang2, Relationship.Hate, true);
+
+            Game.PlayerPed.RelationshipGroup.Remove();
+            Game.PlayerPed.RelationshipGroup = RelationshipPlayer;
+
+            NetworkSetFriendlyFireOption(true);
+            SetCanAttackFriendly(Game.PlayerPed.Handle, true, false);
+
+            SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
+            DisablePlayerVehicleRewards(Game.Player.Handle);
+
+            DisableIdleCamera(true);
         }
 
         public Hangar CreateHangar(int i)
         {
-            Hangar hangar = new(47 + i, i);
-            hangar.Position = hangar.GetDefaultHangarPosition(i);
+            Hangar hangar = new(47 + i, i + 200);
 
-            hangar.Cost = hangar.GetDefaultHangarCost(i);
+            hangar.Id = hangar.GetDefaultId(i);
+
+            hangar.Position = hangar.GetDefaultPosition(hangar.Id);
+
+            hangar.BaseCost = hangar.GetDefaultCost(i);
 
             hangar.StyleCost = new int[9] { 0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000 };
             // LIGHTING_INDEXES_BY_STYLE = [0,2,4,6,8,10,12,16,20]
@@ -240,111 +282,154 @@ namespace Curiosity.Framework.Client.Managers
             return hangar;
         }
 
+        public Bunker CreateBunker(int i)
+        {
+            Bunker bunker = new Bunker(69 + i, i + 300);
+            bunker.Id = bunker.GetDefaultId(i);
+            bunker.Position = bunker.GetDefaultPosition(bunker.Id);
+            bunker.BaseCost = 1000000;
+            bunker.StyleCost = new int[3] { 0, 1000, 2000 };
+            bunker.QuartersCost = 3000;
+            bunker.FiringRangeCost = new int[3] { 1000, 2000, 3000 };
+            bunker.GunLockerCost = 4000;
+            bunker.TransportationCost1 = 10000;
+            bunker.TransportationCost2 = 20000;
+            return bunker;
+        }
+
         int lastGlobal = 0;
+
+        private async Task OnSomeOtherShit()
+        {
+            foreach(Player player in PluginManager.PlayerList)
+            {
+                // if (player == Game.Player) continue;
+
+                float x = 0;
+                float y = 0;
+                Vector3 pos = player.Character.Position;
+
+                SetDrawOrigin(pos.X, pos.Y, pos.Z, 0);
+
+                if (GetScreenCoordFromWorldCoord(pos.X, pos.Y, pos.Z, ref x, ref y))
+                {
+                    UIResText uIResText = new UIResText($"{player.Character.RelationshipGroup.NativeValue}", new PointF(x, y), .25f);
+                    uIResText.Draw();
+                }
+
+                ClearDrawOrigin();
+            }
+        }
+
+        bool isPurchasing = false;
 
         private async Task OnTestSomeShit()
         {
+            if (Game.IsControlJustPressed(0, Control.Context))
+            {
+                N_0x061cb768363d6424(Game.PlayerPed.Handle, false); // SET_ALLOW_LOCKON_TO_PED_IF_FRIENDLY
+                
+                ++group;
+                if (group > 2)
+                    group = 0;
+
+                Game.PlayerPed.RelationshipGroup.Remove();
+                int pedHandle = Game.PlayerPed.Handle;
+
+                if (group == 1)
+                {
+                    Game.PlayerPed.RelationshipGroup = RelationshipGang1;
+                    // NetworkSetFriendlyFireOption(false);
+                    SetCanAttackFriendly(pedHandle, false, false);
+                    N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
+                    Screen.ShowNotification($"Joined Group 1", true);
+                }
+                else if (group == 2)
+                {
+                    Game.PlayerPed.RelationshipGroup = RelationshipGang2;
+                    // NetworkSetFriendlyFireOption(false);
+                    SetCanAttackFriendly(pedHandle, false, false);
+                    N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
+                    Screen.ShowNotification($"Joined Group 2", true);
+                }
+                else if (group == 0)
+                {
+                    Game.PlayerPed.RelationshipGroup = RelationshipPlayer;
+                    // NetworkSetFriendlyFireOption(true);
+                    SetCanAttackFriendly(pedHandle, true, false);
+                    N_0x0f62619393661d6e(pedHandle, 0, 0); // SET_PED_TREATED_AS_FRIENDLY
+                    Screen.ShowNotification($"Left Group", true);
+                }
+            }
+            
             if (Game.IsControlJustPressed(0, Control.MultiplayerInfo))
             {
                 _toggle = !_toggle;
 
-                _webBrowser.GotoWebPage("WWW_EYEFIND_INFO");
-
-                await BaseScript.Delay(250);
+                _webBrowser.GotoWebPage("WWW_EYEFIND_INFO_S_PAGE1");
 
                 _webBrowser.ShowBrowser = _toggle;
 
                 _drawBrowser = !_drawBrowser;
-            }   
+            }
 
             if (_drawBrowser)
             {
                 _webBrowser.Update();
 
-                int asGlobal = GetGlobalActionscriptFlag(13);
-                if (asGlobal > 0 && asGlobal != lastGlobal)
+                
+                int bitwiseValue = GetGlobalActionscriptFlag(13);
+
+                if (bitwiseValue > 0 && bitwiseValue != lastGlobal)
                 {
-                    Logger.Debug($"Global Actionscript Flag 13: {asGlobal}");
+                    Logger.Debug($"Global Actionscript Flag 13: {bitwiseValue}");
 
                     int siteId = await _webBrowser.GetSiteId();
-                    if (siteId == (int)eWebsiteDynamic.FORECLOSURES_MAZE_D_BANK_COM)
+
+                    if (siteId == (int)eWebsiteDynamic.FORECLOSURES_MAZE_D_BANK_COM && isPurchasing)
                     {
-                        int hangerIndex = GetValueFromBit(asGlobal, 0, 6);
+                        // Bitwise 0, 6 contains the index of the item
 
-                        if (hangerIndex > 0)
-                        {
-                            int styleIndex = GetValueFromBit(asGlobal, 6, 4);
-                            int lightingIndex = GetValueFromBit(asGlobal, 10, 2);
-                            // LIGHTING_INDEXES_BY_STYLE = [0,2,4,6,8,10,12,16,20]
-                            // There is a better way, just lazy atm
-                            if (styleIndex == 1)
-                                lightingIndex += 2;
-                            else if (styleIndex == 2)
-                                lightingIndex += 4;
-                            else if (styleIndex == 3)
-                                lightingIndex += 6;
-                            else if (styleIndex == 4)
-                                lightingIndex += 8;
-                            else if (styleIndex == 5)
-                                lightingIndex += 10;
-                            else if (styleIndex == 6)
-                                lightingIndex += 12;
-                            else if (styleIndex == 7)
-                                lightingIndex += 16;
-                            else if (styleIndex == 8)
-                                lightingIndex += 20;
+                        int pageId = await _webBrowser.GetPageId();
+                        int itemIndex = Tools.GetValueFromBitwiseValue(bitwiseValue, 0, 6);
+                        Logger.Debug($"Page ID: {pageId}, Item Index: {itemIndex}");
 
-                            int decalIndex = GetValueFromBit(asGlobal, 12, 4);
+                        //Hangar hangar = _webBrowser.Hangars[hangarKey];
 
-                            int newDecalIndex = decalIndex;
-                            // new decal index, because some R* employee wanted to ruin someones day
-                            if (decalIndex == 0)
-                                newDecalIndex = 6;
-                            else if (decalIndex == 1)
-                                newDecalIndex = 1;
-                            else if (decalIndex == 2)
-                                newDecalIndex = 7;
-                            else if (decalIndex == 3)
-                                newDecalIndex = 8;
-                            else if (decalIndex == 4)
-                                newDecalIndex = 0;
-                            else if (decalIndex == 5)
-                                newDecalIndex = 5;
-                            else if (decalIndex == 6)
-                                newDecalIndex = 3;
-                            else if (decalIndex == 7)
-                                newDecalIndex = 2;
-                            else if (decalIndex == 8)
-                                newDecalIndex = 4;
+                        //int hangarIndex = 0;
+                        //int styleIndex = 0;
+                        //int lightingIndex = 0;
+                        //int decalIndex = 0;
+                        //int furnatureIndex = 0;
+                        //int quartersIndex = 0;
+                        //bool purchasedWorkshop = false;
 
-                            int furnatureIndex = GetValueFromBit(asGlobal, 16, 2);
-                            int quartersIndex = GetValueFromBit(asGlobal, 18, 2);
-                            int workshopIndex = GetValueFromBit(asGlobal, 20, 1);
+                        //hangar.GetPurchasedData(bitwiseValue, ref hangarIndex, ref styleIndex, ref lightingIndex, ref decalIndex, ref furnatureIndex, ref quartersIndex, ref purchasedWorkshop);
 
-                            Hangar hangar = _webBrowser.Hangers[hangerIndex + 1];
+                        //int totalValue = hangar.GetTotalValueOfPurchases(bitwiseValue);
 
-                            Logger.Info($"HANGER PURCHASE");
-                            Logger.Debug($"HANGAR INDEX: {hangerIndex + 1} => {hangar.Cost}");
-                            Logger.Debug($"STYLE: {styleIndex} => {hangar.StyleCost[styleIndex]}");
-                            Logger.Debug($"LIGHTING: {lightingIndex} => {hangar.LightingCost[lightingIndex]}");
-                            Logger.Debug($"DECAL: {newDecalIndex} => {hangar.DecalCost[newDecalIndex]}");
-                            Logger.Debug($"FURNITURE: {furnatureIndex} => {hangar.FurnatureCost[furnatureIndex]}");
-                            Logger.Debug($"QUARTERS: {quartersIndex} => {hangar.QuartersCost[quartersIndex]}");
-                            Logger.Debug($"WORKSHOP: {workshopIndex} => {hangar.WorkshopCost}");
-                        }
+                        //int workshopValue = purchasedWorkshop ? Tools.GetBestPrice(hangar.WorkshopCost, hangar.WorkshopSaleCost) : 0;
+
+                        //Logger.Info($"HANGER PURCHASE");
+                        //Logger.Debug($"BITWISE: {bitwiseValue}");
+                        //Logger.Debug($"HANGAR INDEX: {hangarIndex}[{hangarKey}] => {Tools.GetBestPrice(hangar.BaseCost, hangar.BaseSaleCost)}");
+                        //Logger.Debug($"STYLE: {styleIndex} => {Tools.GetBestPrice(hangar.StyleCost[styleIndex], hangar.StyleSaleCost[styleIndex])}");
+                        //Logger.Debug($"LIGHTING: {lightingIndex} => {Tools.GetBestPrice(hangar.LightingCost[lightingIndex], hangar.LightingSaleCost[lightingIndex])}");
+                        //Logger.Debug($"DECAL: {decalIndex} => {Tools.GetBestPrice(hangar.DecalCost[decalIndex], hangar.DecalSaleCost[decalIndex])}");
+                        //Logger.Debug($"FURNITURE: {furnatureIndex} => {Tools.GetBestPrice(hangar.FurnatureCost[furnatureIndex], hangar.FurnatureSaleCost[furnatureIndex])}");
+                        //Logger.Debug($"QUARTERS: {quartersIndex} => {Tools.GetBestPrice(hangar.QuartersCost[quartersIndex], hangar.QuartersSaleCost[quartersIndex])}");
+                        //Logger.Debug($"WORKSHOP: {purchasedWorkshop} => {workshopValue}");
+                        //Logger.Debug($"TOTAL: {totalValue}");
+
+                        isPurchasing = false;
                     }
 
-                    lastGlobal = asGlobal;
+                    isPurchasing = (bitwiseValue & 2097152) != 0;
+
+                    lastGlobal = bitwiseValue;
                     ResetGlobalActionscriptFlag(13);
                 }
             }
-        }
-
-        int GetValueFromBit(int bit, int p1, int p2)
-        {
-            int i = ((1 << p2) - 1);
-            i = (i << p1);
-            return ((bit & i) >> p1);
         }
     }
 }

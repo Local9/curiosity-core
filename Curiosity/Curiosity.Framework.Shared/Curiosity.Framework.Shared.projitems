@@ -44,5 +44,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\PropDrawables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializedModels\Vector5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypeCache.cs" />
   </ItemGroup>
 </Project>

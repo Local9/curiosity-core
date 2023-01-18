@@ -1,4 +1,5 @@
 ﻿using Curiosity.Framework.Client.Engine;
+using Curiosity.Framework.Client.GameInterface;
 using Curiosity.Framework.Client.Managers;
 using Logger;
 using System.Reflection;
@@ -8,7 +9,9 @@ namespace Curiosity.Framework.Client
     public class PluginManager : BaseScript
     {
         public static PluginManager Instance { get; private set; }
-        public Log Logger;
+        public static Log Logger;
+        public static NuiManager NuiManager;
+
         internal SoundEngine SoundEngine;
         public Dictionary<Type, object> Managers { get; } = new();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new();
@@ -36,7 +39,8 @@ namespace Curiosity.Framework.Client
             {
                 Instance = this;
                 Hud = new();
-                Logger = new Log();
+                Logger = new();
+                NuiManager = new();
                 PlayerList = Players;
 
                 SoundEngine = new SoundEngine();

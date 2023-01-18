@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using Curiosity.Framework.Client.GameInterface;
+using Logger;
 
 namespace Curiosity.Framework.Client.Managers
 {
@@ -13,7 +14,8 @@ namespace Curiosity.Framework.Client.Managers
 
         public void Event(string name, Delegate @delegate) => Instance.AddEventHandler(name, @delegate);
         public PluginManager Instance => PluginManager.Instance;
-        public Log Logger => Instance.Logger;
+        public Log Logger => PluginManager.Logger;
+        public NuiManager NuiManager => PluginManager.NuiManager;
 
         protected Manager()
         {

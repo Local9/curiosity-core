@@ -21,6 +21,11 @@
 
                 SetOverrideWeather("XMAS");
             }
+
+            if (!isChristmasMonth)
+            {
+                Disable();
+            }
         }
 
         private void OnClientResourceStop(string resourceName)
@@ -47,6 +52,8 @@
             ReleaseNamedScriptAudioBank("SNOW_FOOTSTEPS");
             SetForcePedFootstepsTracks(false);
             SetForceVehicleTrails(false);
+
+            ClearOverrideWeather();
         }
 
         private async Task SetUpChristmasTreeAsync()
