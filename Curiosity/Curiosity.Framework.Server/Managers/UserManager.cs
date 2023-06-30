@@ -27,6 +27,7 @@ namespace Curiosity.Framework.Server.Managers
             Event("onResourceStop", new Action<string>(OnResourceStop));
 
             Event("helloWorld", new Action(OnHelloWorld));
+            EventDispatcher.Mount("hello:world", new Action(OnHelloWorld));
 
             EventDispatcher.Mount("user:active", new Func<ClientId, int, Task<User>>(OnUserActiveAsync));
         }
@@ -267,6 +268,8 @@ namespace Curiosity.Framework.Server.Managers
 
                     Logger.Debug($"User {userResult.Username}#{userResult.UserID} is newly added to the User Sessions.");
                     Logger.Debug($"Number of Sessions: {UserSessions.Count}");
+
+                    EventDispatcher.Send(clientId, "hello:world", "Hi there, welcome to the server.");
                 }
 
                 bool stateSetup = client.Player.State.Get("player:server:setup") ?? false;

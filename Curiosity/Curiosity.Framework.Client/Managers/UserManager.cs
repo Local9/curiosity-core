@@ -35,6 +35,8 @@ namespace Curiosity.Framework.Client.Managers
         public async override void Begin()
         {
             Event("onResourceStop", new Action<string>(OnResourceStop));
+            
+            EventDispatcher.Mount("hello:world", new Action<string>(Logger.Info));
 
             InternalGameEvents.PlayerJoined += OnPlayerJoined;
 
@@ -98,6 +100,11 @@ namespace Curiosity.Framework.Client.Managers
             }
         }
 
+        bool HasVehicleRecordingBeenLoaded(int recording, string script)
+        {
+            return Function.Call<bool>(Hash.HAS_VEHICLE_RECORDING_BEEN_LOADED, recording, script);
+        }
+
         public async Task OnRequestCharactersAsync()
         {
             User user = await EventDispatcher.Get<User>("user:active", Game.Player.ServerId);
@@ -113,60 +120,80 @@ namespace Curiosity.Framework.Client.Managers
             //CharacterCreatorManager characterCreatorManager = CharacterCreatorManager.GetModule();
             //characterCreatorManager.OnCreateNewCharacter(new CharacterSkin());
 
-            RegisterCommand("paint", new Action<int, List<object>, string>((source, args, raw) =>
+            RegisterCommand("tp", new Action<int, List<object>, string>((source, args, raw) =>
             {
-                if (!Game.PlayerPed.IsInVehicle())
+                if (args.Count == 3)
                 {
-                    Logger.Debug($"Player is not in a vehicle");
+                    float x = float.Parse(args[0].ToString());
+                    float y = float.Parse(args[1].ToString());
+                    float z = float.Parse(args[2].ToString());
+
+                    Game.PlayerPed.Position = new Vector3(x, y, z);
+                }
+            }), false);
+
+            RegisterCommand("vr", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                List<string> vehicles = new() { "cheetah", "monroe", "entityxf", "feltzer2" };
+                RequestVehicleRecording(292, "escape292");
+                //RequestVehicleRecording(101, "FM_Intro_uber");
+                //RequestVehicleRecording(102, "FM_Intro_uber");
+                //RequestVehicleRecording(103, "FM_Intro_uber");
+
+                while (!HasVehicleRecordingBeenLoaded(100, "escape292") || !HasVehicleRecordingBeenLoaded(101, "FM_Intro_uber") || !HasVehicleRecordingBeenLoaded(102, "FM_Intro_uber") || !HasVehicleRecordingBeenLoaded(103, "FM_Intro_uber"))
+                {
+                    await BaseScript.Delay(0);
+                }
+
+                int count = 0;
+
+                foreach (string vehicle in vehicles)
+                {
+                    Vehicle veh = await World.CreateVehicle(new Model(vehicle), new Vector3(0, 0, 0), 0f);
+                    veh.PlaceOnNextStreet();
+                    StartPlaybackRecordedVehicle(veh.Handle, 100 + count, "FM_Intro_uber", true);
+                    count++;
+
+                    if (count == 0)
+                    {
+                        Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Passenger);
+                    }
+                }
+
+
+                //string vehicle = args[0].ToString();
+                //int vehicleRecording = int.Parse(args[1].ToString());
+                //string vehicleRecordingScript = args[2].ToString();
+
+                //Vehicle veh = await World.CreateVehicle(new Model(vehicle), Game.PlayerPed.Position, Game.PlayerPed.Heading);
+                //veh.PlaceOnGround();
+
+                //RequestVehicleRecording(vehicleRecording, vehicleRecordingScript);
+
+                //StartPlaybackRecordedVehicle(veh.Handle, vehicleRecording, vehicleRecordingScript, true);
+
+                //Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Passenger);
+
+            }), false);
+
+            RegisterCommand("car", new Action<int, List<object>, string>(async (source, args, raw) =>
+            {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Game.PlayerPed.CurrentVehicle.Delete();
                     return;
                 }
 
-                if (args.Count == 0)
-                {
-                    Logger.Debug($"No color specified");
-                    return;
-                }
+                Model model = new Model(args[0].ToString());
+                await model.Request(1000);
+                Vehicle vehicle = await World.CreateVehicle(model, Game.PlayerPed.Position);
+                vehicle.PlaceOnGround();
 
-                string paint = args[0].ToString();
+                DecorSetInt(_vehicle.Handle, "Player_Vehicle", Game.Player.Handle);
 
-                if ("prim" != paint && "sec" != paint)
-                {
-                    Logger.Debug($"Invalid paint type specified: {paint}");
-                    return;
-                }
-
-                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
-                vehicle.Mods.InstallModKit();
-
-                int red = 0;
-                int green = 0;
-                int blue = 0;
-
-                if (int.TryParse(args[1].ToString(), out int _red))
-                    red = _red;
-
-                if (int.TryParse(args[2].ToString(), out int _green))
-                    green = _green;
-
-                if (int.TryParse(args[3].ToString(), out int _blue))
-                    blue = _blue;
-
-                Color color = Color.FromArgb(255, red, green, blue);
-
-                if ("prim" == paint)
-                {
-                    Logger.Debug($"Painting vehicle primary color to {color}");
-                    vehicle.Mods.CustomPrimaryColor = color;
-                    return;
-                }
-                if ("sec" == paint)
-                {
-                    Logger.Debug($"Setting secondary color to {color}");
-                    vehicle.Mods.CustomSecondaryColor = color;
-                    return;
-                }
-
-                Logger.Debug($"Invalid paint type specified");
+                Game.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                
+                model.MarkAsNoLongerNeeded();
 
             }), false);
 
@@ -181,7 +208,7 @@ namespace Curiosity.Framework.Client.Managers
             int vehicleHash = GetResourceKvpInt("vehicle:last:model");
 
             if (vehicleHash == 0)
-                vehicleHash = GetHashKey("pbus2");
+                vehicleHash = GetHashKey("surfer3");
 
             _vehicle = await World.CreateVehicle(vehicleHash, Game.PlayerPed.Position, Game.PlayerPed.Heading);
 
@@ -200,6 +227,7 @@ namespace Curiosity.Framework.Client.Managers
             if (!_playerSpawned)
                 await LoadTransition.OnDownAsync();
 
+            Game.PlayerPed.Weapons.Give((WeaponHash)GetHashKey("WEAPON_FLASHBANG"), 10, false, true);
             Game.PlayerPed.Weapons.Give(WeaponHash.Firework, 999, false, true);
             Game.PlayerPed.Weapons.Give(WeaponHash.AdvancedRifle, 999, true, true);
 
@@ -301,66 +329,66 @@ namespace Curiosity.Framework.Client.Managers
 
         private async Task OnSomeOtherShit()
         {
-            foreach(Player player in PluginManager.PlayerList)
-            {
-                // if (player == Game.Player) continue;
+            //foreach(Player player in PluginManager.PlayerList)
+            //{
+            //    // if (player == Game.Player) continue;
 
-                float x = 0;
-                float y = 0;
-                Vector3 pos = player.Character.Position;
+            //    float x = 0;
+            //    float y = 0;
+            //    Vector3 pos = player.Character.Position;
 
-                SetDrawOrigin(pos.X, pos.Y, pos.Z, 0);
+            //    SetDrawOrigin(pos.X, pos.Y, pos.Z, 0);
 
-                if (GetScreenCoordFromWorldCoord(pos.X, pos.Y, pos.Z, ref x, ref y))
-                {
-                    UIResText uIResText = new UIResText($"{player.Character.RelationshipGroup.NativeValue}", new PointF(x, y), .25f);
-                    uIResText.Draw();
-                }
+            //    if (GetScreenCoordFromWorldCoord(pos.X, pos.Y, pos.Z, ref x, ref y))
+            //    {
+            //        UIResText uIResText = new UIResText($"{player.Character.RelationshipGroup.NativeValue}", new PointF(x, y), .25f);
+            //        uIResText.Draw();
+            //    }
 
-                ClearDrawOrigin();
-            }
+            //    ClearDrawOrigin();
+            //}
         }
 
         bool isPurchasing = false;
 
         private async Task OnTestSomeShit()
         {
-            if (Game.IsControlJustPressed(0, Control.Context))
-            {
-                N_0x061cb768363d6424(Game.PlayerPed.Handle, false); // SET_ALLOW_LOCKON_TO_PED_IF_FRIENDLY
+            //if (Game.IsControlJustPressed(0, Control.Context))
+            //{
+            //    N_0x061cb768363d6424(Game.PlayerPed.Handle, false); // SET_ALLOW_LOCKON_TO_PED_IF_FRIENDLY
                 
-                ++group;
-                if (group > 2)
-                    group = 0;
+            //    ++group;
+            //    if (group > 2)
+            //        group = 0;
 
-                Game.PlayerPed.RelationshipGroup.Remove();
-                int pedHandle = Game.PlayerPed.Handle;
+            //    Game.PlayerPed.RelationshipGroup.Remove();
+            //    int pedHandle = Game.PlayerPed.Handle;
 
-                if (group == 1)
-                {
-                    Game.PlayerPed.RelationshipGroup = RelationshipGang1;
-                    // NetworkSetFriendlyFireOption(false);
-                    SetCanAttackFriendly(pedHandle, false, false);
-                    N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
-                    Screen.ShowNotification($"Joined Group 1", true);
-                }
-                else if (group == 2)
-                {
-                    Game.PlayerPed.RelationshipGroup = RelationshipGang2;
-                    // NetworkSetFriendlyFireOption(false);
-                    SetCanAttackFriendly(pedHandle, false, false);
-                    N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
-                    Screen.ShowNotification($"Joined Group 2", true);
-                }
-                else if (group == 0)
-                {
-                    Game.PlayerPed.RelationshipGroup = RelationshipPlayer;
-                    // NetworkSetFriendlyFireOption(true);
-                    SetCanAttackFriendly(pedHandle, true, false);
-                    N_0x0f62619393661d6e(pedHandle, 0, 0); // SET_PED_TREATED_AS_FRIENDLY
-                    Screen.ShowNotification($"Left Group", true);
-                }
-            }
+            //    if (group == 1)
+            //    {
+            //        Game.PlayerPed.RelationshipGroup = RelationshipGang1;
+            //        // NetworkSetFriendlyFireOption(false);
+            //        SetCanAttackFriendly(pedHandle, false, false);
+            //        N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
+            //        Screen.ShowNotification($"Joined Group 1", true);
+            //    }
+            //    else if (group == 2)
+            //    {
+            //        Game.PlayerPed.RelationshipGroup = RelationshipGang2;
+            //        // NetworkSetFriendlyFireOption(false);
+            //        SetCanAttackFriendly(pedHandle, false, false);
+            //        N_0x0f62619393661d6e(pedHandle, 1, 0); // SET_PED_TREATED_AS_FRIENDLY
+            //        Screen.ShowNotification($"Joined Group 2", true);
+            //    }
+            //    else if (group == 0)
+            //    {
+            //        Game.PlayerPed.RelationshipGroup = RelationshipPlayer;
+            //        // NetworkSetFriendlyFireOption(true);
+            //        SetCanAttackFriendly(pedHandle, true, false);
+            //        N_0x0f62619393661d6e(pedHandle, 0, 0); // SET_PED_TREATED_AS_FRIENDLY
+            //        Screen.ShowNotification($"Left Group", true);
+            //    }
+            //}
             
             if (Game.IsControlJustPressed(0, Control.MultiplayerInfo))
             {

@@ -87,15 +87,6 @@ namespace Curiosity.Core.Client.Managers
                     bool isMeleeDamage = Convert.ToBoolean((int)args[11]);
                     int damageTypeFlag = (int)args[12];
 
-                    //Logger.Debug($"CEventNetworkEntityDamage;\n" +
-                    //    $"victim: {victim}\n" +
-                    //    $"attacker: {attacker}\n" +
-                    //    $"isDamageFatal: {isDamageFatal}\n" +
-                    //    $"weaponInfoHash: {weaponInfoHash}\n" +
-                    //    $"isMeleeDamage: {isMeleeDamage}\n" +
-                    //    $"damageTypeFlag: {damageTypeFlag}\n" +
-                    //    $"");
-
                     HandleCEventNetworkEntityDamaged(
                         victim, attacker, (int)args[2], (int)args[3], (int)args[4], isDamageFatal, weaponInfoHash,
                         (int)args[7], (int)args[8], args[9], args[10], isMeleeDamage,

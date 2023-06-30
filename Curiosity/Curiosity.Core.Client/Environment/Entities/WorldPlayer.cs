@@ -221,7 +221,7 @@ namespace Curiosity.Core.Client.Environment.Entities
                         _blip.Delete();
                 }
 
-                UpdatePlayerCollisionStates();
+                // UpdatePlayerCollisionStates();
                 UpdatePlayerWantedState();
             }
             catch (Exception ex)
@@ -254,6 +254,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
         }
 
+        /// SetLocalPlayerAsGhost handles collision
         private void UpdatePlayerCollisionStates() // need to change this to work differently
         {
             // Updated based on : https://github.com/justalemon/SimplePassive

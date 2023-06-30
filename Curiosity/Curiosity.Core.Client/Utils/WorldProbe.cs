@@ -211,6 +211,19 @@
             return null;
         }
 
+        public static async Task<RaycastResult> RaycastDown(Vector3 source, IntersectOptions options, Entity ignoredEntity = null)
+        {
+            int RayShape = StartShapeTestLosProbe(source.X, source.Y, source.Z, source.X, source.Y, -999.0f, (int)options, ignoredEntity == null ? 0 : ignoredEntity.Handle, 7);
+            RaycastResult result = new(0);
+
+            while (result.Result != 2)
+            {
+                await BaseScript.Delay(0);
+                result = new(RayShape);
+            }
+            return result;
+        }
+
         public static async Task<RaycastResult> Raycast(Vector3 source, Vector3 target, IntersectOptions options, Entity ignoredEntity = null)
         {
             int RayShape = StartShapeTestLosProbe(source.X, source.Y, source.Z, target.X, target.Y, target.Z, (int)options, ignoredEntity == null ? 0 : ignoredEntity.Handle, 7);

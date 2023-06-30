@@ -41,10 +41,10 @@ namespace Curiosity.Framework.Server.Models.Database
         public List<DataStoreCharacter> Characters { get; private set; } = new();
         public DataStoreCharacter CurrentCharacter { get; private set; }
 
-        const string SQL_USER_GET = "select * from curiosity.user u where u.discordId = @pDiscordId;";
-        const string SQL_USER_INSERT = "insert into curiosity.user (username, license, lastSeen, discordId, roleId, IsPassive) values (@pUsername, @pDiscordId, CURRENT_TIMESTAMP, @pDiscordId, 1, 1);";
-        const string SQL_CHARACTERS_GET = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId;";
-        const string SQL_CHARACTER_GET = "select * from curiosity.character c where c.UserID = @pUserId and c.ServerId = @pServerId and c.characterId = @pCharacterId;";
+        const string SQL_USER_GET = "call spUser(@pDiscordId);";
+        const string SQL_USER_INSERT = "call insUser(@pUsername, @pDiscordId, CURRENT_TIMESTAMP, @pDiscordId, 1, 1);";
+        const string SQL_CHARACTERS_GET = "call selCharacters(@pUserId);";
+        const string SQL_CHARACTER_GET = "call selChaarcter(@pCharacterId);";
 
         internal static async Task<DataStoreUser> GetUserAsync(string playerName, ulong discordId, bool withCharacters = false)
         {
@@ -81,7 +81,6 @@ namespace Curiosity.Framework.Server.Models.Database
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("pUserId", UserID);
-            dynamicParameters.Add("pServerId", PluginManager.ServerID);
             var _characters = await DapperDatabase<DataStoreCharacter>.GetListAsync(SQL_CHARACTERS_GET, dynamicParameters);
             await Common.MoveToMainThread();
             Characters = _characters;

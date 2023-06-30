@@ -1,19 +1,17 @@
-﻿using ScaleformUI;
-
-namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
+﻿namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
 {
     public class InteractiveMenuManager : Manager<InteractiveMenuManager>
     {
-        UIMenu _menu;
-        MenuPool _menuPool => GameInterface.Hud.MenuPool;
+        UIMenu menu;
+        MenuPool menuPool => GameInterface.Hud.MenuPool;
 
         // Menu GPS
-        static List<dynamic> _gpsLocations = new List<dynamic>() { "Loading..." };
-        int _gpsIndex = 0;
-        UIMenuListItem _menuListGpsLocations = new UIMenuListItem("Navigation", _gpsLocations, 0);
+        static List<dynamic> gpsLocations = new List<dynamic>() { "Loading..." };
+        int gpsIndex = 0;
+        UIMenuListItem menuListGpsLocations = new UIMenuListItem("Navigation", gpsLocations, 0);
         // Menu Player
-        UIMenu _submenuPlayer;
-        SubMenu.PlayerSubmenu _playerSubmenu = new();
+        UIMenu submenuPlayer;
+        SubMenu.PlayerSubmenu playerSubmenu = new();
         // -> Inventory
         // -> Supporter
         // -> Settings (Language)
@@ -24,7 +22,7 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
 
         public override void Begin()
         {
-            _menu = new UIMenu(Game.Player.Name, "Interactive Menu", GameInterface.Hud.MenuOffset)
+            menu = new UIMenu(Game.Player.Name, "Interactive Menu", GameInterface.Hud.MenuOffset)
             {
                 EnableAnimation = false,
                 MouseControlsEnabled = false,
@@ -34,25 +32,25 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
                 Glare = true
             };
 
-            _menu.AddItem(_menuListGpsLocations);
-            _menuListGpsLocations.SetLeftBadge(BadgeIcon.GLOBE_WHITE);
+            menu.AddItem(menuListGpsLocations);
+            menuListGpsLocations.SetLeftBadge(BadgeIcon.GLOBE_WHITE);
 
-            _submenuPlayer = _menuPool.AddSubMenu(_menu, "Player Options", "Various player options and settings.");
-            _playerSubmenu.CreateMenu(_submenuPlayer);
+            submenuPlayer = menuPool.AddSubMenu(menu, "Player Options", "Various player options and settings.");
+            playerSubmenu.CreateMenu(submenuPlayer);
             BadgeIcon badgeIcon = Game.PlayerPed.Gender == Gender.Male ? BadgeIcon.MALE : BadgeIcon.FEMALE;
-            _submenuPlayer.ParentItem.SetLeftBadge(badgeIcon);
+            submenuPlayer.ParentItem.SetLeftBadge(badgeIcon);
 
-            _menu.OnListChange += OnListChange;
+            menu.OnListChange += OnListChange;
 
-            _menu.RefreshIndex();
-            _menuPool.Add(_menu);
+            menu.RefreshIndex();
+            menuPool.Add(menu);
         }
 
         private void OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            if (listItem == _menuListGpsLocations)
+            if (listItem == menuListGpsLocations)
             {
-                _gpsIndex = newIndex;
+                gpsIndex = newIndex;
                 return;
             }
         }
@@ -62,16 +60,16 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
         {
             if (!Game.IsPaused && !IsPauseMenuRestarting() && IsScreenFadedIn() && !IsPlayerSwitchInProgress())
             {
-                if (_menuPool.IsAnyMenuOpen)
+                if (menuPool.IsAnyMenuOpen)
                 {
                     if (Game.CurrentInputMode == InputMode.MouseAndKeyboard)
                     {
                         if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)))
                         {
-                            _menu.Visible = false;
-                            
-                            if (_menuPool.IsAnyMenuOpen)
-                                _menuPool.CloseAllMenus();
+                            menu.Visible = false;
+
+                            if (menuPool.IsAnyMenuOpen)
+                                menuPool.CloseAllMenus();
                         }
                     }
                 }
@@ -85,9 +83,9 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
                         {
                             if (API.GetGameTimer() - tmpTimer > 400)
                             {
-                                if (!_menuPool.IsAnyMenuOpen)
+                                if (!menuPool.IsAnyMenuOpen)
                                 {
-                                    _menu.Visible = !_menu.Visible;
+                                    menu.Visible = !menu.Visible;
                                 }
                                 break;
                             }
@@ -98,9 +96,9 @@ namespace Curiosity.Framework.Client.Managers.Interface.Menu.InteractiveMenu
                     {
                         if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)) && !Game.IsPaused && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress())
                         {
-                            if (!_menuPool.IsAnyMenuOpen)
+                            if (!menuPool.IsAnyMenuOpen)
                             {
-                                _menu.Visible = !_menu.Visible;
+                                menu.Visible = !menu.Visible;
                             }
                         }
                     }
